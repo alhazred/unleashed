@@ -796,7 +796,7 @@ specinit(int fstype, char *name)
 	/*
 	 * Associate vfs and vnode operations.
 	 */
-	error = vfs_setfsops_const(fstype, &spec_vfsops);
+	error = vfs_setfsops(fstype, &spec_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "specinit: bad fstype");
 		return (error);

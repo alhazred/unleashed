@@ -332,7 +332,7 @@ nfsdyninit(int fstyp, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstyp, &nfsdyn_vfsops);
+	error = vfs_setfsops(fstyp, &nfsdyn_vfsops);
 	if (error != 0)
 		return (error);
 

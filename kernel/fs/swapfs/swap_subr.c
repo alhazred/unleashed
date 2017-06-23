@@ -185,7 +185,7 @@ swapinit(int fstype, char *name)
 	sw_ar = (struct async_reqs *)
 	    kmem_zalloc(sw_freelist_size*sizeof (struct async_reqs), KM_SLEEP);
 
-	error = vfs_setfsops_const(fstype, &swap_vfsops);
+	error = vfs_setfsops(fstype, &swap_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "swapinit: bad vfs ops template");
 		return (error);

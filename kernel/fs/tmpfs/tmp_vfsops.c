@@ -185,7 +185,7 @@ tmpfsinit(int fstype, char *name)
 	tmpfsfstype = fstype;
 	ASSERT(tmpfsfstype != 0);
 
-	error = vfs_setfsops_const(fstype, &tmp_vfsops);
+	error = vfs_setfsops(fstype, &tmp_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "tmpfsinit: bad fstype");
 		return (error);

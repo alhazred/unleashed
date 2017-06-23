@@ -252,7 +252,7 @@ hsfsinit(int fstype, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstype, &hsfs_vfsops);
+	error = vfs_setfsops(fstype, &hsfs_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "hsfsinit: bad fstyp");
 		return (error);

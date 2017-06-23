@@ -886,7 +886,7 @@ dcinit(int fstype, char *name)
 	int error;
 	major_t dev;
 
-	error = vfs_setfsops_const(fstype, &dc_vfsops);
+	error = vfs_setfsops(fstype, &dc_vfsops);
 	if (error) {
 		cmn_err(CE_WARN, "dcinit: bad fstype");
 		return (error);

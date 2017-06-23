@@ -146,7 +146,7 @@ sharefs_init(int fstype, char *name)
 	int		error;
 
 	sharefs_fstype = fstype;
-	if (error = vfs_setfsops_const(fstype, &sharefs_vfsops)) {
+	if (error = vfs_setfsops(fstype, &sharefs_vfsops)) {
 		cmn_err(CE_WARN, "sharefs_init: bad vfs ops template");
 		return (error);
 	}

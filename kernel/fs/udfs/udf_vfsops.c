@@ -1924,7 +1924,7 @@ udfinit(int fstype, char *name)
 
 	ud_printf("udfinit\n");
 
-	error = vfs_setfsops_const(fstype, &udf_vfsops);
+	error = vfs_setfsops(fstype, &udf_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "udfinit: bad fstype");
 		return (error);

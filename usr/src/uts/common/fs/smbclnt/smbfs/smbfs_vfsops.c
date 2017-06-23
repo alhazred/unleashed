@@ -272,7 +272,7 @@ smbfsinit(int fstyp, char *name)
 {
 	int		error;
 
-	error = vfs_setfsops_const(fstyp, &smbfs_vfsops);
+	error = vfs_setfsops(fstyp, &smbfs_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
 		    "smbfsinit: bad vfs ops template");

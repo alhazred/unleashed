@@ -162,7 +162,7 @@ nfs3init(int fstyp, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstyp, &nfs3_vfsops);
+	error = vfs_setfsops(fstyp, &nfs3_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
 		    "nfs3init: bad fstyp");

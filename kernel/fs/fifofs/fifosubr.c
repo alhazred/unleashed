@@ -329,7 +329,7 @@ fifoinit(int fstype, char *name)
 	major_t dev;
 
 	fifofstype = fstype;
-	error = vfs_setfsops_const(fstype, &fifo_vfsops);
+	error = vfs_setfsops(fstype, &fifo_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "fifoinit: bad fstype");
 		return (error);

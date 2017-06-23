@@ -237,7 +237,7 @@ pcfsinit(int fstype, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstype, &pcfs_vfsops);
+	error = vfs_setfsops(fstype, &pcfs_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "pcfsinit: bad fstype");
 		return (error);

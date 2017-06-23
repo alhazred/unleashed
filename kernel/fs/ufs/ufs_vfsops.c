@@ -2071,7 +2071,7 @@ ufsinit(int fstype, char *name)
 
 	ufsfstype = fstype;
 
-	error = vfs_setfsops_const(fstype, &ufs_vfsops);
+	error = vfs_setfsops(fstype, &ufs_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "ufsinit: bad fstype");
 		return (error);

@@ -237,7 +237,7 @@ bootfs_init(int fstype, char *name)
 	bootfs_fstype = fstype;
 	ASSERT(bootfs_fstype != 0);
 
-	ret = vfs_setfsops_const(fstype, &bootfs_vfsops);
+	ret = vfs_setfsops(fstype, &bootfs_vfsops);
 	if (ret != 0)
 		return (ret);
 

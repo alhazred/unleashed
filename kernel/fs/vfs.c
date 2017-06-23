@@ -319,7 +319,7 @@ fsop_sync_by_kind(int fstype, short flag, cred_t *cr)
 }
 
 /*
- * File system initialization.  vfs_setfsops_const() must be called from a file
+ * File system initialization.  vfs_setfsops() must be called from a file
  * system's init routine.
  */
 
@@ -331,7 +331,7 @@ zfs_boot_init(void)
 }
 
 int
-vfs_setfsops_const(int fstype, const struct vfsops *ops)
+vfs_setfsops(int fstype, const struct vfsops *ops)
 {
 	/*
 	 * Verify that fstype refers to a valid fs.  Note that
@@ -4075,7 +4075,7 @@ vfsinit(void)
 	fem_init();
 
 	/* Initialize the dummy stray file system type. */
-	error = vfs_setfsops_const(0, &stray_vfsops);
+	error = vfs_setfsops(0, &stray_vfsops);
 
 	VFS_INIT(&EIO_vfs, &EIO_vfsops, NULL);
 

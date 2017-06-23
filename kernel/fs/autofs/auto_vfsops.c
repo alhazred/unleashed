@@ -262,7 +262,7 @@ autofs_init(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype
 	 */
-	error = vfs_setfsops_const(fstype, &auto_vfsops);
+	error = vfs_setfsops(fstype, &auto_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "autofs_init: bad fstype");
 		return (error);

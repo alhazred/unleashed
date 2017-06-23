@@ -142,7 +142,7 @@ devfsinit(int fstype, char *name)
 	/*
 	 * Associate VFS ops vector with this fstype
 	 */
-	error = vfs_setfsops_const(fstype, &devfs_vfsops);
+	error = vfs_setfsops(fstype, &devfs_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "devfsinit: bad fstype");
 		return (error);

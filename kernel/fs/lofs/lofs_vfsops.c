@@ -475,7 +475,7 @@ lofsinit(int fstyp, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstyp, &lo_vfsops);
+	error = vfs_setfsops(fstyp, &lo_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "lofsinit: bad fstyp");
 		return (error);

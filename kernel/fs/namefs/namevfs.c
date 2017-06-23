@@ -683,7 +683,7 @@ nameinit(int fstype, char *name)
 	int error;
 	int dev;
 
-	error = vfs_setfsops_const(fstype, &namefs_vfsops);
+	error = vfs_setfsops(fstype, &namefs_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "nameinit: bad fsytpe");
 		return (error);

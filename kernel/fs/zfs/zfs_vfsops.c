@@ -1968,7 +1968,7 @@ zfs_vfsinit(int fstype, char *name)
 	/*
 	 * Setup vfsops and vnodeops tables.
 	 */
-	error = vfs_setfsops_const(fstype, &zfs_vfsops);
+	error = vfs_setfsops(fstype, &zfs_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "zfs: bad fstype");
 	}

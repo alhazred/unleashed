@@ -164,7 +164,7 @@ nfsinit(int fstyp, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstyp, &nfs_vfsops);
+	error = vfs_setfsops(fstyp, &nfs_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
 		    "nfsinit: bad fstyp");

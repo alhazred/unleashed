@@ -118,7 +118,7 @@ objfs_init(int fstype, char *name)
 	int error;
 
 	objfs_fstype = fstype;
-	if (error = vfs_setfsops_const(fstype, &objfs_vfsops)) {
+	if (error = vfs_setfsops(fstype, &objfs_vfsops)) {
 		cmn_err(CE_WARN, "objfs_init: bad fstype");
 		return (error);
 	}

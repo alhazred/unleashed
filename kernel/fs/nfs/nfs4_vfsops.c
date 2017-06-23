@@ -198,7 +198,7 @@ nfs4init(int fstyp, char *name)
 {
 	int error;
 
-	error = vfs_setfsops_const(fstyp, &nfs4_vfsops);
+	error = vfs_setfsops(fstyp, &nfs4_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
 		    "nfs4init: bad fstyp");

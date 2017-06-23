@@ -57,7 +57,7 @@ extern "C" {
 
 /*
  * Operations vector.  This is used internal to the kernel; file systems
- * supply their list of operations via vfs_setfsops_const().
+ * supply their list of operations via vfs_setfsops().
  */
 
 typedef struct vfsops vfsops_t;
@@ -447,7 +447,7 @@ struct umounta;
 struct statvfsa;
 struct fstatvfsa;
 
-int	vfs_setfsops_const(int, const struct vfsops *);
+int	vfs_setfsops(int, const struct vfsops *);
 int	vfs_freevfsops_by_type(int);
 void	vfs_setops(struct vfs *, const struct vfsops *);
 const struct vfsops *vfs_getops(struct vfs *);

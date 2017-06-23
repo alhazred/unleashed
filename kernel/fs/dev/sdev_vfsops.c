@@ -156,7 +156,7 @@ devinit(int fstype, char *name)
 
 	devtype = fstype;
 
-	error = vfs_setfsops_const(fstype, &dev_vfsops);
+	error = vfs_setfsops(fstype, &dev_vfsops);
 	if (error != 0) {
 		cmn_err(CE_WARN, "devinit: bad fstype");
 		return (error);

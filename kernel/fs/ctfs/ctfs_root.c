@@ -142,7 +142,7 @@ ctfs_init(int fstype, char *name)
 	int error;
 
 	ctfs_fstype = fstype;
-	if (error = vfs_setfsops_const(fstype, &ctfs_vfsops)) {
+	if (error = vfs_setfsops(fstype, &ctfs_vfsops)) {
 		cmn_err(CE_WARN, "ctfs_init: bad fstype");
 		return (error);
 	}

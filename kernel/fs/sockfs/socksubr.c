@@ -223,7 +223,7 @@ sockinit(int fstype, char *name)
 	major_t dev;
 	char *err_str;
 
-	error = vfs_setfsops_const(fstype, &sock_vfsops);
+	error = vfs_setfsops(fstype, &sock_vfsops);
 	if (error != 0) {
 		zcmn_err(GLOBAL_ZONEID, CE_WARN,
 		    "sockinit: bad fstype");
