@@ -1107,7 +1107,7 @@ C99MODE=	$(C99_ENABLE)
 # The "$(GREP) -v ' L '" part is necessary only until
 # lorder is fixed to ignore thread-local variables.
 BUILD.AR= $(RM) $@ ; \
-	$(AR) q $@ `$(LORDER) $(MOSTOBJS:%=$(DIR)/%) | $(GREP) -v ' L ' | $(TSORT)`
+	$(AR) qc $@ `$(LORDER) $(MOSTOBJS:%=$(DIR)/%) | $(GREP) -v ' L ' | $(TSORT)`
 
 # extra files for the clean target
 CLEANFILES +=			\
