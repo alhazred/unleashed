@@ -115,15 +115,7 @@ BOOT_ARCHIVE=platform/$PLATFORM/boot_archive
 BOOT_ARCHIVE_64=platform/$PLATFORM/$ARCH64/boot_archive
 
 if [ $PLATFORM = i86pc ] ; then
-	if [ ! -x "$ALT_ROOT"/boot/solaris/bin/symdef ]; then
-		# no dboot implies combined archives for example
-		# live-upgrade from s9 to s10u6 is multiboot-only
-		echo "Creating single archive at $ALT_ROOT/$BOOT_ARCHIVE"
-		SPLIT=no
-		compress=no
-	else
-		SPLIT=yes
-	fi
+	SPLIT=yes
 else			# must be sparc
 	SPLIT=no	# there's only 64-bit (sparcv9), so don't split
 	compress=no	
