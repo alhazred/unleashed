@@ -370,7 +370,7 @@ do
 		fi
 		(( dirsize64 += size ))
 	else
-		case `LC_MESSAGES=C /usr/bin/file -m /dev/null "$path" 2>/dev/null` in
+		case `LC_MESSAGES=C /usr/bin/file "$path" 2>/dev/null` in
 		*ELF\ 64-bit*)
 			print "$path" >> "$list64"
 			;;
