@@ -74,8 +74,6 @@ file path=kernel/drv/stmf.conf group=sys
 file path=kernel/drv/stmf_sbd.conf group=sys
 file path=kernel/kmdb/$(ARCH64)/stmf group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/stmf_sbd group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/stmf group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/stmf_sbd group=sys mode=0555
 file path=lib/svc/manifest/system/stmf.xml group=sys mode=0444 \
     variant.opensolaris.zone=global
 file path=lib/svc/method/svc-stmf mode=0555 variant.opensolaris.zone=global
@@ -98,8 +96,6 @@ file path=usr/lib/libstmf.so.1
 file path=usr/lib/libstmfproxy.so.1
 file path=usr/lib/mdb/kvm/$(ARCH64)/stmf.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/stmf_sbd.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/stmf.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/stmf_sbd.so group=sys mode=0555
 file path=usr/sbin/sbdadm mode=0555
 file path=usr/sbin/stmfadm mode=0555
 file path=usr/share/man/man1m/sbdadm.1m

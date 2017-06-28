@@ -74,10 +74,8 @@ file path=kernel/drv/$(ARCH64)/emlxs group=sys
 file path=kernel/drv/$(ARCH64)/oce group=sys
 file path=kernel/drv/emlxs.conf group=sys preserve=true
 file path=kernel/kmdb/$(ARCH64)/emlxs group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/emlxs group=sys mode=0555
 file path=kernel/misc/emlxs/$(ARCH64)/emlxs_fw group=sys mode=0755
 file path=usr/lib/mdb/kvm/$(ARCH64)/emlxs.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/emlxs.so group=sys mode=0555
 license lic_CDDL license=lic_CDDL
 license usr/src/uts/common/io/fibre-channel/fca/emlxs/FIRMWARELICENSE \
     license=usr/src/uts/common/io/fibre-channel/fca/emlxs/FIRMWARELICENSE

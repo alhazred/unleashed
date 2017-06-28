@@ -102,7 +102,6 @@ file path=kernel/drv/uhci.conf group=sys
 file path=kernel/drv/usb_ac.conf group=sys
 $(i386_ONLY)file path=kernel/drv/xhci.conf group=sys
 $(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/xhci group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/xhci group=sys mode=0555
 file path=kernel/misc/$(ARCH64)/hidparser group=sys mode=0755
 file path=kernel/misc/$(ARCH64)/usba group=sys mode=0755
 file path=kernel/misc/$(ARCH64)/usba10 group=sys mode=0755
@@ -111,7 +110,6 @@ file path=kernel/strmod/$(ARCH64)/usbkbm group=sys mode=0755
 file path=kernel/strmod/$(ARCH64)/usbms group=sys mode=0755
 file path=kernel/strmod/$(ARCH64)/usbwcm group=sys mode=0755
 $(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/xhci.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/xhci.so group=sys mode=0555
 $(i386_ONLY)file path=usr/lib/xhci/xhci_portsc group=sys mode=0555
 file path=usr/share/man/man7d/ehci.7d
 file path=usr/share/man/man7d/hid.7d

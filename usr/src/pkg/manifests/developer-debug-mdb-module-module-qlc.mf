@@ -36,6 +36,5 @@ dir path=usr/lib/mdb group=sys
 dir path=usr/lib/mdb/kvm group=sys
 dir path=usr/lib/mdb/kvm/$(ARCH64) group=sys
 file path=usr/lib/mdb/kvm/$(ARCH64)/qlc.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/qlc.so group=sys mode=0555
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

@@ -552,16 +552,12 @@ usr/lib/fs/smbfs/lsacl
 opt/smbcl-tests
 #
 # FC related files
-kernel/kmdb/fcip		i386
 kernel/kmdb/amd64/fcip		i386
 kernel/kmdb/sparcv9/fcip	sparc
-kernel/kmdb/fcp			i386
 kernel/kmdb/amd64/fcp		i386
 kernel/kmdb/sparcv9/fcp		sparc
-kernel/kmdb/fctl		i386
 kernel/kmdb/amd64/fctl		i386
 kernel/kmdb/sparcv9/fctl	sparc
-kernel/kmdb/qlc			i386
 kernel/kmdb/amd64/qlc		i386
 kernel/kmdb/sparcv9/qlc		sparc
 usr/include/a_state.h		sparc

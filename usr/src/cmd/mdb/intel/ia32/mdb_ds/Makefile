@@ -33,10 +33,3 @@ MODSRCS = mdb_ds.c
 include ../../../../Makefile.cmd
 include ../../Makefile.ia32
 include ../../../Makefile.module
-
-#
-# This module is somewhat unusual in that it is a proc-style dmod.  proc dmods
-# are not normally built both for mdb and kmdb.  These overrides build it as a
-# proc dmod and as a kvm kmod.
-TARGETS = $(TARGETS_proc) $(TARGETS_kvm_kmdb)
-ROOTTGTS = $(ROOTTGTS_proc) $(ROOTTGTS_kvm_kmdb)
