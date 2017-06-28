@@ -47,7 +47,6 @@ driver name=myri10ge clone_perms="myri10ge 0666 root sys" \
     alias=pciex14c1,8 \
     alias=pciex14c1,9
 file path=kernel/drv/$(ARCH64)/myri10ge group=sys
-$(i386_ONLY)file path=kernel/drv/myri10ge group=sys
 file path=usr/share/man/man7d/myri10ge.7d
 license cr_Sun license=cr_Sun
 license kernel/drivers/net/myri10ge/THIRDPARTYLICENSE \

@@ -23,14 +23,9 @@
    ('i86pc 'i86xpv))
 
  (const
-   ; Build 32-bit kernel modules
-   BUILD_KMOD_32
-   #t)
-
- (const
    ; Build 64-bit kernel modules
-   BUILD_KMOD_64
-   #t)
+   KERNEL_BITS
+   64)
 
  (include "../../Sconfig"))
 

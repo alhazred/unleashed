@@ -55,7 +55,6 @@ driver name=urtw clone_perms="urtw 0666 root sys" perms="* 0666 root sys" \
     alias=usbbda,8198 \
     alias=usbdf6,28
 file path=kernel/drv/$(ARCH64)/urtw group=sys
-file path=kernel/drv/urtw group=sys
 file path=usr/share/man/man7d/urtw.7d
 license cr_Sun license=cr_Sun
 license kernel/drivers/net/wifi/urtw/THIRDPARTYLICENSE \

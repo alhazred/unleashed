@@ -53,7 +53,6 @@ dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=srpt perms="* 0644 root sys"
 file path=kernel/drv/$(ARCH64)/srpt group=sys
-$(i386_ONLY)file path=kernel/drv/srpt group=sys
 file path=kernel/drv/srpt.conf group=sys
 file path=kernel/kmdb/$(ARCH64)/srpt group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/srpt group=sys mode=0555

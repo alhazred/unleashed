@@ -67,15 +67,10 @@ file path=kernel/drv/$(ARCH64)/pppt group=sys
 file path=kernel/drv/$(ARCH64)/qlt group=sys
 file path=kernel/drv/$(ARCH64)/stmf group=sys
 file path=kernel/drv/$(ARCH64)/stmf_sbd group=sys
-$(i386_ONLY)file path=kernel/drv/fct group=sys
 file path=kernel/drv/fct.conf group=sys
-$(i386_ONLY)file path=kernel/drv/pppt group=sys
 file path=kernel/drv/pppt.conf group=sys
-$(i386_ONLY)file path=kernel/drv/qlt group=sys
 file path=kernel/drv/qlt.conf group=sys
-$(i386_ONLY)file path=kernel/drv/stmf group=sys
 file path=kernel/drv/stmf.conf group=sys
-$(i386_ONLY)file path=kernel/drv/stmf_sbd group=sys
 file path=kernel/drv/stmf_sbd.conf group=sys
 file path=kernel/kmdb/$(ARCH64)/stmf group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/stmf_sbd group=sys mode=0555

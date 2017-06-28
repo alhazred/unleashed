@@ -23,14 +23,9 @@
    ('sun4u 'sun4v))
 
  (const
-   ; Build 32-bit kernel modules
-   BUILD_KMOD_32
-   #f)
-
- (const
    ; Build 64-bit kernel modules
-   BUILD_KMOD_64
-   #t)
+   KERNEL_BITS
+   64)
 
  (include "../../Sconfig"))
 

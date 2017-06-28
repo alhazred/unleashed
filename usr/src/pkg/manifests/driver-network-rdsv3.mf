@@ -53,7 +53,6 @@ file path=kernel/drv/$(ARCH64)/rdsv3 group=sys
 $(i386_ONLY)file path=kernel/drv/rdsv3 group=sys
 file path=kernel/drv/rdsv3.conf group=sys preserve=renamenew
 file path=kernel/socketmod/$(ARCH64)/sockrds group=sys mode=0755
-$(i386_ONLY)file path=kernel/socketmod/sockrds group=sys mode=0755
 file path=usr/lib/rcm/scripts/SUNW,rdsv3u.sh group=bin mode=0555
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

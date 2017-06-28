@@ -471,7 +471,6 @@ $(i386_ONLY)file path=kernel/drv/kmdb group=sys
 file path=kernel/drv/kmdb.conf group=sys
 $(i386_ONLY)file path=kernel/drv/llc1 group=sys
 file path=kernel/drv/llc1.conf group=sys
-$(i386_ONLY)file path=kernel/drv/lofi group=sys
 file path=kernel/drv/lofi.conf group=sys
 $(i386_ONLY)file path=kernel/drv/log group=sys
 file path=kernel/drv/log.conf group=sys preserve=true
@@ -488,7 +487,6 @@ file path=kernel/drv/options.conf group=sys
 $(i386_ONLY)file path=kernel/drv/pci_pci group=sys
 $(i386_ONLY)file path=kernel/drv/pcieb group=sys
 file path=kernel/drv/pcieb.conf group=sys
-$(i386_ONLY)file path=kernel/drv/physmem group=sys
 file path=kernel/drv/physmem.conf group=sys
 $(i386_ONLY)file path=kernel/drv/poll group=sys
 file path=kernel/drv/poll.conf group=sys
@@ -500,9 +498,7 @@ $(i386_ONLY)file path=kernel/drv/ptc group=sys
 file path=kernel/drv/ptc.conf group=sys
 $(i386_ONLY)file path=kernel/drv/ptsl group=sys
 file path=kernel/drv/ptsl.conf group=sys
-$(i386_ONLY)file path=kernel/drv/ramdisk group=sys
 file path=kernel/drv/ramdisk.conf group=sys
-$(i386_ONLY)file path=kernel/drv/random group=sys
 file path=kernel/drv/random.conf group=sys
 $(i386_ONLY)file path=kernel/drv/rts group=sys
 file path=kernel/drv/rts.conf group=sys
@@ -575,26 +571,8 @@ file path=kernel/fs/$(ARCH64)/sockfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/specfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/tmpfs group=sys mode=0755
 file path=kernel/fs/$(ARCH64)/ufs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/autofs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/bootfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/ctfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/dcfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/dev group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/devfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/fdfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/fifofs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/hsfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/lofs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/mntfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/namefs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/objfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/pcfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/procfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/fs/sharefs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/sockfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/specfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/tmpfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/ufs group=sys mode=0755
 $(i386_ONLY)file path=kernel/genunix group=sys mode=0755
 file path=kernel/ipp/$(ARCH64)/ipgpc group=sys mode=0755
 $(i386_ONLY)file path=kernel/ipp/ipgpc group=sys mode=0755
@@ -661,7 +639,6 @@ $(i386_ONLY)file path=kernel/misc/bootdev group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/busra group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/cmlb group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/consconfig group=sys mode=0755
-$(i386_ONLY)file path=kernel/misc/ctf group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/dls group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/fssnap_if group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/gld group=sys mode=0755
@@ -676,7 +653,6 @@ $(i386_ONLY)file path=kernel/misc/kmdbmod group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/ksocket group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/mac group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/mii group=sys mode=0755
-$(i386_ONLY)file path=kernel/misc/net80211 group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/neti group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/pci_autoconfig group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/pcicfg group=sys mode=0755
@@ -717,21 +693,10 @@ file path=kernel/sched/$(ARCH64)/RT_DPTBL group=sys mode=0755
 file path=kernel/sched/$(ARCH64)/SDC group=sys mode=0755
 file path=kernel/sched/$(ARCH64)/TS group=sys mode=0755
 file path=kernel/sched/$(ARCH64)/TS_DPTBL group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/FX group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/FX_DPTBL group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/IA group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/RT group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/RT_DPTBL group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/SDC group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/TS group=sys mode=0755
-$(i386_ONLY)file path=kernel/sched/TS_DPTBL group=sys mode=0755
 file path=kernel/socketmod/$(ARCH64)/datafilt group=sys mode=0755
 file path=kernel/socketmod/$(ARCH64)/httpfilt group=sys mode=0755
 file path=kernel/socketmod/$(ARCH64)/socksctp group=sys mode=0755
 file path=kernel/socketmod/$(ARCH64)/trill group=sys mode=0755
-$(i386_ONLY)file path=kernel/socketmod/datafilt group=sys mode=0755
-$(i386_ONLY)file path=kernel/socketmod/httpfilt group=sys mode=0755
-$(i386_ONLY)file path=kernel/socketmod/socksctp group=sys mode=0755
 $(i386_ONLY)file path=kernel/socketmod/trill group=sys mode=0755
 file path=kernel/strmod/$(ARCH64)/bufmod group=sys mode=0755
 file path=kernel/strmod/$(ARCH64)/connld group=sys mode=0755
@@ -774,12 +739,10 @@ file path=kernel/sys/$(ARCH64)/pset group=sys mode=0755
 file path=kernel/sys/$(ARCH64)/semsys group=sys mode=0755
 file path=kernel/sys/$(ARCH64)/shmsys group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/c2audit group=sys mode=0755
-$(i386_ONLY)file path=kernel/sys/doorfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/inst_sync group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/kaio group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/msgsys group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/pipe group=sys mode=0755
-$(i386_ONLY)file path=kernel/sys/portfs group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/pset group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/semsys group=sys mode=0755
 $(i386_ONLY)file path=kernel/sys/shmsys group=sys mode=0755
@@ -858,7 +821,6 @@ hardlink path=kernel/sys/$(ARCH64)/autofs \
     target=../../../kernel/fs/$(ARCH64)/autofs
 hardlink path=kernel/sys/$(ARCH64)/rpcmod \
     target=../../../kernel/strmod/$(ARCH64)/rpcmod
-$(i386_ONLY)hardlink path=kernel/sys/autofs target=../../kernel/fs/autofs
 $(i386_ONLY)hardlink path=kernel/sys/rpcmod target=../../kernel/strmod/rpcmod
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.firmload \

@@ -81,7 +81,6 @@ file \
     path=etc/sysevent/config/SUNW,EC_zfs,ESC_ZFS_bootfs_vdev_attach,sysevent.conf \
     group=sys
 file path=kernel/drv/$(ARCH64)/zfs group=sys
-$(i386_ONLY)file path=kernel/drv/zfs group=sys
 file path=kernel/drv/zfs.conf group=sys
 file path=kernel/kmdb/$(ARCH64)/zfs group=sys mode=0555
 $(i386_ONLY)file path=kernel/kmdb/zfs group=sys mode=0555
@@ -131,7 +130,6 @@ file path=usr/share/man/man1m/zpool.1m
 file path=usr/share/man/man1m/zstreamdump.1m
 file path=usr/share/man/man5/zpool-features.5
 hardlink path=kernel/fs/$(ARCH64)/zfs target=../../../kernel/drv/$(ARCH64)/zfs
-$(i386_ONLY)hardlink path=kernel/fs/zfs target=../../kernel/drv/zfs
 hardlink path=usr/lib/fs/zfs/fstyp target=../../../sbin/fstyp
 hardlink path=usr/sbin/zdb target=../../usr/lib/isaexec
 license cr_Sun license=cr_Sun

@@ -65,7 +65,6 @@ file path=etc/default/nfs group=sys preserve=renameold
 file path=etc/fs/nfs/mount mode=0555
 file path=etc/nfssec.conf group=sys preserve=true
 file path=kernel/fs/$(ARCH64)/nfs group=sys mode=0755
-$(i386_ONLY)file path=kernel/fs/nfs group=sys mode=0755
 file path=kernel/misc/$(ARCH64)/klmmod group=sys mode=0755
 file path=kernel/misc/$(ARCH64)/klmops group=sys mode=0755
 file path=kernel/misc/$(ARCH64)/nfs_dlboot group=sys mode=0755
@@ -100,7 +99,6 @@ file path=usr/share/man/man4/nfs.4
 file path=usr/share/man/man4/nfssec.conf.4
 group groupname=unknown gid=96
 hardlink path=kernel/sys/$(ARCH64)/nfs target=../../../kernel/fs/$(ARCH64)/nfs
-$(i386_ONLY)hardlink path=kernel/sys/nfs target=../../kernel/fs/nfs
 license cr_ATT license=cr_ATT
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
