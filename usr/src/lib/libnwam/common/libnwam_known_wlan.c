@@ -169,8 +169,8 @@ get_wlans_cb(nwam_known_wlan_handle_t kwh, void *data)
 	uint_t num_wlans = wil->num_wlans;
 
 	/* Reallocate WLAN list and allocate new info list element. */
-	if ((newlist = realloc(list,
-	    sizeof (struct nwam_wlan_info *) * ++num_wlans)) == NULL ||
+	if ((newlist = reallocarray(list, ++num_wlans,
+	    sizeof (struct nwam_wlan_info *))) == NULL ||
 	    (newlist[num_wlans - 1] = calloc(1,
 	    sizeof (struct nwam_wlan_info))) == NULL) {
 		free(newlist);

@@ -824,10 +824,10 @@ evPollfdRealloc(evContext_p *ctx, int pollfd_chunk_size, int fd) {
  
 	maxnfds = (1 + (fd/pollfd_chunk_size)) * pollfd_chunk_size;
  
-	pollfds = realloc(ctx->pollfds, maxnfds * sizeof(*ctx->pollfds));
+	pollfds = reallocarray(ctx->pollfds, maxnfds, sizeof (*ctx->pollfds));
 	if (pollfds != NULL)
 		ctx->pollfds = pollfds;
-	fdTable = realloc(ctx->fdTable, maxnfds * sizeof(*ctx->fdTable));
+	fdTable = reallocarray(ctx->fdTable, maxnfds, sizeof (*ctx->fdTable));
 	if (fdTable != NULL)
 		ctx->fdTable = fdTable;
  

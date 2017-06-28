@@ -65,10 +65,10 @@ add_title_entry(char *title_str)
 
 	if (menu_entry_count == menu_table_size) {
 		printf("Reallocating at count %d\n", menu_table_size);
-		titles = (char **)realloc(titles,
-		    ENTRY_ALLOC_COUNT * sizeof (char *));
-		datasets = (char **)realloc(datasets,
-		    ENTRY_ALLOC_COUNT * sizeof (char *));
+		titles = (char **)reallocarray(titles, ENTRY_ALLOC_COUNT,
+		    sizeof (char *));
+		datasets = reallocarray(datasets, ENTRY_ALLOC_COUNT,
+		    sizeof(char *));
 		if (titles == NULL || datasets == NULL)
 			prom_panic("out of mem");
 		menu_table_size += ENTRY_ALLOC_COUNT;

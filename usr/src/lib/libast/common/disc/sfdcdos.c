@@ -67,7 +67,7 @@ register Dosdisc_t *dp;
 	if((n=dp->maptop++)>=dp->mapsize)
 	{
 		dp->mapsize *= 2;
-		if(!(dp->maptable=(struct map*)realloc((void*)dp->maptable,(dp->mapsize+1)*sizeof(struct map))))
+		if(!(dp->maptable=(struct map*)reallocarray((void *)dp->maptable, (dp->mapsize + 1), sizeof(struct map))))
 		{
 			dp->maptop--;
 			dp->mapsize *= 2;

@@ -160,8 +160,8 @@ static void get_either_iter(struct iter_data *data, char *name)
      if (match) {
 	  if (data->n_names == data->sz_names) {
 	       int new_sz = data->sz_names * 2;
-	       char **new_names = realloc(data->names,
-					  new_sz * sizeof(char *));
+	       char **new_names = reallocarray(data->names, new_sz,
+                                               sizeof(char *));
 	       if (new_names) {
 		    data->names = new_names;
 		    data->sz_names = new_sz;

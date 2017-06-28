@@ -16,6 +16,7 @@
 
 #include "refer..c"
 #include <locale.h>
+#include <stdlib.h>
 
 int newr[250];
 
@@ -105,7 +106,6 @@ recopy(char *fnam)
 	int wsize = 50;
 	int finalrn;
 	char sig[MXSIG];
-	extern int *realloc();
 
 	wref = (int *)calloc((unsigned)wsize, (unsigned)sizeof (int));
 	fclose(ftemp);
@@ -129,8 +129,8 @@ recopy(char *fnam)
 				finalrn = newr[atoi(tb)];
 			else
 				finalrn = atoi(tb);
-			if ((++wcnt > wsize) && ((wref = realloc(wref,
-			    (wsize += 50) * sizeof (int))) == NULL)) {
+			if ((++wcnt > wsize) && ((wref = reallocarray(wref,
+			    (wsize += 50), sizeof (int))) == NULL)) {
 				fprintf(stderr, gettext(
 				    "Ref condense out of memory."));
 				exit(1);

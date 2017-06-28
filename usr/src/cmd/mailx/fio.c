@@ -194,8 +194,8 @@ setptr(register FILE *ibuf)
 				errno = 0;
 				Odot = dot - &(message[0]);
 				message = (struct message *)
-				    realloc(message,
-					space*(sizeof (struct message)));
+				    reallocarray(message, space,
+					sizeof (struct message));
 				if (message == NULL) {
 					perror("realloc failed");
 					fprintf(stderr, gettext(

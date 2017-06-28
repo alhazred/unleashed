@@ -65,14 +65,14 @@ get_list( char *prompt )
 		if ( result == (char **) 0 )
 			result = (char **) malloc( sizeof(char *) );
 		else
-			result = (char **) realloc( result,
-			    sizeof(char *) * (num + 1) );
+			result = reallocarray(result, num + 1,
+			    sizeof(char *));
 
 		result[num++] = (char *) strdup( buf );
 	}
 	if ( result == (char **) 0 )
 		return( NULL );
-	result = (char **) realloc( result, sizeof(char *) * (num + 1) );
+	result = (char **) reallocarray(result, num + 1, sizeof(char *));
 	result[num] = NULL;
 
 	return( result );
@@ -200,8 +200,8 @@ get_modlist( char *prompt1, char *prompt2, char *prompt3 )
 		if ( result == NULL )
 			result = (LDAPMod **) malloc( sizeof(LDAPMod *) );
 		else
-			result = (LDAPMod **) realloc( result,
-			    sizeof(LDAPMod *) * (num + 1) );
+			result = (LDAPMod **) reallocarray(result, num + 1,
+							   sizeof(LDAPMod *));
 
 		result[num] = (LDAPMod *) malloc( sizeof(LDAPMod) );
 		*(result[num]) = tmp;	/* struct copy */
@@ -209,7 +209,8 @@ get_modlist( char *prompt1, char *prompt2, char *prompt3 )
 	}
 	if ( result == NULL )
 		return( NULL );
-	result = (LDAPMod **) realloc( result, sizeof(LDAPMod *) * (num + 1) );
+	result = (LDAPMod **) reallocarray(result, num + 1,
+					   sizeof(LDAPMod *));
 	result[num] = NULL;
 
 	return( result );

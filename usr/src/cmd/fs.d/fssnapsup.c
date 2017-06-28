@@ -31,6 +31,7 @@
  * the real fssnap command.
  */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <kstat.h>
 #include <libintl.h>
@@ -150,8 +151,8 @@ fssnap_show_status(char *mountpoint, char *opts, int labels, int brief)
 			 */
 			order[i++] = getsubopt(&suboptions, infosubopts, &v);
 			if (i >= orderlen) {
-				order = (int *)realloc(order,
-				    sizeof (int) * (orderlen *= 2));
+				order = reallocarray(order, orderlen *= 2,
+				    sizeof (int));
 				if (order == NULL) {
 					fprintf(stderr,
 					    gettext("cannot reallocate order "

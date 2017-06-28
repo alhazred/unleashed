@@ -205,8 +205,8 @@ static krb5_error_code grow_find_authdata
       krb5_set_error_message(context, ERANGE, "More than 256 authdata matched a query");
       return ERANGE;
     }
-    new       = realloc(fctx->out,
-			sizeof (krb5_authdata *)*(2*fctx->space+1));
+    new       = reallocarray(fctx->out, 2 * fctx->space + 1,
+                       sizeof (krb5_authdata *));
     if (new == NULL)
       return ENOMEM;
     fctx->out = new;

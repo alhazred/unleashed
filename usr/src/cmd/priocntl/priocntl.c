@@ -1014,8 +1014,8 @@ pid_t		pid;
 static void
 increase_pidlist(classpids_t *clp)
 {
-	if ((clp->clp_pidlist = realloc(clp->clp_pidlist,
-	    (clp->clp_pidlistsz + NPIDS) * sizeof (pid_t))) == NULL)
+	if ((clp->clp_pidlist = reallocarray(clp->clp_pidlist,
+	    clp->clp_pidlistsz + NPIDS, sizeof (pid_t))) == NULL)
 		/*
 		 * The pidlist is filled up and we cannot increase the size.
 		 */

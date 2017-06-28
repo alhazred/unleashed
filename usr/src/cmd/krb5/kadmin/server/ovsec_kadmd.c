@@ -314,7 +314,7 @@ getdomnames(krb5_context ctx, char *realm, char ***dnames)
 				continue;
 			}
 
-			npp = realloc(npp, sizeof(char *) * (n + 2));
+			npp = reallocarray(npp, n + 2, sizeof (char *));
 			if (!npp) {
 				result = ENOMEM;
 				goto err;
@@ -515,8 +515,8 @@ int main(int argc, char *argv[])
 				usage();
 			db_args_size++;
 			{
-			    char **temp = realloc( db_args,
-				sizeof(char*) * (db_args_size+1)); /* one for NULL */
+			    char **temp = reallocarray(db_args,
+			        db_args_size + 1, sizeof (char *)); /* one for NULL */
 			    if( temp == NULL )
 			    {
 				fprintf(stderr, gettext("%s: cannot initialize. Not enough memory\n"),
@@ -1247,7 +1247,8 @@ void kadm_svc_run(void)
 		timeout.tv_usec = 0;
 
 		if (nfds != svc_max_pollfd) {
-			rfd = realloc(rfd, sizeof (pollfd_t) * svc_max_pollfd);
+			rfd = reallocarray(rfd, svc_max_pollfd,
+                           sizeof (pollfd_t));
 			nfds = svc_max_pollfd;
 		}
 

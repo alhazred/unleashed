@@ -543,7 +543,8 @@ grow_lists(void)
 	    N_lists, NLISTS);
 
 	N_lists *= 2;
-	if ((Buckethead = realloc(Buckethead, sizeof (bucket_t *) * N_lists))
+	if ((Buckethead = reallocarray(Buckethead, N_lists,
+	    sizeof (bucket_t *)))
 		== NULL) {
 		errlog(FATAL, "out of memory growing list of "
 			"version buckets");

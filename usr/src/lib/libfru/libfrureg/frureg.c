@@ -78,7 +78,7 @@ fru_reg_list_entries(unsigned int *num)
 
 	for (i = 0; i < max_data_element_count; i++) {
 		def = &(Element_Defs[i]);
-		rc = realloc(rc, sizeof (char *) * (number + 1));
+		rc = reallocarray(rc, number + 1, sizeof (char *));
 		rc[number] = strdup(def->name);
 		number++;
 	}

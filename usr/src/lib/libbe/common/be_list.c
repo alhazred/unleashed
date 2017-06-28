@@ -708,8 +708,8 @@ be_sort_list(be_node_list_t **pstart, int (*compar)(const void *, const void *))
 		return (BE_SUCCESS);
 	/* build array of linked list BE struct pointers */
 	for (p = *pstart, nbe = 0; p != NULL; nbe++, p = p->be_next_node) {
-		ptrtmp = realloc(ptrlist,
-		    sizeof (be_node_list_t *) * (nbe + 2));
+		ptrtmp = reallocarray(ptrlist, nbe + 2,
+		    sizeof (be_node_list_t *));
 		if (ptrtmp == NULL) { /* out of memory */
 			be_print_err(gettext("be_sort_list: memory "
 			    "allocation failed\n"));

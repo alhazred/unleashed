@@ -628,8 +628,8 @@ __ns_ldap_saveSearchDesc(ns_ldap_search_desc_t ***sdlist,
 	} else if (*cnt+1 >= *max) {
 		*max += NS_SDESC_MAX;
 		tmplist = (ns_ldap_search_desc_t **)
-		    realloc((void *)(*sdlist),
-		    *max * sizeof (ns_ldap_search_desc_t *));
+		    reallocarray(*sdlist, *max,
+		    sizeof (ns_ldap_search_desc_t *));
 		if (tmplist == NULL)
 			return (-1);
 		else

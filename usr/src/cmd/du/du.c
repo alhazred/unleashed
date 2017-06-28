@@ -222,7 +222,7 @@ main(int argc, char **argv)
 		if (optind == argc - 1 || pid == 0) {
 			while (base_len < (strlen(argv[optind]) + 1)) {
 				base_len = base_len * 2;
-				if ((base = (char *)realloc(base, base_len *
+				if ((base = reallocarray(base, base_len,
 				    sizeof (char))) == NULL) {
 					if (rflg) {
 						(void) fprintf(stderr, gettext(
@@ -235,7 +235,7 @@ main(int argc, char **argv)
 			}
 			if (base_len > name_len) {
 				name_len = base_len;
-				if ((name = (char *)realloc(name, name_len *
+				if ((name = reallocarray(name, name_len,
 				    sizeof (char))) == NULL) {
 					if (rflg) {
 						(void) fprintf(stderr, gettext(
@@ -470,8 +470,8 @@ descend(char *curname, int curfd, int *retcode, dev_t device)
 		 */
 		while ((offset + strlen(dp->d_name) + 2) > base_len) {
 			base_len = base_len * 2;
-			if ((base = (char *)realloc(base,
-			    base_len * sizeof (char))) == NULL) {
+			if ((base = reallocarray(base, base_len,
+			    sizeof (char))) == NULL) {
 				if (rflg) {
 					perror("du");
 				}

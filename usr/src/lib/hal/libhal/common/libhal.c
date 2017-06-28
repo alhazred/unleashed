@@ -153,7 +153,7 @@ libhal_get_string_array_from_iter (DBusMessageIter *iter, int *num_elements)
 		char *str;
 		
 		if ((count % 8) == 0 && count != 0) {
-			t = realloc (buffer, sizeof (char *) * (count + 8));
+			t = reallocarray(buffer, count + 8, sizeof (char *));
 			if (t == NULL)
 				goto oom;
 			else
@@ -172,7 +172,7 @@ libhal_get_string_array_from_iter (DBusMessageIter *iter, int *num_elements)
 	}
 
 	if ((count % 8) == 0) {
-		t = realloc (buffer, sizeof (char *) * (count + 1));
+		t = reallocarray(buffer, (count + 1), sizeof(char *));
 		if (t == NULL)
 			goto oom;
 		else

@@ -242,8 +242,8 @@ queue(int activity, char *string)
 {
 	if (optcnt > optbufsz) {
 		optbufsz = optbufsz * 2;
-		if ((Action = realloc((struct action *)Action,
-		    optbufsz * sizeof (struct action))) == NULL) {
+		if ((Action = reallocarray(Action, optbufsz,
+		    sizeof (struct action))) == NULL) {
 		    error_message(MALLOC_ERROR, PLAIN_ERROR, (char *)0, prog);
 		    mcs_exit(FAILURE);
 		}

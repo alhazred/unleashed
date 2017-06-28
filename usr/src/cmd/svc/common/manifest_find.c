@@ -91,8 +91,8 @@ add_pointer(mftsd_t *tsdp, const char *fn, const char *pname, uchar_t *hash)
 	if (tsdp->tsd_count >= (tsdp->tsd_max - 1)) {
 		/* Need more memory. */
 		new_max = (tsdp->tsd_max == 0) ? 16 : 2 * tsdp->tsd_max;
-		newblock = realloc(tsdp->tsd_array,
-		    new_max * sizeof (*tsdp->tsd_array));
+		newblock = reallocarray(tsdp->tsd_array, new_max,
+		    sizeof (*tsdp->tsd_array));
 		if (newblock == NULL)
 			return (-1);
 		tsdp->tsd_array = newblock;

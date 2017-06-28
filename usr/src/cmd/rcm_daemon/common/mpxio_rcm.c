@@ -588,8 +588,8 @@ merge_clients(int *nclients, char ***clientsp, group_t *group)
 	if (group->nclients) {
 		old_nclients = *nclients;
 		*nclients += group->nclients;
-		clients_new = realloc(*clientsp,
-		    ((*nclients) + 1) * sizeof (char *));
+		clients_new = reallocarray(*clientsp, *nclients + 1,
+		    sizeof (char *));
 		if (clients_new == NULL) {
 			rcm_log_message(RCM_ERROR,
 			    "MPXIO: cannot reallocate client array (%s).\n",

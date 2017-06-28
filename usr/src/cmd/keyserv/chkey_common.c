@@ -519,8 +519,8 @@ ldap_attr_mod(ns_ldap_entry_t *entry,
 				}
 				if (!rep) {
 					/* Add entry to list */
-					alist[q] = (char **)realloc(alist[q],
-					    sizeof (char *) * (count + 2));
+					alist[q] = reallocarray(alist[q],
+					    count + 2, sizeof (char *));
 					if (alist[q] == NULL)
 						return (0);
 					alist[q][attr->value_count + 1] = NULL;

@@ -612,8 +612,8 @@ static int ef_record_pathname(ExpandFile *ef, const char *pathname,
  */
   if(ef->result.nfile + 1 > ef->files_dim) {
     int files_dim = ef->files_dim + MATCH_BLK_FACT;
-    char **files = (char **) realloc(ef->result.files,
-				     files_dim * sizeof(files[0]));
+    char **files = (char **) reallocarray(ef->result.files, files_dim,
+                                          sizeof(files[0]));
     if(!files) {
       _err_record_msg(ef->err,
 	     "Insufficient memory to record all of the matching filenames",

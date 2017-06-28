@@ -767,7 +767,7 @@ decode_tl_data(tl_data, tl_type, data)
 		}
 		if (i == limit-1) {
 		    limit *= 2;
-		    DNarr = realloc(DNarr, sizeof(char *) * (limit));
+		    DNarr = reallocarray(DNarr, (limit), sizeof(char *));
 		    if (DNarr == NULL)
 			return ENOMEM;
 		}
@@ -1425,7 +1425,7 @@ krb5_add_member(mods, count)
 	for (;(*mods)[i] != NULL; ++i)
 	    ;
     }
-    lmods = (LDAPMod **) realloc((*mods), (2+i) * sizeof(LDAPMod *));
+    lmods = (LDAPMod **) reallocarray((*mods), (2 + i), sizeof(LDAPMod *));
     if (lmods == NULL)
 	return ENOMEM;
 

@@ -582,8 +582,8 @@ add_to_search_result(kernel_object_t *obj, find_context_t *fcontext,
 	 * allocated space is not enough
 	 */
 	if (*num_result_alloc <= fcontext->num_results) {
-		fcontext->objs_found = realloc(fcontext->objs_found,
-		    sizeof (kernel_object_t *) * (*num_result_alloc + BUFSIZ));
+		fcontext->objs_found = reallocarray(fcontext->objs_found,
+		    *num_result_alloc + BUFSIZ, sizeof (kernel_object_t *));
 		if (fcontext->objs_found == NULL) {
 			return (CKR_HOST_MEMORY);
 		}

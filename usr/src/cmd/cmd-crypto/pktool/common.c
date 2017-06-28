@@ -370,8 +370,8 @@ get_token_slots(CK_SLOT_ID_PTR *slot_list, CK_ULONG *slot_count)
 		}
 
 		/* If the number of slots grew, try again. */
-		if ((tmp2_list = (CK_SLOT_ID_PTR) realloc(tmp_list,
-		    tmp_count * sizeof (CK_SLOT_ID))) == NULL) {
+		if ((tmp2_list = reallocarray(tmp_list, tmp_count,
+		    sizeof (CK_SLOT_ID))) == NULL) {
 			free(tmp_list);
 			rv = CKR_HOST_MEMORY;
 			break;
@@ -404,7 +404,7 @@ populate_opts(char *optstring)
 	 */
 	for (i = 0; *optstring != '\0'; i++) {
 		if ((temp = (av_opts *)((i == 0) ? malloc(sizeof (av_opts)) :
-		    realloc(opts_av, (i+1) * sizeof (av_opts)))) == NULL) {
+		    reallocarray(opts_av, i + 1, sizeof (av_opts)))) == NULL) {
 			free(opts_av);
 			opts_av = NULL;
 			return (0);
@@ -1205,15 +1205,15 @@ addToEKUList(EKU_LIST *ekus, int critical, KMF_OID *newoid)
 	if (newoid != NULL && ekus != NULL) {
 		ekus->eku_count++;
 
-		ekus->critlist = realloc(ekus->critlist,
-		    ekus->eku_count * sizeof (int));
+		ekus->critlist = reallocarray(ekus->critlist,
+		    ekus->eku_count, sizeof (int));
 		if (ekus->critlist != NULL)
 			ekus->critlist[ekus->eku_count-1] = critical;
 		else
 			return (KMF_ERR_MEMORY);
 
-		ekus->ekulist = realloc(
-		    ekus->ekulist, ekus->eku_count * sizeof (KMF_OID));
+		ekus->ekulist = reallocarray(ekus->ekulist, ekus->eku_count,
+		    sizeof (KMF_OID));
 		if (ekus->ekulist != NULL)
 			ekus->ekulist[ekus->eku_count-1] = *newoid;
 		else

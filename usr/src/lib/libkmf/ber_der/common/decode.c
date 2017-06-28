@@ -608,8 +608,8 @@ kmfber_scanf(BerElement *ber, const char *fmt, ...)
 			} else {
 				if ((size_t)(j+2) > array_size) {
 					/* We'v overflowed our buffer */
-					*sss = (char **)realloc(*sss,
-					    (array_size * 2) * sizeof (char *));
+					*sss = (char **)reallocarray(*sss,
+					    array_size * 2, sizeof (char *));
 					array_size = array_size * 2;
 				}
 			}
@@ -636,8 +636,8 @@ kmfber_scanf(BerElement *ber, const char *fmt, ...)
 				*bv = (struct berval **)malloc(
 				    2 * sizeof (struct berval *));
 			} else {
-				*bv = (struct berval **)realloc(*bv,
-				    (j + 2) * sizeof (struct berval *));
+				*bv = reallocarray(*bv, j + 2,
+				    sizeof(struct berval *));
 			}
 			rc = kmfber_get_stringal(ber, &((*bv)[j]));
 			j++;

@@ -1424,7 +1424,7 @@ dladm_bridge_get_fwdtable(dladm_handle_t handle, const char *bridge,
 	for (;;) {
 		if (nblf >= maxblf) {
 			maxblf = maxblf == 0 ? 64 : (maxblf << 1);
-			newblf = realloc(blf, maxblf * sizeof (*blf));
+			newblf = reallocarray(blf, maxblf, sizeof (*blf));
 			if (newblf == NULL) {
 				free(blf);
 				blf = NULL;
@@ -1473,7 +1473,7 @@ dladm_bridge_get_trillnick(const char *bridge, uint_t *nnick)
 	for (;;) {
 		if (ntln >= maxtln) {
 			maxtln = maxtln == 0 ? 64 : (maxtln << 1);
-			newtln = realloc(tln, maxtln * sizeof (*tln));
+			newtln = reallocarray(tln, maxtln, sizeof (*tln));
 			if (newtln == NULL) {
 				free(tln);
 				tln = NULL;

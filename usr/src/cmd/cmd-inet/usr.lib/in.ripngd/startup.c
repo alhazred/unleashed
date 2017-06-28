@@ -470,8 +470,8 @@ setup_listen_sock(int ifindex)
 		    malloc(max_poll_ifs * sizeof (struct pollfd));
 	} else if (poll_ifs_num > max_poll_ifs) {
 		max_poll_ifs *= 2;
-		poll_ifs = (struct pollfd *)realloc((char *)poll_ifs,
-		    max_poll_ifs * sizeof (struct pollfd));
+		poll_ifs = reallocarray(poll_ifs, max_poll_ifs,
+		    sizeof (struct pollfd));
 	}
 	if (poll_ifs == NULL) {
 		syslog(LOG_ERR, "setup_listen_sock: out of memory");

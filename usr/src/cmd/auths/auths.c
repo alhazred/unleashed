@@ -145,8 +145,8 @@ add_auth(const char *authname, void *ctxt, void *res)
 
 	if (cbs->auth_cnt >= cbs->auth_max) {
 		cbs->auth_max += INCRAUTHS;
-		cbs->auths = realloc(cbs->auths,
-		    cbs->auth_max * sizeof (char *));
+		cbs->auths = reallocarray(cbs->auths, cbs->auth_max,
+		    sizeof (char *));
 
 		if (cbs->auths == NULL) {
 			(void) fprintf(stderr, "%s: ", progname);

@@ -197,8 +197,8 @@ int add_db_arg(char *arg)
 {
     char **temp;
     db5util_db_args_size++;
-    temp = realloc(db5util_db_args,
-		   sizeof(char *) * (db5util_db_args_size + 1));
+    temp = reallocarray(db5util_db_args, db5util_db_args_size + 1,
+        sizeof(char *));
     if (temp == NULL)
 	return 0;
     db5util_db_args = temp;

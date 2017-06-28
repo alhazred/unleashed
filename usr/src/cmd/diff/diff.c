@@ -1429,8 +1429,7 @@ setupdir(char *cp)
 
 			(void) strcpy(ep->d_entry, rp->d_name);
 		}
-		dp = (struct dir *)realloc((char *)dp,
-			(nitems + 1) * sizeof (struct dir));
+		dp = reallocarray(dp, nitems + 1, sizeof (struct dir));
 		if (dp == 0)
 			error(gettext(NO_MEM_ERR));
 	}

@@ -549,8 +549,8 @@ addipsecalg(struct ipsecalgent *newbie, uint_t flags)
 	}
 
 	/* append the new algorithm */
-	holder = realloc(current_proto->proto_algs,
-	    sizeof (struct ipsecalgent *) * (i + 1));
+	holder = reallocarray(current_proto->proto_algs, i + 1,
+	    sizeof (struct ipsecalgent *));
 	if (holder == NULL) {
 		_clean_trash(protos, num_protos);
 		return (LIBIPSEC_ALGS_DIAG_NOMEM);
@@ -687,8 +687,7 @@ addipsecproto(const char *proto_name, int proto_num,
 
 	/* add new protocol */
 	num_protos++;
-	new_proto = realloc(protos, num_protos *
-	    sizeof (ipsec_proto_t));
+	new_proto = reallocarray(protos, num_protos, sizeof (ipsec_proto_t));
 	if (new_proto == NULL) {
 		_clean_trash(protos, num_protos - 1);
 		return (LIBIPSEC_ALGS_DIAG_NOMEM);

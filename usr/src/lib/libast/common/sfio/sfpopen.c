@@ -79,7 +79,7 @@ char*	argcmd;
 
 		/* new argument */
 		argv[n++] = s;
-		if((n%16) == 0 && !(argv = (char**)realloc(argv,(n+16)*sizeof(char*))) )
+		if((n%16) == 0 && !(argv = (char**)reallocarray(argv, (n + 16), sizeof(char *))) )
 			goto do_interp;
 
 		/* make this into a C string */

@@ -753,7 +753,8 @@ dt_provmod_open(dt_provmod_t **provmod, dt_fdlist_t *dfp)
 
 		if (dfp->df_ents == dfp->df_size) {
 			uint_t size = dfp->df_size ? dfp->df_size * 2 : 16;
-			int *fds = realloc(dfp->df_fds, size * sizeof (int));
+			int *fds = reallocarray(dfp->df_fds, size,
+			    sizeof (int));
 
 			if (fds == NULL)
 				break; /* skip the rest of this directory */

@@ -216,7 +216,7 @@ main(int argc, char *argv[])
 			}
 			if (n <= nids)
 				break;
-			ids = realloc(ids, (nids = n) * sizeof (int));
+			ids = reallocarray(ids, (nids = n), sizeof (int));
 		}
 
 		(void) printf("%s%s%s%s%s%s%s%s\n", chdr,
@@ -275,7 +275,7 @@ main(int argc, char *argv[])
 			}
 			if (n <= nids)
 				break;
-			ids = realloc(ids, (nids = n) * sizeof (int));
+			ids = reallocarray(ids, (nids = n), sizeof (int));
 		}
 
 		if (!qflg || oflg || bflg || pflg || tflg || iflg)
@@ -341,7 +341,7 @@ main(int argc, char *argv[])
 			}
 			if (n <= nids)
 				break;
-			ids = realloc(ids, (nids = n) * sizeof (int));
+			ids = reallocarray(ids, (nids = n), sizeof (int));
 		}
 
 		if (bflg || tflg || (!qflg && !mflg))

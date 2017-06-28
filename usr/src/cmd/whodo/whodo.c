@@ -617,7 +617,7 @@ devadd(char *name, dev_t ddev)
 
 	if (ndevs == maxdev) {
 		maxdev += DNINCR;
-		dp = realloc(devl, maxdev * sizeof (struct devl));
+		dp = reallocarray(devl, maxdev, sizeof (struct devl));
 		if (!dp) {
 			(void) fprintf(stderr,
 			    gettext("%s: out of memory!: %s\n"),

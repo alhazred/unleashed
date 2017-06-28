@@ -60,7 +60,7 @@ stack_loop(prgreg_t fp, prgreg_t **prevfpp, int *nfpp, uint_t *pfpsizep)
 
 	if (nfp == pfpsize) {
 		pfpsize = pfpsize ? pfpsize * 2 : 16;
-		prevfp = realloc(prevfp, pfpsize * sizeof (prgreg_t));
+		prevfp = reallocarray(prevfp, pfpsize, sizeof (prgreg_t));
 		/*
 		 * Just assume there is no loop in the face of allocation
 		 * failure; the caller still has the original prevfp pointer.
@@ -180,8 +180,8 @@ load_uclist(uclist_t *ucl, const lwpstatus_t *psp)
 	for (;;) {
 		if (ucl->uc_nelems == ucl->uc_size) {
 			new_size = ucl->uc_size ? ucl->uc_size * 2 : 16;
-			new_addrs = realloc(ucl->uc_addrs,
-			    new_size * sizeof (uintptr_t));
+			new_addrs = reallocarray(ucl->uc_addrs, new_size,
+			    sizeof (uintptr_t));
 
 			if (new_addrs != NULL) {
 				ucl->uc_addrs = new_addrs;

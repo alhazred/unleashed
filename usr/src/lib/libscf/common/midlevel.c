@@ -185,7 +185,7 @@ fill_prop(scf_property_t *prop, const char *pgname, const char *propname,
 	for (numvals = 0; (iterret = scf_iter_next_value(iter, val)) == 1;
 	    numvals++) {
 		vallist_backup = vallist;
-		if ((vallist = realloc(vallist, (numvals + 1) *
+		if ((vallist = reallocarray(vallist, numvals + 1,
 		    sizeof (*vallist))) == NULL) {
 			vallist = vallist_backup;
 			goto error1;

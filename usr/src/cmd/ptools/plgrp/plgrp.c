@@ -258,16 +258,16 @@ lgrps_add_lgrp(plgrp_args_t *arg, int id)
 	if (arg->nlgrps == arg->nelements) {
 		arg->nelements += LGRP_BITMAP_CHUNK;
 
-		arg->lgrps = realloc(arg->lgrps,
-		    arg->nelements * sizeof (lgrp_id_t));
+		arg->lgrps = reallocarray(arg->lgrps, arg->nelements,
+		    sizeof (lgrp_id_t));
 		if (arg->lgrps == NULL) {
 			(void) fprintf(stderr, gettext("%s: out of memory\n"),
 			    progname);
 			exit(EXIT_FAILURE);
 		}
 
-		arg->affs = realloc(arg->affs,
-		    arg->nelements * sizeof (lgrp_affinity_t));
+		arg->affs = reallocarray(arg->affs, arg->nelements,
+		    sizeof (lgrp_affinity_t));
 
 		if (arg->affs == NULL) {
 			(void) fprintf(stderr, gettext("%s: out of memory\n"),
@@ -306,8 +306,8 @@ lgrps_bitmap_init(lgrp_cookie_t cookie, lgrp_id_t lgrpid, char **bitmap_array,
 	 */
 	while (lgrpid >= *bitmap_nelements) {
 		*bitmap_nelements += LGRP_BITMAP_CHUNK;
-		*bitmap_array = realloc(*bitmap_array,
-		    *bitmap_nelements * sizeof (char));
+		*bitmap_array = reallocarray(*bitmap_array,
+		    *bitmap_nelements, sizeof (char));
 		if (*bitmap_array == NULL) {
 			(void) fprintf(stderr, gettext("%s: out of memory\n"),
 			    progname);

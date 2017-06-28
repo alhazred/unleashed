@@ -228,8 +228,8 @@ parse_hes_list(struct irs_pr *this, char **hes_list) {
 		while (*p) {
 			if ((num + 1) >= max || !pvt->proto.p_aliases) {
 				max += 10;
-				new = realloc(pvt->proto.p_aliases,
-					      max * sizeof(char *));
+				new = reallocarray(pvt->proto.p_aliases, max,
+				    sizeof (char *));
 				if (!new) {
 					errno = ENOMEM;
 					goto cleanup;

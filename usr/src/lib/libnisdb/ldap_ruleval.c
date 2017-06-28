@@ -124,7 +124,7 @@ growRuleValue(int oldCount, int newCount, __nis_rule_value_t *old,
 	if (rvIn == 0)
 		rvIn = (__nis_rule_value_t *)&rvZero;
 
-	rv = realloc(old, newCount * sizeof (rv[0]));
+	rv = reallocarray(old, newCount, sizeof (rv[0]));
 	if (rv == 0) {
 		logmsg(MSG_NOMEM, LOG_ERR,
 			"%s: realloc(%d ((%d+%d)*%d)) => 0",
@@ -310,9 +310,9 @@ addVal2RuleValue(char *msg, int caseSens, int snipNul, __nis_value_type_t type,
 				return (0);
 
 			/* Not a duplicate, so add the name/value pair */
-			v = realloc(inVal[i].val,
-					(inVal[i].numVals+1) *
-					sizeof (inVal[i].val[0]));
+			v = reallocarray(inVal[i].val,
+					 inVal[i].numVals + 1,
+					 sizeof (inVal[i].val[0]));
 			if (v == 0)
 				return (-1);
 			inVal[i].val = v;
@@ -348,7 +348,7 @@ addVal2RuleValue(char *msg, int caseSens, int snipNul, __nis_value_type_t type,
 		memcpy(v->value, value, copyLen);
 	}
 
-	inVal = realloc(inVal, (num+1)*sizeof (inVal[0]));
+	inVal = reallocarray(inVal, num + 1, sizeof (inVal[0]));
 	if (inVal == 0) {
 		if (value != 0) {
 			sfree(v->value);
@@ -358,8 +358,7 @@ addVal2RuleValue(char *msg, int caseSens, int snipNul, __nis_value_type_t type,
 	}
 	*inValP = inVal;
 
-	inName = realloc(inName,
-		(num+1)*sizeof (inName[0]));
+	inName = reallocarray(inName, num + 1, sizeof (inName[0]));
 	if (inName == 0 || (inName[num] =
 			sdup(msg, T, name)) == 0) {
 		sfree(v->value);

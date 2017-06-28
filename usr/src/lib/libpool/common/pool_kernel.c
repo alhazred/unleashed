@@ -2603,8 +2603,8 @@ pool_knl_result_set_realloc(pool_knl_result_set_t *rs)
 	pool_knl_elem_t **old_list = rs->pkr_list;
 	int new_size = rs->pkr_size * 2;
 
-	if ((rs->pkr_list = realloc(rs->pkr_list,
-	    new_size * sizeof (pool_knl_elem_t *))) == NULL) {
+	if ((rs->pkr_list = reallocarray(rs->pkr_list, new_size,
+	    sizeof (pool_knl_elem_t *))) == NULL) {
 		rs->pkr_list = old_list;
 		pool_seterror(POE_SYSTEM);
 		return (PO_FAIL);

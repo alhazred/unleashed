@@ -127,7 +127,7 @@ do_extends(const Meta_info parentM, const Translator_info *T_info, char *value)
 			buf2 = NULL;
 			continue;
 		}
-		p = realloc(localvalue, sizeof (char)*(strlen(buf2)+1));
+		p = reallocarray(localvalue, strlen(buf2) + 1, sizeof (char));
 		if (p == NULL) {
 			errlog(ERROR | FATAL, "Error (do_extends): "
 			    "Unable to allocate memory\n");
@@ -202,10 +202,11 @@ do_extends(const Meta_info parentM, const Translator_info *T_info, char *value)
 				buf2 = NULL;
 				continue;
 			}
-			p = realloc(localvalue, sizeof (char)*(strlen(buf2)+1));
+			p = reallocarray(localvalue, strlen(buf2) + 1,
+			    sizeof (char));
 			if (p == NULL) {
-				p = realloc(NULL,
-				    sizeof (char)*(strlen(buf2)+1));
+				p = reallocarray(NULL, strlen(buf2) + 1,
+				    sizeof (char));
 				if (p == NULL) {
 					errlog(ERROR | FATAL,
 					    "Error: unable to "
@@ -345,10 +346,10 @@ arch_match(FILE *fp, int arch)
 			buf2 = NULL;
 			continue;
 		}
-		p = realloc(localvalue, sizeof (char)*(strlen(buf2)+1));
+		p = reallocarray(localvalue, strlen(buf2) + 1, sizeof (char));
 		if (p == NULL) {
-			p = realloc(NULL,
-				sizeof (char)*(strlen(buf2)+1));
+			p = reallocarray(NULL, strlen(buf2) + 1,
+			    sizeof (char));
 			if (p == NULL) {
 				errlog(ERROR | FATAL,
 					"Error: unable to "

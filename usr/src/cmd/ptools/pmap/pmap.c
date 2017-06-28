@@ -1176,7 +1176,7 @@ nextmap(void)
 		else
 			next = map_alloc * 2;
 
-		newmaps = realloc(maps, next * sizeof (mapdata_t));
+		newmaps = reallocarray(maps, next, sizeof (mapdata_t));
 		if (newmaps == NULL) {
 			(void) perr("failed to allocate maps");
 			exit(1);

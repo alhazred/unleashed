@@ -135,7 +135,7 @@ insert_word(int off)
 	if (off_idx == off_size) {
 		uint_t *tmp;
 		off_size += CHUNK;
-		tmp = realloc(offsets, sizeof (uint_t) * off_size);
+		tmp = reallocarray(offsets, off_size, sizeof (uint_t));
 		if (tmp == NULL) {
 			syslog(LOG_ERR, MODNAME ": out of memory");
 			free(offsets);

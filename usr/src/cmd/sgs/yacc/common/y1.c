@@ -1195,7 +1195,7 @@ exp_lkst()
  */
 		error(gettext(
 		"could not expand lookset array"));
-	lkst = (LOOKSETS *) realloc((char *)lkst, sizeof (LOOKSETS) * lsetsize);
+	lkst = reallocarray(lkst, lsetsize, sizeof (LOOKSETS));
 	for (i = lsetsize-LSETSIZE, j = 0; i < lsetsize; ++i, ++j)
 		lkst[i].lset = tmp_lset + TBITSET * j;
 	tmp_lset = NULL;
@@ -1239,7 +1239,7 @@ exp_wsets()
  */
 		error(gettext(
 		"could not expand lookset array"));
-	wsets = (WSET *) realloc((char *)wsets, sizeof (WSET) * wsetsz);
+	wsets = reallocarray(wsets, wsetsz, sizeof (WSET));
 	for (i = wsetsz-WSETSIZE, j = 0; i < wsetsz; ++i, ++j)
 		wsets[i].ws.lset = tmp_lset + TBITSET * j;
 	tmp_lset = NULL;
@@ -1263,11 +1263,11 @@ exp_states()
 	nstatesz += NSTATES;
 
 	pstate = (ITEM **)
-	    realloc((char *)pstate, sizeof (ITEM *)*(nstatesz+2));
-	mstates = (int *)realloc((char *)mstates, sizeof (int)*nstatesz);
-	defact = (int *)realloc((char *)defact, sizeof (int)*nstatesz);
-	tystate = (int *)realloc((char *)tystate, sizeof (int)*nstatesz);
-	indgo = (int *)realloc((char *)indgo, sizeof (int)*nstatesz);
+	    reallocarray(pstate, nstatesz + 2, sizeof (ITEM *));
+	mstates = reallocarray(mstates, nstatesz, sizeof (int));
+	defact = reallocarray(defact, nstatesz, sizeof (int));
+	tystate = reallocarray(tystate, nstatesz, sizeof (int));
+	indgo = reallocarray(indgo, nstatesz, sizeof (int));
 
 	if ((*pstate == NULL) || (tystate == NULL) || (defact == NULL) ||
 	    (indgo == NULL) || (mstates == NULL))
@@ -1289,7 +1289,7 @@ exp_psmem()
 	int i;
 
 	new_pstsize += PSTSIZE;
-	psmem = (ITEM *) realloc((char *)psmem, sizeof (ITEM) * new_pstsize);
+	psmem = reallocarray(psmem, new_pstsize, sizeof (ITEM));
 	if (psmem == NULL)
 /*
  * TRANSLATION_NOTE  -- This is a message from yacc.

@@ -155,8 +155,8 @@ kmf_get_token_slots(KMF_HANDLE *handle, CK_SLOT_ID_PTR *slot_list,
 		 * If the number of slots grew, try again. This
 		 * is to be consistent with pktool in ONNV.
 		 */
-		if ((tmp2_list = (CK_SLOT_ID_PTR) realloc(tmp_list,
-		    tmp_count * sizeof (CK_SLOT_ID))) == NULL) {
+		if ((tmp2_list = reallocarray(tmp_list, tmp_count,
+		    sizeof (CK_SLOT_ID))) == NULL) {
 			free(tmp_list);
 			kmf_rv = KMF_ERR_MEMORY;
 			break;

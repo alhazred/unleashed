@@ -715,7 +715,7 @@ static int
 vlist_append(int **vlistp, int *vcntp, int value)
 {
 	(*vcntp)++;
-	if ((*vlistp = realloc(*vlistp, *vcntp * sizeof (**vlistp))) != NULL)
+	if ((*vlistp = reallocarray(*vlistp, *vcntp, sizeof (**vlistp))) != NULL)
 		*(*vlistp + *vcntp - 1) = value;
 	else
 		mesg(MERR, alloc_fmt, "threshold list", strerror(errno));

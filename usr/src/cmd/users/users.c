@@ -40,7 +40,7 @@ main(int argc, char **argv)
 			exit(1);
 		}
 
-	names = namp = (char **)realloc(NULL, BUFSIZ * sizeof (char *));
+	names = namp = reallocarray(NULL, BUFSIZ, sizeof (char *));
 
 	setutxent();
 
@@ -53,8 +53,7 @@ main(int argc, char **argv)
 			continue;
 		if (nusers == bufflen) {
 			bufflen *= 2;
-			names = (char **)realloc(names,
-			    bufflen * sizeof (char *));
+			names = reallocarray(names, bufflen, sizeof (char *));
 			namp = names + nusers;
 		}
 		*namp++ = strndup(utmpx->ut_name, sizeof (utmpx->ut_name));

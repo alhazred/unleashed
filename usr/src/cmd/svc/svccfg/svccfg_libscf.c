@@ -13508,12 +13508,13 @@ listprop(const char *pattern, int only_pgs, int templates)
 		    fnmatch(pattern, pgnbuf, 0) == 0) {
 			if (i+1 >= allocd) {
 				allocd *= 2;
-				objects = realloc(objects,
-				    sizeof (*objects) * allocd);
+				objects = reallocarray(objects, allocd,
+				    sizeof (*objects));
 				names =
-				    realloc(names, sizeof (*names) * allocd);
-				tmpls = realloc(tmpls,
-				    sizeof (*tmpls) * allocd);
+				    reallocarray(names, allocd,
+				    sizeof (*names));
+				tmpls = reallocarray(tmpls, allocd,
+				    sizeof (*tmpls));
 				if (objects == NULL || names == NULL ||
 				    tmpls == NULL)
 					uu_die(gettext("Out of memory"));
@@ -13571,12 +13572,12 @@ listprop(const char *pattern, int only_pgs, int templates)
 			    fnmatch(pattern, ppnbuf, 0) == 0) {
 				if (i+1 >= allocd) {
 					allocd *= 2;
-					objects = realloc(objects,
-					    sizeof (*objects) * allocd);
-					names = realloc(names,
-					    sizeof (*names) * allocd);
-					tmpls = realloc(tmpls,
-					    sizeof (*tmpls) * allocd);
+					objects = reallocarray(objects,
+					    allocd, sizeof (*objects));
+					names = reallocarray(names, allocd,
+					    sizeof (*names));
+					tmpls = reallocarray(tmpls, allocd,
+					    sizeof (*tmpls));
 					if (objects == NULL || names == NULL ||
 					    tmpls == NULL)
 						uu_die(gettext(
@@ -15729,7 +15730,7 @@ tokenize(char *str, const char *sep)
 	    token = strtok_r(NULL, sep, &lasts), ++n) {
 		if (n + 1 >= size) {
 			size *= 2;
-			if ((buf = realloc(buf, size * sizeof (char *))) ==
+			if ((buf = reallocarray(buf, size, sizeof (char *))) ==
 			    NULL) {
 				uu_die(gettext("Out of memory"));
 			}
@@ -17186,8 +17187,8 @@ lscf_service_cleanup(void *act, scf_walkinfo_t *wip)
 			struct mpg_mfile **newmpvarry;
 
 			mfstmax = mfstmax * 2;
-			newmpvarry = realloc(mpvarry,
-			    sizeof (struct mpg_mfile *) * mfstmax);
+			newmpvarry = reallocarray(mpvarry, mfstmax,
+			    sizeof (struct mpg_mfile *));
 
 			if (newmpvarry == NULL)
 				goto out_free;

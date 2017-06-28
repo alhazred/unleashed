@@ -69,7 +69,7 @@ addarg(struct arglist *al, const char *arg)
 
 	if (al->argc == al->maxc) {
 		al->maxc <<= 1;
-		al->argv = realloc(al->argv, al->maxc * sizeof (char *));
+		al->argv = reallocarray(al->argv, al->maxc, sizeof (char *));
 		if (al->argv == NULL)
 			err(EX_TEMPFAIL, "realloc");
 	}

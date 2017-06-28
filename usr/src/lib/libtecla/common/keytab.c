@@ -169,8 +169,9 @@ static int _kt_extend_table(KeyTab *kt)
 /*
  * Attempt to increase the size of the table.
  */
-  KeySym *newtab = (KeySym *) realloc(kt->table, sizeof(kt->table[0]) *
-				      (kt->size + KT_TABLE_INC));
+  KeySym *newtab = (KeySym *) reallocarray(kt->table,
+					   (kt->size + KT_TABLE_INC),
+					   sizeof(kt->table[0]));
 /*
  * Failed?
  */

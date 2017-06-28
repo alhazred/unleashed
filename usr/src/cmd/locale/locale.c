@@ -529,7 +529,7 @@ add_loc_entry(char *loc)
 	if (num_of_loc >= num_of_entries) {
 		char	**tmp;
 		num_of_entries += _INC_NUM;
-		tmp = realloc(entries, sizeof (char *) * num_of_entries);
+		tmp = reallocarray(entries, num_of_entries, sizeof (char *));
 		if (tmp == NULL) {
 			/* restoring original locale */
 			(void) setlocale(LC_ALL, save_loc);

@@ -1209,9 +1209,9 @@ read_vc(void *ct_tmp, caddr_t buf, int len)
 
 			/* reallocate pfdp to svc_max_pollfd +1 */
 			if (npfd != (svc_max_pollfd + 1)) {
-				struct pollfd *tmp_pfdp = realloc(pfdp,
-				    sizeof (struct pollfd) *
-				    (svc_max_pollfd + 1));
+				struct pollfd *tmp_pfdp = reallocarray(pfdp,
+				    svc_max_pollfd + 1,
+				    sizeof (struct pollfd));
 				if (tmp_pfdp == NULL) {
 					sig_rw_unlock(&svc_fd_lock);
 					(void) syslog(LOG_ERR, clnt_vc_errstr,

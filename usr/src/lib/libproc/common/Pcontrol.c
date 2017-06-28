@@ -3864,8 +3864,8 @@ Padd_mapping(struct ps_prochandle *P, off64_t off, file_info_t *fp,
 	if (P->map_count == P->map_alloc) {
 		size_t next = P->map_alloc ? P->map_alloc * 2 : 16;
 
-		if ((P->mappings = realloc(P->mappings,
-		    next * sizeof (map_info_t))) == NULL)
+		if ((P->mappings = reallocarray(P->mappings, next,
+		    sizeof (map_info_t))) == NULL)
 			return (-1);
 
 		P->map_alloc = next;

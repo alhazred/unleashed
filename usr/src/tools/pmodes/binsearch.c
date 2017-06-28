@@ -72,7 +72,8 @@ item_add(itemlist l, char *s)
 			l->nallocated *= 2;
 		else
 			l->nallocated = ALLOCCHUNK;
-		l->items = realloc(l->items, sizeof (char *) * l->nallocated);
+		l->items = reallocarray(l->items, l->nallocated,
+		   sizeof (char *));
 	}
 	l->items[l->nused++] = s;
 	l->sorted = l->nused <= 1;

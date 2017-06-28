@@ -1270,7 +1270,7 @@ krb5_decode_krbsecretkey(context, entries, bvalues)
 	}
 	noofkeys += n_kd;
 	tmp = key_data;
-	key_data = realloc (key_data, noofkeys * sizeof (krb5_key_data));
+	key_data = reallocarray(key_data, noofkeys, sizeof(krb5_key_data));
 	if (key_data == NULL) {
 	    key_data = tmp;
 	    st = ENOMEM;

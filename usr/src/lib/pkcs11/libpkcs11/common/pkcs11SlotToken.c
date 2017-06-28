@@ -646,8 +646,8 @@ C_GetMechanismList(CK_SLOT_ID slotID, CK_MECHANISM_TYPE_PTR pMechanismList,
 	if (rv == CKR_BUFFER_TOO_SMALL) {
 		/* Need to use more space */
 		tmpmech_list = pmech_list;
-		pmech_list = realloc
-		    (tmpmech_list, tmpmech_count * sizeof (CK_MECHANISM_TYPE));
+		pmech_list = reallocarray(tmpmech_list, tmpmech_count,
+		    sizeof (CK_MECHANISM_TYPE));
 
 		if (pmech_list == NULL) {
 			free(tmpmech_list);

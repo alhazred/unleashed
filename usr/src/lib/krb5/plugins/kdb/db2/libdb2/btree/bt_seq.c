@@ -616,7 +616,7 @@ bt_rcgrowstk(rc)
 
 	osize = rc->ssize;
 	rc->ssize *= 2;
-	e = realloc(rc->stack, rc->ssize * sizeof(EPGNO));
+	e = reallocarray(rc->stack, rc->ssize, sizeof(EPGNO));
 	if (e == NULL) {
 		rc->ssize = osize;
 		errno = ENOMEM;

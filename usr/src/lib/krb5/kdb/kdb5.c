@@ -1016,7 +1016,7 @@ krb5_db_put_principal(krb5_context kcontext,
 	    }
 
 	    db_args_size++;
-	    t = realloc(db_args, sizeof(char *) * (db_args_size + 1));	/* 1 for NULL */
+	    t = reallocarray(db_args, (db_args_size + 1), sizeof(char *));	/* 1 for NULL */
 	    if (t == NULL) {
 		status = ENOMEM;
 		goto clean_n_exit;

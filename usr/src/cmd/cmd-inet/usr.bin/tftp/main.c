@@ -810,8 +810,8 @@ makeargv(int *argcp, char ***argvp)
 		argc++;
 		if (argc == argv_size) {
 			argv_size += MARGV_INC;
-			if ((argv = realloc(argv,
-			    argv_size * sizeof (char *))) == NULL) {
+			if ((argv = reallocarray(argv, argv_size,
+			    sizeof (char *))) == NULL) {
 				perror("tftp: realloc");
 				exit(1);
 			}

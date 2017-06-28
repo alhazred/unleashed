@@ -316,7 +316,7 @@ main( int argc, char **argv )
 
 		    /* if we did, add another BUFSIZ worth of bytes */
 	   	    if ((linep = (char *)
-			realloc(linep, (increment + 1) * BUFSIZ)) == NULL) {
+			reallocarray(linep, increment + 1, BUFSIZ)) == NULL) {
 			fprintf( stderr, gettext("Out of memory\n") );
 			exit( LDAP_NO_MEMORY );
 		    }

@@ -455,7 +455,7 @@ get_passwd_list(bool_t adjunct, char *domain)
 			if ((res_count + 1) >= array_size) {
 				array_size += ARRAY_CHUNK;
 				res_old = res;
-				res = realloc(res, array_size *
+				res = reallocarray(res, array_size,
 				    sizeof (char *));
 				if (NULL == res) {
 					res_old[res_count] = NULL;
@@ -1011,7 +1011,7 @@ get_mapping_map_list(char *domain)
 			if ((res_count + 1) >= array_size) {
 				array_size += ARRAY_CHUNK;
 				res_old = res;
-				res = realloc(res, array_size *
+				res = reallocarray(res, array_size,
 				    sizeof (char *));
 				if (NULL == res) {
 					res_old[res_count] = NULL;

@@ -1216,9 +1216,8 @@ void kdb5_ldap_modify(argc, argv)
 		existing_entries = list_count_str_array(rparams->kdcservers);
 		list_entries = list_count_str_array(list);
 		if (rmask & LDAP_REALM_KDCSERVERS) {
-		    tempstr = (char **)realloc(
-			rparams->kdcservers,
-			sizeof(char *) * (existing_entries+list_entries+1));
+		    tempstr = reallocarray(rparams->kdcservers,
+                       existing_entries + list_entries + 1, sizeof (char *));
 		    if (tempstr == NULL) {
 			retval = ENOMEM;
 			goto cleanup;
@@ -1340,9 +1339,9 @@ void kdb5_ldap_modify(argc, argv)
 		existing_entries = list_count_str_array(rparams->adminservers);
 		list_entries = list_count_str_array(list);
 		if (rmask & LDAP_REALM_ADMINSERVERS) {
-		    tempstr = (char **)realloc(
-			rparams->adminservers,
-			sizeof(char *) * (existing_entries+list_entries+1));
+		    tempstr = (char **)reallocarray(rparams->adminservers,
+                                                    (existing_entries + list_entries + 1),
+                                                    sizeof(char *));
 		    if (tempstr == NULL) {
 			retval = ENOMEM;
 			goto cleanup;
@@ -1464,9 +1463,9 @@ void kdb5_ldap_modify(argc, argv)
 		existing_entries = list_count_str_array(rparams->passwdservers);
 		list_entries = list_count_str_array(list);
 		if (rmask & LDAP_REALM_PASSWDSERVERS) {
-		    tempstr = (char **)realloc(
-			rparams->passwdservers,
-			sizeof(char *) * (existing_entries+list_entries+1));
+		    tempstr = (char **)reallocarray(rparams->passwdservers,
+                                                    (existing_entries + list_entries + 1),
+                                                    sizeof(char *));
 		    if (tempstr == NULL) {
 			retval = ENOMEM;
 			goto cleanup;

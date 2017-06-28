@@ -123,8 +123,7 @@ dfn_pre_visit(nltype *parentp)
 
 	if (dfn_depth >= dfn_sz) {
 		dfn_sz += DFN_DEPTH;
-		dfn_stack = (dfntype *) realloc(dfn_stack,
-		    dfn_sz * sizeof (dfntype));
+		dfn_stack = reallocarray(dfn_stack, dfn_sz, sizeof (dfntype));
 
 		if (!dfn_stack) {
 			(void) fprintf(stderr,

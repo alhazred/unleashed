@@ -1823,7 +1823,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			} else
 				p = NULL;
 			conf.ns_ppc =
-			    (char **)realloc(p, (len+1) * sizeof (char *));
+			    reallocarray(p, len + 1, sizeof (char *));
 			if (conf.ns_ppc == NULL) {
 				__s_api_free2dArray(p);
 				free(tcp);
@@ -1923,7 +1923,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			} else
 				p = NULL;
 			conf.ns_ppc =
-			    (char **)realloc(p, (len+1) * sizeof (char *));
+			    reallocarray(p, len + 1, sizeof (char *));
 			if (conf.ns_ppc == NULL) {
 				__s_api_free2dArray(p);
 				free(tcp);
@@ -2027,7 +2027,7 @@ __ns_ldap_setParamValue(ns_config_t *ptr, const ParamIndexType type,
 			} else
 				p = NULL;
 			conf.ns_ppc =
-			    (char **)realloc(p, (len+1) * sizeof (char *));
+			    reallocarray(p, len + 1, sizeof (char *));
 			if (conf.ns_ppc == NULL) {
 				__s_api_free2dArray(p);
 				free(tcp);

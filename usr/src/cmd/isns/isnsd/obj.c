@@ -2780,7 +2780,7 @@ buff_child_obj(
 	}
 
 	/* the array is full, enlarge the child uid array */
-	p = (void const **)realloc(p, (new_num + 1) * sizeof (void *));
+	p = reallocarray(p, new_num + 1, sizeof (void *));
 	if (p != NULL) {
 		*pp = p;
 		*p = (void *)new_num;
@@ -3289,8 +3289,8 @@ cb_add_child(
 			}
 			if (vpp != NULL) {
 				/* copy required */
-				up = (uint32_t *)realloc(*upp,
-				    (num + 1) * sizeof (uint32_t));
+				up = reallocarray(*upp, num + 1,
+				    sizeof (uint32_t));
 				if (up == NULL) {
 					return (ISNS_RSP_INTERNAL_ERROR);
 				}

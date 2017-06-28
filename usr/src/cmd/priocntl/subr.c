@@ -466,8 +466,8 @@ read_pidlist(size_t *npidsp, FILE *filep)
 	*npidsp = 0;
 
 	do {
-		if ((pidlist = (pid_t *)realloc(pidlist,
-		    (*npidsp + NPIDS) * sizeof (pid_t))) == NULL)
+		if ((pidlist = reallocarray(pidlist, *npidsp + NPIDS,
+		    sizeof (pid_t))) == NULL)
 			return (NULL);
 
 		nitems = fread(pidlist + *npidsp, sizeof (pid_t), NPIDS, filep);

@@ -192,8 +192,8 @@ main(int argc, char **argv)
 			invis[ninvis++] = optarg;
 			if (ninvis == invismaxsize) {
 				invismaxsize += INVISMAXSIZE;
-				invis = (char **)realloc(invis,
-						invismaxsize * sizeof (char *));
+				invis = reallocarray(invis, invismaxsize,
+				    sizeof (char *));
 				if (!invis) {
 					(void) fprintf(stderr,
 						gettext("Not enough memory\n"));

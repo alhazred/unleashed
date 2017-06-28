@@ -354,8 +354,8 @@ overstrike(void)
 			/* obtain the offset of cp */
 			pos = cp - scp;
 			/* reallocate another (n * MEMFCT) * sizeof (wchar_t) */
-			scp = (wchar_t *)realloc(scp,
-				sizeof (wchar_t) * (szbf + (n * MEMFCT)));
+			scp = reallocarray(scp, szbf + (n * MEMFCT),
+			    sizeof (wchar_t));
 			if (!scp) {
 				(void) fprintf(stderr, "malloc failed\n");
 				exit(1);
@@ -448,8 +448,8 @@ iattr(void)
 			/* obtain the offset of cp */
 			pos = cp - scp;
 			/* reallocate another (n * MEMFCT) * sizeof (wchar_t) */
-			scp = (wchar_t *)realloc(scp,
-				sizeof (wchar_t) * (szbf + (n * MEMFCT)));
+			scp = reallocarray(scp, szbf + (n * MEMFCT),
+			    sizeof (wchar_t));
 			if (!scp) {
 				(void) fprintf(stderr, "malloc failed\n");
 				exit(1);

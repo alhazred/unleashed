@@ -471,7 +471,7 @@ getrpcpws(char *flavor)
 
 	rpc_pw_count++;
 	if (!(rpc_pws =
-	    (char **)realloc(rpc_pws, sizeof (char *) * rpc_pw_count))) {
+	    reallocarray(rpc_pws, rpc_pw_count, sizeof (char *)))) {
 		fprintf(stderr, "%s: Realloc failure.\n", program_name);
 		exit(1);
 	}
@@ -987,9 +987,8 @@ addmechtolist(char *mechtype)
 					 */
 					numspecmech++;
 					if ((mechs =
-					    (mechanism_t **)realloc(mechs,
-					    sizeof (mechanism_t *) *
-					    (numspecmech + 1))) == NULL) {
+					    reallocarray(mechs, numspecmech + 1,
+					    sizeof (mechanism_t *))) == NULL) {
 						perror("Can not change keys");
 						exit(1);
 					}

@@ -215,8 +215,8 @@ kmf_get_cert_extns(const KMF_DATA *certdata, KMF_FLAG_CERT_EXTN flag,
 			continue;
 
 		(*nextns)++;
-		elist = realloc(elist, sizeof (KMF_X509_EXTENSION) *
-		    (*nextns));
+		elist = reallocarray(elist, *nextns,
+		    sizeof (KMF_X509_EXTENSION));
 		if (elist == NULL) {
 			ret = KMF_ERR_MEMORY;
 			goto end;
@@ -349,8 +349,8 @@ parse_eku_data(const KMF_DATA *asn1data, KMF_X509EXT_EKU *ekuptr)
 			goto end;
 		}
 		ekuptr->nEKUs++;
-		ekuptr->keyPurposeIdList = realloc(ekuptr->keyPurposeIdList,
-		    ekuptr->nEKUs * sizeof (KMF_OID));
+		ekuptr->keyPurposeIdList = reallocarray(ekuptr->keyPurposeIdList,
+		    ekuptr->nEKUs, sizeof (KMF_OID));
 		if (ekuptr->keyPurposeIdList == NULL) {
 			ret = KMF_ERR_MEMORY;
 			goto end;
@@ -702,9 +702,9 @@ kmf_get_cert_policies(const KMF_DATA *certdata,
 			int cnt =
 			    pinfo->policyQualifiers.numberOfPolicyQualifiers;
 			cnt++;
-			pinfo->policyQualifiers.policyQualifier = realloc(
+			pinfo->policyQualifiers.policyQualifier = reallocarray(
 			    pinfo->policyQualifiers.policyQualifier,
-			    cnt * sizeof (KMF_X509EXT_POLICYQUALIFIERINFO));
+			    cnt, sizeof (KMF_X509EXT_POLICYQUALIFIERINFO));
 			if (pinfo->policyQualifiers.policyQualifier == NULL) {
 				ret = KMF_ERR_MEMORY;
 				goto end;
@@ -716,8 +716,8 @@ kmf_get_cert_policies(const KMF_DATA *certdata,
 			free(pqinfo);
 		}
 		extptr->numberOfPolicyInfo++;
-		extptr->policyInfo = realloc(extptr->policyInfo,
-		    extptr->numberOfPolicyInfo *
+		extptr->policyInfo = reallocarray(extptr->policyInfo,
+		    extptr->numberOfPolicyInfo,
 		    sizeof (KMF_X509EXT_POLICYINFO));
 		if (extptr->policyInfo == NULL) {
 			ret = KMF_ERR_MEMORY;
@@ -873,8 +873,8 @@ kmf_get_cert_auth_info_access(const KMF_DATA *certdata,
 		}
 
 		aia->numberOfAccessDescription++;
-		aia->AccessDesc = realloc(aia->AccessDesc,
-		    aia->numberOfAccessDescription *
+		aia->AccessDesc = reallocarray(aia->AccessDesc,
+		    aia->numberOfAccessDescription,
 		    sizeof (KMF_X509EXT_ACCESSDESC));
 
 		if (aia->AccessDesc == NULL) {
@@ -980,8 +980,8 @@ parse_dp_name(char *dp_der_code, int dp_der_size, KMF_CRL_DIST_POINT *dp)
 			}
 
 			fullname->number++;
-			fullname->namelist = realloc(fullname->namelist,
-			    fullname->number * sizeof (KMF_GENERALNAME));
+			fullname->namelist = reallocarray(fullname->namelist,
+			    fullname->number, sizeof (KMF_GENERALNAME));
 			if (fullname->namelist == NULL) {
 				ret = KMF_ERR_MEMORY;
 				goto out;
@@ -1205,8 +1205,8 @@ kmf_get_cert_crl_dist_pts(const KMF_DATA *certdata,
 			free_dp(dp);
 		} else {
 			crl_dps->number++;
-			crl_dps->dplist = realloc(crl_dps->dplist,
-			    crl_dps->number * sizeof (KMF_CRL_DIST_POINT));
+			crl_dps->dplist = reallocarray(crl_dps->dplist,
+			    crl_dps->number, sizeof (KMF_CRL_DIST_POINT));
 			if (crl_dps->dplist == NULL) {
 				ret = KMF_ERR_MEMORY;
 				free_dp(dp);

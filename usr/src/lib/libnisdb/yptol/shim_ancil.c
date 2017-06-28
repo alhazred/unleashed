@@ -149,9 +149,8 @@ add_in_maplist(char *mapname, char ***list, int *list_len) {
 
 	/* do we need to reallocate ? */
 	if (i+1 >= *list_len) {
-		list_tmp = (char **)realloc(list_tmp,
-				    (*list_len + ARRAY_CHUNK) *
-					sizeof (char *));
+		list_tmp = reallocarray(list_tmp, *list_len + ARRAY_CHUNK,
+		    sizeof (char *));
 		if (list_tmp == NULL) {
 			return (FALSE);
 		}

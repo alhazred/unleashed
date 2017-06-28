@@ -688,8 +688,9 @@ void kdb5_ldap_modify_service(argc, argv)
 		    /* Re-size existing list */
 		    existing_entries = list_count_str_array(srvparams->krbhostservers);
 		    new_entries = list_count_str_array(list);
-		    temp_ptr = (char **) realloc(srvparams->krbhostservers,
-						 sizeof(char *) * (existing_entries + new_entries + 1));
+		    temp_ptr = (char **) reallocarray(srvparams->krbhostservers,
+                                                      (existing_entries + new_entries + 1),
+                                                      sizeof(char *));
 		    if (temp_ptr == NULL) {
 			retval = ENOMEM;
 			goto cleanup;
@@ -859,8 +860,9 @@ void kdb5_ldap_modify_service(argc, argv)
 		    existing_entries = list_count_str_array(
 			srvparams->krbrealmreferences);
 		    new_entries = list_count_str_array(list);
-		    temp_ptr = (char **) realloc(srvparams->krbrealmreferences,
-						 sizeof(char *) * (existing_entries + new_entries + 1));
+		    temp_ptr = (char **) reallocarray(srvparams->krbrealmreferences,
+                                                      (existing_entries + new_entries + 1),
+                                                      sizeof(char *));
 		    if (temp_ptr == NULL) {
 			retval = ENOMEM;
 			goto cleanup;

@@ -445,8 +445,8 @@ acttab *acttab_alloc(void){
 void acttab_action(acttab *p, int lookahead, int action){
   if( p->nLookahead>=p->nLookaheadAlloc ){
     p->nLookaheadAlloc += 25;
-    p->aLookahead = realloc( p->aLookahead,
-                             sizeof(p->aLookahead[0])*p->nLookaheadAlloc );
+    p->aLookahead = reallocarray(p->aLookahead, p->nLookaheadAlloc,
+                                 sizeof(p->aLookahead[0]));
     if( p->aLookahead==0 ){
       fprintf(stderr,"malloc failed\n");
       exit(1);
@@ -487,8 +487,8 @@ int acttab_insert(acttab *p){
   if( p->nAction + n >= p->nActionAlloc ){
     int oldAlloc = p->nActionAlloc;
     p->nActionAlloc = p->nAction + n + p->nActionAlloc + 20;
-    p->aAction = realloc( p->aAction,
-                          sizeof(p->aAction[0])*p->nActionAlloc);
+    p->aAction = reallocarray(p->aAction, p->nActionAlloc,
+                              sizeof(p->aAction[0]));
     if( p->aAction==0 ){
       fprintf(stderr,"malloc failed\n");
       exit(1);

@@ -488,8 +488,8 @@ int addRemoveFlag)
 		 */
 		if (i >= lastAlloc) {
 			lastAlloc += GROUP_MEMBER_ALLOC;
-			valueSet = realloc(valueSet,
-			    sizeof (*valueSet) * lastAlloc);
+			valueSet = reallocarray(valueSet, lastAlloc,
+			    sizeof (*valueSet));
 			if (valueSet == NULL) {
 				ret = STMF_PS_ERROR;
 				break;

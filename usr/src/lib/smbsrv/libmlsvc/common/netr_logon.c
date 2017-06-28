@@ -770,7 +770,7 @@ netr_setup_domain_groups(struct netr_validation_info3 *info3, smb_ids_t *gids)
 
 	total_cnt = gids->i_cnt + i;
 
-	gids->i_ids = realloc(gids->i_ids, total_cnt * sizeof (smb_id_t));
+	gids->i_ids = reallocarray(gids->i_ids, total_cnt, sizeof (smb_id_t));
 	if (gids->i_ids == NULL)
 		return (NT_STATUS_NO_MEMORY);
 

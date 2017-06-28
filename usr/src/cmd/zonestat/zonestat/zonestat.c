@@ -2114,7 +2114,7 @@ zonestat_parse_names(char *names, char ***namelist, size_t count)
 	}
 
 	/* Resise names array */
-	*namelist = realloc(*namelist, sizeof (char *) * (num + count));
+	*namelist = reallocarray(*namelist, num + count, sizeof (char *));
 	if (*namelist == NULL)
 		exit(zonestat_error(gettext("Out of Memory")));
 

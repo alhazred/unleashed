@@ -1462,8 +1462,8 @@ add_to_fs_list(be_fs_list_data_t *fld, const char *fs)
 	if (fld == NULL || fs == NULL)
 		return (1);
 
-	if ((fld->fs_list = (char **)realloc(fld->fs_list,
-	    sizeof (char *)*(fld->fs_num + 1))) == NULL) {
+	if ((fld->fs_list = reallocarray(fld->fs_list, fld->fs_num + 1,
+	    sizeof (char *))) == NULL) {
 		be_print_err(gettext("add_to_fs_list: "
 		    "memory allocation failed\n"));
 		return (1);
@@ -1852,8 +1852,8 @@ unmount_shared_fs(be_unmount_data_t *ud)
 
 	while (getmntent(fp, &ent) == 0) {
 		if (size % read_chunk == 0) {
-			table = (struct mnttab *)realloc(table,
-			    (size + read_chunk) * sizeof (ent));
+			table = reallocarray(table, size + read_chunk,
+			    sizeof (ent));
 		}
 		entp = &table[size++];
 

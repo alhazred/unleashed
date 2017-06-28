@@ -545,7 +545,7 @@ parse_intlist(char *args, int *num_args)
 	while ((holder = strtok((holder == NULL) ? args : NULL, comma)) !=
 	    NULL) {
 		(*num_args)++;
-		rc = realloc(rc, ((*num_args) + 1) * sizeof (int));
+		rc = reallocarray(rc, *num_args + 1, sizeof (int));
 		if (rc == NULL)
 			bail_nomem();
 		rc[(*num_args) - 1] = atoi(holder);
@@ -623,8 +623,8 @@ new_alg(void)
 	newbie.a_names = NULL;
 	while ((holder = strtok((holder == NULL) ? alg_names_string : NULL,
 	    comma)) != NULL) {
-		newbie.a_names = realloc(newbie.a_names,
-		    sizeof (char *) * ((++num_names) + 1));
+		newbie.a_names = reallocarray(newbie.a_names,
+		    ++num_names + 1, sizeof (char *));
 		if (newbie.a_names == NULL)
 			bail_nomem();
 		newbie.a_names[num_names - 1] = holder;

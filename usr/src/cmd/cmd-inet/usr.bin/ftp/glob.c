@@ -591,8 +591,8 @@ Gcat(char *s1, char *s2)
 		if (globerr) {
 			return;
 		}
-		tmp = (char **)realloc(agargv,
-		    (agargv_size + GAVSIZ) * sizeof (char *));
+		tmp = reallocarray(agargv, agargv_size + GAVSIZ,
+		    sizeof (char *));
 		if (tmp == NULL) {
 			globerr = "Arguments too long";
 			return;

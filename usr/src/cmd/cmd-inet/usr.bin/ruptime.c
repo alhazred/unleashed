@@ -152,7 +152,7 @@ main(int argc, char **argv)
 			 * the data.
 			 */
 			hoff = hsp - hs;
-			hs = realloc(hs, hostslim * sizeof (struct hs));
+			hs = reallocarray(hs, hostslim, sizeof (struct hs));
 			if (hs == NULL) {
 				(void) fprintf(stderr, "too many hosts\n");
 				exit(1);

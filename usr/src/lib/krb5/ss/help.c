@@ -127,8 +127,8 @@ void ss_add_info_dir(sci_idx, info_dir, code_ptr)
     dirs = info->info_dirs;
     for (n_dirs = 0; dirs[n_dirs] != NULL; n_dirs++)
 	;		/* get number of non-NULL dir entries */
-    dirs = (char **)realloc((char *)dirs,
-			    (unsigned)(n_dirs + 2)*sizeof(char *));
+    dirs = (char **)reallocarray((char *)dirs, (unsigned)(n_dirs + 2),
+                                 sizeof(char *));
     if (dirs == (char **)NULL) {
 	info->info_dirs = (char **)NULL;
 	*code_ptr = errno;

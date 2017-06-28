@@ -216,7 +216,7 @@ retry:
 		if (nps + 1 >= psize) {
 			if ((psize *= 2) == 0)
 				psize = 20;
-			if ((ps = realloc(ps, psize*sizeof (ps_t *))) == NULL) {
+			if ((ps = reallocarray(ps, psize, sizeof (ps_t *))) == NULL) {
 				perror("realloc()");
 				return (1);
 			}
@@ -423,7 +423,7 @@ ctsort(ctid_t ctid, ps_t *p)
 	if (nctps >= ctsize) {
 		if ((ctsize *= 2) == 0)
 			ctsize = 20;
-		if ((ctps = realloc(ctps, ctsize * sizeof (ps_t *))) == NULL) {
+		if ((ctps = reallocarray(ctps, ctsize, sizeof (ps_t *))) == NULL) {
 			perror("realloc()");
 			exit(1);
 		}

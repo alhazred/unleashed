@@ -550,8 +550,8 @@ meta_mechManager_allocmechs(CK_MECHANISM_TYPE *new_mechs,
 			if (num_mechs == true_mechlist_size) {
 				mechlist_t *newmechlist;
 
-				newmechlist = realloc(mechlist,
-				    2 * true_mechlist_size *
+				newmechlist = reallocarray(mechlist,
+				    2 * true_mechlist_size,
 				    sizeof (mechlist_t));
 
 				if (newmechlist == NULL) {

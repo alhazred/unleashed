@@ -29,6 +29,7 @@
  * common routines for parallelization (used by both fsck and quotacheck)
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <dlfcn.h>
 #include <macros.h>
@@ -328,7 +329,7 @@ alloc_driver(char *name, int (*cf)(), void *datap)
 	if (ndrivers == ndalloc) {
 		dlist = ndalloc ?
 		    (struct driver *)
-		    realloc(dlist, sizeof (struct driver) * DRIVER_ALLOC) :
+		    reallocarray(dlist, DRIVER_ALLOC, sizeof (struct driver)) :
 		    (struct driver *)
 		    malloc(sizeof (struct driver) * DRIVER_ALLOC);
 		if (dlist == NULL) {
@@ -378,9 +379,9 @@ addunit(struct onedev *devp, uint_t unit)
 	newsize = howmany(unit+1, WORDSIZE);
 	if (devp->mapsize < newsize) {
 		devp->unitmap = devp->mapsize ?
-		    (uint_t *)realloc(devp->unitmap,
-		    newsize * sizeof (uint_t)) :
-		    (uint_t *)malloc(newsize * sizeof (uint_t));
+		    reallocarray(devp->unitmap, newsize,
+		    sizeof (uint_t)) :
+		    malloc(newsize * sizeof (uint_t));
 		if (devp->unitmap == NULL) {
 			(void) fprintf(stderr, "out of memory in preenlib\n");
 			exit(1);
@@ -418,9 +419,9 @@ makebusy(struct onedev *dev)
 
 	if (drvp->mapsize < newsize) {
 		drvp->busymap = drvp->mapsize ?
-		    (uint_t *)realloc(drvp->busymap,
-		    newsize * sizeof (uint_t)) :
-		    (uint_t *)malloc(newsize * sizeof (uint_t));
+		    reallocarray(drvp->busymap, newsize,
+		    sizeof (uint_t)) :
+		    malloc(newsize * sizeof (uint_t));
 		if (drvp->busymap == NULL) {
 			(void) fprintf(stderr, "out of memory in preenlib\n");
 			exit(1);

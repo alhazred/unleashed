@@ -87,7 +87,7 @@ add_to_list(struct profile_string_list *list, const char *str)
 
 	if (list->num + 1 >= list->max) {
 		newmax = list->max + 10;
-		newlist = realloc(list->list, newmax * sizeof (char *));
+		newlist = reallocarray(list->list, newmax, sizeof (char *));
 		if (newlist == NULL)
 			return (ENOMEM);
 		list->max = newmax;

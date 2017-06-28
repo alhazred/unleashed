@@ -3668,11 +3668,12 @@ getnets(void)
 
 		inputs = Ninputs + nap->n_cnt;
 
-		Nfd = realloc(Nfd, inputs * sizeof (struct pollfd));
-		Ncf = realloc(Ncf, inputs * sizeof (struct netconfig));
-		Myaddrs = realloc(Myaddrs, inputs * sizeof (struct netbuf *));
-		Udp = realloc(Udp, inputs * sizeof (struct t_unitdata *));
-		Errp = realloc(Errp, inputs * sizeof (struct t_uderr *));
+		Nfd = reallocarray(Nfd, inputs, sizeof (struct pollfd));
+		Ncf = reallocarray(Ncf, inputs, sizeof (struct netconfig));
+		Myaddrs = reallocarray(Myaddrs, inputs,
+		    sizeof (struct netbuf *));
+		Udp = reallocarray(Udp, inputs, sizeof (struct t_unitdata *));
+		Errp = reallocarray(Errp, inputs, sizeof (struct t_uderr *));
 
 		/*
 		 * all malloc failures here are fatal

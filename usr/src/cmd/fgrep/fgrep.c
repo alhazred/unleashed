@@ -641,8 +641,8 @@ init:
 			frontoffset = front - queue;
 			rearoffset = rear - queue;
 			qsize += QSIZE;
-			if ((queue = (struct words **)realloc(queue,
-				qsize * sizeof (struct words *))) == NULL) {
+			if ((queue = reallocarray(queue, qsize,
+			    sizeof (struct words *))) == NULL) {
 				perror("fgrep");
 				exit(2);
 			}
@@ -667,8 +667,8 @@ cloop:
 				frontoffset = front - queue;
 				rearoffset = rear - queue;
 				qsize += QSIZE;
-				if ((queue = (struct words **)realloc(queue,
-				    qsize * sizeof (struct words *))) == NULL) {
+				if ((queue = reallocarray(queue, qsize,
+				    sizeof (struct words *))) == NULL) {
 					perror("fgrep");
 					exit(2);
 				}

@@ -267,7 +267,7 @@ inittab_lookup(uchar_t categories, char consumer, const char *name,
 		/*
 		 * looks like a match.  allocate an entry and fill it in
 		 */
-		new_entries = realloc(entries, (n_entries + 1) *
+		new_entries = reallocarray(entries, n_entries + 1,
 		    sizeof (dhcp_symbol_t));
 
 		/*

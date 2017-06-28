@@ -620,7 +620,7 @@ load64(FILE *fp, int fd, struct dk_gpt **efi)
 			    line);
 			exit(1);
 		}
-		mem = realloc(mem, sizeof (*mem) * (nlines + 1));
+		mem = reallocarray(mem, nlines + 1, sizeof (*mem));
 		if (mem == NULL) {
 			(void) fprintf(stderr, "realloc failed\n");
 			exit(1);

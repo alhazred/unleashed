@@ -521,8 +521,8 @@ makefd_xprt(int fd, uint_t sendsize, uint_t recvsize, t_scalar_t tsdu,
 	}
 
 	while (fd >= nsvc_xdrs) {
-		XDR **tmp_xdrs = realloc(svc_xdrs,
-		    sizeof (XDR *) * (nsvc_xdrs + FD_INCREMENT));
+		XDR **tmp_xdrs = reallocarray(svc_xdrs,
+		    nsvc_xdrs + FD_INCREMENT, sizeof (XDR *));
 		if (tmp_xdrs == NULL) {
 			(void) syslog(LOG_ERR, errstring, makefd_xprt_str,
 			    no_mem_str);

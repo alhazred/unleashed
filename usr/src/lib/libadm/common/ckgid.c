@@ -70,7 +70,7 @@ setmsg(int disp)
 		n += strlen(grpptr->gr_name) + 2;
 		while (n >= m) {
 			m += MALSIZ;
-			msg = realloc(msg, m*sizeof (char));
+			msg = reallocarray(msg, m, sizeof (char));
 		}
 		if (count++)
 			(void) strcat(msg, ", ");

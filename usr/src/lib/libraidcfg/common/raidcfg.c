@@ -1330,8 +1330,8 @@ raid_handle_init()
 	void *ptr;
 
 	raid_handle_sys.handle_num += HANDLER_SLOTS;
-	ptr = realloc(raid_handle_sys.handles,
-	    raid_handle_sys.handle_num * sizeof (handle_attr_t));
+	ptr = reallocarray(raid_handle_sys.handles,
+	    raid_handle_sys.handle_num, sizeof (handle_attr_t));
 	if (ptr == NULL)
 		return (ERR_NOMEM);
 	raid_handle_sys.handles = ptr;

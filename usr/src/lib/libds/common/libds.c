@@ -107,7 +107,7 @@ ds_new_dslibentry(void)
 
 	/* double the size */
 	newndslib = ndslib << 1;
-	if ((dslibtab = realloc(dslibtab, newndslib * sizeof (dslibentry_t)))
+	if ((dslibtab = reallocarray(dslibtab, newndslib, sizeof (dslibentry_t)))
 	    == NULL)
 		return (NULL);
 	dsp = &dslibtab[ndslib];

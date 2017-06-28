@@ -197,12 +197,12 @@ update_port(int vlan_id, const char *portname, datalink_id_t linkid,
 	if (posn >= numports) {
 		struct portdata **newarr;
 
-		newarr = realloc(allports,
-		    sizeof (*newarr) * (nextport + ALLOCINCR));
+		newarr = reallocarray(allports, (nextport + ALLOCINCR),
+		    sizeof (*newarr));
 		if (newarr != NULL)
 			allports = newarr;
-		fds = realloc(fdarray,
-		    sizeof (*fds) * (nextport + ALLOCINCR + FDOFFSET));
+		fds = reallocarray(fdarray, nextport + ALLOCINCR + FDOFFSET,
+		    sizeof (*fds));
 		if (fds != NULL)
 			fdarray = fds;
 		if (newarr == NULL || fds == NULL) {

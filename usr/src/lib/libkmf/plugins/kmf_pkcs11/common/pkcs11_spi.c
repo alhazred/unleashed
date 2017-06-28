@@ -4173,8 +4173,8 @@ KMFPK11_ExportPK12(KMF_HANDLE_T handle, int numattr, KMF_ATTRIBUTE *attrlist)
 		rv = KMFPK11_FindPrikeyByCert(handle, j, fk_attrlist);
 		if (rv == KMF_OK) {
 			numkeys++;
-			keylist = realloc(keylist,
-			    numkeys * sizeof (KMF_KEY_HANDLE));
+			keylist = reallocarray(keylist, numkeys,
+			    sizeof (KMF_KEY_HANDLE));
 			if (keylist == NULL) {
 				rv = KMF_ERR_MEMORY;
 				goto out;

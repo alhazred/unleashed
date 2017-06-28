@@ -48,7 +48,7 @@ project_walk(int (*callback)(projid_t, void *), void *init_data)
 	while ((sz = projlist(projids, osz * sizeof (projid_t))) != osz) {
 		osz = sz;
 		curr_projid = projids;
-		if ((projids = realloc(projids, sz * sizeof (projid_t)))
+		if ((projids = reallocarray(projids, sz, sizeof (projid_t)))
 		    == NULL) {
 			/*
 			 * If realloc() fails, we return ENOMEM.

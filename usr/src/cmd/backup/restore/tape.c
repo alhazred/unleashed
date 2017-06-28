@@ -1267,7 +1267,7 @@ fsd_acl(name, aclp, size)
 
 	i = n;
 	n += j;
-	aclent = realloc(aclent, n * (size_t)sizeof (*aclent));
+	aclent = reallocarray(aclent, n, sizeof (*aclent));
 	if (aclent == NULL) {
 		(void) fprintf(stderr, gettext("Cannot malloc acl list\n"));
 		done(1);

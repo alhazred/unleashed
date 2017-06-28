@@ -382,8 +382,8 @@ __s_api_requestServer(const char *request, const char *server,
 			if (dptr == NULL)
 				continue;
 			dptr++;
-			mptr1 = (char **)realloc((void *)mptr,
-			    sizeof (char *) * (mcnt+2));
+			mptr1 = reallocarray(mptr, mcnt + 2,
+			    sizeof (char *));
 			if (mptr1 == NULL) {
 				__s_api_free2dArray(mptr);
 				if (sptr != &space.s_d) {
@@ -415,8 +415,8 @@ __s_api_requestServer(const char *request, const char *server,
 			if (dptr == NULL)
 				continue;
 			dptr++;
-			cptr1 = (char **)realloc((void *)cptr,
-			    sizeof (char *) * (ccnt+2));
+			cptr1 = reallocarray(cptr, ccnt + 2,
+			    sizeof (char *));
 			if (cptr1 == NULL) {
 				if (sptr != &space.s_d) {
 					(void) munmap((char *)sptr, ndata);
@@ -547,8 +547,8 @@ addConnection(Connection *con)
 	if (i == sessionPoolSize) {
 		/* run out of array, need to increase sessionPool */
 		Connection **cl;
-		cl = (Connection **) realloc(sessionPool,
-		    (sessionPoolSize + SESSION_CACHE_INC) *
+		cl = reallocarray(sessionPool,
+		    sessionPoolSize + SESSION_CACHE_INC,
 		    sizeof (Connection *));
 		if (!cl) {
 			(void) mutex_unlock(&sessionPoolLock);

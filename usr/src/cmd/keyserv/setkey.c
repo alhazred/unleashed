@@ -1884,8 +1884,7 @@ getmechwrap()
 
 	mechsbak = mechs;
 	/* mechs == NULL and i == 0 is valid "no mechs configed" case */
-	if ((mechs = (mechanism_t **)realloc(mechs,
-			sizeof (mechanism_t *) * (i + 2))) == NULL) {
+	if ((mechs = reallocarray(mechs, i + 2, sizeof (mechanism_t *))) == NULL) {
 		if (mechsbak)
 			__nis_release_mechanisms(mechsbak);
 		free(desmech);

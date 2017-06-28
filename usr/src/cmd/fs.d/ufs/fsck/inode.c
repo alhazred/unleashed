@@ -831,8 +831,8 @@ cacheino(struct dinode *dp, fsck_ino_t inum)
 	inp->i_number = inum;
 	if (inplast == listmax) {
 		listmax += 100;
-		inpsort = (struct inoinfo **)realloc((void *)inpsort,
-		    (unsigned)listmax * sizeof (struct inoinfo *));
+		inpsort = reallocarray(inpsort, listmax,
+		    sizeof (struct inoinfo *));
 		if (inpsort == NULL)
 			errexit("cannot increase directory list");
 	}
@@ -906,8 +906,8 @@ cacheacl(struct dinode *dp, fsck_ino_t inum)
 	(void) memmove(&aclp->i_blks[0], &dp->di_db[0], aclp->i_blkssize);
 	if (aclplast == aclmax) {
 		aclmax += 100;
-		aclpsort = (struct inoinfo **)realloc((char *)aclpsort,
-		    (unsigned)aclmax * sizeof (struct inoinfo *));
+		aclpsort = reallocarray(aclpsort, aclmax,
+		    sizeof (struct inoinfo *));
 		if (aclpsort == NULL)
 			errexit("cannot increase acl list");
 	}

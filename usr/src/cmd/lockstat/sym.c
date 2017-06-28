@@ -68,7 +68,8 @@ add_symbol(char *name, uintptr_t addr, size_t size)
 
 	if (nsyms >= maxsyms) {
 		maxsyms += 10000;
-		symbol_table = realloc(symbol_table, maxsyms * sizeof (*sep));
+		symbol_table = reallocarray(symbol_table, maxsyms,
+		    sizeof (*sep));
 		if (symbol_table == NULL) {
 			(void) fprintf(stderr, "can't allocate symbol table\n");
 			exit(3);

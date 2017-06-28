@@ -877,8 +877,8 @@ adutils_add_domain(adutils_ad_t *ad, const char *domain, const char *sid)
 	int num = ad->num_known_domains;
 
 	ad->num_known_domains++;
-	new = realloc(ad->known_domains,
-	    sizeof (struct known_domain) * ad->num_known_domains);
+	new = reallocarray(ad->known_domains, ad->num_known_domains,
+	    sizeof (struct known_domain));
 	if (new != NULL) {
 		ad->known_domains = new;
 		(void) strlcpy(ad->known_domains[num].name, domain,

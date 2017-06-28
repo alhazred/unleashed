@@ -203,8 +203,7 @@ struct connection {
 	 / sizeof(set.data[0]))						\
 	!= (set.max + incr)))						\
    ? 0				/* overflow */				\
-   : ((tmpptr = realloc(set.data,					\
-			(int)(set.max + incr) * sizeof(set.data[0])))	\
+   : ((tmpptr = reallocarray(set.data, set.max + incr, sizeof (set.data[0])))	\
       ? (set.data = tmpptr, set.max += incr, 1)				\
       : 0))
 

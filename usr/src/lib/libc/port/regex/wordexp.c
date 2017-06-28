@@ -399,8 +399,8 @@ append(wordexp_t *wp, char *str)
 	 */
 	if ((wp->we_wordp + wp->we_wordc) ==
 	    (wp->we_wordv + wp->we_wordn - 1)) {
-		nwp = realloc(wp->we_wordv,
-		    (wp->we_wordn + INITIAL) * sizeof (char *));
+		nwp = reallocarray(wp->we_wordv, wp->we_wordn + INITIAL,
+		    sizeof (char *));
 		if (nwp == NULL)
 			return (WRDE_NOSPACE);
 		wp->we_wordn += INITIAL;

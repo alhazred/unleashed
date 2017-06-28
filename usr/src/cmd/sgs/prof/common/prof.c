@@ -533,8 +533,8 @@ main(int argc, char **argv)
 
 	/* If less than all cnt entries are used, return unused space. */
 	if (n_cc < head.nfns) {
-		if ((ccounts = (struct cnt *)realloc((char *)ccounts,
-		    (unsigned)n_cc * sizeof (struct cnt))) == NULL)
+		if ((ccounts = reallocarray(ccounts, n_cc,
+		    sizeof (struct cnt))) == NULL)
 			snh();	/* Should not fail when reducing size. */
 	}
 

@@ -61,7 +61,7 @@ idtab_append(idtab_t *idt, idkey_t id)
 	if (idt->id_nelems >= idt->id_size) {
 		size = idt->id_size ? idt->id_size * IDTAB_GROW : IDTAB_DEFSIZE;
 
-		if (data = realloc(idt->id_data, sizeof (idkey_t) * size)) {
+		if (data = reallocarray(idt->id_data, size, sizeof (idkey_t))) {
 			idt->id_data = data;
 			idt->id_size = size;
 		} else {

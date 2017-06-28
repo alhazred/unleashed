@@ -45,8 +45,8 @@ eloop_register_read_sock(int sock,
 {
 	struct eloop_sock *tmp;
 
-	tmp = (struct eloop_sock *)realloc(eloop.readers,
-	    (eloop.reader_count + 1) * sizeof (struct eloop_sock));
+	tmp = reallocarray(eloop.readers, eloop.reader_count + 1,
+	    sizeof(struct eloop_sock));
 	if (tmp == NULL)
 		return (-1);
 
@@ -211,9 +211,8 @@ eloop_register_signal(int sig,
 	struct eloop_signal *tmp;
 
 	tmp = (struct eloop_signal *)
-	    realloc(eloop.signals,
-	    (eloop.signal_count + 1) *
-	    sizeof (struct eloop_signal));
+	    reallocarray(eloop.signals, eloop.signal_count + 1,
+	    sizeof(struct eloop_signal));
 	if (tmp == NULL)
 		return (-1);
 

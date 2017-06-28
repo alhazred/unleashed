@@ -360,8 +360,8 @@ main(int argc, char *argv[])
 					g_nfuncs = 16;
 				else
 					g_nfuncs *= 2;
-				g_funclist = realloc(g_funclist,
-				    sizeof (char *) * g_nfuncs);
+				g_funclist = reallocarray(g_funclist,
+				    g_nfuncs, sizeof (char *));
 				if (g_funclist == NULL) {
 					ctfdiff_fatal("failed to allocate "
 					    "memory for the %dth -F option: "
@@ -378,8 +378,8 @@ main(int argc, char *argv[])
 					g_nobjs = 16;
 				else
 					g_nobjs *= 2;
-				g_objlist = realloc(g_objlist,
-				    sizeof (char *) * g_nobjs);
+				g_objlist = reallocarray(g_objlist, g_nobjs,
+				    sizeof (char *));
 				if (g_objlist == NULL) {
 					ctfdiff_fatal("failed to allocate "
 					    "memory for the %dth -F option: "
@@ -408,8 +408,8 @@ main(int argc, char *argv[])
 					g_ntypes = 16;
 				else
 					g_ntypes *= 2;
-				g_typelist = realloc(g_typelist,
-				    sizeof (char *) * g_ntypes);
+				g_typelist = reallocarray(g_typelist,
+				    g_ntypes, sizeof (char *));
 				if (g_typelist == NULL) {
 					ctfdiff_fatal("failed to allocate "
 					    "memory for the %dth -T option: "

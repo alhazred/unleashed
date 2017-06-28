@@ -1129,8 +1129,8 @@ allocate (void *P_data)
     int i;
     void *n;
 
-    n = realloc (data->addr_temp,
-		 (1 + data->count + data->cur_idx) * sizeof (krb5_address *));
+    n = reallocarray(data->addr_temp, (1 + data->count + data->cur_idx),
+                     sizeof(krb5_address *));
     if (n == 0) {
 	data->mem_err++;
 	return 1;
@@ -1297,8 +1297,9 @@ krb5_os_localaddr_profile (krb5_context context, struct localaddr_data *datap)
 #endif
 	    if (datap->cur_idx + count >= datap->cur_size) {
 		krb5_address **bigger;
-		bigger = realloc (datap->addr_temp,
-				  sizeof (krb5_address *) * (datap->cur_idx + count));
+		bigger = reallocarray(datap->addr_temp,
+                                      (datap->cur_idx + count),
+                                      sizeof(krb5_address *));
 		if (bigger) {
 		    datap->addr_temp = bigger;
 		    datap->cur_size = datap->cur_idx + count;

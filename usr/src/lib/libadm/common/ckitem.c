@@ -391,8 +391,8 @@ setinvis(CKMENU *menup, char *choice)
 	else {
 		while (menup->invis[index])
 			index++; /* count invisible choices */
-		menup->invis = realloc(menup->invis,
-			(index+2)* sizeof (char *));
+		menup->invis = reallocarray(menup->invis, index + 2,
+		    sizeof (char *));
 		menup->invis[index+1] = NULL;
 	}
 	if (!menup->invis)

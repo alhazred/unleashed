@@ -41,7 +41,7 @@ dt_strtab_grow(dt_strtab_t *sp)
 	if ((ptr = malloc(sp->str_bufsz)) == NULL)
 		return (-1);
 
-	bufs = realloc(sp->str_bufs, (sp->str_nbufs + 1) * sizeof (char *));
+	bufs = reallocarray(sp->str_bufs, sp->str_nbufs + 1, sizeof (char *));
 
 	if (bufs == NULL) {
 		free(ptr);

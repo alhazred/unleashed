@@ -358,8 +358,8 @@ fcoe_add_remove_scf_entry(char *mac_name,
 
 			if (i >= lastAlloc) {
 				lastAlloc += portListAlloc;
-				valueSet = realloc(valueSet,
-				    sizeof (*valueSet) * lastAlloc);
+				valueSet = reallocarray(valueSet, lastAlloc,
+				    sizeof (*valueSet));
 				if (valueSet == NULL) {
 					ret = FCOE_ERROR;
 					break;

@@ -502,7 +502,8 @@ void process_property(LibHalContext *hal_ctx, char *buf, lh_prop_t **prop)
 		while (*s_val++ == '\'') {
 			s = skip_nonquote(s_val);
 			if (*s) *s++ = 0;
-			p->v.strlist_value = realloc(p->v.strlist_value, (len + 2) * sizeof *p->v.strlist_value);
+			p->v.strlist_value = reallocarray(p->v.strlist_value,
+			    len + 2, sizeof *p->v.strlist_value);
 			p->v.strlist_value[len] = strdup(s_val);
 			p->v.strlist_value[++len] = NULL;
 			s_val = skip_nonquote(s);

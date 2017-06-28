@@ -359,8 +359,8 @@ regline(int macline, int cnst)
 		 */
 		if (++lindx >= linesize - 1) {
 			linesize = linesize * 2;
-			if ((line = (char *)realloc(line,
-			    linesize * sizeof (char))) == NULL) {
+			if ((line = reallocarray(line, linesize,
+			    sizeof (char))) == NULL) {
 				fatal_msg(gettext("Cannot allocate memory"));
 			}
 		}

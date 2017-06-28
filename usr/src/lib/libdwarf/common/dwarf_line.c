@@ -1851,9 +1851,8 @@ dwarf_read_line_table_prefix(Dwarf_Debug dbg,
         if (files_count >= files_malloc) {
             Dwarf_Unsigned expand = 2 * files_malloc;
             struct Line_Table_File_Entry_s *newfiles =
-                realloc(prefix_out->pf_line_table_file_entries,
-                        sizeof(struct Line_Table_File_Entry_s) *
-                        expand);
+                reallocarray(prefix_out->pf_line_table_file_entries, expand,
+                        sizeof (struct Line_Table_File_Entry_s));
             if (!newfiles) {
                 _dwarf_error(dbg, err, DW_DLE_ALLOC_FAIL);
                 return (DW_DLV_ERROR);

@@ -1011,13 +1011,13 @@ globextend(const wcat_t *path, glob_t *pglob, struct glob_lim *limitp,
 			return (GLOB_NOSPACE);
 		}
 		limitp->glim_malloc += allocn * sizeof (*pathv);
-		pathv = realloc(pglob->gl_pathv, allocn * sizeof (*pathv));
+		pathv = reallocarray(pglob->gl_pathv, allocn, sizeof (*pathv));
 		if (pathv == NULL)
 			goto nospace;
 		if ((pglob->gl_flags & GLOB_KEEPSTAT) != 0) {
 			limitp->glim_malloc += allocn * sizeof (*statv);
-			statv = realloc(pglob->gl_statv,
-			    allocn * sizeof (*statv));
+			statv = reallocarray(pglob->gl_statv, allocn,
+			    sizeof (*statv));
 			if (statv == NULL)
 				goto nospace;
 		}
