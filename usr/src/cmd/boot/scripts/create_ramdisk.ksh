@@ -309,7 +309,7 @@ function create_archive
 		lockfs -f "/$ALT_ROOT" 2>/dev/null
 		mv "${archive}-new" "$archive"
 		rm -f "$archive.hash"
-		digest -a sha1 "$archive" > "$archive.hash"
+		[ -x /usr/bin/digest ] && /usr/bin/digest -a sha1 "$archive" > "$archive.hash"
 		lockfs -f "/$ALT_ROOT" 2>/dev/null
 	fi
 
