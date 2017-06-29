@@ -2506,7 +2506,7 @@ nlm_svc_stopping(struct nlm_globals *g)
 			 * process. Give them some time to do drop
 			 * references.
 			 */
-			delay(MSEC_TO_TICK(500));
+			ddi_msleep(500);
 		}
 	}
 

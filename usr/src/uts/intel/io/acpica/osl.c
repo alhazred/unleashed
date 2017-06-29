@@ -775,7 +775,7 @@ AcpiOsSleep(ACPI_INTEGER Milliseconds)
 	if ((ddi_get_lbolt() == 0) || acpica_use_safe_delay)
 		drv_usecwait(Milliseconds * 1000);
 	else
-		delay(drv_usectohz(Milliseconds * 1000));
+		ddi_msleep(Milliseconds);
 }
 
 void

@@ -113,7 +113,7 @@ typedef unsigned long uptr_t;
 	((a) < (b)?((b)-(a)):((b)+(range)-(a)))
 
 #define	__FUNCTION__		__func__
-#define	nx_msleep(_msecs_)	delay(drv_usectohz(_msecs_ * 1000))
+#define	nx_msleep(_msecs_)	ddi_msleep(_msecs_)
 
 #define	HOST_TO_LE_64			LE_64
 #define	HOST_TO_LE_32			LE_32

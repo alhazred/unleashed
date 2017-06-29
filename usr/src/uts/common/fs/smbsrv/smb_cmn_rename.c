@@ -249,7 +249,7 @@ smb_common_rename(smb_request_t *sr, smb_fqi_t *src_fqi, smb_fqi_t *dst_fqi)
 			if (status != NT_STATUS_SHARING_VIOLATION)
 				break;
 			smb_node_unlock(dst_fnode);
-			delay(MSEC_TO_TICK(100));
+			ddi_msleep(100);
 			smb_node_rdlock(dst_fnode);
 		}
 		if (status != NT_STATUS_SUCCESS) {
@@ -577,7 +577,7 @@ smb_rename_lookup_src(smb_request_t *sr)
 		if (status != NT_STATUS_SHARING_VIOLATION)
 			break;
 		smb_node_unlock(src_node);
-		delay(MSEC_TO_TICK(100));
+		ddi_msleep(100);
 		smb_node_rdlock(src_node);
 	}
 	if (status != NT_STATUS_SUCCESS) {

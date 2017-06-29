@@ -1241,7 +1241,7 @@ ohci_poll_intr(void *arg)
 	/* poll every millisecond */
 	for (;;) {
 		(void) ohci_intr(arg, NULL);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 	}
 }
 
@@ -1957,7 +1957,7 @@ ohci_take_control(ohci_state_t	*ohcip)
 	for (wait = 0; wait < 5000; wait++) {
 		if ((Get_OpReg(hcr_control) & HCR_CONTROL_IR) == 0)
 			break;
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 	}
 	mutex_enter(&ohcip->ohci_int_mutex);
 

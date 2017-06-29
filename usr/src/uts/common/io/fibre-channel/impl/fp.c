@@ -3839,7 +3839,7 @@ fp_loop_online(fc_local_port_t *port, job_request_t *job, int orphan)
 		if (port->fp_soft_state & FP_SOFT_IN_FCA_RESET) {
 			port->fp_soft_state &= ~FP_SOFT_IN_FCA_RESET;
 			mutex_exit(&port->fp_mutex);
-			delay(drv_usectohz(PLDA_RR_TOV * 1000 * 1000));
+			ddi_msleep(PLDA_RR_TOV * 1000);
 		} else {
 			mutex_exit(&port->fp_mutex);
 		}
@@ -10348,7 +10348,7 @@ fp_fabric_online(fc_local_port_t *port, job_request_t *job)
 		if (port->fp_soft_state & FP_SOFT_IN_FCA_RESET) {
 			port->fp_soft_state &= ~FP_SOFT_IN_FCA_RESET;
 			mutex_exit(&port->fp_mutex);
-			delay(drv_usectohz(FLA_RR_TOV * 1000 * 1000));
+			ddi_msleep(FLA_RR_TOV * 1000);
 			mutex_enter(&port->fp_mutex);
 		}
 

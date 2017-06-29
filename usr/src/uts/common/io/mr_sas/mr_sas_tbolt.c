@@ -3241,14 +3241,14 @@ retry_reset:
 	con_log(CL_ANN1, (CE_NOTE,
 	    "mrsas_tbolt_reset_ppc: magic number written "
 	    "to write sequence register"));
-	delay(100 * drv_usectohz(MILLISEC));
+	ddi_msleep(100);
 	status = RD_TBOLT_HOST_DIAG(instance);
 	con_log(CL_ANN1, (CE_NOTE,
 	    "mrsas_tbolt_reset_ppc: READ HOSTDIAG SUCCESS "
 	    "to write sequence register"));
 
 	while (status & DIAG_TBOLT_RESET_ADAPTER) {
-		delay(100 * drv_usectohz(MILLISEC));
+		ddi_msleep(100);
 		status = RD_TBOLT_HOST_DIAG(instance);
 		if (retry++ == 100) {
 			dev_err(instance->dip, CE_WARN,
@@ -3260,14 +3260,14 @@ retry_reset:
 	}
 
 	WR_TBOLT_HOST_DIAG(status | DIAG_TBOLT_RESET_ADAPTER, instance);
-	delay(100 * drv_usectohz(MILLISEC));
+	ddi_msleep(100);
 
 	ddi_rep_get8((instance)->regmap_handle, (uint8_t *)&status,
 	    (uint8_t *)((uintptr_t)(instance)->regmap +
 	    RESET_TBOLT_STATUS_OFF), 4, DDI_DEV_AUTOINCR);
 
 	while ((status & DIAG_TBOLT_RESET_ADAPTER)) {
-		delay(100 * drv_usectohz(MILLISEC));
+		ddi_msleep(100);
 		ddi_rep_get8((instance)->regmap_handle, (uint8_t *)&status,
 		    (uint8_t *)((uintptr_t)(instance)->regmap +
 		    RESET_TBOLT_STATUS_OFF), 4, DDI_DEV_AUTOINCR);
@@ -3289,7 +3289,7 @@ retry_reset:
 	abs_state = instance->func_ptr->read_fw_status_reg(instance);
 	retry = 0;
 	while ((abs_state <= MFI_STATE_FW_INIT) && (retry++ < 1000)) {
-		delay(100 * drv_usectohz(MILLISEC));
+		ddi_msleep(100);
 		abs_state = instance->func_ptr->read_fw_status_reg(instance);
 	}
 	if (abs_state <= MFI_STATE_FW_INIT) {

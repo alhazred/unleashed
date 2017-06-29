@@ -3964,7 +3964,7 @@ emlxs_reset(emlxs_port_t *port, uint32_t cmd)
 		while ((hba->reset_state & FC_LINK_RESET_INP) &&
 		    (i++ < 1000)) {
 			mutex_exit(&EMLXS_PORT_LOCK);
-			delay(drv_usectohz(1000));
+			ddi_msleep(1);
 			mutex_enter(&EMLXS_PORT_LOCK);
 		}
 
@@ -4013,7 +4013,7 @@ emlxs_reset(emlxs_port_t *port, uint32_t cmd)
 		while ((hba->reset_state & FC_LINK_RESET_INP) &&
 		    (i++ < 1000)) {
 			mutex_exit(&EMLXS_PORT_LOCK);
-			delay(drv_usectohz(1000));
+			ddi_msleep(1);
 			mutex_enter(&EMLXS_PORT_LOCK);
 		}
 

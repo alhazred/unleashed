@@ -1298,7 +1298,7 @@ out:
 		 */
 		elapsed = 0;
 		while ((rvp->v_count > 1) && (elapsed < ufs_mount_timeout)) {
-			delay(ufs_mount_error_delay * drv_usectohz(1000));
+			ddi_msleep(ufs_mount_error_delay);
 			elapsed += ufs_mount_error_delay;
 		}
 

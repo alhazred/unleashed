@@ -15063,7 +15063,7 @@ fcp_create_on_demand(struct fcp_port *pptr, uchar_t *pwwn)
 		mutex_exit(&ptgt->tgt_mutex);
 		mutex_exit(&pptr->port_mutex);
 
-		delay(drv_usectohz(wait_ms * 1000));
+		ddi_msleep(wait_ms);
 
 		mutex_enter(&pptr->port_mutex);
 		mutex_enter(&ptgt->tgt_mutex);

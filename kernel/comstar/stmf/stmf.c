@@ -6140,7 +6140,7 @@ stmf_worker_init()
 
 	/* Lets wait for atleast one worker to start */
 	while (stmf_nworkers_cur == 0)
-		delay(drv_usectohz(20 * 1000));
+		ddi_msleep(20);
 	stmf_worker_mgmt_delay = drv_usectohz(3 * 1000 * 1000);
 }
 
@@ -6164,7 +6164,7 @@ stmf_worker_fini()
 			stmf_workers_state = STMF_WORKERS_ENABLED;
 			return (STMF_BUSY);
 		}
-		delay(drv_usectohz(100 * 1000));
+		ddi_msleep(100);
 	}
 	for (i = 0; i < stmf_i_max_nworkers; i++) {
 		stmf_worker_t *w = &stmf_workers[i];

@@ -78,7 +78,7 @@ typedef enum {
 
 #define	CFGROM_READ_PAUSE(d)						\
 	((s1394_cfgrom_read_delay_ms == 0) ? (void) 0 :			\
-	delay(drv_usectohz((d) * 1000)))
+	ddi_msleep((d)))
 
 #define	BUMP_CFGROM_READ_DELAY(n)					\
 	(n)->cfgrom_read_delay += s1394_cfgrom_read_delay_incr

@@ -1099,7 +1099,7 @@ xhci_reg_poll(xhci_t *xhcip, xhci_reg_type_t rt, int reg, uint32_t mask,
 		if ((val & mask) == targ)
 			return (0);
 
-		delay(drv_usectohz(delay_ms * 1000));
+		ddi_msleep(delay_ms);
 	}
 	return (ETIMEDOUT);
 }

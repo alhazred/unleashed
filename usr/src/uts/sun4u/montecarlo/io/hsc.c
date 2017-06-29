@@ -286,7 +286,7 @@ hsc_connect(caddr_t ops_arg, hpc_slot_t slot_hdl, void *data, uint_t flags)
 	 * PCI_RST# before the board is able to respond to config
 	 * cycles. So, before we return, we wait for ~1 sec.
 	 */
-	delay(drv_usectohz(scsb_connect_delay * 1000));
+	ddi_msleep(scsb_connect_delay);
 	return (rc);
 }
 

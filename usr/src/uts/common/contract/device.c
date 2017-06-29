@@ -835,7 +835,7 @@ contract_device_destroy(contract_t *ct)
 		if (mutex_tryenter(&(DEVI(dip)->devi_ct_lock)) != 0)
 			break;
 		mutex_exit(&ct->ct_lock);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 		mutex_enter(&ct->ct_lock);
 	}
 	mutex_exit(&ct->ct_lock);

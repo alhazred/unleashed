@@ -968,7 +968,7 @@ rdsv3_exit(void)
 		RDSV3_DPRINTF5("rdsv3", "%s-%d Waiting for rdsv3_rdma_exit",
 		    __func__, __LINE__);
 #endif
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 	}
 
 	rdsv3_conn_exit();

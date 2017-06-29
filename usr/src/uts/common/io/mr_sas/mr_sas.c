@@ -3870,8 +3870,7 @@ mfi_state_transition_to_ready(struct mrsas_instance *instance)
 					status =
 					    RD_RESERVED0_REGISTER(instance);
 					if (status & 1) {
-						delay(1 *
-						    drv_usectohz(MILLISEC));
+						ddi_msleep(1);
 					} else {
 						break;
 					}
@@ -3925,7 +3924,7 @@ mfi_state_transition_to_ready(struct mrsas_instance *instance)
 			fw_state = cur_abs_reg_val & MFI_STATE_MASK;
 
 			if (fw_state == cur_state) {
-				delay(1 * drv_usectohz(MILLISEC));
+				ddi_msleep(1);
 			} else {
 				break;
 			}
@@ -6988,11 +6987,11 @@ retry_reset:
 	WR_IB_WRITE_SEQ(0xd, instance);
 	con_log(CL_ANN1, (CE_NOTE, "mrsas_reset_ppc: magic number written "
 	    "to write sequence register\n"));
-	delay(100 * drv_usectohz(MILLISEC));
+	ddi_msleep(100);
 	status = RD_OB_DRWE(instance);
 
 	while (!(status & DIAG_WRITE_ENABLE)) {
-		delay(100 * drv_usectohz(MILLISEC));
+		ddi_msleep(100);
 		status = RD_OB_DRWE(instance);
 		if (retry++ == 100) {
 			dev_err(instance->dip, CE_WARN,
@@ -7002,10 +7001,10 @@ retry_reset:
 		}
 	}
 	WR_IB_DRWE(status | DIAG_RESET_ADAPTER, instance);
-	delay(100 * drv_usectohz(MILLISEC));
+	ddi_msleep(100);
 	status = RD_OB_DRWE(instance);
 	while (status & DIAG_RESET_ADAPTER) {
-		delay(100 * drv_usectohz(MILLISEC));
+		ddi_msleep(100);
 		status = RD_OB_DRWE(instance);
 		if (retry++ == 100) {
 			dev_err(instance->dip, CE_WARN, "mrsas_reset_ppc: "

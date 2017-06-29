@@ -227,7 +227,7 @@ uhci_poll_intr(void *arg)
 	/* poll every msec */
 	for (;;) {
 		(void) uhci_intr(arg, NULL);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 	}
 }
 

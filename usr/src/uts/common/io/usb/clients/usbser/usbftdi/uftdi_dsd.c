@@ -1122,7 +1122,7 @@ uftdi_fifo_drain(ds_hdl_t hdl, uint_t portno, int timeout)
 		if ((uf->uf_lsr & txempty) == txempty)
 			break;
 		mutex_exit(&uf->uf_lock);
-		delay(drv_usectohz(10*1000));	/* 10ms */
+		ddi_msleep(10);	/* 10ms */
 		mutex_enter(&uf->uf_lock);
 	}
 

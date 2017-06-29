@@ -462,7 +462,7 @@ upa64s_power(dev_info_t *dip, int component, int level)
 		/*
 		 * Delay 20 milliseconds for the signals to settle down.
 		 */
-		delay(drv_usectohz(20*1000));
+		ddi_msleep(20);
 
 		/*
 		 * Deassert UPA64S_RESET.  Flush the store buffer.

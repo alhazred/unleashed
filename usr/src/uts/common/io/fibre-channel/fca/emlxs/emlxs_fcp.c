@@ -2002,7 +2002,7 @@ emlxs_offline(emlxs_hba_t *hba, uint32_t reset_requested)
 	/* For safety flush every iotag list */
 	if (emlxs_iotag_flush(hba)) {
 		/* Pause here for the IO to flush */
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 	}
 
 	/* Wait for poll command request to settle */

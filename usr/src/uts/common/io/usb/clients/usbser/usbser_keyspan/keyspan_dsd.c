@@ -1500,7 +1500,7 @@ keyspan_fifo_drain(ds_hdl_t hdl, uint_t port_num, int timeout)
 	mutex_exit(&kp->kp_mutex);
 
 	/* wait until hw fifo drains */
-	delay(drv_usectohz(500*1000));
+	ddi_msleep(500);
 
 	return (rval);
 }

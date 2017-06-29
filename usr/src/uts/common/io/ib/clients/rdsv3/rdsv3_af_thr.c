@@ -265,7 +265,7 @@ rdsv3_af_thr_destroy(rdsv3_af_thr_t *ringp)
 	mutex_enter(&ringp->aft_lock);
 	while (ringp->aft_state & AFT_PROC) {
 		mutex_exit(&ringp->aft_lock);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 		mutex_enter(&ringp->aft_lock);
 	}
 	ringp->aft_state |= AFT_CONDEMNED;

@@ -3184,7 +3184,7 @@ ldc_close(ldc_handle_t handle)
 		}
 
 		/* wait for one ms and try again */
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 		chk_done = B_TRUE;
 	}
 

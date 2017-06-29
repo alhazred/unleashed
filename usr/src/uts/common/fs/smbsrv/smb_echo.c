@@ -113,7 +113,7 @@ smb_com_echo(struct smb_request *sr)
 
 		(void) smb_session_send(sr->session, 0, &reply);
 
-		delay(MSEC_TO_TICK(100));
+		ddi_msleep(100);
 	}
 
 	return (SDRC_NO_REPLY);

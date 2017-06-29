@@ -733,7 +733,7 @@ zyd_usb_ioread_req(struct zyd_usb *uc,
 
 	cnt = 0;
 	while (uc->io_read.done != B_TRUE && cnt < 500) {
-		delay(drv_usectohz(10 * 1000));
+		ddi_msleep(10);
 		++cnt;
 	}
 

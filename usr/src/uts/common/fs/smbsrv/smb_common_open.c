@@ -189,7 +189,7 @@ smb_common_open(smb_request_t *sr)
 
 	for (count = 0; count <= 4; count++) {
 		if (count != 0)
-			delay(MSEC_TO_TICK(400));
+			ddi_msleep(400);
 
 		status = smb_open_subr(sr);
 		if (status != NT_STATUS_SHARING_VIOLATION)

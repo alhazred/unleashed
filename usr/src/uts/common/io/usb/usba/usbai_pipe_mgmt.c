@@ -595,7 +595,7 @@ usba_destroy_pipe_handle(usba_pipe_handle_data_t *ph_data)
 		}
 		mutex_exit(&ph_data->p_mutex);
 		mutex_exit(&ph_impl->usba_ph_mutex);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 		mutex_enter(&ph_data->p_mutex);
 		mutex_enter(&ph_impl->usba_ph_mutex);
 	}
@@ -722,7 +722,7 @@ usba_drain_cbs(usba_pipe_handle_data_t *ph_data, usb_cb_flags_t cb_flags,
 	    usba_list_entry_count(&ph_data->p_queue));
 	    timeout++) {
 		mutex_exit(&ph_data->p_mutex);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 		mutex_enter(&ph_data->p_mutex);
 	}
 
@@ -1204,7 +1204,7 @@ usba_pipe_sync_close(dev_info_t *dip, usba_ph_impl_t *ph_impl,
 		}
 		mutex_exit(&ph_impl->usba_ph_mutex);
 		mutex_exit(&ph_data->p_mutex);
-		delay(drv_usectohz(1000));
+		ddi_msleep(1);
 		mutex_enter(&ph_data->p_mutex);
 		mutex_enter(&ph_impl->usba_ph_mutex);
 	}

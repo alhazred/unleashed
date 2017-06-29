@@ -2019,53 +2019,53 @@ rtls_reg_print(rtls_t *rtlsp)
 	val8 = rtls_reg_get8(rtlsp, RT_COMMAND_REG);
 	cmn_err(CE_NOTE, "%s: RT_COMMAND_REG = 0x%x",
 	    mac_name(rtlsp->mh), val8);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val16 = rtls_reg_get16(rtlsp, RT_INT_STATUS_REG);
 	cmn_err(CE_NOTE, "%s: RT_INT_STATUS_REG = 0x%x",
 	    mac_name(rtlsp->mh), val16);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val16 = rtls_reg_get16(rtlsp, RT_INT_MASK_REG);
 	cmn_err(CE_NOTE, "%s: RT_INT_MASK_REG = 0x%x",
 	    mac_name(rtlsp->mh), val16);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val32 = rtls_reg_get32(rtlsp, RX_CONFIG_REG);
 	cmn_err(CE_NOTE, "%s: RX_CONFIG_REG = 0x%x",
 	    mac_name(rtlsp->mh), val32);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val16 = rtls_reg_get16(rtlsp, TX_DESC_STAUS_REG);
 	cmn_err(CE_NOTE, "%s: TX_DESC_STAUS_REG = 0x%x, cur_desc = %d",
 	    mac_name(rtlsp->mh), val16, rtlsp->tx_current_desc);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val32 = rtls_reg_get32(rtlsp, TX_STATUS_DESC0_REG);
 	cmn_err(CE_NOTE, "%s: TX_STATUS_DESC0_REG = 0x%x",
 	    mac_name(rtlsp->mh), val32);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val32 = rtls_reg_get32(rtlsp, TX_STATUS_DESC1_REG);
 	cmn_err(CE_NOTE, "%s: TX_STATUS_DESC1_REG = 0x%x",
 	    mac_name(rtlsp->mh), val32);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val32 = rtls_reg_get32(rtlsp, TX_STATUS_DESC2_REG);
 	cmn_err(CE_NOTE, "%s: TX_STATUS_DESC2_REG = 0x%x",
 	    mac_name(rtlsp->mh), val32);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	val32 = rtls_reg_get32(rtlsp, TX_STATUS_DESC3_REG);
 	cmn_err(CE_NOTE, "%s: TX_STATUS_DESC3_REG = 0x%x",
 	    mac_name(rtlsp->mh), val32);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 
 	cmn_err(CE_NOTE, "%s: in  = %llu, multicast = %llu, broadcast = %llu",
 	    mac_name(rtlsp->mh),
 	    (unsigned long long)rtlsp->stats.ipackets,
 	    (unsigned long long)rtlsp->stats.multi_rcv,
 	    (unsigned long long)rtlsp->stats.brdcst_rcv);
-	delay(drv_usectohz(1000));
+	ddi_msleep(1);
 }
 #endif

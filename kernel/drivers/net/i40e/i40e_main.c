@@ -2583,7 +2583,7 @@ i40e_stop(i40e_t *i40e, bool free_allocations)
 		ddi_fm_service_impact(i40e->i40e_dip, DDI_SERVICE_LOST);
 	}
 
-	delay(50 * drv_usectohz(1000));
+	ddi_msleep(50);
 
 	i40e_intr_chip_fini(i40e);
 

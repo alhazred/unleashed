@@ -499,7 +499,7 @@ smb_delete_remove_file(smb_request_t *sr, smb_error_t *err)
 		if (status != NT_STATUS_SHARING_VIOLATION)
 			break;
 		smb_node_unlock(node);
-		delay(MSEC_TO_TICK(100));
+		ddi_msleep(100);
 		smb_node_rdlock(node);
 	}
 	if (status != NT_STATUS_SUCCESS) {

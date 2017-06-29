@@ -158,7 +158,7 @@
 #define	spin_unlock(u)	mutex_exit(u)
 
 
-#define	DRM_UDELAY(sec)  delay(drv_usectohz(sec *1000))
+#define	DRM_UDELAY(sec)  ddi_msleep(sec)
 #define	DRM_MEMORYBARRIER()
 
 typedef	struct drm_file		drm_file_t;

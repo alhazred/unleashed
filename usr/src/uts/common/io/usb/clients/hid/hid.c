@@ -501,7 +501,7 @@ hid_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			    hidp->hid_interfaceno) == USB_SUCCESS) {
 				break;
 			}
-			delay(retry * drv_usectohz(1000));
+			ddi_msleep(retry);
 		}
 		if (retry >= HID_RETRY) {
 

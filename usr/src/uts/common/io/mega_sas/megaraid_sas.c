@@ -2444,7 +2444,7 @@ mfi_state_transition_to_ready(struct megasas_instance *instance)
 			    MFI_STATE_MASK;
 
 			if (fw_state == cur_state) {
-				delay(1 * drv_usectohz(MILLISEC));
+				ddi_msleep(1);
 			} else {
 				break;
 			}
