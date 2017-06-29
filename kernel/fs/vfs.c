@@ -3953,7 +3953,7 @@ vfs_syncall(void)
 		if (new_pgcnt)
 			printf(" %lu", new_pgcnt);
 
-		delay(hz);
+		ddi_sleep(1);
 	}
 
 	if (new_bufcnt != 0 || new_pgcnt != 0)
@@ -3961,7 +3961,7 @@ vfs_syncall(void)
 	else
 		printf(" done\n");
 
-	delay(hz);
+	ddi_sleep(1);
 }
 
 /*

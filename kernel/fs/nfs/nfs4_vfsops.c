@@ -3955,7 +3955,7 @@ dumpnfs4slist(char *txt, mntinfo4_t *mi, clientid4 clientid, servinfo4_t *srv_p)
 			NFS4_DEBUG(nfs4_server_t_debug, (CE_CONT,
 			    " - thread not exiting"));
 	}
-	delay(hz);
+	ddi_sleep(1);
 }
 #endif
 

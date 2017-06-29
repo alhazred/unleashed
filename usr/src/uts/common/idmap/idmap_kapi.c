@@ -223,7 +223,7 @@ retry:
 		 * smf a chance to restart idmapd
 		 */
 		if (num_retries-- > 0) {
-			delay(hz);
+			ddi_sleep(1);
 			goto retry;
 		}
 
@@ -270,7 +270,7 @@ retry:
 		zcmn_err(zs->zone_id, CE_WARN,
 		    "idmap: Door call returned error %d. Retrying\n", status);
 #endif	/* DEBUG */
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 
 	case EBADF:
@@ -288,7 +288,7 @@ retry:
 		zcmn_err(zs->zone_id, CE_WARN,
 		    "idmap: Door call returned error %d. Retrying\n", status);
 #endif	/* DEBUG */
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 
 	default:

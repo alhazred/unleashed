@@ -1871,7 +1871,7 @@ drmach_mbox_getmsg()
 			if ((err != ETIMEDOUT) && (err != EAGAIN)) {
 				cmn_err(CE_WARN,
 				    "mboxsc_getmsg failed, err=0x%x", err);
-				delay(drmach_mbxerr_delay * hz);
+				ddi_sleep(drmach_mbxerr_delay);
 			}
 			continue;
 		}

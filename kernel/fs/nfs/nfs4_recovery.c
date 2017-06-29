@@ -1632,7 +1632,7 @@ recov_newserver(recov_info_t *recovp, nfs4_server_t **spp, bool_t *recov_fail)
 				    0, 0, 0, FALSE, snames, 0, NULL);
 				oncethru = 1;
 			}
-			delay(hz);
+			ddi_sleep(1);
 		}
 	}
 

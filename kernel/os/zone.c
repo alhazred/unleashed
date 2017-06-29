@@ -6414,7 +6414,7 @@ next:
 		 * zone_free() isn't called until this thread exits).
 		 */
 		zone_rele(zone);
-		delay(hz);
+		ddi_sleep(1);
 		darg = save_arg;
 	}
 out:

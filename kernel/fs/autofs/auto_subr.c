@@ -378,7 +378,7 @@ auto_calldaemon(
 					zprintf(zoneid, "automountd not "\
 					    "running, retrying\n");
 				}
-				delay(hz);
+				ddi_sleep(1);
 				retry = 1;
 			} else {
 				/*
@@ -542,7 +542,7 @@ auto_calldaemon(
 			/*
 			 * Back off for a bit
 			 */
-			delay(hz);
+			ddi_sleep(1);
 			retry = 1;
 			break;
 		case EBADF:	/* Invalid door */
@@ -565,7 +565,7 @@ auto_calldaemon(
 					zprintf(zoneid, "automountd not "
 					    "running, retrying\n");
 				}
-				delay(hz);
+				ddi_sleep(1);
 				retry = 1;
 				break;
 			} else {

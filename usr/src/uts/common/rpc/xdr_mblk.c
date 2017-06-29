@@ -167,7 +167,7 @@ xdrmblk_getint32(XDR *xdrs, int32_t *int32p)
 			 */
 			if (xmsgsize(m) < sizeof (int32_t))
 				return (FALSE);
-			delay(hz);
+			ddi_sleep(1);
 		}
 		p->apos += p->rpos;
 		p->rpos = 0;

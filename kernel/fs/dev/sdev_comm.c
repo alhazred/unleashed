@@ -328,11 +328,11 @@ sdev_ki_call_devfsadmd(sdev_door_arg_t *argp, sdev_door_res_t *resultp)
 		case EINTR:
 			/* return error here? */
 			sdcmn_err6(("sdev_ki_call_devfsadm: EINTR\n"));
-			delay(hz);
+			ddi_sleep(1);
 			break;
 		case EAGAIN:
 			sdcmn_err6(("sdev_ki_call_devfsadm: EAGAIN\n"));
-			delay(2 * hz);
+			ddi_sleep(2);
 			break;
 		case EBADF:
 			if (retry > 4) {
@@ -342,7 +342,7 @@ sdev_ki_call_devfsadmd(sdev_door_arg_t *argp, sdev_door_res_t *resultp)
 			sdcmn_err6((
 			    "sdev_ki_call_devfsadm: EBADF, re-binding\n"));
 			sdev_release_door();
-			delay(retry * hz);
+			ddi_sleep(retry);
 			error = sdev_open_upcall_door();
 			if (error != 0) {
 				sdcmn_err6(("sdev_ki_call_devfsadm: "

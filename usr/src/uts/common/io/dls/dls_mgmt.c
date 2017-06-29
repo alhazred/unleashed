@@ -333,7 +333,7 @@ retry:
 			 * been reached.
 			 */
 			if (retry < MAXRETRYNUM) {
-				delay(2 * hz);
+				ddi_sleep(2);
 				break;
 			}
 			cmn_err(CE_WARN, "dls: dlmgmtd fatal error %d\n", err);

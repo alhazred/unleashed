@@ -434,7 +434,7 @@ retry:
 		 * rescillient and attempt for ntries before we bail.
 		 */
 		if (++ntries % NFSAUTH_DR_TRYCNT) {
-			delay(hz);
+			ddi_sleep(1);
 			goto retry;
 		}
 
@@ -474,7 +474,7 @@ retry:
 		 * Server out of resources; back off for a bit
 		 */
 		door_ki_rele(dh);
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 		/* NOTREACHED */
 
@@ -496,7 +496,7 @@ retry:
 					mountd_dh = NULL;
 				}
 				mutex_exit(&mountd_lock);
-				delay(hz);
+				ddi_sleep(1);
 				goto retry;
 			}
 			/*
@@ -530,7 +530,7 @@ retry:
 		 */
 		door_ki_rele(dh);
 		if (!last) {
-			delay(hz);
+			ddi_sleep(1);
 			last++;
 			goto retry;
 		}

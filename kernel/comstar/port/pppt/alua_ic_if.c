@@ -403,7 +403,7 @@ stmf_ic_transmit(char *buf, size_t size)
 		rc = door_ki_upcall(door, &arg);
 		if (rc != EAGAIN)
 			break;
-		delay(hz);
+		ddi_sleep(1);
 	}
 	door_ki_rele(door);
 	if (rc != 0) {

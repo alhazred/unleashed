@@ -1287,7 +1287,7 @@ dumpsys(void)
 		dump_messages();
 	}
 
-	delay(2 * hz);	/* let people see the 'done' message */
+	ddi_sleep(2);	/* let people see the 'done' message */
 	dump_timeleft = 0;
 	dump_ioerr = 0;
 

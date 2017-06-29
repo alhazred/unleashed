@@ -4342,7 +4342,7 @@ failover_thread(mntinfo_t *mi)
 			mutex_enter(&mi->mi_lock);
 			CALLB_CPR_SAFE_BEGIN(&cprinfo);
 			mutex_exit(&mi->mi_lock);
-			delay(hz);
+			ddi_sleep(1);
 			mutex_enter(&mi->mi_lock);
 			CALLB_CPR_SAFE_END(&cprinfo, &mi->mi_lock);
 			mutex_exit(&mi->mi_lock);

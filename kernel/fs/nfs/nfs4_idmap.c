@@ -468,7 +468,7 @@ retry:
 		/*
 		 * Back off for a bit
 		 */
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 	default:	/* Unknown must be fatal */
 	case EBADF:	/* Invalid door */
@@ -639,7 +639,7 @@ retry:
 		/*
 		 * Back off for a bit
 		 */
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 	default:	/* Unknown must be fatal */
 	case EBADF:	/* Invalid door */
@@ -848,7 +848,7 @@ retry:
 		/*
 		 * Back off for a bit
 		 */
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 	default:	/* Unknown must be fatal */
 	case EBADF:	/* Invalid door */
@@ -1019,7 +1019,7 @@ retry:
 		/*
 		 * Back off for a bit
 		 */
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 	default:	/* Unknown must be fatal */
 	case EBADF:	/* Invalid door */

@@ -363,7 +363,7 @@ rfs4_cbinfo_hold(rfs4_client_t *cp)
 
 		if (++retries >= rfs4_max_setup_cb_tries)
 			return (NULL);
-		delay(hz);
+		ddi_sleep(1);
 		mutex_enter(cbp->cb_lock);
 	}
 

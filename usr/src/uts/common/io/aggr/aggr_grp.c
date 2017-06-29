@@ -2718,7 +2718,7 @@ try_again:
 		 * will be removed once the CR is fixed.
 		 */
 		if (rv == EIO && retry++ < 3) {
-			delay(2 * hz);
+			ddi_sleep(2);
 			goto try_again;
 		}
 		/*

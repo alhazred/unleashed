@@ -942,7 +942,7 @@ thread_reaper()
 		 * Reap lwps
 		 */
 		thread_reap_list(l);
-		delay(hz);
+		ddi_sleep(1);
 	}
 }
 

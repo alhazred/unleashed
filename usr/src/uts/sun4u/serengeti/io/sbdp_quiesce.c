@@ -670,7 +670,7 @@ sbdp_signal_user(int sig)
 	mutex_exit(&pidlock);
 
 	/* add a bit of delay */
-	delay(hz);
+	ddi_sleep(1);
 }
 
 static uint_t saved_watchdog_seconds;

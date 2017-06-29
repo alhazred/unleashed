@@ -108,7 +108,7 @@ retry:
 		 * rescillient and attempt for ntries before we bail.
 		 */
 		if (++ntries % NFSCMD_DR_TRYCNT) {
-			delay(hz);
+			ddi_sleep(1);
 			goto retry;
 		}
 		return (NFSCMD_ERR_DROP);
@@ -128,7 +128,7 @@ retry:
 	case EAGAIN:
 		/* Need to retry a couple of times */
 		door_ki_rele(dh);
-		delay(hz);
+		ddi_sleep(1);
 		goto retry;
 		/* NOTREACHED */
 	case EINTR:
@@ -146,7 +146,7 @@ retry:
 					nfscmd_dh = NULL;
 				mutex_exit(&nfscmd_lock);
 				door_ki_rele(dh);
-				delay(hz);
+				ddi_sleep(1);
 				goto retry;
 			}
 			/*
@@ -180,7 +180,7 @@ retry:
 		 */
 		door_ki_rele(dh);
 		if (!last) {
-			delay(hz);
+			ddi_sleep(1);
 			last++;
 			goto retry;
 		}

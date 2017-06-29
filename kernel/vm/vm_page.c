@@ -5404,7 +5404,7 @@ page_reclaim_mem(pgcnt_t npages, pgcnt_t epages, int adjust)
 		mutex_exit(&freemem_lock);
 		page_needfree(deficit);
 		kmem_reap();
-		delay(hz);
+		ddi_sleep(1);
 		page_needfree(-(spgcnt_t)deficit);
 		mutex_enter(&freemem_lock);
 	}
