@@ -1,35 +1,16 @@
-How to Build Unleashed
+How to build unleashed
 ======================
 
-Building unleashed is not as simple as we would like it to be.  Currently,
-it is in a transitional period where parts of the codebase still rely on the
-legacy build system while other parts of the codebase use the new
-bmake-based build.
+Install unleashed
+-----------------
 
-Install Prerequisites
----------------------
+Building unleashed requires unleashed, so first you must install it (doing
+which is not documented at the time of writing).
 
-NOTE: You must be running a reasonably new version of unleashed in order to
-build unleashed.
-
-You will need these packages:
-
-- pkg:/developer/astdev
-- pkg:/developer/build/onbld
-- pkg:/developer/debug/ctf
-- pkg:/developer/illumos-gcc
-- pkg:/developer/lexer/flex
-- pkg:/developer/parser/bison
-- pkg:/developer/versioning/git
-- pkg:/library/nspr/header-nspr
-- pkg:/system/library/mozilla-nss/header-nss
-- pkg:/system/mozilla-nss
-
-Get the Source
+Get the source
 --------------
 
-The code is maintained in a git repository.  You can clone it from either of
-these URLs (depending on if you want to use the git protocol or http):
+Clone this repository from either:
 
 * git://repo.or.cz/illumos-gate/unleashed.git
 * http://repo.or.cz/illumos-gate/unleashed.git
@@ -38,44 +19,40 @@ For example:
 
 ```
 $ git clone git://repo.or.cz/illumos-gate/unleashed.git
+$ cd unleashed
 ```
 
 Build
 -----
 
-To build everything, you want to use the nightly shell script.  For now it
-still requires an "env" file which defines the environment.  (A sample env
-file can be found in the tools directory.)  To start the build, simply run:
+For a complete build, use 'tools/nightly.sh':
 
 ```
-$ ./tools/nightly.sh <env file>
+$ ./tools/nightly.sh tools/env.sh
 ```
 
-This results in installable packages in the packages directory.
+On success, this results in installable packages in the packages directory.
 
-Incremental Build
+Incremental build
 -----------------
 
-Rebuilding a component is the easiest after a full nightly build.  (TODO:
-document a no-nightly component building)
+Rebuilding a component is the easiest after a full nightly build.
 
-Building a specific component can be either easy or somewhat arcane -
-depending on whether the component is under the legacy build system or the
-new one.
-
-To build a component that is using the new build system (e.g., cat(1)),
-simply change into the source directory and run bmake.  For example:
+To build a component that is using the new build system (e.g., cat(1)), change
+into the source directory and run make. For example:
 
 ```
 $ cd bin/cat
-$ bmake DESTDIR=.../proto/root_i386
-$ bmake install DESTDIR=.../proto/root_i386
+$ make
+# make install
 ```
 
-Note: Omitting DESTDIR will result in the component being built against the
-running system and installed to /.
+The component will be built against the running system and installed to /. To
+build against and install to the "proto area", pass the full path to
+'proto/root\_i386' to both 'make' and 'make install' as DESTDIR=path.
 
-To build a component under the legacy build system, more steps are needed:
+To build a component under the legacy (dmake) build system, ie. things under
+'usr/src':
 
 ```
 $ ./tools/bldenv.sh <env file>
@@ -83,7 +60,4 @@ $ cd usr/src/cmd/w
 $ dmake install
 ```
 
-Install Packages
-----------------
-
-TODO
+The component will be installed into the "proto area".
