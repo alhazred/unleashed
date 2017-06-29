@@ -775,7 +775,7 @@ real_panic_v(ufs_failure_t *f, const char *fmt, va_list adx)
 	}
 #endif /* DEBUG */
 
-	delay(hz >> 1);			/* allow previous warnings to get out */
+	ddi_msleep(500);			/* allow previous warnings to get out */
 
 	if (!f && fmt)
 		vcmn_err(seriousness, fmt, adx);

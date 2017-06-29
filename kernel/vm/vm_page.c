@@ -3649,7 +3649,7 @@ page_resv(pgcnt_t npages, uint_t flags)
 		mutex_exit(&freemem_lock);
 		page_needfree(npages);
 		kmem_reap();
-		delay(hz >> 2);
+		ddi_msleep(250);
 		page_needfree(-(spgcnt_t)npages);
 		mutex_enter(&freemem_lock);
 	}

@@ -966,7 +966,7 @@ done:
 			 * Errors due to lack of resources, wait a bit
 			 * and try again.
 			 */
-			(void) delay(hz/10);
+			(void) ddi_msleep(100);
 		}
 		if (stries-- > 0) {
 			RCSTAT_INCR(p->cku_stats, rcretrans);

@@ -370,7 +370,7 @@ report_stack_exec(proc_t *p, caddr_t addr)
 		    p->p_pid, (void *) addr, crgetruid(p->p_cred));
 	}
 
-	delay(hz / 50);
+	ddi_msleep(20);
 }
 
 /*

@@ -515,7 +515,7 @@ tmp_unmount(struct vfs *vfsp, int flag, struct cred *cr)
 		if (tnp == tm->tm_rootnode->tn_back) {
 			VN_HOLD(vp);
 			mutex_exit(&tm->tm_contents);
-			delay(hz / 4);
+			ddi_msleep(250);
 			mutex_enter(&tm->tm_contents);
 		}
 	}

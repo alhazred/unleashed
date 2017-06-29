@@ -431,7 +431,7 @@ skip_queue:
 			mutex_exit(&allocq->vpmq_mtx);
 			mutex_exit(&releq->vpmq_mtx);
 			if (page_locked) {
-				delay(hz >> 2);
+				ddi_msleep(250);
 				page_locked = 0;
 			}
 			goto retry_queue;

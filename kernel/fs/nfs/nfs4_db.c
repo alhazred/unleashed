@@ -830,7 +830,7 @@ rfs4_dbe_reap(rfs4_table_t *table, time_t cache_time, uint32_t desired)
 			 * instance that the tables are being shut down.
 			 */
 			if (table->dbt_reaper_shutdown && bp->dbk_head != NULL)
-				delay(hz/100);
+				ddi_msleep(10);
 		/*
 		 * If this is a table shutdown, keep going until
 		 * everything is gone

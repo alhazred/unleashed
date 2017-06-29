@@ -1357,7 +1357,7 @@ again:	for (loop_count = 0; (*bound_func)(cp, 0); loop_count++) {
 		 * we would risk another p_online disabling the last
 		 * processor.
 		 */
-		delay(hz/100);
+		ddi_msleep(10);
 	}
 
 	if (error == 0 && callout_off == 0) {
