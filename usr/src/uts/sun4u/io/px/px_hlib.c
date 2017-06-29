@@ -3229,7 +3229,7 @@ oberon_hp_pwron(caddr_t csr_base)
 		CSR_BS(csr_base, HOTPLUG_CONTROL, SLOTPON);
 
 	/* Wait for one second */
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 
 	return (DDI_SUCCESS);
 
@@ -3352,7 +3352,7 @@ oberon_hp_pwroff(caddr_t csr_base)
 		}
 
 		/* Wait for one second */
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 
 	/* Indicator LED off */

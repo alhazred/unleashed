@@ -2203,7 +2203,7 @@ nge_smu_sema(nge_t *ngep, boolean_t acquire)
 			tx_en.val = nge_reg_get32(ngep, NGE_TX_EN);
 			if (tx_en.bits.smu2mac == NGE_SMU_FREE)
 				break;
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		}
 		if (tx_en.bits.smu2mac != NGE_SMU_FREE)
 			return (DDI_FAILURE);

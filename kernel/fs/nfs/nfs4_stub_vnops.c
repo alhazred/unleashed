@@ -1034,7 +1034,7 @@ nfs4_trigger_domount_args_create(vnode_t *vp, cred_t *cr, domount_args_t **dmap)
 
 		/* if we've had no response at all, wait a second */
 		if (esi_first == NULL)
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 
 	} while (esi_first == NULL);
 	ASSERT(nargs_head != NULL);

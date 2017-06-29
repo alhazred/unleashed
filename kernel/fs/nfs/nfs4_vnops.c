@@ -12786,7 +12786,7 @@ recov_retry_confirm:
 				(void) xdr_free(xdr_COMPOUND4res_clnt,
 				    (caddr_t)&res);
 
-			delay(SEC_TO_TICK(confirm_retry_sec));
+			ddi_sleep(confirm_retry_sec);
 			goto recov_retry_confirm;
 		}
 		/* State may have changed so retry the entire OPEN op */

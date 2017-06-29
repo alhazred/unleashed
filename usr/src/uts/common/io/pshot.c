@@ -3075,13 +3075,13 @@ pshot_bus_config_test_specials(dev_info_t *parent, char *devname,
 			cmn_err(CE_CONT,
 			    "pshot%d: %s delay %d second\n",
 			    ddi_get_instance(parent), devname, n);
-		delay(n * drv_usectohz(1000000));
+		ddi_sleep(n);
 	} else if (strncmp(caddr, "delay", 5) == 0) {
 		if (pshot_debug)
 			cmn_err(CE_CONT,
 			    "pshot%d: %s delay 1 second\n",
 			    ddi_get_instance(parent), devname);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	} else if (strncmp(caddr, "wait,", 5) == 0) {
 		p = caddr+5;
 		n = stoi(&p);
@@ -3091,13 +3091,13 @@ pshot_bus_config_test_specials(dev_info_t *parent, char *devname,
 			cmn_err(CE_CONT,
 			    "pshot%d: %s wait %d second\n",
 			    ddi_get_instance(parent), devname, n);
-		delay(n * drv_usectohz(1000000));
+		ddi_sleep(n);
 	} else if (strncmp(caddr, "wait", 4) == 0) {
 		if (pshot_debug)
 			cmn_err(CE_CONT,
 			    "pshot%d: %s wait 1 second\n",
 			    ddi_get_instance(parent), devname);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 
 	return (NDI_SUCCESS);
@@ -3547,128 +3547,128 @@ pshot_event_test(void *arg)
 	events.ndi_event_defs = pshot_test_events;
 
 	cmn_err(CE_CONT, "pshot: binding set of 8 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: binding the same set of 8 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  all events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 
 	cmn_err(CE_CONT, "pshot: binding one highlevel event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = pshot_test_events_high;
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: binding the same set of 8 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = PSHOT_N_TEST_EVENTS;
 	events.ndi_event_defs = pshot_test_events;
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding one highlevel event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = pshot_test_events_high;
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: binding one highlevel event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = pshot_test_events_high;
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding one highlevel event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = pshot_test_events_high;
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: binding the same set of 8 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = PSHOT_N_TEST_EVENTS;
 	events.ndi_event_defs = pshot_test_events;
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding first 2 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 2;
 	events.ndi_event_defs = pshot_test_events;
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding first 2 events again\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 2;
 	events.ndi_event_defs = pshot_test_events;
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  middle 2 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 2;
 	events.ndi_event_defs = &pshot_test_events[4];
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: binding those 2 events back\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 2;
 	events.ndi_event_defs = &pshot_test_events[4];
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  2 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 2;
 	events.ndi_event_defs = &pshot_test_events[4];
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  all events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = PSHOT_N_TEST_EVENTS;
 	events.ndi_event_defs = pshot_test_events;
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  1 event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = &pshot_test_events[2];
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  1 event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = &pshot_test_events[3];
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  1 event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = &pshot_test_events[6];
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_unbind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: unbinding  1 event\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	events.ndi_n_events = 1;
 	events.ndi_event_defs = &pshot_test_events[7];
 	rval = ndi_event_unbind_set(hdl, &events, NDI_SLEEP);
@@ -3678,12 +3678,12 @@ pshot_event_test(void *arg)
 	events.ndi_event_defs = pshot_test_events;
 
 	cmn_err(CE_CONT, "pshot: binding set of 8 events\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	rval = ndi_event_bind_set(hdl, &events, NDI_SLEEP);
 	cmn_err(CE_CONT, "pshot: ndi_event_bind_set rval = %d\n", rval);
 
 	cmn_err(CE_CONT, "pshot: adding 8 callbacks\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	for (i = 0; i < 8; i++) {
 		rval = ndi_event_add_callback(hdl, pshot->dip,
 		    ndi_event_tag_to_cookie(hdl,
@@ -3704,7 +3704,7 @@ pshot_event_test(void *arg)
 
 		cmn_err(CE_CONT, "pshot: callback, tag=%d rval=%d\n",
 		    i, rval);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 
 	cmn_err(CE_CONT, "pshot: redo event callbacks\n");
@@ -3717,11 +3717,11 @@ pshot_event_test(void *arg)
 
 		cmn_err(CE_CONT, "pshot: callback, tag=%d rval=%d\n",
 		    i, rval);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 
 	cmn_err(CE_CONT, "pshot: removing 8 callbacks\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 
 	for (i = 0; i < 8; i++) {
 		(void) ndi_event_remove_callback(hdl,
@@ -3731,7 +3731,7 @@ pshot_event_test(void *arg)
 	}
 
 	cmn_err(CE_CONT, "pshot: freeing handle with bound set\n");
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 
 	rval =	ndi_event_free_hdl(hdl);
 

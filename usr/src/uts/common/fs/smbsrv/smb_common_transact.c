@@ -1473,7 +1473,7 @@ smb_trans_dispatch(smb_request_t *sr, smb_xa_t *xa)
 			break;
 
 		case TRANS_WAIT_NMPIPE:
-			delay(SEC_TO_TICK(1));
+			ddi_sleep(1);
 			rc = SDRC_SUCCESS;
 			break;
 

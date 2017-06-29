@@ -565,7 +565,7 @@ rdsv3_flush_workqueue(rdsv3_workqueue_struct_t *wq)
 		/* already flushing, wait until the flushing is complete */
 		do {
 			mutex_exit(&wq->wq_lock);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&wq->wq_lock);
 		} while (wq->wq_state == RDSV3_WQ_THREAD_FLUSHING);
 		break;
@@ -602,7 +602,7 @@ rdsv3_queue_work(rdsv3_workqueue_struct_t *wq, rdsv3_work_t *wp)
 	case RDSV3_WQ_THREAD_FLUSHING:
 		do {
 			mutex_exit(&wq->wq_lock);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&wq->wq_lock);
 		} while (wq->wq_state == RDSV3_WQ_THREAD_FLUSHING);
 
@@ -736,7 +736,7 @@ rdsv3_destroy_task_workqueue(rdsv3_workqueue_struct_t *wq)
 
 	while (wq->wq_pending > 0) {
 		mutex_exit(&wq->wq_lock);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&wq->wq_lock);
 	};
 	mutex_exit(&wq->wq_lock);

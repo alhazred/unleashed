@@ -923,7 +923,7 @@ idm_so_ini_conn_connect(idm_conn_t *ic)
 			if (lbolt < conn_login_interval) {
 				if ((rc == EINPROGRESS) || (rc == EALREADY)) {
 					/* TCP connect still in progress */
-					delay(SEC_TO_TICK(IN_PROGRESS_DELAY));
+					ddi_sleep(IN_PROGRESS_DELAY);
 					continue;
 				} else {
 					delay(conn_login_interval - lbolt);

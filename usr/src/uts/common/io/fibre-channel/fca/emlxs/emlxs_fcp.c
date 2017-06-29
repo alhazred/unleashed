@@ -1983,7 +1983,7 @@ emlxs_offline(emlxs_hba_t *hba, uint32_t reset_requested)
 	}
 
 	/* Pause here for the IO to settle */
-	delay(drv_usectohz(1000000));	/* 1 sec */
+	ddi_sleep(1);	/* 1 sec */
 
 	/* Unregister all nodes */
 	emlxs_ffcleanup(hba);

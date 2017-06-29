@@ -285,7 +285,7 @@ rds_handle_cm_req(rds_state_t *statep, ibt_cm_event_t *evp,
 				    (sp->session_state ==
 				    RDS_SESSION_STATE_FINI))) {
 					rw_exit(&sp->session_lock);
-					delay(drv_usectohz(1000000));
+					ddi_sleep(1);
 					rw_enter(&sp->session_lock, RW_WRITER);
 				}
 		}

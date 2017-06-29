@@ -766,7 +766,7 @@ fcsm_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 			while ((count++ <= 30) &&
 			    (fcsm_num_attaching || fcsm_num_detaching)) {
 				mutex_exit(&fcsm_global_mutex);
-				delay(drv_usectohz(1000000));
+				ddi_sleep(1);
 				mutex_enter(&fcsm_global_mutex);
 			}
 
@@ -1054,7 +1054,7 @@ fcsm_handle_port_detach(fc_ulp_port_info_t *pinfo, fcsm_t *fcsm,
 	count = 0;
 	while ((count++ <= 30) && (fcsm->sm_ncmds || fcsm->sm_cb_count)) {
 		mutex_exit(&fcsm->sm_mutex);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&fcsm->sm_mutex);
 	}
 	if (fcsm->sm_ncmds || fcsm->sm_cb_count) {
@@ -1567,7 +1567,7 @@ fcsm_fciocmd(intptr_t arg, int mode, cred_t *credp, fcio_t *fcio)
 				    "fciocmd: instance 0x%x, "
 				    "wait for port attach", instance));
 			}
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			fcsm = ddi_get_soft_state(fcsm_state, instance);
 		}
 		if (count > 30) {

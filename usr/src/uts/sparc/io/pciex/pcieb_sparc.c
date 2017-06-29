@@ -500,7 +500,7 @@ pcieb_print_plx_seeprom_crc_data(pcieb_devstate_t *pcieb_p)
 	    &mattr, &h) != DDI_SUCCESS)
 		return;
 	ddi_put32(h, (uint32_t *)((uchar_t *)mp + addr_reg_off), data);
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	printf("%s#%d: EEPROM StatusReg = %x, CRC = %x\n",
 	    ddi_driver_name(dip), ddi_get_instance(dip),
 	    ddi_get32(h, (uint32_t *)((uchar_t *)mp + addr_reg_off)),
@@ -509,7 +509,7 @@ pcieb_print_plx_seeprom_crc_data(pcieb_devstate_t *pcieb_p)
 	/* prevent hot reset from propogating downstream. */
 	data = ddi_get32(h, (uint32_t *)((uchar_t *)mp + 0x1DC));
 	ddi_put32(h, (uint32_t *)((uchar_t *)mp + 0x1DC), data | 0x80000);
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	printf("%s#%d: EEPROM 0x1DC prewrite=%x postwrite=%x\n",
 	    ddi_driver_name(dip), ddi_get_instance(dip), data,
 	    ddi_get32(h, (uint32_t *)((uchar_t *)mp + 0x1DC)));

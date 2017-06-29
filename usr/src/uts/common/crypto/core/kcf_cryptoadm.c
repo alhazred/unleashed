@@ -720,7 +720,7 @@ crypto_load_soft_disabled(char *name, uint_t new_count,
 		/* Wait till the existing requests complete. */
 		while (kcf_get_refcnt(provider, B_TRUE) > 0) {
 			/* wait 1 second and try again. */
-			delay(1 * drv_usectohz(1000000));
+			ddi_sleep(1);
 		}
 	}
 

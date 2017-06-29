@@ -13696,7 +13696,7 @@ inq83_retry:
 			goto out;
 		}
 		NDBG20(("The GUID is not ready, retry..."));
-		delay(1 * drv_usectohz(1000000));
+		ddi_sleep(1);
 		goto inq83_retry;
 	}
 out:
@@ -14996,7 +14996,7 @@ mptsas_create_lun(dev_info_t *pdip, struct scsi_inquiry *sd_inq,
 			 * to retry inquiry page 0x83 and get GUID.
 			 */
 			NDBG20(("Not well formed devid, retry..."));
-			delay(1 * drv_usectohz(1000000));
+			ddi_sleep(1);
 			continue;
 		} else {
 			mptsas_log(mpt, CE_WARN, "!Encode devid failed for "

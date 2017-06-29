@@ -926,7 +926,7 @@ cpqary3_check_ctlr_init(cpqary3_t *cpqary3p)
 			break;
 		} else {
 			DTRACE_PROBE(ctlr_init_check_notready);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		}
 	}
 

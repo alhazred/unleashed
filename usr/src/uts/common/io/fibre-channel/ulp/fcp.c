@@ -4059,7 +4059,7 @@ fcp_port_ioctl(opaque_t ulph, opaque_t port_handle, dev_t dev, int cmd,
 
 					if (!i_ddi_devi_attached(cdip)) {
 						mutex_exit(&plun->lun_mutex);
-						delay(drv_usectohz(1000000));
+						ddi_sleep(1);
 						mutex_enter(&plun->lun_mutex);
 					} else {
 						/*
@@ -4430,7 +4430,7 @@ fcp_statec_callback(opaque_t ulph, opaque_t port_handle,
 
 		while (pptr->port_ipkt_cnt) {
 			mutex_exit(&pptr->port_mutex);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&pptr->port_mutex);
 		}
 
@@ -4784,7 +4784,7 @@ fcp_handle_devices(struct fcp_port *pptr, fc_portmap_t devlist[],
 					    fcp_outstanding_lun_cmds(ptgt)
 					    == FC_SUCCESS) {
 						mutex_exit(&ptgt->tgt_mutex);
-						delay(drv_usectohz(1000000));
+						ddi_sleep(1);
 						mutex_enter(&ptgt->tgt_mutex);
 					}
 					mutex_exit(&ptgt->tgt_mutex);
@@ -10284,7 +10284,7 @@ fcp_handle_port_detach(struct fcp_port *pptr, int flag, int instance)
 			break;
 		}
 		mutex_exit(&pptr->port_mutex);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&pptr->port_mutex);
 	}
 

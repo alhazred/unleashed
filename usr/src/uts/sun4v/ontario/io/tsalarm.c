@@ -759,7 +759,7 @@ glvc_alarm_get(int alarm_type, int *alarm_state, tsalarm_softc_t *sc)
 	if (tsal_pcp_send_recv(sc, &send_msg, &recv_msg,
 	    PCP_COMM_TIMEOUT) < 0) {
 		/* we either timed out or erred; either way try again */
-		(void) delay(PCP_COMM_TIMEOUT * drv_usectohz(1000000));
+		(void) ddi_sleep(PCP_COMM_TIMEOUT);
 
 		if (tsal_pcp_send_recv(sc, &send_msg, &recv_msg,
 		    PCP_COMM_TIMEOUT) < 0) {
@@ -834,7 +834,7 @@ glvc_alarm_set(int alarm_type, int new_state, tsalarm_softc_t *sc)
 	if (tsal_pcp_send_recv(sc, &send_msg, &recv_msg,
 	    PCP_COMM_TIMEOUT) < 0) {
 		/* we either timed out or erred; either way try again */
-		(void) delay(PCP_COMM_TIMEOUT * drv_usectohz(1000000));
+		(void) ddi_sleep(PCP_COMM_TIMEOUT);
 
 		if (tsal_pcp_send_recv(sc, &send_msg, &recv_msg,
 		    PCP_COMM_TIMEOUT) < 0) {
@@ -1093,7 +1093,7 @@ tsal_pcp_io_op(tsalarm_softc_t *sc, void *buf, int byte_cnt, int io_op)
 				goto done;
 			}
 			/* waiting 5 secs. Do we need 5 Secs? */
-			(void) delay(PCP_GLVC_SLEEP * drv_usectohz(1000000));
+			(void) ddi_sleep(PCP_GLVC_SLEEP);
 		} /* while trying the io operation */
 
 		if (n < 0) {

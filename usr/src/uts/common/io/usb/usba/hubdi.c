@@ -9077,7 +9077,7 @@ hubd_reset_thread(void *arg)
 				if (rval == USB_SUCCESS)
 					break;
 
-				delay(drv_usectohz(1000000)); /* 1s */
+				ddi_sleep(1); /* 1s */
 			}
 		}
 

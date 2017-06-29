@@ -4305,7 +4305,7 @@ devtree_freeze(void)
 
 		/* do a sleeping wait for one second */
 		ASSERT(!servicing_interrupt());
-		delay(drv_usectohz(MICROSEC));
+		ddi_sleep(1);
 	}
 }
 

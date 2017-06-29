@@ -511,12 +511,12 @@ ps_suspend_send_response(ds_svc_hdl_t *ds_handle, uint64_t req_num,
 			 * service was temporarily unregistered.
 			 */
 			if ((hdl = *ds_handle) == DS_INVALID_HDL) {
-				delay(SEC2HZ(intval));
+				ddi_sleep(intval);
 			} else if ((rv = ds_cap_send(hdl, resp,
 			    sizeof (platsvc_suspend_resp_t) +
 			    reason_length)) != 0) {
 				tries++;
-				delay(SEC2HZ(intval));
+				ddi_sleep(intval);
 			}
 		} while ((rv != 0) && (gethrestime_sec() < deadline));
 	}

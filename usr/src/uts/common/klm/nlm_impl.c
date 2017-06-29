@@ -823,7 +823,7 @@ nlm_nsm_init(struct nlm_nsm *nsm, struct knetconfig *knc, struct netbuf *nb)
 		    SM_VERS, &nsm->ns_addr);
 		if (stat != RPC_SUCCESS) {
 			if (stat == RPC_PROGNOTREGISTERED) {
-				delay(SEC_TO_TICK(NLM_NSM_RPCBIND_TIMEOUT));
+				ddi_sleep(NLM_NSM_RPCBIND_TIMEOUT);
 				continue;
 			}
 		}

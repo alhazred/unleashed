@@ -867,7 +867,7 @@ reparse_kderef(const char *svc_type, const char *svc_data, char *buf,
 	    NULL, SIZE_MAX, 0)) != 0) {
 		if (err == EAGAIN || err == EINTR) {
 			if (++retries < REPARSED_DOORCALL_MAX_RETRY) {
-				delay(SEC_TO_TICK(1));
+				ddi_sleep(1);
 				continue;
 			}
 		} else if (err == EBADF) {

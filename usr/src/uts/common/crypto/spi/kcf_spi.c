@@ -514,7 +514,7 @@ crypto_unregister_provider(crypto_kcf_provider_handle_t handle)
 		 */
 		while (kcf_get_refcnt(desc, B_TRUE) > 1) {
 			/* wait 1 second and try again. */
-			delay(1 * drv_usectohz(1000000));
+			ddi_sleep(1);
 		}
 	} else {
 		int i;

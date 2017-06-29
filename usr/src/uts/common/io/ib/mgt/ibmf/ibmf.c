@@ -248,7 +248,7 @@ ibmf_unregister(ibmf_handle_t *ibmf_handlep, uint_t flags)
 	while (clientp->ic_recv_cb == NULL && clientp->ic_msgs_alloced != 0 &&
 	    secs > 0) {
 		mutex_exit(&clientp->ic_mutex);
-		delay(drv_usectohz(1000000)); /* one second delay */
+		ddi_sleep(1); /* one second delay */
 		secs--;
 		mutex_enter(&clientp->ic_mutex);
 	}

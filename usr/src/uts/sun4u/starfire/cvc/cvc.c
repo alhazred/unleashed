@@ -982,7 +982,7 @@ cvc_getstr(char *cp)
 		if ((cvcoutput_q == NULL) || (via_bbsram))
 			delay(drv_usectohz(100000));
 		else
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		cvc_bbsram_ops(BBSRAM_CONTROL_REG);
 		count = BBSRAM_INPUT_COUNT;
 	} while (count == 0);

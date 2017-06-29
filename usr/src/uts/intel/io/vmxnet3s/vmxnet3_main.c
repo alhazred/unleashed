@@ -1516,7 +1516,7 @@ vmxnet3_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		if (retries++ < 10) {
 			VMXNET3_WARN(dp, "rx pending (%u), waiting 1 second\n",
 			    dp->rx_num_bufs);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		} else {
 			VMXNET3_WARN(dp, "giving up\n");
 			return (DDI_FAILURE);

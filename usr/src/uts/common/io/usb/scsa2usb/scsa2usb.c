@@ -1340,7 +1340,7 @@ scsa2usb_cleanup(dev_info_t *dip, scsa2usb_state_t *scsa2usbp)
 			break;
 		}
 		mutex_exit(&scsa2usbp->scsa2usb_mutex);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&scsa2usbp->scsa2usb_mutex);
 	}
 	mutex_exit(&scsa2usbp->scsa2usb_mutex);
@@ -5472,7 +5472,7 @@ scsa2usb_disconnect_event_cb(dev_info_t *dip)
 			break;
 		}
 		mutex_exit(&scsa2usbp->scsa2usb_mutex);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&scsa2usbp->scsa2usb_mutex);
 	}
 	mutex_exit(&scsa2usbp->scsa2usb_mutex);

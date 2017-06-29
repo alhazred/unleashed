@@ -6799,8 +6799,7 @@ sata_reidentify_device(sata_pkt_txlate_t *spx)
 				scsi_hba_pkt_comp(scsipkt);
 			return;
 		} else if (rval == SATA_RETRY) {
-			delay(drv_usectohz(1000000 *
-			    DOWNLOAD_WAIT_INTERVAL_SECS));
+			ddi_sleep(DOWNLOAD_WAIT_INTERVAL_SECS);
 			continue;
 		} else	/* failed - no reason to retry */
 			break;

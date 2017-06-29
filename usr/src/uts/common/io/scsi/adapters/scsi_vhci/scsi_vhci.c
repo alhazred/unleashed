@@ -2629,7 +2629,7 @@ again:
 				if (rval == SCSI_SENSE_NOT_READY) {
 					max_retry = vhci_prout_not_ready_retry;
 					retry = nr_retry++;
-					delay(1*drv_usectohz(1000000));
+					ddi_sleep(1);
 				} else {
 					/* chk for state change and update */
 					if (rval == SCSI_SENSE_STATE_CHANGED) {
@@ -5372,7 +5372,7 @@ vhci_pathinfo_offline(dev_info_t *vdip, mdi_pathinfo_t *pip, int flags)
 				VHCI_DEBUG(1, (CE_NOTE, NULL,
 				    "!vhci_pathinfo_offline (pip:%p):"
 				    "reset failed, retrying\n", (void *)pip));
-				delay(1*drv_usectohz(1000000));
+				ddi_sleep(1);
 				if (vhci_recovery_reset(svp->svp_svl,
 				    &svp->svp_psd->sd_address, TRUE,
 				    VHCI_DEPTH_TARGET) == 0) {

@@ -1972,7 +1972,7 @@ ql_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		ha->flags |= ADAPTER_SUSPENDED;
 		while (ha->flags & ADAPTER_TIMER_BUSY && delay_cnt++ < 10) {
 			ADAPTER_STATE_UNLOCK(ha);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			ADAPTER_STATE_LOCK(ha);
 		}
 		if (ha->busy || ha->flags & ADAPTER_TIMER_BUSY) {

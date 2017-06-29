@@ -1078,7 +1078,7 @@ isnst_monitor(void *arg)
 	 * messages we send to the iSNS server.
 	 */
 	mutex_exit(&isns_monitor_mutex);
-	delay(drv_usectohz(isns_initial_delay * 1000000));
+	ddi_sleep(isns_initial_delay);
 	mutex_enter(&isns_monitor_mutex);
 
 	/* Force an initialization of isns_all_portals */
@@ -3085,7 +3085,7 @@ isnst_esi_thread(void *arg)
 			ISNST_LOG(CE_WARN,
 			    "isnst_esi_thread: Unable to create socket");
 			mutex_exit(&esi.esi_mutex);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&esi.esi_mutex);
 			continue;
 		}
@@ -3106,7 +3106,7 @@ isnst_esi_thread(void *arg)
 			ISNST_LOG(CE_WARN, "Unable to bind socket for ESI");
 			idm_sodestroy(esi.esi_so);
 			mutex_exit(&esi.esi_mutex);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&esi.esi_mutex);
 			continue;
 		}
@@ -3124,7 +3124,7 @@ isnst_esi_thread(void *arg)
 			    "failure 0x%x", rc);
 			idm_sodestroy(esi.esi_so);
 			mutex_exit(&esi.esi_mutex);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&esi.esi_mutex);
 			continue;
 		}

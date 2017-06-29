@@ -438,7 +438,7 @@ fp_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		for (cnt = 0; (port->fp_job_head) && (cnt < fp_cmd_wait_cnt);
 		    cnt++) {
 			mutex_exit(&port->fp_mutex);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&port->fp_mutex);
 		}
 
@@ -1518,7 +1518,7 @@ fp_detach_handler(fc_local_port_t *port)
 	    (delay_count < 30)) {
 		mutex_exit(&port->fp_mutex);
 		delay_count++;
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&port->fp_mutex);
 	}
 
@@ -1688,7 +1688,7 @@ fp_suspend_handler(fc_local_port_t *port)
 	    FP_SOFT_IN_UNSOL_CB)) && (delay_count < 30)) {
 		mutex_exit(&port->fp_mutex);
 		delay_count++;
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&port->fp_mutex);
 	}
 

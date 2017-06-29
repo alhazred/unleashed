@@ -133,7 +133,7 @@ rds_free_recv_caches(rds_state_t *statep)
 	    "pending buffers: %d", rds_dpool.pool_nbusy);
 	while (rds_dpool.pool_nbusy != 0) {
 		mutex_exit(&rds_dpool.pool_lock);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&rds_dpool.pool_lock);
 	}
 
@@ -815,7 +815,7 @@ rds_is_recvq_empty(rds_ep_t *ep, boolean_t wait)
 		while (recvqp->qp_level != 0) {
 			/* wait one second and try again */
 			mutex_exit(&recvqp->qp_lock);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&recvqp->qp_lock);
 		}
 	} else if (recvqp->qp_level != 0) {
@@ -858,13 +858,13 @@ rds_is_sendq_empty(rds_ep_t *ep, uint_t wait)
 		while (spool->pool_nbusy != 0) {
 			if (rds_no_interrupts) {
 				/* wait one second and try again */
-				delay(drv_usectohz(1000000));
+				ddi_sleep(1);
 				rds_poll_send_completions(ep->ep_sendcq, ep,
 				    B_TRUE);
 			} else {
 				/* wait one second and try again */
 				mutex_exit(&spool->pool_lock);
-				delay(drv_usectohz(1000000));
+				ddi_sleep(1);
 				mutex_enter(&spool->pool_lock);
 			}
 		}
@@ -887,7 +887,7 @@ rds_is_sendq_empty(rds_ep_t *ep, uint_t wait)
 				    "EP(%p) BP(0x%p/0x%p) last "
 				    "sent/acknowledged", ep, bp, ackbp);
 				mutex_exit(&spool->pool_lock);
-				delay(drv_usectohz(1000000));
+				ddi_sleep(1);
 				mutex_enter(&spool->pool_lock);
 
 				bp = spool->pool_tailp;
@@ -914,13 +914,13 @@ rds_is_sendq_empty(rds_ep_t *ep, uint_t wait)
 		while (ep->ep_rdmacnt != 0) {
 			if (rds_no_interrupts) {
 				/* wait one second and try again */
-				delay(drv_usectohz(1000000));
+				ddi_sleep(1);
 				rds_poll_send_completions(ep->ep_sendcq, ep,
 				    B_FALSE);
 			} else {
 				/* wait one second and try again */
 				mutex_exit(&ep->ep_lock);
-				delay(drv_usectohz(1000000));
+				ddi_sleep(1);
 				mutex_enter(&ep->ep_lock);
 			}
 		}

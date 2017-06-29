@@ -806,7 +806,7 @@ void
 nxge_delay(
 	int seconds)
 {
-	delay(drv_usectohz(seconds * 1000000));
+	ddi_sleep(seconds);
 }
 
 static dmc_reg_name_t rx_names[] = {

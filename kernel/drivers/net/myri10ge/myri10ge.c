@@ -2216,7 +2216,7 @@ myri10ge_stop_locked(struct myri10ge_priv *mgp)
 	}
 
 	while (old_down_cnt == *((volatile int *)&mgp->down_cnt)) {
-		delay(1 * drv_usectohz(1000000));
+		ddi_sleep(1);
 		wait_time--;
 		if (wait_time == 0)
 			break;
@@ -2244,11 +2244,11 @@ again:
 			if (polling) {
 				printf("%s: slice %d is polling\n",
 				    mgp->name, i);
-				delay(1 * drv_usectohz(1000000));
+				ddi_sleep(1);
 				goto again;
 			}
 		}
-		delay(1 * drv_usectohz(1000000));
+		ddi_sleep(1);
 		if (old_down_cnt == *((volatile int *)&mgp->down_cnt)) {
 			cmn_err(CE_WARN, "%s: Never got down irq\n", mgp->name);
 		}

@@ -1419,8 +1419,7 @@ ibmf_saa_impl_send_request(saa_impl_trans_info_t *trans_info)
 		 * to allow SA to transition from busy state (if busy)
 		 */
 		if (mad_status == MAD_STATUS_BUSY)
-			delay(drv_usectohz(
-			    IBMF_SAA_BUSY_RETRY_SLEEP_SECS * 1000000));
+			ddi_sleep(IBMF_SAA_BUSY_RETRY_SLEEP_SECS);
 	}
 
 	if (ibmf_status != IBMF_SUCCESS) {

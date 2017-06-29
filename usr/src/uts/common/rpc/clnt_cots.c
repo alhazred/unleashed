@@ -2363,7 +2363,7 @@ connmgr_wrapconnect(
 			cm_entry->x_needrel = FALSE;
 
 			connmgr_sndrel(cm_entry);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 
 			mutex_enter(&connmgr_lock);
 		}

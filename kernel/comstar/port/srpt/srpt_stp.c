@@ -385,7 +385,7 @@ retry_registration:
 		 * execution so it is ok to take a while.
 		 */
 		SRPT_DPRINTF_L3("stp_alloc_port, delaying");
-		delay(2 * drv_usectohz(1000000));
+		ddi_sleep(2);
 		goto retry_registration;
 	}
 	SRPT_DPRINTF_L1("stp_alloc_port, STMF register local port err(0x%llx)",
@@ -496,7 +496,7 @@ srpt_stp_destroy_port(srpt_target_port_t *tgt)
 	for (;;) {
 		status = stmf_deregister_local_port(tgt->tp_lport);
 		if (status == STMF_BUSY) {
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		} else {
 			break;
 		}

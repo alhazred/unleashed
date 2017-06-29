@@ -2778,8 +2778,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 					}
 					mutex_exit(
 					    &ihp->hba_discovery_events_mutex);
-					delay(SEC_TO_TICK(
-					    ISCSI_DISC_DELAY));
+					ddi_sleep(ISCSI_DISC_DELAY);
 					mutex_enter(
 					    &ihp->hba_discovery_events_mutex);
 				}
@@ -3085,7 +3084,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 				break;
 			}
 			mutex_exit(&ihp->hba_discovery_events_mutex);
-			delay(SEC_TO_TICK(ISCSI_DISC_DELAY));
+			ddi_sleep(ISCSI_DISC_DELAY);
 			mutex_enter(&ihp->hba_discovery_events_mutex);
 		}
 
@@ -3139,7 +3138,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 				break;
 			}
 			mutex_exit(&ihp->hba_discovery_events_mutex);
-			delay(SEC_TO_TICK(ISCSI_DISC_DELAY));
+			ddi_sleep(ISCSI_DISC_DELAY);
 			mutex_enter(&ihp->hba_discovery_events_mutex);
 		}
 
@@ -3261,7 +3260,7 @@ iscsi_ioctl(dev_t dev, int cmd, intptr_t arg, int mode,
 				break;
 			}
 			mutex_exit(&ihp->hba_discovery_events_mutex);
-			delay(SEC_TO_TICK(ISCSI_DISC_DELAY));
+			ddi_sleep(ISCSI_DISC_DELAY);
 			mutex_enter(&ihp->hba_discovery_events_mutex);
 		}
 

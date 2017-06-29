@@ -1610,7 +1610,7 @@ rdsib_del_hca(rds_state_t *statep, ib_guid_t hca_guid)
 		    (sp->session_state == RDS_SESSION_STATE_PASSIVE_CLOSING) ||
 		    (sp->session_state == RDS_SESSION_STATE_CLOSED)) {
 			rw_exit(&sp->session_lock);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			rw_enter(&sp->session_lock, RW_READER);
 			RDS_DPRINTF2("rdsib_del_hca", "SP(%p) State: %d", sp,
 			    sp->session_state);

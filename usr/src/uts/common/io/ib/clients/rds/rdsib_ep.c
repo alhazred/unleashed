@@ -772,7 +772,7 @@ rds_destroy_session(rds_session_t *sp)
 	    (sp->session_state == RDS_SESSION_STATE_FAILED) ||
 	    (sp->session_state == RDS_SESSION_STATE_FINI))) {
 		rw_exit(&sp->session_lock);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		rw_enter(&sp->session_lock, RW_READER);
 		RDS_DPRINTF2("rds_destroy_session", "SP(%p) State: %d WAITING "
 		    "ON SESSION", sp, sp->session_state);
@@ -863,7 +863,7 @@ rds_failover_session(void *arg)
 	}
 
 	/* wait 1 sec before re-connecting */
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 
 	do {
 		ibt_ip_path_attr_t	ipattr;
@@ -907,7 +907,7 @@ rds_failover_session(void *arg)
 		RDS_DPRINTF2(LABEL, "ibt_get_ip_paths failed, ret: %d ", ret);
 
 		/* wait 1 sec before re-trying */
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		cnt++;
 	} while (cnt < 5);
 
@@ -1115,7 +1115,7 @@ rds_close_sessions(void *arg)
 		/* wait one second and try again */
 		RDS_DPRINTF2("rds_close_sessions", "waiting on "
 		    "pending packets", RDS_GET_RXPKTS_PEND());
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 	RDS_DPRINTF2("rds_close_sessions", "No more RX packets pending");
 

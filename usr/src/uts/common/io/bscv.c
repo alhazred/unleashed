@@ -3201,7 +3201,7 @@ bscv_stop_event_daemon(bscv_soft_state_t *ssp)
 		 * during panic we should use drv_usecwait() rather
 		 * than delay in those circumstances.
 		 */
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&ssp->task_mu);
 	}
 
@@ -3247,7 +3247,7 @@ bscv_pause_event_daemon(bscv_soft_state_t *ssp)
 		cv_signal(&ssp->task_cv);
 		/* Release task daemon lock. */
 		mutex_exit(&ssp->task_mu);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&ssp->task_mu);
 	}
 	if ((ssp->task_flags & TASK_SLEEPING_FLG) ||

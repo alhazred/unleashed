@@ -218,7 +218,7 @@ boolean_t BnxeWaitForPacketsFromClient(um_device_t * pUM,
             }
 
             /* twiddle our thumbs for one second */
-            delay(drv_usectohz(1000000));
+            ddi_sleep(1);
         }
 
         if (cnt)
@@ -244,7 +244,7 @@ boolean_t BnxeWaitForPacketsFromClient(um_device_t * pUM,
                 }
 
                 /* twiddle our thumbs for one second */
-                delay(drv_usectohz(1000000));
+                ddi_sleep(1);
             }
 
             tot += cnt;

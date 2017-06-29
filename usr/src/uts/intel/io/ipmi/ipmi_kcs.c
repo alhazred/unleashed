@@ -195,7 +195,7 @@ kcs_start_write(struct ipmi_softc *sc)
 		status = kcs_wait_for_ibf(sc, 0);
 		if (KCS_STATUS_STATE(status) == KCS_STATUS_STATE_WRITE)
 			break;
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 
 	if (KCS_STATUS_STATE(status) != KCS_STATUS_STATE_WRITE)

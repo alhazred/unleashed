@@ -4046,14 +4046,14 @@ emlxs_reset(emlxs_port_t *port, uint32_t cmd)
 		mutex_exit(&EMLXS_PORT_LOCK);
 
 		/* Wait for the timer thread to detect the error condition */
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 
 		/* Wait for the HBA to re-initialize */
 		i = 0;
 		mutex_enter(&EMLXS_PORT_LOCK);
 		while (!(hba->flag & FC_ONLINE_MODE) && (i++ < 30)) {
 			mutex_exit(&EMLXS_PORT_LOCK);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&EMLXS_PORT_LOCK);
 		}
 

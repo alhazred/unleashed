@@ -1115,7 +1115,7 @@ nfs4_wait_for_grace(mntinfo4_t *mi, nfs4_recov_state_t *rsp)
 
 				mutex_exit(&mi->mi_lock);
 
-				delay(SEC_TO_TICK(time_to_wait));
+				ddi_sleep(time_to_wait);
 
 				curtime = gethrestime_sec();
 
@@ -1172,7 +1172,7 @@ nfs4_wait_for_delay(vnode_t *vp, nfs4_recov_state_t *rsp)
 
 				mutex_exit(&rp->r_statelock);
 
-				delay(SEC_TO_TICK(time_to_wait));
+				ddi_sleep(time_to_wait);
 
 				curtime = gethrestime_sec();
 
@@ -1479,7 +1479,7 @@ nfs4_recov_thread(recov_info_t *recovp)
 			mutex_enter(&mi->mi_lock);
 			cv_broadcast(&mi->mi_failover_cv);
 			mutex_exit(&mi->mi_lock);
-			delay(SEC_TO_TICK(nfs4_unmount_delay));
+			ddi_sleep(nfs4_unmount_delay);
 		}
 
 	} while (!done);
@@ -1789,7 +1789,7 @@ recov_clientid(recov_info_t *recovp, nfs4_server_t *sp)
 		nfs_rw_exit(&sp->s_recovlock);
 		mutex_enter(&mi->mi_lock);
 		if ((mi->mi_flags & MI4_RECOV_FAIL) == 0)
-			delay(SEC_TO_TICK(recov_err_delay));
+			ddi_sleep(recov_err_delay);
 		mutex_exit(&mi->mi_lock);
 	} else {
 		mntinfo4_t **milist;
@@ -2669,7 +2669,7 @@ nfs4_resend_lost_rqsts(recov_info_t *recovp, nfs4_server_t *sp)
 			    (n4e.error == 0 && n4e.stat == NFS4ERR_GRACE) ||
 			    (n4e.error == 0 && n4e.stat == NFS4ERR_RESOURCE) ||
 			    NFS4_FRC_UNMT_ERR(n4e.error, mi->mi_vfsp)) {
-				delay(SEC_TO_TICK(nfs4err_delay_time));
+				ddi_sleep(nfs4err_delay_time);
 			} else {
 				(void) nfs4_start_recovery(&n4e,
 				    mi, lrp->lr_dvp, lrp->lr_vp, NULL, NULL,
@@ -2913,7 +2913,7 @@ resend_lock(nfs4_lost_rqst_t *lrp, nfs4_error_t *ep)
 		if ((ep->error == 0 && ep->stat == NFS4ERR_DELAY) ||
 		    (ep->error == 0 && ep->stat == NFS4ERR_GRACE) ||
 		    (ep->error == 0 && ep->stat == NFS4ERR_RESOURCE))
-			delay(SEC_TO_TICK(recov_err_delay));
+			ddi_sleep(recov_err_delay);
 		goto done;
 	}
 
@@ -3362,7 +3362,7 @@ recov_throttle(recov_info_t *recovp, vnode_t *vp)
 	    rp->r_last_recov + recov_err_delay > curtime) {
 		time_to_wait = rp->r_last_recov + recov_err_delay - curtime;
 		mutex_exit(&rp->r_statelock);
-		delay(SEC_TO_TICK(time_to_wait));
+		ddi_sleep(time_to_wait);
 		curtime = gethrestime_sec();
 		mutex_enter(&rp->r_statelock);
 	}

@@ -1128,7 +1128,7 @@ pciehpc_slot_poweron(pcie_hp_slot_t *slot_p, ddi_hp_cn_state_t *result)
 	}
 
 	/* wait 1 sec for link to come up */
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 
 	/* check power is really turned ON */
 	control =  pciehpc_reg_get16(ctrl_p,
@@ -1167,7 +1167,7 @@ pciehpc_slot_poweron(pcie_hp_slot_t *slot_p, ddi_hp_cn_state_t *result)
 			pciehpc_issue_hpc_command(ctrl_p, control);
 
 			/* wait 1 sec after toggling the state of EMI lock */
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		}
 	}
 
@@ -1276,7 +1276,7 @@ pciehpc_slot_poweroff(pcie_hp_slot_t *slot_p, ddi_hp_cn_state_t *result)
 			pciehpc_issue_hpc_command(ctrl_p, control);
 
 			/* wait 1 sec after toggling the state of EMI lock */
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 		}
 	}
 

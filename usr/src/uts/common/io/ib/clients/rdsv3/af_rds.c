@@ -120,7 +120,7 @@ rdsv3_release(sock_lower_handle_t proto_handle, int flgs, cred_t *cr)
 
 	while (sk->sk_refcount > 1) {
 		/* wait for 1 sec and try again */
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 	}
 
 	/* this will free the rs and sk */

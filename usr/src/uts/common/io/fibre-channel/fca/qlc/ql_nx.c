@@ -1608,7 +1608,7 @@ ql_8021_init_p3p(ql_adapter_state_t *ha)
 
 	/* ??? */
 	ql_8021_wr_32(ha, UNM_PORT_MODE_ADDR, UNM_PORT_MODE_AUTO_NEG);
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 
 	/* CAM RAM Cold Boot Register */
 	ql_8021_rd_32(ha, UNM_RAM_COLD_BOOT, &data);

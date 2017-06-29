@@ -552,7 +552,7 @@ iscsid_poke_discovery(iscsi_hba_t *ihp, iSCSIDiscoveryMethod_t method)
 	mutex_enter(&ihp->hba_discovery_events_mutex);
 	while (ihp->hba_discovery_events != ISCSI_ALL_DISCOVERY_METHODS) {
 		mutex_exit(&ihp->hba_discovery_events_mutex);
-		delay(SEC_TO_TICK(ISCSI_DISCOVERY_DELAY));
+		ddi_sleep(ISCSI_DISCOVERY_DELAY);
 		mutex_enter(&ihp->hba_discovery_events_mutex);
 	}
 	ihp->hba_discovery_in_progress = B_FALSE;
@@ -795,7 +795,7 @@ iscsid_config_one(iscsi_hba_t *ihp, char *name, boolean_t protect)
 				 * one is found or the retry count
 				 * is exceeded
 				 */
-				delay(SEC_TO_TICK(ISCSI_CONFIGROOT_DELAY));
+				ddi_sleep(ISCSI_CONFIGROOT_DELAY);
 				retry++;
 				continue;
 			}
@@ -808,8 +808,7 @@ iscsid_config_one(iscsi_hba_t *ihp, char *name, boolean_t protect)
 				lun_online =
 				    iscsiboot_prop->boot_tgt.lun_online;
 				if (lun_online == 0) {
-					delay(SEC_TO_TICK(
-					    ISCSI_CONFIGROOT_DELAY));
+					ddi_sleep(ISCSI_CONFIGROOT_DELAY);
 					cur_sec++;
 				}
 			} while ((lun_online == 0) &&
@@ -898,7 +897,7 @@ iscsid_config_all(iscsi_hba_t *ihp, boolean_t protect)
 				 * one is found or the retry count
 				 * is exceeded
 				 */
-				delay(SEC_TO_TICK(ISCSI_CONFIGROOT_DELAY));
+				ddi_sleep(ISCSI_CONFIGROOT_DELAY);
 				retry++;
 				continue;
 			}
@@ -911,8 +910,7 @@ iscsid_config_all(iscsi_hba_t *ihp, boolean_t protect)
 				lun_online =
 				    iscsiboot_prop->boot_tgt.lun_online;
 				if (lun_online == 0) {
-					delay(SEC_TO_TICK(
-					    ISCSI_CONFIGROOT_DELAY));
+					ddi_sleep(ISCSI_CONFIGROOT_DELAY);
 					cur_sec++;
 				}
 			} while ((lun_online == 0) &&

@@ -265,7 +265,7 @@ smb_rq_simple_timed(struct smb_rq *rqp, int timeout)
 			    SEC_TO_TICK(SMB_RCNDELAY), TR_CLOCK_TICK);
 
 		} else {
-			delay(SEC_TO_TICK(SMB_RCNDELAY));
+			ddi_sleep(SMB_RCNDELAY);
 		}
 		SMBRQ_UNLOCK(rqp);
 		rqp->sr_rexmit--;
@@ -1398,7 +1398,7 @@ smb_t2_request(struct smb_t2rq *t2p)
 			(void) cv_reltimedwait(&t2p->t2_cond, &(t2p)->t2_lock,
 			    SEC_TO_TICK(SMB_RCNDELAY), TR_CLOCK_TICK);
 		} else {
-			delay(SEC_TO_TICK(SMB_RCNDELAY));
+			ddi_sleep(SMB_RCNDELAY);
 		}
 		mutex_exit(&(t2p)->t2_lock);
 	}
@@ -1432,7 +1432,7 @@ smb_nt_request(struct smb_ntrq *ntp)
 			    SEC_TO_TICK(SMB_RCNDELAY), TR_CLOCK_TICK);
 
 		} else {
-			delay(SEC_TO_TICK(SMB_RCNDELAY));
+			ddi_sleep(SMB_RCNDELAY);
 		}
 		mutex_exit(&(ntp)->nt_lock);
 	}

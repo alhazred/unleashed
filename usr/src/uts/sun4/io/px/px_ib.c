@@ -1066,7 +1066,7 @@ px_ib_set_msix_target(px_t *px_p, ddi_intr_handle_impl_t *hdlp,
 	    (old_ih_p->ih_intr_flags & PX_INTR_PENDING)) {
 
 		/* Wait for one second */
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 
 		end_time = gethrtime() - start_time;
 		if (end_time > px_ib_msix_retarget_timeout) {

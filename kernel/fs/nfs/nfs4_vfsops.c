@@ -3334,10 +3334,10 @@ recov_retry:
 
 	if (retry && num_retries++ < nfs4_num_sclid_retries) {
 		if (retry_inuse) {
-			delay(SEC_TO_TICK(lease_time + nfs4_retry_sclid_delay));
+			ddi_sleep(lease_time + nfs4_retry_sclid_delay);
 			retry_inuse = 0;
 		} else
-			delay(SEC_TO_TICK(nfs4_retry_sclid_delay));
+			ddi_sleep(nfs4_retry_sclid_delay);
 
 		nfs4_server_rele(np);
 		goto recov_retry;

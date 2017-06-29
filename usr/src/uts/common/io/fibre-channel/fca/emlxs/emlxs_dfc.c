@@ -4368,7 +4368,7 @@ emlxs_set_hba_mode(emlxs_hba_t *hba, uint32_t mode)
 		}
 
 		mutex_exit(&EMLXS_PORT_LOCK);
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		mutex_enter(&EMLXS_PORT_LOCK);
 	}
 
@@ -4463,7 +4463,7 @@ emlxs_set_hba_mode(emlxs_hba_t *hba, uint32_t mode)
 			}
 
 			mutex_exit(&EMLXS_PORT_LOCK);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&EMLXS_PORT_LOCK);
 		}
 
@@ -4546,7 +4546,7 @@ emlxs_set_hba_mode(emlxs_hba_t *hba, uint32_t mode)
 			}
 
 			mutex_exit(&EMLXS_PORT_LOCK);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(&EMLXS_PORT_LOCK);
 		}
 
@@ -8324,7 +8324,7 @@ emlxs_dfc_set_menlo_loopback(emlxs_hba_t *hba)
 			rval = DFC_TIMEOUT;
 	}
 
-	delay(drv_usectohz(1000000));
+	ddi_sleep(1);
 	i = 0;
 	while ((hba->state < FC_LINK_UP) && (hba->state != FC_ERROR)) {
 		delay(drv_usectohz(100000));

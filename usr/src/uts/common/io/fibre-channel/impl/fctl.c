@@ -654,7 +654,7 @@ fc_ulp_add(fc_ulp_modinfo_t *ulp_info)
 	mutex_exit(&fctl_ulp_list_mutex);
 
 	while (rw_tryenter(&fctl_ulp_lock, RW_WRITER) == 0) {
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		if (ntry++ > FC_ULP_ADD_RETRY_COUNT) {
 			fc_ulp_list_t	*list;
 			fc_ulp_list_t	*last;

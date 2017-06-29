@@ -17606,7 +17606,7 @@ st_test_path_to_device(struct scsi_tape *un)
 	do {
 		if (rval != 0) {
 			mutex_exit(ST_MUTEX);
-			delay(drv_usectohz(1000000));
+			ddi_sleep(1);
 			mutex_enter(ST_MUTEX);
 		}
 		rval = st_rcmd(un, SCMD_TEST_UNIT_READY, 0, SYNC_CMD);

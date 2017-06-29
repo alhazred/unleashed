@@ -420,7 +420,7 @@ skip_intr:
 	 * On NCR system,  the driver seen  failure of some commands
 	 * while booting. This delay mysteriously solved the problem.
 	 */
-	delay(drv_usectohz(uhci_attach_wait*1000000));
+	ddi_sleep(uhci_attach_wait);
 #endif
 
 	/*

@@ -627,7 +627,7 @@ cmdksuspend(dev_info_t *dip)
 
 	/* need to wait a while */
 	while (dadk_getcmds(DKTP_DATA) != 0) {
-		delay(drv_usectohz(1000000));
+		ddi_sleep(1);
 		if (count > 60) {
 			dkp->dk_flag &= ~CMDK_SUSPEND;
 			cv_broadcast(&dkp->dk_suspend_cv);

@@ -289,7 +289,7 @@ crypto_bufcall_service(void)
 			 */
 			CALLB_CPR_SAFE_BEGIN(&cprinfo);
 			mutex_exit(&cbuf_list_lock);
-			delay(30 * drv_usectohz(1000000));
+			ddi_sleep(30);
 			mutex_enter(&cbuf_list_lock);
 			CALLB_CPR_SAFE_END(&cprinfo, &cbuf_list_lock);
 		}
