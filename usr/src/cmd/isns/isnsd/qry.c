@@ -767,7 +767,7 @@ insert_uid(
 
 	if (s == n) {
 		s = (s == 0) ? 8 : s * 2;
-		t = (uint32_t *)realloc(p, s * sizeof (uint32_t));
+		t = reallocarray(p, s, sizeof (uint32_t));
 		if (t != NULL) {
 			p = t;
 			*pp = p;

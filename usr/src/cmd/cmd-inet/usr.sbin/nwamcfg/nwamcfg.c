@@ -2391,8 +2391,8 @@ next_rule:
 		 * rules.  Also, update the check_props array with this prop.
 		 */
 		if (show_prop) {
-			char **newprops = realloc(checked_props,
-			    ++num_checked * sizeof (char *));
+			char **newprops = reallocarray(checked_props,
+			    ++num_checked, sizeof (char *));
 			if (newprops == NULL) {
 				free(checked_props);
 				return (B_FALSE);

@@ -172,7 +172,7 @@ loadpolicy(const char *infile)
 		line = fep->entry;
 		if (cnt >= nalloc) {
 			nalloc += PLCY_CHUNK;
-			mem = realloc(mem, nalloc * devplcysys_sz);
+			mem = reallocarray(mem, nalloc, devplcysys_sz);
 			if (mem == NULL) {
 				err_print(MALLOC_FAILED,
 					nalloc * devplcysys_sz);

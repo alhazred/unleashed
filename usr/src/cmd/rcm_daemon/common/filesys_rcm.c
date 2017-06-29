@@ -1008,8 +1008,8 @@ cache_insert(cache_t *cache, struct mnttab *mt)
 	 * Add this mountpoint to the list of mounts associated with the
 	 * special device.
 	 */
-	mountps = (char **)realloc(entry->mountps,
-	    (entry->n_mounts + 2) * sizeof (char *));
+	mountps = (char **)reallocarray(entry->mountps,
+	    entry->n_mounts + 2, sizeof (char *));
 	if ((mountps == NULL) ||
 	    ((mountps[entry->n_mounts] = strdup(mt->mnt_mountp)) == NULL)) {
 		rcm_log_message(RCM_ERROR,

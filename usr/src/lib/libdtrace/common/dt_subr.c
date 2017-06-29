@@ -419,7 +419,8 @@ dt_cpp_add_arg(dtrace_hdl_t *dtp, const char *str)
 	if (dtp->dt_cpp_argc == dtp->dt_cpp_args) {
 		int olds = dtp->dt_cpp_args;
 		int news = olds * 2;
-		char **argv = realloc(dtp->dt_cpp_argv, sizeof (char *) * news);
+		char **argv = reallocarray(dtp->dt_cpp_argv, news,
+		    sizeof (char *));
 
 		if (argv == NULL)
 			return (NULL);

@@ -486,7 +486,8 @@ pnset_add(pnset_t *pnsetp, const char *path)
 
 	if (pnsetp->npath == pnsetp->maxpaths) {
 		maxpaths = (pnsetp->maxpaths == 0) ? 512 : pnsetp->maxpaths * 2;
-		newpaths = realloc(pnsetp->paths, sizeof (char *) * maxpaths);
+		newpaths = reallocarray(pnsetp->paths, maxpaths,
+		    sizeof (char *));
 		if (newpaths == NULL)
 			return (0);
 		pnsetp->paths = newpaths;

@@ -1298,8 +1298,9 @@ krb5_error_code krb5_klog_add_stderr() {
 	int i;
 
 	if (log_control.log_entries != &def_log_entry) {
-		log_control.log_entries = realloc(log_control.log_entries,
-		    (log_control.log_nentries + 1) * sizeof(struct log_entry));
+		log_control.log_entries = reallocarray(log_control.log_entries,
+						       (log_control.log_nentries + 1),
+						       sizeof(struct log_entry));
 		if (log_control.log_entries == NULL) {
 			log_control.log_entries = tmp_log_entries;
 			return (ENOMEM);
@@ -1325,8 +1326,9 @@ krb5_error_code krb5_klog_add_stderr() {
 		/* Free the alloc'ed extra entry */
 		int err = errno;
 		tmp_log_entries = log_control.log_entries;
-		log_control.log_entries = realloc(log_control.log_entries,
-		    (log_control.log_nentries) * sizeof(struct log_entry));
+		log_control.log_entries = reallocarray(log_control.log_entries,
+						       (log_control.log_nentries),
+						       sizeof(struct log_entry));
 		if (log_control.log_entries == NULL)
 			log_control.log_entries = tmp_log_entries;
 		return (err);
@@ -1358,9 +1360,9 @@ void krb5_klog_remove_stderr() {
 
 		if (log_control.log_nentries > 1) {
 			log_control.log_entries =
-			    realloc(log_control.log_entries,
-			    (log_control.log_nentries + 1) *
-			    sizeof(struct log_entry));
+			    reallocarray(log_control.log_entries,
+					 (log_control.log_nentries + 1),
+					 sizeof(struct log_entry));
 			if (log_control.log_entries != NULL)
 				log_control.log_nentries--;
 			else

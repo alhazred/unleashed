@@ -376,8 +376,8 @@ asn1_error_code asn1buf_expand(asn1buf *buf, unsigned int inc)
   if (buf->base == NULL)
     buf->base = malloc((asn1buf_size(buf)+inc) * sizeof(asn1_octet));
   else
-    buf->base = realloc(buf->base,
-			(asn1buf_size(buf)+inc) * sizeof(asn1_octet));
+    buf->base = reallocarray(buf->base, (asn1buf_size(buf) + inc),
+			     sizeof(asn1_octet));
   if (buf->base == NULL) return ENOMEM;
   buf->bound = (buf->base) + bound_offset + inc;
   buf->next = (buf->base) + next_offset;

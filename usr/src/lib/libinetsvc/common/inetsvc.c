@@ -1070,9 +1070,8 @@ read_prop(scf_handle_t *h, inetd_prop_t *iprop, int index, const char *inst,
 			    scf_simple_prop_next_astring(sprop)) != NULL) {
 				char	**cpp;
 
-				if ((cpp = realloc(
-				    iprop->ip_value.iv_string_list,
-				    (j + 2) * sizeof (char *))) == NULL) {
+				if ((cpp = reallocarray(iprop->ip_value.iv_string_list,
+				    j + 2, sizeof (char *))) == NULL) {
 					scf_simple_prop_free(sprop);
 					return (SCF_ERROR_NO_MEMORY);
 				}
@@ -1696,7 +1695,7 @@ get_protos(const char *pstr)
 			errno = E2BIG;
 			return (NULL);
 		}
-		if ((cpp = realloc(ret, (i + 2) * sizeof (char *))) == NULL)
+		if ((cpp = reallocarray(ret, i + 2, sizeof (char *))) == NULL)
 			goto malloc_failure;
 		ret = cpp;
 		if ((cpp[i] = strdup(cp)) == NULL)
@@ -1737,8 +1736,8 @@ get_netids(char *proto)
 	if ((handle = __rpc_setconf(proto)) != NULL) {
 		/* expand nettype */
 		while ((nconf = __rpc_getconf(handle)) != NULL) {
-			if ((cpp = realloc(netids,
-			    (i + 2) * sizeof (char *))) == NULL)
+			if ((cpp = reallocarray(netids, i + 2,
+			     sizeof (char *))) == NULL)
 				goto failure_cleanup;
 			netids = cpp;
 			if ((cpp[i] = strdup(nconf->nc_netid)) == NULL)

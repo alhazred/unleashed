@@ -1701,8 +1701,7 @@ zsd_get_pool_pset(zsd_ctl_t *ctl, psetid_t psetid, char *psetname,
 			/* Success */
 				break;
 			}
-			if ((cache = (processorid_t *)realloc(
-			    ctl->zsctl_cpu_cache, num *
+			if ((cache = reallocarray(ctl->zsctl_cpu_cache, num,
 			    sizeof (processorid_t))) != NULL) {
 				ctl->zsctl_cpu_ncache = num;
 				ctl->zsctl_cpu_cache = cache;
@@ -1818,8 +1817,7 @@ zsd_get_pool_pset(zsd_ctl_t *ctl, psetid_t psetid, char *psetname,
 
 	/* Make sure there is space for cpu id list */
 	if (num > ctl->zsctl_cpu_ncache) {
-		if ((cache = (processorid_t *)realloc(
-		    ctl->zsctl_cpu_cache, num *
+		if ((cache = reallocarray(ctl->zsctl_cpu_cache, num,
 		    sizeof (processorid_t))) != NULL) {
 			ctl->zsctl_cpu_ncache = num;
 			ctl->zsctl_cpu_cache = cache;
@@ -1939,8 +1937,8 @@ retry:
 			goto err;
 
 		if (num > ctl->zsctl_pset_ncache)  {
-			if ((cache = (psetid_t *)realloc(ctl->zsctl_pset_cache,
-			    (num) * sizeof (psetid_t))) == NULL) {
+			if ((cache = reallocarray(ctl->zsctl_pset_cache, num,
+			    sizeof (psetid_t))) == NULL) {
 				goto err;
 			}
 			ctl->zsctl_pset_ncache = num;
@@ -1970,8 +1968,8 @@ retry:
 			if ((num + 1) <= old) {
 				break;
 			}
-			if ((cache = (psetid_t *)realloc(ctl->zsctl_pset_cache,
-			    (num + 1) * sizeof (psetid_t))) != NULL) {
+			if ((cache = reallocarray(ctl->zsctl_pset_cache,
+			    num + 1, sizeof (psetid_t))) != NULL) {
 				ctl->zsctl_pset_ncache = num + 1;
 				ctl->zsctl_pset_cache = cache;
 			} else {
@@ -2410,8 +2408,8 @@ zsd_refresh_zones(zsd_ctl_t *ctl)
 		(void) zone_list(ctl->zsctl_zone_cache, &num);
 		if (num <= old)
 			break;
-		if ((cache = (zoneid_t *)realloc(ctl->zsctl_zone_cache,
-		    (num) * sizeof (zoneid_t))) != NULL) {
+		if ((cache = reallocarray(ctl->zsctl_zone_cache, num,
+		    sizeof (zoneid_t))) != NULL) {
 			ctl->zsctl_zone_ncache = num;
 			ctl->zsctl_zone_cache = cache;
 		} else {

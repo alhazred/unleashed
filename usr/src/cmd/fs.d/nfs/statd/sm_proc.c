@@ -1175,8 +1175,8 @@ add_to_host_array(char *host) {
 	/* Make sure we don't overrun host_name. */
 	if (addrix >= host_name_count) {
 		host_name_count += HOST_NAME_INCR;
-		new_block = realloc((void *)host_name,
-				    host_name_count*sizeof (char *));
+		new_block = reallocarray(host_name, host_name_count,
+		    sizeof (char *));
 		if (new_block != NULL)
 			host_name = new_block;
 		else {

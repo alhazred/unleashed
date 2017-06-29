@@ -75,9 +75,9 @@ OM_uint32 generic_gss_add_buffer_set_member
     }
 
     set = *buffer_set;
-    set->elements = (gss_buffer_desc *)realloc(set->elements,
-					       (set->count + 1) *
-						sizeof(gss_buffer_desc));
+    set->elements = (gss_buffer_desc *)reallocarray(set->elements,
+                                                    (set->count + 1),
+                                                    sizeof(gss_buffer_desc));
     if (set->elements == NULL) {
 	free(set);  /* SUNW17PACresync - MIT17 bug */
 	*minor_status = ENOMEM;

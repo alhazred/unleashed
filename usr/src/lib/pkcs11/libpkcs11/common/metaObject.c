@@ -950,8 +950,8 @@ add_to_search_result(meta_object_t *object, find_objs_info_t *info,
 	 */
 	if (*num_results_alloc <= info->num_matched_objs) {
 		*num_results_alloc += FIND_OBJ_BUF_SIZE;
-		info->matched_objs = realloc(info->matched_objs,
-		    sizeof (meta_object_t *) * (*num_results_alloc));
+		info->matched_objs = reallocarray(info->matched_objs,
+		    *num_results_alloc, sizeof (meta_object_t *));
 		if (info->matched_objs == NULL) {
 			return (CKR_HOST_MEMORY);
 		}

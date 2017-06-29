@@ -707,7 +707,7 @@ show_sockfilters(struct ps_prochandle *Pr, int fd)
 			if (nalloc > MAXNALLOC)
 				break;
 			len = nalloc * sizeof (*fi);
-			new = realloc(fi, nalloc * sizeof (*fi));
+			new = reallocarray(fi, nalloc, sizeof (*fi));
 			if (new == NULL) {
 				perror("realloc");
 				break;

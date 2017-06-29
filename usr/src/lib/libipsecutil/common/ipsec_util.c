@@ -553,8 +553,8 @@ create_argv(char *ibuf, int *newargc, char ***thisargv)
 						return (TOO_MANY_TOKENS);
 					}
 					/* Double the allocation. */
-					current = realloc(*thisargv,
-					    sizeof (char *) * (argvlen << 1));
+					current = reallocarray(*thisargv,
+					    argvlen << 1, sizeof (char *));
 					if (current == NULL) {
 						free(*thisargv);
 						return (MEMORY_ALLOCATION);
@@ -596,7 +596,8 @@ create_argv(char *ibuf, int *newargc, char ***thisargv)
 	 * the caller.
 	 */
 	if (argvlen == *newargc) {
-		current = realloc(*thisargv, sizeof (char *) * (argvlen + 1));
+		current = reallocarray(*thisargv, argvlen + 1,
+		    sizeof (char *));
 		if (current == NULL) {
 			free(*thisargv);
 			return (MEMORY_ALLOCATION);

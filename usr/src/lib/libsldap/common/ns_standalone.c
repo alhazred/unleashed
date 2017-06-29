@@ -1634,9 +1634,8 @@ create_ns_servers_entry(void *param)
 		    _SASLMECHANISM,
 		    _SASLMECHANISM_LEN) == 0) {
 			if (sm_counter == CHUNK_SIZE * sm_mem_blocks - 1) {
-				ptr = (char **)realloc(server->saslMech,
-				    CHUNK_SIZE *
-				    ++sm_mem_blocks *
+				ptr = (char **)reallocarray(server->saslMech,
+				    CHUNK_SIZE * ++sm_mem_blocks,
 				    sizeof (char *));
 				if (ptr == NULL) {
 					*retCode = NS_LDAP_MEMORY;
@@ -1664,9 +1663,8 @@ create_ns_servers_entry(void *param)
 		    _SUPPORTEDCONTROL,
 		    _SUPPORTEDCONTROL_LEN) == 0) {
 			if (sc_counter == CHUNK_SIZE * sc_mem_blocks - 1) {
-				ptr = (char **)realloc(server->controls,
-				    CHUNK_SIZE *
-				    ++sc_mem_blocks *
+				ptr = (char **)reallocarray(server->controls,
+				    CHUNK_SIZE * ++sc_mem_blocks,
 				    sizeof (char *));
 				if (ptr == NULL) {
 					*retCode = NS_LDAP_MEMORY;

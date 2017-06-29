@@ -415,8 +415,7 @@ convert_to_aclent_t(char *entryp, int *cntp, aclent_t **aclpp, int mode)
 		return (0);
 
 	if (*cntp > 1)
-		new_aclp = (aclent_t *)realloc(*aclpp,
-		    sizeof (aclent_t) * (*cntp));
+		new_aclp = reallocarray(*aclpp, *cntp, sizeof (aclent_t));
 	else
 		new_aclp = (aclent_t *) malloc(sizeof (aclent_t) * (*cntp));
 	if (new_aclp == NULL) {

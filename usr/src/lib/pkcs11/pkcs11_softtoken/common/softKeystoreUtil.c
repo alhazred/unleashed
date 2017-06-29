@@ -1209,7 +1209,7 @@ read_obj_data(int old_fd, char **buf, ssize_t *bytes_read)
 
 		loop_count++;
 		/* more than BUFSIZ of data */
-		buf1 = realloc(*buf, loop_count * BUFSIZ);
+		buf1 = reallocarray(*buf, loop_count, BUFSIZ);
 		if (buf1 == NULL) {
 			free(*buf);
 			return (CKR_HOST_MEMORY);

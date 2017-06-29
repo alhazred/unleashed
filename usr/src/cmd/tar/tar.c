@@ -6929,7 +6929,7 @@ gen_num(const char *keyword, const u_longlong_t number)
 	 */
 	len = strlen(save_val) + strlen(keyword) + 5;
 	if (xrec_offset + len > xrec_size) {
-		if (((curr_ptr = realloc(xrec_ptr, 2 * xrec_size)) == NULL))
+		if (((curr_ptr = reallocarray(xrec_ptr, 2, xrec_size)) == NULL))
 			fatal(gettext(
 			    "cannot allocate extended header buffer"));
 		xrec_ptr = curr_ptr;
@@ -6968,7 +6968,7 @@ gen_date(const char *keyword, const timestruc_t time_value)
 	 */
 	len = strlen(save_val) + strlen(keyword) + 5;
 	if (xrec_offset + len > xrec_size) {
-		if (((curr_ptr = realloc(xrec_ptr, 2 * xrec_size)) == NULL))
+		if (((curr_ptr = reallocarray(xrec_ptr, 2, xrec_size)) == NULL))
 			fatal(gettext(
 			    "cannot allocate extended header buffer"));
 		xrec_ptr = curr_ptr;
@@ -7008,7 +7008,7 @@ gen_string(const char *keyword, const char *value)
 	else if (len > 9)
 		len += 1;
 	if (xrec_offset + len > xrec_size) {
-		if (((curr_ptr = realloc(xrec_ptr, 2 * xrec_size)) == NULL))
+		if (((curr_ptr = reallocarray(xrec_ptr, 2, xrec_size)) == NULL))
 			fatal(gettext(
 			    "cannot allocate extended header buffer"));
 		xrec_ptr = curr_ptr;

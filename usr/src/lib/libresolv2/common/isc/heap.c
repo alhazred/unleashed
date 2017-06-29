@@ -91,8 +91,8 @@ heap_resize(heap_context ctx) {
 	void **new_heap;
 
 	ctx->array_size += ctx->array_size_increment;
-	new_heap = (void **)realloc(ctx->heap,
-				    (ctx->array_size) * (sizeof (void *)));
+	new_heap = (void **)reallocarray(ctx->heap, ctx->array_size,
+	    sizeof (void *));
 	if (new_heap == NULL) {
 		errno = ENOMEM;
 		return (-1);

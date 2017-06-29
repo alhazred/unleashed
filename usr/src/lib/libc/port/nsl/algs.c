@@ -145,8 +145,8 @@ build_keysizes(int **sizep, char *input_string)
 		do {
 			int *nks;
 
-			nks = (int *)realloc(key_sizes,
-			    sizeof (int) * ((++num_sizes) + 1));
+			nks = reallocarray(key_sizes,
+			    (++num_sizes) + 1, sizeof (int));
 			if (nks == NULL) {
 				free(key_sizes);
 				return (-1);
@@ -263,8 +263,8 @@ build_list(FILE *f, int *num)
 
 			/* initialize protocol structure */
 			rc_num++;
-			new_proto = (ipsec_proto_t *)realloc(rc,
-			    sizeof (ipsec_proto_t) * rc_num);
+			new_proto = reallocarray(rc, rc_num,
+			    sizeof (ipsec_proto_t));
 			rc = new_proto;
 			if (new_proto == NULL)
 				goto bail;
@@ -405,8 +405,8 @@ build_list(FILE *f, int *num)
 			do {
 				int *nbk;
 
-				nbk = (int *)realloc(block_sizes,
-				    sizeof (int) * ((++num_sizes) + 1));
+				nbk = reallocarray(block_sizes,
+				    (++num_sizes) + 1, sizeof (int));
 				if (nbk == NULL) {
 					goto bail;
 				}
@@ -436,8 +436,8 @@ build_list(FILE *f, int *num)
 				do {
 					int *nbk;
 
-					nbk = (int *)realloc(mech_params,
-					    sizeof (int) * ((++num_sizes) + 1));
+					nbk = reallocarray(mech_params,
+					    (++num_sizes) + 1, sizeof (int));
 					if (nbk == NULL) {
 						goto bail;
 					}
@@ -477,8 +477,8 @@ build_list(FILE *f, int *num)
 			do {
 				char **nnames;
 
-				nnames = (char **)realloc(curalg->a_names,
-				    sizeof (char *) * ((++num_sizes) + 1));
+				nnames = reallocarray(curalg->a_names,
+				    (++num_sizes) + 1, sizeof (char *));
 				if (nnames == NULL) {
 					freeipsecalgent(curalg);
 					goto bail;
@@ -498,9 +498,8 @@ build_list(FILE *f, int *num)
 				/* record alg as being part of current pkg */
 				int npkgs = new_proto->proto_algs_npkgs;
 
-				new_proto->proto_algs_pkgs = realloc(
-				    new_proto->proto_algs_pkgs,
-				    (npkgs + 1) * sizeof (ipsecalgs_pkg_t));
+				new_proto->proto_algs_pkgs = reallocarray(new_proto->proto_algs_pkgs,
+				    npkgs + 1, sizeof (ipsecalgs_pkg_t));
 				if (new_proto->proto_algs_pkgs == NULL)
 					goto bail;
 
@@ -516,8 +515,8 @@ build_list(FILE *f, int *num)
 			}
 
 			/* add new alg to protocol */
-			newalglist = realloc(new_proto->proto_algs,
-			    (new_proto->proto_numalgs + 1) *
+			newalglist = reallocarray(new_proto->proto_algs,
+			    new_proto->proto_numalgs + 1,
 			    sizeof (struct ipsecalgent *));
 			if (newalglist == NULL) {
 				freeipsecalgent(curalg);

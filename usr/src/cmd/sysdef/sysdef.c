@@ -496,8 +496,8 @@ setup(char *nam)
 	int idx;
 
 	if (nlptr >= &nl[nlsize]) {
-		if ((nl = (struct nlist *)realloc(nl,
-		    (nlsize + EXPAND) * sizeof (struct nlist))) == NULL) {
+		if ((nl = reallocarray(nl, nlsize + EXPAND,
+		    sizeof (struct nlist))) == NULL) {
 			fprintf(stderr, "Namelist space allocation failed\n");
 			exit(1);
 		}

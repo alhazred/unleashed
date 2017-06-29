@@ -723,8 +723,8 @@ genent_hosts(char *line, int (*cback)())
 
 		ctr++;
 		alias = strdup(ecol[1].ec_value.ec_value_val);
-		if ((data.h_aliases = (char **)realloc(data.h_aliases,
-		    ctr * sizeof (char **))) == NULL) {
+		if ((data.h_aliases = reallocarray(data.h_aliases, ctr,
+		    sizeof (char **))) == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -736,9 +736,9 @@ genent_hosts(char *line, int (*cback)())
 	 * If there is some comment, it will be stored as the last entry
 	 * in the list of the host aliases
 	 */
-	if ((data.h_aliases = (char **)realloc(data.h_aliases,
-	    (ecol[3].ec_value.ec_value_len != 0 ?
-	    ctr + 2 : ctr + 1) * sizeof (char **))) == NULL) {
+	if ((data.h_aliases = reallocarray(data.h_aliases,
+	    ecol[3].ec_value.ec_value_len != 0 ? ctr + 2 : ctr + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
@@ -954,8 +954,8 @@ genent_rpc(char *line, int (*cback)())
 
 		ctr++;
 		alias = strdup(ecol[1].ec_value.ec_value_val);
-		if ((data.r_aliases = (char **)realloc(data.r_aliases,
-		    ctr * sizeof (char **))) == NULL) {
+		if ((data.r_aliases = reallocarray(data.r_aliases, ctr,
+		    sizeof (char **))) == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -971,8 +971,8 @@ genent_rpc(char *line, int (*cback)())
 	} while (t = strtok(NULL, " \t"));
 
 	/* End the list of all the aliases by NULL */
-	if ((data.r_aliases = (char **)realloc(data.r_aliases,
-	    (ctr + 1) * sizeof (char **))) == NULL) {
+	if ((data.r_aliases = reallocarray(data.r_aliases, ctr + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
@@ -1166,8 +1166,8 @@ genent_protocols(char *line, int (*cback)())
 
 		ctr++;
 		alias = strdup(ecol[1].ec_value.ec_value_val);
-		if ((data.p_aliases = (char **)realloc(data.p_aliases,
-		    ctr * sizeof (char **))) == NULL) {
+		if ((data.p_aliases = reallocarray(data.p_aliases, ctr,
+		    sizeof (char **))) == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -1182,8 +1182,8 @@ genent_protocols(char *line, int (*cback)())
 	} while (t = strtok(NULL, " \t"));
 
 	/* End the list of all the aliases by NULL */
-	if ((data.p_aliases = (char **)realloc(data.p_aliases,
-	    (ctr + 1) * sizeof (char **))) == NULL) {
+	if ((data.p_aliases = reallocarray(data.p_aliases, ctr + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
@@ -1388,8 +1388,8 @@ genent_networks(char *line, int (*cback)())
 
 		ctr++;
 		alias = strdup(ecol[1].ec_value.ec_value_val);
-		if ((data.n_aliases = (char **)realloc(data.n_aliases,
-		    ctr * sizeof (char **))) == NULL) {
+		if ((data.n_aliases = reallocarray(data.n_aliases, ctr,
+		    sizeof (char **))) == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -1404,8 +1404,8 @@ genent_networks(char *line, int (*cback)())
 	} while (t = strtok(NULL, " \t"));
 
 	/* End the list of all the aliases by NULL */
-	if ((data.n_aliases = (char **)realloc(data.n_aliases,
-	    (ctr + 1) * sizeof (char **))) == NULL) {
+	if ((data.n_aliases = reallocarray(data.n_aliases, ctr + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
@@ -1620,8 +1620,8 @@ genent_services(char *line, int (*cback)())
 
 		ctr++;
 		alias = strdup(ecol[1].ec_value.ec_value_val);
-		if ((data.s_aliases = (char **)realloc(data.s_aliases,
-		    ctr * sizeof (char **))) == NULL) {
+		if ((data.s_aliases = (char **)reallocarray(data.s_aliases,
+		    ctr, sizeof (char **))) == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -1636,8 +1636,8 @@ genent_services(char *line, int (*cback)())
 	} while (t = strtok(NULL, " \t"));
 
 	/* End the list of all the aliases by NULL */
-	if ((data.s_aliases = (char **)realloc(data.s_aliases,
-	    (ctr + 1) * sizeof (char **))) == NULL) {
+	if ((data.s_aliases = reallocarray(data.s_aliases, ctr + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
@@ -2120,8 +2120,8 @@ genent_aliases(char *line, int (*cback)())
 			t++;
 		alias = strdup(t);
 		if ((alias == NULL) ||
-		    ((data.member = (char **)realloc(data.member,
-		    (ctr + 1) * sizeof (char **))) == NULL)) {
+		    ((data.member = reallocarray(data.member, ctr + 1,
+		    sizeof (char **))) == NULL)) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -2701,9 +2701,8 @@ genent_netgroup(char *line, int (*cback)())
 
 				tripletcount++;
 				triplet_tmp = strdup(t);
-				if ((data.triplet = (char **)realloc(
-				    data.triplet,
-				    tripletcount * sizeof (char **))) == NULL) {
+				if ((data.triplet = reallocarray(data.triplet,
+				    tripletcount, sizeof (char **))) == NULL) {
 					(void) fprintf(stderr,
 					    gettext("out of memory\n"));
 					exit(1);
@@ -2725,8 +2724,8 @@ genent_netgroup(char *line, int (*cback)())
 
 			netgcount++;
 			netg_tmp = strdup(t);
-			if ((data.netgroup = (char **)realloc(data.netgroup,
-			    netgcount * sizeof (char **))) == NULL) {
+			if ((data.netgroup = reallocarray(data.netgroup,
+			    netgcount, sizeof (char **))) == NULL) {
 				(void) fprintf(stderr,
 				gettext("out of memory\n"));
 				exit(1);
@@ -2736,14 +2735,14 @@ genent_netgroup(char *line, int (*cback)())
 	}
 
 	/* End the list with NULL */
-	if ((data.triplet = (char **)realloc(data.triplet,
-	    (tripletcount + 1) * sizeof (char **))) == NULL) {
+	if ((data.triplet = reallocarray(data.triplet, tripletcount + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
 	data.triplet[tripletcount] = NULL;
-	if ((data.netgroup = (char **)realloc(data.netgroup,
-	    (netgcount + 1) * sizeof (char **))) == NULL) {
+	if ((data.netgroup = reallocarray(data.netgroup, netgcount + 1,
+	    sizeof (char **))) == NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}
@@ -3566,8 +3565,8 @@ genent_bootparams(char *line, int (*cback)())
 
 		ctr++;
 		parameter = strdup(ecol[1].ec_value.ec_value_val);
-		if ((data.param = (char **)realloc(data.param,
-		    (ctr + 1) * sizeof (char **))) == NULL) {
+		if ((data.param = reallocarray(data.param, ctr + 1,
+		    sizeof (char **))) == NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			exit(1);
 		}
@@ -3577,8 +3576,8 @@ genent_bootparams(char *line, int (*cback)())
 
 
 	/* End the list of all the aliases by NULL */
-	if ((data.param = (char **)realloc(data.param,
-	    (ctr + 1) * sizeof (char **))) == NULL) {
+	if ((data.param = reallocarray(data.param, ctr + 1, sizeof(char **))) ==
+	    NULL) {
 		(void) fprintf(stderr, gettext("out of memory\n"));
 		exit(1);
 	}

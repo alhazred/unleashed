@@ -105,7 +105,7 @@ parse_replica(char *special, int *count)
 			proot = root + 1;
 			root = y + 1;
 			v6addr = 1;
-			if ((list = realloc(list, (*count + 1) *
+			if ((list = reallocarray(list, *count + 1,
 			    sizeof (struct replica))) == NULL)
 				goto bad;
 			bzero(&list[(*count)++], sizeof (struct replica));
@@ -138,7 +138,7 @@ parse_replica(char *special, int *count)
 			if (v6addr == 1)
 				v6addr = 0;
 			else {
-				if ((list = realloc(list, (*count + 1) *
+				if ((list = reallocarray(list, *count + 1,
 				    sizeof (struct replica))) == NULL)
 					goto bad;
 				bzero(&list[(*count)++],
@@ -171,7 +171,7 @@ parse_replica(char *special, int *count)
 			} else {
 				*root = '\0';
 				root++;
-				if ((list = realloc(list, (*count + 1) *
+				if ((list = reallocarray(list, *count + 1,
 				    sizeof (struct replica))) == NULL)
 					goto bad;
 				bzero(&list[(*count)++],

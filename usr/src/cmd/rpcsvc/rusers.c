@@ -202,8 +202,8 @@ singlehost(char *name)
 		struct entry *tmp;
 
 		total_entries += NUMENTRIES;
-		if ((tmp = realloc(entry, sizeof (struct entry)
-						* total_entries)) == NULL)
+		if ((tmp = reallocarray(entry, total_entries,
+		    sizeof (struct entry))) == NULL)
 			return;
 		entry = tmp;
 	}
@@ -268,8 +268,8 @@ collectnames(void *resultsp, struct netbuf *raddrp, struct netconfig *nconf)
 		struct entry *tmp;
 
 		total_entries += NUMENTRIES;
-		if ((tmp = realloc(entry, sizeof (struct entry)
-						* total_entries)) == NULL)
+		if ((tmp = reallocarray(entry, total_entries,
+		    sizeof(struct entry))) == NULL)
 			return (1);
 		entry = tmp;
 	}
@@ -395,8 +395,8 @@ collectnames_3(void *resultsp, struct netbuf *raddrp, struct netconfig *nconf)
 		struct entry *tmp;
 
 		total_entries += NUMENTRIES;
-		if ((tmp = realloc(entry, sizeof (struct entry)
-						* total_entries)) == NULL)
+		if ((tmp = reallocarray(entry, total_entries,
+		    sizeof (struct entry))) == NULL)
 			return (1);
 		entry = tmp;
 	}

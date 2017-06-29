@@ -218,8 +218,8 @@ main(int argc, char **argv)
 			break;
 		case 'e':
 			cmd_info.elfcnt++;
-			cmd_info.elfobj = (char **)realloc(cmd_info.elfobj,
-			    sizeof (char *) * cmd_info.elfcnt);
+			cmd_info.elfobj = reallocarray(cmd_info.elfobj,
+			    cmd_info.elfcnt, sizeof (char *));
 			if (cmd_info.elfobj == NULL) {
 				es_error(gettext(
 				    "Too many elf objects specified."));

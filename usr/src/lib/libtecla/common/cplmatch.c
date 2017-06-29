@@ -315,8 +315,9 @@ int cpl_add_completion(WordCompletion *cpl, const char *line,
  */
   if(cpl->result.nmatch+1 > cpl->matches_dim) {
     int needed = cpl->matches_dim + STR_BLK_FACT;
-    CplMatch *matches = (CplMatch *) realloc(cpl->result.matches,
-			    sizeof(cpl->result.matches[0]) * needed);
+    CplMatch *matches = (CplMatch *) reallocarray(cpl->result.matches,
+                                                  needed,
+                                                  sizeof(cpl->result.matches[0]));
     if(!matches) {
       _err_record_msg(cpl->err,
 		      "Insufficient memory to extend array of matches.",

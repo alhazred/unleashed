@@ -123,8 +123,8 @@ main(int argc, char **argv)
 				(void) strcat(T_info.ti_dash_I, ":");
 				size = strlen(T_info.ti_dash_I);
 			}
-			tmpptr = realloc(T_info.ti_dash_I,
-			    sizeof (char) * (size + strlen(optarg) + 3));
+			tmpptr = reallocarray(T_info.ti_dash_I,
+			    size + strlen(optarg) + 3, sizeof (char));
 			if (tmpptr == NULL) {
 				errlog(ERROR | FATAL,
 				    "Error: Unable to allocate memory "

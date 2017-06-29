@@ -796,7 +796,7 @@ ldaptool_process_args( int argc, char **argv, char *extra_opts,
 
 		/* if we did, add another BUFSIZ worth of bytes */
 		if ((linep = (char *)
-		    realloc(linep, (increment + 1) * BUFSIZ)) == NULL) {
+		    reallocarray(linep, increment + 1, BUFSIZ)) == NULL) {
 			fprintf( stderr, gettext("%s: not enough memory to read password from file\n"), ldaptool_progname );
 			exit( LDAP_NO_MEMORY );
 		}

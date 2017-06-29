@@ -87,8 +87,8 @@ static int build_assoc_xml_doc(xmlChar *, association_t, xmlChar **);
 static int build_assoc_xml_doc(xmlChar *, association_t, xmlChar **);
 static int build_enumerate_xml_doc(object_type, xmlChar **);
 
-#define	NEW_XMLARGV(old, n) (xmlChar **)realloc((xmlChar *)old, \
-	(unsigned)(n+2) * sizeof (xmlChar *))
+#define	NEW_XMLARGV(old, n) (xmlChar **)reallocarray((old), \
+	(n) + 2, sizeof (xmlChar *))
 
 #define	XML_SFREE(x)	(((x) != NULL) ? (xmlFree(x), (x) = NULL) : NULL)
 

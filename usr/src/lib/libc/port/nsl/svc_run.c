@@ -270,8 +270,8 @@ alloc_pollset(int npollfds)
 		do {
 			svc_pollset_allocd += POLLSET_EXTEND;
 		} while (npollfds > svc_pollset_allocd);
-		tmp = realloc(svc_pollset,
-		    sizeof (pollfd_t) * svc_pollset_allocd);
+		tmp = reallocarray(svc_pollset, svc_pollset_allocd,
+		    sizeof (pollfd_t));
 		if (tmp == NULL) {
 			syslog(LOG_ERR, "alloc_pollset: out of memory");
 			return (-1);

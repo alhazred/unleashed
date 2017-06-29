@@ -200,8 +200,7 @@ singlehost(host)
 		struct entry *tmp;
 
 		total_entries += SLOTS;
-		tmp = realloc((struct entry *)entry, sizeof (struct entry)
-						* total_entries);
+		tmp = reallocarray(entry, total_entries, sizeof (struct entry));
 		if (tmp == NULL) {
 			return (1);
 		}
@@ -329,8 +328,7 @@ collectnames(resultsp, taddr, nconf)
 		struct entry *tmp;
 
 		total_entries += SLOTS;
-		tmp = realloc((struct entry *)entry, sizeof (struct entry)
-						* total_entries);
+		tmp = reallocarray(entry, total_entries, sizeof (struct entry));
 		if (tmp == NULL) {
 			return (1);
 		}

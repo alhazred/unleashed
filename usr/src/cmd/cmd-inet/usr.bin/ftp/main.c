@@ -466,8 +466,8 @@ makeargv(void)
 		margc++;
 		if (margc == margv_size) {
 			margv_size += MARGV_INC;
-			if ((margv = realloc(margv,
-			    margv_size * sizeof (char *))) == NULL)
+			if ((margv = reallocarray(margv, margv_size,
+			    sizeof (char *))) == NULL)
 				fatal("Out of memory");
 			argp = margv + margc;
 		}

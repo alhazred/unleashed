@@ -1277,8 +1277,8 @@ int topclosed;
 			tsentry++;
 			if (!maxtsentries || tsentry == maxtsentries) {
 				maxtsentries += STGROWSIZE;
-				tstable = realloc(tstable,
-				    maxtsentries * sizeof(statetop_t));
+				tstable = reallocarray(tstable, maxtsentries,
+				    sizeof (statetop_t));
 				if (tstable == NULL) {
 					perror("realloc");
 					exit(-1);

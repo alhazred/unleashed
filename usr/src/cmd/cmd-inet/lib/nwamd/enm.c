@@ -216,7 +216,7 @@ nwamd_enm_activate_deactivate_thread(void *arg)
 
 		for (; (argv[i] = strtok_r(NULL, " ", &lasts)) != NULL; i++) {}
 
-		newargv = realloc(argv, (i + 1) * sizeof (char *));
+		newargv = reallocarray(argv, i + 1, sizeof (char *));
 		argv = newargv;
 
 		/* Store the current time as the time the script began */

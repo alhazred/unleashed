@@ -210,7 +210,7 @@ read_spec(const Translator_info *T_info, char *spec_filename)
 			buf2 = NULL;
 			continue;
 		}
-		p = realloc(value, sizeof (char)*(strlen(buf2)+1));
+		p = reallocarray(value, strlen(buf2) + 1, sizeof (char));
 		if (p == NULL) {
 			errlog(ERROR | FATAL,
 			    "Error: Unable to allocate memory for "

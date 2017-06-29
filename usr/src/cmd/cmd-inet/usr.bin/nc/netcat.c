@@ -820,8 +820,8 @@ build_ports(char *p)
 		 */
 		if (hi - lo + ports.numports + 1 >= ports.listsize) {
 			ports.listsize = ports.listsize * 2 + hi - lo;
-			ports.list = realloc(ports.list,
-			    ports.listsize * sizeof (uint16_t));
+			ports.list = reallocarray(ports.list, ports.listsize,
+			    sizeof (uint16_t));
 			if (ports.list == NULL)
 				err(1, NULL);
 		}

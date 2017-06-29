@@ -1011,8 +1011,8 @@ setpagerargs(source)
 		cp = copynext(cp, word, sizeof (word));
 		if (dflag)
 			fprintf(stderr, gettext("got word `%s'\n"), word);
-		pager_vector = (char **)realloc(pager_vector,
-			(size_t)sizeof (char *) * (pager_len + 1));
+		pager_vector = reallocarray(pager_vector,
+		    pager_len + 1, sizeof (char *));
 		if (pager_vector == (char **)NULL) {
 			(void) fprintf(stderr, gettext("out of memory\n"));
 			done(1);

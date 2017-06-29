@@ -118,7 +118,7 @@ getids(int (*idsfunc)(int *, uint_t, uint_t *))
 			goto err;	/* should never happen */
 		if (n <= nids)
 			break;
-		idlist = realloc(idlist, (nids = n) * sizeof (int));
+		idlist = reallocarray(idlist, (nids = n), sizeof (int));
 		if (idlist == NULL)
 			goto err;
 	}

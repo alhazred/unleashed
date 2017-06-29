@@ -64,8 +64,8 @@ krb5_build_principal_va(krb5_context context, krb5_principal princ, unsigned int
 	if (i == count) {
 	    /* not big enough.  realloc the array */
 	    krb5_data *p_tmp;
-	    p_tmp = (krb5_data *) realloc((char *)data,
-					  sizeof(krb5_data)*(count*2));
+	    p_tmp = (krb5_data *) reallocarray((char *)data, (count * 2),
+                                               sizeof(krb5_data));
 	    if (!p_tmp) {
 	    free_out:
 		    while (--i >= 0)

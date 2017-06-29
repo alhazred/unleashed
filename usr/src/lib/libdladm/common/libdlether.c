@@ -157,8 +157,8 @@ i_dladm_get_spdx(dladm_handle_t handle, datalink_id_t linkid,
 		if (speed == 0)
 			continue;
 		nspdx++;
-		ptr = realloc(eattr->le_spdx,
-		    nspdx * sizeof (dladm_ether_spdx_t));
+		ptr = reallocarray(eattr->le_spdx, nspdx,
+		    sizeof (dladm_ether_spdx_t));
 		if (ptr != NULL) {
 			eattr->le_spdx = ptr;
 		} else {

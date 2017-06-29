@@ -806,8 +806,8 @@ main_loop(program)
 		}
 
 		if (npollfds != svc_max_pollfd) {
-			pollset = realloc(pollset,
-					sizeof (pollfd_t) * svc_max_pollfd);
+			pollset = reallocarray(pollset, svc_max_pollfd,
+			    sizeof (pollfd_t));
 			npollfds = svc_max_pollfd;
 		}
 

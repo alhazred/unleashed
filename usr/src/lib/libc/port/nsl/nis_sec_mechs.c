@@ -132,7 +132,7 @@ list_append_ent(void *ent, void **list, uint_t cnt, void (*free_ent)())
 {
 	void **new_l;
 
-	if (!(new_l = realloc(list, sizeof (*list) * (cnt + 1)))) {
+	if (!(new_l = reallocarray(list, cnt + 1, sizeof (*list)))) {
 		list_free_all(free_ent, list);
 		return (NULL);
 	}

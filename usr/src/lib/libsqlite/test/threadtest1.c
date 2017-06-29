@@ -81,7 +81,8 @@ static int db_query_callback(
     }else{
       pResult->nAlloc = pResult->nAlloc*2 + nArg + 1;
     }
-    pResult->azElem = realloc( pResult->azElem, pResult->nAlloc*sizeof(char*));
+    pResult->azElem = reallocarray(pResult->azElem, pResult->nAlloc,
+                             sizeof(char *));
     if( pResult->azElem==0 ){
       fprintf(stdout,"%s: malloc failed\n", pResult->zFile);
       return 1;

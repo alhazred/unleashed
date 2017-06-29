@@ -236,8 +236,8 @@ build_mnttable(zlog_t *zlogp, const char *zroot, size_t zrootlen, FILE *mnttab,
 		if (strncmp(mnt.mnt_mountp, zroot, zrootlen) != 0)
 			continue;
 		if (nmnt % MNTTAB_HUNK == 0) {
-			tmp_array = realloc(mnts,
-			    (nmnt + MNTTAB_HUNK) * sizeof (*mnts));
+			tmp_array = reallocarray(mnts, nmnt + MNTTAB_HUNK,
+			    sizeof (*mnts));
 			if (tmp_array == NULL) {
 				free_mnttable(mnts, nmnt);
 				return (-1);
@@ -1543,7 +1543,8 @@ plat_gmount_cb(void *data, const char *spec, const char *dir,
 	struct zone_fstab	*fsp, *tmp_ptr;
 
 	num_fs++;
-	if ((tmp_ptr = realloc(fs_ptr, num_fs * sizeof (*tmp_ptr))) == NULL) {
+	if ((tmp_ptr = reallocarray(fs_ptr, num_fs,
+	    sizeof (*tmp_ptr))) == NULL) {
 		zerror(zlogp, B_TRUE, "memory allocation failed");
 		return (-1);
 	}
@@ -1595,8 +1596,8 @@ mount_filesystems_fsent(zone_dochandle_t handle, zlog_t *zlogp,
 			continue;
 
 		num_fs++;
-		if ((tmp_ptr = realloc(fs_ptr,
-		    num_fs * sizeof (*tmp_ptr))) == NULL) {
+		if ((tmp_ptr = reallocarray(fs_ptr, num_fs,
+		    sizeof (*tmp_ptr))) == NULL) {
 			zerror(zlogp, B_TRUE, "memory allocation failed");
 			(void) zonecfg_endfsent(handle);
 			return (-1);

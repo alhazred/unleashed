@@ -147,15 +147,15 @@ grow_fds(iu_eh_t *eh, int total_fds)
 	if (total_fds <= eh->iueh_num_fds)
 		return (1);
 
-	new_pollfds = realloc(eh->iueh_pollfds,
-	    total_fds * sizeof (struct pollfd));
+	new_pollfds = reallocarray(eh->iueh_pollfds, total_fds,
+	    sizeof (struct pollfd));
 	if (new_pollfds == NULL)
 		return (0);
 
 	eh->iueh_pollfds = new_pollfds;
 
-	new_events = realloc(eh->iueh_events,
-	    total_fds * sizeof (iu_event_node_t));
+	new_events = reallocarray(eh->iueh_events, total_fds,
+	    sizeof (iu_event_node_t));
 	if (new_events == NULL) {
 
 		/*

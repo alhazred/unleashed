@@ -3116,8 +3116,8 @@ multival_add(multival_t *list, char *opt)
 	if (list->count == 0) {
 		list->optlist = (char **)malloc(sizeof (char **));
 	} else {
-		list->optlist = (char **)realloc(list->optlist,
-		    (list->count + 1) * sizeof (char **));
+		list->optlist = reallocarray(list->optlist, list->count + 1,
+		    sizeof (char **));
 	}
 
 	if (list->optlist == NULL) {

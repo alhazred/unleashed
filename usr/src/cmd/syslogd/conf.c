@@ -117,7 +117,7 @@ static int
 grow_conf_file(conf_t *cf)
 {
 	int ndsize = cf->cf_dsize ? cf->cf_dsize * CF_GROW : CF_DEFSIZE;
-	void *ndtab = realloc(cf->cf_dtab, sizeof (char *) * ndsize);
+	void *ndtab = reallocarray(cf->cf_dtab, ndsize, sizeof (char *));
 
 	register char *p;
 	int odsize, lines, i;

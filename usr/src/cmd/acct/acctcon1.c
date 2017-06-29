@@ -319,8 +319,8 @@ iline()
 			return(i);
 	if (++tsize >= a_tsize) {
 		a_tsize = a_tsize + A_TSIZE;
-		if ((tbuf = (struct tbuf *) realloc(tbuf, a_tsize *
-			sizeof (struct tbuf))) == NULL) {
+		if ((tbuf = reallocarray(tbuf, a_tsize,
+		    sizeof (struct tbuf))) == NULL) {
 			fprintf(stderr, "acctcon1: Cannot reallocate memory\n");
 			exit(2);
 		}

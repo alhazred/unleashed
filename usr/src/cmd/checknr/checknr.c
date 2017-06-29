@@ -170,8 +170,7 @@ growstk()
 	stktop++;
 	if (stktop >= maxstk) {
 		maxstk *= 2;
-		stk = (struct stkstr *)realloc(stk,
-		    sizeof (struct stkstr) * maxstk);
+		stk = reallocarray(stk, maxstk, sizeof (struct stkstr));
 	}
 }
 

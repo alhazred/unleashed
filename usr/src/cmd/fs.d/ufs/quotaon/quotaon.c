@@ -178,8 +178,8 @@ main(int argc, char **argv)
 			/* grow listbuf if needed */
 			if (listcnt >= listmax) {
 				listmax += CHUNK;
-				listbuf = (char **)realloc(listbuf,
-					sizeof (char *) * listmax);
+				listbuf = reallocarray(listbuf, listmax,
+				    sizeof (char *));
 				if (listbuf == NULL) {
 					fprintf(stderr,
 						"Can't grow listbuf.\n");

@@ -66,7 +66,8 @@ extern "C" {
 #define	CALLOC(number, type) \
 	(type *)(long)calloc((unsigned)(number), sizeof (type))
 #define	REALLOC(ptr, number, type) \
-	(type *)(long)realloc((char *)(ptr), (unsigned)(number) * sizeof (type))
+	(type *)(long)reallocarray((char *)(ptr), (unsigned)(number), \
+				   sizeof (type))
 #define	FREE(ptr)	\
 	(void) free((char *)(ptr))
 

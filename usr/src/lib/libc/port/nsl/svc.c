@@ -233,8 +233,8 @@ _svc_attribute_new_id(_svc_user_fd_node *node)
 
 		svc_nmgtuserfds += USER_FD_INCREMENT;
 
-		tmp = realloc(user_fd_mgt_array,
-		    svc_nmgtuserfds * sizeof (_svc_management_user_fd));
+		tmp = reallocarray(user_fd_mgt_array, svc_nmgtuserfds,
+		    sizeof (_svc_management_user_fd));
 
 		if (tmp == NULL) {
 			syslog(LOG_ERR, "_svc_attribute_new_id: out of memory");
@@ -438,8 +438,8 @@ svc_add_input(int user_fd, unsigned int events,
 
 		svc_nuserfds = (user_fd + 1) + USER_FD_INCREMENT;
 
-		tmp = realloc(svc_userfds,
-		    svc_nuserfds * sizeof (_svc_user_fd_head));
+		tmp = reallocarray(svc_userfds, svc_nuserfds,
+		    sizeof (_svc_user_fd_head));
 
 		if (tmp == NULL) {
 			syslog(LOG_ERR, "svc_add_input: out of memory");
@@ -618,8 +618,8 @@ add_pollfd(int fd, short events)
 		do {
 			svc_pollfd_allocd += POLLFD_EXTEND;
 		} while (svc_max_pollfd > svc_pollfd_allocd);
-		tmp = realloc(svc_pollfd,
-		    sizeof (pollfd_t) * svc_pollfd_allocd);
+		tmp = reallocarray(svc_pollfd, svc_pollfd_allocd,
+		    sizeof (pollfd_t));
 		if (tmp != NULL) {
 			svc_pollfd = tmp;
 			for (; i < svc_pollfd_allocd; i++)
@@ -722,8 +722,8 @@ delete_pollfd(int fd)
 		do {
 			svc_pollfd_allocd -= POLLFD_SHRINK;
 		} while (svc_max_pollfd < (svc_pollfd_allocd - POLLFD_SHRINK));
-		svc_pollfd = realloc(svc_pollfd,
-		    sizeof (pollfd_t) * svc_pollfd_allocd);
+		svc_pollfd = reallocarray(svc_pollfd, svc_pollfd_allocd,
+		    sizeof (pollfd_t));
 		if (svc_pollfd == NULL) {
 			syslog(LOG_ERR, "delete_pollfd: out of memory");
 			_exit(1);
@@ -772,8 +772,8 @@ xprt_register(const SVCXPRT *xprt)
 		SVCXPRT **tmp_xprts = svc_xports;
 
 		/* time to expand svc_xprts */
-		tmp_xprts = realloc(svc_xports,
-		    sizeof (SVCXPRT *) * (nsvc_xports + FD_INCREMENT));
+		tmp_xprts = reallocarray(svc_xports,
+		    nsvc_xports + FD_INCREMENT, sizeof (SVCXPRT *));
 		if (tmp_xprts == NULL) {
 			syslog(LOG_ERR, "xprt_register : out of memory.");
 			_exit(1);

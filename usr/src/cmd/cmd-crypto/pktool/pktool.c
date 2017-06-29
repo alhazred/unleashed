@@ -677,8 +677,7 @@ process_arg_file(char *argfile, char ***argv, int *argc)
 		if (!strlen(argline))
 			continue;
 
-		(*argv) = realloc((*argv),
-		    (nargs + 1) * sizeof (char *));
+		*argv = reallocarray(*argv, nargs + 1, sizeof (char *));
 		if ((*argv) == NULL) {
 			perror("memory error");
 			(void) fclose(fp);

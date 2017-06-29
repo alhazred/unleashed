@@ -537,8 +537,8 @@ sort_responses(trans)
 
 				if (size >= allocsize) {
 					allocsize += 10;
-					buffer = (struct sm *)realloc(buffer,
-					    allocsize * sizeof (struct sm));
+					buffer = reallocarray(buffer, allocsize,
+					    sizeof (struct sm));
 					if (!buffer) {
 						syslog(LOG_ERR,
 					    "sort_responses: malloc error.\n");

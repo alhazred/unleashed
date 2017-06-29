@@ -928,7 +928,8 @@ static int pca_scan_dir(PathCache *pc, const char *dirname, CacheMem *mem)
  */
     if(mem->nfiles + 1 > mem->files_dim) {
       int needed = mem->files_dim + FILES_BLK_FACT;
-      char **files = (char **) realloc(mem->files, sizeof(*mem->files)*needed);
+      char **files = (char **) reallocarray(mem->files, needed,
+                                            sizeof(*mem->files));
       if(!files) {
 	_err_record_msg(pc->err,
 			"Insufficient memory to extend filename cache.",

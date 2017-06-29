@@ -127,7 +127,7 @@ cpc_setgrp_newset(cpc_setgrp_t *sgrp, const char *spec, int *errcnt)
 		return (NULL);
 	}
 
-	if ((new = realloc(sgrp->sets, (1 + sgrp->nelem) * sizeof (*new)))
+	if ((new = reallocarray(sgrp->sets, 1 + sgrp->nelem, sizeof (*new)))
 	    == NULL) {
 		(void) fprintf(stderr,
 		    gettext("cpc_setgrp: no re memory available\n"));

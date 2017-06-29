@@ -749,8 +749,8 @@ backend_backup_get_prev(char *pathname, size_t pathlen, const char ***out_arg)
 		}
 
 		if (idx == count) {
-			char **new_out = realloc(out,
-			    (count + 1) * sizeof (*out));
+			char **new_out = reallocarray(out, count + 1,
+						      sizeof (*out));
 
 			if (new_out == NULL) {
 				free(name);

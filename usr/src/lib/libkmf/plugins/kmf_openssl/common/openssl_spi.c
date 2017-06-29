@@ -4155,8 +4155,7 @@ add_cert_to_list(KMF_HANDLE *kmfh, X509 *sslcert,
 	if (list == NULL) {
 		list = (KMF_X509_DER_CERT *)malloc(sizeof (KMF_X509_DER_CERT));
 	} else {
-		list = (KMF_X509_DER_CERT *)realloc(list,
-		    sizeof (KMF_X509_DER_CERT) * (n + 1));
+		list = reallocarray(list, n + 1, sizeof (KMF_X509_DER_CERT));
 	}
 
 	if (list == NULL)
@@ -4193,8 +4192,7 @@ add_key_to_list(KMF_RAW_KEY_DATA **keylist,
 	if (list == NULL) {
 		list = (KMF_RAW_KEY_DATA *)malloc(sizeof (KMF_RAW_KEY_DATA));
 	} else {
-		list = (KMF_RAW_KEY_DATA *)realloc(list,
-		    sizeof (KMF_RAW_KEY_DATA) * (n + 1));
+		list = reallocarray(list, n + 1, sizeof (KMF_RAW_KEY_DATA));
 	}
 
 	if (list == NULL)

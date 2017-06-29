@@ -162,8 +162,8 @@ main(int argc, char **argv)
 			regexp[nregexp++] = optarg;
 			if (nregexp == maxregexp) {
 				maxregexp += MAXREGEXP;
-				regexp = (char **)realloc(regexp,
-					maxregexp * sizeof (char *));
+				regexp = reallocarray(regexp, maxregexp,
+				    sizeof (char *));
 				if (!regexp) {
 					(void) fprintf(stderr,
 						gettext("Not enough memory\n"));

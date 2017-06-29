@@ -2455,8 +2455,8 @@ retry:
 			continue;
 		}
 
-		if ((p = (struct net_if **)realloc(local_ifs,
-		    sizeof (struct net_if *) * (cnt + 1))) == NULL) {
+		if ((p = reallocarray(local_ifs, cnt + 1,
+		    sizeof (struct net_if *))) == NULL) {
 			res = Z_ERR;
 			break;
 		}

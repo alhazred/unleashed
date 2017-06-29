@@ -290,7 +290,7 @@ makeFilterComp(char *filter, int *numComps) {
 				break;
 			for (e = s; str[e] != '\0' && str[e] != ')'; e++);
 			str[e] = '\0';
-			new = realloc(comp, (nc+1) * sizeof (comp[nc]));
+			new = reallocarray(comp, nc + 1, sizeof (comp[nc]));
 			if (new == 0) {
 				if (comp != 0) {
 					for (i = 0; i < nc; i++)
@@ -346,7 +346,7 @@ addFilterComp(char *new, char **comp, int *numComps) {
 	str = sdup(myself, T, new);
 	if (str == 0)
 		return (0);
-	tmp = realloc(comp, ((*numComps)+1) * sizeof (comp[0]));
+	tmp = reallocarray(comp, (*numComps) + 1, sizeof (comp[0]));
 	if (tmp == 0) {
 		sfree(str);
 		return (0);

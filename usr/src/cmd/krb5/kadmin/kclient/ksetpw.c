@@ -122,8 +122,8 @@ main(int argc, char **argv)
 				if (enctype_count++ == 0) {
 					enctypes = malloc(sizeof (*enctypes));
 				} else {
-					enctypes = realloc(enctypes,
-					    sizeof (*enctypes) * enctype_count);
+					enctypes = reallocarray(enctypes,
+					    enctype_count, sizeof (*enctypes));
 				}
 				if (enctypes == NULL) {
 					(void) fprintf(stderr, gettext

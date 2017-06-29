@@ -1911,7 +1911,7 @@ exp_tokname()
 {
 	toksize += NAMESIZE;
 	tokname = (wchar_t *)
-	    realloc((char *)tokname, sizeof (wchar_t) * toksize);
+	    reallocarray(tokname, toksize, sizeof (wchar_t));
 }
 
 
@@ -1925,10 +1925,10 @@ exp_prod()
 	int i;
 	nprodsz += NPROD;
 
-	prdptr = (int **) realloc((char *)prdptr, sizeof (int *) * (nprodsz+2));
-	levprd  = (int *)  realloc((char *)levprd, sizeof (int) * (nprodsz+2));
+	prdptr = reallocarray(prdptr, nprodsz + 2, sizeof (int *));
+	levprd = reallocarray(levprd, nprodsz + 2, sizeof (int));
 	had_act = (wchar_t *)
-	    realloc((char *)had_act, sizeof (wchar_t) * (nprodsz+2));
+	    reallocarray(had_act, nprodsz + 2, sizeof (wchar_t));
 	for (i = nprodsz-NPROD; i < nprodsz+2; ++i)
 		had_act[i] = 0;
 
@@ -1961,8 +1961,8 @@ exp_ntok()
 {
 	ntoksz += NTERMS;
 
-	tokset = (TOKSYMB *) realloc((char *)tokset, sizeof (TOKSYMB) * ntoksz);
-	toklev = (int *) realloc((char *)toklev, sizeof (int) * ntoksz);
+	tokset = reallocarray((char *)tokset, ntoksz, sizeof (TOKSYMB));
+	toklev = reallocarray(toklev, ntoksz, sizeof (int));
 
 	if ((tokset == NULL) || (toklev == NULL))
 /*
@@ -1984,7 +1984,7 @@ exp_nonterm()
 	nnontersz += NNONTERM;
 
 	nontrst = (NTSYMB *)
-	    realloc((char *)nontrst, sizeof (TOKSYMB) * nnontersz);
+	    reallocarray(nontrst, nnontersz, sizeof (TOKSYMB));
 	if (nontrst == NULL)
 /*
  * TRANSLATION_NOTE  -- This is a message from yacc.

@@ -443,7 +443,8 @@ krb5_error_code asn1_decode_sequence_of_keys (krb5_data *in,
 	ret = asn1buf_imbed(&keyseq, &subbuf, length, seqindef); checkerr;
 	for (i = 1, *out = NULL; ; i++) {
 	    krb5_key_data *tmp;
-	    tmp = (krb5_key_data *) realloc (*out, i * sizeof (krb5_key_data));
+	    tmp = (krb5_key_data *) reallocarray(*out, i,
+                                                 sizeof(krb5_key_data));
 	    if (tmp == NULL)
 		cleanup (ENOMEM);
 	    *out = tmp;

@@ -1544,7 +1544,7 @@ alloc_dev_list(struct larg *largp)
 		return (0);
 
 	nelem =  largp->nelem + 16;
-	p = realloc(largp->dev_list, nelem * sizeof (char *));
+	p = reallocarray(largp->dev_list, nelem, sizeof (char *));
 	if (p == NULL)
 		return (-1);
 

@@ -567,16 +567,16 @@ __nss_files_XY_hostbyname(be, args, filter, type)
 			if (nhosts >= ntaddr) {
 				ntaddr *= 2;
 				if (type == AF_INET) {
-					addrp = realloc(taddr,
-						sizeof (*taddr) * ntaddr);
+					addrp = reallocarray(taddr, ntaddr,
+						sizeof (*taddr));
 					if (addrp == NULL) {
 						res = NSS_UNAVAIL;
 						break;
 					}
 					taddr = (in_addr_t *)addrp;
 				} else {
-					addrp = realloc(taddr6,
-						sizeof (*taddr6) * ntaddr);
+					addrp = reallocarray(taddr6, ntaddr,
+						sizeof (*taddr6));
 					if (addrp == NULL) {
 						res = NSS_UNAVAIL;
 						break;

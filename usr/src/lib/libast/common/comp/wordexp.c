@@ -153,7 +153,8 @@ int	wordexp(const char *string, wordexp_t *wdarg, register int flags)
 	if(flags&WRDE_DOOFFS)
 		c += wdarg->we_offs;
 	if(flags&WRDE_APPEND)
-		av = (char**)realloc((void*)&wdarg->we_wordv[-1], (wdarg->we_wordc+c)*sizeof(char*));
+		av = reallocarray((void *)&wdarg->we_wordv[-1],
+		    wdarg->we_wordc + c, sizeof (char *));
 	else if(av = (char**)malloc(c*sizeof(char*)))
 	{
 		if(flags&WRDE_DOOFFS)

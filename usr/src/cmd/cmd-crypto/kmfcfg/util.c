@@ -182,8 +182,8 @@ addToEKUList(KMF_EKU_POLICY *ekus, KMF_OID *newoid)
 {
 	if (newoid != NULL && ekus != NULL) {
 		ekus->eku_count++;
-		ekus->ekulist = realloc(
-		    ekus->ekulist, ekus->eku_count * sizeof (KMF_OID));
+		ekus->ekulist = reallocarray(ekus->ekulist, ekus->eku_count,
+		    sizeof (KMF_OID));
 		if (ekus->ekulist != NULL) {
 			ekus->ekulist[ekus->eku_count-1] = *newoid;
 		}
@@ -380,7 +380,7 @@ populate_opts(char *optstring)
 	 */
 	for (i = 0; *optstring != '\0'; i++) {
 		if ((temp = (av_opts *)((i == 0) ? malloc(sizeof (av_opts)) :
-		    realloc(opts_av, (i+1) * sizeof (av_opts)))) == NULL) {
+		    reallocarray(opts_av, i + 1, sizeof (av_opts)))) == NULL) {
 			free(opts_av);
 			opts_av = NULL;
 			return (0);

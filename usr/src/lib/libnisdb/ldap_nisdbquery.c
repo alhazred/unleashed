@@ -816,8 +816,8 @@ createNisPlusEntry(__nis_table_mapping_t *t, __nis_rule_value_t *rv,
 			ntq = nq * nrq;
 
 		if (ntq > nq) {
-			newq = realloc(query, ntq * sizeof (query[0]));
-			newattr = realloc(attr, ntq * sizeof (attr[0]));
+			newq = reallocarray(query, ntq, sizeof (query[0]));
+			newattr = reallocarray(attr, ntq, sizeof (attr[0]));
 			if (newq == 0 || newattr == 0) {
 				logmsg(MSG_NOMEM, LOG_ERR,
 					"%s: realloc(%d) => NULL",

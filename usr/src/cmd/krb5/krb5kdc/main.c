@@ -502,7 +502,8 @@ initialize_realms(krb5_context kcontext, int argc, char **argv)
 	case 'x':
 	    db_args_size++;
 	    {
-		char **temp = realloc( db_args, sizeof(char*) * (db_args_size+1)); /* one for NULL */
+		char **temp = reallocarray(db_args, db_args_size + 1,
+                                          sizeof (char *)); /* one for NULL */
 		if( temp == NULL )
 		{
 			/* Solaris Kerberos: Keep error messages consistent */
@@ -556,7 +557,8 @@ initialize_realms(krb5_context kcontext, int argc, char **argv)
 
 	    db_args_size++;
 	    {
-		char **temp = realloc( db_args, sizeof(char*) * (db_args_size+1)); /* one for NULL */
+		char **temp = reallocarray(db_args, db_args_size + 1,
+                                          sizeof (char *)); /* one for NULL */
 		if( temp == NULL )
 		{
 			/* Solaris Kerberos: Keep error messages consistent */

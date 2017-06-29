@@ -98,8 +98,8 @@ pkcs11_slottable_increase(ulong_t increment) {
 		return (CKR_OK);
 	}
 
-	tmpslots = realloc
-	    (slottable->st_slots, newsize * sizeof (pkcs11_slot_t *));
+	tmpslots = reallocarray(slottable->st_slots, newsize,
+	    sizeof (pkcs11_slot_t *));
 
 	if (tmpslots == NULL) {
 		(void) pthread_mutex_unlock(&slottable->st_mutex);

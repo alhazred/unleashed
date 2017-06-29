@@ -436,8 +436,8 @@ asn1_error_code asn1_decode_principal_name(asn1buf *buf, krb5_principal *val)
 	if ((*val)->data == NULL)
 	  (*val)->data = (krb5_data*)malloc(size*sizeof(krb5_data));
 	else
-	  (*val)->data = (krb5_data*)realloc((*val)->data,
-					     size*sizeof(krb5_data));
+	  (*val)->data = (krb5_data*)reallocarray((*val)->data, size,
+                                                  sizeof (krb5_data));
 	if((*val)->data == NULL) return ENOMEM;
 	retval = asn1_decode_generalstring(&seqbuf,
 					   &((*val)->data[size-1].length),
@@ -863,7 +863,7 @@ asn1_error_code asn1_decode_sequence_of_enctype(asn1buf *buf, int *num, krb5_enc
       if (*val == NULL)
         *val = (krb5_enctype*)malloc(size*sizeof(krb5_enctype));
       else
-        *val = (krb5_enctype*)realloc(*val,size*sizeof(krb5_enctype));
+        *val = (krb5_enctype*)reallocarray(*val, size, sizeof(krb5_enctype));
       if(*val == NULL) return ENOMEM;
       retval = asn1_decode_enctype(&seqbuf,&((*val)[size-1]));
       if(retval) return retval;

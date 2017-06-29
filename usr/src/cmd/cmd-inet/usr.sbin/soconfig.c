@@ -523,8 +523,8 @@ parse_filter_params(int argc, char **argv)
 			sof_socktuple_t *new;
 
 			nalloc *= 2;
-			new = realloc(socktuples,
-			    nalloc * sizeof (sof_socktuple_t));
+			new = reallocarray(socktuples, nalloc,
+			    sizeof (sof_socktuple_t));
 			if (new == NULL) {
 				perror("realloc");
 				free(socktuples);

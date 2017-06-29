@@ -1280,8 +1280,8 @@ check_line_syntax(cmdbuf_t *cmds, char *buf)
 	 * If it is full, reallocate the buffer.
 	 */
 	if (cmds->count == cmds->allocated) {
-		cmds->commands = realloc(cmds->commands,
-		    sizeof (command_t) * (cmds->allocated + PER_ALLOC_COUNT));
+		cmds->commands = reallocarray(cmds->commands,
+		    cmds->allocated + PER_ALLOC_COUNT, sizeof (command_t));
 		if (cmds->commands == NULL)
 			return (EC_FAILURE);
 		cmds->allocated += PER_ALLOC_COUNT;

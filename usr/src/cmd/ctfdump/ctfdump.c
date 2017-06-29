@@ -196,7 +196,7 @@ static void
 ctfdump_fargs_grow(int nargs)
 {
 	if (g_nfargc < nargs) {
-		g_fargc = realloc(g_fargc, sizeof (ctf_id_t) * nargs);
+		g_fargc = reallocarray(g_fargc, nargs, sizeof (ctf_id_t));
 		if (g_fargc == NULL)
 			ctfdump_fatal("failed to get memory for %d "
 			    "ctf_id_t's\n", nargs);

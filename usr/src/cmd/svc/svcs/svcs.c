@@ -607,7 +607,7 @@ ctid_to_pids(uint64_t c, pid_t **pidsp, uint_t *np)
 		return;
 	}
 
-	*pidsp = realloc(*pidsp, (*np + m) * sizeof (*pidsp));
+	*pidsp = reallocarray(*pidsp, *np + m, sizeof (*pidsp));
 	if (*pidsp == NULL)
 		uu_die(gettext("Out of memory"));
 
@@ -2723,7 +2723,7 @@ get_notify_param_classes()
 
 		if (n + 1 >= size) {
 			size *= 2;
-			buf = realloc(buf, size * sizeof (char *));
+			buf = reallocarray(buf, size, sizeof (char *));
 			if (buf == NULL)
 				uu_die(gettext("Out of memory.\n"));
 		}
@@ -3353,7 +3353,7 @@ add_sort_column(const char *col, int reverse)
 
 	++opt_snum;
 
-	opt_sort = realloc(opt_sort, opt_snum * sizeof (*opt_sort));
+	opt_sort = reallocarray(opt_sort, opt_snum, sizeof (*opt_sort));
 	if (opt_sort == NULL)
 		uu_die(gettext("Too many sort criteria: out of memory.\n"));
 

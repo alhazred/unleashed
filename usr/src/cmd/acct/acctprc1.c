@@ -201,8 +201,8 @@ readctmp(char *fname)
 				up = ur;
 			if (++up >= &ur[a_usize]) {
 				a_usize = a_usize + A_USIZE;
-                		if ((ur = (struct urec *) realloc(ur, a_usize *
-					sizeof (struct urec))) == NULL) {
+				if ((ur = reallocarray(ur, a_usize,
+				    sizeof (struct urec))) == NULL) {
                         		fprintf(stderr, "acctprc1: 1 Cannot reallocate memory\n");
 					exit(2);
 				}
@@ -216,8 +216,8 @@ readctmp(char *fname)
 		
 		if (sp >= &sr[a_ssize-1]) { 
 			a_ssize = a_ssize + A_SSIZE;
-			if ((sr = (struct srec *) realloc(sr, a_ssize *
-				sizeof (struct srec))) == NULL) {
+			if ((sr = reallocarray(sr, a_ssize,
+			    sizeof (struct srec))) == NULL) {
 				fprintf(stderr, "acctprc1: 2 Cannot reallocate memory\n");
 				printf("errno=%d\n", errno);
 				exit(2);

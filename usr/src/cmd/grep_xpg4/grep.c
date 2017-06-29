@@ -199,8 +199,8 @@ main(int argc, char **argv)
 
 		case 'e':	/* POSIX: pattern list */
 			n_pattern++;
-			pattern_list = realloc(pattern_list,
-			    sizeof (char *) * n_pattern);
+			pattern_list = reallocarray(pattern_list, n_pattern,
+			    sizeof (char *));
 			if (pattern_list == NULL) {
 				(void) fprintf(stderr,
 				    gettext("%s: out of memory\n"),
@@ -213,8 +213,8 @@ main(int argc, char **argv)
 		case 'f':	/* POSIX: pattern file */
 			fflag = 1;
 			n_file++;
-			file_list = realloc(file_list,
-			    sizeof (char *) * n_file);
+			file_list = reallocarray(file_list, n_file,
+			    sizeof (char *));
 			if (file_list == NULL) {
 				(void) fprintf(stderr,
 				    gettext("%s: out of memory\n"),
@@ -1007,8 +1007,8 @@ L_start_process:
 
 			if (line_len >= outbuflen) {
 				outbuflen = line_len + 1;
-				outline = realloc(outline,
-				    sizeof (wchar_t) * outbuflen);
+				outline = reallocarray(outline, outbuflen,
+				    sizeof (wchar_t));
 				if (outline == NULL) {
 					(void) fprintf(stderr,
 					    gettext("%s: out of memory\n"),

@@ -305,11 +305,11 @@ mapFromLDAP(__nis_table_mapping_t *t, db_query *qin, int *numQueries,
 				__nis_obj_attr_t	**atmp;
 
 				/* Extend the 'q' array */
-				tmp = realloc(q,
-					(numVals+nqt) * sizeof (q[0]));
+				tmp = reallocarray(q, numVals + nqt,
+				    sizeof(q[0]));
 				/* ... and the 'attr' array */
-				atmp = realloc(attr,
-					(numVals+nqt) * sizeof (attr[0]));
+				atmp = reallocarray(attr, numVals + nqt,
+				    sizeof(attr[0]));
 				if (tmp == 0 || atmp == 0) {
 					logmsg(MSG_NOMEM, LOG_ERR,
 						"%s: realloc(%d) => NULL",

@@ -370,7 +370,7 @@ construct_symtab(dis_tgt_t *tgt)
 	}
 
 	tgt->dt_symcount -= nsym;
-	tgt->dt_symtab = realloc(p_symtab, tgt->dt_symcount *
+	tgt->dt_symtab = reallocarray(p_symtab, tgt->dt_symcount,
 	    sizeof (sym_entry_t));
 
 	qsort(tgt->dt_symtab, tgt->dt_symcount, sizeof (sym_entry_t),

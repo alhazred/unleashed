@@ -1707,9 +1707,8 @@ splitMappingItem(__nis_mapping_item_t *item, char delim,
 			str[e] = '\0';
 			/* Add to val->val */
 			newstr = strdup(&str[s]);
-			newval = realloc(val->val,
-					(val->numVals+1) *
-						sizeof (val->val[0]));
+			newval = reallocarray(val->val, val->numVals + 1,
+					      sizeof (val->val[0]));
 			if (newval != 0)
 				val->val = newval;
 			if (newstr == 0 || newval == 0) {
@@ -2289,8 +2288,8 @@ extractMappingItem(__nis_mapping_item_t *item, __nis_mapping_format_t *f,
 		 * 0, we somehow failed to obtain a value.
 		 */
 		if (str == 0 || *str != '\0' || newstr == 0 ||
-				(newval = realloc(val->val,
-					(val->numVals+1) *
+				(newval = reallocarray(val->val,
+					val->numVals + 1,
 					sizeof (val->val[0]))) == 0) {
 			freeValue(val, 1);
 			for (n = 0; n < nv; n++) {

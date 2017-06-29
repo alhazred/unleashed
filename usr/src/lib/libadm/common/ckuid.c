@@ -70,7 +70,7 @@ setmsg(int disp)
 		n += strlen(pwdptr->pw_name) + 2;
 		while (n >= m) {
 			m += MALSIZ;
-			msg = (char *) realloc(msg, m*sizeof (char));
+			msg = reallocarray(msg, m, sizeof (char));
 		}
 		if (count++)
 			(void) strcat(msg, ", ");

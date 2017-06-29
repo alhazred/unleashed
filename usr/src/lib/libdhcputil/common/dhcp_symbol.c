@@ -332,8 +332,8 @@ dsym_parse_classes(char *ptr, dhcp_classes_t *classes_ret)
 			cp++;
 		}
 
-		classes = realloc(classes_ret->dc_names,
-		    (sizeof (char **)) * (classes_ret->dc_cnt + 1));
+		classes = reallocarray(classes_ret->dc_names,
+		    classes_ret->dc_cnt + 1, sizeof (char **));
 		if (classes == NULL ||
 		    (classes[classes_ret->dc_cnt] = strdup(cp))
 		    == NULL) {

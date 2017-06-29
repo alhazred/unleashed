@@ -228,7 +228,8 @@ char *kadmin_startup(argc, argv)
 	case 'x':
 	    db_args_size++;
 	    {
-		char **temp = realloc(db_args, sizeof(char*) * (db_args_size+1));
+		char **temp = reallocarray(db_args, db_args_size + 1,
+		    sizeof (char *));
 		if (temp == NULL) {
 		    fprintf(stderr, gettext("%s: Cannot initialize. Not enough memory\n"),
 			    argv[0]);
@@ -275,7 +276,8 @@ char *kadmin_startup(argc, argv)
 
 	    db_args_size++;
 	    {
-		char **temp = realloc(db_args, sizeof(char*) * (db_args_size+1)); /* one for NULL */
+		char **temp = reallocarray(db_args, db_args_size + 1,
+		    sizeof (char *)); /* one for NULL */
 		if (temp == NULL) {
 		    fprintf(stderr,
 			    gettext("%s: Cannot initialize. Not enough memory\n"),
@@ -734,7 +736,8 @@ void kadmin_cpw(argc, argv)
 	    }
 	    db_args_size++;
 	    {
-		char **temp = realloc(db_args, sizeof(char*) * (db_args_size+1)); /* one for NULL */
+		char **temp = reallocarray(db_args, db_args_size + 1,
+		    sizeof (char *)); /* one for NULL */
 		if (temp == NULL) {
 		    fprintf(stderr, gettext("change_password: Not enough memory\n"));
 		    free(db_args), db_args = NULL;

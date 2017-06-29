@@ -880,8 +880,8 @@ dispatch_keyword(struct parse_state *psp, const char *keybuf)
 			}
 			if (env == NULL &&
 			    evlist-psp->ps_evlist >= psp->ps_evsize-1) {
-				evlist = (char **)realloc(psp->ps_evlist,
-				    (psp->ps_evsize + 8) * sizeof (*evlist));
+				evlist = reallocarray(psp->ps_evlist,
+				    psp->ps_evsize + 8, sizeof (*evlist));
 				if (evlist == NULL) {
 					logerr("cannot realloc evlist to %d",
 					    psp->ps_evsize + 8);

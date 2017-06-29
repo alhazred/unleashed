@@ -988,7 +988,7 @@ values_get(scf_property_t *prop, scf_values_t *v)
 
 			/* set initial size or double it */
 			cursz = cursz ? 2 * cursz : 8;
-			if ((tmp = realloc(*p, cursz * elem_sz)) == NULL) {
+			if ((tmp = reallocarray(*p, cursz, elem_sz)) == NULL) {
 				(void) scf_set_error(SCF_ERROR_NO_MEMORY);
 				goto error;
 			}

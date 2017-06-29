@@ -581,7 +581,7 @@ i_get_server_descs(ilbst_arg_t *sta, kstat_ctl_t *kctl)
 		if (i+1 > rp->ird_num_servers) {
 			ilbst_srv_desc_t  *srvlist;
 
-			if ((srvlist = realloc(rp->ird_srvlist, (i+1) *
+			if ((srvlist = reallocarray(rp->ird_srvlist, i + 1,
 			    sizeof (*srvlist))) == NULL) {
 				rc = ILBADM_ENOMEM;
 				break;
@@ -742,8 +742,8 @@ i_get_rule_descs(ilbst_arg_t *sta, kstat_ctl_t *kctl)
 				srvlist = calloc(num_servers,
 				    sizeof (*srvlist));
 			else
-				srvlist = realloc(rlist[i].ird_srvlist,
-				    sizeof (*srvlist) * num_servers);
+				srvlist = reallocarray(rlist[i].ird_srvlist,
+				    num_servers, sizeof (*srvlist));
 			if (srvlist == NULL) {
 				rc = ILBADM_ENOMEM;
 				break;
@@ -900,8 +900,8 @@ i_do_show_stats(ilbst_arg_t *sta)
 			sta->ilbst_rcount = rcount;
 
 			if (rcount > sta->ilbst_rcount_prev) {
-				rlist = realloc(sta->ilbst_rlist,
-				    sizeof (*sta->ilbst_rlist) * rcount);
+				rlist = reallocarray(sta->ilbst_rlist,
+				    rcount, sizeof (*sta->ilbst_rlist));
 				if (rlist == NULL) {
 					rc = ILBADM_ENOMEM;
 					break;
@@ -932,8 +932,8 @@ i_do_show_stats(ilbst_arg_t *sta)
 		    sta->ilbst_rcount_prev)) {
 			sta->ilbst_rlist_sz =
 			    MAX(sta->ilbst_rcount, sta->ilbst_rcount_prev);
-			rlist = realloc(sta->ilbst_rlist,
-			    sizeof (*sta->ilbst_rlist) * sta->ilbst_rlist_sz);
+			rlist = reallocarray(sta->ilbst_rlist,
+			    sta->ilbst_rlist_sz, sizeof (*sta->ilbst_rlist));
 			if (rlist == NULL) {
 				rc = ILBADM_ENOMEM;
 				break;

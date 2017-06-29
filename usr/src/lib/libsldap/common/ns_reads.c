@@ -1796,7 +1796,7 @@ update_srvsidesort_type(char *service, ns_srvsidesort_t type)
 		sort_type_size = size;
 	} else if (sort_type_hwm >= sort_type_size) {
 		size = sort_type_size + 10;
-		tmp = realloc(sort_type, size * sizeof (servicesorttype_t));
+		tmp = reallocarray(sort_type, size, sizeof (servicesorttype_t));
 		if (tmp == NULL) {
 			(void) mutex_unlock(&sort_type_mutex);
 			return;

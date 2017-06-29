@@ -263,8 +263,8 @@ fpkgparam(FILE *fp, char *param)
 
 			if (copy && ((++n % VALSIZ) == 0)) {
 				if (mempt) {
-					mempt = realloc(mempt,
-					    (n+VALSIZ)*sizeof (char));
+					mempt = reallocarray(mempt,
+					    n + VALSIZ, sizeof (char));
 					if (!mempt)
 						return (NULL);
 				} else {
@@ -310,7 +310,7 @@ fpkgparam(FILE *fp, char *param)
 	if (!mempt)
 		mempt = strdup(buffer);
 	else
-		mempt = realloc(mempt, (strlen(mempt)+1)*sizeof (char));
+		mempt = reallocarray(mempt, strlen(mempt) + 1, sizeof (char));
 	return (mempt);
 }
 

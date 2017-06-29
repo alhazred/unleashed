@@ -56,17 +56,17 @@
 extern boolean_t door_created;
 
 /* macro for allocating name buffers for the request */
-#define	NEW_REQARGV(old, n) (xmlChar **)realloc((xmlChar *)old, \
-	(unsigned)(n+2) * sizeof (xmlChar *))
+#define	NEW_REQARGV(old, n) (xmlChar **)reallocarray((old), \
+	(n) + 2, sizeof (xmlChar *))
 
 /* macro for allocating association pair buffers for the request */
-#define	NEW_REQPAIRARGV(old, n) (assoc_pair_t **)realloc((assoc_pair_t *)old, \
-	(unsigned)(n+2) * sizeof (assoc_pair_t *))
+#define	NEW_REQPAIRARGV(old, n) (assoc_pair_t **)reallocarray(old, \
+	(n) + 2, sizeof (assoc_pair_t *))
 
 /* macro for allocating DD/DD set attribute list buffers for the request */
 #define	NEW_REQATTRLISTARGV(old, n)\
-	(object_attrlist_t **)realloc((object_attrlist_t *)old, \
-	(unsigned)(n+2) * sizeof (object_attrlist_t *))
+	(object_attrlist_t **)reallocarray(old, \
+	(n) + 2, sizeof (object_attrlist_t *))
 
 #if LIBXML_VERSION >= 20904
 #define	XMLSTRING_CAST (const char *)

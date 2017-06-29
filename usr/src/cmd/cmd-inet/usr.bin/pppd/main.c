@@ -2317,8 +2317,7 @@ script_setenv(var, value, iskey)
     /* reallocate script_env with more space if needed */
     if (i + 1 >= s_env_nalloc) {
 	int new_n = i + 17;
-	char **newenv = (char **) realloc((void *)script_env,
-					  new_n * sizeof(char *));
+	char **newenv = reallocarray(script_env, new_n, sizeof (char *));
 	if (newenv == NULL) {
 	    novm("expanded script environment variable.");
 	    return;

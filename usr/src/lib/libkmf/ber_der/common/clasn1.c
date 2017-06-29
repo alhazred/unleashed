@@ -723,8 +723,8 @@ AddRDN(KMF_X509_NAME *name, KMF_X509_RDN *newrdn)
 	/* Add new RDN record to existing list */
 	name->numberOfRDNs++;
 	name->RelativeDistinguishedName =
-	    realloc(name->RelativeDistinguishedName,
-	    name->numberOfRDNs * sizeof (KMF_X509_RDN));
+	    reallocarray(name->RelativeDistinguishedName, name->numberOfRDNs,
+	    sizeof(KMF_X509_RDN));
 
 	if (name->RelativeDistinguishedName == NULL) {
 		ret = KMF_ERR_MEMORY;
@@ -1244,8 +1244,8 @@ get_extensions(BerElement *asn1, KMF_X509_EXTENSIONS *extns)
 			goto cleanup;
 
 		extns->numberOfExtensions++;
-		extns->extensions = realloc(extns->extensions,
-		    extns->numberOfExtensions *
+		extns->extensions = reallocarray(extns->extensions,
+		    extns->numberOfExtensions,
 		    sizeof (KMF_X509_EXTENSION));
 		if (extns->extensions == NULL) {
 			ret = KMF_ERR_MEMORY;

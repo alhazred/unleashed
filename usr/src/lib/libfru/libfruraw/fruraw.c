@@ -222,8 +222,8 @@ add_segs_for_section(section_t *section, fru_strlist_t *list)
 		return (map_errno(errno));
 	}
 
-	list->strs = realloc(list->strs, sizeof (char *)
-	    * (list->num + num_segment));
+	list->strs = reallocarray(list->strs, list->num + num_segment,
+	    sizeof (char *));
 
 	for (i = 0; i < num_segment; i++) {
 		/* ensure NULL terminated. */

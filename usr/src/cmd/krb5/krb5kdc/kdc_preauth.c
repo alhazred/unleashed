@@ -1899,8 +1899,8 @@ get_sam_edata(krb5_context context, krb5_kdc_req *request,
 
       probeslot = krb5_princ_size(context, newp)++;
       krb5_princ_name(kdc_context, newp) = 
-	realloc(krb5_princ_name(kdc_context, newp),
-		krb5_princ_size(context, newp) * sizeof(krb5_data));
+	reallocarray(krb5_princ_name(kdc_context, newp),
+                     krb5_princ_size(context, newp), sizeof(krb5_data));
 
       for(sam_ptr = sam_inst_map; sam_ptr->name; sam_ptr++) {
 	krb5_princ_component(kdc_context,newp,probeslot)->data = sam_ptr->name;

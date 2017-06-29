@@ -143,7 +143,7 @@ retry:
 
 	/* Allocate space for 32 more fds and initialize to -1 */
 	new_num = pollfd_num + 32;
-	newfds = realloc(pollfds, new_num * sizeof (struct pollfd));
+	newfds = reallocarray(pollfds, new_num, sizeof (struct pollfd));
 	if (newfds == NULL) {
 		logperror("poll_add: realloc");
 		return (-1);

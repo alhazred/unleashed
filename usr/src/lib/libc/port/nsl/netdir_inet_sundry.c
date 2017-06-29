@@ -374,7 +374,8 @@ getifnum:
 		if (if_info == NULL)
 			if_info = malloc(numifs * sizeof (if_info_t));
 		else
-			if_info = realloc(if_info, numifs * sizeof (if_info_t));
+			if_info = reallocarray(if_info, numifs,
+			    sizeof (if_info_t));
 		if (if_info == NULL) {
 			free(buf);
 			_nderror = ND_NOMEM;

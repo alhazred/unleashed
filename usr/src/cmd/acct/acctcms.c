@@ -456,8 +456,8 @@ tenter(struct tcms *p)
 		if (EQN(p->tcm_comm, tcm[i].tcm_comm))
 			break;
 	if(j == csize) {
-		if ((ntcm = (struct tcms *) realloc(tcm,
-			(csize + CSIZE - 1) * sizeof (struct tcms))) == NULL) {
+		if ((ntcm = (struct tcms *) reallocarray(tcm, csize + CSIZE - 1,
+		    sizeof (struct tcms))) == NULL) {
 			fprintf(stderr,
 				"acctcms: Cannot reallocate memory (tcm)\n");
 			return(-1);
@@ -492,8 +492,8 @@ enter(struct pcms *p)
 		if (EQN(p->pcm_comm, pcm[i].pcm_comm))
 			break;
 	if(j == csize) {
-		if ((npcm = (struct pcms *) realloc(pcm,
-			(csize + CSIZE - 1) * sizeof (struct pcms))) == NULL) {
+		if ((npcm = reallocarray(pcm, csize + CSIZE - 1,
+		    sizeof (struct pcms))) == NULL) {
 			fprintf(stderr,
 				"acctcms: Cannot reallocate memory (pcm)\n");
 			return(-1);

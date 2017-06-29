@@ -256,8 +256,8 @@ nwam_line_to_object(char *line, char **objname, void *proplist)
 		}
 		switch (proptype) {
 		case NWAM_VALUE_TYPE_BOOLEAN:
-			if ((newvalbool = realloc(valbool,
-			    nelem * sizeof (boolean_t))) == NULL) {
+			if ((newvalbool = reallocarray(valbool, nelem,
+			    sizeof (boolean_t))) == NULL) {
 				nwam_free_object_list(*((char **)proplist));
 				return (NWAM_NO_MEMORY);
 			}
@@ -274,8 +274,8 @@ nwam_line_to_object(char *line, char **objname, void *proplist)
 			nwam_value_free(val);
 			break;
 		case NWAM_VALUE_TYPE_INT64:
-			if ((newvalint = realloc(valint,
-			    nelem * sizeof (int64_t))) == NULL) {
+			if ((newvalint = reallocarray(valint, nelem,
+			    sizeof (int64_t))) == NULL) {
 				nwam_free_object_list(*((char **)proplist));
 				return (NWAM_NO_MEMORY);
 			}
@@ -292,8 +292,8 @@ nwam_line_to_object(char *line, char **objname, void *proplist)
 			nwam_value_free(val);
 			break;
 		case NWAM_VALUE_TYPE_UINT64:
-			if ((newvaluint = realloc(valuint,
-			    nelem * sizeof (uint64_t))) == NULL) {
+			if ((newvaluint = reallocarray(valuint, nelem,
+			    sizeof (uint64_t))) == NULL) {
 				nwam_free_object_list(*((char **)proplist));
 				return (NWAM_NO_MEMORY);
 			}
@@ -310,8 +310,8 @@ nwam_line_to_object(char *line, char **objname, void *proplist)
 			nwam_value_free(val);
 			break;
 		case NWAM_VALUE_TYPE_STRING:
-			if ((newvalstr = realloc(valstr,
-			    nelem * sizeof (char *))) == NULL) {
+			if ((newvalstr = reallocarray(valstr, nelem,
+			    sizeof (char *))) == NULL) {
 				nwam_free_object_list(*((char **)proplist));
 				return (NWAM_NO_MEMORY);
 			}
@@ -392,7 +392,8 @@ done:
 			free(ncpfiles[i]);
 		free(ncpfiles);
 	} else {
-		*ncpfilesp = realloc(ncpfiles, sizeof (char *) * (*num_filesp));
+		*ncpfilesp = reallocarray(ncpfiles, *num_filesp,
+		    sizeof (char *));
 		if (*num_filesp != 0 && *ncpfilesp == NULL)
 			err = NWAM_NO_MEMORY;
 	}

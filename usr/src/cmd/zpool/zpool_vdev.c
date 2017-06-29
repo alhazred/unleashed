@@ -1271,8 +1271,8 @@ construct_spec(int argc, char **argv)
 				if (is_grouping(argv[c], NULL, NULL) != NULL)
 					break;
 				children++;
-				child = realloc(child,
-				    children * sizeof (nvlist_t *));
+				child = reallocarray(child, children,
+				    sizeof (nvlist_t *));
 				if (child == NULL)
 					zpool_no_memory();
 				if ((nv = make_leaf_vdev(argv[c], B_FALSE))
@@ -1340,7 +1340,7 @@ construct_spec(int argc, char **argv)
 		}
 
 		toplevels++;
-		top = realloc(top, toplevels * sizeof (nvlist_t *));
+		top = reallocarray(top, toplevels, sizeof (nvlist_t *));
 		if (top == NULL)
 			zpool_no_memory();
 		top[toplevels - 1] = nv;

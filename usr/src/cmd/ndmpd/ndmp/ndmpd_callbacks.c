@@ -918,8 +918,8 @@ ndmpd_api_add_env(void *cookie, char *name, char *value)
 	if (session == NULL)
 		return (-1);
 
-	session->ns_data.dd_env = realloc((void *)session->ns_data.dd_env,
-	    sizeof (ndmp_pval) * (session->ns_data.dd_env_len + 1));
+	session->ns_data.dd_env = reallocarray(session->ns_data.dd_env,
+	    session->ns_data.dd_env_len + 1, sizeof (ndmp_pval));
 
 	if (session->ns_data.dd_env == NULL) {
 		NDMP_LOG(LOG_ERR, "Out of memory.");

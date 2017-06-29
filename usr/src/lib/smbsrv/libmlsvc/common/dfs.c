@@ -603,7 +603,7 @@ dfs_link_add(const char *path, const char *server, const char *share,
 	}
 
 	/* add the new target */
-	t = realloc(info.i_targets, (ntargets + 1) * sizeof (dfs_target_t));
+	t = reallocarray(info.i_targets, ntargets + 1, sizeof (dfs_target_t));
 	if (t == NULL) {
 		dfs_info_free(&info);
 		return (ERROR_NOT_ENOUGH_MEMORY);

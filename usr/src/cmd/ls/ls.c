@@ -1789,8 +1789,8 @@ gstat(char *file, int argfl, struct ditem *myparent)
 		 * more space
 		 */
 		maxfils += quantn;
-		if (((flist = realloc(flist,
-		    maxfils * sizeof (struct lbuf *))) == NULL) ||
+		if (((flist = reallocarray(flist, maxfils,
+		    sizeof (struct lbuf *))) == NULL) ||
 		    ((nxtlbf = malloc(quantn *
 		    sizeof (struct lbuf))) == NULL)) {
 			perror("ls");

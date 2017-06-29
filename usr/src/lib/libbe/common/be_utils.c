@@ -983,8 +983,8 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 			/* Found empty line or comment line */
 			if (do_buffer) {
 				/* Buffer this line */
-				if ((buffer = (char **)realloc(buffer,
-				    sizeof (char *)*(nlines + 1))) == NULL) {
+				if ((buffer = reallocarray(buffer, nlines + 1,
+				    sizeof (char *))) == NULL) {
 					ret = BE_ERR_NOMEM;
 					goto cleanup;
 				}
@@ -1024,8 +1024,8 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 			entry_cnt++;
 
 			/* Buffer this 'title' line */
-			if ((buffer = (char **)realloc(buffer,
-			    sizeof (char *)*(nlines + 1))) == NULL) {
+			if ((buffer = reallocarray(buffer, nlines + 1,
+			    sizeof (char *))) == NULL) {
 				ret = BE_ERR_NOMEM;
 				goto cleanup;
 			}
@@ -1091,8 +1091,8 @@ be_remove_menu(char *be_name, char *be_root_pool, char *boot_pool)
 		} else {
 			if (do_buffer) {
 				/* Buffer this line */
-				if ((buffer = (char **)realloc(buffer,
-				    sizeof (char *)*(nlines + 1))) == NULL) {
+				if ((buffer = reallocarray(buffer, nlines + 1,
+				    sizeof (char *))) == NULL) {
 					ret = BE_ERR_NOMEM;
 					goto cleanup;
 				}

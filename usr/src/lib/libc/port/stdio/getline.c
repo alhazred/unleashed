@@ -75,7 +75,7 @@ getdelim(char **_RESTRICT_KYWD lineptr, size_t *_RESTRICT_KYWD n,
 			break;
 		*ptr++ = c;
 		if (++cnt == size) {	/* must reallocate */
-			if ((ptr = realloc(*lineptr, 2 * size)) == NULL) {
+			if ((ptr = reallocarray(*lineptr, 2, size)) == NULL) {
 				FUNLOCKFILE(lk);
 				ptr = *lineptr + size - 1;
 				*ptr = '\0';

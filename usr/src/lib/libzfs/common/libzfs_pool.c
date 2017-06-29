@@ -3701,8 +3701,8 @@ zpool_history_unpack(char *buf, uint64_t bytes_read, uint64_t *leftover,
 		/* add record to nvlist array */
 		(*numrecords)++;
 		if (ISP2(*numrecords + 1)) {
-			*records = realloc(*records,
-			    *numrecords * 2 * sizeof (nvlist_t *));
+			*records = reallocarray(*records, *numrecords * 2,
+			    sizeof (nvlist_t *));
 		}
 		(*records)[*numrecords - 1] = nv;
 	}

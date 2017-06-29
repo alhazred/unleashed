@@ -5459,7 +5459,7 @@ int *nitems)
 
 			/* extend items array to accomodate new item */
 
-			tmp = realloc(items, (cnt + 1) * sizeof (char *));
+			tmp = reallocarray(items, cnt + 1, sizeof (char *));
 			if (tmp == NULL) {
 				ipqos_msg(MT_ENOSTR, "realloc");
 				goto fail;

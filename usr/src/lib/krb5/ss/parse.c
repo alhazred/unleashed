@@ -44,8 +44,8 @@ enum parse_mode { WHITESPACE, TOKEN, QUOTED_STRING };
  *      error (0 - success, non-zero on failure)
  */
 
-#define NEW_ARGV(old,n) (char **)realloc((char *)old,\
-					 (unsigned)(n+2)*sizeof(char*))
+#define NEW_ARGV(old,n) (char **)reallocarray((char *)old, (unsigned)(n + 2), \
+					      sizeof(char *))
 
 int ss_parse (sci_idx, line_ptr, argc_ptr, argv_ptr, quiet)
     int sci_idx;

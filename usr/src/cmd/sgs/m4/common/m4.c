@@ -1090,8 +1090,8 @@ str2wstr(char *from, int alloc)
 		ret = p = xmalloc((strlen(from) + 1) * sizeof (wchar_t));
 	} else {
 		while (bsiz < (strlen(from) + 1)) {
-			if ((p = realloc(retbuf,
-			    (bsiz + 256) * sizeof (wchar_t))) == NULL) {
+			if ((p = reallocarray(retbuf, bsiz + 256,
+			    sizeof (wchar_t))) == NULL) {
 				error(gettext("out of storage"));
 			}
 			bsiz += 256;

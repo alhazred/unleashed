@@ -415,8 +415,8 @@ reallocate_buffer()
 	static time_t	*tmplogouts;
 
 	lines += CHUNK_SIZE;
-	tmpttnames = realloc(ttnames, sizeof (char *)*lines);
-	tmplogouts = realloc(logouts, sizeof (time_t)*lines);
+	tmpttnames = reallocarray(ttnames, lines, sizeof (char *));
+	tmplogouts = reallocarray(logouts, lines, sizeof (time_t));
 	if (tmpttnames == NULL || tmplogouts == NULL) {
 		(void) fprintf(stderr, gettext("Out of memory \n"));
 		exit(2);
