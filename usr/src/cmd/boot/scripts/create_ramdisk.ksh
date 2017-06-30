@@ -240,13 +240,6 @@ function create_ufs
 	umount -f "$rdmnt"
 	rmdir "$rdmnt"
 
-	if [ $ISA = sparc ] ; then
-		rlofidev=`echo "$lofidev" | sed -e "s/dev\/lofi/dev\/rlofi/"`
-		bb="$ALT_ROOT/platform/$PLATFORM/lib/fs/ufs/bootblk"
-		# installboot is not available on all platforms
-		dd if=$bb of=$rlofidev bs=1b oseek=1 count=15 conv=sync 2>&1
-	fi
-
 	#
 	# Check if gzip exists in /usr/bin, so we only try to run gzip
 	# on systems that have gzip. Then run gzip out of the patch to
