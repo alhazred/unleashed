@@ -37,3 +37,5 @@ set name=org.opensolaris.consolidation value=osnet
 # fashion.
 #
 set name=variant.opensolaris.zone value=global value=nonglobal
+
+set name=pkg.human-version value=$(HUMAN_VERSION)
