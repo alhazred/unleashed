@@ -3256,11 +3256,11 @@ create_ramdisk(char *root)
 	}
 
 	/*
-	 * Else setup command args for create_ramdisk.ksh for the UFS archives
+	 * Else setup command args for create_ramdisk.ksh for the cpio archives
 	 * Note: we will not create hash here, CREATE_RAMDISK should create it.
 	 */
 	if (bam_verbose)
-		bam_print("mkisofs not found, creating UFS archive\n");
+		bam_print("mkisofs not found, creating cpio archive\n");
 
 	(void) snprintf(path, sizeof (path), "%s/%s", root, CREATE_RAMDISK);
 	if (stat(path, &sb) != 0) {
