@@ -10,7 +10,7 @@ SRCS=	tic_captab.c \
 CPPFLAGS+=	-I${SRCTOP}/usr/src/lib/libcurses/screen
 CFLAGS+=	-Wno-char-subscripts
 LDADD+=		-lcurses
-LDADD+=		-Wl,-Mmapfile-intf
+LDADD+=		-Wl,-M${.CURDIR}/mapfile-intf
 
 .include <unleashed.mk>
 .include <prog.mk>
