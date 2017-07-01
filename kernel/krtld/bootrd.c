@@ -183,12 +183,8 @@ kobj_boot_mountroot()
 	 */
 	for (i = 0; bfs_tab[i] != NULL; i++) {
 		bfs_ops = bfs_tab[i];
-		if (BRD_MOUNTROOT(bfs_ops, "dummy") == 0) {
-			if (strcmp("boot_cpio", bfs_ops->fsw_name) != 0)
-				_kobj_printf(ops, "Warning: using %s boot "
-				    "archive\n", bfs_ops->fsw_name);
+		if (BRD_MOUNTROOT(bfs_ops, "dummy") == 0)
 			return (0);
-		}
 	}
 
 	_kobj_printf(ops, "failed to mount ramdisk from boot\n");
