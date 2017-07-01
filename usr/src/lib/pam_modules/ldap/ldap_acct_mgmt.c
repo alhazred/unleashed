@@ -185,7 +185,7 @@ get_account_mgmt(char *user, int *seconds, int *grace)
 	int rc	= PAM_AUTH_ERR;
 	AcctUsableResponse_t	acctResp;
 
-	(void *)memset(&acctResp, 0, sizeof (acctResp));
+	memset(&acctResp, 0, sizeof (acctResp));
 	/* get the values for local account checking */
 	if ((rc = __ns_ldap_getAcctMgmt(user, &acctResp))
 		!= NS_LDAP_SUCCESS) {

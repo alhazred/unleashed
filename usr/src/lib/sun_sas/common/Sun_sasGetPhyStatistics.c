@@ -134,7 +134,7 @@ HBA_STATUS Sun_sasGetPhyStatistics(HBA_HANDLE handle,
 
 	errno = 0;
 
-	(void *) memset(kstat_name, 0, sizeof (kstat_name));
+	memset(kstat_name, 0, sizeof (kstat_name));
 	node = di_init(path, DINFOCPYONE);
 	if (node == DI_NODE_NIL) {
 		di_fini(node);
