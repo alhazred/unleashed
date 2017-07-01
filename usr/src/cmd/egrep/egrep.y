@@ -389,19 +389,19 @@ int
 alloctree(void)
 {
 	maxlin += MAXLIN;
-	if((name = (int *)realloc(name, maxlin*sizeof(int))) == (int *)0)
+	if((name = (int *)realloc(name, maxlin * sizeof(int))) == NULL)
 		return 0;
-	if((left = (int *)realloc(left, maxlin*sizeof(int))) == (int *)0)
+	if((left = (int *)realloc(left, maxlin * sizeof(int))) == NULL)
 		return 0;
-	if((right = (int *)realloc(right, maxlin*sizeof(int))) == (int *)0)
+	if((right = (int *)realloc(right, maxlin * sizeof(int))) == NULL)
 		return 0;
-	if((parent = (int *)realloc(parent, maxlin*sizeof(int))) == (int *)0)
+	if((parent = (int *)realloc(parent, maxlin * sizeof(int))) == NULL)
 		return 0;
-	if((foll = (int *)realloc(foll, maxlin*sizeof(int))) == (int *)0)
+	if((foll = (int *)realloc(foll, maxlin * sizeof(int))) == NULL)
 		return 0;
-	if((tmpstat = (int *)realloc(tmpstat, maxlin*sizeof(int))) == (int *)0)
+	if((tmpstat = (int *)realloc(tmpstat, maxlin * sizeof(int))) == NULL)
 		return 0;
-	if((initstat = (int *)realloc(initstat, maxlin*sizeof(int))) == (int *)0)
+	if((initstat = (int *)realloc(initstat, maxlin * sizeof(int))) == NULL)
 		return 0;
 	return 1;
 }
@@ -603,7 +603,7 @@ add(int *array, int n)
 	int i;
 	if (nxtpos + count >= maxpos) { 
 		maxpos += MAXPOS + count;
-		if((positions = (int *)realloc(positions, maxpos *sizeof(int))) == (int *)0)
+		if((positions = (int *)realloc(positions, maxpos * sizeof(int))) == NULL)
 			overflo();
 	}
 	array[n] = nxtpos;
@@ -739,19 +739,19 @@ main(int argc, char **argv)
 	argv = &argv[optind];
 	
 	/* allocate initial space for arrays */
-	if((name = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((name = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
-	if((left = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((left = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
-	if((right = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((right = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
-	if((parent = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((parent = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
-	if((foll = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((foll = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
-	if((tmpstat = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((tmpstat = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
-	if((initstat = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
+	if((initstat = (int *)malloc(MAXLIN * sizeof(int))) == NULL)
 		overflo();
 	if((chars = (char *)malloc(MAXLIN)) == NULL)
 		overflo();
@@ -759,7 +759,7 @@ main(int argc, char **argv)
 		overflo();
 	if((upper = (wchar_t *)malloc(MAXLIN*sizeof(wchar_t))) == (wchar_t *)0)
 		overflo();
-	if((positions = (int *)malloc(MAXPOS*sizeof(int))) == (int *)0)
+	if((positions = (int *)malloc(MAXPOS * sizeof(int))) == NULL)
 		overflo();
 	maxlin = MAXLIN;
 	maxclin = MAXLIN;

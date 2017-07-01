@@ -30,7 +30,7 @@
  */
 
 void __umem_assert_failed(void) {}
-int *___errno(void) { return (int *)0; }
+int *___errno(void) { return ((int *)0); }
 void atomic_add_64(void) {}
 void atomic_add_32_nv(void) {}
 void atomic_swap_64(void) {}

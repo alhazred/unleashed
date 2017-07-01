@@ -144,7 +144,7 @@ regcmp(const char *regexp, ...)
 	int		return_arg_number;
 	int		substringn;
 
-	if (___i_size() == (int *)0)
+	if (___i_size() == NULL)
 		return (NULL);
 
 	/*

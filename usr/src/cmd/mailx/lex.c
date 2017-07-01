@@ -737,7 +737,7 @@ static void
 setmsize(int sz)
 {
 
-	if (msgvec != (int *)0)
+	if (msgvec != NULL)
 		free(msgvec);
 	if (sz < 1)
 		sz = 1; /* need at least one cell for terminating 0 */
