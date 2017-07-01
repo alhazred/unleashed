@@ -488,7 +488,7 @@ display_busy(char *path, boolean_t vm_running)
 		goto dun;
 	}
 
-	(void) memset(&mref, '\0', sizeof (struct mnttab));
+	(void) memset(&mref, 0, sizeof (struct mnttab));
 	mref.mnt_special = blk;
 	if (getmntany(fp, &mp, &mref) == 0) {
 		/* we found our entry -- we're done */

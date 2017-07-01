@@ -463,7 +463,7 @@ rl_log_control(char *bdev, int request)
 	if ((request != _FIOLOGENABLE) && (request != _FIOLOGDISABLE))
 		return (RL_FAIL);
 
-	(void) memset(&li, '\0', (size_t)sizeof (li));
+	(void) memset(&li, 0, (size_t)sizeof (li));
 	if ((alreadymounted = is_mounted(&li, bdev)) != RL_TRUE) {
 		/*
 		 * Device is not mounted. Need to mount it rw to allow
