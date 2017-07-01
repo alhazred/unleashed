@@ -2000,7 +2000,7 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 		login_exit(1);
 	}
 
-	(void) memset((void *)&utmpx, 0, sizeof (utmpx));
+	(void) memset(&utmpx, 0, sizeof (utmpx));
 	(void) time(&utmpx.ut_tv.tv_sec);
 	utmpx.ut_pid = getpid();
 

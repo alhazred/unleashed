@@ -389,7 +389,7 @@ notify_scf_of_hotplug(sysevent_t *ev)
 	 */
 	r_state = o_state = 0;
 	dev_name[0] = dev_model[0] = '\0';
-	(void) memset((void *)&pci_notify_dev_info, 0, sizeof (pci_notify_t));
+	(void) memset(&pci_notify_dev_info, 0, sizeof (pci_notify_t));
 
 	/* Get the current time when event picked up. */
 	sec = time(NULL);

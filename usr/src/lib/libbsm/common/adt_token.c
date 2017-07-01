@@ -445,7 +445,7 @@ getCharacteristics(struct auditpinfo_addr *info, pid_t *pid)
 	if (rc == -1) {
 		info->ap_auid = AU_NOAUDITID;
 		info->ap_asid = 0;
-		(void) memset((void *)&(info->ap_termid), 0,
+		(void) memset(&(info->ap_termid), 0,
 		    sizeof (au_tid_addr_t));
 		info->ap_termid.at_type = AU_IPv4;
 	}

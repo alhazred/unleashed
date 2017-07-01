@@ -914,7 +914,7 @@ static struct argnod *assign(Lex_t *lexp, register struct argnod *ap, int tdef)
 		struct argnod **settail;
 		ac = (struct comnod*)getnode(comnod);
 		settail= &ac->comset;
-		memset((void*)ac,0,sizeof(*ac));
+		memset(ac,0,sizeof(*ac));
 		ac->comline = sh_getlineno(lexp);
 		while(n==LPAREN)
 		{

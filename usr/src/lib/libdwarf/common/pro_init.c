@@ -79,7 +79,7 @@ dwarf_producer_init_b(Dwarf_Unsigned flags,
         DWARF_P_DBG_ERROR(dbg, DW_DLE_DBG_ALLOC,
                           (Dwarf_P_Debug) DW_DLV_BADADDR);
     }
-    memset((void *) dbg, 0, sizeof(struct Dwarf_P_Debug_s));
+    memset(dbg, 0, sizeof(struct Dwarf_P_Debug_s));
     /* For the time being */
     if (func == NULL) {
         DWARF_P_DBG_ERROR(dbg, DW_DLE_NO_CALLBACK_FUNC,
@@ -111,7 +111,7 @@ dwarf_producer_init(Dwarf_Unsigned flags,
         DWARF_P_DBG_ERROR(dbg, DW_DLE_DBG_ALLOC,
                           (Dwarf_P_Debug) DW_DLV_BADADDR);
     }
-    memset((void *) dbg, 0, sizeof(struct Dwarf_P_Debug_s));
+    memset(dbg, 0, sizeof(struct Dwarf_P_Debug_s));
     /* For the time being */
     if (func == NULL) {
         DWARF_P_DBG_ERROR(dbg, DW_DLE_NO_CALLBACK_FUNC,

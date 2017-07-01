@@ -123,7 +123,7 @@ print_kn(kstat_t *ksp)
 	if ((nullstr = calloc(1, NALEN)) == NULL) {
 		fail(0, "print_kn: out of memory\n");
 	}
-	(void) memset((void *)nullstr, '0', NALEN);
+	(void) memset(nullstr, '0', NALEN);
 
 	(void) printf("\nActive UNIX domain sockets\n");
 	(void) printf("%-8.8s %-10.10s %8.8s %8.8s  "

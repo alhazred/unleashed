@@ -150,7 +150,7 @@ i_match_onehost(const char *val, ilb_ip_addr_t *ip, addr_type_t *a_type)
 	struct addrinfo hints;
 	addr_type_t	at = numeric;
 
-	(void) memset((void *)&hints, 0, sizeof (hints));
+	(void) memset(&hints, 0, sizeof (hints));
 	hints.ai_flags |= AI_NUMERICHOST;
 
 	/*

@@ -91,7 +91,7 @@ mount_autofs(
 	    malloc(sizeof (autofs_args))) == NULL) {
 		goto free_mem;
 	}
-	(void) memset((void *) fnip, 0, sizeof (*fnip));
+	(void) memset(fnip, 0, sizeof (*fnip));
 
 	if ((fnip->addr.buf = (char *)malloc(MAXADDRLEN)) == NULL)
 		goto free_mem;

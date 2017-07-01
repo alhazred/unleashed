@@ -515,9 +515,9 @@ get_device_type_scsi(int32_t fd, struct scsi_inquiry *inq)
 	int32_t	ret_val;
 	char rq_data[RQ_LEN];
 
-	(void) memset((void *) inq, 0, sizeof (struct scsi_inquiry));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+	(void) memset(inq, 0, sizeof (struct scsi_inquiry));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 	cdb.scc_cmd = SCMD_INQUIRY;
 	FORMG0COUNT(&cdb, sizeof (struct scsi_inquiry));
 	ucmd.uscsi_cdb = (caddr_t)&cdb;
@@ -552,9 +552,9 @@ get_media_capacity(int32_t fd, uint32_t *capacity, uint32_t *blocksize)
 
 	debug(5, "get_media_capacity:\n");
 
-	(void) memset((void *)&data, 0, sizeof (data));
-	(void) memset((void *)&ucmd, 0, sizeof (ucmd));
-	(void) memset((void *)&cdb, 0, sizeof (cdb));
+	(void) memset(&data, 0, sizeof (data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 
 	/* retrieve size discriptor of inserted media */
 	cdb[0] = SCMD_READ_FORMAT_CAP;
@@ -626,10 +626,10 @@ scsi_zip_format(int32_t fd, uint_t flavor, uint_t mode)
 	 * IOMEGA JAZ 2GB device.
 	 */
 
-	(void) memset((void *) &inq, 0, sizeof (inq));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
-	(void) memset((void *) &rq_data, 0, sizeof (rq_data));
+	(void) memset(&inq, 0, sizeof (inq));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
+	(void) memset(&rq_data, 0, sizeof (rq_data));
 	cdb[0] = SCMD_INQUIRY;
 	cdb[4] = sizeof (inq);
 	ucmd.uscsi_cdb = (caddr_t)&cdb;
@@ -646,9 +646,9 @@ scsi_zip_format(int32_t fd, uint_t flavor, uint_t mode)
 		return (ucmd.uscsi_status);
 	}
 
-	(void) memset((void *) &rc_data, 0, sizeof (rc_data));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(&rc_data, 0, sizeof (rc_data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	cdb[0] = SCMD_READ_CAPACITY;
 	ucmd.uscsi_cdb = (caddr_t)&cdb;
 	ucmd.uscsi_cdblen = CDB_GROUP1;
@@ -665,9 +665,9 @@ scsi_zip_format(int32_t fd, uint_t flavor, uint_t mode)
 
 	capacity = ntohl(rc_data[0]);
 
-	(void) memset((void *)&data, 0, sizeof (data));
-	(void) memset((void *)&ucmd, 0, sizeof (ucmd));
-	(void) memset((void *)&cdb, 0, sizeof (cdb));
+	(void) memset(&data, 0, sizeof (data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	cdb[0] =  SCMD_FORMAT;
 	/*
 	 * Defect list sent by initiator is a complete list of defects.
@@ -772,9 +772,9 @@ scsi_ls120_format(uint_t fd, uint_t flavor, uint32_t capacity,
 
 	debug(5, "scsi_ls120_format:\n");
 
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
-	(void) memset((void *) &rq_data, 0, sizeof (rq_data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
+	(void) memset(&rq_data, 0, sizeof (rq_data));
 
 	cdb[0] = SCMD_FORMAT;
 	cdb[1] = (FMTDATA | 0x7);
@@ -873,10 +873,10 @@ scsi_format(int32_t fd, uint_t flavor, uint_t mode)
 	 * IOMEGA JAZ 2GB device.
 	 */
 
-	(void) memset((void *) &inq, 0, sizeof (inq));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
-	(void) memset((void *) &rq_data, 0, sizeof (rq_data));
+	(void) memset(&inq, 0, sizeof (inq));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
+	(void) memset(&rq_data, 0, sizeof (rq_data));
 	cdb[0] = SCMD_INQUIRY;
 	cdb[4] = sizeof (inq);
 	ucmd.uscsi_cdb = (caddr_t)&cdb;
@@ -893,9 +893,9 @@ scsi_format(int32_t fd, uint_t flavor, uint_t mode)
 		return (ucmd.uscsi_status);
 	}
 
-	(void) memset((void *) &rc_data, 0, sizeof (rc_data));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(&rc_data, 0, sizeof (rc_data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	cdb[0] = SCMD_READ_CAPACITY;
 	ucmd.uscsi_cdb = (caddr_t)&cdb;
 	ucmd.uscsi_cdblen = CDB_GROUP1;
@@ -912,9 +912,9 @@ scsi_format(int32_t fd, uint_t flavor, uint_t mode)
 
 	capacity = ntohl(rc_data[0]);
 
-	(void) memset((void *)&data, 0, sizeof (data));
-	(void) memset((void *)&ucmd, 0, sizeof (ucmd));
-	(void) memset((void *)&cdb, 0, sizeof (cdb));
+	(void) memset(&data, 0, sizeof (data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	cdb[0] =  SCMD_FORMAT;
 	/*
 	 * Defect list sent is an addition to the existing
@@ -983,9 +983,9 @@ scsi_media_status(int32_t fd)
 
 	debug(10, "SCSI MEDIA STATUS CALLED \n");
 
-	(void) memset((void *) &modeh, 0, sizeof (modeh));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+	(void) memset(&modeh, 0, sizeof (modeh));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 	cdb.scc_cmd = SCMD_MODE_SENSE;
 	cdb.cdb_opaque[2] = MODEPAGE_ALLPAGES;
 	FORMG0COUNT(&cdb, sizeof (modeh));
@@ -1034,8 +1034,8 @@ scsi_zip_media_status(int32_t fd)
 
 	debug(10, "Getting media status\n");
 
-	(void) memset((void *)&ucmd, 0, sizeof (ucmd));
-	(void) memset((void *)&cdb, 0, sizeof (cdb));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 
 	cdb[0] = IOMEGA_NONSENSE_CMD;
 	cdb[2] = CARTRIDGE_STATUS_PAGE;
@@ -1099,9 +1099,9 @@ scsi_reassign_block(int32_t fd, diskaddr_t block)
 
 	debug(5, "SCSI REASSIGN CALLED block = %lld\n", block);
 
-	(void) memset((void *) &data, 0, sizeof (data));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(&data, 0, sizeof (data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	cdb[0] = SCMD_REASSIGN_BLOCK;
 	data[3] = 4;
 	data[4] = ((block & 0xFF000000) >> 24);
@@ -1137,9 +1137,9 @@ get_mode_page(int32_t fd, uchar_t pc, uchar_t page_code,
 
 	debug(10, "MODE SENSE(6) - page_code = 0x%x\n", page_code);
 
-	(void) memset((void *) md_data, 0, sizeof (data_len));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(md_data, 0, sizeof (data_len));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	cdb[0] = SCMD_MODE_SENSE;
 	cdb[2] = (pc << 6) | page_code;
 	cdb[4] = data_len;
@@ -1180,10 +1180,10 @@ scsi_zip_write_protect(int32_t fd, smwp_state_t *wp)
 	 * ATAPI or SCSI device.
 	 */
 
-	(void) memset((void *) &inq, 0, sizeof (inq));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
-	(void) memset((void *) &rq_data, 0, sizeof (rq_data));
+	(void) memset(&inq, 0, sizeof (inq));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
+	(void) memset(&rq_data, 0, sizeof (rq_data));
 	cdb[0] = SCMD_INQUIRY;
 	cdb[4] = sizeof (inq);
 	ucmd.uscsi_cdb = (caddr_t)&cdb;
@@ -1232,9 +1232,9 @@ scsi_zip_write_protect(int32_t fd, smwp_state_t *wp)
 	}
 
 
-	(void) memset((void *)&ucmd, 0, sizeof (ucmd));
-	(void) memset((void *)&cdb, 0, sizeof (cdb));
-	(void) memset((void *) &rq_data, 0, sizeof (rq_data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
+	(void) memset(&rq_data, 0, sizeof (rq_data));
 	cdb[0] = IOMEGA_CATRIDGE_PROTECT;
 	cdb[1] |= new_mode;
 	if (wa_bit)
@@ -1580,9 +1580,9 @@ raw_read(door_data_t *door_dp, smedia_services_t *req)
 	int32_t			rc_data[2];
 	char			rq_data[RQ_LEN];
 
-	(void) memset((void *) &rc_data, 0, sizeof (rc_data));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+	(void) memset(&rc_data, 0, sizeof (rc_data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 
 	if (door_dp->dd_sector_size == 0) {
 		sector_size = get_sector_size(door_dp->dd_fd);
@@ -1600,7 +1600,7 @@ raw_read(door_data_t *door_dp, smedia_services_t *req)
 		return (-1);
 	}
 
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	num_sectors = (uint32_t)req->reqraw_read.nbytes/sector_size;
 
 	cdb.scc_cmd = SCMD_READ_G1;
@@ -1641,9 +1641,9 @@ raw_write(door_data_t *door_dp, smedia_services_t *req)
 	int32_t			rc_data[2];
 	char			rq_data[RQ_LEN];
 
-	(void) memset((void *) &rc_data, 0, sizeof (rc_data));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+	(void) memset(&rc_data, 0, sizeof (rc_data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 
 	if (door_dp->dd_sector_size == 0) {
 		sector_size = get_sector_size(door_dp->dd_fd);
@@ -1661,7 +1661,7 @@ raw_write(door_data_t *door_dp, smedia_services_t *req)
 		return (-1);
 	}
 
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(&cdb, 0, sizeof (cdb));
 	num_sectors = (uint32_t)req->reqraw_write.nbytes/sector_size;
 
 	cdb.scc_cmd = SCMD_WRITE_G1;
@@ -1872,8 +1872,8 @@ reassign_block(door_data_t *door_dp, smedia_services_t *req)
 	debug(5, "Reading the block %d\n",
 		(uint32_t)req->reqreassign_block.blockno);
 
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 
 	cdb.scc_cmd = SCMD_READ_G1;
 	FORMG1ADDR(&cdb, req->reqreassign_block.blockno);
@@ -1890,8 +1890,8 @@ reassign_block(door_data_t *door_dp, smedia_services_t *req)
 
 	debug(5, "Writing the block %d\n",
 		(uint32_t)req->reqreassign_block.blockno);
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (cdb));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 
 	cdb.scc_cmd = SCMD_WRITE_G1;
 	FORMG1ADDR(&cdb, req->reqreassign_block.blockno);
@@ -2127,9 +2127,9 @@ client_servproc(void *cookie, char *argp, size_t arg_size,
 
 	case SMEDIA_CNUM_GET_DEVICE_INFO:
 
-		(void) memset((void *) &inq, 0, sizeof (inq));
-		(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-		(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+		(void) memset(&inq, 0, sizeof (inq));
+		(void) memset(&ucmd, 0, sizeof (ucmd));
+		(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 		cdb.scc_cmd = SCMD_INQUIRY;
 		FORMG0COUNT(&cdb, sizeof (inq));
 		ucmd.uscsi_cdb = (caddr_t)&cdb;
@@ -2179,7 +2179,7 @@ client_servproc(void *cookie, char *argp, size_t arg_size,
 
 	case	SMEDIA_CNUM_GET_MEDIUM_PROPERTY:
 
-		(void) memset((void *)&rmsvc.retget_medium_property.smprop,
+		(void) memset(&rmsvc.retget_medium_property.smprop,
 			0, sizeof (smmedium_prop_t));
 
 		ret_val = ioctl(door_dp->dd_fd, DKIOCGMEDIAINFO, &media_info);
@@ -2356,9 +2356,9 @@ client_servproc(void *cookie, char *argp, size_t arg_size,
 
 	case SMEDIA_CNUM_CHECK_FORMAT_STATUS:
 
-		(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
-		(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-		(void) memset((void *) &data, 0, sizeof (data));
+		(void) memset(&cdb, 0, sizeof (union scsi_cdb));
+		(void) memset(&ucmd, 0, sizeof (ucmd));
+		(void) memset(&data, 0, sizeof (data));
 		cdb.scc_cmd = SCMD_REQUEST_SENSE;
 		cdb.g0_count0 = sizeof (data);
 		ucmd.uscsi_cdb = (caddr_t)&cdb;
@@ -3123,9 +3123,9 @@ scsi_floppy_format(int32_t fd, uint_t flavor, uint_t mode)
 			return (-1);
 		}
 
-	(void) memset((void *)&data, 0, sizeof (data));
-	(void) memset((void *)&ucmd, 0, sizeof (ucmd));
-	(void) memset((void *)&cdb, 0, sizeof (cdb));
+	(void) memset(&data, 0, sizeof (data));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (cdb));
 
 	/* retrieve size discriptor of inserted media */
 	cdb[0] = SCMD_FORMAT;	/* format */
@@ -3227,8 +3227,8 @@ scsi_floppy_media_status(int32_t fd)
 
 	debug(5, "SCSI MEDIA STATUS CALLED \n");
 
-	(void) memset((void *) &modeh, 0, sizeof (modeh));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
+	(void) memset(&modeh, 0, sizeof (modeh));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
 	(void) memset(cdb, 0, sizeof (cdb));
 	/*
 	 * issue 10 byte mode sense (0x5A)

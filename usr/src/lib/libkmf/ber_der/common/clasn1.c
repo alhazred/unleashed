@@ -1566,7 +1566,7 @@ DerDecodeName(KMF_DATA *encodedname, KMF_X509_NAME *name)
 	if (asn1 == NULL)
 		return (KMF_ERR_MEMORY);
 
-	(void) memset((void *)name, 0, sizeof (KMF_X509_NAME));
+	(void) memset(name, 0, sizeof (KMF_X509_NAME));
 
 	if ((ret = get_rdn(asn1, name)) != KMF_OK)
 		goto cleanup;

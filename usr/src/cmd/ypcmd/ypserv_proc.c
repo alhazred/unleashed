@@ -988,8 +988,8 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 	char *fun = "ypoldmatch";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
-	memset((void *) &resp, 0, sizeof (resp));
+	memset(&req, 0, sizeof (req));
+	memset(&resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,
@@ -1100,8 +1100,8 @@ ypoldfirst(SVCXPRT *transp)
 	char *fun = "ypoldfirst";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
-	memset((void *) &resp, 0, sizeof (resp));
+	memset(&req, 0, sizeof (req));
+	memset(&resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,
@@ -1164,8 +1164,8 @@ ypoldnext(SVCXPRT *transp)
 	char *fun = "ypoldnext";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
-	memset((void *) &resp, 0, sizeof (resp));
+	memset(&req, 0, sizeof (req));
+	memset(&resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,
@@ -1235,8 +1235,8 @@ ypoldpoll(SVCXPRT *transp)
 	char *fun = "ypoldpoll";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
-	memset((void *) &resp, 0, sizeof (resp));
+	memset(&req, 0, sizeof (req));
+	memset(&resp, 0, sizeof (resp));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,
@@ -1303,7 +1303,7 @@ ypoldpush(SVCXPRT *transp)
 	char *fun = "ypoldpush";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
+	memset(&req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,
@@ -1352,7 +1352,7 @@ ypoldpull(SVCXPRT *transp)
 	char *fun = "ypoldpull";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
+	memset(&req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,
@@ -1400,7 +1400,7 @@ ypoldget(SVCXPRT *transp)
 	char *fun = "ypoldget";
 	DBM *fdb;
 
-	memset((void *) &req, 0, sizeof (req));
+	memset(&req, 0, sizeof (req));
 
 	if (!svc_getargs(transp,
 	    (xdrproc_t)_xdr_yprequest,

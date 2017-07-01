@@ -158,7 +158,7 @@ int	wordexp(const char *string, wordexp_t *wdarg, register int flags)
 	else if(av = (char**)malloc(c*sizeof(char*)))
 	{
 		if(flags&WRDE_DOOFFS)
-			memset((void*)av,0,(wdarg->we_offs+1)*sizeof(char*));
+			memset(av,0,(wdarg->we_offs+1)*sizeof(char*));
 		else
 			av[0] = 0;
 	}

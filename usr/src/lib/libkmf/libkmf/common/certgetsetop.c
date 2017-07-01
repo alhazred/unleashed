@@ -146,7 +146,7 @@ kmf_get_cert_extn(const KMF_DATA *certdata,
 		goto end;
 	}
 
-	(void) memset((void *)extdata, 0, sizeof (KMF_X509_EXTENSION));
+	(void) memset(extdata, 0, sizeof (KMF_X509_EXTENSION));
 	for (i = 0; !found &&
 	    i < cert->certificate.extensions.numberOfExtensions;
 	    i++) {
@@ -525,7 +525,7 @@ get_pqinfo(BerElement *asn1)
 			ret = KMF_ERR_MEMORY;
 			goto end;
 		}
-		(void) memset((void *)pqinfo, 0,
+		(void) memset(pqinfo, 0,
 		    sizeof (KMF_X509EXT_POLICYQUALIFIERINFO));
 		/*
 		 * Read the PolicyQualifier OID
@@ -643,7 +643,7 @@ kmf_get_cert_policies(const KMF_DATA *certdata,
 	exdata.bv_val = (char *)extn.BERvalue.Data;
 	exdata.bv_len = extn.BERvalue.Length;
 
-	(void) memset((void *)extptr, 0, sizeof (KMF_X509EXT_CERT_POLICIES));
+	(void) memset(extptr, 0, sizeof (KMF_X509EXT_CERT_POLICIES));
 
 	if ((asn1 = kmfder_init(&exdata)) == NULL) {
 		ret = KMF_ERR_MEMORY;
@@ -684,7 +684,7 @@ kmf_get_cert_policies(const KMF_DATA *certdata,
 			ret = KMF_ERR_MEMORY;
 			goto end;
 		}
-		(void) memset((void *)pinfo, 0,
+		(void) memset(pinfo, 0,
 		    sizeof (KMF_X509EXT_POLICYINFO));
 		/*
 		 * Decode the PolicyInformation SEQUENCE
@@ -777,7 +777,7 @@ kmf_get_cert_auth_info_access(const KMF_DATA *certdata,
 	exdata.bv_val = (char *)extn.BERvalue.Data;
 	exdata.bv_len = extn.BERvalue.Length;
 
-	(void) memset((void *)aia, 0, sizeof (KMF_X509EXT_AUTHINFOACCESS));
+	(void) memset(aia, 0, sizeof (KMF_X509EXT_AUTHINFOACCESS));
 
 	if ((asn1 = kmfder_init(&exdata)) == NULL) {
 		ret = KMF_ERR_MEMORY;
@@ -814,7 +814,7 @@ kmf_get_cert_auth_info_access(const KMF_DATA *certdata,
 			goto end;
 		}
 
-		(void) memset((void *)access_info, 0,
+		(void) memset(access_info, 0,
 		    sizeof (KMF_X509EXT_ACCESSDESC));
 
 		/*
@@ -1077,7 +1077,7 @@ kmf_get_cert_crl_dist_pts(const KMF_DATA *certdata,
 		goto out;
 	}
 
-	(void) memset((void *)crl_dps, 0, sizeof (KMF_X509EXT_CRLDISTPOINTS));
+	(void) memset(crl_dps, 0, sizeof (KMF_X509EXT_CRLDISTPOINTS));
 
 	while ((tag = kmfber_next_element(asn1, &size, end)) ==
 	    BER_CONSTRUCTED_SEQUENCE) {
@@ -1098,7 +1098,7 @@ kmf_get_cert_crl_dist_pts(const KMF_DATA *certdata,
 			ret = KMF_ERR_MEMORY;
 			goto out;
 		}
-		(void) memset((void *)dp, 0, sizeof (KMF_CRL_DIST_POINT));
+		(void) memset(dp, 0, sizeof (KMF_CRL_DIST_POINT));
 
 		if (tag == 0xA0) { /* distributionPoint Name */
 			char *name_der;

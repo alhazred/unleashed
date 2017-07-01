@@ -110,7 +110,7 @@ add_base(const char *src, const char *dst)
 		nomem("base structure");
 
 	/* initialize the new base			*/
-	memset((void *) bp, 0, sizeof (struct base));
+	memset(bp, 0, sizeof (struct base));
 	bp->b_ident = ++num_bases;
 	bp->b_src_spec = strdup(src);
 	bp->b_dst_spec = strdup(dst);
@@ -233,7 +233,7 @@ makeit:
 		nomem("file structure");
 
 	/* initialize the new node	*/
-	memset((void *) new, 0, sizeof (struct file));
+	memset(new, 0, sizeof (struct file));
 	new->f_name = strdup(name);
 	new->f_flags = F_NEW;
 

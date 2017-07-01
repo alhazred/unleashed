@@ -230,7 +230,7 @@ ndmpd_scsi_reset_device_v2(ndmp_connection_t *connection, void *body)
 		reply.error = NDMP_DEV_NOT_OPEN_ERR;
 	} else {
 		reply.error = NDMP_NO_ERR;
-		(void) memset((void*)&cmd, 0, sizeof (cmd));
+		(void) memset(&cmd, 0, sizeof (cmd));
 		cmd.uscsi_flags |= USCSI_RESET;
 		if (ioctl(session->ns_scsi.sd_devid, USCSICMD, &cmd) < 0) {
 			NDMP_LOG(LOG_ERR, "USCSI reset failed: %m.");
@@ -294,7 +294,7 @@ ndmpd_scsi_execute_cdb_v2(ndmp_connection_t *connection, void *body)
 
 	if (session->ns_scsi.sd_is_open == -1 ||
 	    !session->ns_scsi.sd_valid_target_set) {
-		(void) memset((void *) &reply, 0, sizeof (reply));
+		(void) memset(&reply, 0, sizeof (reply));
 
 		NDMP_LOG(LOG_ERR, "SCSI device is not open.");
 		reply.error = NDMP_DEV_NOT_OPEN_ERR;

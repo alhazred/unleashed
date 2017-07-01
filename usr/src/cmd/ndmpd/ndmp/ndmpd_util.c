@@ -1199,9 +1199,9 @@ ndmp_execute_cdb(ndmpd_session_t *session, char *adapter_name, int sid, int lun,
 	struct open_list *olp;
 	char rq_buf[255];
 
-	(void) memset((void *)&cmd, 0, sizeof (cmd));
-	(void) memset((void *)&reply, 0, sizeof (reply));
-	(void) memset((void *)rq_buf, 0, sizeof (rq_buf));
+	(void) memset(&cmd, 0, sizeof (cmd));
+	(void) memset(&reply, 0, sizeof (reply));
+	(void) memset(rq_buf, 0, sizeof (rq_buf));
 
 	if (request->flags == NDMP_SCSI_DATA_IN) {
 		cmd.uscsi_flags = USCSI_READ | USCSI_RQENABLE;
@@ -1937,7 +1937,7 @@ ndmp_connect_sock_v3(ulong_t addr, ushort_t port)
 		return (-1);
 	}
 
-	(void) memset((void *) &sin, 0, sizeof (sin));
+	(void) memset(&sin, 0, sizeof (sin));
 	sin.sin_family = AF_INET;
 	sin.sin_addr.s_addr = htonl(addr);
 	sin.sin_port = htons(port);

@@ -403,7 +403,7 @@ nss_cfgcomp_get(char *name, int add)
 			lmutex_unlock(&nss_cfglock);
 			return ((nss_cfglist_t *)NULL);
 		}
-		(void) memset((void *)(next + nss_cfgcount), '\0',
+		(void) memset((next + nss_cfgcount), '\0',
 		    NSS_CFG_INCR * sizeof (nss_cfglist_t));
 		nss_cfgmax += NSS_CFG_INCR;
 		nss_cfg = next;

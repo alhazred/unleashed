@@ -141,7 +141,7 @@ res_init(void)
 		ifrp = ifc.ifc_req;
 		for (n = ifc.ifc_len / sizeof (struct ifreq); n > 0;
 								n--, ifrp++) {
-			(void) memset((void *) &ifr, 0, sizeof (ifr));
+			(void) memset(&ifr, 0, sizeof (ifr));
 			strncpy(ifr.ifr_name, ifrp->ifr_name,
 							sizeof (ifr.ifr_name));
 			if (ioctl(s, SIOCGIFFLAGS, (char *)&ifr) < 0) {

@@ -1084,8 +1084,7 @@ get_next_pcb(char *suffix)
 	/*
 	 * Don't know if realloc clears the new memory like calloc would.
 	 */
-	(void) memset((void *) & audit_pcbs[pcbsize-PCB_INC], 0,
-	    (size_t)zerosize);
+	(void) memset(&audit_pcbs[pcbsize-PCB_INC], 0, (size_t)zerosize);
 	pcb = &audit_pcbs[pcbsize-PCB_INC];	/* allocate the first new one */
 	proc_pcb(pcb, suffix, pcbsize - PCB_INC);
 	return (pcb);

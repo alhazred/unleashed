@@ -81,7 +81,7 @@ _m_get_media_info(rmedia_handle_t *handle, void *ip)
 		errno = EINVAL;
 		return (-1);
 	}
-	(void) memset((void *) medinfo, 0, sizeof (smmedium_prop_t));
+	(void) memset(medinfo, 0, sizeof (smmedium_prop_t));
 
 	reqget_medium_property.cnum = SMEDIA_CNUM_GET_MEDIUM_PROPERTY;
 	door_args.data_ptr = (char *)&reqget_medium_property;

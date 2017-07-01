@@ -46,7 +46,7 @@ undo_reloc(void *vrel, uchar_t *oaddr, uchar_t *iaddr, Reloc *reloc)
 	case R_AMD64_NONE:
 		break;
 	case R_AMD64_COPY:
-		(void) memset((void *)oaddr, 0, (size_t)reloc->r_size);
+		(void) memset(oaddr, 0, (size_t)reloc->r_size);
 		break;
 	case R_AMD64_JUMP_SLOT:
 		{

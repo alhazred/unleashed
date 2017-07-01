@@ -224,7 +224,7 @@ ndmpd_data_get_env_v2(ndmp_connection_t *connection, void *body)
 	ndmp_data_get_env_reply reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	if (session->ns_data.dd_operation != NDMP_DATA_OP_BACKUP) {
 		NDMP_LOG(LOG_ERR, "Backup operation not active.");
 		reply.error = NDMP_ILLEGAL_STATE_ERR;
@@ -347,7 +347,7 @@ ndmpd_data_get_state_v3(ndmp_connection_t *connection, void *body)
 	ndmp_data_get_state_reply_v3 reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	reply.error = NDMP_NO_ERR;
 	reply.invalid = NDMP_DATA_STATE_EST_BYTES_REMAIN_INVALID
@@ -398,7 +398,7 @@ ndmpd_data_start_backup_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_data_start_backup_request_v3 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_data.dd_state != NDMP_DATA_STATE_CONNECTED) {
 		NDMP_LOG(LOG_ERR,
@@ -488,7 +488,7 @@ ndmpd_data_start_recover_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_data_start_recover_request_v3 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_data.dd_state != NDMP_DATA_STATE_CONNECTED) {
 		NDMP_LOG(LOG_ERR, "Can't start new recover in current state.");
@@ -670,7 +670,7 @@ ndmpd_data_listen_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_data_listen_request_v3 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_data.dd_state != NDMP_DATA_STATE_IDLE) {
 		reply.error = NDMP_ILLEGAL_STATE_ERR;
@@ -749,7 +749,7 @@ ndmpd_data_connect_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_data_connect_request_v3 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (!ndmp_valid_v3addr_type(request->addr.addr_type)) {
 		reply.error = NDMP_ILLEGAL_ARGS_ERR;
@@ -830,7 +830,7 @@ ndmpd_data_get_env_v4(ndmp_connection_t *connection, void *body)
 	ndmp_data_get_env_reply reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_data.dd_state != NDMP_DATA_STATE_ACTIVE &&
 	    session->ns_data.dd_state != NDMP_DATA_STATE_HALTED) {
@@ -869,7 +869,7 @@ ndmpd_data_get_state_v4(ndmp_connection_t *connection, void *body)
 	ndmp_data_get_state_reply_v4 reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	reply.error = NDMP_NO_ERR;
 	reply.unsupported = NDMP_DATA_STATE_EST_BYTES_REMAIN_INVALID
@@ -922,7 +922,7 @@ ndmpd_data_connect_v4(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_data_connect_request_v4 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (!ndmp_valid_v3addr_type(request->addr.addr_type)) {
 		reply.error = NDMP_ILLEGAL_ARGS_ERR;
@@ -999,7 +999,7 @@ ndmpd_data_listen_v4(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_data_listen_request_v4 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_data.dd_state != NDMP_DATA_STATE_IDLE) {
 		reply.error = NDMP_ILLEGAL_STATE_ERR;
@@ -1374,7 +1374,7 @@ ndmpd_tar_start_backup_v3(ndmpd_session_t *session, char *bu_type,
 	ndmpd_module_params_t *params;
 	ndmp_data_start_backup_reply_v3 reply;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	err = ndmpd_save_env(session, env_val, env_len);
 	if (err != NDMP_NO_ERR)
@@ -1503,7 +1503,7 @@ ndmpd_tar_start_recover_v3(ndmpd_session_t *session,
 	ndmp_lbr_params_t *nlp;
 	int err;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	nlp = ndmp_get_nlp(session);
 	NDMP_FREE(nlp->nlp_params);
@@ -1673,11 +1673,11 @@ ndmpd_zfs_start_op(ndmpd_session_t *session, ndmp_pval *env_val,
 	session->ns_data.dd_abort = FALSE;
 
 	if (op == NDMP_DATA_OP_BACKUP) {
-		(void) memset((void*)&backup_reply, 0, sizeof (backup_reply));
+		(void) memset(&backup_reply, 0, sizeof (backup_reply));
 		backup_reply.error = NDMP_NO_ERR;
 		reply = &backup_reply;
 	} else {
-		(void) memset((void*)&recover_reply, 0, sizeof (recover_reply));
+		(void) memset(&recover_reply, 0, sizeof (recover_reply));
 		recover_reply.error = NDMP_NO_ERR;
 		reply = &recover_reply;
 	}

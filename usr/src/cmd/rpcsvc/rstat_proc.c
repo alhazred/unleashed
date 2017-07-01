@@ -851,7 +851,7 @@ init_disks(void)
 			disk->next = NULLDISK;
 		}
 		disk->ks = ksp;
-		memset((void *)&disk->kios, 0, sizeof (kstat_io_t));
+		memset(&disk->kios, 0, sizeof (kstat_io_t));
 		disk->kios.wlastupdate = disk->ks->ks_crtime;
 		disk->kios.rlastupdate = disk->ks->ks_crtime;
 

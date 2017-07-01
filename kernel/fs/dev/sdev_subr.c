@@ -929,7 +929,7 @@ sdev_nodedestroy(struct sdev_node *dv, uint_t flags)
 	cv_destroy(&dv->sdev_lookup_cv);
 
 	/* return node to initial state as per constructor */
-	(void) memset((void *)&dv->sdev_instance_data, 0,
+	(void) memset(&dv->sdev_instance_data, 0,
 	    sizeof (dv->sdev_instance_data));
 	vn_invalid(SDEVTOV(dv));
 	kmem_cache_free(sdev_node_cache, dv);

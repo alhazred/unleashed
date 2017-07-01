@@ -1814,7 +1814,7 @@ gstat(char *file, int argfl, struct ditem *myparent)
 	}
 
 	/* Clear the lbuf */
-	(void) memset((void *) rep, 0, sizeof (struct lbuf));
+	(void) memset(rep, 0, sizeof (struct lbuf));
 
 	/*
 	 * When noflist is set, none of the extra information about the dirent

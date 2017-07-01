@@ -430,7 +430,7 @@ derive_date(char *str, struct tm *tme)
 		return (-1);
 	}
 	/* unspecified values go to 0 */
-	(void) memset((void *) tme, 0, (size_t)sizeof (*tme));
+	(void) memset(tme, 0, (size_t)sizeof (*tme));
 	(void) strncpy(strs, str, 4);
 	strs[4] = '\0';
 	tme->tm_year = atoi(strs) - 1900;	/* get the year */

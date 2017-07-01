@@ -510,7 +510,7 @@ pass2check(struct inodesc *idesc)
 		 */
 		/* LINTED pointer cast alignment (entrysize is valid) */
 		dirp = (struct direct *)((char *)(dirp) + entrysize);
-		(void) memset((void *)dirp, 0, (size_t)reclen);
+		(void) memset(dirp, 0, (size_t)reclen);
 		dirp->d_reclen = reclen;
 
 		/*
@@ -613,7 +613,7 @@ chk1:
 			 */
 			/* LINTED pointer cast alignment (reclen is valid) */
 			dirp = (struct direct *)((char *)(dirp) + reclen);
-			(void) memset((void *)dirp, 0, (size_t)proto.d_reclen);
+			(void) memset(dirp, 0, (size_t)proto.d_reclen);
 			dirp->d_reclen = proto.d_reclen;
 		} else {
 			/*

@@ -166,7 +166,7 @@ create_global_raw(int *error)
 
 	*error = 0;
 	if (p = (nfsl_config_t *)malloc(sizeof (*p)))
-		(void) memset((void *)p, 0, sizeof (*p));
+		(void) memset(p, 0, sizeof (*p));
 	else
 		*error = ENOMEM;
 
@@ -264,7 +264,7 @@ getconfiglist(nfsl_config_t **listpp, boolean_t updating)
 		return (0);
 	}
 
-	(void) memset((void *) &flock, 0, sizeof (flock));
+	(void) memset(&flock, 0, sizeof (flock));
 	flock.l_type = F_RDLCK;
 	if (fcntl(fileno(fp), F_SETLKW, &flock) == -1) {
 		error = errno;
@@ -378,7 +378,7 @@ create_config(
 		*error = ENOMEM;
 		return (NULL);
 	}
-	(void) memset((void *)config, 0, sizeof (*config));
+	(void) memset(config, 0, sizeof (*config));
 
 	*error = update_config(config, tag, defaultdir, bufferpath, rpclogpath,
 			fhpath, logpath, logformat, complete, B_TRUE);

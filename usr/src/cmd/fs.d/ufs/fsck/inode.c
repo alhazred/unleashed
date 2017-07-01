@@ -1212,7 +1212,7 @@ allocino(fsck_ino_t request, int type)
 	 * incarnations.
 	 */
 	dp = ginode(ino);
-	(void) memset((void *)dp, 0, sizeof (struct dinode));
+	(void) memset(dp, 0, sizeof (struct dinode));
 	dp->di_db[0] = allocblk(1);
 	if (dp->di_db[0] == 0) {
 		statemap[ino] = USTATE;

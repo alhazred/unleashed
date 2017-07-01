@@ -823,12 +823,12 @@ remove_from_poll_list(int fd)
 			(void) memcpy((void *)&poll_array[i],
 			    (void *)&poll_array[i+1],
 			    num_to_copy * sizeof (struct pollfd));
-			(void) memset((void *)&poll_array[num_fds], 0,
+			(void) memset(&poll_array[num_fds], 0,
 			    sizeof (struct pollfd));
 			(void) memcpy((void *)&conn_polled[i],
 			    (void *)&conn_polled[i+1],
 			    num_to_copy * sizeof (struct conn_entry));
-			(void) memset((void *)&conn_polled[num_fds], 0,
+			(void) memset(&conn_polled[num_fds], 0,
 			    sizeof (struct conn_entry));
 			return;
 		}

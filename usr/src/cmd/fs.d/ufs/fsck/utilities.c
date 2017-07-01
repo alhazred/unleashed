@@ -606,7 +606,7 @@ allocblk(int wantedfrags)
 			size = wantedfrags * sblock.fs_fsize;
 			selected = block + leadfrag;
 			bp = getdatablk(selected, size);
-			(void) memset((void *)bp->b_un.b_buf, 0, size);
+			(void) memset(bp->b_un.b_buf, 0, size);
 			dirty(bp);
 			brelse(bp);
 			if (debug)
@@ -1097,7 +1097,7 @@ writable(caddr_t name)
 		(void) printf("can't open %s\n", VFSTAB);
 		return (1);
 	}
-	(void) memset((void *)&vfskey, 0, sizeof (vfskey));
+	(void) memset(&vfskey, 0, sizeof (vfskey));
 	vfsnull(&vfskey);
 	vfskey.vfs_special = unrawname(name);
 	vfskey.vfs_fstype = MNTTYPE_UFS;
@@ -1472,7 +1472,7 @@ is_errorlocked(caddr_t fs)
 	if (elock_combuf == NULL)
 		goto out;
 
-	(void) memset((void *)elock_combuf, 0, LOCKFS_MAXCOMMENTLEN);
+	(void) memset(elock_combuf, 0, LOCKFS_MAXCOMMENTLEN);
 
 	if (elock_mountp != NULL) {
 		free(elock_mountp);
@@ -1491,7 +1491,7 @@ is_errorlocked(caddr_t fs)
 		lfp = (struct lockfs *)malloc(sizeof (struct lockfs));
 		if (lfp == NULL)
 			goto out;
-		(void) memset((void *)lfp, 0, sizeof (struct lockfs));
+		(void) memset(lfp, 0, sizeof (struct lockfs));
 	}
 
 	lfp->lf_comlen = LOCKFS_MAXCOMMENTLEN;
@@ -2278,7 +2278,7 @@ init_inodesc(struct inodesc *idesc)
 	/*
 	 * Most fields should be zero, just hit the special cases.
 	 */
-	(void) memset((void *)idesc, 0, sizeof (struct inodesc));
+	(void) memset(idesc, 0, sizeof (struct inodesc));
 	idesc->id_fix = DONTKNOW;
 	idesc->id_lbn = -1;
 	idesc->id_truncto = -1;

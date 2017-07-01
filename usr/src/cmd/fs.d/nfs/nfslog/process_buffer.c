@@ -146,7 +146,7 @@ process_buffer(
 			 * Issue the LOG_FLUSH system call to flush the
 			 * buffer and process it.
 			 */
-			(void) memset((void *)&nfa, 0, sizeof (nfa));
+			(void) memset(&nfa, 0, sizeof (nfa));
 			nfa.version = NFSL_FLUSH_ARGS_VERS;
 			nfa.directive = NFSL_RENAME | NFSL_SYNC;
 			nfa.buff = bufferpath;

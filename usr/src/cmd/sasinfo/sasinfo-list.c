@@ -1998,7 +1998,7 @@ searchTargetPort(HBA_HANDLE handle, HBA_UINT32 portIndex,
 		    LocalSASAddress.wwn, (void *)sasattr->
 		    AttachedSASAddress.wwn, sizeof (HBA_WWN)) == 0) {
 			/* NO expander */
-			(void) memset((void *)expander.wwn, 0,
+			(void) memset(expander.wwn, 0,
 			    sizeof (HBA_WWN));
 			expanderValid = 1;
 		} else {
@@ -2118,7 +2118,7 @@ searchTargetPort(HBA_HANDLE handle, HBA_UINT32 portIndex,
 		    LocalSASAddress.wwn, (void *)sasattr->
 		    AttachedSASAddress.wwn, sizeof (HBA_WWN)) == 0) {
 			/* NO expander */
-			(void) memset((void *)newConfig->expanderSASAddr.wwn,
+			(void) memset(newConfig->expanderSASAddr.wwn,
 			    0, sizeof (HBA_WWN));
 		} else {
 			/* expander exist.  We should verify it. */

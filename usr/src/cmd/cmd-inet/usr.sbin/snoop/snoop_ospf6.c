@@ -269,7 +269,7 @@ ospf6_print_lsaprefix(int flags, struct lsa6_prefix *lpfx)
 			    "Unknown prefix len %d", lpfx->lsa6_plen);
 		}
 	}
-	memset((void *)&prefix, 0, sizeof (prefix));
+	memset(&prefix, 0, sizeof (prefix));
 	memcpy((void *)&prefix, lpfx->lsa6_pfx, k * 4);
 	(void) inet_ntop(AF_INET6, (char *)&prefix, prefixstr,
 	    INET6_ADDRSTRLEN);

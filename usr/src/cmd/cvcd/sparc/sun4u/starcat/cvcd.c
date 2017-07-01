@@ -267,7 +267,7 @@ main(int argc, char **argv)
 	 * the connection to the console redirection driver, and the network
 	 * connection.
 	 */
-	(void) memset((void *)pfds, 0, NUM_PFDS * sizeof (struct pollfd));
+	(void) memset(pfds, 0, NUM_PFDS * sizeof (struct pollfd));
 	for (i = 0; i < NUM_PFDS; i++) {
 		pfds[i].fd = -1;
 	}

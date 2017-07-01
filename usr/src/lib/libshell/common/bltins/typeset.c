@@ -87,7 +87,7 @@ int    b_readonly(int argc,char *argv[],void *extra)
 	char *command = argv[0];
 	struct tdata tdata;
 	NOT_USED(argc);
-	memset((void*)&tdata,0,sizeof(tdata));
+	memset(&tdata,0,sizeof(tdata));
 	tdata.sh = ((Shbltin_t*)extra)->shp;
 	tdata.aflag = '-';
 	while((flag = optget(argv,*command=='e'?sh_optexport:sh_optreadonly))) switch(flag)
@@ -137,7 +137,7 @@ int    b_alias(int argc,register char *argv[],void *extra)
 	register int n;
 	struct tdata tdata;
 	NOT_USED(argc);
-	memset((void*)&tdata,0,sizeof(tdata));
+	memset(&tdata,0,sizeof(tdata));
 	tdata.sh = ((Shbltin_t*)extra)->shp;
 	troot = tdata.sh->alias_tree;
 	if(*argv[0]=='h')
@@ -210,7 +210,7 @@ int    b_typeset(int argc,register char *argv[],void *extra)
 	Dt_t		*troot;
 	int		isfloat=0, shortint=0, sflag=0;
 	NOT_USED(argc);
-	memset((void*)&tdata,0,sizeof(tdata));
+	memset(&tdata,0,sizeof(tdata));
 	tdata.sh = ((Shbltin_t*)extra)->shp;
 	if(ntp)
 	{

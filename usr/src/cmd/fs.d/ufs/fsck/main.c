@@ -697,7 +697,7 @@ check_sanity(char *filename)
 	int is_block = 0;
 	int is_file = 0;
 
-	(void) memset((void *)found_magic, 0, sizeof (found_magic));
+	(void) memset(found_magic, 0, sizeof (found_magic));
 
 	if (stat64(filename, &stbd) < 0) {
 		(void) fprintf(stderr,

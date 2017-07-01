@@ -416,8 +416,8 @@ gettext("No such volume (or no media in specified device): %s\n"),
 	 * be added.  This function should fill in fd_vtoc, bpb, and
 	 * rdirsec with device dependent information.
 	 */
-	(void) memset((void *)&fd_vtoc, 0, sizeof (struct vtoc));
-	(void) memset((void *)&bpb, 0, sizeof (struct  bios_param_blk));
+	(void) memset(&fd_vtoc, 0, sizeof (struct vtoc));
+	(void) memset(&bpb, 0, sizeof (struct  bios_param_blk));
 
 	format_diskette(fd, real_name, &fd_vtoc, &bpb, &rdirsec);
 

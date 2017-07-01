@@ -436,7 +436,7 @@ static errmask_t add_rule(struct base *bp, int flags, const char *args)
 		nomem("rule struture");
 
 	/* initialize the new base			*/
-	memset((void *) rp, 0, sizeof (struct rule));
+	memset(rp, 0, sizeof (struct rule));
 	rp->r_flags = flags;
 	rp->r_file = strdup(args);
 

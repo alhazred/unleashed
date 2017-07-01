@@ -135,7 +135,7 @@ main(int argc, char *argv[])
 			    (cswp.codeset_type == LDTERM_CS_TYPE_PCCS &&
 			    (cswp.csinfo_num < LDTERM_CS_TYPE_PCCS_MIN_SUBCS ||
 			    cswp.csinfo_num > LDTERM_CS_TYPE_PCCS_MAX_SUBCS))) {
-				(void) memset((void *)&cswp, 0, sizeof (cswp));
+				(void) memset(&cswp, 0, sizeof (cswp));
 				invalid_ldterm_dat_file = 1;
 			} else {
 				(void) strcpy(cswp.locale_name, lc);

@@ -912,7 +912,7 @@ __ns_ldap_make_config(ns_ldap_result_t *result)
 			}
 			break;
 		default:
-			(void) memset((void *)&buffer, 0, sizeof (LineBuf));
+			(void) memset(&buffer, 0, sizeof (LineBuf));
 
 			/* Single or Multiple Value */
 			for (m = 0; m < attr->value_count; m++) {

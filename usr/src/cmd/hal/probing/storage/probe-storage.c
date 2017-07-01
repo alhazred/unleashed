@@ -224,9 +224,9 @@ get_disk_properties (int fd, LibHalChangeSet *cs)
 	char		*s;
 
 	/* INQUIRY */
-	(void) memset((void *) &inq, 0, sizeof (inq));
-	(void) memset((void *) &ucmd, 0, sizeof (ucmd));
-	(void) memset((void *) &cdb, 0, sizeof (union scsi_cdb));
+	(void) memset(&inq, 0, sizeof (inq));
+	(void) memset(&ucmd, 0, sizeof (ucmd));
+	(void) memset(&cdb, 0, sizeof (union scsi_cdb));
 	cdb.scc_cmd = SCMD_INQUIRY;
 	FORMG0COUNT(&cdb, sizeof (inq));
 	ucmd.uscsi_cdb = (caddr_t) & cdb;

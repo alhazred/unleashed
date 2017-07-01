@@ -1377,7 +1377,7 @@ int sh_reinit(char *argv[])
 	nv_scan(shp->var_tree,sh_envnolocal,(void*)0,NV_ARRAY,NV_ARRAY);
 	sh_offstate(SH_INIT);
 	memset(shp->st.trapcom,0,(shp->st.trapmax+1)*sizeof(char*));
-	memset((void*)&opt,0,sizeof(opt));
+	memset(&opt,0,sizeof(opt));
 	if(sh_isoption(SH_TRACKALL))
 		on_option(&opt,SH_TRACKALL);
 	if(sh_isoption(SH_EMACS))

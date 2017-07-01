@@ -4191,7 +4191,7 @@ check_dpm_file(int fd)
 	lseek(fd, 0, SEEK_SET);
 
 	/* First record */
-	memset((void*)&theRec, 0, sizeof (struct s3hdr));
+	memset(&theRec, 0, sizeof (struct s3hdr));
 	nread = read(fd, (void *)&theRec, 4);
 	if (nread != 4) {
 	    /* error reading first record/length */
@@ -4217,7 +4217,7 @@ check_dpm_file(int fd)
 	}
 
 	/* Second record */
-	memset((void*)&theRec, 0, sizeof (struct s3hdr));
+	memset(&theRec, 0, sizeof (struct s3hdr));
 	nread = read(fd, (void *)&theRec, 4);
 	if (nread != 4) {
 	    /* error reading second record/length */

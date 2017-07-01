@@ -1675,7 +1675,7 @@ void nv_putval(register Namval_t *np, const char *string, int flags)
 				if(!nv_isattr(np,NV_ZFILL) || nv_size(np)==0)
 					nv_setsize(np,dot);
 				else if(nv_isattr(np,NV_ZFILL) && (size>dot))
-					memset((void*)&cp[dot],0,size-dot);
+					memset(&cp[dot],0,size-dot);
 				return;
 			}
 			else

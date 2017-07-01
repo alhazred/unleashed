@@ -245,7 +245,7 @@ static void
 ngt_init(ngt)
 	struct netgrtab	*ngt;
 {
-	(void) memset((void *)ngt, 0, sizeof (*ngt));
+	(void) memset(ngt, 0, sizeof (*ngt));
 	ngt->expand_lastp = &ngt->expand_first;
 }
 

@@ -124,7 +124,7 @@ dump_node(Prom_node *node)
 	node->props = NULL;
 
 	/* get first prop by asking for null string */
-	(void) memset((void *) oppbuf.buf, 0, BUFSIZE);
+	(void) memset(oppbuf.buf, 0, BUFSIZE);
 
 	/* allocate space for the property */
 	if ((temp = malloc(sizeof (StaticProp))) == NULL) {
@@ -281,7 +281,7 @@ next(int id)
 	/* LINTED */
 	int *ip = (int *)(opp->oprom_array);
 
-	(void) memset((void *) oppbuf.buf, 0, BUFSIZE);
+	(void) memset(oppbuf.buf, 0, BUFSIZE);
 
 	opp->oprom_size = MAXVALSIZE;
 	*ip = id;
@@ -299,7 +299,7 @@ child(int id)
 	/* LINTED */
 	int *ip = (int *)(opp->oprom_array);
 
-	(void) memset((void *) oppbuf.buf, 0, BUFSIZE);
+	(void) memset(oppbuf.buf, 0, BUFSIZE);
 	opp->oprom_size = MAXVALSIZE;
 	*ip = id;
 	if (ioctl(prom_fd, OPROMCHILD, opp) < 0)
