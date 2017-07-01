@@ -148,7 +148,7 @@ new_field(int rows, int cols, int frow, int fcol, int nrow, int nbuf)
 /* int nrow;	 number of off screen rows		*/
 /* int nbuf;	 number of additional buffers		*/
 {
-	FIELD *f = (FIELD *) 0;
+	FIELD *f = NULL;
 	int i, size;
 
 	if (rows > 0 &&	cols > 0 && frow >= 0 && fcol >= 0 && nrow >= 0 &&
@@ -192,7 +192,7 @@ dup_field(FIELD *field, int frow, int fcol)
 /* int frow;	 first row relative to form origin	*/
 /* int fcol;	 first col relative to form origin	*/
 {
-	FIELD *f = (FIELD *) 0;
+	FIELD *f = NULL;
 	int size;
 
 	if (field && frow >= 0 && fcol >= 0 && Alloc(f, FIELD)) {
@@ -241,7 +241,7 @@ link_field(FIELD *field, int frow, int fcol)
 /* int frow;	 first row relative to form origin	*/
 /* int fcol;	 first col relative to form origin	*/
 {
-	FIELD *f = (FIELD *) 0;
+	FIELD *f = NULL;
 
 	if (field && frow >= 0 && fcol >= 0 && Alloc(f, FIELD)) {
 		*f = *_DEFAULT_FIELD;

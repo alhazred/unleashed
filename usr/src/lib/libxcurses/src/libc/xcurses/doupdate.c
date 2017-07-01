@@ -80,10 +80,10 @@ static jmp_buf breakout;
 
 #define LC(i,j) 	(lc[(i) * (LINES + 1) + (j)])
 
-static lcost *lc = (lcost *) 0;
-static unsigned long *nhash = (unsigned long *) 0;
-static t_action *del = (t_action *) 0;
-static t_action *ins_rep = (t_action *) 0;
+static lcost *lc = NULL;
+static unsigned long *nhash = NULL;
+static t_action *del = NULL;
+static t_action *ins_rep = NULL;
 
 static WINDOW *newscr;
 

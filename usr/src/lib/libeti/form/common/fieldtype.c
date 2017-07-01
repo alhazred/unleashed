@@ -81,7 +81,7 @@ FIELDTYPE * _DEFAULT_FIELDTYPE	= &default_fieldtype;
 FIELDTYPE *
 new_fieldtype(PTF_int fcheck, PTF_int ccheck)
 {
-	FIELDTYPE *t = (FIELDTYPE *) 0;
+	FIELDTYPE *t = NULL;
 
 	if ((fcheck || ccheck) && Alloc(t, FIELDTYPE)) {
 		*t = *_DEFAULT_FIELDTYPE;
@@ -95,7 +95,7 @@ new_fieldtype(PTF_int fcheck, PTF_int ccheck)
 FIELDTYPE *
 link_fieldtype(FIELDTYPE *left, FIELDTYPE *right)
 {
-	FIELDTYPE *t = (FIELDTYPE *) 0;
+	FIELDTYPE *t = NULL;
 
 	if ((left || right) && Alloc(t, FIELDTYPE)) {
 		*t = *_DEFAULT_FIELDTYPE;
@@ -174,7 +174,7 @@ _makearg(FIELDTYPE *t, va_list *ap, int *err)
 		return (p);
 
 	if (Status(t, LINKED)) {
-		LINK *n = (LINK *) 0;
+		LINK *n = NULL;
 
 		if (Alloc(n, LINK)) {
 			ArgL(n) = _makearg(TypeL(t), ap, err);
@@ -202,7 +202,7 @@ _copyarg(FIELDTYPE *t, char *arg, int *err)
 		return (p);
 
 	if (Status(t, LINKED)) {
-		LINK *n = (LINK *) 0;
+		LINK *n = NULL;
 
 		if (Alloc(n, LINK)) {
 			ArgL(n) = _copyarg(TypeL(t), ArgL(arg), err);

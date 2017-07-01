@@ -56,7 +56,7 @@
 static au_class_t flagstohex(char *);
 
 static char	au_event_fname[PATH_MAX] = AUDITEVENTFILE;
-static FILE *au_event_file = (FILE *)0;
+static FILE *au_event_file = NULL;
 static mutex_t mutex_eventfile = DEFAULTMUTEX;
 static mutex_t mutex_eventcache = DEFAULTMUTEX;
 /*

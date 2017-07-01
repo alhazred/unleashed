@@ -162,7 +162,7 @@ static int gen_testing = 0;
 static char *v_stmp = "n";
 
 int nmbchars = 0;	/* number of mb literals in mbchars */
-MBCLIT *mbchars = (MBCLIT *) 0; /* array of mb literals */
+MBCLIT *mbchars = NULL; /* array of mb literals */
 int nmbcharsz = 0; /* allocated space for mbchars */
 
 void

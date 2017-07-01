@@ -470,7 +470,7 @@ static void *fcip_softp = NULL;
  */
 
 static int fcip_num_instances = 0;
-static dev_info_t *fcip_module_dip = (dev_info_t *)0;
+static dev_info_t *fcip_module_dip = NULL;
 
 
 /*
