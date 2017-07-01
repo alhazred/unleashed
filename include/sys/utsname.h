@@ -110,11 +110,6 @@ extern char *uts_nodename(void);
 extern const struct utsname *utsname_get(bool alt);
 extern void utsname_set_machine(const char *machine);
 
-/*
- * Alternate UNAME values to use if uarea->u_flags & U_FLAG_ALTUNAME is set.
- */
-extern struct utsname utsname_alt;
-
 #endif	/* !(_KERNEL) */
 
 #ifdef	__cplusplus

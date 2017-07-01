@@ -32,7 +32,7 @@ struct utsname utsname = {
 	.machine = UTS_PLATFORM,
 };
 
-struct utsname utsname_alt = {
+static struct utsname utsname_alt = {
 	.sysname = "illumos",
 	.nodename = "",
 	.release = "0.9.71",
