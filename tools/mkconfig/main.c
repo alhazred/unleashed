@@ -269,12 +269,16 @@ static void map_str_makefile(FILE *f, const struct str *name, struct val *val)
 
 static void map_sym_header(FILE *f, const struct str *name, struct val *val)
 {
+	/* produce the symbol as well as a stringified version */
 	__map_str(f, "#define\t", str_cstr(name), " ", str_cstr(val->str), false);
+	__map_str(f, "#define\t", str_cstr(name), "_STR ", str_cstr(val->str), true);
 }
 
 static void map_sym_makefile(FILE *f, const struct str *name, struct val *val)
 {
+	/* produce the symbol as well as a stringified version */
 	__map_str(f, "", str_cstr(name), "=", str_cstr(val->str), false);
+	__map_str(f, "", str_cstr(name), "_STR=", str_cstr(val->str), true);
 }
 
 static void map_bool_header(FILE *f, const struct str *name,
