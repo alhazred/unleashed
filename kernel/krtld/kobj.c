@@ -120,6 +120,7 @@ static int kobj_boot_seek(int, off_t, off_t);
 static int kobj_boot_read(int, caddr_t, size_t);
 static int kobj_boot_fstat(int, struct bootstat *);
 static int kobj_boot_compinfo(int, struct compinfo *);
+extern int kobj_boot_mountroot(void);
 
 static Sym *lookup_one(struct module *, const char *);
 static void sym_insert(struct module *, char *, symid_t);
@@ -133,10 +134,6 @@ static int kobj_is_compressed(intptr_t);
 extern int kcopy(const void *, void *, size_t);
 extern int elf_mach_ok(Ehdr *);
 extern int alloc_gottable(struct module *, caddr_t *, caddr_t *);
-
-#if !defined(_OBP)
-extern int kobj_boot_mountroot(void);
-#endif
 
 static void tnf_unsplice_probes(uint_t, struct modctl *);
 extern tnf_probe_control_t *__tnf_probe_list_head;

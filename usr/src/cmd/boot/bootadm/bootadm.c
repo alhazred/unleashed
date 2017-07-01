@@ -109,17 +109,7 @@ typedef enum {
 #define	PARTNO_EFI	-2	/* EFI partition table found */
 
 #define	RAMDISK_SPECIAL		"/devices/ramdisk"
-#define	GRUBSIGN_DIR		"/boot/grub/bootsign"
-#define	GRUBSIGN_BACKUP		"/etc/bootsign"
-#define	GRUBSIGN_UFS_PREFIX	"rootfs"
-#define	GRUBSIGN_ZFS_PREFIX	"pool_"
-#define	GRUBSIGN_LU_PREFIX	"BE_"
-#define	UFS_SIGNATURE_LIST	"/var/run/grub_ufs_signatures"
 #define	ZFS_LEGACY_MNTPT	"/tmp/bootadm_mnt_zfs_legacy"
-
-/* BE defaults */
-#define	BE_DEFAULTS		"/etc/default/be"
-#define	BE_DFLT_BE_HAS_GRUB	"BE_HAS_GRUB="
 
 #define	BOOTADM_RDONLY_TEST	"BOOTADM_RDONLY_TEST"
 
@@ -128,31 +118,10 @@ typedef enum {
 #define	LOCK_FILE_PERMS		(S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)
 
 #define	CREATE_RAMDISK		"boot/solaris/bin/create_ramdisk"
-#define	CREATE_DISKMAP		"boot/solaris/bin/create_diskmap"
 #define	EXTRACT_BOOT_FILELIST	"boot/solaris/bin/extract_boot_filelist"
-#define	GRUBDISK_MAP		"/var/run/solaris_grubdisk.map"
 
-#define	GRUB_slice		"/etc/lu/GRUB_slice"
-#define	GRUB_root		"/etc/lu/GRUB_root"
 #define	GRUB_fdisk		"/etc/lu/GRUB_fdisk"
 #define	GRUB_fdisk_target	"/etc/lu/GRUB_fdisk_target"
-#define	FINDROOT_INSTALLGRUB	"/etc/lu/installgrub.findroot"
-#define	LULIB			"/usr/lib/lu/lulib"
-#define	LULIB_PROPAGATE_FILE	"lulib_propagate_file"
-#define	CKSUM			"/usr/bin/cksum"
-#define	LU_MENU_CKSUM		"/etc/lu/menu.cksum"
-#define	BOOTADM			"/sbin/bootadm"
-
-#define	INSTALLGRUB		"/sbin/installgrub"
-#define	STAGE1			"/boot/grub/stage1"
-#define	STAGE2			"/boot/grub/stage2"
-
-/*
- * Default file attributes
- */
-#define	DEFAULT_DEV_MODE	0644	/* default permissions */
-#define	DEFAULT_DEV_UID		0	/* user root */
-#define	DEFAULT_DEV_GID		3	/* group sys */
 
 /*
  * exec_cmd related
@@ -3256,11 +3225,11 @@ create_ramdisk(char *root)
 	}
 
 	/*
-	 * Else setup command args for create_ramdisk.ksh for the UFS archives
+	 * Else setup command args for create_ramdisk.ksh for the cpio archives
 	 * Note: we will not create hash here, CREATE_RAMDISK should create it.
 	 */
 	if (bam_verbose)
-		bam_print("mkisofs not found, creating UFS archive\n");
+		bam_print("mkisofs not found, creating cpio archive\n");
 
 	(void) snprintf(path, sizeof (path), "%s/%s", root, CREATE_RAMDISK);
 	if (stat(path, &sb) != 0) {
