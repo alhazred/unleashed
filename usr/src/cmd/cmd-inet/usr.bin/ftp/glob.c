@@ -262,7 +262,7 @@ matchdir(char *pattern)
 	 * BSD/SunOS open() system call maps a null pathname into
 	 * "." while System V does not.
 	 */
-	if (*gpath == (char)0) {
+	if (*gpath == '\0') {
 		dirp = opendir(".");
 	} else
 		dirp = opendir(gpath);

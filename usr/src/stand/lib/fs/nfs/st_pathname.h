@@ -52,7 +52,7 @@ struct st_pathname {
 #define	stpn_stripcomponent(PNP, COMP) stpn_getcomponent(PNP, COMP, PN_STRIP)
 
 #define	stpn_peekchar(PNP) 	(((PNP)->pn_pathlen != 0) ? \
-				    *((PNP)->pn_path) : (char)0)
+				    *((PNP)->pn_path) : '\0')
 #define	stpn_pathleft(PNP)	((PNP)->pn_pathlen)
 #define	stpn_getpath(PNP)		((PNP)->pn_path)
 #define	stpn_copy(PNP1, PNP2)	(stpn_set(PNP2, stpn_getpath(PNP1)))

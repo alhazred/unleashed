@@ -1907,7 +1907,7 @@ setup_simplepg_params(ns_ldap_cookie_t *cookie)
 	_freeControlList(&cookie->p_serverctrls);
 
 	rc = ldap_create_page_control(cookie->conn->ld, LISTPAGESIZE,
-	    cookie->ctrlCookie, (char)0, &pgctrl);
+	    cookie->ctrlCookie, '\0', &pgctrl);
 	if (rc != LDAP_SUCCESS) {
 		(void) ldap_get_option(cookie->conn->ld, LDAP_OPT_ERROR_NUMBER,
 		    &rc);

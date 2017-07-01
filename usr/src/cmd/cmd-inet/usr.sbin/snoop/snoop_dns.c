@@ -738,7 +738,7 @@ binary_string(char data)
 		*ptr++ = (data & 0x80) ? '1' : '0';
 		data = data << 1;
 	}
-	*ptr = (char)0;
+	*ptr = '\0';
 	return (bstring);
 }
 

@@ -133,7 +133,7 @@ ieee_value_to_sym(cell_t *cif)
 	 * If there are no arguments, fall through and return "not found".
 	 * Otherwise, try to translate the value to a symbol-name/offset.
 	 */
-	*name = (char)0;
+	*name = '\0';
 	offset = (u_int)-1;
 	if (nargs != 0) {
 		value = p1275_cell2uintptr(cif[3]); /* argument 0 */

@@ -49,7 +49,7 @@ prom_version_name(char *buf, int buflen)
 	int proplen;
 	char *unknown = "unknown";
 
-	*buf = *(buf + buflen - 1) = (char)0;	/* Force NULL termination */
+	*buf = *(buf + buflen - 1) = '\0';	/* Force NULL termination */
 
 	/*
 	 * On sun4u systems, the /openprom "version" property

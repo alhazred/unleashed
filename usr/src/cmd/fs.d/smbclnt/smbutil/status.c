@@ -105,8 +105,8 @@ cmd_status(int argc, char *argv[])
 		    gettext("nbns_enable=false, cannot get status\n"));
 		exit(1);
 	}
-	servername[0] = (char)0;
-	workgroupname[0] = (char)0;
+	servername[0] = '\0';
+	workgroupname[0] = '\0';
 	error = nbns_getnodestatus(ctx, &ina, servername, workgroupname);
 	if (error) {
 		smb_error(

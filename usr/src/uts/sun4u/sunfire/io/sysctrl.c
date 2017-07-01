@@ -3213,7 +3213,7 @@ sysctrl_abort_seq_handler(char *msg)
 	 * then disallow entry to the prom/debugger
 	 */
 	mutex_enter(&sslist_mutex);
-	buf[0] = (char)0;
+	buf[0] = '\0';
 	for (list = sys_list; list != NULL; list = list->next) {
 		if (!(*(list->status1) & SYS_NOT_SECURE)) {
 			if (secure++)

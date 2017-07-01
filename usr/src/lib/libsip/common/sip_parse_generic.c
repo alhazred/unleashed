@@ -1019,7 +1019,7 @@ sip_parse_hdr_parser5(_sip_header_t *hdr, sip_parsed_header_t **phdr,
 	for (;;) {
 		char		*tmp_cur;
 		boolean_t	quoted_name = B_FALSE;
-		char		quoted_char = (char)0;
+		char		quoted_char = '\0';
 		sip_param_t	*new_param;
 		boolean_t	pval_is_uri = B_FALSE;
 

@@ -2218,7 +2218,7 @@ ldterm_tabcols(ldtermstd_state_t *tp)
 		startp = bp->b_datap->db_base;
 		readp = tp->t_eucp_mp->b_rptr;
 		endp = tp->t_eucp;
-		errflg = (char)0;
+		errflg = '\0';
 		while (readp < endp) {
 			switch (*readp) {
 			case EUC_TWIDTH:	/* it's a tab */

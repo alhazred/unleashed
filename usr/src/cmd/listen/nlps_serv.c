@@ -568,7 +568,7 @@ int size, *lowp, *highp;
 
 	/* first, make sure bp is null terminated */
 
-	if ((*(bp + size - 1)) != (char)0)
+	if ((*(bp + size - 1)) != '\0')
 		return(0);
 
 	/* scanf returns number of "matched and assigned items"	*/

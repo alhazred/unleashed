@@ -328,7 +328,7 @@ checkdevinuse(char *cur_disk_path, diskaddr_t start, diskaddr_t end, int print,
 		name++;
 		for (; (*name <= '9') && (*name >= '0'); name++) {
 		}
-		*name = (char)0;
+		*name = '\0';
 	}
 
 

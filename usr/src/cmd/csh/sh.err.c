@@ -195,10 +195,10 @@ seterrc(char *cp, tchar d)
 	int	i;
 
 	i = wctomb(chbuf, wcd); /* chbuf holds d in multibyte representation. */
-	chbuf[(i>0)?i:0] = (char) 0;
+	chbuf[(i>0)?i:0] = '\0';
 	}
 #else
-	chbuf[0]=(char)(d&TRIM); chbuf[1]=(char)0;
+	chbuf[0]=(char)(d&TRIM); chbuf[1]='\0';
 #endif
 
 

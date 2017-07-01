@@ -37,7 +37,7 @@ prom_bootargs(void)
 	static char *name = "bootargs";
 	static char bootargs[OBP_MAXPATHLEN];
 
-	if (bootargs[0] != (char)0)
+	if (bootargs[0] != '\0')
 		return (bootargs);
 
 	node = prom_chosennode();
@@ -68,7 +68,7 @@ prom_bootpath(void)
 	pnode_t node;
 	static char *name = "bootpath";
 
-	if (bootpath[0] != (char)0)
+	if (bootpath[0] != '\0')
 		return (bootpath);
 
 	node = prom_chosennode();

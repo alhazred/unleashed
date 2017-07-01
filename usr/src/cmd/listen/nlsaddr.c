@@ -183,7 +183,7 @@ int len;
 		*charaddr++ = hex_digits[(i>>4) & 0xf];
 		*charaddr++ = hex_digits[i & 0xf];
 	}
-	*charaddr = (char)0;
+	*charaddr = '\0';
 }
 
 

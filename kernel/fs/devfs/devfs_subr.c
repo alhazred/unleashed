@@ -1080,7 +1080,7 @@ founddv:
 
 	mnm = strchr(nm, ':');
 	if (mnm)
-		*mnm = (char)0;
+		*mnm = '\0';
 
 	/*
 	 * Configure one nexus child, will call nexus's bus_ops

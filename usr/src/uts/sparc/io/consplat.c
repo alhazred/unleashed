@@ -154,7 +154,7 @@ plat_mousepath(void)
 	if (p != NULL) {
 		q = strchr(p, ':');
 		if (q != 0)
-			*q = (char)0;	/* Replace or append options */
+			*q = '\0';	/* Replace or append options */
 		(void) strcat(p, ":b");
 		mousepath = buf;
 		return (mousepath);

@@ -34,7 +34,7 @@ prom_devname_from_pathname(register char *pathname, register char *buffer)
 {
 	register char *p;
 
-	if ((pathname == (char *)0) || (*pathname == (char)0))
+	if ((pathname == (char *)0) || (*pathname == '\0'))
 		return (-1);
 
 	p = prom_strrchr(pathname, '/');
@@ -47,7 +47,7 @@ prom_devname_from_pathname(register char *pathname, register char *buffer)
 		if ((*p == '@') || (*p == ':'))
 			break;
 	}
-	*buffer = (char)0;
+	*buffer = '\0';
 
 	return (0);
 }

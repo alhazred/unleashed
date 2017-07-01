@@ -755,7 +755,7 @@ strings_common_token(adr_t *adr)
 	adrm_int32(adr, (int32_t *)&count, 1);
 	for (i = 1; i <= count; i++) {
 		adrm_char(adr, &c, 1);
-		while (c != (char)0)
+		while (c != '\0')
 			adrm_char(adr, &c, 1);
 	}
 	/* no dump option here, since we will have variable length fields */

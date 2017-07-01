@@ -9885,7 +9885,7 @@ daplka_dbglog(char *str)
 	if (length > remlen) {
 		if (remlen)
 			bcopy(str, daplka_dbgbuf + daplka_dbgnext, remlen);
-		daplka_dbgbuf[sizeof (daplka_dbgbuf) - 1] = (char)0;
+		daplka_dbgbuf[sizeof (daplka_dbgbuf) - 1] = '\0';
 		str += remlen;
 		length -= remlen;
 		daplka_dbgnext = 0;

@@ -1002,10 +1002,10 @@ bcpio_wr(ARCHD *arcn)
 		 * no file data for the caller to process
 		 */
 		arcn->pad = 0;
-		hd->h_filesize_1[0] = (char)0;
-		hd->h_filesize_1[1] = (char)0;
-		hd->h_filesize_2[0] = (char)0;
-		hd->h_filesize_2[1] = (char)0;
+		hd->h_filesize_1[0] = '\0';
+		hd->h_filesize_1[1] = '\0';
+		hd->h_filesize_2[0] = '\0';
+		hd->h_filesize_2[1] = '\0';
 		break;
 	}
 

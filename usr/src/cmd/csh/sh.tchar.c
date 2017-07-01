@@ -122,7 +122,7 @@ tstostr(char *to, tchar *from)
 		}
 		pmb += len;
 	}
-	*pmb = (char)0;
+	*pmb = '\0';
 	return (to);
 }
 
@@ -837,7 +837,7 @@ readlink_(tchar *path, tchar *buf, int bufsiz)
 	if (i < 0) {
 		return (-1);
 	}
-	chbuf[i] = (char)0;	/* readlink() doesn't put NULL. */
+	chbuf[i] = '\0';	/* readlink() doesn't put NULL. */
 	i = mbstotcs(buf, chbuf, bufsiz);
 	if (i < 0) {
 		return (-1);

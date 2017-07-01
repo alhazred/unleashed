@@ -836,9 +836,9 @@ writemsg(char *buf, size_t size,
 	/*
 	 * initialize variables.
 	 */
-	sevpstrbuf[0] = (char)0;
-	lcllbl[0] = (char)0;
-	lcltag[0] = (char)0;
+	sevpstrbuf[0] = '\0';
+	lcllbl[0] = '\0';
+	lcltag[0] = '\0';
 
 	/*
 	 * Figure out what fields are to be written (all are optional)

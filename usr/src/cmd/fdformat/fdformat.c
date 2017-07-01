@@ -416,8 +416,8 @@ gettext("No such volume (or no media in specified device): %s\n"),
 	 * be added.  This function should fill in fd_vtoc, bpb, and
 	 * rdirsec with device dependent information.
 	 */
-	(void) memset((void *)&fd_vtoc, (char)0, sizeof (struct vtoc));
-	(void) memset((void *)&bpb, (char)0, sizeof (struct  bios_param_blk));
+	(void) memset((void *)&fd_vtoc, 0, sizeof (struct vtoc));
+	(void) memset((void *)&bpb, 0, sizeof (struct  bios_param_blk));
 
 	format_diskette(fd, real_name, &fd_vtoc, &bpb, &rdirsec);
 
@@ -1534,7 +1534,7 @@ write_DOS_label(int fd, uchar_t *bootloadr, int bootlen, char *altbootname,
 
 	fat_bsize = 512 * bpb->b_fatsec[0];
 	fat_rdir = (uchar_t *)malloc(fat_bsize);
-	(void) memset(fat_rdir, (char)0, fat_bsize);
+	(void) memset(fat_rdir, 0, fat_bsize);
 
 	*fat_rdir = bpb->b_mediadescriptor;
 	*(fat_rdir + 1) = 0xFF;
@@ -1606,7 +1606,7 @@ gettext("%s: write of MS-DOS File Allocation Table failed, "),
 	} else {
 		i = 0;
 	}
-	(void) memset(fat_rdir, (char)0, 512);
+	(void) memset(fat_rdir, 0, 512);
 	for (; i < (int)rdirsec; ++i) {
 		if (write(fd, fat_rdir, 512) != 512) {
 			(void) fprintf(stderr,
@@ -1655,7 +1655,7 @@ write_NEC_DOS_label(int fd, char *doslabel)
 	};
 
 
-	(void) memset(bootsec_NEC, (char)0, 1024);
+	(void) memset(bootsec_NEC, 0, 1024);
 
 	(void) memcpy(&bootsec_NEC, &bios_param_NEC, 30);
 
@@ -1667,7 +1667,7 @@ write_NEC_DOS_label(int fd, char *doslabel)
 		perror(nullstring);
 		exit(3);
 	}
-	(void) memset(fat_rdir, (char)0, 1024);
+	(void) memset(fat_rdir, 0, 1024);
 	fatsec = bpb->b_fatsec[0];
 	for (i = 0; i < (int)bpb->b_nfat * (int)fatsec; ++i) {
 		if ((i % (int)fatsec) == 0) {
@@ -1735,7 +1735,7 @@ gettext("%s: write of NEC-DOS root directory failed, "), myname);
 			perror(nullstring);
 			exit(3);
 		}
-		(void) memset(fat_rdir, (char)0, 512);
+		(void) memset(fat_rdir, 0, 512);
 		i = 1;
 	} else {
 		i = 0;
