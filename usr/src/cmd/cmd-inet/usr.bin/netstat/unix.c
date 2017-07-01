@@ -101,8 +101,8 @@ print_kn(kstat_t *ksp)
 	int		i;
 	struct sockinfo	*psi;		/* ptr to current sockinfo	*/
 	char		*pas;		/* ptr to string-format addrs	*/
-	char		*conn_vp;
-	char		*local_vp;
+	const char	*conn_vp;
+	const char	*local_vp;
 
 	if (ksp->ks_ndata == 0) {
 		return;			/* no AF_UNIX sockets found	*/
