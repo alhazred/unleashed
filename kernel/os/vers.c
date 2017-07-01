@@ -1,59 +1,40 @@
 /*
- * CDDL HEADER START
+ * Copyright 2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License").  You may not use this file except in compliance
- * with the License.
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
  *
- * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
- * or http://www.opensolaris.org/os/licensing.
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at usr/src/OPENSOLARIS.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
- * CDDL HEADER END
- */
-/*
- * Copyright 2014 Garrett D'Amore <garrett@damore.org>
- *
- * Copyright (c) 2001 by Sun Microsystems, Inc.
- * All rights reserved.
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
 /*
- * Template utsname; appropriate values for UTS_SYSNAME, UTS_RELEASE,
- * UTS_VERSION and  UTS_PLATFORM must be passed in by the build process.
+ * Template utsname and alternate utsname.
  *
- * The build process can also override ALT_SYSNAME, ALT_VERSION
- * and ALT_RELEASE to change the fallback legacy uname.  We use these
- * alternate values for legacy compatibility, but it may have other uses
- * in the future.
+ * UTS_SYSNAME, UTS_RELEASE, UTS_VERSION and  UTS_PLATFORM must defined by
+ * the build system.
  */
 
 #include <sys/utsname.h>
 
 struct utsname utsname = {
-	UTS_SYSNAME, "", UTS_RELEASE, UTS_VERSION, UTS_PLATFORM
+	.sysname = UTS_SYSNAME,
+	.nodename = "",
+	.release = UTS_RELEASE,
+	.version = UTS_VERSION,
+	.machine = UTS_PLATFORM,
 };
 
-#ifndef	ALT_SYSNAME
-#define	ALT_SYSNAME	"illumos"
-#endif
-
-#ifndef	ALT_RELEASE
-#define	ALT_RELEASE	"0.9.71"
-#endif
-
-#ifndef	ALT_VERSION
-#define	ALT_VERSION	"alternate-uname"
-#endif
-
-const char *alt_sysname	= ALT_SYSNAME;
-const char *alt_version = ALT_VERSION;
-const char *alt_release	= ALT_RELEASE;
+struct utsname utsname_alt = {
+	.sysname = "illumos",
+	.nodename = "",
+	.release = "0.9.71",
+	.version = "alternate-uname",
+	.machine = UTS_PLATFORM,
+};

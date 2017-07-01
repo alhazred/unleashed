@@ -103,9 +103,7 @@ extern char *uts_nodename(void);
 /*
  * Alternate UNAME values to use if uarea->u_flags & U_FLAG_ALTUNAME is set.
  */
-extern	const char *alt_sysname;
-extern	const char *alt_version;
-extern	const char *alt_release;
+extern struct utsname utsname_alt;
 
 #endif	/* !(_KERNEL) */
 

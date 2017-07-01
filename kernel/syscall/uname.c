@@ -43,28 +43,35 @@
 int
 uname(struct utsname *buf)
 {
-	const char *sysname, *version, *release;
 	const char *name_to_use = uts_nodename();
+	const struct utsname *info;
 
-	if ((PTOU(curproc)->u_flags & U_FLAG_ALTUNAME) != 0) {
-		sysname = alt_sysname;
-		version = alt_version;
-		release = alt_release;
-	} else {
-		sysname = utsname.sysname;
-		version = utsname.version;
-		release = utsname.release;
-	}
-	if (copyout(sysname, buf->sysname, strlen(sysname)+1)) {
+	if ((PTOU(curproc)->u_flags & U_FLAG_ALTUNAME) != 0)
+		info = &utsname_alt;
+	else
+		info = &utsname;
+
+	/*
+	 * FIXME: Ideally we could just use either struct completely, but
+	 * unfortunately the structs aren't const and in fact change at
+	 * runtime.  To make matters worse, the changes are performed by
+	 * just overwritting the globals' contents so there is no easy way
+	 * to keep the two synchronized.
+	 *
+	 *  - nodename changes whenever the hostname changes
+	 *  - machine changes on i86pc boot
+	 */
+
+	if (copyout(info->sysname, buf->sysname, strlen(info->sysname) + 1)) {
 		return (set_errno(EFAULT));
 	}
 	if (copyout(name_to_use, buf->nodename, strlen(name_to_use)+1)) {
 		return (set_errno(EFAULT));
 	}
-	if (copyout(release, buf->release, strlen(release)+1)) {
+	if (copyout(info->release, buf->release, strlen(info->release) + 1)) {
 		return (set_errno(EFAULT));
 	}
-	if (copyout(version, buf->version, strlen(version)+1)) {
+	if (copyout(info->version, buf->version, strlen(info->version) + 1)) {
 		return (set_errno(EFAULT));
 	}
 	if (copyout(utsname.machine, buf->machine, strlen(utsname.machine)+1)) {
