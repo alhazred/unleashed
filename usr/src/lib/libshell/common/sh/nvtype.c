@@ -377,7 +377,7 @@ static Namfun_t *clone_type(Namval_t* np, Namval_t *mp, int flags, Namfun_t *fp)
 	if(pp->nref)
 	{
 		nrp = (struct Namref*)((char*)dp + size);
-		memset((void*)nrp,0,pp->nref*sizeof(struct Namref));
+		memset(nrp,0,pp->nref*sizeof(struct Namref));
 	}
 	memcpy((void*)dp,(void*)pp,size);
 #if 0

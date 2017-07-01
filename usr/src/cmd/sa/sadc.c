@@ -622,7 +622,7 @@ init_iodevs(void)
 		}
 		iodev->ksp = ksp;
 		iodev->ks = *ksp;
-		memset((void *)&iodev->kios, 0, sizeof (kstat_io_t));
+		memset(&iodev->kios, 0, sizeof (kstat_io_t));
 		iodev->kios.wlastupdate = iodev->ks.ks_crtime;
 		iodev->kios.rlastupdate = iodev->ks.ks_crtime;
 

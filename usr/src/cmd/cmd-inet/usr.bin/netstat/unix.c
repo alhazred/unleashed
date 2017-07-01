@@ -97,12 +97,12 @@ unixpr(kstat_ctl_t 	*kc)
 static void
 print_kn(kstat_t *ksp)
 {
+	char nullstr[NALEN + 1];
 	int		i;
 	struct sockinfo	*psi;		/* ptr to current sockinfo	*/
 	char		*pas;		/* ptr to string-format addrs	*/
-	char		*nullstr;	/* ptr to null string		*/
-	char		*conn_vp;
-	char		*local_vp;
+	const char	*conn_vp;
+	const char	*local_vp;
 
 	if (ksp->ks_ndata == 0) {
 		return;			/* no AF_UNIX sockets found	*/
@@ -120,10 +120,8 @@ print_kn(kstat_t *ksp)
 	pas = &((char *)psi)[sizeof (struct sockinfo)];
 
 	/* Create a string of NALEN "0"'s for NULL addresses.		*/
-	if ((nullstr = calloc(1, NALEN)) == NULL) {
-		fail(0, "print_kn: out of memory\n");
-	}
-	(void) memset((void *)nullstr, '0', NALEN);
+	memset(nullstr, '0', NALEN);
+	nullstr[NALEN] = '\0';
 
 	(void) printf("\nActive UNIX domain sockets\n");
 	(void) printf("%-8.8s %-10.10s %8.8s %8.8s  "

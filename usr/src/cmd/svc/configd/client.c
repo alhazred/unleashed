@@ -1812,7 +1812,7 @@ set_annotation(repcache_client_t *cp, struct rep_protocol_annotation *rpr)
 	rep_protocol_responseid_t rc = REP_PROTOCOL_FAIL_NO_RESOURCES;
 	au_asid_t sessionid;
 
-	(void) memset((void *)old_ptrs, 0, sizeof (old_ptrs));
+	(void) memset(old_ptrs, 0, sizeof (old_ptrs));
 
 	/* Copy rpr_operation and rpr_file if they are not empty strings. */
 	if (rpr->rpr_operation[0] != 0) {

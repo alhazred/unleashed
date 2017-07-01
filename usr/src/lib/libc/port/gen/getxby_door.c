@@ -288,8 +288,7 @@ try_again:
 			 */
 			(void) close(dp->doorfd);
 			dp->doorfd = -1;
-			(void) memset((void *)&dp->doori,
-			    '\0', sizeof (door_info_t));
+			(void) memset(&dp->doori, 0, sizeof (door_info_t));
 			lmutex_unlock(&dp->door_lock);
 			errno = ECONNREFUSED;
 			return (NSS_ERROR);
@@ -303,8 +302,7 @@ try_again:
 			 * someone else has clobbered fd
 			 */
 			dp->doorfd = -1;
-			(void) memset((void *)&dp->doori,
-			    '\0', sizeof (door_info_t));
+			(void) memset(&dp->doori, 0, sizeof (door_info_t));
 			if (dp == &nsc_door[1]) {	/* reset back door */
 				/* flush invalid db list */
 				_nsc_flush_private_db();
@@ -317,8 +315,7 @@ try_again:
 		if (my_door.di_attributes & DOOR_REVOKED) {
 			(void) close(dp->doorfd);	/* nscd exited .... */
 			dp->doorfd = -1;	/* try and restart connection */
-			(void) memset((void *)&dp->doori,
-			    '\0', sizeof (door_info_t));
+			(void) memset(&dp->doori, 0, sizeof (door_info_t));
 			if (dp == &nsc_door[1]) {	/* back door reset */
 				/* flush invalid db list */
 				_nsc_flush_private_db();
@@ -447,8 +444,8 @@ _nsc_trydoorcall_ext(void **dptr, size_t *ndata, size_t *adata)
 				 */
 				lmutex_lock(&backd->door_lock);
 				backd->doorfd = -1;
-				(void) memset((void *)&backd->doori,
-				    '\0', sizeof (door_info_t));
+				(void) memset(&backd->doori,
+				    0, sizeof (door_info_t));
 				/* flush now invalid db list */
 				_nsc_flush_private_db();
 				lmutex_unlock(&backd->door_lock);
@@ -513,8 +510,7 @@ _nsc_trydoorcall_ext(void **dptr, size_t *ndata, size_t *adata)
 		if (reset_frontd == 1) {
 			lmutex_lock(&frontd->door_lock);
 			frontd->doorfd = -1;
-			(void) memset((void *)&frontd->doori,
-			    '\0', sizeof (door_info_t));
+			(void) memset(&frontd->doori, 0, sizeof (door_info_t));
 			lmutex_unlock(&frontd->door_lock);
 			/* error out */
 			ret = NSS_ERROR;
@@ -554,8 +550,7 @@ _nsc_trydoorcall_ext(void **dptr, size_t *ndata, size_t *adata)
 			/* doorfd bad, or must not really be open */
 			(void) close(backd->doorfd);
 			backd->doorfd = -1;
-			(void) memset((void *)&backd->doori,
-			    '\0', sizeof (door_info_t));
+			(void) memset(&backd->doori, 0, sizeof (door_info_t));
 		}
 		(void) fcntl(backd->doorfd, F_SETFD, FD_CLOEXEC);
 		lmutex_unlock(&backd->door_lock);
@@ -672,7 +667,7 @@ _nsc_getdoorbuf(void **doorptr, size_t *bufsize)
 		}
 		/* freshly malloc'd door bufs are 0'd */
 		/* 0 header for now.  Zero entire buf(?) TDB */
-		(void) memset((void *)tsdbuf->buffer, 0,
+		(void) memset(tsdbuf->buffer, 0,
 		    (size_t)sizeof (nss_pheader_t));
 
 	}

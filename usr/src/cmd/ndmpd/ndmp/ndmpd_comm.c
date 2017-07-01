@@ -1171,10 +1171,10 @@ ndmp_process_messages(ndmp_connection_t *connection, boolean_t reply_expected)
 	NDMP_LOG(LOG_DEBUG, "reply_expected: %s",
 	    reply_expected == TRUE ? "TRUE" : "FALSE");
 
-	(void) memset((void *)&reply_msginfo, 0, sizeof (msg_info_t));
+	(void) memset(&reply_msginfo, 0, sizeof (msg_info_t));
 
 	do {
-		(void) memset((void *)&connection->conn_msginfo, 0,
+		(void) memset(&connection->conn_msginfo, 0,
 		    sizeof (msg_info_t));
 
 		if ((err = ndmp_recv_msg(connection)) != NDMP_NO_ERR) {

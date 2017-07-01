@@ -81,19 +81,19 @@ name_to_value(char *name, uintptr_t *value)
 	char *p;
 	int retval = 0;
 	uintptr_t symvalue = 0;
-	char c = (char)0;
+	char c = '\0';
 
 	/*
 	 * we take names of the form: "modname:symbol", "unix:symbol", "symbol"
 	 */
-	if ((p = strchr(name, ':')) != NULL && p[1] != (char)0) {
+	if ((p = strchr(name, ':')) != NULL && p[1] != '\0') {
 		symname = p + 1;
 		modname = name;
 		c = *p;
-		*p = (char)0;
+		*p = '\0';
 	}
 
-	if (*modname == (char)0) {
+	if (*modname == '\0') {
 		symvalue = kobj_getsymvalue(symname, 0);
 	} else  {
 		struct modctl *mp = &modules;
@@ -108,7 +108,7 @@ name_to_value(char *name, uintptr_t *value)
 
 	if (symvalue == 0)
 		retval = -1;
-	if (c != (char)0)		/* Restore incoming cstr */
+	if (c != '\0')		/* Restore incoming cstr */
 		*p = c;
 
 	*value = symvalue;
@@ -140,7 +140,7 @@ value_to_name(uintptr_t value, char *symbol)
 		}
 	} while ((modp = modp->mod_next) != &modules);
 
-	*symbol = (char)0;
+	*symbol = '\0';
 	return ((ulong_t)-1l);
 }
 

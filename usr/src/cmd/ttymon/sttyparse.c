@@ -418,7 +418,7 @@ get_ttymode(int fd, struct termio *termio, struct termios *termios,
 	if (ioctl(fd, I_STR, &cmd) == 0)
 		term |= CSIW;
 	else
-		(void) memset((void *)kcswp, 0, sizeof (ldterm_cs_data_user_t));
+		(void) memset(kcswp, 0, sizeof (ldterm_cs_data_user_t));
 #endif /* EUC */
 	return (term);
 }

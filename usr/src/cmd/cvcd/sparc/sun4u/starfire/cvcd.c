@@ -251,7 +251,7 @@ main(int argc, char **argv)
 		cvcd_err(LOG_ERR, "malloc:", strerror(errno));
 		exit(1);
 	}
-	(void) memset((void *)cvcd_pfd, 0, 3*sizeof (struct pollfd));
+	(void) memset(cvcd_pfd, 0, 3*sizeof (struct pollfd));
 	cvcd_pfd[0].fd = -1;
 	cvcd_pfd[1].fd = -1;
 	cvcd_pfd[2].fd = -1;
@@ -362,7 +362,7 @@ main(int argc, char **argv)
 	reqb->qlen = 1;
 	reqb->addr.len = sizeof (struct sockaddr_in);
 	sin = (struct sockaddr_in *)reqb->addr.buf;
-	(void) memset((void *)sin, 0, sizeof (struct sockaddr_in));
+	(void) memset(sin, 0, sizeof (struct sockaddr_in));
 	sin->sin_family = AF_INET;
 
 

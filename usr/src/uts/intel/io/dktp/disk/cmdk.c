@@ -1378,7 +1378,7 @@ cmdk_create_obj(dev_info_t *dip, struct cmdk *dkp)
 		cmn_err(CE_WARN, "cmdk_create_obj: queue property undefined");
 		return (DDI_FAILURE);
 	}
-	que_keyvalp[que_keylen] = (char)0;
+	que_keyvalp[que_keylen] = '\0';
 
 	if (strcmp(que_keyvalp, "qfifo") == 0) {
 		queobjp = (opaque_t)qfifo_create();
@@ -1398,7 +1398,7 @@ cmdk_create_obj(dev_info_t *dip, struct cmdk *dkp)
 		return (DDI_FAILURE);
 	}
 
-	flc_keyvalp[flc_keylen] = (char)0;
+	flc_keyvalp[flc_keylen] = '\0';
 
 	if (strcmp(flc_keyvalp, "dsngl") == 0) {
 		flcobjp = (opaque_t)dsngl_create();
@@ -1442,7 +1442,7 @@ cmdk_destroy_obj(dev_info_t *dip, struct cmdk *dkp)
 		cmn_err(CE_WARN, "cmdk_destroy_obj: queue property undefined");
 		return;
 	}
-	que_keyvalp[que_keylen] = (char)0;
+	que_keyvalp[que_keylen] = '\0';
 
 	flc_keylen = sizeof (flc_keyvalp);
 	if (ddi_prop_op(DDI_DEV_T_NONE, dip, PROP_LEN_AND_VAL_BUF,
@@ -1452,7 +1452,7 @@ cmdk_destroy_obj(dev_info_t *dip, struct cmdk *dkp)
 		    "cmdk_destroy_obj: flow-control property undefined");
 		return;
 	}
-	flc_keyvalp[flc_keylen] = (char)0;
+	flc_keyvalp[flc_keylen] = '\0';
 }
 /*ARGSUSED5*/
 static int

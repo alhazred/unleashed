@@ -696,7 +696,7 @@ nfsl_flush()
 {
 	struct nfsl_flush_args nfa;
 
-	memset((void *)&nfa, 0, sizeof (nfa));
+	memset(&nfa, 0, sizeof (nfa));
 	nfa.version = NFSL_FLUSH_ARGS_VERS;
 	nfa.directive = NFSL_ALL;	/* flush all asynchronously */
 

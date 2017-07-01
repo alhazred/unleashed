@@ -181,7 +181,7 @@ again:
 		exit(1);
 	}
 }
-if (unvis(&out, (char)0, &state, UNVIS_END) == UNVIS_VALID)
+if (unvis(&out, '\0', &state, UNVIS_END) == UNVIS_VALID)
 	(void) putchar(out);
 .Ed
 .Sh SEE ALSO

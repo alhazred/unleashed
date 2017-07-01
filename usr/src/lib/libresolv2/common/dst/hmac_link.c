@@ -245,7 +245,7 @@ dst_buffer_to_hmac_md5(DST_KEY *dkey, const u_char *key, const int keylen)
 		MD5Init(&ctx);
 		MD5Update(&ctx, key, keylen);
 		MD5Final(tk, &ctx);
-		memset((void *) &ctx, 0, sizeof(ctx));
+		memset(&ctx, 0, sizeof(ctx));
 		key = tk;
 		local_keylen = MD5_LEN;
 	}

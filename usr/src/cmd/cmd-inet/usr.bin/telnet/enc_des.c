@@ -136,7 +136,7 @@ cfb64_init(void)
 {
 	register struct _fb *fbp = &des_cfb;
 
-	(void) memset((void *)fbp, 0, sizeof (*fbp));
+	(void) memset(fbp, 0, sizeof (*fbp));
 	fbp->state[0] = des_cfb.state[1] = ENCR_STATE_FAILED;
 	fbp->fb_feed[0] = IAC;
 	fbp->fb_feed[1] = SB;

@@ -81,7 +81,7 @@ prom_sprintf(char *s, const char *fmt, ...)
 
 	va_start(adx, fmt);
 	(void) _doprint(fmt, adx, _sput, &bp);
-	*bp++ = (char)0;
+	*bp++ = '\0';
 	va_end(adx);
 	return (s);
 }
@@ -92,7 +92,7 @@ prom_vsprintf(char *s, const char *fmt, va_list adx)
 	char *bp = s;
 
 	(void) _doprint(fmt, adx, _sput, &bp);
-	*bp++ = (char)0;
+	*bp++ = '\0';
 	return (s);
 }
 

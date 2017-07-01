@@ -2940,7 +2940,7 @@ mb_t *pkt;
 		phdr.src_addr.in4 = fin->fin_src;
 		phdr.dst_addr.in4 = fin->fin_dst;
 #endif
-		phdr.zero = (char) 0;
+		phdr.zero = '\0';
 		phdr.proto = fin->fin_p;
 		phdr.len = htons((uint16_t)fin->fin_dlen);
 		sum = fr_buf_sum(&phdr, (unsigned int)sizeof (phdr));

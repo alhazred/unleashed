@@ -86,8 +86,8 @@ isns_rcv_pdu(
 	if (tmp_pdu_hdr == NULL) {
 		return (0);
 	}
-	(void) memset((void *)&tmp_pdu_hdr[0], 0, ISNSP_HEADER_SIZE);
-	(void) memset((void *)&iovec[0], 0, sizeof (iovec_t));
+	(void) memset(&tmp_pdu_hdr[0], 0, ISNSP_HEADER_SIZE);
+	(void) memset(&iovec[0], 0, sizeof (iovec_t));
 	iovec[0].iov_base = (void *)tmp_pdu_hdr;
 	iovec[0].iov_len = ISNSP_HEADER_SIZE;
 
@@ -134,7 +134,7 @@ isns_rcv_pdu(
 		free(tmp_pdu_hdr);
 		return (0);
 	}
-	(void) memset((void *)&iovec[0], 0, sizeof (iovec_t));
+	(void) memset(&iovec[0], 0, sizeof (iovec_t));
 	iovec[0].iov_base = (void *)tmp_pdu_data;
 	iovec[0].iov_len = payload_len;
 
@@ -409,7 +409,7 @@ pdu_add_tlv(
 	}
 
 	attr_tlv = (isns_tlv_t *)malloc(attr_tlv_len);
-	(void) memset((void *)attr_tlv, 0, attr_tlv_len);
+	(void) memset(attr_tlv, 0, attr_tlv_len);
 
 	attr_tlv->attr_id = htonl(attr_id);
 

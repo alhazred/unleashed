@@ -330,7 +330,7 @@ sysc_cmd_init(sysc_cfga_cmd_t *sc, char *outputstr, int force)
 	sc->outputstr = outputstr;
 	sc->errtype = SYSC_ERR_DEFAULT;
 
-	(void) memset((void *)outputstr, 0, sizeof (outputstr));
+	(void) memset(outputstr, 0, sizeof (outputstr));
 
 	cfga_str(SYSC_DEVSTR) = outputstr;
 }

@@ -814,7 +814,7 @@ Arith_t *arith_compile(const char *string,char **last,Sfdouble_t(*fun)(const cha
 	struct vars cur;
 	register Arith_t *ep;
 	int offset;
-	memset((void*)&cur,0,sizeof(cur));
+	memset(&cur,0,sizeof(cur));
 	cur.emode = emode;
      	cur.expr = cur.nextchr = string;
 	cur.convert = fun;

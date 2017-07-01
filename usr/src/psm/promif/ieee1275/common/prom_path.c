@@ -67,7 +67,7 @@ prom_pathname(char *pathname)
 	char *opathname = NULL;
 #endif /* PROM_32BIT_ADDRS */
 
-	if ((to == (char *)0) || (*to == (char)0))
+	if ((to == (char *)0) || (*to == '\0'))
 		return;
 
 #ifdef PROM_32BIT_ADDRS
@@ -93,7 +93,7 @@ prom_pathname(char *pathname)
 	promif_preprom();
 
 	(void) prom_strcpy(from, to);
-	*to = (char)0;
+	*to = '\0';
 
 	ci[0] = p1275_ptr2cell("canon");	/* Service name */
 	ci[1] = (cell_t)3;			/* #argument cells */
@@ -158,12 +158,12 @@ prom_pathname(char *pathname)
 void
 prom_strip_options(char *from, char *to)
 {
-	while (*from != (char)0)  {
+	while (*from != '\0')  {
 		if (*from == ':')  {
-			while ((*from != (char)0) && (*from != '/'))
+			while ((*from != '\0') && (*from != '/'))
 				++from;
 		} else
 			*to++ = *from++;
 	}
-	*to = (char)0;
+	*to = '\0';
 }

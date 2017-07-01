@@ -214,7 +214,7 @@ sas_util_list_hba(int hbaCount, char **hba_argv, cmdOptions_t *options)
 		return (err_cnt);
 	}
 
-	(void *) memset(&input, 0, sizeof (input));
+	memset(&input, 0, sizeof (input));
 	/* utilize wwnCount and wwn_argv for hbaCount and hba_argv */
 	input.wwnCount = hbaCount;
 	input.wwn_argv = hba_argv;
@@ -284,7 +284,7 @@ sas_util_list_hbaport(int wwnCount, char **wwn_argv, cmdOptions_t *options)
 		return (err_cnt);
 	}
 
-	(void *) memset(&input, 0, sizeof (input));
+	memset(&input, 0, sizeof (input));
 	input.wwnCount = wwnCount;
 	input.wwn_argv = wwn_argv;
 	input.hbaName = hbaName;
@@ -352,7 +352,7 @@ sas_util_list_expander(int wwnCount, char **wwn_argv, cmdOptions_t *options)
 		return (err_cnt);
 	}
 
-	(void *) memset(&input, 0, sizeof (input));
+	memset(&input, 0, sizeof (input));
 	input.wwnCount = wwnCount;
 	input.wwn_argv = wwn_argv;
 	input.pflag = processHBA_flags;
@@ -418,7 +418,7 @@ sas_util_list_targetport(int tpCount, char **tpArgv, cmdOptions_t *options)
 		return (err_cnt);
 	}
 
-	(void *) memset(&input, 0, sizeof (input));
+	memset(&input, 0, sizeof (input));
 	input.wwnCount = tpCount;
 	input.wwn_argv = tpArgv;
 	input.pflag = processHBA_flags;
@@ -599,7 +599,7 @@ processHBA(inputArg_t *input, processPortFunc processPort)
 		 * We need to support an adapter without hba port.
 		 * So get attributes anyway.
 		 */
-		(void *) memset(&attrs, 0, sizeof (attrs));
+		memset(&attrs, 0, sizeof (attrs));
 		status = SMHBA_GetAdapterAttributes(handle, &attrs);
 		while ((status == HBA_STATUS_ERROR_TRY_AGAIN ||
 		    status == HBA_STATUS_ERROR_BUSY) &&
@@ -678,8 +678,8 @@ processHBA(inputArg_t *input, processPortFunc processPort)
 				/* skip any non-sas hba port */
 				continue;
 			}
-			(void *) memset(&port, 0, sizeof (port));
-			(void *) memset(&sasattrs, 0, sizeof (sasattrs));
+			memset(&port, 0, sizeof (port));
+			memset(&sasattrs, 0, sizeof (sasattrs));
 			port.PortSpecificAttribute.SASPort = &sasattrs;
 			if ((status = SMHBA_GetAdapterPortAttributes(
 			    handle, portIndex, &port)) != HBA_STATUS_OK) {
@@ -726,8 +726,8 @@ processHBA(inputArg_t *input, processPortFunc processPort)
 			if (port_array[portIndex].name[0] == '\0') {
 				continue;
 			}
-			(void *) memset(&port, 0, sizeof (port));
-			(void *) memset(&sasattrs, 0, sizeof (sasattrs));
+			memset(&port, 0, sizeof (port));
+			memset(&sasattrs, 0, sizeof (sasattrs));
 			port.PortSpecificAttribute.SASPort = &sasattrs;
 
 			(void) SMHBA_GetAdapterPortAttributes(handle,
@@ -973,7 +973,7 @@ processHBAPortPhyInfo(HBA_HANDLE handle, HBA_UINT32 portIndex,
 
 
 	for (phyIndex = 0; phyIndex < numphys; phyIndex++) {
-		(void *) memset(&phyattrs, 0, sizeof (phyattrs));
+		memset(&phyattrs, 0, sizeof (phyattrs));
 		status = SMHBA_GetSASPhyAttributes(
 		    handle, portIndex, phyIndex, &phyattrs);
 		if (status != HBA_STATUS_OK) {
@@ -1020,8 +1020,8 @@ processHBAPortPhyStat(HBA_HANDLE handle, HBA_UINT32 portIndex, int phyIndex,
 		    "      Identifier:", phyattrs->PhyIdentifier);
 	}
 
-	(void *) memset(&phystat, 0, sizeof (phystat));
-	(void *) memset(&sasphystat, 0, sizeof (sasphystat));
+	memset(&phystat, 0, sizeof (phystat));
+	memset(&sasphystat, 0, sizeof (sasphystat));
 	phystat.SASPhyStatistics = &sasphystat;
 	status = SMHBA_GetPhyStatistics(handle, portIndex, phyIndex, &phystat);
 	if (status != HBA_STATUS_OK) {
@@ -1196,8 +1196,8 @@ static int handleExpander(HBA_HANDLE handle, char *adapterName,
 	int			disco_port_fail = 0;
 	boolean_t		firstPrinted = B_FALSE;
 
-	(void *) memset(&attr, 0, sizeof (attr));
-	(void *) memset(&sasport, 0, sizeof (sasport));
+	memset(&attr, 0, sizeof (attr));
+	memset(&sasport, 0, sizeof (sasport));
 	attr.PortSpecificAttribute.SASPort = &sasport;
 
 	/*
@@ -1524,7 +1524,7 @@ sas_util_list_logicalunit(int luCount, char **luArgv, cmdOptions_t *options)
 		return (err_cnt);
 	}
 
-	(void *) memset(&input, 0, sizeof (input));
+	memset(&input, 0, sizeof (input));
 	input.pflag = processHBA_flags;
 	input.wwnCount = luCount;
 	input.wwn_argv = luArgv;
@@ -1998,7 +1998,7 @@ searchTargetPort(HBA_HANDLE handle, HBA_UINT32 portIndex,
 		    LocalSASAddress.wwn, (void *)sasattr->
 		    AttachedSASAddress.wwn, sizeof (HBA_WWN)) == 0) {
 			/* NO expander */
-			(void) memset((void *)expander.wwn, 0,
+			(void) memset(expander.wwn, 0,
 			    sizeof (HBA_WWN));
 			expanderValid = 1;
 		} else {
@@ -2009,8 +2009,8 @@ searchTargetPort(HBA_HANDLE handle, HBA_UINT32 portIndex,
 				    (void *)sasattr->AttachedSASAddress.wwn,
 				    sizeof (HBA_WWN));
 
-				(void *) memset(&tgtattr, 0, sizeof (tgtattr));
-				(void *) memset(&tgtsasport, 0,
+				memset(&tgtattr, 0, sizeof (tgtattr));
+				memset(&tgtsasport, 0,
 				    sizeof (tgtsasport));
 				tgtattr.PortSpecificAttribute.SASPort
 				    = &tgtsasport;
@@ -2118,7 +2118,7 @@ searchTargetPort(HBA_HANDLE handle, HBA_UINT32 portIndex,
 		    LocalSASAddress.wwn, (void *)sasattr->
 		    AttachedSASAddress.wwn, sizeof (HBA_WWN)) == 0) {
 			/* NO expander */
-			(void) memset((void *)newConfig->expanderSASAddr.wwn,
+			(void) memset(newConfig->expanderSASAddr.wwn,
 			    0, sizeof (HBA_WWN));
 		} else {
 			/* expander exist.  We should verify it. */
@@ -2126,8 +2126,8 @@ searchTargetPort(HBA_HANDLE handle, HBA_UINT32 portIndex,
 			    (void *)sasattr->AttachedSASAddress.wwn,
 			    sizeof (HBA_WWN));
 
-			(void *) memset(&tgtattr, 0, sizeof (tgtattr));
-			(void *) memset(&tgtsasport, 0, sizeof (tgtsasport));
+			memset(&tgtattr, 0, sizeof (tgtattr));
+			memset(&tgtsasport, 0, sizeof (tgtsasport));
 			tgtattr.PortSpecificAttribute.SASPort = &tgtsasport;
 			status = SMHBA_GetPortAttributesByWWN(handle,
 			    sasattr->AttachedSASAddress, domainPortWWN,
@@ -2359,8 +2359,8 @@ searchDevice(PSMHBA_SCSIENTRY entryP,
 
 		responseSize = sizeof (struct scsi_inquiry);
 		senseSize = sizeof (struct scsi_extended_sense);
-		(void *) memset(&inq, 0, sizeof (struct scsi_inquiry));
-		(void *) memset(&sense, 0, sizeof (sense));
+		memset(&inq, 0, sizeof (struct scsi_inquiry));
+		memset(&sense, 0, sizeof (sense));
 		(void *) memcpy(&smhbaLUN, &entryP->PortLun.TargetLun,
 		    sizeof (smhbaLUN));
 
@@ -2724,7 +2724,7 @@ get_domainPort(HBA_HANDLE handle,
 	SMHBA_SAS_PHY phyattr;
 
 	sasport = port->PortSpecificAttribute.SASPort;
-	(void *) memset(pdomainPort, 0, sizeof (HBA_WWN));
+	memset(pdomainPort, 0, sizeof (HBA_WWN));
 	/*
 	 * Since iport can exist without any phys,
 	 * sasinfo hba-port -v has indicated numberOfPhys;

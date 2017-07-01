@@ -553,7 +553,7 @@ ndmpd_mover_get_state_v3(ndmp_connection_t *connection, void *body)
 	ndmp_mover_get_state_reply_v3 reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	reply.error = NDMP_NO_ERR;
 	reply.state = session->ns_mover.md_state;
@@ -606,7 +606,7 @@ ndmpd_mover_listen_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_mover_listen_request_v3 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	reply.error = NDMP_NO_ERR;
 
 	if (request->mode != NDMP_MOVER_MODE_READ &&
@@ -698,7 +698,7 @@ ndmpd_mover_continue_v3(ndmp_connection_t *connection, void *body)
 	ndmp_lbr_params_t *nlp = ndmp_get_nlp(session);
 	int ret;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_mover.md_state != NDMP_MOVER_STATE_PAUSED) {
 		NDMP_LOG(LOG_DEBUG, "Invalid state");
@@ -919,7 +919,7 @@ ndmpd_mover_read_v3(ndmp_connection_t *connection, void *body)
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 	int err;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_mover.md_state != NDMP_MOVER_STATE_ACTIVE ||
 	    session->ns_mover.md_mode != NDMP_MOVER_MODE_WRITE) {
@@ -1040,7 +1040,7 @@ ndmpd_mover_connect_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_mover_connect_request_v3*)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (request->mode != NDMP_MOVER_MODE_READ &&
 	    request->mode != NDMP_MOVER_MODE_WRITE) {
@@ -1134,7 +1134,7 @@ ndmpd_mover_get_state_v4(ndmp_connection_t *connection, void *body)
 	ndmp_mover_get_state_reply_v4 reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	reply.error = NDMP_NO_ERR;
 	reply.state = session->ns_mover.md_state;
@@ -1190,7 +1190,7 @@ ndmpd_mover_listen_v4(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_mover_listen_request_v4 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	reply.error = NDMP_NO_ERR;
 
 	if (request->mode != NDMP_MOVER_MODE_READ &&
@@ -1294,7 +1294,7 @@ ndmpd_mover_connect_v4(ndmp_connection_t *connection, void *body)
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
 	request = (ndmp_mover_connect_request_v4 *)body;
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (request->mode != NDMP_MOVER_MODE_READ &&
 	    request->mode != NDMP_MOVER_MODE_WRITE) {
@@ -1926,7 +1926,7 @@ ndmpd_mover_connect(ndmpd_session_t *session, ndmp_mover_mode mover_mode)
 
 	if (mover->addr_type == NDMP_ADDR_TCP) {
 		if (mover->ndmp_mover_addr_u.addr.ip_addr) {
-			(void) memset((void *) &sin, 0, sizeof (sin));
+			(void) memset(&sin, 0, sizeof (sin));
 			sin.sin_family = AF_INET;
 			sin.sin_addr.s_addr =
 			    htonl(mover->ndmp_mover_addr_u.addr.ip_addr);
@@ -3533,7 +3533,7 @@ mover_tape_flush_v3(ndmpd_session_t *session)
 	if (session->ns_mover.md_w_index == 0)
 		return (0);
 
-	(void) memset((void*)&session->ns_mover.md_buf[session->
+	(void) memset(&session->ns_mover.md_buf[session->
 	    ns_mover.md_w_index], 0,
 	    session->ns_mover.md_record_size - session->ns_mover.md_w_index);
 
@@ -3587,7 +3587,7 @@ ndmpd_local_write_v3(ndmpd_session_t *session, char *data, ulong_t length)
 		if (session->ns_mover.md_w_index == 0)
 			return (0);
 
-		(void) memset((void*)&session->ns_mover.md_buf[session->
+		(void) memset(&session->ns_mover.md_buf[session->
 		    ns_mover.md_w_index], 0, session->ns_mover.md_record_size -
 		    session->ns_mover.md_w_index);
 

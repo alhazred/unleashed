@@ -627,12 +627,12 @@ zsa_channel_is_active_in_rom(dev_info_t *dev, int zsminor)
 	 */
 
 	(void) ddi_pathname(dev, pathname);	/* device pathname */
-	default_pathname[0] = (char)0;	/* default pathname if channel 'a' */
+	default_pathname[0] = '\0';	/* default pathname if channel 'a' */
 	if ((zsminor & 1) == 0)
 		(void) strcpy(default_pathname, pathname);
 	minordata[0] = ':';
 	minordata[1] = (char)('a' + (zsminor & 1));
-	minordata[2] = (char)0;
+	minordata[2] = '\0';
 	(void) strcat(pathname, minordata);
 
 	stdioname = prom_stdinpath();

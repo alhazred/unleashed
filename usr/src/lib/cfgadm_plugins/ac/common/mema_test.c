@@ -155,8 +155,8 @@ memory_test_normal(
 	total_errors = 0;
 	cond = CFGA_COND_OK;
 
-	(void) memset((void *)patternbuf1, 0x55, PAGE_SIZE(handle));
-	(void) memset((void *)patternbuf2, 0xaa, PAGE_SIZE(handle));
+	(void) memset(patternbuf1, 0x55, PAGE_SIZE(handle));
+	(void) memset(patternbuf2, 0xaa, PAGE_SIZE(handle));
 
 	time_rep = time(NULL) + REPORT_SEC;
 
@@ -310,8 +310,8 @@ memory_test_quick(
 	total_errors = 0;
 	cond = CFGA_COND_OK;
 
-	(void) memset((void *)patternbuf1, 0x55, PAGE_SIZE(handle));
-	(void) memset((void *)patternbuf2, 0xaa, PAGE_SIZE(handle));
+	(void) memset(patternbuf1, 0x55, PAGE_SIZE(handle));
+	(void) memset(patternbuf2, 0xaa, PAGE_SIZE(handle));
 
 	time_rep = time(NULL) + REPORT_SEC;
 
@@ -442,8 +442,8 @@ memory_test_extended(
 	total_errors = 0;
 	cond = CFGA_COND_OK;
 
-	(void) memset((void *)patternbuf0, 0x55, PAGE_SIZE(handle));
-	(void) memset((void *)patternbuf1, 0xaa, PAGE_SIZE(handle));
+	(void) memset(patternbuf0, 0x55, PAGE_SIZE(handle));
+	(void) memset(patternbuf1, 0xaa, PAGE_SIZE(handle));
 
 	time_rep = time(NULL) + REPORT_SEC;
 

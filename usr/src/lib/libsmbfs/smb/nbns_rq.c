@@ -316,13 +316,13 @@ nbns_getnodestatus(struct nb_ctx *ctx,
 	    i <= nrcount; ++i, ++nrp) {
 		nrtype = nrp->ns_name[NB_NAMELEN-1];
 		/* Terminate the string: */
-		nrp->ns_name[NB_NAMELEN-1] = (char)0;
+		nrp->ns_name[NB_NAMELEN-1] = '\0';
 		/* Strip off trailing spaces */
 		for (cp = &nrp->ns_name[NB_NAMELEN-2];
 		    cp >= nrp->ns_name; --cp) {
 			if (*cp != (char)0x20)
 				break;
-			*cp = (char)0;
+			*cp = '\0';
 		}
 		nrp->ns_flags = ntohs(nrp->ns_flags);
 		DPRINT(" %s[%02x] Flags 0x%x",

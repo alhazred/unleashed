@@ -74,7 +74,7 @@ prom_read_disabled_list(mema_disabled_t *dp, int bd)
 	int prom_fd;
 	int ret;
 
-	(void) memset((void *)dp, 0, sizeof (*dp));
+	(void) memset(dp, 0, sizeof (*dp));
 	prom_fd = open(PROMDEV, O_RDONLY);
 	if (prom_fd == -1) {
 		return (0);
@@ -113,7 +113,7 @@ prom_read_one(
 	struct openpromio *opp = &oppbuf.opp;
 	int ret;
 
-	(void) memset((void *)&oppbuf, 0, sizeof (oppbuf));
+	(void) memset(&oppbuf, 0, sizeof (oppbuf));
 	(void) strncpy(opp->oprom_array, var, MAXNAMESIZE);
 	opp->oprom_size = MAXVALSIZE;
 	if (ioctl(prom_fd, OPROMGETOPT, opp) == -1) {
@@ -186,7 +186,7 @@ prom_write_one(
 	char *cp;
 
 	/* Setup output buffer. */
-	(void) memset((void *)&oppbuf, 0, sizeof (oppbuf));
+	(void) memset(&oppbuf, 0, sizeof (oppbuf));
 	(void) strncpy(opp->oprom_array, var, MAXNAMESIZE);
 	opp->oprom_size = strlen(var) + 1;
 	cp = opp->oprom_array + opp->oprom_size;
@@ -195,7 +195,7 @@ prom_write_one(
 	 * First read the existing list, filtering out 'bd' if 'bit'
 	 * not set.
 	 */
-	(void) memset((void *)&in_oppbuf, 0, sizeof (in_oppbuf));
+	(void) memset(&in_oppbuf, 0, sizeof (in_oppbuf));
 	(void) strncpy(in_opp->oprom_array, var, MAXNAMESIZE);
 	in_opp->oprom_size = MAXVALSIZE;
 	if (ioctl(prom_fd, OPROMGETOPT, in_opp) != -1 &&

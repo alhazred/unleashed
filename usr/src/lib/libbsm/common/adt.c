@@ -1318,11 +1318,11 @@ adt_setto_unaudited(adt_internal_state_t *state)
 		state->as_info.ai_asid = 0;
 		state->as_info.ai_auid = AU_NOAUDITID;
 
-		(void) memset((void *)&(state->as_info.ai_termid), 0,
+		(void) memset(&(state->as_info.ai_termid), 0,
 		    sizeof (au_tid_addr_t));
 		state->as_info.ai_termid.at_type = AU_IPv4;
 
-		(void) memset((void *)&(state->as_info.ai_mask), 0,
+		(void) memset(&(state->as_info.ai_mask), 0,
 		    sizeof (au_mask_t));
 		state->as_have_user_data = 0;
 	}

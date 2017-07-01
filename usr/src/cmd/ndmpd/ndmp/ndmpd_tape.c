@@ -547,7 +547,7 @@ ndmpd_tape_execute_cdb_v2(ndmp_connection_t *connection, void *body)
 	request = (ndmp_tape_execute_cdb_request *) body;
 
 	if (session->ns_tape.td_fd == -1) {
-		(void) memset((void *) &reply, 0, sizeof (reply));
+		(void) memset(&reply, 0, sizeof (reply));
 
 		NDMP_LOG(LOG_ERR, "Tape device is not open.");
 		reply.error = NDMP_DEV_NOT_OPEN_ERR;

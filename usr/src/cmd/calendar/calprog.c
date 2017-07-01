@@ -187,12 +187,12 @@ clean_line(char *s)
 {
 	char  *ns;
 
-	*(s + strlen(s) -1) = (char)0; /* delete newline */
+	*(s + strlen(s) -1) = '\0'; /* delete newline */
 	if (!strlen(s))
 		return (s);
 	ns = s + strlen(s) - 1; /* s->start; ns->end */
 	while ((ns != s) && (isspace(*ns))) {
-		*ns = (char)0;	/* delete terminating spaces */
+		*ns = '\0';	/* delete terminating spaces */
 		--ns;
 		}
 	while (*s)		/* delete beginning white spaces */

@@ -271,7 +271,7 @@ elfsign_begin(const char *filename, enum ES_ACTION action, ELFsign_t *essp)
 	if ((ess = malloc(sizeof (struct ELFsign_s))) == NULL) {
 		return (ELFSIGN_UNKNOWN);
 	}
-	(void) memset((void *)ess, 0, sizeof (struct ELFsign_s));
+	(void) memset(ess, 0, sizeof (struct ELFsign_s));
 
 	if (!elfcertlib_init(ess)) {
 		cryptodebug("elfsign_begin: failed initialization");

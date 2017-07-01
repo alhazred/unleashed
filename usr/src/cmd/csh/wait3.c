@@ -66,8 +66,8 @@ csh_wait3(int *status, int options, struct rusage *rp)
 	int error;
 
 	if (rp)
-		memset((void *)rp, 0, sizeof (struct rusage));
-	memset((void *)&info, 0, sizeof (siginfo_t));
+		memset(rp, 0, sizeof (struct rusage));
+	memset(&info, 0, sizeof (siginfo_t));
 	if (times(&before_tms) == -1)
 		return (-1);	/* errno is set by times() */
 

@@ -404,14 +404,14 @@ mema_err(ac_cfga_cmd_t *ac, int ret_errno, char **errstring, int cmd)
 static void
 mema_cmd_init(ac_cfga_cmd_t *ac, void *cmd, char *outputstr, int force)
 {
-	(void) memset((void *)ac, 0, sizeof (*ac));
+	(void) memset(ac, 0, sizeof (*ac));
 
 	ac->errtype = AC_ERR_DEFAULT;
 	ac->private = cmd;
 	ac->force = force;
 	ac->outputstr = outputstr;
 
-	(void) memset((void *)outputstr, 0, AC_OUTPUT_LEN);
+	(void) memset(outputstr, 0, AC_OUTPUT_LEN);
 }
 
 static int
@@ -784,7 +784,7 @@ cfga_private_func(
 		    (flags & CFGA_FLAG_FORCE));
 		cmd.arg = AC_MEMX_RELOCATE_ALL;
 		cmd.private = &rstat;
-		(void) memset((void *)&rstat, 0, sizeof (rstat));
+		(void) memset(&rstat, 0, sizeof (rstat));
 		dump_ioctl(AC_MEM_EXERCISE, &cmd);
 		ret = ioctl(fd, AC_MEM_EXERCISE, &cmd);
 		ret_errno = errno;
@@ -821,7 +821,7 @@ mtest_run(
 	ac_cfga_cmd_t cmd;
 	char outputstr[AC_OUTPUT_LEN];
 
-	(void) memset((void *)&test_start, 0, sizeof (test_start));
+	(void) memset(&test_start, 0, sizeof (test_start));
 	mema_cmd_init(&cmd, &test_start, outputstr, 0);
 	dump_ioctl(AC_MEM_TEST_START, &test_start);
 	ret = ioctl(fd, AC_MEM_TEST_START, &cmd);
@@ -854,7 +854,7 @@ mtest_run(
 			/*
 			 * Do a test stop and re-try the start.
 			 */
-			(void) memset((void *)&test_stop, 0,
+			(void) memset(&test_stop, 0,
 			    sizeof (test_stop));
 			test_stop.handle = test_start.handle;
 			test_stop.condition = SYSC_CFGA_COND_UNKNOWN;
@@ -869,7 +869,7 @@ mtest_run(
 			 * start.  The error return will be derived from the
 			 * result of start.
 			 */
-			(void) memset((void *)&test_start, 0,
+			(void) memset(&test_start, 0,
 			    sizeof (test_start));
 			mema_cmd_init(&cmd, &test_start, outputstr, 0);
 			dump_ioctl(AC_MEM_TEST_START, &test_start);
@@ -885,7 +885,7 @@ mtest_run(
 			return (CFGA_ERROR);
 		}
 	}
-	(void) memset((void *)&handle, 0, sizeof (handle));
+	(void) memset(&handle, 0, sizeof (handle));
 	handle.fd = fd;
 	handle.drvhandle = (void *)&test_start;
 	handle.msgp = msgp;
@@ -925,7 +925,7 @@ mtest_run(
 		break;
 	}
 
-	(void) memset((void *)&test_stop, 0, sizeof (test_stop));
+	(void) memset(&test_stop, 0, sizeof (test_stop));
 	test_stop.handle = test_start.handle;
 	switch (handle.condition) {
 	case CFGA_COND_OK:
@@ -974,7 +974,7 @@ mtest_write(
 	ac_cfga_cmd_t cmd;
 	char outputstr[AC_OUTPUT_LEN];
 
-	(void) memset((void *)&test_write, 0, sizeof (test_write));
+	(void) memset(&test_write, 0, sizeof (test_write));
 	fd = handle->fd;
 	test_write.handle = DRVHANDLE(handle);
 	test_write.page_buf = page_buf;
@@ -1011,8 +1011,8 @@ mtest_read(
 	ac_cfga_cmd_t cmd;
 	char outputstr[AC_OUTPUT_LEN];
 
-	(void) memset((void *)&test_read, 0, sizeof (test_read));
-	(void) memset((void *)&errbuf, 0, sizeof (errbuf));
+	(void) memset(&test_read, 0, sizeof (test_read));
+	(void) memset(&errbuf, 0, sizeof (errbuf));
 	fd = handle->fd;
 	test_read.handle = DRVHANDLE(handle);
 	test_read.page_buf = page_buf;

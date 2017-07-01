@@ -678,7 +678,7 @@ register audit_pcb_t *pcb;
 	 * Used by s5_IPC_token to set the ipc_type so
 	 * s5_IPC_perm_token can test.
 	 */
-	ipc_type = (char)0;
+	ipc_type = '\0';
 
 	if (flags & M_TYPE) {
 		checkflags |= M_TYPE;

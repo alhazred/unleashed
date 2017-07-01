@@ -304,7 +304,7 @@ status_okay(int id, char *buf, int buflen)
 		bufp = status_buf;
 		len = sizeof (status_buf);
 	}
-	*bufp = (char)0;
+	*bufp = '\0';
 
 	/*
 	 * Get the property into the buffer, to the extent of the buffer,
@@ -315,7 +315,7 @@ status_okay(int id, char *buf, int buflen)
 	 */
 	(void) prom_bounded_getprop((pnode_t)id, (caddr_t)status,
 	    (caddr_t)bufp, len);
-	*(bufp + len - 1) = (char)0;
+	*(bufp + len - 1) = '\0';
 
 	/*
 	 * If the value begins with the char string "fail",
@@ -1895,10 +1895,10 @@ get_boot_properties(void)
 		if (strcmp(name, "si-machine") == 0) {
 			(void) strncpy(utsname.machine, bop_staging_area,
 			    SYS_NMLN);
-			utsname.machine[SYS_NMLN - 1] = (char)0;
+			utsname.machine[SYS_NMLN - 1] = '\0';
 		} else if (strcmp(name, "si-hw-provider") == 0) {
 			(void) strncpy(hw_provider, bop_staging_area, SYS_NMLN);
-			hw_provider[SYS_NMLN - 1] = (char)0;
+			hw_provider[SYS_NMLN - 1] = '\0';
 		} else if (strcmp(name, "bios-boot-device") == 0) {
 			copy_boot_str(bop_staging_area, property_val, 50);
 			(void) ndi_prop_update_string(DDI_DEV_T_NONE, devi,

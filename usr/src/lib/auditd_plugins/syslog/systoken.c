@@ -1266,7 +1266,7 @@ skip_string(parse_context_t *ctx)
 
 	do {
 		adrm_char(&(ctx->adr), &c, 1);
-	} while (c != (char)0);
+	} while (c != '\0');
 }
 
 /*

@@ -150,7 +150,7 @@ void *nv_diropen(Namval_t *np,const char *name)
 	Namfun_t *nfp=0;
 	if(!dp)
 		return(0);
-	memset((void*)dp, 0, sizeof(*dp));
+	memset(dp, 0, sizeof(*dp));
 	if(name[len-1]=='*' || name[len-1]=='@')
 		len -= 1;
 	name = memcpy(dp->data,name,len);

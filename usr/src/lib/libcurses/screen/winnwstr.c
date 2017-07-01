@@ -72,7 +72,7 @@ winnwstr(WINDOW *win, wchar_t *wstr, int ncols)
 				continue;
 			*cp++ = wc;
 		}
-		*cp = (char)0;
+		*cp = '\0';
 
 		if (_curs_mbtowc(&wc, cbuf, CSMAX) <= 0)
 			break;

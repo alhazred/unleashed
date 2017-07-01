@@ -526,7 +526,7 @@ dapls_ib_qp_modify(IN DAPL_IA *ia_ptr, IN DAPL_EP *ep_ptr,
 		}
 	}
 
-	(void) memset((void *)&epm_args, 0, sizeof (epm_args));
+	(void) memset(&epm_args, 0, sizeof (epm_args));
 	/*
 	 * The following parameters are dealt by creating a new qp
 	 * in dapl_ep_modify.

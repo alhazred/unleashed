@@ -70,7 +70,7 @@ static struct sockaddr no_addr;
 #define	FD_CLR(n, p)	((p)->fds_bits[(n)/NFDBITS] &= ~(1 << ((n) % NFDBITS)))
 #define	FD_ISSET(n, p)	((p)->fds_bits[(n)/NFDBITS] & (1 << ((n) % NFDBITS)))
 #ifdef SYSV
-#define	FD_ZERO(p)	(void) memset((void *)(p), 0, sizeof (*(p)))
+#define	FD_ZERO(p)	(void) memset((p), 0, sizeof (*(p)))
 #else
 #define	FD_ZERO(p)	bzero((char *)(p), sizeof (*(p)))
 #endif

@@ -571,7 +571,7 @@ nss_pack_key2str(void *buffer, size_t length, nss_XbyY_args_t *arg,
 			len = ROUND_UP(len, sizeof (nssuint_t));
 			if (len >= length)
 				return (NSS_ERROR);
-			(void) memset((void *)buffer, 0, slop);
+			(void) memset(buffer, 0, slop);
 			uptr = (nssuint_t *)((void *)((char *)buffer + slop));
 			*uptr++ = (nssuint_t)pe->search_flag;
 			dptr = (char *)uptr;

@@ -245,7 +245,7 @@ opl_getled(
 	scfga_ret_t retval;
 	scfiocgetdiskled_t scf_disk;
 
-	(void) memset((void *)&scf_disk, 0, sizeof (scf_disk));
+	(void) memset(&scf_disk, 0, sizeof (scf_disk));
 
 	retval = opl_disk_led_control(apidp, errstring, msgp,
 				SCFIOCGETDISKLED, &scf_disk);
@@ -272,7 +272,7 @@ opl_setled(
 	scfga_ret_t retval;
 	scfiocgetdiskled_t scf_disk;
 
-	(void) memset((void *)&scf_disk, 0, sizeof (scf_disk));
+	(void) memset(&scf_disk, 0, sizeof (scf_disk));
 
 	if (strcmp(mode, "on") == 0) {
 		scf_disk.led = SCF_DISK_LED_ON;

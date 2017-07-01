@@ -403,7 +403,7 @@ main(int argc, char **argv)
 
 	if ((strcmp(sp.sp_pwdp, crypt(password, sp.sp_pwdp)) != 0)) {
 		/* clear password file entry */
-		(void) memset((void *)spbuf, 0, sizeof (spbuf));
+		(void) memset(spbuf, 0, sizeof (spbuf));
 		if (Sulog != NULL)
 			log(Sulog, nptr, 0);    /* log entry */
 		message(ERR, gettext("Sorry"));
@@ -415,7 +415,7 @@ main(int argc, char **argv)
 		exit(2);
 	}
 	/* clear password file entry */
-	(void) memset((void *)spbuf, 0, sizeof (spbuf));
+	(void) memset(spbuf, 0, sizeof (spbuf));
 ok:
 	/* update audit session in a non-pam environment */
 	update_audit(&pwd);

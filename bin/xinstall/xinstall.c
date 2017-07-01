@@ -217,8 +217,8 @@ install(char *from_name, char *to_name, u_long fset, u_int flags)
 	int devnull, from_fd, to_fd, serrno, files_match = 0;
 	char *p;
 
-	(void)memset((void *)&from_sb, 0, sizeof(from_sb));
-	(void)memset((void *)&to_sb, 0, sizeof(to_sb));
+	(void)memset(&from_sb, 0, sizeof(from_sb));
+	(void)memset(&to_sb, 0, sizeof(to_sb));
 
 	/* If try to install NULL file to a directory, fails. */
 	if (flags & DIRECTORY || strcmp(from_name, _PATH_DEVNULL)) {

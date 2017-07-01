@@ -49,7 +49,7 @@ undo_reloc(void *vrel, uchar_t *oaddr, uchar_t *iaddr, Reloc *reloc)
 	case R_SPARC_NONE:
 		break;
 	case R_SPARC_COPY:
-		(void) memset((void *)oaddr, 0, (size_t)reloc->r_size);
+		(void) memset(oaddr, 0, (size_t)reloc->r_size);
 		break;
 	case R_SPARC_JMP_SLOT:
 		/* LINTED */

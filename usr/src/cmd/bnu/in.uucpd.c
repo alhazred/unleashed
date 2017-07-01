@@ -129,7 +129,7 @@ char **argv;
 #endif
 
 #ifdef ATTSVR4
-	memset((void *)&myctladdr, 0, sizeof (myctladdr));
+	memset(&myctladdr, 0, sizeof (myctladdr));
 #else
 	bzero((char *)&myctladdr, sizeof (myctladdr));
 #endif
@@ -437,7 +437,7 @@ struct sockaddr_in *sin;
 		    sizeof (remotehost));
 #ifdef ATTSVR4
 	/* clear wtmpx entry */
-	(void) memset((void *)&ut, 0, sizeof (ut));
+	(void) memset(&ut, 0, sizeof (ut));
 
 	SCPYN(ut.ut_user, pw->pw_name);
 	ut.ut_id[0] = 'u';

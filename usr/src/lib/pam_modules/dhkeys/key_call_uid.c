@@ -237,7 +237,7 @@ key_secretkey_is_set_uid(uid_t uid, gid_t gid)
 {
 	struct key_netstres 	kres;
 
-	(void) memset((void*)&kres, 0, sizeof (kres));
+	(void) memset(&kres, 0, sizeof (kres));
 
 	if (my_key_call((rpcproc_t)KEY_NET_GET, xdr_void, NULL,
 			xdr_key_netstres, (char *)&kres, uid, gid) &&

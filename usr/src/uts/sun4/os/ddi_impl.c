@@ -1676,7 +1676,7 @@ status_okay(int id, char *buf, int buflen)
 		bufp = status_buf;
 		len = sizeof (status_buf);
 	}
-	*bufp = (char)0;
+	*bufp = '\0';
 
 	/*
 	 * Get the property into the buffer, to the extent of the buffer,
@@ -1687,7 +1687,7 @@ status_okay(int id, char *buf, int buflen)
 	 */
 	(void) prom_bounded_getprop((pnode_t)id, (caddr_t)status,
 	    (caddr_t)bufp, len);
-	*(bufp + len - 1) = (char)0;
+	*(bufp + len - 1) = '\0';
 
 	/*
 	 * If the value begins with the char string "fail",

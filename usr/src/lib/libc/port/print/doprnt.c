@@ -2282,7 +2282,7 @@ _mkarglst(char *fmt, stva_list args, stva_list arglst[], int prflag)
 	 * Assumptions:	Cannot use %*$... to specify variable position.
 	 */
 
-	(void) memset((void *) typelst, 0, sizeof (typelst));
+	(void) memset(typelst, 0, sizeof (typelst));
 	maxnum = -1;
 	curargno = 0;
 	while ((fmt = STRCHR(fmt, '%')) != 0) {

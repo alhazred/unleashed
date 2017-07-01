@@ -355,7 +355,7 @@ get_handle_from_fd(int32_t fd)
 		DPRINTF("Could not allocate memory for handle\n");
 		return (NULL);
 	}
-	(void) memset((void *) handle, 0, sizeof (rmedia_handle_t));
+	(void) memset(handle, 0, sizeof (rmedia_handle_t));
 	handle->sm_fd = -1;
 	handle->sm_door = -1;
 	handle->sm_death_door = -1;

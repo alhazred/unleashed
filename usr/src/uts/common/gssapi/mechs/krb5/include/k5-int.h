@@ -934,7 +934,7 @@ krb5_error_code krb5int_pbkdf2_hmac_sha1 (krb5_context,
    memset.  On the other hand, we probably want it for gcc.  */
 # define krb5int_zap_data(ptr, len) memset(ptr, 0, len)
 #else
-# define krb5int_zap_data(ptr, len) memset((void *)ptr, 0, len)
+# define krb5int_zap_data(ptr, len) memset(ptr, 0, len)
 # if defined(__GNUC__) && defined(__GLIBC__)
 /* GNU libc generates multiple bogus initialization warnings if we
    pass memset a volatile pointer.  The compiler should do well enough

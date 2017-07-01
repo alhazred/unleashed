@@ -115,7 +115,7 @@ prom_strrchr(register char *sp, register char c)
 {
 	register char *r;
 
-	for (r = (char *)0; *sp != (char)0; ++sp)
+	for (r = (char *)0; *sp != '\0'; ++sp)
 		if (*sp == c)
 			r = sp;
 	return (r);
@@ -129,7 +129,7 @@ prom_strcat(register char *s1, register char *s2)
 {
 	char *os1 = s1;
 
-	while ((*s1) != ((char)0))
+	while ((*s1) != '\0')
 		s1++;		/* find the end of string s1 */
 
 	while (*s1++ = *s2++)	/* Concatenate s2 */

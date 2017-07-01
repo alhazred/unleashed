@@ -111,7 +111,7 @@ ndmpd_config_get_host_info_v2(ndmp_connection_t *connection, void *body)
 	char hostidstr[16];
 	ulong_t hostid;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	(void) memset(buf, 0, sizeof (buf));
 	(void) gethostname(buf, sizeof (buf));
 
@@ -294,7 +294,7 @@ ndmpd_config_get_host_info_v3(ndmp_connection_t *connection, void *body)
 	char hostidstr[16];
 	ulong_t hostid;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	(void) memset(buf, 0, sizeof (buf));
 	(void) gethostname(buf, sizeof (buf));
 
@@ -345,7 +345,7 @@ ndmpd_config_get_connection_type_v3(ndmp_connection_t *connection,
 	ndmp_config_get_connection_type_reply_v3 reply;
 	ndmp_addr_type addr_types[2];
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	reply.error = NDMP_NO_ERR;
 
@@ -382,7 +382,7 @@ ndmpd_config_get_auth_attr_v3(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_config_get_auth_attr_request *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	reply.error = NDMP_NO_ERR;
 	reply.server_attr.auth_type = request->auth_type;
 
@@ -438,7 +438,7 @@ ndmpd_config_get_butype_info_v3(ndmp_connection_t *connection, void *body)
 	ulong_t zfs_attrs;
 	ndmp_pval *zfs_envp = zfs_envs;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	/*
 	 * Supported environment variables and their default values
@@ -539,7 +539,7 @@ ndmpd_config_get_fs_info_v3(ndmp_connection_t *connection, void *body)
 	struct statvfs64 stat_buf;
 	ndmp_pval *envp, *save;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	reply.error = NDMP_NO_ERR;
 
 	if ((fd = open(MNTTAB, O_RDONLY)) == -1) {
@@ -628,7 +628,7 @@ ndmpd_config_get_fs_info_v3(ndmp_connection_t *connection, void *body)
 			reply.error = NDMP_NO_MEM_ERR;
 			break;
 		}
-		(void) memset((void*)save, 0,
+		(void) memset(save, 0,
 		    V3_N_FS_ENVS * sizeof (ndmp_pval));
 
 		fsip->fs_env.fs_env_val = envp;
@@ -692,7 +692,7 @@ ndmpd_config_get_tape_info_v3(ndmp_connection_t *connection, void *body)
 	ndmp_pval *envp, *envp_save = NULL;
 	ndmp_pval *envp_head;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	max = sasd_dev_count();
 
 	tip_save = tip = ndmp_malloc(sizeof (ndmp_device_info_v3) * max);
@@ -796,7 +796,7 @@ ndmpd_config_get_scsi_info_v3(ndmp_connection_t *connection, void *body)
 	ndmp_pval *envp, *envp_save = NULL;
 	ndmp_pval *envp_head;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	max = sasd_dev_count();
 	sip_save = sip = ndmp_malloc(sizeof (ndmp_device_info_v3) * max);
 	dcp_save = dcp = ndmp_malloc(sizeof (ndmp_device_capability_v3) * max);
@@ -879,7 +879,7 @@ ndmpd_config_get_server_info_v3(ndmp_connection_t *connection, void *body)
 	char rev_number[10];
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 	reply.error = NDMP_NO_ERR;
 
 	if (connection->conn_authorized ||
@@ -945,7 +945,7 @@ ndmpd_config_get_butype_info_v4(ndmp_connection_t *connection, void *body)
 	ndmp_pval *zfs_envp = zfs_envs;
 
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	/*
 	 * Supported environment variables and their default values
@@ -1049,7 +1049,7 @@ ndmpd_config_get_ext_list_v4(ndmp_connection_t *connection, void *body)
 	ndmp_config_get_ext_list_reply_v4 reply;
 	ndmpd_session_t *session = ndmp_get_client_data(connection);
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (session->ns_set_ext_list) {
 		/*
@@ -1093,7 +1093,7 @@ ndmpd_config_set_ext_list_v4(ndmp_connection_t *connection, void *body)
 
 	request = (ndmp_config_set_ext_list_request_v4 *)body;
 
-	(void) memset((void*)&reply, 0, sizeof (reply));
+	(void) memset(&reply, 0, sizeof (reply));
 
 	if (!session->ns_get_ext_list) {
 		/*

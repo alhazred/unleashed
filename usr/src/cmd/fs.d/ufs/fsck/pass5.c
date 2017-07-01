@@ -64,7 +64,7 @@ pass5(void)
 	caddr_t buf = u.buf;
 	struct cg *newcg = &u.cg;
 
-	(void) memset((void *)buf, 0, sizeof (u.buf));
+	(void) memset(buf, 0, sizeof (u.buf));
 	newcg->cg_niblk = fs->fs_ipg;
 
 	if (fs->fs_postblformat != FS_DYNAMICPOSTBLFMT) {
@@ -106,7 +106,7 @@ pass5(void)
 
 	init_inodesc(&idesc);
 	idesc.id_type = ADDR;
-	(void) memset((void *)&cstotal, 0, sizeof (struct csum));
+	(void) memset(&cstotal, 0, sizeof (struct csum));
 	now = time(NULL);
 
 	/*
@@ -185,11 +185,11 @@ pass5(void)
 			newcg->cg_irotor = cg->cg_irotor;
 		else
 			newcg->cg_irotor = 0;
-		(void) memset((void *)&newcg->cg_frsum[0], 0,
+		(void) memset(&newcg->cg_frsum[0], 0,
 		    sizeof (newcg->cg_frsum));
-		(void) memset((void *)cg_inosused(newcg), 0, (size_t)mapsize);
+		(void) memset(cg_inosused(newcg), 0, (size_t)mapsize);
 		/* LINTED macro is int32-aligned per newcg->cg_btotoff above */
-		(void) memset((void *)&cg_blktot(newcg)[0], 0,
+		(void) memset(&cg_blktot(newcg)[0], 0,
 		    sumsize + mapsize);
 		j = fs->fs_ipg * c;
 		for (i = 0; i < fs->fs_ipg; j++, i++) {

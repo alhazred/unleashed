@@ -524,7 +524,7 @@ readdumptimes(FILE *fp, dumpdates_t *ddheadp)
 		return (-1);
 
 	recno = 1;
-	(void) memset((void *)ddheadp, 0, sizeof (*ddheadp));
+	(void) memset(ddheadp, 0, sizeof (*ddheadp));
 	for (; ; ) {
 		ddwalk = ndmp_malloc(sizeof (*ddwalk));
 		if (!ddwalk)
@@ -664,7 +664,7 @@ putdumptime(char *path, int level, time_t ddate)
 	rfp = fopen(fname, "r");
 	if (!rfp) {
 		NDMP_LOG(LOG_DEBUG, "Creating %s.", fname);
-		(void) memset((void *)&ddhead, 0, sizeof (ddhead));
+		(void) memset(&ddhead, 0, sizeof (ddhead));
 		if (initdumptimes(&ddhead) < 0) {
 			NDMP_LOG(LOG_ERR, "Could not initialize %s.",
 			    NDMP_DUMPDATES);
@@ -890,7 +890,7 @@ ndmpd_get_dumptime(char *path, int *level, time_t *ddate)
 	}
 	(void) mutex_unlock(&zlib_mtx);
 
-	(void) memset((void *)&ddhead, 0, sizeof (ddhead));
+	(void) memset(&ddhead, 0, sizeof (ddhead));
 	if (initdumptimes(&ddhead) < 0) {
 		dd_free(&ddhead);
 		return (-1);

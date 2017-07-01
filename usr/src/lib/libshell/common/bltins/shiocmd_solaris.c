@@ -377,7 +377,7 @@ static int mkclass(Namval_t *np, Shclass_t *sp)
 	struct dcclass *tcp = newof(NULL,struct dcclass,1,sp->nelem*sizeof(Namval_t*)); 
 	if(!tcp)
 		return(0);
-	memset((void*)(tcp+1),0,sp->nelem*sizeof(Namval_t*));
+	memset((tcp+1),0,sp->nelem*sizeof(Namval_t*));
 	tcp->fun.disc = &classdisc;
 	tcp->sclass = *sp;
 	np->nvalue = (char*)calloc(sp->dsize,1);

@@ -271,7 +271,7 @@ char *argv[];
 			free(bufinp);
 			exit(1);
 		}
-		*(bufinp + strlen(bufinp) -1) = (char)0; /* delete newline */
+		*(bufinp + strlen(bufinp) -1) = '\0'; /* delete newline */
 		num_msgs++;
 		(void)strccpy(bufworkp, bufinp);
 		nitems = strlen(bufworkp) + 1;

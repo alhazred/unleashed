@@ -448,16 +448,16 @@ int mflag;
 			return(-1);
 		}
 
-		*(bp + strlen(bp) -1) = (char)0; /* delete newline	*/
+		*(bp + strlen(bp) -1) = '\0'; /* delete newline	*/
 
 		if (strlen(bp) && (p = strchr(bp, DBFCOMMENT)))
-			*p = (char)0;		/* delete comments	*/
+			*p = '\0';		/* delete comments	*/
 		if (!strlen(bp))
 			continue;
 
 		p = bp + strlen(bp) - 1;	/* bp->start; p->end	*/
 		while ((p != bp) && (isspace(*p)))  {
-			*p = (char)0;		/* delete terminating spaces */
+			*p = '\0';		/* delete terminating spaces */
 			--p;
 		}
 

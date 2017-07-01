@@ -1742,7 +1742,7 @@ soft_unpack_object(soft_object_t *objp, uchar_t *buf)
 		if (cert == NULL) {
 			return (CKR_HOST_MEMORY);
 		}
-		(void) memset((void *)cert, 0, sizeof (certificate_obj_t));
+		(void) memset(cert, 0, sizeof (certificate_obj_t));
 
 		cert->certificate_type = certtype;
 		objp->object_class_u.certificate = cert;

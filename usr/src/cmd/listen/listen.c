@@ -736,7 +736,7 @@ char **ap;
 
 #if defined(CHARADDR) && defined(DEBUGMODE)
 		(void)memcpy(pbuf, req->addr.buf, req->addr.len);
-		pbuf[req->addr.len] = (char)0;
+		pbuf[req->addr.len] = '\0';
 		DEBUG((3,"bind: fd=%d, logical name=%c%s%c, len=%d",
 			fd, '\"',pbuf, '\"', req->addr.len));
 #endif	/* CHARADDR  && DEBUGMODE */
@@ -744,7 +744,7 @@ char **ap;
 
 #if defined(CHARADDR) && defined(DEBUGMODE)
 		(void)memcpy(pbuf, req->addr.buf, req->addr.len);
-		pbuf[req->addr.len] = (char)0;
+		pbuf[req->addr.len] = '\0';
 		DEBUG((3,"bind: fd=%d, address=%c%s%c, len=%d",
 			fd, '\"',pbuf, '\"', req->addr.len));
 #endif	/* CHARADDR  && DEBUGMODE */

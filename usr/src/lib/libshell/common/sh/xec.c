@@ -2067,7 +2067,7 @@ int sh_exec(register const Shnode_t *t, int flags)
 			if(!np->nvalue.rp)
 			{
 				np->nvalue.rp = new_of(struct Ufunction,shp->funload?sizeof(Dtlink_t):0);
-				memset((void*)np->nvalue.rp,0,sizeof(struct Ufunction));
+				memset(np->nvalue.rp,0,sizeof(struct Ufunction));
 			}
 			if(t->funct.functstak)
 			{
