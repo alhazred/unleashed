@@ -188,7 +188,7 @@ char *sh_substitute(const char *string,const char *oldsp,char *newsp)
 	const char *savesp = 0;
 	stakseek(0);
 	if(*sp==0)
-		return((char*)0);
+		return (NULL);
 	if(*(cp=oldsp) == 0)
 		goto found;
 #if SHOPT_MULTIBYTE
@@ -209,7 +209,7 @@ char *sh_substitute(const char *string,const char *oldsp,char *newsp)
 			stakputc(*sp++);
 		}
 		if(*sp == 0)
-			return((char*)0);
+			return (NULL);
 		savesp = sp;
 	        for(;*cp;cp++)
 		{
@@ -223,7 +223,7 @@ char *sh_substitute(const char *string,const char *oldsp,char *newsp)
 		cp = oldsp;
 	}
 	while(*sp);
-	return((char*)0);
+	return (NULL);
 
 found:
 	/* copy new */
@@ -304,7 +304,7 @@ char	*sh_fmtq(const char *string)
 	register int c, state;
 	int offset;
 	if(!cp)
-		return((char*)0);
+		return (NULL);
 	offset = staktell();
 #if SHOPT_MULTIBYTE
 	state = ((c= mbchar(cp))==0);

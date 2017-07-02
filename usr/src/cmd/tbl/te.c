@@ -40,7 +40,7 @@ while(len > 0)
 	while ((p = fgets(s,len,tabin))==0)
 		{
 		if (swapin()==0)
-			return((char *)0);
+			return (NULL);
 		}
 
 	while (*s) s++;

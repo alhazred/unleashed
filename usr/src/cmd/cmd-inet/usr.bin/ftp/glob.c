@@ -720,7 +720,7 @@ strspl(char *cp, char *dp)
 {
 	register char *ep = malloc((unsigned)(strlen(cp) + strlen(dp) + 1));
 
-	if (ep == (char *)0)
+	if (ep == NULL)
 		fatal("Out of memory");
 	(void) strcpy(ep, cp);
 	(void) strcat(ep, dp);

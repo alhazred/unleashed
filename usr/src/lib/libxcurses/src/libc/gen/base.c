@@ -65,7 +65,7 @@ basedir(char *arg, int type)
 {
 	register char *cp, *path;
 
-	if (arg==(char *)0 || *arg=='\0' ||
+	if (arg == NULL || *arg=='\0' ||
 		(*arg=='.' && (arg[1]=='\0' ||
 		(type==DIRNAME && arg[1]=='.' && arg[2]=='\0'))))
 

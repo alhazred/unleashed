@@ -809,7 +809,7 @@ hasnopasswd(struct passwd *pwent)
 	if (psp = getspnam(pwent->pw_name)) {
 
 		/* Look at the encrypted password in that entry */
-		if (psp->sp_pwdp == (char *)0 ||
+		if (psp->sp_pwdp == NULL ||
 		    *psp->sp_pwdp == '\0') {
 			nopwflag = TRUE;
 		} else {

@@ -312,11 +312,11 @@ proc_object(char *optarg)
 		return (-1);
 	}
 	flags |= M_OBJECT;
-	if ((obj_arg = strdup(optarg)) == (char *)0)
+	if ((obj_arg = strdup(optarg)) == NULL)
 		return (-1);
-	if ((obj_str = strtok(optarg, "=")) == (char *)0 ||
+	if ((obj_str = strtok(optarg, "=")) == NULL ||
 	    (oep = obj_lkup(obj_str)) == (obj_ent_t *)0 ||
-	    (obj_val = strtok((char *)0, "=")) == (char *)0) {
+	    (obj_val = strtok(NULL, "=")) == NULL) {
 		(void) sprintf(errbuf, gettext("invalid object arg (%s)"),
 		    obj_arg);
 		error_str = errbuf;

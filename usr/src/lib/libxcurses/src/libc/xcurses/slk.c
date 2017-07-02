@@ -193,7 +193,7 @@ slk_clear()
 	if (__m_screen->_slk._w != (WINDOW *) 0) {
 		if (werase(__m_screen->_slk._w) == OK)
 			code = wrefresh(__m_screen->_slk._w);
-	} else if (label_off != (char *) 0) {
+	} else if (label_off != NULL) {
 		(void) tputs(label_off, 1, __m_outc);
 		(void) fflush(__m_screen->_of);
 		code = OK;
@@ -213,7 +213,7 @@ slk_restore()
 
 	if (__m_screen->_slk._w != (WINDOW *) 0) {
 		for (i = 0; i < 8; ++i) {
-			if (__m_screen->_slk._labels[i] != (char *) 0) {
+			if (__m_screen->_slk._labels[i] != NULL) {
 				(void) slk_set(
 					i, __m_screen->_slk._labels[i],
 					__m_screen->_slk._justify[i]
@@ -222,7 +222,7 @@ slk_restore()
 		}
 
 		code = slk_refresh();
-	} else if (label_on != (char *) 0) {
+	} else if (label_on != NULL) {
 		(void) tputs(label_on, 1, __m_outc);
 		(void) fflush(__m_screen->_of);
 		code = OK;
@@ -333,9 +333,9 @@ slk_wset(int index, const wchar_t *label, int justify)
 
 	/* Remember the new label. */
 	__m_screen->_slk._justify[index] = (short) justify;
-	if (__m_screen->_slk._labels[index] != (char *) 0)
+	if (__m_screen->_slk._labels[index] != NULL)
 		free(__m_screen->_slk._labels[index]);
-	if ((__m_screen->_slk._labels[index] = m_strdup(mbs)) == (char *) 0)
+	if ((__m_screen->_slk._labels[index] = m_strdup(mbs)) == NULL)
 		goto error1;
 	
 	if (__m_screen->_slk._w != (WINDOW *) 0) {
@@ -355,19 +355,19 @@ slk_wset(int index, const wchar_t *label, int justify)
 		}
 
 		(void) mvwaddstr(__m_screen->_slk._w, 0, i, mbs);
-	} else if (plab_norm != (char *) 0) {
+	} else if (plab_norm != NULL) {
 		(void) tputs(
 			tparm(
 				plab_norm, (long) index, (long) mbs,
 				0L, 0L, 0L, 0L, 0L, 0L, 0L
 			), 1, __m_outc
 		);
-	} else if (pkey_plab != (char *) 0) {
+	} else if (pkey_plab != NULL) {
 		/* Lookup multibyte sequence for the function key. */
 		for (i = KEY_F(index), k = __m_keyindex; (*k)[1] != i; ++k)
 			;
 
-		if (cur_term->_str[**k] != (char *) 0) {
+		if (cur_term->_str[**k] != NULL) {
 			(void) tputs(
 				tparm(
 					pkey_plab, (long) index, 

@@ -307,7 +307,7 @@ PolyStrchr(register char *string, register char class)
 		}
 		string++;
 	}
-	return ((char *)0);
+	return (NULL);
 }
 
 /* returns pointer to a swapped about copy */
@@ -399,33 +399,33 @@ Mangle(char *input, char *control)
 				break;
 			case RULE_GT:
 				if (!ptr[1]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					limit = Char2Int(*(++ptr));
 					if (limit < 0) {
-						return ((char *)0);
+						return (NULL);
 					}
 					if (strlen(area) <= limit) {
-						return ((char *)0);
+						return (NULL);
 					}
 				}
 				break;
 			case RULE_LT:
 				if (!ptr[1]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					limit = Char2Int(*(++ptr));
 					if (limit < 0) {
-						return ((char *)0);
+						return (NULL);
 					}
 					if (strlen(area) >= limit) {
-						return ((char *)0);
+						return (NULL);
 					}
 				}
 				break;
 			case RULE_PREPEND:
 				if (!ptr[1]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					area2[0] = *(++ptr);
 					(void) strlcpy(area2 + 1, area,
@@ -435,7 +435,7 @@ Mangle(char *input, char *control)
 				break;
 			case RULE_APPEND:
 				if (!ptr[1]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					register char *string;
 
@@ -447,7 +447,7 @@ Mangle(char *input, char *control)
 				break;
 			case RULE_EXTRACT:
 				if (!ptr[1] || !ptr[2]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					register int i;
 					int start;
@@ -456,7 +456,7 @@ Mangle(char *input, char *control)
 					start = Char2Int(*(++ptr));
 					length = Char2Int(*(++ptr));
 					if (start < 0 || length < 0) {
-						return ((char *)0);
+						return (NULL);
 					}
 					(void) strlcpy(area2, area, PATH_MAX);
 					for (i = 0; length-- &&
@@ -469,13 +469,13 @@ Mangle(char *input, char *control)
 				break;
 			case RULE_OVERSTRIKE:
 				if (!ptr[1] || !ptr[2]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					register int i;
 
 					i = Char2Int(*(++ptr));
 					if (i < 0) {
-						return ((char *)0);
+						return (NULL);
 					} else {
 						++ptr;
 						if (area[i]) {
@@ -486,7 +486,7 @@ Mangle(char *input, char *control)
 				break;
 			case RULE_INSERT:
 				if (!ptr[1] || !ptr[2]) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					register int i;
 					register char *p1;
@@ -494,7 +494,7 @@ Mangle(char *input, char *control)
 
 					i = Char2Int(*(++ptr));
 					if (i < 0) {
-						return ((char *)0);
+						return (NULL);
 					}
 					p1 = area;
 					p2 = area2;
@@ -512,7 +512,7 @@ Mangle(char *input, char *control)
 			case RULE_PURGE:	/* @x or @?c */
 				if (!ptr[1] || (ptr[1] ==
 				    RULE_CLASS && !ptr[2])) {
-					return ((char *)0);
+					return (NULL);
 				} else if (ptr[1] != RULE_CLASS) {
 					(void) strlcpy(area, Purge(area,
 					    *(++ptr)), PATH_MAX);
@@ -525,7 +525,7 @@ Mangle(char *input, char *control)
 			case RULE_SUBSTITUTE:	/* sxy || s?cy */
 				if (!ptr[1] || !ptr[2] ||
 				    (ptr[1] == RULE_CLASS && !ptr[3])) {
-					return ((char *)0);
+					return (NULL);
 				} else if (ptr[1] != RULE_CLASS) {
 					ptr += 2;
 				} else {
@@ -537,14 +537,14 @@ Mangle(char *input, char *control)
 			case RULE_MATCH:	/* /x || /?c */
 				if (!ptr[1] ||
 				    (ptr[1] == RULE_CLASS && !ptr[2])) {
-					return ((char *)0);
+					return (NULL);
 				} else if (ptr[1] != RULE_CLASS) {
 					if (!strchr(area, *(++ptr))) {
-						return ((char *)0);
+						return (NULL);
 					}
 				} else {
 					if (!PolyStrchr(area, ptr[2])) {
-						return ((char *)0);
+						return (NULL);
 					}
 					ptr += 2;
 				}
@@ -552,14 +552,14 @@ Mangle(char *input, char *control)
 			case RULE_NOT:		/* !x || !?c */
 				if (!ptr[1] ||
 				    (ptr[1] == RULE_CLASS && !ptr[2])) {
-					return ((char *)0);
+					return (NULL);
 				} else if (ptr[1] != RULE_CLASS) {
 					if (strchr(area, *(++ptr))) {
-						return ((char *)0);
+						return (NULL);
 					}
 				} else {
 					if (PolyStrchr(area, ptr[2])) {
-						return ((char *)0);
+						return (NULL);
 					}
 					ptr += 2;
 				}
@@ -576,23 +576,23 @@ Mangle(char *input, char *control)
 			case RULE_EQUALS:	/* =nx || =n?c */
 				if (!ptr[1] || !ptr[2] ||
 				    (ptr[2] == RULE_CLASS && !ptr[3])) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					register int i;
 
 					if ((i = Char2Int(ptr[1])) < 0) {
-						return ((char *)0);
+						return (NULL);
 					}
 					if (ptr[2] != RULE_CLASS) {
 						ptr += 2;
 						if (area[i] != *ptr) {
-							return ((char *)0);
+							return (NULL);
 						}
 					} else {
 						ptr += 3;
 						if (!MatchClass(*ptr,
 						    area[i])) {
-							return ((char *)0);
+							return (NULL);
 						}
 					}
 				}
@@ -621,18 +621,18 @@ Mangle(char *input, char *control)
 			case RULE_MFIRST:
 				if (!ptr[1] ||
 				    (ptr[1] == RULE_CLASS && !ptr[2])) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					if (ptr[1] != RULE_CLASS) {
 						ptr++;
 						if (area[0] != *ptr) {
-							return ((char *)0);
+							return (NULL);
 						}
 					} else {
 						ptr += 2;
 						if (!MatchClass(*ptr,
 						    area[0])) {
-							return ((char *)0);
+							return (NULL);
 						}
 					}
 				}
@@ -640,7 +640,7 @@ Mangle(char *input, char *control)
 			case RULE_MLAST:
 				if (!ptr[1] ||
 				    (ptr[1] == RULE_CLASS && !ptr[2])) {
-					return ((char *)0);
+					return (NULL);
 				} else {
 					register int i;
 
@@ -649,18 +649,18 @@ Mangle(char *input, char *control)
 					if (i > 0) {
 						i--;
 					} else {
-						return ((char *)0);
+						return (NULL);
 					}
 					if (ptr[1] != RULE_CLASS) {
 						ptr++;
 						if (area[i] != *ptr) {
-							return ((char *)0);
+							return (NULL);
 						}
 					} else {
 						ptr += 2;
 						if (!MatchClass(*ptr,
 						    area[i])) {
-							return ((char *)0);
+							return (NULL);
 						}
 					}
 				}
@@ -668,7 +668,7 @@ Mangle(char *input, char *control)
 		}
 	}
 	if (!area[0]) {		/* have we deweted de poor widdle fing away? */
-		return ((char *)0);
+		return (NULL);
 	}
 	return (area);
 }

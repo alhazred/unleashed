@@ -277,7 +277,7 @@ char   *list;
 
     for (cp = strtok(buf, sep); cp != 0; cp = next) {
 	fputs(cp, stdout);
-	next = strtok((char *) 0, sep);
+	next = strtok(NULL, sep);
 	if (next != 0)
 	    fputs(" ", stdout);
     }
@@ -296,7 +296,7 @@ char   *list;
 
     strcpy(buf, list);
 
-    for (cp = strtok(buf, sep); cp != 0; cp = strtok((char *) 0, sep)) {
+    for (cp = strtok(buf, sep); cp != 0; cp = strtok(NULL, sep)) {
 	if (STR_EQ(cp, "EXCEPT")) {
 	    daemons = 0;
 	} else {
@@ -324,7 +324,7 @@ char   *list;
 
     strcpy(buf, list);
 
-    for (cp = strtok(buf, sep); cp != 0; cp = strtok((char *) 0, sep)) {
+    for (cp = strtok(buf, sep); cp != 0; cp = strtok(NULL, sep)) {
 	if (STR_EQ(cp, "EXCEPT")) {
 	    clients = 0;
 	} else {

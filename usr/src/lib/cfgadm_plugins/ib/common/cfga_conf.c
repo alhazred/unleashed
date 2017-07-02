@@ -358,7 +358,7 @@ ib_get_string(char **llptr, char *tchar)
 {
 	int	tlen = strlen(tchar);
 	char	*cp;
-	char	*start = (char *)0;
+	char *start = NULL;
 
 	start = tchar;
 	/* copy string */

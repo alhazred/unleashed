@@ -181,14 +181,14 @@ _uu_setlocale(int category, char *locale)
 	len = strlen(tmp) + 1;
 
 	if ((ret = malloc(len)) == NULL)
-		return ((char *) 0);
+		return (NULL);
 
 	strncpy(ret, tmp, len);
 
 	/* now set the new locale */
 	if (setlocale(category, locale) == NULL) {
 		free(ret);
-		return ((char *) 0);
+		return (NULL);
 	}
 	return (ret);
 }

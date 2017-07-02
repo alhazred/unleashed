@@ -757,7 +757,7 @@ transmit()
 		    Takeflag = NO;
 		    break;
 		}
-		p = (char*)0;
+		p = NULL;
 	    }
 	}
     }

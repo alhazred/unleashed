@@ -2411,15 +2411,15 @@ read_next_token(char **cpp)
 	register char *cp = *cpp;
 	char *start;
 
-	if (cp == (char *)0) {
-		*cpp = (char *)0;
-		return ((char *)0);
+	if (cp == NULL) {
+		*cpp = NULL;
+		return (NULL);
 	}
 	while (*cp == ' ' || *cp == '\t')
 		cp++;
 	if (*cp == '\0') {
-		*cpp = (char *)0;
-		return ((char *)0);
+		*cpp = NULL;
+		return (NULL);
 	}
 	start = cp;
 	while (*cp && *cp != ' ' && *cp != '\t')

@@ -414,7 +414,7 @@ token_processing(pr_context_t *context)
 			retstat = open_tag(context, tokenid);
 		} else {
 			if (!(context->format & PRF_RAWM) &&
-			    (tokentable[tokenid].t_name != (char *)0)) {
+			    (tokentable[tokenid].t_name != NULL)) {
 				uval.uvaltype = PRA_STRING;
 				uval.string_val =
 				    gettext(tokentable[tokenid].t_name);

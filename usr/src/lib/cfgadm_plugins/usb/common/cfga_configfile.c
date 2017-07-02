@@ -115,7 +115,7 @@ static int
 get_string(u_longlong_t *llptr, char *tchar)
 {
 	register char *cp;
-	register char *start = (char *)0;
+	register char *start = NULL;
 	register int len = 0;
 
 	len = strlen(tchar);

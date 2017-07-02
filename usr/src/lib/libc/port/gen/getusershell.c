@@ -168,7 +168,7 @@ initshells(void)
 			cp++;
 		*cp++ = '\0';
 	}
-	*sp = (char *)0;
+	*sp = NULL;
 	(void) fclose(fp);
 	return (shells);
 }

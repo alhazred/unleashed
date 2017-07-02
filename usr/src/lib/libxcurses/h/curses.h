@@ -898,7 +898,7 @@ extern const wchar_t *wunctrl(const cchar_t *);
 #define box_set(w,v,h)			wborder_set(w,v,v,h,h,0,0,0,0)
 
 #define can_change_color()		(2 < max_colors && can_change \
-					&& initialize_color != (char *) 0)
+					&& initialize_color != NULL)
 #define has_colors()			(0 < max_colors)
 
 #define chgat(n,a,co,p)			wchgat(stdscr,n,a,co,p)
@@ -956,18 +956,18 @@ extern const wchar_t *wunctrl(const cchar_t *);
 #define mvwget_wstr(w,y,x,wcs)		(wmove(w,y,x)?ERR:wget_wstr(w,wcs))
 #define wget_wstr(w,wcs)		wgetn_wstr(w,wcs,-1)
 
-#define has_ic()			(((insert_character != (char *) 0 \
-					   || parm_ich != (char *) 0) \
-					  && (delete_character != (char *) 0 \
-					      || parm_dch != (char *) 0)) \
-					 || (enter_insert_mode != (char *) 0 \
+#define has_ic()			(((insert_character != NULL \
+					   || parm_ich != NULL) \
+					  && (delete_character != NULL \
+					      || parm_dch != NULL)) \
+					 || (enter_insert_mode != NULL \
 					     && exit_insert_mode))
 
-#define has_il()			(((insert_line != (char *) 0 \
-					   || parm_insert_line != (char *) 0) \
-					  && (delete_line != (char *) 0 \
-					      || parm_delete_line !=(char*)0)) \
-					 || change_scroll_region != (char *) 0)
+#define has_il()			(((insert_line != NULL \
+					   || parm_insert_line != NULL) \
+					  && (delete_line != NULL \
+					      || parm_delete_line != NULL)) \
+					 || change_scroll_region != NULL)
 
 
 #define hline(ch,n)			whline(stdscr,ch,n)

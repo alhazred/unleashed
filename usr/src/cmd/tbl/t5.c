@@ -57,7 +57,7 @@ for (nlin=nslin=0; gets1(cstore, MAXSTR); nlin++)
 			fullbot[nlin]= ch;
 		nlin++;
 		nslin++;
-		instead[nlin]=(char *)0;
+		instead[nlin] = NULL;
 		fullbot[nlin]=0;
 		}
 	table[nlin] = (struct colstr *) alocv((ncol+2)*sizeof(table[0][0]));

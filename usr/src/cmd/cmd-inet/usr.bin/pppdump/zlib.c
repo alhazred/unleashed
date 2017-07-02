@@ -2352,7 +2352,7 @@ local ulg ct_flush_block(s, buf, stored_len, flush)
     } else
 
 #ifdef FORCE_STORED
-    if (buf != (char*)0) /* force stored block */
+    if (buf != NULL) /* force stored block */
 #else
     if (stored_len+4 <= opt_lenb && buf != (char*)0)
                        /* 4: two words for the lengths */

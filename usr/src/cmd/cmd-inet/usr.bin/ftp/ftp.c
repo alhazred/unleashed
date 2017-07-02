@@ -207,7 +207,7 @@ hookup(char *host, char *service)
 			    host);
 		}
 		code = -1;
-		return ((char *)0);
+		return (NULL);
 	}
 	ai_head = ai;
 
@@ -349,7 +349,7 @@ hookup(char *host, char *service)
 	return (hostname);
 bad:
 	(void) close(s);
-	return ((char *)0);
+	return (NULL);
 }
 
 int
@@ -2205,7 +2205,7 @@ gunique(char *local)
 		*cp = '/';
 	if (d < 0) {
 		perror(local);
-		return ((char *)0);
+		return (NULL);
 	}
 	if (strlcpy(new, local, sizeof (new)) >= sizeof (new))
 		(void) printf("gunique: too long: local %s, %d, new %d\n",
@@ -2217,7 +2217,7 @@ gunique(char *local)
 		if (++count == 100) {
 			(void) printf(
 				"runique: can't find unique file name.\n");
-			return ((char *)0);
+			return (NULL);
 		}
 		*cp++ = ext;
 		*cp = '\0';

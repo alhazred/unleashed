@@ -84,5 +84,5 @@ field_buffer(FIELD *f, int n)
 	if (f && n >= 0 && n <= f -> nbuf)
 		return (Buffer(f, n));
 	else
-		return ((char *) 0);
+		return (NULL);
 }

@@ -365,13 +365,13 @@ psm_get_impl_module(int first)
 	if (first)
 		pnamep = psm_impl_module_list;
 
-	if (*pnamep != (char *)0)
+	if (*pnamep != NULL)
 		return (*pnamep++);
 
 	mhdl = get_next_mach(mhdl, machname);
 	if (mhdl)
 		return (machname);
-	return ((char *)0);
+	return (NULL);
 }
 
 void

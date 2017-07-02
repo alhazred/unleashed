@@ -4605,7 +4605,7 @@ iscsi_i_commoncap(struct scsi_address *ap, char *cap, int val,
 	ilp	= (iscsi_lun_t *)((ap)->a_hba_tran->tran_tgt_private);
 	ASSERT(ilp != NULL);
 
-	if (cap == (char *)0) {
+	if (cap == NULL) {
 		return (FALSE);
 	}
 

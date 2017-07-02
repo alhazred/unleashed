@@ -380,7 +380,7 @@ chownr(char *dir, uid_t uid, gid_t gid)
 	struct stat st, st2;
 	char savedir[1024];
 
-	if (getcwd(savedir, 1024) == (char *)0) {
+	if (getcwd(savedir, 1024) == NULL) {
 		(void) Perror("getcwd");
 		exit(255);
 	}

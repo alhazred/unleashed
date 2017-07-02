@@ -169,7 +169,7 @@ fcheck_enum(FIELD *f, char *arg)
 							break;
 						}
 						else
-							value = (char *) 0;
+							value = NULL;
 					}
 			if (! value)
 				return (FALSE);

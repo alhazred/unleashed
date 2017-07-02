@@ -916,7 +916,7 @@ local_setenv(char *termNinfo)
 		(void) sprintf(terminfo, "TERMINFO=%s", termNinfo);
 		newenviron[0] = terminfo;
 	} else
-		newenviron[0] = (char *) 0;
+		newenviron[0] = NULL;
 	environ = newenviron;
 }
 

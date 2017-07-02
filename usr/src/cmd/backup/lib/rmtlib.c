@@ -124,7 +124,7 @@ rmthost(char *host, uint_t blocksize)
 	if (rmtpeer_malloc)
 		(void) free(rmtpeer_malloc);
 	rmtpeer = rmtpeer_malloc = strdup(host);
-	if (rmtpeer == (char *)0)
+	if (rmtpeer == NULL)
 		return (0);
 	ntrec = blocksize;
 	sv.sa_flags = SA_RESTART;

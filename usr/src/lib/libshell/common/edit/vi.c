@@ -1703,7 +1703,7 @@ find_b:
 		int nextc;
 		tcur_virt = cur_virt;
 		while( tcur_virt <= last_virt
-			&& strchr(paren_chars,virtual[tcur_virt])==(char*)0)
+			&& strchr(paren_chars, virtual[tcur_virt]) == NULL)
 				tcur_virt++;
 		if(tcur_virt > last_virt )
 			return(0);

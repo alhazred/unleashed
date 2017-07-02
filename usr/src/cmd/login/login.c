@@ -231,7 +231,7 @@ static	char	*newenv[10+MAXARGS] =
 	{home, path, logname, hertz, term, 0, 0};
 static	char	**envinit = newenv;
 static	int	basicenv;
-static	char	*zero = (char *)0;
+static	char *zero = NULL;
 static	char 	**envp;
 #ifndef	NO_MAIL
 static	char	mail[30] = { "MAIL=/var/mail/" };

@@ -110,7 +110,7 @@ main(argc, argv)
 			*sp++ = '\0';
 	}
 
-	av[i] = (char *)0;
+	av[i] = NULL;
 	if (pipe(p) < 0)
 		fatal(argv[0], "pipe");
 

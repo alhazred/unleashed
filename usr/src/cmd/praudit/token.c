@@ -649,8 +649,8 @@ anchor_path(char *sp)
 	size_t	len;
 
 	len = strlen(sp) + 2;
-	if ((dp = tp = (char *)calloc(1, len)) == (char *)0)
-		return ((char *)0);
+	if ((dp = tp = (char *)calloc(1, len)) == NULL)
+		return (NULL);
 
 	*dp++ = '/';
 

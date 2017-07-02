@@ -62,7 +62,7 @@ execl(const char *name, const char *arg0, ...)
 	 */
 
 	va_start(args, arg0);
-	while (va_arg(args, char *) != (char *)0) {
+	while (va_arg(args, char *) != NULL) {
 		nargs++;
 	}
 	va_end(args);
@@ -78,11 +78,11 @@ execl(const char *name, const char *arg0, ...)
 	argvec = (char **)alloca((size_t)((nargs + 2) * sizeof (char *)));
 	argp = argvec;
 	*argp++ = (char *)arg0;
-	while ((nextarg = va_arg(args, char *)) != (char *)0) {
+	while ((nextarg = va_arg(args, char *)) != NULL) {
 		*argp++ = nextarg;
 	}
 	va_end(args);
-	*argp = (char *)0;
+	*argp = NULL;
 
 	/*
 	 * call execve()

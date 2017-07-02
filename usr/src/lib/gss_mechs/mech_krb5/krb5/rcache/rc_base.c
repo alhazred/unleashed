@@ -148,7 +148,7 @@ char * krb5_rc_default_name(krb5_context context)
     if ((s = getenv("KRB5RCNAME")))
 	return s;
     else
-	return (char *) 0;
+	return (NULL);
 }
 
 krb5_error_code

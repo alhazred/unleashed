@@ -37,7 +37,7 @@ prom_stdinpath(void)
 {
 	ihandle_t	istdin;
 
-	if (stdinpath != (char *) 0)		/* Got it already? */
+	if (stdinpath != NULL)		/* Got it already? */
 		return (stdinpath);
 
 	istdin = prom_stdin_ihandle();
@@ -46,5 +46,5 @@ prom_stdinpath(void)
 		if (prom_ihandle_to_path(istdin, buffer,
 		    OBP_MAXPATHLEN - 1) > 0)
 			return (stdinpath = buffer);
-	return ((char *)0);
+	return (NULL);
 }

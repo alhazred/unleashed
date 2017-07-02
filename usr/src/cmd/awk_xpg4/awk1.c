@@ -253,7 +253,7 @@ awkvarinit()
 		for (fp = ofiles; fp < &ofiles[NIOSTREAM]; fp += 1) {
 			fp->f_fp = FNULL;
 					fp->f_mode = 0;
-					fp->f_name = (char *)0;
+					fp->f_name = NULL;
 		}
 	}
 #endif

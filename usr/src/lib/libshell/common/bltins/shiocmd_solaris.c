@@ -339,7 +339,7 @@ static char *walk_class(register Namval_t *np, int dlete, struct dcclass *dcp)
 	genvalue(outfile,&dcp->sclass,0,np);
 	stkset(stkstd,savptr,savtop);
 	if(!outfile)
-		return((char*)0);
+		return (NULL);
 	sfputc(out,0);
 	return((char*)out->_data);
 }

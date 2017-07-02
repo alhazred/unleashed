@@ -473,7 +473,7 @@ scsi_mname(uchar_t msg)
 char *
 scsi_cname(uchar_t cmd, register char **cmdvec)
 {
-	while (*cmdvec != (char *)0) {
+	while (*cmdvec != NULL) {
 		if (cmd == **cmdvec) {
 			return ((char *)((long)(*cmdvec)+1));
 		}

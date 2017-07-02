@@ -69,7 +69,7 @@ vid_puts(attr_t attr, short pair, void *opts, int (*putout)(int))
 	__m_trace("vid_puts(%x, %d, %p, %p)", attr, pair, opts, putout);
 #endif
 
-	if (set_attributes != (char *) 0 && ATTR_STATE != attr) {
+	if (set_attributes != NULL && ATTR_STATE != attr) {
 		/* Assume that <set_attributes> disables attributes
 		 * then re-enables attributes that are to be on.
 		 */
@@ -97,7 +97,7 @@ vid_puts(attr_t attr, short pair, void *opts, int (*putout)(int))
 		 * attributes, as this will have been handled by
 		 * <set_attributes>.
 		 */
-		if (set_a_attributes != (char *) 0 && (attr & WA_SGR1_MASK)) {
+		if (set_a_attributes != NULL && (attr & WA_SGR1_MASK)) {
 			(void) tputs(
 				tparm(
 					set_a_attributes,
@@ -133,14 +133,14 @@ vid_puts(attr_t attr, short pair, void *opts, int (*putout)(int))
 	 * the orig_pair.
 	 */
 	if (attr == WA_NORMAL) {
-		if (orig_pair != (char *) 0)
+		if (orig_pair != NULL)
 			(void) tputs(orig_pair, 1, putout);
 
 		pair = 0;
 	} else if (pair != cur_term->_co && 0 < max_colors) {
 		short fg, bg;
 
-		if (set_color_pair != (char *) 0) {
+		if (set_color_pair != NULL) {
 			(void) tputs(
 				tparm(
 					set_color_pair, (long) pair,
@@ -149,14 +149,14 @@ vid_puts(attr_t attr, short pair, void *opts, int (*putout)(int))
 				1, putout
 			);
 		} else if (pair_content(pair, &fg, &bg) == OK) {
-			if (set_foreground != (char *) 0) {
+			if (set_foreground != NULL) {
 				(void) tputs(
 					tparm(set_foreground, (long) fg,
 						0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L 
 					), 
 					1, putout
 				);
-			} else if (set_a_foreground != (char *) 0) {
+			} else if (set_a_foreground != NULL) {
 				(void) tputs(
 					tparm(
 						set_a_foreground, (long) fg,
@@ -166,14 +166,14 @@ vid_puts(attr_t attr, short pair, void *opts, int (*putout)(int))
 				);
 			}
 
-			if (set_background != (char *) 0) {
+			if (set_background != NULL) {
 				(void) tputs(
 					tparm(set_background, (long) bg,
 						0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L 
 					), 
 					1, putout
 				);
-			} else if (set_a_background != (char *) 0) {
+			} else if (set_a_background != NULL) {
 				(void) tputs(
 					tparm(
 						set_a_background, (long) bg,
@@ -197,24 +197,24 @@ turn_off(int (*putout)(int), attr_t attr)
 {
 	attr_t new = attr;
 
-	if (exit_attribute_mode != (char *) 0) {
+	if (exit_attribute_mode != NULL) {
 		(void) tputs(exit_attribute_mode, 1, putout);
 		new = WA_NORMAL;
 	} else {
 		if (ISATTR(attr, WA_UNDERLINE) 
-		&& exit_underline_mode != (char *) 0) {
+		&& exit_underline_mode != NULL) {
 			(void) tputs(exit_underline_mode, 1, putout);
 			new &= ~WA_UNDERLINE;
 		}
 
 		if (ISATTR(attr, WA_STANDOUT) 
-		&& exit_standout_mode != (char *) 0) {
+		&& exit_standout_mode != NULL) {
 			(void) tputs(exit_standout_mode, 1, putout);
 			new &= ~WA_STANDOUT;
 		}
 
 		if (ISATTR(attr, WA_ALTCHARSET) 
-		&& exit_alt_charset_mode != (char *) 0) {
+		&& exit_alt_charset_mode != NULL) {
 			(void) tputs(exit_alt_charset_mode, 1, putout);
 			new &= ~WA_ALTCHARSET;
 		}
@@ -229,78 +229,78 @@ turn_on(int (*putout)(int), attr_t attr)
 	attr_t new = attr;
 
 	if (ISATTR(attr, WA_ALTCHARSET) 
-	&& enter_alt_charset_mode != (char *) 0) {
+	&& enter_alt_charset_mode != NULL) {
 		(void) tputs(enter_alt_charset_mode, 1, putout);
 		new |= WA_ALTCHARSET;
 	}
 
-	if (ISATTR(attr, WA_BLINK) && enter_blink_mode != (char *) 0) {
+	if (ISATTR(attr, WA_BLINK) && enter_blink_mode != NULL) {
 		(void) tputs(enter_blink_mode, 1, putout);
 		new |= WA_BLINK;
 	}
 
-	if (ISATTR(attr, WA_BOLD) && enter_bold_mode != (char *) 0) {
+	if (ISATTR(attr, WA_BOLD) && enter_bold_mode != NULL) {
 		(void) tputs(enter_bold_mode, 1, putout);
 		new |= WA_BOLD;
 	}
 
-	if (ISATTR(attr, WA_INVIS) && enter_secure_mode != (char *) 0) {
+	if (ISATTR(attr, WA_INVIS) && enter_secure_mode != NULL) {
 		(void) tputs(enter_secure_mode, 1, putout);
 		new |= WA_INVIS;
 	}
 
-	if (ISATTR(attr, WA_DIM) && enter_dim_mode != (char *) 0) {
+	if (ISATTR(attr, WA_DIM) && enter_dim_mode != NULL) {
 		(void) tputs(enter_dim_mode, 1, putout);
 		new |= WA_DIM;
 	}
 
-	if (ISATTR(attr, WA_PROTECT) && enter_protected_mode != (char *) 0) {
+	if (ISATTR(attr, WA_PROTECT) && enter_protected_mode != NULL) {
 		(void) tputs(enter_protected_mode, 1, putout);
 		new |= WA_PROTECT;
 	}
 
-	if (ISATTR(attr, WA_REVERSE) && enter_reverse_mode != (char *) 0) {
+	if (ISATTR(attr, WA_REVERSE) && enter_reverse_mode != NULL) {
 		(void) tputs(enter_reverse_mode, 1, putout);
 		new |= WA_REVERSE;
 	}
 
-	if (ISATTR(attr, WA_STANDOUT) && enter_standout_mode != (char *) 0) {
+	if (ISATTR(attr, WA_STANDOUT) && enter_standout_mode != NULL) {
 		(void) tputs(enter_standout_mode, 1, putout);
 		new |= WA_STANDOUT;
 	}
 
-	if (ISATTR(attr, WA_UNDERLINE) && enter_underline_mode != (char *) 0) {
+	if (ISATTR(attr, WA_UNDERLINE) && enter_underline_mode != NULL) {
 		(void) tputs(enter_underline_mode, 1, putout);
 		new |= WA_UNDERLINE;
 	}
 
 	if (ISATTR(attr, WA_HORIZONTAL) 
-	&& enter_horizontal_hl_mode != (char *) 0) {
+	&& enter_horizontal_hl_mode != NULL) {
 		(void) tputs(enter_horizontal_hl_mode, 1, putout);
 		new |= WA_HORIZONTAL;
 	}
 
-	if (ISATTR(attr, WA_LEFT) && enter_left_hl_mode != (char *) 0) {
+	if (ISATTR(attr, WA_LEFT) && enter_left_hl_mode != NULL) {
 		(void) tputs(enter_left_hl_mode, 1, putout);
 		new |= WA_LEFT;
 	}
 
-	if (ISATTR(attr, WA_LOW) && enter_low_hl_mode != (char *) 0) {
+	if (ISATTR(attr, WA_LOW) && enter_low_hl_mode != NULL) {
 		(void) tputs(enter_low_hl_mode, 1, putout);
 		new |= WA_LOW;
 	}
 
-	if (ISATTR(attr, WA_RIGHT) && enter_right_hl_mode != (char *) 0) {
+	if (ISATTR(attr, WA_RIGHT) && enter_right_hl_mode != NULL) {
 		(void) tputs(enter_right_hl_mode, 1, putout);
 		new |= WA_RIGHT;
 	}
 
-	if (ISATTR(attr, WA_TOP) && enter_top_hl_mode != (char *) 0) {
+	if (ISATTR(attr, WA_TOP) && enter_top_hl_mode != NULL) {
 		(void) tputs(enter_top_hl_mode, 1, putout);
 		new |= WA_TOP;
 	}
 
-	if (ISATTR(attr, WA_VERTICAL) && enter_vertical_hl_mode != (char *) 0) {
+	if (ISATTR(attr, WA_VERTICAL) && enter_vertical_hl_mode != NULL) {
 		(void) tputs(enter_vertical_hl_mode, 1, putout);
 		new |= WA_VERTICAL;
 	}

@@ -905,7 +905,7 @@ adjust_buf(wchar_t **bp, int *len, wchar_t **offset, char *fmtstr, size_t slen)
 
 	do {
 		fmtstr++;
-	} while (strchr("-+ 0", *fmtstr) != (char *)0 || *fmtstr == ('#'));
+	} while (strchr("-+ 0", *fmtstr) != NULL || *fmtstr == ('#'));
 	if (*fmtstr != '*') {
 		if (isdigit(*fmtstr)) {
 			width = *fmtstr-'0';
@@ -922,7 +922,7 @@ adjust_buf(wchar_t **bp, int *len, wchar_t **offset, char *fmtstr, size_t slen)
 		} else
 			fmtstr++;
 	}
-	if (strchr("Llh", *fmtstr) != (char *)0)
+	if (strchr("Llh", *fmtstr) != NULL)
 		fmtstr++;
 	if (*fmtstr == 'S') {
 		if (width && slen < width)

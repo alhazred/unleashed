@@ -127,7 +127,7 @@ regcmp(const char *regexp, ...)
 	int		char_size;
 	unsigned int	class_length;
 	char		*compilep;
-	char		*compile_startp = (char *)0;
+	char *compile_startp = NULL;
 	int		count_length;
 	wchar_t		current_char;
 	int		expr_length;
@@ -145,7 +145,7 @@ regcmp(const char *regexp, ...)
 	int		substringn;
 
 	if (___i_size() == (int *)0)
-		return ((char *)0);
+		return (NULL);
 
 	/*
 	 * When compiling a regular expression, regcmp() generates at most
@@ -159,17 +159,17 @@ regcmp(const char *regexp, ...)
 	va_start(arg_listp, regexp);
 	next_argp = regexp;
 	arg_strlen = 0;
-	while (next_argp != (char *)0) {
+	while (next_argp != NULL) {
 		arg_strlen += strlen(next_argp);
 		next_argp = va_arg(arg_listp, /* const */ char *);
 	}
 	va_end(arg_listp);
 
 	if (arg_strlen == 0)
-		return ((char *)0);
+		return (NULL);
 	compile_startp = (char *)malloc(3 * arg_strlen + 1);
-	if (compile_startp == (char *)0)
-		return ((char *)0);
+	if (compile_startp == NULL)
+		return (NULL);
 
 	lmutex_lock(&regcmp_lock);
 	__i_size = 0;
@@ -205,7 +205,7 @@ regcmp(const char *regexp, ...)
 			regexp += char_size;
 			*compilep = (unsigned char)START_OF_STRING_MARK;
 			compilep++;
-		} else if /* (char_size == 0) && */ (next_argp != (char *)0) {
+		} else if /* (char_size == 0) && */ (next_argp != NULL) {
 			regexp = next_argp;
 			next_argp = va_arg(arg_listp, /* const */ char *);
 			char_size = get_wchar(&current_char, regexp);
@@ -292,7 +292,7 @@ regcmp(const char *regexp, ...)
 			/* <ASCII_CHAR><'$'> */
 
 			char_size = get_wchar(&current_char, regexp);
-			if ((char_size == 0) && (next_argp == (char *)0)) {
+			if ((char_size == 0) && (next_argp == NULL)) {
 				can_repeat = B_FALSE;
 				*compilep = (unsigned char)END_OF_STRING_MARK;
 				compilep++;
@@ -575,7 +575,7 @@ regcmp(const char *regexp, ...)
 			 * <group_type|ADDED_LENGTH_BITS><group_length>
 			 */
 
-			if (push_compilep(compilep) == (char *)0) {
+			if (push_compilep(compilep) == NULL) {
 				/*
 				 * groups can contain groups, so group
 				 * start pointers
@@ -633,7 +633,7 @@ regcmp(const char *regexp, ...)
 			/* RETRIEVE THE ADDRESS OF THE START OF THE GROUP */
 
 			regex_typep = pop_compilep();
-			if (regex_typep == (char *)0) {
+			if (regex_typep == NULL) {
 				ERROR_EXIT(&regcmp_lock, arg_listp,
 				    compile_startp);
 			}
@@ -861,7 +861,7 @@ regcmp(const char *regexp, ...)
 			ERROR_EXIT(&regcmp_lock, arg_listp, compile_startp);
 		} else if (char_size > 0) {
 			regexp += char_size;
-		} else if /* (char_size == 0) && */ (next_argp != (char *)0) {
+		} else if /* (char_size == 0) && */ (next_argp != NULL) {
 			regexp = next_argp;
 			next_argp = va_arg(arg_listp, /* const */ char *);
 			char_size = get_wchar(&current_char, regexp);
@@ -872,7 +872,7 @@ regcmp(const char *regexp, ...)
 				regexp += char_size;
 			}
 		} else /* ((char_size == 0) && (next_argp == (char *)0)) */ {
-			if (pop_compilep() != (char *)0) {
+			if (pop_compilep() != NULL) {
 				/* unmatched parentheses */
 				ERROR_EXIT(&regcmp_lock, arg_listp,
 				    compile_startp);
@@ -933,7 +933,7 @@ get_count(int *countp, const char *regexp)
 	int count = 0;
 	int count_length = 0;
 
-	if (regexp == (char *)0) {
+	if (regexp == NULL) {
 		return ((int)0);
 	} else {
 		count_char = *regexp;
@@ -953,7 +953,7 @@ get_digit(const char *regexp)
 {
 	char digit;
 
-	if (regexp == (char *)0) {
+	if (regexp == NULL) {
 		return ((int)-1);
 	} else {
 		digit = *regexp;
@@ -970,7 +970,7 @@ get_wchar(wchar_t *wcharp, const char *regexp)
 {
 	int char_size;
 
-	if (regexp == (char *)0) {
+	if (regexp == NULL) {
 		char_size = 0;
 		*wcharp = (wchar_t)((unsigned int)'\0');
 	} else if (*regexp == '\0') {
@@ -991,7 +991,7 @@ pop_compilep(void)
 	char *compilep;
 
 	if (compilep_stackp >= &compilep_stack[STRINGP_STACK_SIZE]) {
-		return ((char *)0);
+		return (NULL);
 	} else {
 		compilep = *compilep_stackp;
 		compilep_stackp++;
@@ -1003,7 +1003,7 @@ static char *
 push_compilep(char *compilep)
 {
 	if (compilep_stackp <= &compilep_stack[0]) {
-		return ((char *)0);
+		return (NULL);
 	} else {
 		compilep_stackp--;
 		*compilep_stackp = compilep;

@@ -496,7 +496,7 @@ _advance(char *lp, char *ep)
 			goto star;
 
 		case CBRC:
-			if (lp == start && locs == (char *)0)
+			if (lp == start && locs == NULL)
 				continue;
 			c = (unsigned char)*lp;
 			d = (unsigned char)*(lp-1);

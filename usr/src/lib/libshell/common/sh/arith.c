@@ -131,7 +131,7 @@ static Sfdouble_t arith(const char **ptr, struct lval *lvalue, int type, Sfdoubl
 	    {
 		register int c = *str;
 		register char *xp=str;
-		lvalue->value = (char*)0;
+		lvalue->value = NULL;
 		if(c=='.')
 			str++;
 		c = mbchar(str);

@@ -54,10 +54,10 @@ start_color()
 	COLORS = max_colors;
 	COLOR_PAIRS = max_pairs; 
 
-	if (orig_colors != (char *) 0)
+	if (orig_colors != NULL)
 		(void) tputs(orig_colors, 1, __m_outc);
 
-	if (orig_pair != (char *) 0)
+	if (orig_pair != NULL)
 		(void) tputs(orig_pair, 1, __m_outc);
 
 	if (0 < max_colors) {
@@ -103,7 +103,7 @@ init_color(short color, short r, short g, short b)
 	code = OK;
 
 	/* Set the color. */
-	if (initialize_color != (char *) 0) {
+	if (initialize_color != NULL) {
 		code = tputs(
 			tparm(
 				initialize_color, (long) color,
@@ -137,7 +137,7 @@ init_pair(short pair, short f, short b)
 	code = OK;
 
 	/* Set color-pair (foreground-background). */
-	if (initialize_pair == (char *) 0) {
+	if (initialize_pair == NULL) {
 		code = tputs(
 			tparm(
 				initialize_pair, 

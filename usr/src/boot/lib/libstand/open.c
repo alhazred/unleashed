@@ -107,7 +107,7 @@ open(const char *fname, int mode)
     f->f_ops = (struct fs_ops *)0;
     f->f_offset = 0;
     f->f_devdata = NULL;
-    file = (char *)0;
+    file = NULL;
 
     if (exclusive_file_system != NULL) {
 	fs = exclusive_file_system;
@@ -123,7 +123,7 @@ open(const char *fname, int mode)
 	goto err;
 
     /* see if we opened a raw device; otherwise, 'file' is the file name. */
-    if (file == (char *)0 || *file == '\0') {
+    if (file == NULL || *file == '\0') {
 	f->f_flags |= F_RAW;
 	f->f_rabuf = NULL;
 	return (fd);

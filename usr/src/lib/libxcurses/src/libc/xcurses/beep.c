@@ -52,9 +52,9 @@ beep()
 	__m_trace("beep(void)");
 #endif
 
-	if (bell != (char *) 0)
+	if (bell != NULL)
 		(void) tputs(bell, 1, __m_outc);
-	else if (flash_screen != (char *) 0)
+	else if (flash_screen != NULL)
 		(void) tputs(flash_screen, 1, __m_outc);
 
 	(void) fflush(__m_screen->_of);
@@ -73,9 +73,9 @@ flash()
 	__m_trace("flash(void)");
 #endif
 
-	if (flash_screen != (char *) 0)
+	if (flash_screen != NULL)
 		(void) tputs(flash_screen, 1, __m_outc);
-	else if (bell != (char *) 0)
+	else if (bell != NULL)
 		(void) tputs(bell, 1, __m_outc);
 
 	(void) fflush(__m_screen->_of);

@@ -217,7 +217,7 @@ main(int argc, char **argv)
 			}
 		}
 		fclose(vfstab);
-		*listp = (char *)0;
+		*listp = NULL;
 		listp = listbuf;
 	} else {
 		listp = &argv[optind];
@@ -305,7 +305,7 @@ preen(int listcnt, char **listp)
 			    !hasmntopt(&mntp, MNTOPT_RO)) {
 				errs += (31+chkquota(mntp.mnt_special,
 				    mntp.mnt_mountp, quotafile));
-				*lp = (char *)0;
+				*lp = NULL;
 			}
 		}
 	}
@@ -613,7 +613,7 @@ oneof(char *target, char **olistp, int on)
 
 	while (n--) {
 		if (*listp && strcmp(target, *listp) == 0) {
-			*listp = (char *)0;
+			*listp = NULL;
 			return (1);
 		}
 		listp++;

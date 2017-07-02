@@ -590,7 +590,7 @@ gethdr:
 		 * since that's volatile across lctime() invocations.
 		 */
 		tmp_ct = strdup(lctime(&lc_date));
-		if (tmp_ct == (char *)0) {
+		if (tmp_ct == NULL) {
 			(void) fprintf(stderr, gettext(
 			    "Cannot allocate space for time string\n"));
 			done(1);

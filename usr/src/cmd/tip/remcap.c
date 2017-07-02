@@ -96,7 +96,7 @@ tgetent(char *bp, char *name, int len)
 	trusted_device = 1;
 
 	remotefile = cp = getenv(V_TERMCAP);
-	if (cp == (char *)0 || strcmp(cp, SYSREMOTE) == 0) {
+	if (cp == NULL || strcmp(cp, SYSREMOTE) == 0) {
 		remotefile = cp = SYSREMOTE;
 		return (getent(bp, name, cp, len));
 	} else {
@@ -143,7 +143,7 @@ getent(char *bp, char *name, char *cp, int len)
 	if (cp && *cp) {
 		if (*cp != '/') {
 			cp2 = getenv(V_TERM);
-			if (cp2 == (char *)0 || strcmp(name, cp2) == 0) {
+			if (cp2 == NULL || strcmp(name, cp2) == 0) {
 				if (strstr(cp, "dv=") != 0)
 					trusted_device = 0;
 				(void) strncpy(bp, cp, len-1);

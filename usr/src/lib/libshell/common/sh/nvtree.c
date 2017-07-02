@@ -979,7 +979,7 @@ static char *walk_tree(register Namval_t *np, Namval_t *xp, int flags)
 	if(xp)
 	{
 		shp->var_tree = save_tree;
-		return((char*)0);
+		return (NULL);
 	}
 	argv = (char**)stakalloc((n+1)*sizeof(char*));
 	argv += n;
@@ -1002,7 +1002,7 @@ static char *walk_tree(register Namval_t *np, Namval_t *xp, int flags)
 	stakset(savptr,savtop);
 	shp->var_tree = save_tree;
 	if(!outfile)
-		return((char*)0);
+		return (NULL);
 	sfputc(out,0);
 	return((char*)out->_data);
 }

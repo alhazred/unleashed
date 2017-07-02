@@ -168,7 +168,7 @@ vx_handler(cell_t *argument_array)
 	name = p1275_cell2ptr(*argument_array);
 
 	for (vp = vx_cmd; vp < vx_cmd_end; vp++) {
-		if (vp->service == (char *)0)
+		if (vp->service == NULL)
 			continue;
 		if (strcmp(vp->service, name) != 0)
 			continue;

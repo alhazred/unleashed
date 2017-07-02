@@ -211,7 +211,7 @@ authunix_refresh(AUTH *auth, struct rpc_msg *msg, cred_t *cr)
 	au->au_shfaults ++;
 
 	/* first deserialize the creds back into a struct authunix_parms */
-	aup.aup_machname = (char *)0;
+	aup.aup_machname = NULL;
 	aup.aup_gids = (gid_t *)0;
 	xdrmem_create(&xdrs, au->au_origcred.oa_base,
 			au->au_origcred.oa_length, XDR_DECODE);

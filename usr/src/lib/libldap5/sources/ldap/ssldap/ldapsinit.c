@@ -737,7 +737,7 @@ ldapssl_AuthCertificate(void *sessionarg, PRFileDesc *fd, PRBool checkSig,
     LDAPSSLSessionInfo	*sseip;
     CERTCertificate	*cert;
     SECCertUsage	certUsage;
-    char		*hostname = (char *)0;
+    char *hostname = NULL;
     
     if (!sessionarg || !socket)
 	return rv;

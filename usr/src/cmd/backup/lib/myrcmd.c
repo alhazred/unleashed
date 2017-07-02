@@ -99,7 +99,7 @@ myrcmd(char **ahost, unsigned short rport, char *locuser, char *remuser,
 			bzero((char *)&numhp, sizeof (numhp));
 			bzero(numhostname, sizeof (numhostname));
 
-			if ((straddr = inet_ntoa(numaddr)) == (char *)0) {
+			if ((straddr = inet_ntoa(numaddr)) == NULL) {
 				(void) snprintf(myrcmd_stderr,
 				    sizeof (myrcmd_stderr),
 				    gettext("%s: unknown host\n"), *ahost);

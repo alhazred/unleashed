@@ -376,7 +376,7 @@ __nss_files_XY_hostbyname(be, args, filter, type)
 	}
 
 	res = NSS_NOTFOUND;
-	args->returnval = (char *)0;
+	args->returnval = NULL;
 	args->returnlen = 0;
 	hp = (struct hostent *)args->buf.result;
 	buffer = args->buf.buffer;

@@ -162,12 +162,12 @@ _compile(const char *sp, char *ep, char *endbuf, int viflag)
 
 	oldsp = sp;
 	if ((c = *sp++) == '\0') {
-		if (ep == (char *)0 || ep[1] == 0)
+		if (ep == NULL || ep[1] == 0)
 			ERROR(41);
 		goto out;
 	}
 	nbra = 0;
-	if (ep == (char *)0) {
+	if (ep == NULL) {
 		/* malloc space */
 		const char *startsp = oldsp;
 		n = 0;
@@ -176,7 +176,7 @@ _compile(const char *sp, char *ep, char *endbuf, int viflag)
 				n += 33; /* add room for bitmaps */
 		}
 		n += 2 * (startsp - oldsp) + 3;
-		if ((ep = malloc(n)) == (char *)0)
+		if ((ep = malloc(n)) == NULL)
 			ERROR(50);
 		expbuf = ep;
 		alloc = 1;
@@ -343,7 +343,7 @@ _compile(const char *sp, char *ep, char *endbuf, int viflag)
 				continue;
 
 			case '{':
-				if (lastep == (char *)0)
+				if (lastep == NULL)
 					goto defchar;
 				*lastep |= RNGE;
 				cflg = 0;
@@ -423,7 +423,7 @@ out:
 	if (regerrno) {
 		if (alloc)
 			free(expbuf);
-		return ((char *)0);
+		return (NULL);
 	}
 	reglength = (int)(ep - expbuf);
 	if (alloc)

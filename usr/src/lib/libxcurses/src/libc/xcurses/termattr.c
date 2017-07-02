@@ -137,49 +137,49 @@ term_attrs()
 		}
 	}
 
-	if (enter_alt_charset_mode != (char *) 0)
+	if (enter_alt_charset_mode != NULL)
 		at |= WA_ALTCHARSET;
 
-	if (enter_blink_mode != (char *) 0)
+	if (enter_blink_mode != NULL)
 		at |= WA_BLINK;
 
-	if (enter_bold_mode != (char *) 0)
+	if (enter_bold_mode != NULL)
 		at |= WA_BOLD;
 
-	if (enter_secure_mode != (char *) 0)
+	if (enter_secure_mode != NULL)
 		at |= WA_INVIS;
 
-	if (enter_dim_mode != (char *) 0)
+	if (enter_dim_mode != NULL)
 		at |= WA_DIM;
 
-	if (enter_protected_mode != (char *) 0)
+	if (enter_protected_mode != NULL)
 		at |= WA_PROTECT;
 
-	if (enter_reverse_mode != (char *) 0)
+	if (enter_reverse_mode != NULL)
 		at |= WA_REVERSE;
 
-	if (enter_standout_mode != (char *) 0)
+	if (enter_standout_mode != NULL)
 		at |= WA_STANDOUT;
 
-	if (enter_underline_mode != (char *) 0)
+	if (enter_underline_mode != NULL)
 		at |= WA_UNDERLINE;
 
-	if (enter_horizontal_hl_mode != (char *) 0)
+	if (enter_horizontal_hl_mode != NULL)
 		at |= WA_HORIZONTAL;
 
-	if (enter_left_hl_mode != (char *) 0)
+	if (enter_left_hl_mode != NULL)
 		at |= WA_LEFT;
 
-	if (enter_low_hl_mode != (char *) 0)
+	if (enter_low_hl_mode != NULL)
 		at |= WA_LOW;
 
-	if (enter_right_hl_mode != (char *) 0)
+	if (enter_right_hl_mode != NULL)
 		at |= WA_RIGHT;
 
-	if (enter_top_hl_mode != (char *) 0)
+	if (enter_top_hl_mode != NULL)
 		at |= WA_TOP;
 
-	if (enter_vertical_hl_mode != (char *) 0)
+	if (enter_vertical_hl_mode != NULL)
 		at |= WA_VERTICAL;
 
 	return __m_return_chtype("term_attrs", (chtype) at);

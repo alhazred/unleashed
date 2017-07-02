@@ -57,7 +57,7 @@
 #include	"listen.h"
 
 extern	int _nlslog;		/* non-zero allows use of stderr	*/
-char *_nlsrmsg = (char *)0;
+char *_nlsrmsg = NULL;
 static char _nlsbuf[256];
 
 
@@ -114,11 +114,11 @@ nlsrequest(int fd, char *svc_code)
 	} while (*p++ != '\0');
 
 
-	if ((p = strtok(_nlsbuf, ":")) == (char *)0)
+	if ((p = strtok(_nlsbuf, ":")) == NULL)
 		goto parsefail;
 	version = atoi(p);
 
-	if ((p = strtok((char *)0, ":")) == (char *)0)
+	if ((p = strtok(NULL, ":")) == NULL)
 		goto parsefail;
 	ret = atoi(p);
 	_nlsrmsg = p + strlen(p) + 1;

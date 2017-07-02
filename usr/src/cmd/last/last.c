@@ -126,7 +126,7 @@ main(int ac, char **av)
 	time_t otime;
 	struct stat stb;
 	int print = 0;
-	char *crmsg = (char *)0;
+	char *crmsg = NULL;
 	long outrec = 0;
 	long maxrec = 0x7fffffffL;
 	char *wtmpfile = "/var/adm/wtmpx";

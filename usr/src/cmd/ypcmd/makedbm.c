@@ -514,7 +514,7 @@ any(cp, match, num_del_to_match, count_esp)
 		prev_char = c;
 		cp++;
 	}
-	return ((char *)0);
+	return (NULL);
 }
 
 static char *

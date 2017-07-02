@@ -87,23 +87,23 @@ initscr()
 	 * to provide minimum full screen support. 
 	 */
 	if (1 < lines
-	&& cursor_address == (char *) 0 
-	&& row_address == (char *) 0
-	&& (cursor_up == (char *) 0 || cursor_down == (char *) 0)
-	&& (parm_up_cursor == (char *) 0 || parm_down_cursor == (char *) 0)) {
+	&& cursor_address == NULL 
+	&& row_address == NULL
+	&& (cursor_up == NULL || cursor_down == NULL)
+	&& (parm_up_cursor == NULL || parm_down_cursor == NULL)) {
 		err = dumb_msg;
 		goto error_3;
 	}
 	
-	if ((1 < lines && cursor_address == (char *) 0)
-	&& column_address == (char *) 0
-	&& (cursor_left == (char *) 0 || cursor_right == (char *) 0)
-	&& (parm_left_cursor == (char *) 0 || parm_right_cursor == (char *)0)) {
+	if ((1 < lines && cursor_address == NULL)
+	&& column_address == NULL
+	&& (cursor_left == NULL || cursor_right == NULL)
+	&& (parm_left_cursor == NULL || parm_right_cursor == NULL)) {
 		err = dumb_msg;
 		goto error_3;
 	}
 
-	if (clr_eol == (char *) 0) {
+	if (clr_eol == NULL) {
 		err = dumb_msg;
 		goto error_3;
 	}
@@ -118,7 +118,7 @@ error_1:
 	/* newterm()/setupterm() attempts to load $TERM, else if
 	 * $TERM is not defined, the vendor's default terminal type.
 	 */
-	if ((term = getenv("TERM")) == (char *) 0)
+	if ((term = getenv("TERM")) == NULL)
 		term = M_TERM_NAME;
 
 	(void) fprintf(stderr, m_strmsg(err), term);

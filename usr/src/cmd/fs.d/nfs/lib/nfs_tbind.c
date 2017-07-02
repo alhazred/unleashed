@@ -181,7 +181,7 @@ nfslib_transport_open(struct netconfig *nconf)
 	}
 
 	strioc.ic_cmd = RPC_SERVER;
-	strioc.ic_dp = (char *)0;
+	strioc.ic_dp = NULL;
 	strioc.ic_len = 0;
 	strioc.ic_timout = -1;
 
@@ -1241,7 +1241,7 @@ discon_get(int fd, struct netconfig *nconf, struct conn_ind **connp)
 	struct conn_ind	*conn;
 	struct t_discon	discon;
 
-	discon.udata.buf = (char *)0;
+	discon.udata.buf = NULL;
 	discon.udata.maxlen = 0;
 	if (t_rcvdis(fd, &discon) == -1) {
 		nfslib_log_tli_error("t_rcvdis", fd, nconf);

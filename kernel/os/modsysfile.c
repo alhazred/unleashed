@@ -1335,7 +1335,7 @@ int
 kobj_get_string(u_longlong_t *llptr, char *tchar)
 {
 	char *cp;
-	char *start = (char *)0;
+	char *start = NULL;
 	int len = 0;
 
 	len = strlen(tchar);

@@ -525,7 +525,7 @@ print_symtab(Elf *elf_file, SCNTAB *p_symtab, Elf_Data *sym_data,
 		adj = 8;
 
 	while (range > 0) {
-		char		*sym_name = (char *)0;
+		char *sym_name = NULL;
 		int		type, bind;
 		int		specsec;
 		unsigned int	shndx;

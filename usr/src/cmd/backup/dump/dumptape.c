@@ -1045,7 +1045,7 @@ nextdevice()
 		tape = strchr(host, ':');
 		*tape++ = 0;
 		cp = strchr(host, '@');	/* user@host? */
-		if (cp != (char *)0)
+		if (cp != NULL)
 			cp++;
 		else
 			cp = host;
@@ -1256,7 +1256,7 @@ changevol()
 	if (host) {
 		char	*rhost = host;
 		char	*cp = strchr(host, '@');
-		if (cp == (char *)0)
+		if (cp == NULL)
 			cp = host;
 		else
 			cp++;

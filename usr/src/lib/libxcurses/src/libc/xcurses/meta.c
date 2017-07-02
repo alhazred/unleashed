@@ -60,10 +60,10 @@ meta(WINDOW *w, bool bf)
 	__m_screen->_flags &= ~S_USE_META;
 
 	if (bf) {
-		if (meta_on != (char *) 0)
+		if (meta_on != NULL)
 			(void) tputs(meta_on, 1, __m_outc);
 		__m_screen->_flags |= S_USE_META;
-	} else if (meta_off != (char *) 0) {
+	} else if (meta_off != NULL) {
 		(void) tputs(meta_off, 1, __m_outc);
 	}
 

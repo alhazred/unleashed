@@ -168,7 +168,7 @@ _makearg(FIELDTYPE *t, va_list *ap, int *err)
  * return pointer to argument information or null if none.
  * increment err if an error is encountered.
  */
-	char *p = (char *)0;
+	char *p = NULL;
 
 	if (! t || ! Status(t, ARGS))
 		return (p);
@@ -196,7 +196,7 @@ _copyarg(FIELDTYPE *t, char *arg, int *err)
  * return pointer to argument information or null if none.
  * increment err if an error is encountered.
  */
-	char *p = (char *)0;
+	char *p = NULL;
 
 	if (!t || !Status(t, ARGS))
 		return (p);

@@ -34,7 +34,7 @@ prom_devname_from_pathname(register char *pathname, register char *buffer)
 {
 	register char *p;
 
-	if ((pathname == (char *)0) || (*pathname == '\0'))
+	if ((pathname == NULL) || (*pathname == '\0'))
 		return (-1);
 
 	p = prom_strrchr(pathname, '/');
@@ -82,7 +82,7 @@ prom_stdin_stdout_equivalence(void)
 	s = prom_stdinpath();
 	p = prom_stdoutpath();
 
-	if ((s != (char *)0) && (p != (char *)0))  {
+	if ((s != NULL) && (p != NULL))  {
 		return (prom_strcmp(s, p) == 0 ? 1:0);
 	}
 
@@ -100,10 +100,10 @@ prom_path_options(register char *path)
 	register char *p, *s;
 
 	s = prom_strrchr(path, '/');
-	if (s == (char *)0)
-		return ((char *)0);
+	if (s == NULL)
+		return (NULL);
 	p = prom_strrchr(s, ':');
-	if (p == (char *)0)
-		return ((char *)0);
+	if (p == NULL)
+		return (NULL);
 	return (p+1);
 }

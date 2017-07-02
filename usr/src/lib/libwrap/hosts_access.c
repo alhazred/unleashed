@@ -208,11 +208,11 @@ int   (*match_fn) ();
      * the match is affected by any exceptions.
      */
 
-    for (tok = strtok(list, sep); tok != 0; tok = strtok((char *) 0, sep)) {
+    for (tok = strtok(list, sep); tok != 0; tok = strtok(NULL, sep)) {
 	if (STR_EQ(tok, "EXCEPT"))		/* EXCEPT: give up */
 	    return (NO);
 	if (match_fn(tok, request)) {		/* YES: look for exceptions */
-	    while ((tok = strtok((char *) 0, sep)) && STR_NE(tok, "EXCEPT"))
+	    while ((tok = strtok(NULL, sep)) && STR_NE(tok, "EXCEPT"))
 		 /* VOID */ ;
 	    return (tok == 0 || list_match((char *) 0, request, match_fn) == 0);
 	}

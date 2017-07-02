@@ -437,14 +437,14 @@ cost(char *cap, int index, int p1, int p2)
 {
 	cur_term->_move[index]._seq = cap;
 
-	if (cap == (char *) 0 || cap[0] == '\0') {
+	if (cap == NULL || cap[0] == '\0') {
 		cur_term->_move[index]._cost = __MOVE_INFINITY;
 	} else {
 		cur_term->_move[index]._cost = __m_tputs(
 			tparm(cap, (long) p1, (long) p2, 0, 0, 0, 0, 0, 0, 0),
 			1, nilout);
 
-		if (cap == cursor_down && strchr(cap, '\n') != (char *) 0)
+		if (cap == cursor_down && strchr(cap, '\n') != NULL)
 			cur_term->_move[index]._cost = __MOVE_INFINITY;
 	}
 }

@@ -91,7 +91,7 @@ bgets(char *buf, size_t count, FILE *fp, char *stopstr)
 		if ((c = getc(fp)) == EOF) {
 			*cp = '\0';
 			if (cp == buf)
-				cp = (char *)0;
+				cp = NULL;
 			break;
 		}
 		*cp++ = (char)c;

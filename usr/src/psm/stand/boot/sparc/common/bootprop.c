@@ -125,7 +125,7 @@ bgetproplen(struct bootops *bop, char *name)
 	if (strequal(name, "memory-update"))
 		return (BOOT_SUCCESS);
 
-	for (p = (struct bplist *)bprop_tab; p->name != (char *)0; p++) {
+	for (p = (struct bplist *)bprop_tab; p->name != NULL; p++) {
 
 		/* got a linked list?  */
 		if ((strequal(name, "virt-avail") && strequal(name, p->name)) ||
@@ -197,7 +197,7 @@ bgetprop(struct bootops *bop, char *name, void *buf)
 		return (BOOT_SUCCESS);
 	}
 
-	for (p = (struct bplist *)bprop_tab; p->name != (char *)0; p++) {
+	for (p = (struct bplist *)bprop_tab; p->name != NULL; p++) {
 
 		/* gotta linked list? */
 		if ((strequal(name, "virt-avail") && strequal(name, p->name)) ||
@@ -245,7 +245,7 @@ bnextprop(struct bootops *bop, char *prev)
 	if (*prev == 0)
 		return (bprop_tab->name);
 
-	for (p = (struct bplist *)bprop_tab; p->name != (char *)0; p++) {
+	for (p = (struct bplist *)bprop_tab; p->name != NULL; p++) {
 
 		if (strequal(prev, p->name))
 			/*
@@ -256,5 +256,5 @@ bnextprop(struct bootops *bop, char *prev)
 
 
 	}
-	return ((char *)0);
+	return (NULL);
 }

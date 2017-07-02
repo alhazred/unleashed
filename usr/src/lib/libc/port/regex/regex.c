@@ -182,15 +182,15 @@ regex(const char *regexp, const char *stringp, ...)
 	wchar_t		string_wchar;
 
 	if (____loc1() == (char **)0) {
-	    return ((char *)0);
+	    return (NULL);
 	} else {
 	    lmutex_lock(&regex_lock);
-	    __loc1 = (char *)0;
+	    __loc1 = NULL;
 	}
 
-	if ((stringp == (char *)0) || (regexp == (char *)0)) {
+	if ((stringp == NULL) || (regexp == NULL)) {
 	    lmutex_unlock(&regex_lock);
-	return ((char *)0);
+	return (NULL);
 	}
 
 
@@ -200,7 +200,7 @@ regex(const char *regexp, const char *stringp, ...)
 	va_start(arg_listp, stringp);
 	while (substringn < NSUBSTRINGS) {
 	    return_argp[substringn] = va_arg(arg_listp, char *);
-	    substring_startp[substringn] = (char *)0;
+	    substring_startp[substringn] = NULL;
 	    return_arg_number[substringn] = -1;
 	    substringn++;
 	}
@@ -209,7 +209,7 @@ regex(const char *regexp, const char *stringp, ...)
 
 	/* TEST THE STRING AGAINST THE REGULAR EXPRESSION */
 
-	end_of_matchp = (char *)0;
+	end_of_matchp = NULL;
 	stringp_stackp = &stringp_stack[STRINGP_STACK_SIZE];
 
 	if ((int)*regexp == (int)START_OF_STRING_MARK) {
@@ -236,9 +236,9 @@ regex(const char *regexp, const char *stringp, ...)
 	    while ((*stringp != *(regexp + 1)) && (*stringp != '\0')) {
 		stringp++;
 	    }
-	    while ((end_of_matchp == (char *)0) && (*stringp != '\0')) {
+	    while ((end_of_matchp == NULL) && (*stringp != '\0')) {
 		end_of_matchp = test_string(stringp, regexp);
-		if (end_of_matchp != (char *)0) {
+		if (end_of_matchp != NULL) {
 		    __loc1 = (char *)stringp;
 		} else {
 		    stringp++;
@@ -261,11 +261,11 @@ regex(const char *regexp, const char *stringp, ...)
 	 */
 
 	    end_of_matchp = test_string(stringp, regexp);
-	    while ((end_of_matchp == (char *)0) && (*stringp != '\0')) {
+	    while ((end_of_matchp == NULL) && (*stringp != '\0')) {
 		stringp++;
 		end_of_matchp = test_string(stringp, regexp);
 	    }
-	    if (end_of_matchp != (char *)0) {
+	    if (end_of_matchp != NULL) {
 		__loc1 = (char *)stringp;
 	    }
 
@@ -286,9 +286,9 @@ regex(const char *regexp, const char *stringp, ...)
 		stringp += char_size;
 		char_size = get_wchar(&string_wchar, stringp);
 	    }
-	    while ((end_of_matchp == (char *)0) && (char_size > 0)) {
+	    while ((end_of_matchp == NULL) && (char_size > 0)) {
 		end_of_matchp = test_string(stringp, regexp);
-		if (end_of_matchp != (char *)0) {
+		if (end_of_matchp != NULL) {
 		    __loc1 = (char *)stringp;
 		} else {
 		    stringp += char_size;
@@ -312,12 +312,12 @@ regex(const char *regexp, const char *stringp, ...)
 
 	    end_of_matchp = test_string(stringp, regexp);
 	    char_size = get_wchar(&string_wchar, stringp);
-	    while ((end_of_matchp == (char *)0) && (char_size > 0)) {
+	    while ((end_of_matchp == NULL) && (char_size > 0)) {
 		stringp += char_size;
 		end_of_matchp = test_string(stringp, regexp);
 		char_size = get_wchar(&string_wchar, stringp);
 	    }
-	    if (end_of_matchp != (char *)0) {
+	    if (end_of_matchp != NULL) {
 		__loc1 = (char *)stringp;
 	    }
 	}
@@ -336,11 +336,11 @@ regex(const char *regexp, const char *stringp, ...)
 	substringn = 0;
 	while (substringn < NSUBSTRINGS) {
 	    substringp = substring_startp[substringn];
-	    if ((substringp != (char *)0) &&
+	    if ((substringp != NULL) &&
 		(return_arg_number[substringn] >= 0)) {
 		returned_substringp =
 		    return_argp[return_arg_number[substringn]];
-		if (returned_substringp != (char *)0) {
+		if (returned_substringp != NULL) {
 		    while (substringp < substring_endp[substringn]) {
 			*returned_substringp = (char)*substringp;
 			returned_substringp++;
@@ -364,7 +364,7 @@ get_wchar(wchar_t *wcharp,
 {
 	int char_size;
 
-	if (stringp == (char *)0) {
+	if (stringp == NULL) {
 	    char_size = 0;
 	    *wcharp = (wchar_t)((unsigned int)'\0');
 	} else if (*stringp == '\0') {
@@ -423,7 +423,7 @@ pop_stringp(void)
 	const char *stringp;
 
 	if (stringp_stackp >= &stringp_stack[STRINGP_STACK_SIZE]) {
-	    return ((char *)0);
+	    return (NULL);
 	} else {
 	    stringp = *stringp_stackp;
 	    stringp_stackp++;
@@ -463,7 +463,7 @@ static const char *
 push_stringp(const char *stringp)
 {
 	if (stringp_stackp <= &stringp_stack[0]) {
-	    return ((char *)0);
+	    return (NULL);
 	} else {
 	    stringp_stackp--;
 	    *stringp_stackp = stringp;
@@ -657,7 +657,7 @@ test_repeated_ascii_char(const char *repeat_startp,
 	const char *end_of_matchp;
 
 	end_of_matchp = test_string(stringp, regexp);
-	while ((end_of_matchp == (char *)0) &&
+	while ((end_of_matchp == NULL) &&
 	    (stringp > repeat_startp)) {
 	    stringp--;
 	    end_of_matchp = test_string(stringp, regexp);
@@ -673,7 +673,7 @@ test_repeated_multibyte_char(const char *repeat_startp,
 	const char *end_of_matchp;
 
 	end_of_matchp = test_string(stringp, regexp);
-	while ((end_of_matchp == (char *)0) &&
+	while ((end_of_matchp == NULL) &&
 	    (stringp > repeat_startp)) {
 	    stringp = previous_charp(stringp);
 	    end_of_matchp = test_string(stringp, regexp);
@@ -689,11 +689,11 @@ test_repeated_group(const char *repeat_startp,
 	const char *end_of_matchp;
 
 	end_of_matchp = test_string(stringp, regexp);
-	while ((end_of_matchp == (char *)0) &&
+	while ((end_of_matchp == NULL) &&
 	    (stringp > repeat_startp)) {
 	    stringp = pop_stringp();
-	    if (stringp == (char *)0) {
-		return ((char *)0);
+	    if (stringp == NULL) {
+		return (NULL);
 	    }
 	    end_of_matchp = test_string(stringp, regexp);
 	}
@@ -765,7 +765,7 @@ test_string(const char *stringp,
 		    regexp++;
 		    stringp++;
 		} else {
-		    return ((char *)0);
+		    return (NULL);
 		}
 		break;		/* end case ASCII_CHAR */
 
@@ -777,7 +777,7 @@ test_string(const char *stringp,
 		regex_char_size = get_wchar(&regex_wchar, regexp);
 		string_char_size = get_wchar(&string_wchar, stringp);
 		if ((string_char_size <= 0) || (string_wchar != regex_wchar)) {
-		    return ((char *)0);
+		    return (NULL);
 		} else {
 		    regexp += regex_char_size;
 		    stringp += string_char_size;
@@ -790,7 +790,7 @@ test_string(const char *stringp,
 
 		if (!multibyte) {
 		    if (*stringp == '\0') {
-			return ((char *)0);
+			return (NULL);
 		    } else {
 			regexp++;
 			stringp++;
@@ -798,7 +798,7 @@ test_string(const char *stringp,
 		} else {
 		    string_char_size = get_wchar(&string_wchar, stringp);
 		    if (string_char_size <= 0) {
-			return ((char *)0);
+			return (NULL);
 		    } else {
 			regexp++;
 			stringp += string_char_size;
@@ -829,7 +829,7 @@ test_string(const char *stringp,
 		    regexp += (int)*regexp; /* add the class length to regexp */
 		    stringp++;
 		} else {
-		    return ((char *)0);
+		    return (NULL);
 		}
 		break; /* end case IN_ASCII_CHAR_CLASS */
 
@@ -857,7 +857,7 @@ test_string(const char *stringp,
 		    regexp += (int)*regexp; /* add the class length to regexp */
 		    stringp += string_char_size;
 		} else {
-		    return ((char *)0);
+		    return (NULL);
 		}
 		break; /* end case IN_MULTIBYTE_CHAR_CLASS */
 
@@ -884,7 +884,7 @@ test_string(const char *stringp,
 		    regexp += (int)*regexp; /* add the class length to regexp */
 		    stringp++;
 		} else {
-		    return ((char *)0);
+		    return (NULL);
 		}
 		break; /* end case [NOT_]IN_OLD_ASCII_CHAR_CLASS */
 
@@ -909,7 +909,7 @@ test_string(const char *stringp,
 		regexp++;
 		substringn = (unsigned int)*regexp;
 		if (substringn >= NSUBSTRINGS)
-		    return ((char *)0);
+		    return (NULL);
 		substring_startp[substringn] = stringp;
 		regexp++;
 		break;		/* end case SAVED_GROUP */
@@ -924,12 +924,12 @@ test_string(const char *stringp,
 		regexp++;
 		substringn = (unsigned int)*regexp;
 		if (substringn >= NSUBSTRINGS)
-		    return ((char *)0);
+		    return (NULL);
 		substring_endp[substringn] = stringp;
 		regexp++;
 		return_argn = (unsigned int)*regexp;
 		if (return_argn >= NSUBSTRINGS)
-		    return ((char *)0);
+		    return (NULL);
 		return_arg_number[substringn] = return_argn;
 		regexp++;
 		break;		/* end case END_SAVED_GROUP */
@@ -955,7 +955,7 @@ test_string(const char *stringp,
 
 		regexp++;
 		if (*stringp != *regexp) {
-		    return ((char *)0);
+		    return (NULL);
 		} else {
 		    stringp++;
 		    repeat_startp = stringp;
@@ -983,7 +983,7 @@ test_string(const char *stringp,
 		    stringp++;
 		}
 		if (nmust_match > 0) {
-		    return ((char *)0);
+		    return (NULL);
 		} else if (nextra_matches_allowed == UNLIMITED) {
 		    repeat_startp = stringp;
 		    while (*stringp == *regexp) {
@@ -1032,7 +1032,7 @@ test_string(const char *stringp,
 		regex_char_size = get_wchar(&regex_wchar, regexp);
 		string_char_size = get_wchar(&string_wchar, stringp);
 		if ((string_char_size <= 0) || (string_wchar != regex_wchar)) {
-		    return ((char *)0);
+		    return (NULL);
 		} else {
 		    stringp += string_char_size;
 		    repeat_startp = stringp;
@@ -1069,7 +1069,7 @@ test_string(const char *stringp,
 		    string_char_size = get_wchar(&string_wchar, stringp);
 		}
 		if (nmust_match > 0) {
-		    return ((char *)0);
+		    return (NULL);
 		} else if (nextra_matches_allowed == UNLIMITED) {
 		    repeat_startp = stringp;
 		    while ((string_char_size > 0) &&
@@ -1125,7 +1125,7 @@ test_string(const char *stringp,
 
 		if (!multibyte) {
 		    if (*stringp == '\0') {
-			return ((char *)0);
+			return (NULL);
 		    } else {
 			stringp++;
 			repeat_startp = stringp;
@@ -1139,7 +1139,7 @@ test_string(const char *stringp,
 		} else {
 		    string_char_size = get_wchar(&string_wchar, stringp);
 		    if (string_char_size <= 0) {
-			return ((char *)0);
+			return (NULL);
 		    } else {
 			stringp += string_char_size;
 			repeat_startp = stringp;
@@ -1171,7 +1171,7 @@ test_string(const char *stringp,
 			stringp++;
 		    }
 		    if (nmust_match > 0) {
-			return ((char *)0);
+			return (NULL);
 		    } else if (nextra_matches_allowed == UNLIMITED) {
 			repeat_startp = stringp;
 			while (*stringp != '\0') {
@@ -1200,7 +1200,7 @@ test_string(const char *stringp,
 			string_char_size = get_wchar(&string_wchar, stringp);
 		    }
 		    if (nmust_match > 0) {
-			return ((char *)0);
+			return (NULL);
 		    } else if (nextra_matches_allowed == UNLIMITED) {
 			repeat_startp = stringp;
 			while (string_char_size > 0) {
@@ -1279,7 +1279,7 @@ test_string(const char *stringp,
 		if ((*stringp == '\0') ||
 		    (test_char_against_ascii_class(*stringp, regexp,
 		    test_condition) != CONDITION_TRUE)) {
-		    return ((char *)0);
+		    return (NULL);
 		} else {
 		    stringp++;
 		    repeat_startp = stringp;
@@ -1327,7 +1327,7 @@ test_string(const char *stringp,
 		    stringp++;
 		}
 		if (nmust_match > 0) {
-		    return ((char *)0);
+		    return (NULL);
 		} else if (nextra_matches_allowed == UNLIMITED) {
 		    repeat_startp = stringp;
 		    while ((*stringp != '\0') &&
@@ -1411,7 +1411,7 @@ test_string(const char *stringp,
 		if ((string_char_size <= 0) ||
 		    (test_char_against_multibyte_class(string_wchar, regexp,
 		    test_condition) != CONDITION_TRUE)) {
-		    return ((char *)0);
+		    return (NULL);
 		} else {
 		    stringp += string_char_size;
 		    repeat_startp = stringp;
@@ -1461,7 +1461,7 @@ test_string(const char *stringp,
 		    string_char_size = get_wchar(&string_wchar, stringp);
 		}
 		if (nmust_match > 0) {
-		    return ((char *)0);
+		    return (NULL);
 		} else if (nextra_matches_allowed == UNLIMITED) {
 		    repeat_startp = stringp;
 		    while ((string_char_size > 0) &&
@@ -1544,7 +1544,7 @@ test_string(const char *stringp,
 		if ((*stringp == '\0') ||
 		    (test_char_against_old_ascii_class(*stringp, regexp,
 		    test_condition) != CONDITION_TRUE)) {
-		    return ((char *)0);
+		    return (NULL);
 		} else {
 		    stringp++;
 		    repeat_startp = stringp;
@@ -1592,7 +1592,7 @@ test_string(const char *stringp,
 		    stringp++;
 		}
 		if (nmust_match > 0) {
-		    return ((char *)0);
+		    return (NULL);
 		} else if (nextra_matches_allowed == UNLIMITED) {
 		    repeat_startp = stringp;
 		    while ((*stringp != '\0') &&
@@ -1644,9 +1644,9 @@ test_string(const char *stringp,
 		regexp++;
 		repeat_startp = stringp;
 		test_stringp = test_string(stringp, regexp);
-		while (test_stringp != (char *)0) {
-		    if (push_stringp(stringp) == (char *)0)
-			return ((char *)0);
+		while (test_stringp != NULL) {
+		    if (push_stringp(stringp) == NULL)
+			return (NULL);
 		    stringp = test_stringp;
 		    test_stringp = test_string(stringp, regexp);
 		}
@@ -1689,13 +1689,13 @@ test_string(const char *stringp,
 		group_length += (unsigned int)*regexp;
 		regexp++;
 		stringp = test_string(stringp, regexp);
-		if (stringp == (char *)0)
-		    return ((char *)0);
+		if (stringp == NULL)
+		    return (NULL);
 		repeat_startp = stringp;
 		test_stringp = test_string(stringp, regexp);
-		while (test_stringp != (char *)0) {
-		    if (push_stringp(stringp) == (char *)0)
-			return ((char *)0);
+		while (test_stringp != NULL) {
+		    if (push_stringp(stringp) == NULL)
+			return (NULL);
 		    stringp = test_stringp;
 		    test_stringp = test_string(stringp, regexp);
 		}
@@ -1742,18 +1742,18 @@ test_string(const char *stringp,
 		get_match_counts(&nmust_match, &nextra_matches_allowed,
 		    regexp + group_length);
 		test_stringp = test_string(stringp, regexp);
-		while ((test_stringp != (char *)0) && (nmust_match > 0)) {
+		while ((test_stringp != NULL) && (nmust_match > 0)) {
 		    stringp = test_stringp;
 		    nmust_match--;
 		    test_stringp = test_string(stringp, regexp);
 		}
 		if (nmust_match > 0) {
-		    return ((char *)0);
+		    return (NULL);
 		} else if (nextra_matches_allowed == UNLIMITED) {
 		    repeat_startp = stringp;
-		    while (test_stringp != (char *)0) {
-			if (push_stringp(stringp) == (char *)0)
-			    return ((char *)0);
+		    while (test_stringp != NULL) {
+			if (push_stringp(stringp) == NULL)
+			    return (NULL);
 			stringp = test_stringp;
 			test_stringp = test_string(stringp, regexp);
 		}
@@ -1762,11 +1762,11 @@ test_string(const char *stringp,
 			regexp));
 		} else {
 		    repeat_startp = stringp;
-		    while ((test_stringp != (char *)0) &&
+		    while ((test_stringp != NULL) &&
 			(nextra_matches_allowed > 0)) {
 			nextra_matches_allowed--;
-			if (push_stringp(stringp) == (char *)0)
-			    return ((char *)0);
+			if (push_stringp(stringp) == NULL)
+			    return (NULL);
 			stringp = test_stringp;
 			test_stringp = test_string(stringp, regexp);
 		}
@@ -1793,7 +1793,7 @@ test_string(const char *stringp,
 		if (*stringp == '\0') {
 		    regexp++;
 		} else {
-		    return ((char *)0);
+		    return (NULL);
 		}
 		break; /* end case END_OF_STRING_MARK */
 
@@ -1807,7 +1807,7 @@ test_string(const char *stringp,
 
 	    default:
 
-		return ((char *)0);
+		return (NULL);
 
 	    } /* end switch (*regexp) */
 

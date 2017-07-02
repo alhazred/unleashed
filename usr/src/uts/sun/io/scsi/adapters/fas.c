@@ -8885,7 +8885,7 @@ fas_commoncap(struct scsi_address *ap, char *cap, int val,
 
 	mutex_enter(FAS_MUTEX(fas));
 
-	if (cap == (char *)0) {
+	if (cap == NULL) {
 		goto exit;
 	}
 

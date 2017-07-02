@@ -37,7 +37,7 @@ prom_stdoutpath(void)
 {
 	ihandle_t	istdout;
 
-	if (stdoutpath != (char *)0)
+	if (stdoutpath != NULL)
 		return (stdoutpath);
 
 	istdout = prom_stdout_ihandle();
@@ -46,5 +46,5 @@ prom_stdoutpath(void)
 		if (prom_ihandle_to_path(istdout, buffer,
 		    OBP_MAXPATHLEN - 1) > 0)
 			return (stdoutpath = buffer);
-	return ((char *)0);
+	return (NULL);
 }

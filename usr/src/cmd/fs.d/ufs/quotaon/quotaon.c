@@ -189,7 +189,7 @@ main(int argc, char **argv)
 			}
 		}
 		fclose(vfstab);
-		*listp = (char *)0;
+		*listp = NULL;
 		listp = listbuf;
 	} else {
 		listp = &argv[optind];
@@ -273,7 +273,7 @@ oneof(char *target, char **olistp, int on)
 
 	while (n--) {
 		if (*listp && strcmp(target, *listp) == 0) {
-			*listp = (char *)0;
+			*listp = NULL;
 			return (1);
 		}
 		listp++;

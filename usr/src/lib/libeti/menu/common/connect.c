@@ -99,8 +99,7 @@ _connect(MENU *m, ITEM **items)
 	maxlengths(m);
 
 	/* Set up match buffer */
-	if ((Pattern(m) = (char *)malloc((unsigned)MaxName(m)+1)) ==
-	    (char *)0) {
+	if ((Pattern(m) = (char *)malloc((unsigned)MaxName(m) + 1)) == NULL) {
 		return (FALSE);
 	}
 

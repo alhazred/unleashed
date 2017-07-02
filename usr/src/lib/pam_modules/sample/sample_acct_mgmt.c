@@ -133,7 +133,7 @@ getname(char *cp, char *name)
 
 	/* end of string? */
 	if (*cp == '\0')
-		return ((char *)0);
+		return (NULL);
 	while (*cp) {
 		/* end of name? */
 		if (*cp == ',' || *cp == '\0')

@@ -210,7 +210,7 @@ texec(struct command *cmd, tchar *f, tchar **t)
 	 */
 	xfree(cmd->cfname);
 	chr_blkfree(cmd->cargs);
-	cmd->cfname = (char *)0;
+	cmd->cfname = NULL;
 	cmd->cargs = (char **)0;
 
 	switch (errno) {
@@ -274,7 +274,7 @@ texec(struct command *cmd, tchar *f, tchar **t)
 		/* exec returned, same free'ing as above */
 		xfree(cmd->cfname);
 		chr_blkfree(cmd->cargs);
-		cmd->cfname = (char *)0;
+		cmd->cfname = NULL;
 		cmd->cargs = (char **)0;
 
 		/* The sky is falling, the sky is falling! */

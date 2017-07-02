@@ -140,7 +140,7 @@ _tgetent(char *bp, char *name)
 	if (cp && *cp) {
 		if (*cp != '/') {
 			cp2 = getenv("TERM");
-			if (cp2 == (char *)0 || strcmp(name, cp2) == 0) {
+			if (cp2 == NULL || strcmp(name, cp2) == 0) {
 				(void) strcpy(bp, cp);
 				return (otnchktc());
 			} else {

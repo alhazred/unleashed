@@ -94,7 +94,7 @@ MakeType(FIELD *f, va_list *ap)
 	if (err) {
 		FreeArg(f);		/* release type specific args	*/
 		f->type = (FIELDTYPE *)0;
-		f->arg = (char *)0;
+		f->arg = NULL;
 		return (FALSE);
 	}
 	IncrType(f->type);		/* increment reference count	*/
@@ -116,7 +116,7 @@ CopyType(FIELD *f, FIELD *fsrc)
 	if (err) {
 		FreeArg(f);		/* release type specific args	*/
 		f->type = (FIELDTYPE *)0;
-		f->arg = (char *)0;
+		f->arg = NULL;
 		return (FALSE);
 	}
 	IncrType(f->type);		/* increment reference count	*/

@@ -144,7 +144,7 @@ pathfind(const char *path, const char *name, const char *mode)
 			nzflag = 1;
 			break;
 		default:
-			return ((char *)0);
+			return (NULL);
 		}
 	}
 
@@ -169,7 +169,7 @@ pathfind(const char *path, const char *name, const char *mode)
 			return (cpath);
 	}
 
-	return ((char *)0);
+	return (NULL);
 }
 
 static int

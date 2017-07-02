@@ -573,6 +573,6 @@ str_to_sv(char *buf, char *sv[])
 	if (in_word)
 		*q++ = 0;
 
-	*pp = (char *)0;
+	*pp = NULL;
 	return (pp - sv);
 }

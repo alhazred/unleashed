@@ -940,11 +940,11 @@ doupdate()
 		__m_screen->_flags &= ~S_ENDWIN;
 
 		(void) reset_prog_mode();
-		if (enter_ca_mode != (char *) 0)
+		if (enter_ca_mode != NULL)
 			(void) tputs(enter_ca_mode, 1, __m_outc);
-		if (keypad_xmit != (char *) 0)
+		if (keypad_xmit != NULL)
 			(void) tputs(keypad_xmit, 1, __m_outc);
-		if (ena_acs != (char *) 0)
+		if (ena_acs != NULL)
 			(void) tputs(ena_acs, 1, __m_outc);
 
 		/* Force redraw of screen. */

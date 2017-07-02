@@ -105,15 +105,15 @@ char   *conf;
 	if (service == 0 || *service == '#')
 	    continue;
 	if (STR_NE(service, "stream") && STR_NE(service, "dgram"))
-	    strtok((char *) 0, whitespace);	/* endpoint */
-	protocol = strtok((char *) 0, whitespace);
-	(void) strtok((char *) 0, whitespace);	/* wait */
-	if ((user = strtok((char *) 0, whitespace)) == 0)
+	    strtok(NULL, whitespace);	/* endpoint */
+	protocol = strtok(NULL, whitespace);
+	(void) strtok(NULL, whitespace);	/* wait */
+	if ((user = strtok(NULL, whitespace)) == 0)
 	    continue;
 	if (user[0] == '/') {			/* user */
 	    path = user;
 	} else {				/* path */
-	    if ((path = strtok((char *) 0, whitespace)) == 0)
+	    if ((path = strtok(NULL, whitespace)) == 0)
 		continue;
 	}
 	if (path[0] == '?')			/* IRIX optional service */
@@ -126,10 +126,10 @@ char   *conf;
 	     * ConvexOS puts RPC version numbers before path names. Jukka
 	     * Ukkonen <ukkonen@csc.fi>.
 	     */
-	    if ((path = strtok((char *) 0, whitespace)) == 0)
+	    if ((path = strtok(NULL, whitespace)) == 0)
 		continue;
 	}
-	if ((arg0 = strtok((char *) 0, whitespace)) == 0) {
+	if ((arg0 = strtok(NULL, whitespace)) == 0) {
 	    tcpd_warn("incomplete line");
 	    continue;
 	}
@@ -140,12 +140,12 @@ char   *conf;
 	     * 
 	     * ...stuff... path arg_count arguments mod_count modules
 	     */
-	    if ((arg0 = strtok((char *) 0, whitespace)) == 0) {
+	    if ((arg0 = strtok(NULL, whitespace)) == 0) {
 		tcpd_warn("incomplete line");
 		continue;
 	    }
 	}
-	if ((arg1 = strtok((char *) 0, whitespace)) == 0)
+	if ((arg1 = strtok(NULL, whitespace)) == 0)
 	    arg1 = "";
 
 	inet_chk(protocol, path, arg0, arg1);

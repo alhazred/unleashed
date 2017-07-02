@@ -1728,7 +1728,7 @@ vhci_commoncap(struct scsi_address *ap, char *cap,
 	int			cidx;
 	int			rval = 0;
 
-	if (cap == (char *)0) {
+	if (cap == NULL) {
 		VHCI_DEBUG(3, (CE_WARN, vhci->vhci_dip,
 		    "!vhci_commoncap: invalid arg"));
 		return (rval);

@@ -724,7 +724,7 @@ pdateerr(p)
     struct tm	*tm;
 
     value = getenv(name);
-    if (value == (char *)0) {
+    if (value == NULL) {
 	fprintf(stderr,
 	    dgettext(domainname, "%s: Environment variable %s not set\n"),
 		p, name);
@@ -771,7 +771,7 @@ pdateerr(p)
 	    fprintf(stderr, dgettext(domainname,
 		"The following are examples of valid formats:\n"));
 	    while (fgets(fmt, sizeof (fmt), fp)) {
-		if (strchr(fmt, '%') == (char *)0)
+		if (strchr(fmt, '%') == NULL)
 		    continue;
 		fprintf(stderr, "    ");
 	        (void) strftime(line, sizeof (line), fmt, tm);

@@ -299,7 +299,7 @@ sip_uri_url_casecmp(const char *str1, const char *str2, unsigned len)
 static int
 sip_uri_parse_tel(char *scan, char *uend)
 {
-	char	*mark = (char *)0;
+	char *mark = NULL;
 	int	ret = 0;
 	int	isGlobal = 0;
 	int	quote = 0;
@@ -543,7 +543,7 @@ sip_uri_hexVal(char *scan, char *uend)
 static int
 sip_uri_parse_tel_servicepro(char *scan, char *uend)
 {
-	char	*mark = (char *)0;
+	char *mark = NULL;
 
 	if (scan == uend)
 		return (0);
@@ -779,8 +779,8 @@ sip_uri_parse_scheme(_sip_uri_t *outurl, char *scan, char *uend)
 static void
 sip_uri_parse_params(_sip_uri_t *outurl, char *scan, char *uend)
 {
-	char		*mark = (char *)0;
-	char		*equal = (char *)0;
+	char *mark = NULL;
+	char *equal = NULL;
 	int		i = 0;
 	int		ttl = 0;
 	int		paramleftlen = 0;
@@ -817,7 +817,7 @@ sip_uri_parse_params(_sip_uri_t *outurl, char *scan, char *uend)
 
 		param->param_name.sip_str_ptr = mark;
 		equal = memchr(mark, '=', scan - mark);
-		if (equal == (char *)0) {
+		if (equal == NULL) {
 			param->param_name.sip_str_len = scan - mark;
 			param->param_value.sip_str_ptr = NULL;
 			param->param_value.sip_str_len = 0;
@@ -948,7 +948,7 @@ sip_uri_parse_headers(_sip_uri_t *outurl, char *scan, char *uend)
 			return;
 		}
 		equal = memchr(mark, '=', scan - mark);
-		if (equal == mark || equal == (char *)0) {
+		if (equal == mark || equal == NULL) {
 			outurl->sip_uri_errflags |= SIP_URIERR_HEADER;
 			return;
 		}
@@ -1321,8 +1321,8 @@ static void
 sip_uri_parse_netpath(_sip_uri_t *outurl, char **pscan, char *uend,
     boolean_t issip)
 {
-	char	*mark = (char *)0;
-	char	*mark2 = (char *)0;
+	char *mark = NULL;
+	char *mark2 = NULL;
 	char	*scan = *pscan;
 	int	gothost = 0;
 

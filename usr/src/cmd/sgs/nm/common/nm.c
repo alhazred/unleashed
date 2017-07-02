@@ -134,7 +134,7 @@ static  int	/* flags: ?_flag corresponds to ? option */
 static char A_header[DEF_MAX_SYM_SIZE+1] = {0};
 
 static char *prog_name;
-static char *archive_name = (char *)0;
+static char *archive_name = NULL;
 static int errflag = 0;
 static void usage();
 static void each_file(char *);
@@ -464,7 +464,7 @@ each_file(char *filename)
 						    filename);
 				}
 			}
-			archive_name = (char *)0;
+			archive_name = NULL;
 			process(elf_file, filename);
 		} else {
 			(void) fprintf(stderr, gettext(
@@ -881,7 +881,7 @@ set_A_header(char *fname)
 	if (A_flag == 0)
 		return;
 
-	if (archive_name == (char *)0) {
+	if (archive_name == NULL) {
 		(void) snprintf(A_header, sizeof (A_header), "%s: ", fname);
 	} else {
 		(void) snprintf(A_header, sizeof (A_header), "%s[%s]: ",
@@ -1020,7 +1020,7 @@ print_with_uflag(
 	if ((sym_data->shndx == SHN_UNDEF) && (strlen(sym_data->name))) {
 		if (!r_flag) {
 			if (R_flag) {
-				if (archive_name != (char *)0)
+				if (archive_name != NULL)
 					(void) printf("   %s:%s:%s\n",
 					    archive_name, filename,
 					    sym_data->name);
@@ -1128,7 +1128,7 @@ print_with_pflag(
 
 	if (!r_flag) {
 		if (R_flag) {
-			if (archive_name != (char *)0)
+			if (archive_name != NULL)
 				(void) printf("%s:%s:%s\n", archive_name,
 				    filename, sym_data->name);
 			else
@@ -1291,7 +1291,7 @@ print_with_otherflags(
 	(void) printf("|");
 	if (!r_flag) {
 		if (R_flag) {
-			if (archive_name != (char *)0)
+			if (archive_name != NULL)
 				(void) printf("%s:%s:%s\n", archive_name,
 				    filename, sym_data->name);
 			else

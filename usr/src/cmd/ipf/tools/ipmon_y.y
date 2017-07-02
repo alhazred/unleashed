@@ -310,7 +310,7 @@ int type;
 	o->o_type = type;
 	o->o_line = yylineNum;
 	o->o_num = 0;
-	o->o_str = (char *)0;
+	o->o_str = NULL;
 	o->o_next = NULL;
 	return o;
 }

@@ -11812,7 +11812,7 @@ fcp_commoncap(struct scsi_address *ap, char *cap,
 	int			cidx;
 	int			rval = FALSE;
 
-	if (cap == (char *)0) {
+	if (cap == NULL) {
 		FCP_TRACE(fcp_logq, pptr->port_instbuf,
 		    fcp_trace, FCP_BUF_LEVEL_3, 0,
 		    "fcp_commoncap: invalid arg");

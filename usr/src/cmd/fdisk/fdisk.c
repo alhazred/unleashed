@@ -1548,7 +1548,7 @@ mboot_read(void)
 	 * If the master boot file hasn't been specified, use the
 	 * implementation architecture name to generate the default one.
 	 */
-	if (io_mboot == (char *)0) {
+	if (io_mboot == NULL) {
 		/*
 		 * Bug ID 1249035:
 		 *	The mboot file must be delivered on all platforms

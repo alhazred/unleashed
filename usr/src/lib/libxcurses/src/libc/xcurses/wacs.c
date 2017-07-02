@@ -142,7 +142,7 @@ __m_acs_cc(chtype acs, cchar_t *cc)
 		return 0;
 		
 	/* Pick the acs mapping string to use. */
-	if (acs_chars == (char *) 0) {
+	if (acs_chars == NULL) {
 		/* Use primary character set. */
 		acsc = acs_defaults;
 		acs &= ~A_ALTCHARSET;
@@ -179,7 +179,7 @@ __m_wacs_cc(const cchar_t *acs, cchar_t *cc)
 		return 0;
 
 	/* Pick the acs mapping string to use. */
-	if (acs_chars == (char *) 0) {
+	if (acs_chars == NULL) {
 		/* Use primary character set. */
 		acsc = acs_defaults;
 		cc->_at &= ~A_ALTCHARSET;

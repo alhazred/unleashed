@@ -380,7 +380,7 @@ int
 allocchars(void)
 {
 	maxclin += MAXLIN;
-	if((chars = realloc(chars, maxclin)) == (char *)0)
+	if((chars = realloc(chars, maxclin)) == NULL)
 		return 0;
 	return 1;
 }
@@ -753,7 +753,7 @@ main(int argc, char **argv)
 		overflo();
 	if((initstat = (int *)malloc(MAXLIN*sizeof(int))) == (int *)0)
 		overflo();
-	if((chars = (char *)malloc(MAXLIN)) == (char *)0)
+	if((chars = (char *)malloc(MAXLIN)) == NULL)
 		overflo();
 	if((lower = (wchar_t *)malloc(MAXLIN*sizeof(wchar_t))) == (wchar_t *)0)
 		overflo();

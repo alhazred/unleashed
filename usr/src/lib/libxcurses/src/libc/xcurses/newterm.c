@@ -134,7 +134,7 @@ __m_slk_init(SCREEN *sp, int style)
 	code = ERR;
 
 	/* Does the terminal have a method to program the soft label key? */
-	if (plab_norm != (char *) 0 || pkey_plab  != (char *) 0) {
+	if (plab_norm != NULL || pkey_plab != NULL) {
 		code = OK;
 		goto done;
 	}

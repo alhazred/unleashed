@@ -1258,7 +1258,7 @@ exec_devfsadm(
 		} while (*current != '\0');
 
 	}
-	cmdline[n] = (char *)0;
+	cmdline[n] = NULL;
 
 	rv = exec_command(DRVCONFIG_PATH, cmdline);
 	if (rv == NOERR)
@@ -1330,7 +1330,7 @@ load_driver(char *driver_name, int verbose_flag)
 	}
 	cmdline[n++] = "-i";
 	cmdline[n++] = driver_name;
-	cmdline[n] = (char *)0;
+	cmdline[n] = NULL;
 
 	exec_status = exec_command(DEVFSADM_PATH, cmdline);
 

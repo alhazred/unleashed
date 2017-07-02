@@ -42,7 +42,7 @@ _curs_mbtowc(wchar_t *wchar, const char *s, size_t n)
 	char *olds = (char *)s;
 	wchar_t mask;
 
-	if (s == (char *)0)
+	if (s == NULL)
 		return (0);
 	if (n == 0)
 		return (-1);

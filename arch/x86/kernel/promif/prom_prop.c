@@ -57,14 +57,14 @@ char *
 prom_decode_composite_string(void *buf, size_t buflen, char *prev)
 {
 	if ((buf == 0) || (buflen == 0) || ((int)buflen == -1))
-		return ((char *)0);
+		return (NULL);
 
 	if (prev == 0)
 		return ((char *)buf);
 
 	prev += strlen(prev) + 1;
 	if (prev >= ((char *)buf + buflen))
-		return ((char *)0);
+		return (NULL);
 	return (prev);
 }
 

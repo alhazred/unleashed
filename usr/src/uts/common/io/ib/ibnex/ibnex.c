@@ -3434,7 +3434,7 @@ ibnex_lookup_named_prop(ddi_prop_t *head, char *name)
 		return ((char *)propp->prop_val);
 	}
 
-	return ((char *)0);
+	return (NULL);
 }
 
 

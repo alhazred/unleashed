@@ -318,7 +318,7 @@ sttyparse(int argc, char *argv[], int term, struct termio *ocb,
 			}
 		}
 	}
-	return ((char *)0);
+	return (NULL);
 }
 
 static int

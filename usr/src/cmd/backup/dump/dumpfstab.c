@@ -115,7 +115,7 @@ addvfstab(tablename, pm)
 		return (NULL);
 	}
 	while ((status = getvfsent(tp, &vfs)) == 0) {
-		if (vfs.vfs_fstype == (char *)0 ||
+		if (vfs.vfs_fstype == NULL ||
 		    strcmp(vfs.vfs_fstype, MNTTYPE_42) != 0)
 			continue;
 
@@ -208,7 +208,7 @@ addmtab(tablename, pm)
 		return (NULL);
 	}
 	while (mnt = mygetmntent(tp, tablename)) {
-		if (mnt->mnt_type == (char *)0 ||
+		if (mnt->mnt_type == NULL ||
 		    strcmp(mnt->mnt_type, MNTTYPE_42) != 0)
 			continue;
 

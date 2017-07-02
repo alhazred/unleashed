@@ -147,7 +147,7 @@ pr_heading(char *term, char *synonyms)
 	 */
 	terminfo = getenv("TERMINFO");
 
-	if (term == (char *)0)
+	if (term == NULL)
 		term = "";
 	/*
 	 *	Build the suffix for this device

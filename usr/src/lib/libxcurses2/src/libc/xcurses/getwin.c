@@ -165,7 +165,7 @@ putwin(WINDOW *w, FILE *fp)
 	int	y, x;
 
 	mbs_len = columns * _M_CCHAR_MAX * MB_LEN_MAX * sizeof (*mbs) + 1;
-	if ((mbs = (char *) malloc((size_t) mbs_len)) == (char *) 0)
+	if ((mbs = (char *)malloc((size_t)mbs_len)) == NULL)
 		return (ERR);
 
 	(void) fprintf(fp,

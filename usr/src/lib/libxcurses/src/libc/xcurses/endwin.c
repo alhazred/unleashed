@@ -57,13 +57,13 @@ endwin()
 	if (!(__m_screen->_flags & S_ENDWIN)) {
 		__m_mvcur(-1, -1, lines-1, 0, __m_outc);
 
-		if (exit_ca_mode != (char *) 0)
+		if (exit_ca_mode != NULL)
 			(void) tputs(exit_ca_mode, 1, __m_outc);
 
-		if (keypad_local != (char *) 0)
+		if (keypad_local != NULL)
 			(void) tputs(keypad_local, 1, __m_outc);
 
-		if (orig_colors != (char *) 0)
+		if (orig_colors != NULL)
 			(void) tputs(orig_colors, 1, __m_outc);
 		
 		/* Make sure the current attribute state is normal.*/

@@ -361,7 +361,7 @@ extract_name(name)
 
 	if (strncmp(*name, MSG_ORIG(MSG_FIL_LIB), MSG_FIL_LIB_SIZE) == 0) {
 		ls = *name + MSG_FIL_LIB_SIZE;
-		if ((dp = (char *)strchr(ls, '.')) != (char *)0) {
+		if ((dp = (char *)strchr(ls, '.')) != NULL) {
 			*name = ls;
 			return (dp - ls);
 		}

@@ -77,7 +77,7 @@ execlp(const char *name, const char *arg0, ...)
 
 	va_start(args, arg0);
 
-	while (va_arg(args, char *) != (char *)0)
+	while (va_arg(args, char *) != NULL)
 		nargs++;
 
 	va_end(args);
@@ -93,13 +93,13 @@ execlp(const char *name, const char *arg0, ...)
 	nextarg = va_arg(args, char *);
 	argp = argvec;
 	*argp++ = (char *)arg0;
-	while (nargs-- && nextarg != (char *)0) {
+	while (nargs-- && nextarg != NULL) {
 		*argp = nextarg;
 		argp++;
 		nextarg = va_arg(args, char *);
 	}
 	va_end(args);
-	*argp = (char *)0;
+	*argp = NULL;
 
 	/*
 	 * call execvp()

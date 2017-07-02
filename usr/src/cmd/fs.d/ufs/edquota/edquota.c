@@ -246,7 +246,7 @@ editit(void)
 #define	mask(s)	(1 << ((s) - 1))
 	omask = sigblock(mask(SIGINT)|mask(SIGQUIT)|mask(SIGHUP));
 
-	if ((ed = getenv("EDITOR")) == (char *)0)
+	if ((ed = getenv("EDITOR")) == NULL)
 		ed = DEFEDITOR;
 
 	/*CONSTANTCONDITION*/
@@ -585,7 +585,7 @@ next(char *cp, char *match)
 				return (cp);
 		cp++;
 	}
-	return ((char *)0);
+	return (NULL);
 }
 
 static int

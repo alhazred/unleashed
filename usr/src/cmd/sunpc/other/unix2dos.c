@@ -123,7 +123,7 @@ main(int argc, char **argv)
 	char	sysinfo_str[MAXLEN];
 
 	same_name = FALSE;
-	out_file_name = (char *)0;
+	out_file_name = NULL;
 
 	/*
 	 * The filename parameter is positionally dependent - in that

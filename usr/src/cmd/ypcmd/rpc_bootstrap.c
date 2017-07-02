@@ -492,5 +492,5 @@ any(cp, match)
 				return (cp);
 		cp++;
 	}
-	return ((char *)0);
+	return (NULL);
 }

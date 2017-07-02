@@ -67,7 +67,7 @@ prom_pathname(char *pathname)
 	char *opathname = NULL;
 #endif /* PROM_32BIT_ADDRS */
 
-	if ((to == (char *)0) || (*to == '\0'))
+	if ((to == NULL) || (*to == '\0'))
 		return;
 
 #ifdef PROM_32BIT_ADDRS

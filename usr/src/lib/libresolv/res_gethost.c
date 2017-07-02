@@ -299,7 +299,7 @@ _getrhbyaddr(addr, len, type)
 	hp->h_addrtype = type;
 	hp->h_length = len;
 	h_addr_ptrs[0] = (char *)&host_addr;
-	h_addr_ptrs[1] = (char *)0;
+	h_addr_ptrs[1] = NULL;
 	host_addr = *(struct in_addr *)addr;
 	return (hp);
 }
@@ -433,7 +433,7 @@ any(cp, match)
 				return (cp);
 		cp++;
 	}
-	return ((char *)0);
+	return (NULL);
 }
 
 static struct hostent *

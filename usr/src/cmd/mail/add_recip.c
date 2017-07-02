@@ -101,6 +101,6 @@ void
 madd_recip(reciplist *plist, char *namelist, int checkdups)
 {
 	char	*name;
-	for (name = strtok(namelist, " \t"); name; name = strtok((char*)0, " \t"))
+	for (name = strtok(namelist, " \t"); name; name = strtok(NULL, " \t"))
 		add_recip(plist, name, checkdups);
 }

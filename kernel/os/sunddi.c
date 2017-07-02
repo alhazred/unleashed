@@ -3251,7 +3251,7 @@ ddi_prop_add(dev_t dev, dev_info_t *dip, int flags,
 	 * If dev_t is DDI_DEV_T_ANY or name's length is zero return error.
 	 */
 
-	if (dev == DDI_DEV_T_ANY || name == (char *)0 || strlen(name) == 0)
+	if (dev == DDI_DEV_T_ANY || name == NULL || strlen(name) == 0)
 		return (DDI_PROP_INVAL_ARG);
 
 	if (flags & DDI_PROP_CANSLEEP)
@@ -4085,7 +4085,7 @@ ddi_prop_remove_common(dev_t dev, dev_info_t *dip, char *name, int flag)
 	ddi_prop_t	*propp;
 	ddi_prop_t	*lastpropp = NULL;
 
-	if ((dev == DDI_DEV_T_ANY) || (name == (char *)0) ||
+	if ((dev == DDI_DEV_T_ANY) || (name == NULL) ||
 	    (strlen(name) == 0)) {
 		return (DDI_PROP_INVAL_ARG);
 	}

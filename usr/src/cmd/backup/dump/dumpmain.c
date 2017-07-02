@@ -571,7 +571,7 @@ main(int argc, char *argv[])
 	rmtinit(msg, Exit);
 	if (host) {
 		char	*cp = strchr(host, '@');
-		if (cp == (char *)0)
+		if (cp == NULL)
 			cp = host;
 		else
 			cp++;

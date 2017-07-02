@@ -601,12 +601,12 @@ OUT:
 			break;
 		case 1:
 			slrflag++;
-			altarg = (char *)0;
+			altarg = NULL;
 			break;
 		default:
 			break;
 	}
-	return ((char *)0);
+	return (NULL);
 }
 
 #define	HELPINDENT (sizeof ("directory"))
@@ -688,7 +688,7 @@ call(void (*routine)(int argc, char *argv[]), ...)
 	int argc = 0;
 
 	va_start(ap, routine);
-	while ((argv[argc] = va_arg(ap, char *)) != (char *)0)
+	while ((argv[argc] = va_arg(ap, char *)) != NULL)
 		argc++;
 	va_end(ap);
 	(*routine)(argc, argv);
