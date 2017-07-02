@@ -1238,7 +1238,7 @@ do_archives_update(int do_fast_reboot)
 
 
 	cmd_argv[i++] = "/sbin/bootadm";
-	cmd_argv[i++] = "-ea";
+	cmd_argv[i++] = "-a";
 	cmd_argv[i++] = "update_all";
 	if (do_fast_reboot)
 		cmd_argv[i++] = "fastboot";

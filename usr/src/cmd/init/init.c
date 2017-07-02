@@ -923,7 +923,7 @@ update_boot_archive(int new_state)
 	if (getzoneid() != GLOBAL_ZONEID)
 		return;
 
-	(void) system("/sbin/bootadm -ea update_all");
+	(void) system("/sbin/bootadm -a update_all");
 }
 
 /*
