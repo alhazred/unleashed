@@ -26,8 +26,6 @@
 #
 # common rules for $SRC/cmd/fwflash
 
-CLOSED=			$(SRC)/../closed
-
 CERRWARN +=		-Wno-parentheses
 CERRWARN +=		-Wno-uninitialized
 CERRWARN +=		-Wno-address

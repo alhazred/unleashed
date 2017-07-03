@@ -38,8 +38,7 @@ ROOTDIRS= $(ROOT)/usr/include/sharefs
 
 ROOTHDRS= $(ALLHDRS:%=$(ROOTDIRS)/%)
 
-CHECKHDRS= $(HDRS:%.h=%.check) \
-	$(CLOSEDHDRS:%.h=$(CLOSED)/uts/common/sharefs/%.check)
+CHECKHDRS= $(HDRS:%.h=%.check)
 
 $(ROOTDIRS)/%: %
 	$(INS.file)

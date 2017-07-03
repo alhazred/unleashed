@@ -53,19 +53,16 @@ check		:=	TARGET= check
 
 .KEEP_STATE:
 
-.PARALLEL:	$(PARALLEL_KMODS) $(CLOSED_KMODS) $(XMODS) $(CLOSED_XMODS) \
-		modlist modlist.sparc
+.PARALLEL:	$(PARALLEL_KMODS) $(XMODS) modlist modlist.sparc
 
 # Override for CPU_KMODS... they cannot be built
 # in parallel
 .NO_PARALLEL:	$(CPU_KMODS)
 
-def all clean clobber: genassym unix .WAIT \
-	$(KMODS) $(CLOSED_KMODS) $(XMODS) $(CLOSED_XMODS) $(IMPLEMENTATIONS)
+def all clean clobber: genassym unix .WAIT $(KMODS) $(XMODS) $(IMPLEMENTATIONS)
 
 # list the modules under sun4v.
-modlist: unix $(KMODS) $(CLOSED_KMODS) $(XMODS) $(CLOSED_XMODS) \
-	$(IMPLEMENTATIONS)
+modlist: unix $(KMODS) $(XMODS) $(IMPLEMENTATIONS)
 
 # list the modules for Install -k sun4v.
 modlist.karch: modlist modlist.sparc
@@ -73,8 +70,8 @@ modlist.karch: modlist modlist.sparc
 modlist.sparc:
 	@cd $(SRC)/uts/sparc; pwd; $(MAKE) $(NO_STATE) modlist
 
-install: install_platforms genassym unix .WAIT $(KMODS) $(CLOSED_KMODS) \
-	$(XMODS) $(CLOSED_XMODS) $(IMPLEMENTATIONS)
+install: install_platforms genassym unix .WAIT $(KMODS) \
+	$(XMODS) $(IMPLEMENTATIONS)
 
 genassym unix $(KMODS):	FRC
 	@cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET)
@@ -88,17 +85,6 @@ $(XMODS):	FRC
 	else \
 		true; \
 	fi
-
-$(CLOSED_XMODS):	FRC
-	@if [ -f $(CLOSED)/uts/sun4v/$@/Makefile  ]; then \
-		cd $(CLOSED)/uts/sun4v/$@; pwd; \
-		    $(MAKE) $(NO_STATE) $(TARGET); \
-	else \
-		true; \
-	fi
-
-$(CLOSED_KMODS):	FRC
-	cd $(CLOSED)/uts/sun4v/$@; pwd; $(MAKE) $(NO_STATE) $(TARGET)
 
 install_h check:	install_platforms $(IMPLEMENTATIONS) FRC
 	@cd sys; pwd; $(MAKE) $(TARGET)

@@ -68,10 +68,6 @@ INTEL_BLD=      $(INTEL_BLD_1:i386=)
 # The default is POUND_SIGN, meaning "not enabled".
 ENABLE_PERL64=		$(POUND_SIGN)
 
-# CLOSED is the root of the tree that contains source which isn't released
-# as open source
-CLOSED=		$(SRC)/../closed
-
 # BUILD_TOOLS is the root of all tools including compilers.
 # ONBLD_TOOLS is the root of all the tools that are part of SUNWonbld.
 

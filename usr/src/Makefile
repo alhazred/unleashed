@@ -106,8 +106,7 @@ all: mapfiles sgs .WAIT $(SUBDIRS) pkg
 # proto area.
 #
 # The stage-licenses target causes the license files needed for
-# packaging to be pulled from $(SRC) and $(CLOSED) and staged in
-# $(ROOT)/licenses.
+# packaging to be pulled from $(SRC) and staged in $(ROOT)/licenses.
 #
 install: install1 install2 _msg stage-licenses
 	@cd msg; pwd; $(MAKE) _msg

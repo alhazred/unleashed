@@ -58,24 +58,21 @@ BLADE_PLAT_LINK1 =	$(BLADE_LINK_1:%=$(ROOT_PLAT_DIR)/%)
 #
 .KEEP_STATE:
 
-.PARALLEL:	$(BLADE_KMODS) $(CLOSED_BLADE_KMODS)
+.PARALLEL:	$(BLADE_KMODS)
 
-def all clean clobber modlist: $(BLADE_KMODS) $(CLOSED_BLADE_KMODS)
+def all clean clobber modlist: $(BLADE_KMODS)
 
 install:	$(ROOT_BLADE_DIR) \
 		$(USR_BLADE_DIR) \
 		$(USR_BLADE_INC_DIR) \
 		$(USR_BLADE_SBIN_DIR) \
 		$(USR_BLADE_LIB_DIR) \
-		.WAIT $(BLADE_KMODS) $(CLOSED_BLADE_KMODS) \
+		.WAIT $(BLADE_KMODS) \
 		$(BLADE_OPTION) \
 		$(BLADE_PLAT_LINK_1)
 
 $(BLADE_KMODS):	FRC
 	@cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET)
-
-$(CLOSED_BLADE_KMODS):	FRC
-	cd $(CLOSED)/uts/sun4u/blade/$@; pwd; $(MAKE) $(NO_STATE) $(TARGET)
 
 $(BLADE_OPTION):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

@@ -41,8 +41,8 @@ include	$(SRC)/cmd/picl/plugins/Makefile.com
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/serengeti
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/serengeti
 CPPFLAGS +=	-I$(SRC)/uts/sun4u/lw8
-CPPFLAGS +=	-I$(SRC)/uts/sun4u -I$(CLOSED)/uts/sun4u
-CPPFLAGS +=	-I$(SRC)/uts/common -I$(CLOSED)/uts/common
+CPPFLAGS +=	-I$(SRC)/uts/sun4u
+CPPFLAGS +=	-I$(SRC)/uts/common
 
 SRCS =		$(OBJECTS:%.o=%.c)
 
