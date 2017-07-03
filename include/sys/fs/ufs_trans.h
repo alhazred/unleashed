@@ -144,9 +144,7 @@ struct ufsvfs;
 
 /*
  * Begin a synchronous or asynchronous transaction.
- * The lint case is needed because vsize can be a constant.
  */
-#ifndef __lint
 
 #define	TRANS_BEGIN_CSYNC(ufsvfsp, issync, vid, vsize)\
 {\
@@ -163,23 +161,6 @@ struct ufsvfs;
 		}\
 	}\
 }
-
-#else /* __lint */
-
-#define	TRANS_BEGIN_CSYNC(ufsvfsp, issync, vid, vsize)\
-{\
-	if (TRANS_ISTRANS(ufsvfsp)) {\
-		if (ufsvfsp->vfs_syncdir) {\
-			int error = 0; \
-			top_begin_sync(ufsvfsp, vid, vsize, &error); \
-			issync = 1; \
-		} else {\
-			(void) top_begin_async(ufsvfsp, vid, vsize, 0); \
-			issync = 0; \
-		}\
-	}\
-}
-#endif /* __lint */
 
 /*
  * try to begin a synchronous or asynchronous transaction
