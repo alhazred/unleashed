@@ -21,7 +21,7 @@ mapfile: ${VERSION_SCRIPT}
 	    printf 'SYMBOL_SCOPE '; \
 	    cat ${VERSION_SCRIPT}; } > $@
 CLEANFILES+=	mapfile
-all: mapfile
+realbuild: mapfile
 
 # XXX includes need to be available in DESTDIR if DESTDIR is specified since
 # the mk files set -isysroot in that case

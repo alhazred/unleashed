@@ -17,9 +17,9 @@ SHLIB_LDADD+=	-M${.OBJDIR}/mapfile
 mapfile: ${VERSION_SCRIPT}
 	{ echo '$$mapfile_version 2'; \
 	    printf 'SYMBOL_SCOPE '; \
-	    cat ${VERSION_SCRIPT}; } > $@
+	    fgrep -v '/* ' ${VERSION_SCRIPT}; } > $@
 CLEANFILES+=	mapfile
-all: mapfile
+realbuild: mapfile
 
 # XXX <openssl/*> includes need to be available in DESTDIR if DESTDIR is
 # specified since the mk files set -isysroot in that case
