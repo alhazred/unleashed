@@ -117,8 +117,8 @@ struct ufsvfs;
 #define	TRANS_BEGIN_SYNC(ufsvfsp, vid, vsize, error)\
 {\
 	if (TRANS_ISTRANS(ufsvfsp)) { \
-		error = 0; \
-		top_begin_sync(ufsvfsp, vid, vsize, &error); \
+		*error = 0; \
+		top_begin_sync(ufsvfsp, vid, vsize, error); \
 	} \
 }
 
@@ -137,9 +137,9 @@ struct ufsvfs;
 #define	TRANS_TRY_BEGIN_ASYNC(ufsvfsp, vid, vsize, err)\
 {\
 	if (TRANS_ISTRANS(ufsvfsp))\
-		err = top_begin_async(ufsvfsp, vid, vsize, 1); \
+		*err = top_begin_async(ufsvfsp, vid, vsize, 1); \
 	else\
-		err = 0; \
+		*err = 0; \
 }
 
 /*
@@ -154,10 +154,10 @@ struct ufsvfs;
 			ASSERT(vsize); \
 			top_begin_sync(ufsvfsp, vid, vsize, &error); \
 			ASSERT(error == 0); \
-			issync = 1; \
+			*issync = 1; \
 		} else {\
 			(void) top_begin_async(ufsvfsp, vid, vsize, 0); \
-			issync = 0; \
+			*issync = 0; \
 		}\
 	}\
 }
@@ -171,12 +171,12 @@ struct ufsvfs;
 	if (TRANS_ISTRANS(ufsvfsp)) {\
 		if (ufsvfsp->vfs_syncdir) {\
 			ASSERT(vsize); \
-			top_begin_sync(ufsvfsp, vid, vsize, &error); \
-			ASSERT(error == 0); \
-			issync = 1; \
+			top_begin_sync(ufsvfsp, vid, vsize, error); \
+			ASSERT(*error == 0); \
+			*issync = 1; \
 		} else {\
-			error = top_begin_async(ufsvfsp, vid, vsize, 1); \
-			issync = 0; \
+			*error = top_begin_async(ufsvfsp, vid, vsize, 1); \
+			*issync = 0; \
 		}\
 	}\
 }\
@@ -197,7 +197,7 @@ struct ufsvfs;
 #define	TRANS_END_SYNC(ufsvfsp, error, vid, vsize)\
 {\
 	if (TRANS_ISTRANS(ufsvfsp))\
-		top_end_sync(ufsvfsp, &error, vid, vsize); \
+		top_end_sync(ufsvfsp, error, vid, vsize); \
 }
 
 /*
@@ -207,7 +207,7 @@ struct ufsvfs;
 {\
 	if (TRANS_ISTRANS(ufsvfsp))\
 		if (issync)\
-			top_end_sync(ufsvfsp, &error, vid, vsize); \
+			top_end_sync(ufsvfsp, error, vid, vsize); \
 		else\
 			top_end_async(ufsvfsp, vid, vsize); \
 }

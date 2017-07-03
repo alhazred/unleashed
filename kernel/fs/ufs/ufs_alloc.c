@@ -1622,7 +1622,7 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 	if (lblkno(fs, lp->l_start) < NDADDR) {
 		ufs_trans_trunc_resv(ip, ip->i_size + (NDADDR * fs->fs_bsize),
 		    &resv, &resid);
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_ALLOCSP, resv);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_ALLOCSP, resv);
 
 		rw_enter(&ufsvfsp->vfs_dqrwlock, RW_READER);
 		rw_enter(&ip->i_contents, RW_WRITER);
@@ -1642,8 +1642,8 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 				TRANS_INODE(ufsvfsp, ip);
 				rw_exit(&ip->i_contents);
 				rw_exit(&ufsvfsp->vfs_dqrwlock);
-				TRANS_END_CSYNC(ufsvfsp, err, issync,
-				    TOP_ALLOCSP, resv);
+				TRANS_END_CSYNC(ufsvfsp, &err, issync,
+						TOP_ALLOCSP, resv);
 				err = allocsp_unlockfs(vp, &lf);
 				goto exit;
 			}
@@ -1659,7 +1659,7 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 		TRANS_INODE(ufsvfsp, ip);
 		rw_exit(&ip->i_contents);
 		rw_exit(&ufsvfsp->vfs_dqrwlock);
-		TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_ALLOCSP, resv);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_ALLOCSP, resv);
 
 		/* start offset for indirect allocation */
 		istart =  (uoff + nbytes);
@@ -1668,7 +1668,7 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 	/* Break the transactions into vfs_iotransz units */
 	ufs_trans_trunc_resv(ip, ip->i_size +
 	    blkroundup(fs, ufsvfsp->vfs_iotransz), &resv, &resid);
-	TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_ALLOCSP, resv);
+	TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_ALLOCSP, resv);
 
 	rw_enter(&ufsvfsp->vfs_dqrwlock, RW_READER);
 	rw_enter(&ip->i_contents, RW_WRITER);
@@ -1681,8 +1681,8 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 			TRANS_INODE(ufsvfsp, ip);
 			rw_exit(&ip->i_contents);
 			rw_exit(&ufsvfsp->vfs_dqrwlock);
-			TRANS_END_CSYNC(ufsvfsp, err, issync,
-			    TOP_ALLOCSP, resv);
+			TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_ALLOCSP,
+					resv);
 			err = allocsp_unlockfs(vp, &lf);
 			goto exit;
 		}
@@ -1717,8 +1717,8 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 				rw_exit(&ip->i_contents);
 				rw_exit(&ufsvfsp->vfs_dqrwlock);
 
-				TRANS_END_CSYNC(ufsvfsp, err, issync,
-				    TOP_ALLOCSP, resv);
+				TRANS_END_CSYNC(ufsvfsp, &err, issync,
+						TOP_ALLOCSP, resv);
 				rw_exit(&ip->i_rwlock);
 				(void) allocsp_unlockfs(vp, &lf);
 				return (EIO);
@@ -1729,8 +1729,8 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 			rw_exit(&ufsvfsp->vfs_dqrwlock);
 
 			/* End the current transaction */
-			TRANS_END_CSYNC(ufsvfsp, err, issync,
-			    TOP_ALLOCSP, resv);
+			TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_ALLOCSP,
+					resv);
 
 			if (CV_HAS_WAITERS(&ulp->ul_cv)) {
 				/* Release the write lock */
@@ -1751,7 +1751,7 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 			ufs_trans_trunc_resv(ip,
 			    ip->i_size + blkroundup(fs, ufsvfsp->vfs_iotransz),
 			    &resv, &resid);
-			TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_ALLOCSP, resv);
+			TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_ALLOCSP, resv);
 
 			rw_enter(&ufsvfsp->vfs_dqrwlock, RW_READER);
 			rw_enter(&ip->i_contents, RW_WRITER);
@@ -1772,7 +1772,7 @@ ufs_allocsp(struct vnode *vp, struct flock64 *lp, cred_t *cr)
 	rw_exit(&ip->i_contents);
 	rw_exit(&ufsvfsp->vfs_dqrwlock);
 
-	TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_ALLOCSP, resv);
+	TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_ALLOCSP, resv);
 	err = allocsp_unlockfs(vp, &lf);
 
 	/*
@@ -1800,7 +1800,7 @@ exit:
 	 */
 	if (berr) {
 		ufs_trans_trunc_resv(ip, totblks * fs->fs_bsize, &resv, &resid);
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_ALLOCSP, resv);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_ALLOCSP, resv);
 
 		rw_enter(&ufsvfsp->vfs_dqrwlock, RW_READER);
 		rw_enter(&ip->i_contents, RW_WRITER);
@@ -1837,7 +1837,7 @@ exit:
 		rw_exit(&ip->i_contents);
 		rw_exit(&ufsvfsp->vfs_dqrwlock);
 
-		TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_ALLOCSP, resv);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_ALLOCSP, resv);
 
 		rw_exit(&ip->i_rwlock);
 		return (berr);

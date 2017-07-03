@@ -3224,7 +3224,7 @@ again:
 
 	if (ulp) {
 		trans_size = (int)TOP_MKDIR_SIZE(tdp);
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_MKDIR, trans_size);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_MKDIR, trans_size);
 	}
 
 	/*
@@ -3281,7 +3281,7 @@ again:
 	if (ulp) {
 		int terr = 0;
 
-		TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_MKDIR, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_MKDIR, trans_size);
 		ufs_lockfs_end(ulp);
 		if (err == 0)
 			err = terr;
@@ -3297,7 +3297,7 @@ fail:
 	if (dorwlock == 2)
 		rw_exit(&tdp->i_rwlock);
 	if (ulp) {
-		TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_MKDIR, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_MKDIR, trans_size);
 		ufs_lockfs_end(ulp);
 	}
 	if (dorwlock == 1)

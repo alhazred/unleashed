@@ -778,8 +778,8 @@ struct	ocg {
 		indeadlock = 0; \
 		while (!rw_tryenter(lock, mode)) { \
 			if (ulp && ULOCKFS_IS_SLOCK(ulp)) { \
-				TRANS_END_CSYNC(ufsvfsp, error, issync, \
-					transmode, trans_size); \
+				TRANS_END_CSYNC(ufsvfsp, &error, issync, \
+						transmode, trans_size); \
 				ufs_lockfs_end(ulp); \
 				indeadlock = 1; \
 				break; \

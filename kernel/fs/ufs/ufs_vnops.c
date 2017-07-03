@@ -350,11 +350,11 @@ ufs_read(struct vnode *vp, struct uio *uiop, int ioflag, struct cred *cr,
 		if (ulp && (ioflag & FRSYNC) && (ioflag & (FSYNC | FDSYNC)) &&
 		    TRANS_ISTRANS(ufsvfsp)) {
 			rw_exit(&ip->i_rwlock);
-			TRANS_BEGIN_SYNC(ufsvfsp, TOP_READ_SYNC, TOP_READ_SIZE,
-			    error);
+			TRANS_BEGIN_SYNC(ufsvfsp, TOP_READ_SYNC,
+					 TOP_READ_SIZE, &error);
 			ASSERT(!error);
-			TRANS_END_SYNC(ufsvfsp, error, TOP_READ_SYNC,
-			    TOP_READ_SIZE);
+			TRANS_END_SYNC(ufsvfsp, &error, TOP_READ_SYNC,
+				       TOP_READ_SIZE);
 			rw_enter(&ip->i_rwlock, RW_READER);
 		}
 	} else {
@@ -370,8 +370,8 @@ ufs_read(struct vnode *vp, struct uio *uiop, int ioflag, struct cred *cr,
 		 */
 		if (ulp && (ioflag & FRSYNC) && (ioflag & (FSYNC | FDSYNC)) &&
 		    TRANS_ISTRANS(ufsvfsp)) {
-			TRANS_BEGIN_SYNC(ufsvfsp, TOP_READ_SYNC, TOP_READ_SIZE,
-			    error);
+			TRANS_BEGIN_SYNC(ufsvfsp, TOP_READ_SYNC,
+					 TOP_READ_SIZE, &error);
 			ASSERT(!error);
 			intrans = 1;
 		}
@@ -381,8 +381,8 @@ ufs_read(struct vnode *vp, struct uio *uiop, int ioflag, struct cred *cr,
 		rw_exit(&ip->i_contents);
 
 		if (intrans) {
-			TRANS_END_SYNC(ufsvfsp, error, TOP_READ_SYNC,
-			    TOP_READ_SIZE);
+			TRANS_END_SYNC(ufsvfsp, &error, TOP_READ_SYNC,
+				       TOP_READ_SIZE);
 		}
 	}
 
@@ -578,8 +578,8 @@ retry_mandlock:
 				rw_exit(&ip->i_contents);
 			} else {
 				int terr = 0;
-				TRANS_BEGIN_SYNC(ufsvfsp, TOP_WRITE_SYNC, resv,
-				    terr);
+				TRANS_BEGIN_SYNC(ufsvfsp, TOP_WRITE_SYNC,
+						 resv, &terr);
 				ASSERT(!terr);
 			}
 		}
@@ -624,8 +624,8 @@ retry_mandlock:
 			if (!rewriteflg) {
 				int terr = 0;
 
-				TRANS_END_SYNC(ufsvfsp, terr, TOP_WRITE_SYNC,
-				    resv);
+				TRANS_END_SYNC(ufsvfsp, &terr,
+					       TOP_WRITE_SYNC, resv);
 				if (error == 0)
 					error = terr;
 			}
@@ -1753,16 +1753,16 @@ ufs_ioctl(
 
 			if (ulp) {
 				trans_size = (int)TOP_SETATTR_SIZE(VTOI(vp));
-				TRANS_BEGIN_CSYNC(ufsvfsp, issync,
-				    TOP_SETATTR, trans_size);
+				TRANS_BEGIN_CSYNC(ufsvfsp, &issync,
+						  TOP_SETATTR, trans_size);
 			}
 
 			error = ufs_fiosatime(vp, (struct timeval *)arg,
 			    flag, cr);
 
 			if (ulp) {
-				TRANS_END_CSYNC(ufsvfsp, error, issync,
-				    TOP_SETATTR, trans_size);
+				TRANS_END_CSYNC(ufsvfsp, &error, issync,
+						TOP_SETATTR, trans_size);
 				ufs_lockfs_end(ulp);
 			}
 			return (error);
@@ -2198,7 +2198,7 @@ again:
 
 	if (ulp) {
 		trans_size = (int)TOP_SETATTR_SIZE(ip);
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_SETATTR, trans_size);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_SETATTR, trans_size);
 		++dotrans;
 	}
 
@@ -2400,8 +2400,8 @@ update_inode:
 	if (ulp) {
 		if (dotrans) {
 			int terr = 0;
-			TRANS_END_CSYNC(ufsvfsp, terr, issync, TOP_SETATTR,
-			    trans_size);
+			TRANS_END_CSYNC(ufsvfsp, &terr, issync, TOP_SETATTR,
+					trans_size);
 			if (error == 0)
 				error = terr;
 		}
@@ -2673,13 +2673,13 @@ ufs_fsync(struct vnode *vp, int syncflag, struct cred *cr,
 		 */
 		if (ulp) {
 			TRANS_BEGIN_SYNC(ufsvfsp, TOP_FSYNC, TOP_COMMIT_SIZE,
-			    error);
+					 &error);
 			if (error) {
 				error = 0; /* commit wasn't needed */
 				goto out;
 			}
-			TRANS_END_SYNC(ufsvfsp, error, TOP_FSYNC,
-			    TOP_COMMIT_SIZE);
+			TRANS_END_SYNC(ufsvfsp, &error, TOP_FSYNC,
+				       TOP_COMMIT_SIZE);
 		}
 	} else {	/* not logging */
 		if (!(IS_SWAPVP(vp)))
@@ -2934,7 +2934,7 @@ again:
 
 	if (ulp) {
 		trans_size = (int)TOP_CREATE_SIZE(ip);
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_CREATE, trans_size);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_CREATE, trans_size);
 	}
 
 	if ((vap->va_mode & VSVTX) && secpolicy_vnode_stky_modify(cr) != 0)
@@ -2986,8 +2986,9 @@ again:
 			    vap, &xip, cr, (noentry | (retry ? IQUIET : 0)));
 			if (error == EAGAIN) {
 				if (ulp) {
-					TRANS_END_CSYNC(ufsvfsp, error, issync,
-					    TOP_CREATE, trans_size);
+					TRANS_END_CSYNC(ufsvfsp, &error,
+							issync, TOP_CREATE,
+							trans_size);
 					ufs_lockfs_end(ulp);
 				}
 				goto again;
@@ -3145,8 +3146,8 @@ unlock:
 	if (ulp) {
 		int terr = 0;
 
-		TRANS_END_CSYNC(ufsvfsp, terr, issync, TOP_CREATE,
-		    trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &terr, issync, TOP_CREATE,
+				trans_size);
 
 		/*
 		 * If we haven't had a more interesting failure
@@ -3225,8 +3226,8 @@ retry_remove:
 		goto out;
 
 	if (ulp)
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_REMOVE,
-		    trans_size = (int)TOP_REMOVE_SIZE(VTOI(vp)));
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_REMOVE,
+				  trans_size = (int)TOP_REMOVE_SIZE(VTOI(vp)));
 
 	/*
 	 * ufs_tryirwlock_trans uses rw_tryenter and checks for SLOCK
@@ -3240,7 +3241,8 @@ retry_remove:
 	rw_exit(&ip->i_rwlock);
 
 	if (ulp) {
-		TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_REMOVE, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_REMOVE,
+				trans_size);
 		ufs_lockfs_end(ulp);
 	}
 
@@ -3274,8 +3276,8 @@ retry_link:
 		goto out;
 
 	if (ulp)
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_LINK,
-		    trans_size = (int)TOP_LINK_SIZE(VTOI(tdvp)));
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_LINK,
+				  trans_size = (int)TOP_LINK_SIZE(VTOI(tdvp)));
 
 	if (fop_realvp(svp, &realvp, ct) == 0)
 		svp = realvp;
@@ -3318,7 +3320,7 @@ retry_link:
 
 unlock:
 	if (ulp) {
-		TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_LINK, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_LINK, trans_size);
 		ufs_lockfs_end(ulp);
 	}
 
@@ -3412,8 +3414,8 @@ retry_rename:
 		goto unlock;
 
 	if (ulp)
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_RENAME,
-		    trans_size = (int)TOP_RENAME_SIZE(sdp));
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_RENAME,
+				  trans_size = (int)TOP_RENAME_SIZE(sdp));
 
 	if (fop_realvp(tdvp, &realvp, ct) == 0)
 		tdvp = realvp;
@@ -3441,8 +3443,8 @@ retry_rename:
 	if (error = ufs_dirlook(sdp, snm, &sip, cr, 0, 0)) {
 		if (error == EAGAIN) {
 			if (ulp) {
-				TRANS_END_CSYNC(ufsvfsp, error, issync,
-				    TOP_RENAME, trans_size);
+				TRANS_END_CSYNC(ufsvfsp, &error, issync,
+						TOP_RENAME, trans_size);
 				ufs_lockfs_end(ulp);
 			}
 			goto retry_rename;
@@ -3490,8 +3492,8 @@ retry_firstlock:
 		 */
 
 		if (ulp && ULOCKFS_IS_SLOCK(ulp)) {
-			TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_RENAME,
-			    trans_size);
+			TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_RENAME,
+					trans_size);
 			ufs_lockfs_end(ulp);
 			goto retry_rename;
 
@@ -3516,8 +3518,8 @@ retry_firstlock:
 
 		rw_exit(first_lock);
 		if (ulp && ULOCKFS_IS_SLOCK(ulp)) {
-			TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_RENAME,
-			    trans_size);
+			TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_RENAME,
+					trans_size);
 			ufs_lockfs_end(ulp);
 			goto retry_rename;
 
@@ -3745,7 +3747,8 @@ unlock:
 		VN_RELE(ITOV(sip));
 
 	if (ulp) {
-		TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_RENAME, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_RENAME,
+				trans_size);
 		ufs_lockfs_end(ulp);
 	}
 
@@ -3783,8 +3786,8 @@ again:
 	if (error)
 		goto out;
 	if (ulp)
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_MKDIR,
-		    trans_size = (int)TOP_MKDIR_SIZE(ip));
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_MKDIR,
+				  trans_size = (int)TOP_MKDIR_SIZE(ip));
 
 	/*
 	 * ufs_tryirwlock_trans uses rw_tryenter and checks for SLOCK
@@ -3799,8 +3802,8 @@ again:
 	    (retry ? IQUIET : 0));
 	if (error == EAGAIN) {
 		if (ulp) {
-			TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_MKDIR,
-			    trans_size);
+			TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_MKDIR,
+					trans_size);
 			ufs_lockfs_end(ulp);
 		}
 		goto again;
@@ -3815,7 +3818,7 @@ again:
 
 	if (ulp) {
 		int terr = 0;
-		TRANS_END_CSYNC(ufsvfsp, terr, issync, TOP_MKDIR, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &terr, issync, TOP_MKDIR, trans_size);
 		ufs_lockfs_end(ulp);
 		if (error == 0)
 			error = terr;
@@ -3868,8 +3871,8 @@ retry_rmdir:
 		goto out;
 
 	if (ulp)
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_RMDIR,
-		    trans_size = TOP_RMDIR_SIZE);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_RMDIR,
+				  trans_size = TOP_RMDIR_SIZE);
 
 	/*
 	 * ufs_tryirwlock_trans uses rw_tryenter and checks for SLOCK
@@ -3884,8 +3887,8 @@ retry_rmdir:
 	rw_exit(&ip->i_rwlock);
 
 	if (ulp) {
-		TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_RMDIR,
-		    trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_RMDIR,
+				trans_size);
 		ufs_lockfs_end(ulp);
 	}
 
@@ -4139,8 +4142,8 @@ again:
 		goto out;
 
 	if (ulp)
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_SYMLINK,
-		    trans_size = (int)TOP_SYMLINK_SIZE(dip));
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_SYMLINK,
+				  trans_size = (int)TOP_SYMLINK_SIZE(dip));
 
 	/*
 	 * We must create the inode before the directory entry, to avoid
@@ -4267,8 +4270,8 @@ unlock:
 	if (ulp) {
 		int terr = 0;
 
-		TRANS_END_CSYNC(ufsvfsp, terr, issync, TOP_SYMLINK,
-		    trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &terr, issync, TOP_SYMLINK,
+				trans_size);
 		ufs_lockfs_end(ulp);
 		if (error == 0)
 			error = terr;
@@ -4568,7 +4571,7 @@ ufs_getpage(struct vnode *vp, offset_t off, size_t len, uint_t *protp,
 		trans_size = TOP_GETPAGE_SIZE(ip);
 		if (seg->s_as != &kas) {
 			TRANS_TRY_BEGIN_ASYNC(ufsvfsp, TOP_GETPAGE,
-			    trans_size, err)
+			    trans_size, &err);
 			if (err == EWOULDBLOCK) {
 				/*
 				 * Use EDEADLK here because the VM code
@@ -5860,8 +5863,9 @@ ufs_l_pathconf(struct vnode *vp, int cmd, ulong_t *valp, struct cred *cr,
 			if (error ==  0 && sip != NULL) {
 				/* Start transaction */
 				if (ulp) {
-					TRANS_BEGIN_CSYNC(ufsvfsp, issync,
-					    TOP_RMDIR, TOP_RMDIR_SIZE);
+					TRANS_BEGIN_CSYNC(ufsvfsp, &issync,
+							  TOP_RMDIR,
+							  TOP_RMDIR_SIZE);
 				}
 				/*
 				 * Is directory empty
@@ -5881,8 +5885,9 @@ ufs_l_pathconf(struct vnode *vp, int cmd, ulong_t *valp, struct cred *cr,
 				rw_exit(&sip->i_contents);
 				rw_exit(&sip->i_rwlock);
 				if (ulp) {
-					TRANS_END_CSYNC(ufsvfsp, error, issync,
-					    TOP_RMDIR, TOP_RMDIR_SIZE);
+					TRANS_END_CSYNC(ufsvfsp, &error,
+							issync, TOP_RMDIR,
+							TOP_RMDIR_SIZE);
 				}
 				VN_RELE(ITOV(sip));
 			} else if (error == ENOENT) {
