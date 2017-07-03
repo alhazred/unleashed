@@ -167,7 +167,7 @@ _LIBSODIR?=	${LIBDIR}
 SHLINKDIR?=	/usr/libexec
 LIBGRP?=	${BINGRP}
 LIBOWN?=	${BINOWN}
-LIBMODE?=	${NONBINMODE}
+LIBMODE?=	${BINMODE}
 
 DOCDIR?=        ${prefix}/share/doc
 DOCGRP?=	${BINGRP}
