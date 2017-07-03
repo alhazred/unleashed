@@ -74,7 +74,7 @@ LD_X?=-X
 LD_x?=-x
 LD_r?=-r
 
-LD_shared=-h lib${LIB}.so.${SHLIB_MAJOR} -G
+LD_shared=-h lib${LIB}.so.${SHLIB_MAJOR} -G -Bdirect
 
 SHLIB_LD ?= ${LD}
 
@@ -297,7 +297,7 @@ lib${LIB}_pic.a:: ${SOBJS}
 lib${LIB}.${LD_so}: ${SOBJS} ${DPADD}
 	@echo building shared ${LIB} library \(version ${SHLIB_FULLVERSION}\)
 	@rm -f ${.TARGET}
-	${SHLIB_LD} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD}
+	${SHLIB_LD} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD} -lc
 .endif
 .if !empty(SHLIB_LINKS)
 	rm -f ${SHLIB_LINKS}; ${SHLIB_LINKS:O:u:@x@ln -s ${.TARGET} $x;@}
