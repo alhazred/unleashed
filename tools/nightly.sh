@@ -870,6 +870,7 @@ function child_wstype {
 function run_bmake {
 	echo "\n==== bmake $@ ====\n" >&2
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+		SRCTOP=$CODEMGR_WS \
 		bmake -j $DMAKE_MAX_JOBS \
 			VERBOSE=yes \
 			"$@"
