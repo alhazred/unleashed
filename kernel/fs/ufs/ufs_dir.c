@@ -234,7 +234,7 @@ ufs_dirlook(
 	 * avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 	 * possible, retries the operation.
 	 */
-	ufs_tryirwlock((&dp->i_rwlock), RW_READER);
+	ufs_tryirwlock(ulp, &dp->i_rwlock, RW_READER);
 	if (indeadlock)
 		return (EAGAIN);
 
@@ -261,7 +261,7 @@ ufs_dirlook(
 			/*
 			 * must recheck as we dropped dp->i_rwlock
 			 */
-			ufs_tryirwlock(&dp->i_rwlock, RW_READER);
+			ufs_tryirwlock(ulp, &dp->i_rwlock, RW_READER);
 			if (indeadlock) {
 				if (!err)
 					VN_RELE(ITOV(*ipp));
@@ -518,7 +518,7 @@ searchloop:
 				err = ufs_iget_alloced(dp->i_vfs, ep_ino, ipp,
 				    cr);
 				rw_exit(&dp->i_ufsvfs->vfs_dqrwlock);
-				ufs_tryirwlock(&dp->i_rwlock, RW_READER);
+				ufs_tryirwlock(ulp, &dp->i_rwlock, RW_READER);
 				if (indeadlock) {
 					if (!err)
 						VN_RELE(ITOV(*ipp));
@@ -698,13 +698,13 @@ ufs_direnter_cm(
 			 * SLOCK to avoid i_rwlock, ufs_lockfs_begin deadlock.
 			 * If deadlock possible, retries the operation.
 			 */
-			ufs_tryirwlock(&tdp->i_rwlock, RW_WRITER);
+			ufs_tryirwlock(ulp, &tdp->i_rwlock, RW_WRITER);
 			if (indeadlock)
 				return (EAGAIN);
 
 			return (err);
 		}
-		ufs_tryirwlock(&tdp->i_rwlock, RW_WRITER);
+		ufs_tryirwlock(ulp, &tdp->i_rwlock, RW_WRITER);
 		if (indeadlock) {
 			VN_RELE(ITOV(*ipp));
 			return (EAGAIN);

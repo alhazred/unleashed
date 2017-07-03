@@ -755,7 +755,7 @@ struct	ocg {
  * call ufs_lockfs_end and restart the operation.
  */
 
-#define	ufs_tryirwlock(lock, mode) \
+#define	ufs_tryirwlock(ulp, lock, mode) \
 	do { \
 		indeadlock = 0; \
 		while (!rw_tryenter(lock, mode)) { \
@@ -773,12 +773,13 @@ struct	ocg {
  * TRANS_END_CSYNC and ufs_lockfs_end.
  */
 
-#define	ufs_tryirwlock_trans(lock, mode, transmode) \
+#define	ufs_tryirwlock_trans(ulp, lock, mode, transmode, ufsvfsp, error, \
+			     issync, trans_size) \
 	do { \
 		indeadlock = 0; \
 		while (!rw_tryenter(lock, mode)) { \
 			if (ulp && ULOCKFS_IS_SLOCK(ulp)) { \
-				TRANS_END_CSYNC(ufsvfsp, &error, issync, \
+				TRANS_END_CSYNC(ufsvfsp, error, issync, \
 						transmode, trans_size); \
 				ufs_lockfs_end(ulp); \
 				indeadlock = 1; \

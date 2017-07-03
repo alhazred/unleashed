@@ -2164,7 +2164,7 @@ again:
 		 * avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 		 * possible, retries the operation.
 		 */
-		ufs_tryirwlock(&ip->i_rwlock, RW_WRITER);
+		ufs_tryirwlock(ulp, &ip->i_rwlock, RW_WRITER);
 		if (indeadlock) {
 			if (ulp)
 				ufs_lockfs_end(ulp);
@@ -2208,7 +2208,9 @@ again:
 	 * ufs_link/create/remove/rename/mkdir/rmdir/symlink.
 	 */
 	if (vp->v_type == VDIR) {
-		ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_SETATTR);
+		ufs_tryirwlock_trans(ulp, &ip->i_rwlock, RW_WRITER,
+				     TOP_SETATTR, ufsvfsp, &error, issync,
+				     trans_size);
 		if (indeadlock)
 			goto again;
 		dorwlock = 1;
@@ -2960,7 +2962,9 @@ again:
 		 * to avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 		 * possible, retries the operation.
 		 */
-		ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_CREATE);
+		ufs_tryirwlock_trans(ulp, &ip->i_rwlock, RW_WRITER,
+				     TOP_CREATE, ufsvfsp, &error, issync,
+				     trans_size);
 		if (indeadlock)
 			goto again;
 
@@ -3079,9 +3083,14 @@ again:
 				else {
 					rw_exit(&ip->i_contents);
 					rw_exit(&ufsvfsp->vfs_dqrwlock);
-					ufs_tryirwlock_trans(&ip->i_rwlock,
+					ufs_tryirwlock_trans(ulp,
+							     &ip->i_rwlock,
 							     RW_WRITER,
-							     TOP_CREATE);
+							     TOP_CREATE,
+							     ufsvfsp,
+							     &error,
+							     issync,
+							     trans_size);
 					if (indeadlock) {
 						VN_RELE(ITOV(ip));
 						goto again;
@@ -3159,7 +3168,7 @@ unlock:
 	}
 
 	if (!error && truncflag) {
-		ufs_tryirwlock(&ip->i_rwlock, RW_WRITER);
+		ufs_tryirwlock(ulp, &ip->i_rwlock, RW_WRITER);
 		if (indeadlock) {
 			if (ulp)
 				ufs_lockfs_end(ulp);
@@ -3234,7 +3243,8 @@ retry_remove:
 	 * to avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 	 * possible, retries the operation.
 	 */
-	ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_REMOVE);
+	ufs_tryirwlock_trans(ulp, &ip->i_rwlock, RW_WRITER, TOP_REMOVE,
+			     ufsvfsp, &error, issync, trans_size);
 	if (indeadlock)
 		goto retry_remove;
 	error = ufs_dirremove(ip, nm, NULL, NULL, DR_REMOVE, cr);
@@ -3312,7 +3322,8 @@ retry_link:
 	 * to avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 	 * possible, retries the operation.
 	 */
-	ufs_tryirwlock_trans(&tdp->i_rwlock, RW_WRITER, TOP_LINK);
+	ufs_tryirwlock_trans(ulp, &tdp->i_rwlock, RW_WRITER, TOP_LINK,
+			     ufsvfsp, &error, issync, trans_size);
 	if (indeadlock)
 		goto retry_link;
 	error = ufs_direnter_lr(tdp, tnm, DE_LINK, NULL, sip, cr);
@@ -3794,7 +3805,8 @@ again:
 	 * to avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 	 * possible, retries the operation.
 	 */
-	ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_MKDIR);
+	ufs_tryirwlock_trans(ulp, &ip->i_rwlock, RW_WRITER, TOP_MKDIR,
+			     ufsvfsp, &error, issync, trans_size);
 	if (indeadlock)
 		goto again;
 
@@ -3879,7 +3891,8 @@ retry_rmdir:
 	 * to avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 	 * possible, retries the operation.
 	 */
-	ufs_tryirwlock_trans(&ip->i_rwlock, RW_WRITER, TOP_RMDIR);
+	ufs_tryirwlock_trans(ulp, &ip->i_rwlock, RW_WRITER, TOP_RMDIR,
+			     ufsvfsp, &error, issync, trans_size);
 	if (indeadlock)
 		goto retry_rmdir;
 	error = ufs_dirremove(ip, nm, NULL, cdir, DR_RMDIR, cr);
