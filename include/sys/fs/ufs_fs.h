@@ -756,16 +756,17 @@ struct	ocg {
  */
 
 #define	ufs_tryirwlock(ulp, lock, mode) \
-	do { \
-		indeadlock = 0; \
+	({ \
+		int ret = 0; \
 		while (!rw_tryenter(lock, mode)) { \
 			if (ulp && ULOCKFS_IS_SLOCK(ulp)) { \
-				indeadlock = 1; \
+				ret = 1; \
 				break; \
 			} \
 			delay(RETRY_LOCK_DELAY); \
 		} \
-	} while (0)
+		ret; \
+	})
 
 /*
  * The macro ufs_tryirwlock_trans is used in functions which call
@@ -775,19 +776,20 @@ struct	ocg {
 
 #define	ufs_tryirwlock_trans(ulp, lock, mode, transmode, ufsvfsp, error, \
 			     issync, trans_size) \
-	do { \
-		indeadlock = 0; \
+	({ \
+		int ret = 0; \
 		while (!rw_tryenter(lock, mode)) { \
 			if (ulp && ULOCKFS_IS_SLOCK(ulp)) { \
 				TRANS_END_CSYNC(ufsvfsp, error, issync, \
 						transmode, trans_size); \
 				ufs_lockfs_end(ulp); \
-				indeadlock = 1; \
+				ret = 1; \
 				break; \
 			} \
 			delay(RETRY_LOCK_DELAY); \
 		} \
-	} while (0)
+		ret; \
+	})
 
 #ifdef	__cplusplus
 }
