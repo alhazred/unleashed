@@ -234,7 +234,7 @@ ufs_dirlook(
 	 * avoid i_rwlock, ufs_lockfs_begin deadlock. If deadlock
 	 * possible, retries the operation.
 	 */
-	ufs_tryirwlock((&dp->i_rwlock), RW_READER, retry_dircache);
+	indeadlock = ufs_tryirwlock(ulp, &dp->i_rwlock, RW_READER);
 	if (indeadlock)
 		return (EAGAIN);
 
@@ -261,7 +261,8 @@ ufs_dirlook(
 			/*
 			 * must recheck as we dropped dp->i_rwlock
 			 */
-			ufs_tryirwlock(&dp->i_rwlock, RW_READER, retry_parent);
+			indeadlock = ufs_tryirwlock(ulp, &dp->i_rwlock,
+						    RW_READER);
 			if (indeadlock) {
 				if (!err)
 					VN_RELE(ITOV(*ipp));
@@ -518,8 +519,8 @@ searchloop:
 				err = ufs_iget_alloced(dp->i_vfs, ep_ino, ipp,
 				    cr);
 				rw_exit(&dp->i_ufsvfs->vfs_dqrwlock);
-				ufs_tryirwlock(&dp->i_rwlock, RW_READER,
-				    retry_disk);
+				indeadlock = ufs_tryirwlock(ulp, &dp->i_rwlock,
+							    RW_READER);
 				if (indeadlock) {
 					if (!err)
 						VN_RELE(ITOV(*ipp));
@@ -699,13 +700,14 @@ ufs_direnter_cm(
 			 * SLOCK to avoid i_rwlock, ufs_lockfs_begin deadlock.
 			 * If deadlock possible, retries the operation.
 			 */
-			ufs_tryirwlock(&tdp->i_rwlock, RW_WRITER, retry_err);
+			indeadlock = ufs_tryirwlock(ulp, &tdp->i_rwlock,
+						    RW_WRITER);
 			if (indeadlock)
 				return (EAGAIN);
 
 			return (err);
 		}
-		ufs_tryirwlock(&tdp->i_rwlock, RW_WRITER, retry);
+		indeadlock = ufs_tryirwlock(ulp, &tdp->i_rwlock, RW_WRITER);
 		if (indeadlock) {
 			VN_RELE(ITOV(*ipp));
 			return (EAGAIN);
@@ -3225,7 +3227,7 @@ again:
 
 	if (ulp) {
 		trans_size = (int)TOP_MKDIR_SIZE(tdp);
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_MKDIR, trans_size);
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_MKDIR, trans_size);
 	}
 
 	/*
@@ -3282,7 +3284,7 @@ again:
 	if (ulp) {
 		int terr = 0;
 
-		TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_MKDIR, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_MKDIR, trans_size);
 		ufs_lockfs_end(ulp);
 		if (err == 0)
 			err = terr;
@@ -3298,7 +3300,7 @@ fail:
 	if (dorwlock == 2)
 		rw_exit(&tdp->i_rwlock);
 	if (ulp) {
-		TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_MKDIR, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_MKDIR, trans_size);
 		ufs_lockfs_end(ulp);
 	}
 	if (dorwlock == 1)

@@ -276,8 +276,8 @@ ufs_alloc_data(
 		 * Try to begin a UFS log transaction
 		 */
 		trans_size = TOP_GETPAGE_SIZE(ip);
-		TRANS_TRY_BEGIN_CSYNC(ufsvfsp, issync, TOP_GETPAGE,
-		    trans_size, error);
+		TRANS_TRY_BEGIN_CSYNC(ufsvfsp, &issync, TOP_GETPAGE,
+				      trans_size, &error);
 		if (error == EWOULDBLOCK) {
 			ufs_lockfs_end(ulp);
 			if ((fdbp != NULL) && (flags & B_ASYNC)) {
@@ -516,8 +516,8 @@ ufs_alloc_data(
 		/*
 		 * End the UFS Log transaction
 		 */
-		TRANS_END_CSYNC(ufsvfsp, error, issync, TOP_GETPAGE,
-		    trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_GETPAGE,
+				trans_size);
 		ufs_lockfs_end(ulp);
 	}
 	if (io_started && (flags & B_ASYNC)) {

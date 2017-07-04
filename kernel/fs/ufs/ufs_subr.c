@@ -369,10 +369,10 @@ ufs_update(int flag)
 		ufsp = (struct ufsvfs *)vfsp->vfs_data;
 		curthread->t_flag |= T_DONTBLOCK;
 		TRANS_BEGIN_SYNC(ufsp, TOP_COMMIT_UPDATE, TOP_COMMIT_SIZE,
-		    error);
+				 &error);
 		if (!error) {
-			TRANS_END_SYNC(ufsp, error, TOP_COMMIT_UPDATE,
-			    TOP_COMMIT_SIZE);
+			TRANS_END_SYNC(ufsp, &error, TOP_COMMIT_UPDATE,
+				       TOP_COMMIT_SIZE);
 		}
 		curthread->t_flag &= ~T_DONTBLOCK;
 
