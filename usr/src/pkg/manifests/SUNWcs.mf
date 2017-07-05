@@ -1696,6 +1696,7 @@ link path=usr/spool target=../var/spool
 link path=usr/tmp target=../var/tmp
 link path=var/ld/32 target=.
 link path=var/ld/64 target=$(ARCH64)
+depend fmri=library/libressl type=require
 #
 # intrd and others use the illumos-defaulted perl interpreter
 #
