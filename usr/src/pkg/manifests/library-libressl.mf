@@ -20,6 +20,7 @@ set name=pkg.summary value="LibreSSL - TLS/crypto stack forked from OpenSSL"
 dir path=etc group=sys
 dir path=etc/ssl group=sys
 dir path=usr group=sys
+dir path=usr/bin
 dir path=usr/include
 dir path=usr/include/openssl
 dir path=usr/lib
@@ -33,6 +34,7 @@ dir path=usr/share/man/man5
 file path=etc/ssl/cert.pem mode=0444
 file path=etc/ssl/openssl.cnf mode=0444
 file path=etc/ssl/x509v3.cnf mode=0444
+file path=usr/bin/openssl mode=0555
 file path=usr/include/openssl/aes.h
 file path=usr/include/openssl/asn1.h
 file path=usr/include/openssl/asn1_mac.h
@@ -112,6 +114,7 @@ file path=usr/lib/libtls.so.15.4 mode=0555
 file path=usr/lib/pkgconfig/libcrypto.pc mode=0444
 file path=usr/lib/pkgconfig/libssl.pc mode=0444
 file path=usr/lib/pkgconfig/openssl.pc mode=0444
+file path=usr/share/man/man1/openssl.1
 file path=usr/share/man/man3/ACCESS_DESCRIPTION_new.3
 file path=usr/share/man/man3/ASN1_OBJECT_new.3
 file path=usr/share/man/man3/ASN1_STRING_length.3
