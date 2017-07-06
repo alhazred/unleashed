@@ -762,6 +762,7 @@ file path=usr/bin/moe mode=0555
 file path=usr/bin/more mode=0555
 file path=usr/bin/mpstat mode=0555
 file path=usr/bin/mt mode=0555
+file path=usr/bin/nc mode=0555
 file path=usr/bin/netstat mode=0555
 file path=usr/bin/newgrp group=sys mode=4755
 file path=usr/bin/nice mode=0555

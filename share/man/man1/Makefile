@@ -201,7 +201,6 @@ MAN = acctcom.1 \
       msgget.1 \
       mt.1 \
       mv.1 \
-      nc.1 \
       newform.1 \
       newgrp.1 \
       news.1 \
