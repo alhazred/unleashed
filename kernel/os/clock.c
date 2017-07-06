@@ -24,6 +24,7 @@
 /*
  * Copyright (c) 1988, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2013, Joyent, Inc.  All rights reserved.
+ * Copyright (c) 2015, Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
@@ -1793,6 +1794,74 @@ delay_sig(clock_t ticks)
 	if (rc == 0)
 		return (EINTR);
 	return (0);
+}
+
+static void
+ddi_sleep_common(hrtime_t delay, hrtime_t resolution)
+{
+	kthread_t *t = curthread;
+	hrtime_t deadline;
+	callout_id_t id;
+	hrtime_t tmp;
+
+	/* If timeouts aren't running all we can do is spin. */
+	if (panicstr || devinfo_freeze) {
+		/* Convert ddi_*sleep(9F) call into drv_usecwait(9F) call. */
+		if (NSEC2USEC(delay) > 0)
+			drv_usecwait(NSEC2USEC(delay));
+		return;
+	}
+
+	/*
+	 * TODO: does this need to be in a loop checking that we didn't get
+	 * woken up too early?
+	 */
+	mutex_enter(&t->t_delay_lock);
+	tmp = gethrtime();
+	id = timeout_generic(CALLOUT_NORMAL, delay_wakeup, t, delay,
+	    resolution, CALLOUT_FLAG_ROUNDUP);
+	cv_wait(&t->t_delay_cv, &t->t_delay_lock);
+	mutex_exit(&t->t_delay_lock);
+	(void) untimeout_generic(id, 0);
+	if (gethrtime() - tmp < delay)
+		cmn_err(CE_WARN, "%s returned too soon (wanted %llu, got %llu)",
+			__func__, delay, gethrtime() - tmp);
+}
+
+void
+ddi_sleep(clock_t secs)
+{
+	hrtime_t res;
+
+	/*
+	 * We don't want to use 1 s resulution unconditionally because of
+	 * how it is used for rounding up the deadline.  With 1 s
+	 * resolution, a sleep of 1 second can take anywhere from 1 to
+	 * 1.999999999 seconds on an idle system.  This seems unacceptable,
+	 * and so we use either 100 ms or 10% of sleep interval as the
+	 * resolution - whichever is smaller.
+	 *
+	 * (There is a similar issue with the milli- and micro- sleep
+	 * functions, but somehow an extra 1 ms or 1us doesn't seem as bad.)
+	 */
+	if (secs > 0)
+		res = MIN(100000000 /* 100 ms */, SEC2NSEC(secs) / 10);
+	else
+		res = 100000000; /* 100 ms */
+
+	ddi_sleep_common(SEC2NSEC(secs), res);
+}
+
+void
+ddi_msleep(clock_t msecs)
+{
+	ddi_sleep_common(MSEC2NSEC(msecs), 1000000 /* 1 ms */);
+}
+
+void
+ddi_usleep(clock_t usecs)
+{
+	ddi_sleep_common(USEC2NSEC(usecs), 1000 /* 1 us */);
 }
 
 

@@ -21,6 +21,7 @@
  */
 /*
  * Copyright 2014 Garrett D'Amore <garrett@damore.org>
+ * Copyright 2015 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  *
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
@@ -87,6 +88,10 @@ extern clock_t drv_hztousec(clock_t);
 extern clock_t drv_usectohz(clock_t);
 extern void delay(clock_t);
 extern void time_to_wait(clock_t *, clock_t);
+
+extern void ddi_sleep(clock_t);
+extern void ddi_msleep(clock_t);
+extern void ddi_usleep(clock_t);
 
 /* XXX -- should be changed to major_t */
 /* convert external to internal major number */
