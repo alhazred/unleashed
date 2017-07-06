@@ -1193,7 +1193,7 @@ axf_mii_probe(struct usbgem_dev *dp)
 			    0, 0, 0, NULL, &err, usberr);
 #if 1
 			/* XXX - read back, but it doesn't work, why? */
-			ddi_msleep(1000);
+			ddi_sleep(1);
 			IN(dp, VCMD_READ_SROM,
 			    0x11, 0, 2, new_11th, &err, usberr);
 #endif

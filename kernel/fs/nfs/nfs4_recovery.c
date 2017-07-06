@@ -2574,7 +2574,7 @@ recov_openfiles(recov_info_t *recovp, nfs4_server_t *sp)
 			}
 #ifdef DEBUG
 			if (nfs4_recovdelay > 0)
-				ddi_msleep(nfs4_recovdelay * 1000);
+				ddi_sleep(nfs4_recovdelay);
 #endif
 			if (e.error == 0 && e.stat == NFS4_OK) {
 				relock_file(rep->re_vp, mi, &e, pre_change);
