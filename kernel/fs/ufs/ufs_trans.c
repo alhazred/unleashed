@@ -826,7 +826,7 @@ ufs_trans_itrunc(struct inode *ip, uoff_t length, int flags, cred_t *cr)
 	 */
 again:
 	ufs_trans_trunc_resv(ip, length, &resv, &resid);
-	TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_ITRUNC, resv);
+	TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_ITRUNC, resv);
 	rw_enter(&ufsvfsp->vfs_dqrwlock, RW_READER);
 	rw_enter(&ip->i_contents, RW_WRITER);
 	if (resid) {
@@ -854,7 +854,7 @@ again:
 		curthread->t_flag &= ~T_DONTBLOCK;
 	rw_exit(&ip->i_contents);
 	rw_exit(&ufsvfsp->vfs_dqrwlock);
-	TRANS_END_CSYNC(ufsvfsp, err, issync, TOP_ITRUNC, resv);
+	TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_ITRUNC, resv);
 
 	if ((err == 0) && resid) {
 		ufsvfsp->vfs_avgbfree = fs->fs_cstotal.cs_nbfree / fs->fs_ncg;
@@ -961,7 +961,7 @@ again:
 	rw_exit(&ip->i_contents);
 	rw_exit(&ufsvfsp->vfs_dqrwlock);
 	if (ioflag & (FSYNC|FDSYNC)) {
-		TRANS_END_SYNC(ufsvfsp, err, TOP_WRITE_SYNC, resv);
+		TRANS_END_SYNC(ufsvfsp, &err, TOP_WRITE_SYNC, resv);
 	} else {
 		TRANS_END_ASYNC(ufsvfsp, TOP_WRITE, resv);
 	}
@@ -977,7 +977,7 @@ again:
 	 */
 	if (ioflag & (FSYNC|FDSYNC)) {
 		int error;
-		TRANS_BEGIN_SYNC(ufsvfsp, TOP_WRITE_SYNC, resv, error);
+		TRANS_BEGIN_SYNC(ufsvfsp, TOP_WRITE_SYNC, resv, &error);
 		ASSERT(!error);
 	} else {
 		TRANS_BEGIN_ASYNC(ufsvfsp, TOP_WRITE, resv);

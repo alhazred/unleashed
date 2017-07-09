@@ -305,8 +305,8 @@ ufs_delete(struct ufsvfs *ufsvfsp, struct inode *ip, int dolockfs)
 	 * Delete the attribute directory.
 	 */
 	if (ip->i_oeftflag != 0) {
-		TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_REMOVE,
-		    trans_size = (int)TOP_REMOVE_SIZE(ip));
+		TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_REMOVE,
+				  trans_size = (int)TOP_REMOVE_SIZE(ip));
 		rw_enter(&ip->i_contents, RW_WRITER);
 		err = ufs_iget(ip->i_vfs, ip->i_oeftflag,
 		    &dp, CRED());
@@ -345,8 +345,7 @@ ufs_delete(struct ufsvfs *ufsvfsp, struct inode *ip, int dolockfs)
 		 */
 		ip->i_oeftflag = 0;
 		rw_exit(&ip->i_contents);
-		TRANS_END_CSYNC(ufsvfsp, err, issync,
-		    TOP_REMOVE, trans_size);
+		TRANS_END_CSYNC(ufsvfsp, &err, issync, TOP_REMOVE, trans_size);
 		dnlc_remove(ITOV(ip), XATTR_DIR_NAME);
 	}
 
@@ -595,10 +594,10 @@ ufs_delete_drain_wait(struct ufsvfs *ufsvfsp, int dolockfs)
 	 * any canceled freed blocks are available for allocation.
 	 */
 	curthread->t_flag |= T_DONTBLOCK;
-	TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_UPDATE, TOP_COMMIT_SIZE, error);
+	TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_UPDATE, TOP_COMMIT_SIZE, &error);
 	if (!error) {
-		TRANS_END_SYNC(ufsvfsp, error, TOP_COMMIT_UPDATE,
-		    TOP_COMMIT_SIZE);
+		TRANS_END_SYNC(ufsvfsp, &error, TOP_COMMIT_UPDATE,
+			       TOP_COMMIT_SIZE);
 	}
 	curthread->t_flag &= ~T_DONTBLOCK;
 }
@@ -1224,8 +1223,8 @@ ufs_attr_purge(struct inode *dp)
 				goto out;
 			}
 
-			TRANS_BEGIN_CSYNC(ufsvfsp, issync, TOP_REMOVE,
-			    trans_size = (int)TOP_REMOVE_SIZE(tp));
+			TRANS_BEGIN_CSYNC(ufsvfsp, &issync, TOP_REMOVE,
+					  trans_size = (int)TOP_REMOVE_SIZE(tp));
 
 			/*
 			 * Delete inode.
@@ -1244,8 +1243,8 @@ ufs_attr_purge(struct inode *dp)
 
 			VN_RELE(ITOV(tp));
 			entryoffsetinblk += ep->d_reclen;
-			TRANS_END_CSYNC(ufsvfsp, error,
-			    issync, TOP_REMOVE, trans_size);
+			TRANS_END_CSYNC(ufsvfsp, &error, issync, TOP_REMOVE,
+					trans_size);
 
 		}
 		offset += ep->d_reclen;

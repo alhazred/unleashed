@@ -422,11 +422,12 @@ ufs_flush(struct vfs *vfsp)
 				curthread->t_flag |= T_DONTBLOCK;
 
 			TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_FLUSH,
-			    TOP_COMMIT_SIZE, error);
+					 TOP_COMMIT_SIZE, &error);
 
 			if (!error) {
-				TRANS_END_SYNC(ufsvfsp, saverror,
-				    TOP_COMMIT_FLUSH, TOP_COMMIT_SIZE);
+				TRANS_END_SYNC(ufsvfsp, &saverror,
+					       TOP_COMMIT_FLUSH,
+					       TOP_COMMIT_SIZE);
 			}
 
 			if (tdontblock == 0)

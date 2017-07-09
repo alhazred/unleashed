@@ -123,6 +123,9 @@ _uid!=  id -u
 USERGRP!=  id -g
 .export USERGRP
 .endif
+.if empty(USER)
+USER!=	id -un
+.endif
 .for x in BIN CONF DOC INC INFO FILES KMOD LIB MAN NLS SHARE
 $xOWN=  ${USER}
 $xGRP=  ${USERGRP}
@@ -164,7 +167,7 @@ _LIBSODIR?=	${LIBDIR}
 SHLINKDIR?=	/usr/libexec
 LIBGRP?=	${BINGRP}
 LIBOWN?=	${BINOWN}
-LIBMODE?=	${NONBINMODE}
+LIBMODE?=	${BINMODE}
 
 DOCDIR?=        ${prefix}/share/doc
 DOCGRP?=	${BINGRP}

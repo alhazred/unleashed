@@ -755,20 +755,18 @@ struct	ocg {
  * call ufs_lockfs_end and restart the operation.
  */
 
-#define	ufs_tryirwlock(lock, mode, label) \
-{\
-	indeadlock = 0;\
-label:\
-	if (!rw_tryenter(lock, mode))\
-	{\
-		if (ulp && ULOCKFS_IS_SLOCK(ulp)) {\
-			indeadlock = 1;\
-		} else {\
-			delay(RETRY_LOCK_DELAY);\
-			goto  label;\
-		}\
-	}\
-}
+#define	ufs_tryirwlock(ulp, lock, mode) \
+	({ \
+		int ret = 0; \
+		while (!rw_tryenter(lock, mode)) { \
+			if (ulp && ULOCKFS_IS_SLOCK(ulp)) { \
+				ret = 1; \
+				break; \
+			} \
+			delay(RETRY_LOCK_DELAY); \
+		} \
+		ret; \
+	})
 
 /*
  * The macro ufs_tryirwlock_trans is used in functions which call
@@ -776,23 +774,22 @@ label:\
  * TRANS_END_CSYNC and ufs_lockfs_end.
  */
 
-#define	ufs_tryirwlock_trans(lock, mode, transmode, label) \
-{\
-	indeadlock = 0;\
-label:\
-	if (!rw_tryenter(lock, mode))\
-	{\
-		if (ulp && ULOCKFS_IS_SLOCK(ulp)) {\
-			TRANS_END_CSYNC(ufsvfsp, error, issync,\
-				transmode, trans_size);\
-			ufs_lockfs_end(ulp);\
-			indeadlock = 1;\
-		} else {\
-			delay(RETRY_LOCK_DELAY);\
-			goto  label;\
-		}\
-	}\
-}
+#define	ufs_tryirwlock_trans(ulp, lock, mode, transmode, ufsvfsp, error, \
+			     issync, trans_size) \
+	({ \
+		int ret = 0; \
+		while (!rw_tryenter(lock, mode)) { \
+			if (ulp && ULOCKFS_IS_SLOCK(ulp)) { \
+				TRANS_END_CSYNC(ufsvfsp, error, issync, \
+						transmode, trans_size); \
+				ufs_lockfs_end(ulp); \
+				ret = 1; \
+				break; \
+			} \
+			delay(RETRY_LOCK_DELAY); \
+		} \
+		ret; \
+	})
 
 #ifdef	__cplusplus
 }

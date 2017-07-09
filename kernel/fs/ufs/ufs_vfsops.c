@@ -1636,11 +1636,11 @@ ufs_unmount(struct vfs *vfsp, int fflag, struct cred *cr)
 		 * push this last transaction
 		 */
 		curthread->t_flag |= T_DONTBLOCK;
-		TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_UNMOUNT, TOP_COMMIT_SIZE,
-		    error);
+		TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_UNMOUNT,
+				 TOP_COMMIT_SIZE, &error);
 		if (!error)
-			TRANS_END_SYNC(ufsvfsp, error, TOP_COMMIT_UNMOUNT,
-			    TOP_COMMIT_SIZE);
+			TRANS_END_SYNC(ufsvfsp, &error, TOP_COMMIT_UNMOUNT,
+				       TOP_COMMIT_SIZE);
 		curthread->t_flag &= ~T_DONTBLOCK;
 	}
 
@@ -1929,10 +1929,10 @@ ufs_sync(struct vfs *vfsp, short flag, struct cred *cr)
 	 * commit any outstanding async transactions
 	 */
 	curthread->t_flag |= T_DONTBLOCK;
-	TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_UPDATE, TOP_COMMIT_SIZE, error);
+	TRANS_BEGIN_SYNC(ufsvfsp, TOP_COMMIT_UPDATE, TOP_COMMIT_SIZE, &error);
 	if (!error) {
-		TRANS_END_SYNC(ufsvfsp, error, TOP_COMMIT_UPDATE,
-		    TOP_COMMIT_SIZE);
+		TRANS_END_SYNC(ufsvfsp, &error, TOP_COMMIT_UPDATE,
+			       TOP_COMMIT_SIZE);
 	}
 	curthread->t_flag &= ~T_DONTBLOCK;
 
