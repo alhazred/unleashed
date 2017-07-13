@@ -59,7 +59,7 @@ clobber:
 
 motd:	FRC
 	@-$(ECHO) "rebuilding motd"
-	@-$(ECHO) "unleashed\t$(VERSION)\t$(RELEASE_DATE)" > motd
+	@-$(ECHO) "Unleashed\t$(VERSION)\t$(RELEASE_DATE)" > motd
 	@-$(CAT) release_info >> motd
 
 release: motd

@@ -247,7 +247,7 @@ log_init(void)
 	/*
 	 * Now that logging is enabled, emit the boot banner.
 	 */
-	printf("\rillumos-unleashed version %s %u-bit\n",
+	printf("\rUnleashed version %s %u-bit\n",
 	    utsname.version, NBBY * (uint_t)sizeof (void *));
 #ifdef DEBUG
 	printf("DEBUG enabled\n");

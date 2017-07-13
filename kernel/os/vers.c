@@ -33,9 +33,9 @@ struct utsname utsname = {
 };
 
 static struct utsname utsname_alt = {
-	.sysname = "illumos",
+	.sysname = "Unleashed",
 	.nodename = "",
-	.release = "0.9.71",
+	.release = "11.0",
 	.version = "alternate-uname",
 	.machine = UTS_PLATFORM,
 };
