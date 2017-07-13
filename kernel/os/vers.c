@@ -22,6 +22,7 @@
  */
 
 #include <sys/utsname.h>
+#include <sys/sunddi.h>
 
 struct utsname utsname = {
 	.sysname = UTS_SYSNAME,
@@ -31,10 +32,24 @@ struct utsname utsname = {
 	.machine = UTS_PLATFORM,
 };
 
-struct utsname utsname_alt = {
+static struct utsname utsname_alt = {
 	.sysname = "illumos",
 	.nodename = "",
 	.release = "0.9.71",
 	.version = "alternate-uname",
 	.machine = UTS_PLATFORM,
 };
+
+const struct utsname *utsname_get(bool alt)
+{
+	return alt ? &utsname_alt : &utsname;
+}
+
+void utsname_set_machine(const char *machine)
+{
+	strncpy(utsname.machine, machine, _SYS_NMLN);
+	utsname.machine[_SYS_NMLN - 1] = '\0';
+
+	strncpy(utsname_alt.machine, machine, _SYS_NMLN);
+	utsname_alt.machine[_SYS_NMLN - 1] = '\0';
+}

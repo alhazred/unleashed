@@ -35,6 +35,10 @@
 
 #include <sys/feature_tests.h>
 
+#ifdef _KERNEL
+#include <sys/stdbool.h>
+#endif
+
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -101,9 +105,10 @@ extern int uname(struct utsname *);
 extern char *uts_nodename(void);
 
 /*
- * Alternate UNAME values to use if uarea->u_flags & U_FLAG_ALTUNAME is set.
+ * Routines to access parts of the utsname.
  */
-extern struct utsname utsname_alt;
+extern const struct utsname *utsname_get(bool alt);
+extern void utsname_set_machine(const char *machine);
 
 #endif	/* !(_KERNEL) */
 

@@ -54,6 +54,7 @@ static void get_netif_name(char *, char *);
 long
 systeminfo(int command, char *buf, long count)
 {
+	const bool altuname = (PTOU(curproc)->u_flags & U_FLAG_ALTUNAME) != 0;
 	int error = 0;
 	long strcnt, getcnt;
 	const char *kstr;
@@ -64,43 +65,23 @@ systeminfo(int command, char *buf, long count)
 		return (set_errno(EINVAL));
 
 	/*
-	 * FIXME: Ideally we could just use either utsname struct
-	 * completely, but unfortunately the structs aren't const and in
-	 * fact change at runtime.  To make matters worse, the changes are
-	 * performed by just overwritting the globals' contents so there is
-	 * no easy way to keep the two synchronized.
-	 *
-	 *  - nodename changes whenever the hostname changes
-	 *  - machine changes on i86pc boot
-	 */
-
-	/*
 	 * Deal with the common "get a string" case first.
 	 */
 	switch (command) {
 	case SI_SYSNAME:
-		if (PTOU(curproc)->u_flags & U_FLAG_ALTUNAME)
-			kstr = utsname_alt.sysname;
-		else
-			kstr = utsname.sysname;
+		kstr = utsname_get(altuname)->sysname;
 		break;
 	case SI_HOSTNAME:
 		kstr = uts_nodename();
 		break;
 	case SI_RELEASE:
-		if (PTOU(curproc)->u_flags & U_FLAG_ALTUNAME)
-			kstr = utsname_alt.release;
-		else
-			kstr = utsname.release;
+		kstr = utsname_get(altuname)->release;
 		break;
 	case SI_VERSION:
-		if (PTOU(curproc)->u_flags & U_FLAG_ALTUNAME)
-			kstr = utsname_alt.version;
-		else
-			kstr = utsname.version;
+		kstr = utsname_get(altuname)->version;
 		break;
 	case SI_MACHINE:
-		kstr = utsname.machine;
+		kstr = utsname_get(altuname)->machine;
 		break;
 #ifdef _LP64
 	case SI_ARCHITECTURE_64:

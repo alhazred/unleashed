@@ -1893,9 +1893,7 @@ get_boot_properties(void)
 		 *	this can be taken out.
 		 */
 		if (strcmp(name, "si-machine") == 0) {
-			(void) strncpy(utsname.machine, bop_staging_area,
-			    SYS_NMLN);
-			utsname.machine[SYS_NMLN - 1] = '\0';
+			utsname_set_machine(bop_staging_area);
 		} else if (strcmp(name, "si-hw-provider") == 0) {
 			(void) strncpy(hw_provider, bop_staging_area, SYS_NMLN);
 			hw_provider[SYS_NMLN - 1] = '\0';
