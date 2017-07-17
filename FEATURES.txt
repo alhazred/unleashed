@@ -43,6 +43,7 @@ changed.
  + errc(3), warnc(3) were added to libc
  + fts(3) added to libc
  + reallocarray(3) added to libc
+ + LibreSSL (libcrypto, libssl, libtls, openssl(1), nc(1)) added
  * man(1) is mandoc. mandoc.db support added, eliminating the need for
    manpage symlinks.
  * socket interfaces are now in libc. libsocket, libxnet and libnsl remain as
