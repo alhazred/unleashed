@@ -107,7 +107,7 @@ extern char *uts_nodename(void);
 /*
  * Routines to access parts of the utsname.
  */
-extern const struct utsname *utsname_get(bool alt);
+extern const struct utsname *utsname_get(bool legacy);
 extern void utsname_set_machine(const char *machine);
 
 #endif	/* !(_KERNEL) */

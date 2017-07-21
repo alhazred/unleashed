@@ -15,7 +15,7 @@
  */
 
 /*
- * Template utsname and alternate utsname.
+ * Template utsname and legacy utsname.
  *
  * UTS_SYSNAME, UTS_RELEASE, UTS_VERSION and  UTS_PLATFORM must defined by
  * the build system.
@@ -25,24 +25,25 @@
 #include <sys/sunddi.h>
 
 struct utsname utsname = {
-	.sysname = UTS_SYSNAME,
+	.sysname = "Unleashed",
 	.nodename = "",
-	.release = UTS_RELEASE,
+	.release = "11.0",
 	.version = UTS_VERSION,
 	.machine = UTS_PLATFORM,
 };
 
-static struct utsname utsname_alt = {
-	.sysname = "Unleashed",
+static struct utsname utsname_legacy = {
+	.sysname = UTS_SYSNAME,
 	.nodename = "",
-	.release = "11.0",
-	.version = "alternate-uname",
+	.release = UTS_RELEASE,
+	.version = "legacy-uname",
 	.machine = UTS_PLATFORM,
 };
 
-const struct utsname *utsname_get(bool alt)
+
+const struct utsname *utsname_get(bool legacy)
 {
-	return alt ? &utsname_alt : &utsname;
+	return legacy ? &utsname_legacy : &utsname;
 }
 
 void utsname_set_machine(const char *machine)
@@ -50,6 +51,6 @@ void utsname_set_machine(const char *machine)
 	strncpy(utsname.machine, machine, _SYS_NMLN);
 	utsname.machine[_SYS_NMLN - 1] = '\0';
 
-	strncpy(utsname_alt.machine, machine, _SYS_NMLN);
-	utsname_alt.machine[_SYS_NMLN - 1] = '\0';
+	strncpy(utsname_legacy.machine, machine, _SYS_NMLN);
+	utsname_legacy.machine[_SYS_NMLN - 1] = '\0';
 }
