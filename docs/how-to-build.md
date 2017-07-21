@@ -48,8 +48,9 @@ $ make
 ```
 
 The component will be built against the running system and installed to /. To
-build against and install to the "proto area", pass the full path to
-'proto/root\_i386' to both 'make' and 'make install' as DESTDIR=path.
+install to the proto area, pass DESTDIR=path to 'make install'. Building
+against libraries and headers in the "proto area" or in object directories is
+not currently supported.
 
 To build a component under the legacy (dmake) build system, ie. things under
 'usr/src':
@@ -60,4 +61,4 @@ $ cd usr/src/cmd/w
 $ dmake install
 ```
 
-The component will be installed into the "proto area".
+The component will be built against the "proto area" and installed there.
