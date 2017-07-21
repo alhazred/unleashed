@@ -131,7 +131,6 @@ file path=usr/share/man/man1/moe.1
 file path=usr/share/man/man1/more.1
 file path=usr/share/man/man1/mt.1
 file path=usr/share/man/man1/mv.1
-file path=usr/share/man/man1/nc.1
 file path=usr/share/man/man1/newgrp.1
 file path=usr/share/man/man1/newtask.1
 file path=usr/share/man/man1/nice.1
