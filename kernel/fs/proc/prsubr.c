@@ -970,8 +970,8 @@ prgetlwpstatus32(kthread_t *t, lwpstatus32_t *sp, zone_t *zp)
 		flags |= PR_MSFORK;
 	if (p->p_flag & SVFWAIT)
 		flags |= PR_VFORKP;
-	if (PTOU(p)->u_flags & U_FLAG_ALTUNAME)
-		flags |= PR_AUNAME;
+	if (PTOU(p)->u_flags & U_FLAG_LEGACYUNAME)
+		flags |= PR_LUNAME;
 	sp->pr_flags = flags;
 	if (VSTOPPED(t)) {
 		sp->pr_why   = PR_REQUESTED;
@@ -1204,8 +1204,8 @@ prgetlwpstatus(kthread_t *t, lwpstatus_t *sp, zone_t *zp)
 		flags |= PR_NOSIGCHLD;
 	if (p->p_pidflag & CLDWAITPID)
 		flags |= PR_WAITPID;
-	if (PTOU(p)->u_flags & U_FLAG_ALTUNAME)
-		flags |= PR_AUNAME;
+	if (PTOU(p)->u_flags & U_FLAG_LEGACYUNAME)
+		flags |= PR_LUNAME;
 	sp->pr_flags = flags;
 	if (VSTOPPED(t)) {
 		sp->pr_why   = PR_REQUESTED;

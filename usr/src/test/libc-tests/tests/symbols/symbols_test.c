@@ -64,7 +64,7 @@ const char *compilers[] = {
 
 const char *puname[] = {
 	"",
-	"/usr/bin/puname -S "
+	"/usr/bin/puname "
 };
 
 char *compiler = NULL;

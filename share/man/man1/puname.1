@@ -10,93 +10,55 @@
 .\"
 .\"
 .\" Copyright 2014 Garrett D'Amore <garrett@damore.org>
+.\" Copyright 2017 Lauri Tirkkonen <lotheac@iki.fi>
 .\"
-.Dd Aug 31, 2014
+.Dd Jul 22, 2017
 .Dt PUNAME 1
 .Os
 .Sh NAME
 .Nm puname
-.Nd set or clear alternate uname for process
+.Nd run a command with legacy uname
 .Sh SYNOPSIS
 .Nm
-.Op Fl S | U
-.Op Fl v
-.Fl p Ar pid
-.Nm
-.Op Fl S | U
-.Op Fl v
 .Ar command
-.Op arg Ns \&...
-.
+.Op args
+.Nm
+.Fl p Ar pid
 .Sh DESCRIPTION
-.
 The
 .Nm
-command is used to query, set or clear the process flag that drives
-the use of an alternate set of values used to report the system identity
-in response to the
+utility runs the given command with legacy uname.
 .Xr uname 2
-and
+will return the following values for the command and its child processes:
+.Pp
+.Bl -tag -width sysnameXXX -offset indent -compact
+.It Fa sysname
+SunOS
+.It Fa release
+5.11
+.It Fa version
+legacy-uname
+.El
+.Pp
+The values returned by the
 .Xr sysinfo 2
-system calls.
-.Lp
-The use of an alternate uname affects the
-.Vt sysname ,
-.Vt release ,
-and
-.Vt version
-fields of the
-.Vt utsname
-structure.  See
-.Xr utsname 3HEAD
-and
-.Xr uname 2 .
-It also affects the
+commands
 .Dv SI_SYSNAME ,
 .Dv SI_RELEASE ,
 and
 .Dv SI_VERSION
-commands used with
-.Xr sysinfo 2 .
-.
+commands are modified accordingly.
 .Sh OPTIONS
-.
 The following options are supported:
 .Bl -tag -width indent
-.It Fl S
-Sets the use of the alternate system identity for the process.  The
-system will report alternate identity information to the process, and
-any children subsequently created.
-.It Fl U
-Clears the use of the alternate system identity for the process.  The
-system will report the primary identity information to the process, and
-any children subsequently created.
-.It Fl v
-Report the setting of the flag for the process to the standard error
-stream.
+.It Fl p Ar pid
+Display the current uname setting for
+.Ar pid .
 .El
-.
-.Sh OPERANDS
-.
-The following operands are supported:
-.Bl -tag -width indent
-.It Ar pid
-The process id of an existing process to modify.
-.It Ar command Op arg Ns ...
-A command to execute, under the specified setting.
-.El
-.
 .Sh EXIT STATUS
-.
 .Ex -std
-.
-.Sh INTERFACE STABILITY
-.
-.Sy Uncommitted .
-.
 .Sh SEE ALSO
 .Xr proc 1 ,
 .Xr sysinfo 2 ,
 .Xr uname 2 ,
-.Xr utsname 3HEAD ,
 .Xr proc 4

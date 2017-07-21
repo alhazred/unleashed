@@ -248,7 +248,7 @@ typedef	struct	user {
 } user_t;
 
 /* flags for u_flags */
-#define	U_FLAG_ALTUNAME		1	/* Report alternate utsname fields */
+#define	U_FLAG_LEGACYUNAME	1	/* Report legacy utsname fields */
 
 #include <sys/proc.h>			/* cannot include before user defined */
 

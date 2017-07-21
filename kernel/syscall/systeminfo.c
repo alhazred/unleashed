@@ -54,7 +54,7 @@ static void get_netif_name(char *, char *);
 long
 systeminfo(int command, char *buf, long count)
 {
-	const bool altuname = (PTOU(curproc)->u_flags & U_FLAG_ALTUNAME) != 0;
+	const bool legacy = (PTOU(curproc)->u_flags & U_FLAG_LEGACYUNAME) != 0;
 	int error = 0;
 	long strcnt, getcnt;
 	const char *kstr;
@@ -69,19 +69,19 @@ systeminfo(int command, char *buf, long count)
 	 */
 	switch (command) {
 	case SI_SYSNAME:
-		kstr = utsname_get(altuname)->sysname;
+		kstr = utsname_get(legacy)->sysname;
 		break;
 	case SI_HOSTNAME:
 		kstr = uts_nodename();
 		break;
 	case SI_RELEASE:
-		kstr = utsname_get(altuname)->release;
+		kstr = utsname_get(legacy)->release;
 		break;
 	case SI_VERSION:
-		kstr = utsname_get(altuname)->version;
+		kstr = utsname_get(legacy)->version;
 		break;
 	case SI_MACHINE:
-		kstr = utsname_get(altuname)->machine;
+		kstr = utsname_get(legacy)->machine;
 		break;
 #ifdef _LP64
 	case SI_ARCHITECTURE_64:

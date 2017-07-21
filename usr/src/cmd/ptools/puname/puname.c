@@ -25,6 +25,7 @@
  * Portions Copyright 2008 Chad Mynhier
  *
  * Copyright 2014 Garrett D'Amore <garrett@damore.org>
+ * Copyright 2017 Lauri Tirkkonen <lotheac@iki.fi>
  */
 
 #include <stdio.h>
@@ -36,50 +37,33 @@
 #include <sys/types.h>
 #include <libproc.h>
 #include <wait.h>
+#include <err.h>
+#include <stdbool.h>
 
-static	char	*command;
-static	char	*pidarg;
-
-static	int	Fflag;
-static	int	errflg;
-static	int	Sflag;
-static	int	Uflag;
-static	int	vflag;
+static void
+usage()
+{
+	const char *command = getprogname();
+	fprintf(stderr, "usage: %s command [args]\n"
+	    "       %s -p pid\n", command, command);
+	exit(1);
+}
 
 int
 main(int argc, char **argv)
 {
+	char *pidarg = NULL;
 	int opt;
-	pid_t pid;
 	int gret;
-	int isalt;
-	pid_t parent = 0;
 	struct ps_prochandle *Pr;
 
-	if ((command = strrchr(argv[0], '/')) != NULL)
-		command++;
-	else
-		command = argv[0];
-
-	while ((opt = getopt(argc, argv, "Fp:SUv")) != EOF) {
+	while ((opt = getopt(argc, argv, "p:")) != EOF) {
 		switch (opt) {
-		case 'F':		/* force grabbing (no O_EXCL) */
-			Fflag = PGRAB_FORCE;
-			break;
-		case 'S':
-			Sflag = 1;
-			break;
-		case 'U':
-			Uflag = 1;
-			break;
 		case 'p':
 			pidarg = optarg;
 			break;
-		case 'v':
-			vflag = 1;
-			break;
 		default:
-			errflg = 1;
+			usage();
 			break;
 		}
 	}
@@ -87,79 +71,40 @@ main(int argc, char **argv)
 	argc -= optind;
 	argv += optind;
 
-	if (Sflag && Uflag) {
-		errflg++;
+	if (!pidarg && argc < 1)
+		usage();
+	if (pidarg) {
+		Pr = proc_arg_grab(pidarg, PR_ARG_PIDS, PGRAB_RDONLY, &gret);
+		if (!Pr)
+			errx(1, "cannot examine %s: %s", pidarg,
+			    Pgrab_error(gret));
+		bool islegacy = Pstatus(Pr)->pr_flags & PR_LUNAME;
+		printf("%s: %s\n", pidarg, islegacy ? "legacy uname" :
+		    "standard uname");
+		Prelease(Pr, 0);
+		return 0;
 	}
-
-	if (((pidarg != NULL) ^ (argc < 1)) || errflg) {
-		(void) fprintf(stderr,
-		    "usage:\t%s [-S|-U] [-p pid | command [ args ... ]]\n",
-		    command);
-		(void) fprintf(stderr,
-		    "  (set or unset alternate uname for process)\n");
-		return (1);
-	}
-
-	if (pidarg == NULL) {
-		/*
-		 * We perform the action in a child.  This allows us
-		 * to avoid masquerading our status, so that when run
-		 * in a shell the parent gets to see our status directly.
-		 */
-		pid = fork();
-		switch (pid) {
-		case 0:
-			parent = getppid();
-			(void) asprintf(&pidarg, "%d", (int)parent);
-			break;
-		case -1:
-			(void) fprintf(stderr, "%s: fork1: %s\n",
-			    command, strerror(errno));
+	pid_t pid = fork();
+	switch (pid) {
+	case -1:
+		err(1, "fork");
+		break;
+	case 0:
+		Pr = Pgrab(getppid(), 0, &gret);
+		if (!Pr)
+			errx(1, "cannot grab parent: %s", Pgrab_error(gret));
+		if (Psetflags(Pr, PR_LUNAME) != 0)
+			err(1, "cannot set legacy flag");
+		Prelease(Pr, 0);
+		return 0;
+	default:
+		if (waitpid(pid, &gret, 0) < 0)
+			err(1, "waitpid");
+		if ((!WIFEXITED(gret)) || (WEXITSTATUS(gret) != 0))
 			return (1);
-		default:
-			if (waitpid(pid, &gret, 0) < 0) {
-				(void) fprintf(stderr, "%s: waitpid: %s\n",
-				    command, strerror(errno));
-				return (1);
-			}
-			if ((!WIFEXITED(gret)) || (WEXITSTATUS(gret) != 0)) {
-				return (1);
-			}
-			(void) execvp(argv[0], argv);
-			(void) fprintf(stderr, "%s: cannot exec %s: %s\n",
-			    command, argv[0], strerror(errno));
-			return (1);
-			break;
-		}
+		execvp(argv[0], argv);
+		err(1, "execvp");
+		break;
 	}
-	if ((Pr = proc_arg_grab(pidarg, PR_ARG_PIDS, Fflag, &gret)) == NULL) {
-		(void) fprintf(stderr, "%s: cannot examine %s: %s\n",
-		    command, pidarg, Pgrab_error(gret));
-		return (1);
-	}
-	pid = Pstatus(Pr)->pr_pid;
-	if (Sflag) {
-		if (Psetflags(Pr, PR_AUNAME) != 0) {
-			(void) fprintf(stderr,
-			    "%s: failed to set flag %s: %s\n",
-			    command, pidarg, strerror(errno));
-			return (1);
-		}
-	} else if (Uflag) {
-		if (Punsetflags(Pr, PR_AUNAME) != 0) {
-			(void) fprintf(stderr,
-			    "%s: failed to unset flag %s: %s\n",
-			    command, pidarg, strerror(errno));
-			return (1);
-		}
-	}
-	isalt = Pstatus(Pr)->pr_flags & PR_AUNAME;
-
-	if (vflag || !(Sflag || Uflag)) {
-		(void) fprintf(stderr, "%d: %s\n", (int)pid,
-		    isalt ? "alternate uname" : "standard uname");
-	}
-
-	Prelease(Pr, 0);
-	return (0);
+	return 1;
 }
