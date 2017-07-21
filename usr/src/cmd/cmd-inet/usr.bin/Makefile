@@ -30,7 +30,7 @@ PROG=		finger rdate ruptime rwho whois
 ALL=		$(PROG)
 SRCS=		$(ALL:%=%.c)
 
-SUBDIRS=	chat dns-sd ftp nc netstat \
+SUBDIRS=	chat dns-sd ftp netstat \
 		pppd pppdump pppstats talk telnet tftp
 SUBDIR1=	talk 
 MSGSUBDIRS=	talk

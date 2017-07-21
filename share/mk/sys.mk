@@ -48,9 +48,6 @@ LINK.S?=	${CC} ${AFLAGS} ${CPPFLAGS} ${LDFLAGS}
 
 CC?=		gcc
 CPP?=		gcpp
-.if defined(DESTDIR)
-CPPFLAGS+=	-isysroot ${DESTDIR}
-.endif
 CFLAGS?=	-O2 ${PIPE} ${DBG}
 COMPILE.c?=	${CC} ${CFLAGS} ${CPPFLAGS} -c
 LINK.c?=	${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}
