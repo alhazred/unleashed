@@ -1,181 +1,149 @@
-/*
- * CDDL HEADER START
- *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License (the "License").
- * You may not use this file except in compliance with the License.
- *
- * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
- * or http://www.opensolaris.org/os/licensing.
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at usr/src/OPENSOLARIS.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
- * CDDL HEADER END
- */
-/*
- * Copyright (c) 1988, 2010, Oracle and/or its affiliates. All rights reserved.
- */
-
-/*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
-/*	  All Rights Reserved  	*/
+/*	$OpenBSD: uname.c,v 1.19 2016/10/28 07:22:59 schwarze Exp $	*/
 
 /*
- * University Copyright- Copyright (c) 1982, 1986, 1988
- * The Regents of the University of California
- * All Rights Reserved
+ * Copyright (c) 1994 Winning Strategies, Inc.
+ * All rights reserved.
  *
- * University Acknowledgment- Portions of this document are derived from
- * software developed by the University of California, Berkeley, and its
- * contributors.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. All advertising materials mentioning features or use of this software
+ *    must display the following acknowledgement:
+ *      This product includes software developed by Winning Strategies, Inc.
+ * 4. The name of Winning Strategies, Inc. may not be used to endorse or
+ *    promote products derived from this software without specific prior
+ *    written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <sys/types.h>
-#include <stdio.h>
-#include <stdio.h>
-#include <string.h>
-#include <locale.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <err.h>
-#include <sys/fcntl.h>
-#include <sys/stat.h>
 #include <sys/utsname.h>
 #include <sys/systeminfo.h>
 
-static void usage(void);
+#include <err.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-/* ARGSUSED */
+#define __dead __attribute__((__noreturn__))
+#define pledge(request, paths) 0
+static void __dead usage(void);
+
+#define	PRINT_SYSNAME		0x01
+#define	PRINT_NODENAME		0x02
+#define	PRINT_RELEASE		0x04
+#define	PRINT_VERSION		0x08
+#define	PRINT_MACHINE		0x10
+#define	PRINT_ALL		0x1f
+#define PRINT_MACHINE_ARCH	0x20
+
 int
-main(int argc, char *argv[], char *envp[])
+main(int argc, char *argv[])
 {
-	char *nodename;
-	char *optstring = "asnrpvmiX";
-	int sflg = 0, nflg = 0, rflg = 0, vflg = 0, mflg = 0;
-	int pflg = 0, iflg = 0;
-	int errflg = 0, optlet;
-	int Xflg = 0;
-	struct utsname  unstr, *un;
-	char fmt_string[] = " %.*s";
-	char *fs = &fmt_string[1];
-	char procbuf[SYS_NMLN];
+	struct utsname u;
+	int c;
+	int space = 0;
+	int print_mask = 0;
 
-	(void) umask(~(S_IRWXU|S_IRGRP|S_IROTH) & S_IAMB);
-	un = &unstr;
-	(void) uname(un);
+	if (pledge("stdio", NULL) == -1)
+		err(1, "pledge");
 
-	(void) setlocale(LC_ALL, "");
-
-	while ((optlet = getopt(argc, argv, optstring)) != EOF)
-		switch (optlet) {
+	while ((c = getopt(argc, argv, "amnrsvp")) != -1 ) {
+		switch (c) {
 		case 'a':
-			sflg++; nflg++; rflg++; vflg++; mflg++;
-			pflg++;
-			iflg++;
-			break;
-		case 's':
-			sflg++;
-			break;
-		case 'n':
-			nflg++;
-			break;
-		case 'r':
-			rflg++;
-			break;
-		case 'v':
-			vflg++;
+			print_mask |= PRINT_ALL;
 			break;
 		case 'm':
-			mflg++;
+			print_mask |= PRINT_MACHINE;
+			break;
+		case 'n':
+			print_mask |= PRINT_NODENAME;
 			break;
 		case 'p':
-			pflg++;
+			print_mask |= PRINT_MACHINE_ARCH;
 			break;
-		case 'i':
-			iflg++;
+		case 'r':
+			print_mask |= PRINT_RELEASE;
 			break;
-		case 'X':
-			Xflg++;
+		case 's':
+			print_mask |= PRINT_SYSNAME;
 			break;
-
-		case '?':
-			errflg++;
+		case 'v':
+			print_mask |= PRINT_VERSION;
+			break;
+		default:
+			usage();
 		}
+	}
 
-	if (errflg || (optind != argc))
+	if (optind != argc)
 		usage();
 
-	/*
-	 * "uname -s" is the default
-	 */
-	if (!(sflg || nflg || rflg || vflg || mflg || pflg || iflg || Xflg))
-		sflg++;
-	if (sflg) {
-		(void) fprintf(stdout, fs, sizeof (un->sysname),
-		    un->sysname);
-		fs = fmt_string;
-	}
-	if (nflg) {
-		(void) fprintf(stdout, fs, sizeof (un->nodename), un->nodename);
-		fs = fmt_string;
-	}
-	if (rflg) {
-		(void) fprintf(stdout, fs, sizeof (un->release), un->release);
-		fs = fmt_string;
-	}
-	if (vflg) {
-		(void) fprintf(stdout, fs, sizeof (un->version), un->version);
-		fs = fmt_string;
-	}
-	if (mflg) {
-		(void) fprintf(stdout, fs, sizeof (un->machine), un->machine);
-		fs = fmt_string;
-	}
-	if (pflg) {
-		if (sysinfo(SI_ARCHITECTURE, procbuf, sizeof (procbuf)) == -1) {
-			err(1, "sysinfo");
-		}
-		(void) fprintf(stdout, fs, strlen(procbuf), procbuf);
-		fs = fmt_string;
-	}
-	if (iflg) {
-		if (sysinfo(SI_PLATFORM, procbuf, sizeof (procbuf)) == -1) {
-			err(1, "sysinfo");
-		}
-		(void) fprintf(stdout, fs, strlen(procbuf), procbuf);
-		fs = fmt_string;
-	}
-	if (sflg || nflg || rflg || vflg || mflg || pflg || iflg)
-		(void) putchar('\n');
-	if (Xflg) {
-		int	val;
+	if (!print_mask)
+		print_mask = PRINT_SYSNAME;
 
-		(void) fprintf(stdout, "System = %.*s\n", sizeof (un->sysname),
-		    un->sysname);
-		(void) fprintf(stdout, "Node = %.*s\n", sizeof (un->nodename),
-		    un->nodename);
-		(void) fprintf(stdout, "Release = %.*s\n", sizeof (un->release),
-		    un->release);
-		(void) fprintf(stdout, "KernelID = %.*s\n",
-		    sizeof (un->version), un->version);
-		(void) fprintf(stdout, "Machine = %.*s\n", sizeof (un->machine),
-		    un->machine);
+	if (uname(&u) == -1)
+		err(1, NULL);
 
-		val = sysconf(_SC_NPROCESSORS_CONF);
-		(void) fprintf(stdout, "NumCPU = %d\n", val);
+	if (print_mask & PRINT_SYSNAME) {
+		space++;
+		fputs(u.sysname, stdout);
 	}
-	return (0);
+	if (print_mask & PRINT_NODENAME) {
+		if (space++)
+			putchar(' ');
+
+		fputs(u.nodename, stdout);
+	}
+	if (print_mask & PRINT_RELEASE) {
+		if (space++)
+			putchar(' ');
+
+		fputs(u.release, stdout);
+	}
+	if (print_mask & PRINT_VERSION) {
+		if (space++)
+			putchar(' ');
+
+		fputs(u.version, stdout);
+	}
+	if (print_mask & PRINT_MACHINE) {
+		if (space++)
+			putchar(' ');
+
+		fputs(u.machine, stdout);
+	}
+	if (print_mask & PRINT_MACHINE_ARCH) {
+		if (space++)
+			putchar(' ');
+
+		char buf[SYS_NMLN];
+		if (sysinfo(SI_ARCHITECTURE, buf, SYS_NMLN) < 0)
+			err(1, "sysinfo");
+		fputs(buf, stdout);
+	}
+	putchar('\n');
+
+	return 0;
 }
 
-static void
+static void __dead
 usage(void)
 {
-	(void) fprintf(stderr, "usage:	uname [-snrvmapiX]\n");
+	fprintf(stderr, "usage: uname [-amnprsv]\n");
 	exit(1);
 }
