@@ -128,7 +128,6 @@ MAN = Intro.2 \
       ulimit.2 \
       umask.2 \
       umount.2 \
-      uname.2 \
       unlink.2 \
       ustat.2 \
       utime.2 \
