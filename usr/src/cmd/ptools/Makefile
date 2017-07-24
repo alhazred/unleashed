@@ -57,8 +57,7 @@ NEW_SUBDIRS =	\
 	pmadvise \
 	ppriv	\
 	preap	\
-	psecflags \
-	puname
+	psecflags
 
 SUBDIRS = $(LEGACY_SUBDIRS) $(NEW_SUBDIRS)
 

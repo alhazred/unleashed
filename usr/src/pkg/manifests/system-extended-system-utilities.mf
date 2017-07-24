@@ -69,7 +69,6 @@ $(i386_ONLY)file path=usr/bin/$(ARCH32)/pstack mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/pstop mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/ptime mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/ptree mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/puname mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/pwait mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/pwdx mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/sort mode=0555
@@ -91,7 +90,6 @@ file path=usr/bin/$(ARCH64)/pstack mode=0555
 file path=usr/bin/$(ARCH64)/pstop mode=0555
 file path=usr/bin/$(ARCH64)/ptime mode=0555
 file path=usr/bin/$(ARCH64)/ptree mode=0555
-file path=usr/bin/$(ARCH64)/puname mode=0555
 file path=usr/bin/$(ARCH64)/pwait mode=0555
 file path=usr/bin/$(ARCH64)/pwdx mode=0555
 file path=usr/bin/$(ARCH64)/sort mode=0555
@@ -125,6 +123,7 @@ file path=usr/bin/nl mode=0555
 file path=usr/bin/pack mode=0555
 file path=usr/bin/pginfo mode=0555
 file path=usr/bin/pgstat mode=0555
+file path=usr/bin/puname mode=0555
 file path=usr/bin/sdiff mode=0555
 file path=usr/bin/spell mode=0555
 file path=usr/bin/split mode=0555
@@ -236,7 +235,6 @@ hardlink path=usr/bin/pstack target=../../usr/lib/isaexec
 hardlink path=usr/bin/pstop target=../../usr/lib/isaexec
 hardlink path=usr/bin/ptime target=../../usr/lib/isaexec
 hardlink path=usr/bin/ptree target=../../usr/lib/isaexec
-hardlink path=usr/bin/puname target=../../usr/lib/isaexec
 hardlink path=usr/bin/pwait target=../../usr/lib/isaexec
 hardlink path=usr/bin/pwdx target=../../usr/lib/isaexec
 hardlink path=usr/bin/sort target=../../usr/lib/isaexec

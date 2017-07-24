@@ -242,7 +242,6 @@ MAN = acctcom.1 \
       ps.1 \
       psecflags.1 \
       ptree.1 \
-      puname.1 \
       pvs.1 \
       ranlib.1 \
       rcapstat.1 \
