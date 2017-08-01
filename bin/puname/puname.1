@@ -22,13 +22,11 @@
 .Nm
 .Ar command
 .Op args
-.Nm
-.Fl p Ar pid
 .Sh DESCRIPTION
 The
 .Nm
 utility runs the given command with legacy uname.
-.Xr uname 2
+.Xr uname 3
 will return the following values for the command and its child processes:
 .Pp
 .Bl -tag -width sysnameXXX -offset indent -compact
@@ -40,25 +38,11 @@ SunOS
 legacy-uname
 .El
 .Pp
-The values returned by the
-.Xr sysinfo 2
-commands
-.Dv SI_SYSNAME ,
-.Dv SI_RELEASE ,
-and
-.Dv SI_VERSION
-commands are modified accordingly.
-.Sh OPTIONS
-The following options are supported:
-.Bl -tag -width indent
-.It Fl p Ar pid
-Display the current uname setting for
-.Ar pid .
 .El
 .Sh EXIT STATUS
 .Ex -std
 .Sh SEE ALSO
 .Xr proc 1 ,
 .Xr sysinfo 2 ,
-.Xr uname 2 ,
+.Xr uname 3 ,
 .Xr proc 4

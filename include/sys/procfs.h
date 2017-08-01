@@ -219,7 +219,6 @@ typedef struct pstatus {
 #define	PR_BPTADJ  0x02000000	/* breakpoint trap pc adjustment is in effect */
 #define	PR_PTRACE  0x04000000	/* ptrace-compatibility mode is in effect */
 #define	PR_MSFORK  0x08000000	/* micro-state accounting inherited on fork */
-#define	PR_LUNAME  0x10000000	/* legacy utsname in effect */
 
 /*
  * See <sys/procfs_isa.h> for possible values of pr_dmodel.

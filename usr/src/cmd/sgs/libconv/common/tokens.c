@@ -28,6 +28,7 @@
 
 #include <sys/systeminfo.h>
 #include <sys/utsname.h>
+#include <sys/syscall.h>
 #include <limits.h>
 #include <strings.h>
 #include "_conv.h"
@@ -116,8 +117,10 @@ conv_uts(void)
 
 	/*
 	 * If we can't get the uname(2) silently ignore.
+	 * XXX We use syscall() here because we can't use the libc
+	 * implementation with the 'legacy uname' feature in rtld.
 	 */
-	if (uname(&utsname) == -1)
+	if (syscall(SYS_uname, &utsname) == -1)
 		return (desc);
 
 	/*

@@ -320,6 +320,7 @@ COMSYSOBJS=			\
 	ulimit.o		\
 	umask.o			\
 	umount2.o		\
+	uname.o			\
 	utssys.o		\
 	uucopy.o		\
 	vhangup.o		\
@@ -343,7 +344,6 @@ SYSOBJS=			\
 	tls_get_addr.o		\
 	uadmin.o		\
 	umount.o		\
-	uname.o			\
 	vforkx.o
 
 # objects under $(LIBCDIR)/port which contain transitional large file interfaces

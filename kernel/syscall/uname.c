@@ -46,7 +46,7 @@ uname(struct utsname *buf)
 	const char *name_to_use = uts_nodename();
 	const struct utsname *info;
 
-	info = utsname_get((PTOU(curproc)->u_flags & U_FLAG_LEGACYUNAME) != 0);
+	info = utsname_get();
 
 	if (copyout(info->sysname, buf->sysname, strlen(info->sysname) + 1)) {
 		return (set_errno(EFAULT));

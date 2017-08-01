@@ -23,6 +23,7 @@ file path=usr/share/man/man3/fts.3
 file path=usr/share/man/man3/alloca.3
 file path=usr/share/man/man3/malloc.3
 file path=usr/share/man/man3/posix_memalign.3
+file path=usr/share/man/man3/uname.3
 file path=usr/share/man/man3/unvis.3
 file path=usr/share/man/man3/valloc.3
 file path=usr/share/man/man3/vis.3

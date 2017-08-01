@@ -280,6 +280,7 @@ COMSYSOBJS=			\
 	ulimit.o		\
 	umask.o			\
 	umount2.o		\
+	uname.o			\
 	utssys.o		\
 	uucopy.o		\
 	vhangup.o		\
@@ -306,7 +307,6 @@ SYSOBJS=			\
 	tls_get_addr.o		\
 	uadmin.o		\
 	umount.o		\
-	uname.o			\
 	vforkx.o
 
 # Preserved solely to ease maintenance of 32-bit and 64-bit library builds

@@ -15,9 +15,7 @@
  */
 
 /*
- * Template utsname and legacy utsname.
- *
- * UTS_SYSNAME, UTS_RELEASE, UTS_VERSION and  UTS_PLATFORM must defined by
+ * UTS_VERSION and  UTS_PLATFORM must defined by
  * the build system.
  */
 
@@ -32,25 +30,14 @@ struct utsname utsname = {
 	.machine = UTS_PLATFORM,
 };
 
-static struct utsname utsname_legacy = {
-	.sysname = UTS_SYSNAME,
-	.nodename = "",
-	.release = UTS_RELEASE,
-	.version = "legacy-uname",
-	.machine = UTS_PLATFORM,
-};
-
-
-const struct utsname *utsname_get(bool legacy)
+const struct utsname *
+utsname_get(void)
 {
-	return legacy ? &utsname_legacy : &utsname;
+	return &utsname;
 }
 
 void utsname_set_machine(const char *machine)
 {
 	strncpy(utsname.machine, machine, _SYS_NMLN);
 	utsname.machine[_SYS_NMLN - 1] = '\0';
-
-	strncpy(utsname_legacy.machine, machine, _SYS_NMLN);
-	utsname_legacy.machine[_SYS_NMLN - 1] = '\0';
 }

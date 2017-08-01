@@ -247,9 +247,6 @@ typedef	struct	user {
 	uf_info_t	u_finfo;	/* open file information */
 } user_t;
 
-/* flags for u_flags */
-#define	U_FLAG_LEGACYUNAME	1	/* Report legacy utsname fields */
-
 #include <sys/proc.h>			/* cannot include before user defined */
 
 #ifdef	_KERNEL

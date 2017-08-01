@@ -14,27 +14,24 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#include <err.h>
+#include <errno.h>
 #include <stdlib.h>
-#include <unistd.h>
-
-static void
-usage(void)
-{
-	printf("usage: puname command [args]\n");
-	exit(1);
-}
+#include <string.h>
+#include <sys/syscall.h>
+#include <sys/utsname.h>
 
 int
-main(int argc, char **argv)
+uname(struct utsname *name)
 {
-	if (argc < 2)
-		usage();
-
-	if (setenv("UNAME_LEGACY", "", 0) < 0)
-		err(1, "setenv");
-	argv++;
-	execvp(argv[0], argv);
-	err(1, "cannot execute %s", argv[0]);
-	return 1;
+	int ret = syscall(SYS_uname, name);
+	int serr = errno;
+	if (ret >= 0 && getenv("UNAME_LEGACY")) {
+		strlcpy(name->sysname, "SunOS", sizeof(name->sysname));
+		strlcpy(name->release, "5.11", sizeof(name->release));
+		strlcpy(name->version, "legacy-uname", sizeof(name->version));
+	}
+	errno = serr;
+	return ret;
 }
+/* binary compat alias */
+#pragma weak _nuname = uname
