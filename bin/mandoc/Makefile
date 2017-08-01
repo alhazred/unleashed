@@ -1,14 +1,17 @@
 PROG=	mandoc
 
-SRCS=	mandoc.c mandoc_aux.c mandoc_ohash.c preconv.c read.c \
-	roff.c tbl.c tbl_opts.c tbl_layout.c tbl_data.c eqn.c
-SRCS+=	mdoc_macro.c mdoc.c mdoc_hash.c \
-        mdoc_argv.c mdoc_state.c mdoc_validate.c att.c msec.c st.c
-SRCS+=	man_macro.c man.c man_hash.c man_validate.c
-SRCS+=	main.c mdoc_term.c tag.c chars.c term.c tree.c man_term.c eqn_term.c
+SRCS=	mandoc_aux.c mandoc_ohash.c mandoc.c mandoc_xr.c \
+	chars.c preconv.c read.c \
+	roff.c roff_validate.c tbl.c tbl_opts.c tbl_layout.c tbl_data.c eqn.c
+SRCS+=	mdoc_macro.c mdoc.c \
+	mdoc_argv.c mdoc_state.c mdoc_validate.c att.c msec.c st.c
+SRCS+=	man_macro.c man.c man_validate.c
+SRCS+=	main.c out.c tag.c tree.c
+SRCS+=	term.c term_tab.c term_ascii.c term_ps.c
+SRCS+=	roff_term.c mdoc_term.c man_term.c eqn_term.c tbl_term.c
 SRCS+=	mdoc_man.c
-SRCS+=	html.c mdoc_html.c man_html.c out.c eqn_html.c
-SRCS+=	term_ps.c term_ascii.c tbl_term.c tbl_html.c
+SRCS+=	html.c roff_html.c mdoc_html.c man_html.c eqn_html.c tbl_html.c
+SRCS+=	mdoc_markdown.c
 SRCS+=	dbm_map.c dbm.c dba_write.c dba_array.c dba.c dba_read.c
 SRCS+=	manpath.c mandocdb.c mansearch.c
 

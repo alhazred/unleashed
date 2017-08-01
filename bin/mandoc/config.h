@@ -12,6 +12,7 @@
 
 
 #define MAN_CONF_FILE "/etc/man.conf"
+#define MANPATH_BASE "/usr/share/man:/usr/X11R6/man"
 #define MANPATH_DEFAULT "/usr/share/man:/usr/X11R6/man:/usr/local/man"
 #define UTF8_LOCALE "en_US.UTF-8"
 #define EFTYPE EINVAL
@@ -29,6 +30,7 @@
 #define HAVE_PLEDGE 0
 #define HAVE_PROGNAME 1
 #define HAVE_REALLOCARRAY 1
+#define HAVE_RECALLOCARRAY 1
 #define HAVE_REWB_BSD 1
 #define HAVE_REWB_SYSV 1
 #define HAVE_SANDBOX_INIT 0
