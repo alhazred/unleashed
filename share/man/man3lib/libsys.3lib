@@ -176,9 +176,9 @@ The following interfaces are unique to the x86 version of this library:
 l l l
 l l l .
 \fB__flt_rounds\fR	\fB_fp_hw\fR	\fB_fpstart\fR
-\fB_fxstat\fR	\fB_lxstat\fR	\fB_nuname\fR
+\fB_fxstat\fR	\fB_lxstat\fR
 \fB_sbrk\fR	\fB_xmknod\fR	\fB_xstat\fR
-\fBnuname\fR	\fBsbrk\fR	
+\fBsbrk\fR	
 .TE
 
 .SH FILES

@@ -74,7 +74,6 @@ static int		_statvfs64_by_dev(dev_t, struct statvfs64 *);
 
 #if defined(_ILP32) || defined(_SYSCALL32_IMPL)
 
-static int utssys_uname32(caddr_t, rval_t *);
 static int utssys_ustat32(dev_t, struct ustat32 *);
 
 int64_t
@@ -86,14 +85,6 @@ utssys32(void *buf, int arg, int type, void *outbp)
 	rv.r_vals = 0;
 
 	switch (type) {
-	case UTS_UNAME:
-		/*
-		 * This is an obsolete way to get the utsname structure
-		 * (it only gives you the first 8 characters of each field!)
-		 * uname(2) is the preferred and better interface.
-		 */
-		error = utssys_uname32(buf, &rv);
-		break;
 	case UTS_USTAT:
 		error = utssys_ustat32(expldev((dev32_t)arg), buf);
 		break;
@@ -106,42 +97,6 @@ utssys32(void *buf, int arg, int type, void *outbp)
 	}
 
 	return (error == 0 ? rv.r_vals : (int64_t)set_errno(error));
-}
-
-static int
-utssys_uname32(caddr_t buf, rval_t *rvp)
-{
-	if (copyout(utsname.sysname, buf, 8))
-		return (EFAULT);
-	buf += 8;
-	if (subyte(buf, 0) < 0)
-		return (EFAULT);
-	buf++;
-	if (copyout(uts_nodename(), buf, 8))
-		return (EFAULT);
-	buf += 8;
-	if (subyte(buf, 0) < 0)
-		return (EFAULT);
-	buf++;
-	if (copyout(utsname.release, buf, 8))
-		return (EFAULT);
-	buf += 8;
-	if (subyte(buf, 0) < 0)
-		return (EFAULT);
-	buf++;
-	if (copyout(utsname.version, buf, 8))
-		return (EFAULT);
-	buf += 8;
-	if (subyte(buf, 0) < 0)
-		return (EFAULT);
-	buf++;
-	if (copyout(utsname.machine, buf, 8))
-		return (EFAULT);
-	buf += 8;
-	if (subyte(buf, 0) < 0)
-		return (EFAULT);
-	rvp->r_val1 = 1;
-	return (0);
 }
 
 static int

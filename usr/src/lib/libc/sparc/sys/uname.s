@@ -35,6 +35,7 @@
 #include <sys/asm_linkage.h>
 
 	ANSI_PRAGMA_WEAK(uname,function)
+	ANSI_PRAGMA_WEAK2(_nuname,uname,function)
 
 #include "SYS.h"
 

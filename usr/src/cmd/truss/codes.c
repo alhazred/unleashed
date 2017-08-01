@@ -1821,7 +1821,6 @@ utscode(int code)
 	const char *str = NULL;
 
 	switch (code) {
-	case UTS_UNAME:		str = "UNAME";	break;
 	case UTS_USTAT:		str = "USTAT";	break;
 	case UTS_FUSERS:	str = "FUSERS";	break;
 	}

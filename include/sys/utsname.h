@@ -66,38 +66,7 @@ extern struct utsname utsname;
 #endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
 
 #if !defined(_KERNEL)
-
-#if defined(__i386) && !defined(__amd64)
-
 extern int uname(struct utsname *);
-extern int _uname(struct utsname *);
-
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
-extern int nuname(struct utsname *);
-#endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
-extern int _nuname(struct utsname *);
-
-/*
- * On i386 in SVID.2 uname() returns a utsname structure with 8 byte members,
- * and nuname() returns the real struct utsname.  In SVID.3 uname and nuname
- * are equivalent.  Anyone who includes this header gets the SVID.3 behaviour.
- * The SVID.2 behaviour exists solely for compatibility, and is what is
- * implemented by the libc uname/_uname entrypoints.
- */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	uname	_nuname
-#pragma redefine_extname	_uname	_nuname
-#else
-#define	uname	_nuname
-#define	_uname	_nuname
-#endif
-
-#else	/* defined(__i386) */
-
-extern int uname(struct utsname *);
-
-#endif	/* defined(__i386) */
-
 #else	/* !(_KERNEL) */
 /*
  * Routine to retrieve the nodename as seen in the current process's zone.

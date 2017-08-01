@@ -52,7 +52,6 @@ mkstemp64
 mkstemps64
 mmap64
 nftw64
-nuname
 open64
 openat64
 pread64

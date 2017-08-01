@@ -2627,7 +2627,6 @@ $endif
 	umount;
 	_umount;
 	uname;
-	_uname;
 	ungetc;
 	unlink;
 	_unlink;
@@ -2660,7 +2659,6 @@ $endif
 $if i386
 	_fxstat;
 	_lxstat;
-	nuname;
 	_nuname;
 	_xmknod;
 	_xstat;

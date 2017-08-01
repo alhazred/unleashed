@@ -333,7 +333,6 @@ SYSOBJS=			\
 	getcontext.o		\
 	gettimeofday.o		\
 	lwp_private.o		\
-	nuname.o		\
 	ptrace.o		\
 	syscall.o		\
 	sysi86.o		\

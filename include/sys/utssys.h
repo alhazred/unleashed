@@ -44,7 +44,6 @@ extern "C" {
 /*
  * "commands" of utssys
  */
-#define	UTS_UNAME	0x0	/* obsolete */
 #define	UTS_USTAT	0x2	/* 1 was umask */
 #define	UTS_FUSERS	0x3
 

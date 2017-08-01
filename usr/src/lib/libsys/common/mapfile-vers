@@ -373,7 +373,6 @@ SYMBOL_VERSION SYSVABI_1.2 {
 	umask;
 	_umount;
 	umount;
-	_uname;
 	uname;
 	_unlink;
 	unlink;
@@ -439,8 +438,6 @@ $if _x86
 	_fxstat;
 	_lxstat;
 	_mmap;
-	_nuname;
-	nuname;
 	_sbrk;
 	sbrk;
 	_xmknod;

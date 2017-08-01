@@ -364,33 +364,6 @@ show_times(private_t *pri)
 	    hz);
 }
 
-void
-show_uname(private_t *pri, long offset)
-{
-	/*
-	 * Old utsname buffer (no longer accessible in <sys/utsname.h>).
-	 */
-	struct {
-		char	sysname[9];
-		char	nodename[9];
-		char	release[9];
-		char	version[9];
-		char	machine[9];
-	} ubuf;
-
-	if (offset != 0 &&
-	    Pread(Proc, &ubuf, sizeof (ubuf), offset) == sizeof (ubuf)) {
-		(void) printf(
-		    "%s\tsys=%-9.9snod=%-9.9srel=%-9.9sver=%-9.9smch=%.9s\n",
-		    pri->pname,
-		    ubuf.sysname,
-		    ubuf.nodename,
-		    ubuf.release,
-		    ubuf.version,
-		    ubuf.machine);
-	}
-}
-
 /* XX64 -- definition of 'struct ustat' is strange -- check out the defn */
 void
 show_ustat(private_t *pri, long offset)
@@ -462,9 +435,6 @@ show_utssys(private_t *pri, long r0)
 {
 	if (pri->sys_nargs >= 3) {
 		switch (pri->sys_args[2]) {
-		case UTS_UNAME:
-			show_uname(pri, (long)pri->sys_args[0]);
-			break;
 		case UTS_USTAT:
 			show_ustat(pri, (long)pri->sys_args[0]);
 			break;
@@ -481,9 +451,6 @@ show_utssys32(private_t *pri, long r0)
 {
 	if (pri->sys_nargs >= 3) {
 		switch (pri->sys_args[2]) {
-		case UTS_UNAME:
-			show_uname(pri, (long)pri->sys_args[0]);
-			break;
 		case UTS_USTAT:
 			show_ustat32(pri, (long)pri->sys_args[0]);
 			break;
@@ -3434,7 +3401,7 @@ show_rlimit64(private_t *pri, long offset)
 }
 
 void
-show_nuname(private_t *pri, long offset)
+show_uname(private_t *pri, long offset)
 {
 	struct utsname ubuf;
 
@@ -5322,7 +5289,7 @@ expound(private_t *pri, long r0, int raw)
 		break;
 	case SYS_uname:
 		if (!err && pri->sys_nargs > 0)
-			show_nuname(pri, (long)pri->sys_args[0]);
+			show_uname(pri, (long)pri->sys_args[0]);
 		break;
 	case SYS_adjtime:
 		if (!err && pri->sys_nargs > 1)

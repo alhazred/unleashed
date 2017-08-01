@@ -75,7 +75,6 @@ f 1 msgsnd
 f 1 msync
 f 1 munlock
 f 1 munmap
-f 1 nuname
 f 1 nice
 f 1 open
 f 1 opendir

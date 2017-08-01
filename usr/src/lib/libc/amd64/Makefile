@@ -301,7 +301,6 @@ SYSOBJS=			\
 	getcontext.o		\
 	gettimeofday.o		\
 	lwp_private.o		\
-	nuname.o		\
 	syscall.o		\
 	sysi86.o		\
 	tls_get_addr.o		\
