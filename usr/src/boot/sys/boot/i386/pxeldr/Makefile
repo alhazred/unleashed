@@ -53,9 +53,10 @@ LOADERBIN= ../loader/zfsloader.bin
 
 CLEANFILES += ${BOOT}.tmp
 
+# XXX our dd doesn't support status=none, so silence stderr completely
 ${BOOT}: ${LDR} ${LOADER}
 	$(CAT) ${LDR} ${LOADER} > $@.tmp
-	$(DD) if=$@.tmp of=$@ obs=2k conv=sync
+	$(DD) if=$@.tmp of=$@ obs=2k conv=sync 2>/dev/null
 	$(RM) $@.tmp
 
 LDFLAGS +=-e start -Ttext ${ORG} -N -S --oformat binary
