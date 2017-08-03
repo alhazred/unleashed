@@ -109,17 +109,17 @@ htemp1:	list local extra hashmk1
 
 hlista: american $(HASHPROG) htemp1
 	$(RM) htemp2; ./hashmk1 <american |sort -u - htemp1 >htemp2
-	$(RM) $@; ./spellin1 `wc htemp2|sed -n 's/\([^ ]\) .*/\1/p'`<htemp2 >$@
+	$(RM) $@; ./spellin1 `wc htemp2|sed -n 's/\([^ ]\) .*/\1/p'`<htemp2 >$@ 2>/dev/null
 	$(RM) htemp2
 
 hlistb: british $(HASHPROG) htemp1
 	$(RM) htemp2; ./hashmk1 <british |sort -u - htemp1 >htemp2
-	$(RM) $@; ./spellin1 `wc htemp2|sed -n 's/\([^ ]\) .*/\1/p'`<htemp2 >$@
+	$(RM) $@; ./spellin1 `wc htemp2|sed -n 's/\([^ ]\) .*/\1/p'`<htemp2 >$@ 2>/dev/null
 	$(RM) htemp2
 
 hstop:	stop $(HASHPROG)
 	$(RM) htemp2; ./hashmk1 <stop | sort -u >htemp2
-	$(RM) $@; ./spellin1 `wc htemp2|sed -n 's/\([^ ]\) .*/\1/p'`<htemp2 >$@
+	$(RM) $@; ./spellin1 `wc htemp2|sed -n 's/\([^ ]\) .*/\1/p'`<htemp2 >$@ 2>/dev/null
 	$(RM) htemp2
 
 install: all $(ROOTDIRS) $(ROOTBINF) $(ROOTSPELLF) $(ROOTVARADMF)
