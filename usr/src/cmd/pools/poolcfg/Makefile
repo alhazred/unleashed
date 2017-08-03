@@ -41,7 +41,7 @@ include ../Makefile.pools
 MAPFILES +=	$(MAPFILE.LEX) $(MAPFILE.NGB)
 MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
-LFLAGS =	-t
+LFLAGS +=	-t
 YFLAGS =	-d
 CFLAGS +=	-I$(POOLSCOMMONDIR)
 LDFLAGS +=	$(MAPOPTS)

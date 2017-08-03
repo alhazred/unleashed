@@ -40,7 +40,7 @@ CTFSTABSCFLAGS = $(CFLAGS64)
 # Used to locate the AMD64 kmdb linktest object
 KMDBDIR = $(SRC)/cmd/mdb/intel/amd64/kmdb
 
-LFLAGS = -t -v
+LFLAGS += -t
 YFLAGS = -d -v
 
 #

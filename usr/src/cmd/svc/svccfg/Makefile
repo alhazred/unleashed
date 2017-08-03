@@ -80,7 +80,7 @@ CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-parentheses
 
-LFLAGS = -t
+LFLAGS += -t
 YFLAGS = -d
 
 CLOBBERFILES += svccfg_lex.c svccfg_grammar.c svccfg_grammar.h \

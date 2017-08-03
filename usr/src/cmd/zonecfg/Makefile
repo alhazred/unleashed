@@ -34,7 +34,7 @@ include ../Makefile.cmd
 MAPFILES +=	$(MAPFILE.LEX) $(MAPFILE.NGB)
 MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
-LFLAGS =	-t
+LFLAGS +=	-t
 YFLAGS =	-d -b zonecfg_grammar
 LDLIBS +=	-lzonecfg -ll -ltecla -lzfs -lbrand -ldladm -linetutil
 CPPFLAGS +=	-I.

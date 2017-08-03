@@ -57,7 +57,7 @@ LDLIBS += -L$(ROOT)/usr/lib/fm -lfmd_log -lsysevent -lnvpair -lumem
 LDFLAGS += -R/usr/lib/fm
 STRIPFLAG =
 
-LFLAGS = -t -v
+LFLAGS += -t
 YFLAGS = -d
 
 .PARALLEL: $(OBJS)

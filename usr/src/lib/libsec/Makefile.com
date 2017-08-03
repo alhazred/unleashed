@@ -27,7 +27,6 @@ LIBRARY= libsec.a
 VERS= .1
 
 YFLAGS =	-d -v -b acl
-LFLAGS = 	-t
 OBJS_SHARED= acl_common.o
 GENERATED_SRCS = acl.tab.o acl_lex.o
 OBJS_COMMON= aclcheck.o aclmode.o aclsort.o acltext.o aclutils.o
@@ -41,6 +40,7 @@ SRCDIR=		../common
 
 LIBS =		$(DYNLIB)
 
+LFLAGS += 	-t
 CPPFLAGS +=	-I$(SRCDIR) -I. -I../../../common/acl
 LDLIBS += -lc -lavl -lidmap
 

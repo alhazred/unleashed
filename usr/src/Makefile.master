@@ -109,6 +109,7 @@ ELFDUMP=	/usr/ccs/bin/elfdump
 M4=		/usr/bin/m4
 STRIP=		/usr/ccs/bin/strip
 LEX=		/usr/ccs/bin/lex
+LFLAGS=		-n
 FLEX=		/usr/bin/flex
 YACC=		/usr/ccs/bin/yacc
 CPP=		$(GCC_ROOT)/cpp

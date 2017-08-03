@@ -35,7 +35,7 @@ $$(ROOTMOD)/%: dmod/%
 CFLAGS += $(CTF_FLAGS)
 CTFSTABSCFLAGS = $(CFLAGS) $(CALLSYMS)
 
-LFLAGS = -t -v
+LFLAGS += -t
 YFLAGS = -d -v
 
 #

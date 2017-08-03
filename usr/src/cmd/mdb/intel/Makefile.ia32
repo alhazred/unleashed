@@ -39,7 +39,7 @@ KMDBDIR = $(SRC)/cmd/mdb/intel/ia32/kmdb
 MAPFILE_SOURCES_i386 = \
 	$(SRC)/common/util/i386/muldiv.h
 
-LFLAGS = -t -v
+LFLAGS += -t
 YFLAGS = -d -v
 
 #

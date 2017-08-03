@@ -31,7 +31,7 @@ OBJS=	nwamcfg.o nwamcfg_lex.o nwamcfg_grammar.tab.o
 include ../../../Makefile.cmd
 
 XGETFLAGS +=	-a -x $(PROG).xcl
-LFLAGS =	-t
+LFLAGS +=	-t
 LDLIBS +=	-ll -ltecla -lnwam -lumem
 YFLAGS +=	-d -b nwamcfg_grammar
 CLEANFILES +=	nwamcfg_lex.c nwamcfg_grammar.tab.c nwamcfg_grammar.tab.h

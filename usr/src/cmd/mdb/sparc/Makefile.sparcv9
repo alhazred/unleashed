@@ -46,7 +46,7 @@ KMDB_FPTEST = \
 
 PROMINCDIRS += $(SRC)/uts/sparc/v7
 
-LFLAGS = -t -v
+LFLAGS += -t
 YFLAGS = -d -v
 
 MMU = sfmmu
