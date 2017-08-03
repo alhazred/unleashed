@@ -26,7 +26,7 @@ include $(UTSBASE)/intel/Makefile.intel
 ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
-LDFLAGS += -dy -Nmisc/neti -Nmisch/hook
+LDFLAGS += -dy -Nmisc/neti -Nmisc/hook
 
 .KEEP_STATE:
 
