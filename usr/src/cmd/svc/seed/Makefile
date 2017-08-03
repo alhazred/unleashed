@@ -192,7 +192,7 @@ install_global: global.db
 	$(INS) -m $(SEEDFILEMODE) global.db $(LIBSVCSEED)/
 
 install_nonglobal: nonglobal.db
-	$(INS) -m $(SEEDFILEMODE) -s nonglobal.db $(LIBSVCSEED)/
+	$(INS) -m $(SEEDFILEMODE) nonglobal.db $(LIBSVCSEED)/
 
 install_miniroot: $(INSTALLSEED) miniroot.db
 	$(INS) -m $(SEEDFILEMODE) miniroot.db $(INSTALLSEED)/
