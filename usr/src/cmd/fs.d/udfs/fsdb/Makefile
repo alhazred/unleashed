@@ -78,7 +78,7 @@ fsdb_yacc.o : y.tab.c
 	$(POST_PROCESS_O)
 
 lex.yy.c : fsdb_lex.l
-	$(LEX) -e fsdb_lex.l
+	$(LEX) $(LFLAGS) -e fsdb_lex.l
 
 fsdb_lex.o : lex.yy.c
 	$(COMPILE.c) -o $@ lex.yy.c
