@@ -199,17 +199,6 @@ example# ufsdump 0f \(mi /dev/rdsk/c0t0d0s7 \e
 .in -2
 .sp
 
-If the name of the file is of the form \fImachine\fR\fB:\fR\fIdevice\fR, the
-restore is done from the specified machine over the network using
-\fBrmt\fR(1M). Since \fBufsrestore\fR is normally run by root, the name of the
-local machine must appear in the \fB/.rhosts\fR file of the remote machine. If
-the file is specified as \fIuser\fR\fB@\fR\fImachine\fR\fB:\fR\fIdevice\fR,
-\fBufsrestore\fR will attempt to execute as the specified user on the remote
-machine. The specified user must have a \fB\&.rhosts\fR file on the remote
-machine that allows the user invoking the command from the local machine to
-access the remote machine.
-.RE
-
 .sp
 .ne 2
 .na

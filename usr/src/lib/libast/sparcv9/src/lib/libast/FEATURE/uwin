@@ -6,7 +6,6 @@
 #define _lib_crypt	1	/* crypt() in default lib(s) */
 #define _lib_getpass	1	/* getpass() in default lib(s) */
 #define _lib_random	1	/* random() in default lib(s) */
-#define _lib_rcmd	1	/* rcmd() in default lib(s) */
 #define _lib_srand48	1	/* srand48() in default lib(s) */
 #define _lib_logb	1	/* logb() in default lib(s) */
 #define _lib_finite	1	/* finite() in default lib(s) */

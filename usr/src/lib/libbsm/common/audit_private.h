@@ -47,11 +47,7 @@ extern "C" {
 /*
  * audit_settid.c
  * interface users
- * rexecd
- * rlogind
- * rshd
  * telnetd
- * rexd
  */
 extern	int	audit_settid(int);
 
@@ -77,24 +73,6 @@ extern	void	audit_ftpd_no_anon(void);
 extern	void	audit_ftpd_success(char *uname);
 extern	void	audit_ftpd_unknown(char *uname);
 extern	void	audit_ftpd_logout(void);
-
-/*
- * audit_rexecd.c
- * interface user
- * rexecd
- */
-extern	void	audit_rexecd_setup(void);
-extern	void	audit_rexecd_success(char *, char *, char *);
-extern	void	audit_rexecd_fail(char *, char *, char *, char *);
-
-/*
- * audit_rshd.c
- * interface user
- * rshd
- */
-extern	int	audit_rshd_setup(void);
-extern	int	audit_rshd_success(char *, char *, char *, char *);
-extern	int	audit_rshd_fail(char *, char *, char *, char *, char *);
 
 /*
  * audit_at.c
@@ -167,17 +145,6 @@ extern	int	audit_shutdown_fail(void);
 extern	int	audit_reboot_setup(void);
 extern	int	audit_reboot_success(void);
 extern	int	audit_reboot_fail(void);
-
-/*
- * audit_rexd.c
- * interface users
- * rpc.rexd
- */
-extern	void 	audit_rexd_fail(char *, char *, char *, uid_t, gid_t,
-    char *, char **);
-extern	void	audit_rexd_success(char *, char *, uid_t, gid_t,
-    char *, char **);
-extern	void	audit_rexd_setup(void);
 
 #ifdef	__cplusplus
 }

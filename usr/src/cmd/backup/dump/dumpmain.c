@@ -34,7 +34,6 @@
  */
 
 #include "dump.h"
-#include <rmt.h>
 #include <sys/mtio.h>
 #include <limits.h>
 #include <priv_utils.h>
@@ -92,8 +91,6 @@ main(int argc, char *argv[])
 	uoff_t	esize_shift = 0;
 	int32_t	new_mult = 0;
 	time32_t	snapdate;
-
-	host = NULL;
 
 	if (myname = strrchr(argv[0], '/'))
 		myname++;
@@ -567,20 +564,6 @@ main(int argc, char *argv[])
 		tsize *= 12L*10L;
 		if (cartridge)
 			tsize *= tracks;
-	}
-	rmtinit(msg, Exit);
-	if (host) {
-		char	*cp = strchr(host, '@');
-		if (cp == NULL)
-			cp = host;
-		else
-			cp++;
-
-		if (rmthost(host, ntrec) == 0) {
-			msg(gettext("Cannot connect to tape host `%s'\n"), cp);
-			dumpabort();
-			/*NOTREACHED*/
-		}
 	}
 	if (signal(SIGHUP, sigAbort) == SIG_IGN)
 		(void) signal(SIGHUP, SIG_IGN);

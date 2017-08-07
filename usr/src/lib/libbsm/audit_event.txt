@@ -374,16 +374,12 @@
 6152:AUE_login:login - local:lo
 6153:AUE_logout:logout:lo
 6154:AUE_telnet:login - telnet:lo
-6155:AUE_rlogin:login - rlogin:lo
 6156:AUE_mountd_mount:mount:na
 6157:AUE_mountd_umount:unmount:na
-6158:AUE_rshd:rsh access:lo
 6159:AUE_su:su:lo
 6160:AUE_halt_solaris:halt(1m):ss
 6161:AUE_reboot_solaris:reboot(1m):ss
-6162:AUE_rexecd:rexecd:lo
 6163:AUE_passwd:passwd:lo
-6164:AUE_rexd:rexd:lo
 6165:AUE_ftpd:ftp access:lo
 6166:AUE_init_solaris:init(1m):ss
 6167:AUE_uadmin_solaris:uadmin(1m):no

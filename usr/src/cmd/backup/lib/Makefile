@@ -45,17 +45,16 @@ SRCDIR =	.
 LIBS=	$(LIBRARY)
 
 HDRS=		../include/byteorder.h \
-	../include/memutils.h ../include/myrcmd.h \
-	../../../../../include/protocols/dumprestore.h \
-	../include/rmt.h
+	../include/memutils.h \
+	../../../../../include/protocols/dumprestore.h
+	
 
 YFILE=		getdate.y
 YSRC=		getdate.c
 
 CLOBBERFILES +=	$(LIBS) $(GLIB)
 
-LOBJS=		rmtlib.o myrcmd.o \
-		$(YSRC:%.c=%.o) \
+LOBJS=		$(YSRC:%.c=%.o) \
 		byteorder.o memutils.o $(RPC_CLNT:%.c=%.o) $(RPC_XDR:%.c=%.o)
 
 OBJECTS=	$(LOBJS)

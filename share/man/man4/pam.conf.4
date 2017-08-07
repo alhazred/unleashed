@@ -120,8 +120,7 @@ other   password required       pam_authtok_store.so.1
 
 .sp
 .LP
-\fIservice_name\fR denotes the service (for example, \fBlogin\fR,
-\fBdtlogin\fR, or \fBrlogin\fR).
+\fIservice_name\fR denotes the service (for example, \fBlogin\fR).
 .sp
 .LP
 The keyword, "\fBother\fR," indicates the module that all other applications
@@ -267,8 +266,8 @@ system administrator may enter system maintenance mode to correct or restore
 the file.
 .sp
 .LP
-The following is a sample configuration file that stacks the \fBsu\fR,
-\fBlogin\fR, and \fBrlogin\fR services.
+The following is a sample configuration file that stacks the \fBsu\fR and
+\fBlogin\fR services.
 .sp
 .in +2
 .nf
@@ -282,11 +281,6 @@ login   auth required      pam_dhkeys.so.1
 login   auth required      pam_unix_auth.so.1
 login   auth required      pam_dial_auth.so.1
 login   auth optional      pam_inhouse.so.1
-
-rlogin  auth sufficient    pam_rhosts_auth.so.1
-rlogin  auth requisite     pam_authtok_get.so.1
-rlogin  auth required      pam_dhkeys.so.1
-rlogin  auth required      pam_unix_auth.so.1
 .fi
 .in -2
 
@@ -310,15 +304,6 @@ module is invoked. \fBinhouse\fR authentication is optional by virtue of the
 optional keyword in the \fIcontrol_flag\fR field. The user can still log in
 even if \fBinhouse\fR authentication fails, assuming the modules stacked above
 succeeded.
-.sp
-.LP
-In the case of \fBrlogin\fR, the \fBsufficient\fR keyword for
-\fIcontrol_flag\fR specifies that if the \fBrhosts\fR authentication check
-succeeds, then \fBPAM\fR should return success to \fBrlogin\fR and \fBrlogin\fR
-should not prompt the user for a password. The other authentication modules,
-which are in the stack, will only be invoked if the \fBrhosts\fR check fails.
-This gives the system administrator the flexibility to determine if
-\fBrhosts\fR alone is sufficient enough to authenticate a remote user.
 .sp
 .LP
 Some modules return \fBPAM_IGNORE\fR in certain situations. In these cases the
@@ -415,11 +400,6 @@ The \fBpam.conf\fR file and consists of:
 login   auth include            unix_common
 login   auth required           pam_dial_auth.so.1
 #
-# rlogin service (explicit because of pam_rhost_auth)
-#
-rlogin  auth sufficient         pam_rhosts_auth.so.1
-rlogin  auth include            unix_common
-#
 # Default definitions for Authentication management
 # Used when service name is not explicitly mentioned
 #
@@ -463,8 +443,8 @@ Interface Stability	See Below.
 The format is Stable. The contents has no stability attributes.
 .SH SEE ALSO
 .LP
-\fBlogin\fR(1), \fBpasswd\fR(1), \fBin.rlogind\fR(1M),
-\fBin.rshd\fR(1M), \fBin.telnetd\fR(1M), \fBin.uucpd\fR(1M), \fBinit\fR(1M),
+\fBlogin\fR(1), \fBpasswd\fR(1),
+\fBin.telnetd\fR(1M), \fBin.uucpd\fR(1M), \fBinit\fR(1M),
 \fBsac\fR(1M), \fBttymon\fR(1M), \fBsu\fR(1M),
 \fBpam\fR(3PAM), \fBsyslog\fR(3C), \fBlibpam\fR(3LIB), \fBattributes\fR(5),
 \fBenviron\fR(5), \fBpam_authtok_check\fR(5), \fBpam_authtok_get\fR(5),

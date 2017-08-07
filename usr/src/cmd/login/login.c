@@ -318,16 +318,14 @@ static	boolean_t pflag = B_FALSE;
 static  boolean_t uflag = B_FALSE;
 static  boolean_t Rflag = B_FALSE;
 static  boolean_t sflag = B_FALSE;
-static  boolean_t Uflag = B_FALSE;
 static  boolean_t tflag = B_FALSE;
 static	boolean_t hflag = B_FALSE;
-static  boolean_t rflag = B_FALSE;
 static  boolean_t zflag = B_FALSE;
 
 /*
  * Remote login support
  */
-static	char	rusername[NMAX+1], lusername[NMAX+1];
+static	char	lusername[NMAX+1];
 static	char	terminal[MAXPATHLEN];
 
 /*
@@ -349,7 +347,6 @@ static pam_handle_t *pamh;	/* Authentication handle */
 static	void	turn_on_logging(void);
 static	void	defaults(void);
 static	void	usage(void);
-static	void	process_rlogin(void);
 static	void	login_authenticate();
 static	void	setup_credentials(void);
 static	void	adjust_nice(void);
@@ -500,12 +497,6 @@ main(int argc, char *argv[], char **renvp)
 	openlog("login", 0, LOG_AUTH);
 
 	/*
-	 * Do special processing for -r (rlogin) flag
-	 */
-	if (rflag)
-		process_rlogin();
-
-	/*
 	 * validate user
 	 */
 	/* we are already authenticated. fill in what we must, then continue */
@@ -581,7 +572,7 @@ main(int argc, char *argv[], char **renvp)
 	if (chdir(pwd->pw_dir) == 0)
 		silent = (access(HUSHLOGIN, F_OK) == 0);
 	/*
-	 * NOTE: telnetd and rlogind rely upon this updating of utmpx
+	 * NOTE: telnetd relies upon this updating of utmpx
 	 * to indicate that the authentication completed  successfully,
 	 * pam_open_session was called and therefore they are required to
 	 * call pam_close_session.
@@ -1349,7 +1340,7 @@ get_options(int argc, char *argv[])
 			break;
 
 		case 'h':
-			if (hflag || rflag || zflag) {
+			if (hflag || zflag) {
 				(void) fprintf(stderr, flags_message);
 				login_exit(1);
 			}
@@ -1370,16 +1361,6 @@ get_options(int argc, char *argv[])
 
 			}
 			SCPYL(progname, "telnet");
-			break;
-
-		case 'r':
-			if (hflag || rflag || zflag) {
-				(void) fprintf(stderr, flags_message);
-				login_exit(1);
-			}
-			rflag = B_TRUE;
-			SCPYL(remote_host, optarg);
-			SCPYL(progname, "rlogin");
 			break;
 
 		case 'p':
@@ -1437,21 +1418,8 @@ get_options(int argc, char *argv[])
 			SCPYL(terminal, optarg);
 			tflag = B_TRUE;
 			break;
-		case 'U':
-			/*
-			 * Kerberized rlogind may fork us with
-			 * -U "" if the rlogin client used the "-a"
-			 * option to send a NULL username.  This is done
-			 * to force login to prompt for a user/password.
-			 * However, if Kerberos auth was used, we dont need
-			 * to prompt, so we will accept the option and
-			 * handle the situation later.
-			 */
-			SCPYL(rusername, optarg);
-			Uflag = B_TRUE;
-			break;
 		case 'z':
-			if (hflag || rflag || zflag) {
+			if (hflag || zflag) {
 				(void) fprintf(stderr, flags_message);
 				login_exit(1);
 			}
@@ -1514,8 +1482,8 @@ usage(void)
 	(void) fprintf(stderr,
 	    "usage:\n"
 	    "    login [-p] [-d device] [-R repository] [-s service]\n"
-	    "\t[-t terminal]  [-u identity] [-U ruser]\n"
-	    "\t[-h hostname [terminal] | -r hostname] [name [environ]...]\n");
+	    "\t[-t terminal]  [-u identity]\n"
+	    "\t[-h hostname [terminal]] [name [environ]...]\n");
 
 }
 
@@ -1561,59 +1529,6 @@ doremoteterm(char *term)
 
 	(void) ioctl(0, TCSETS, &tp);
 
-}
-
-/*
- * Process_rlogin		- Does the work that rlogin and telnet
- *				  need done
- */
-static void
-process_rlogin(void)
-{
-	/*
-	 * If a Kerberized rlogin was initiated, then these fields
-	 * must be read by rlogin daemon itself and passed down via
-	 * cmd line args.
-	 */
-	if (!Uflag && !strlen(rusername))
-		getstr(rusername, sizeof (rusername), "remuser");
-	if (!strlen(lusername))
-		getstr(lusername, sizeof (lusername), "locuser");
-	if (!tflag && !strlen(terminal))
-		getstr(terminal, sizeof (terminal), "Terminal type");
-
-	if (strlen(terminal))
-		doremoteterm(terminal);
-
-	/* fflag has precedence over stuff passed by rlogind */
-	if (fflag || getuid()) {
-		pwd = &nouser;
-		return;
-	} else {
-		if (pam_set_item(pamh, PAM_USER, lusername) != PAM_SUCCESS)
-			login_exit(1);
-
-		pwd = getpwnam(lusername);
-		if (pwd == NULL) {
-			pwd = &nouser;
-			return;
-		}
-	}
-
-	/*
-	 * Update PAM on the user name
-	 */
-	if (strlen(lusername) &&
-	    pam_set_item(pamh, PAM_USER, lusername) != PAM_SUCCESS)
-		login_exit(1);
-
-	if (strlen(rusername) &&
-	    pam_set_item(pamh, PAM_RUSER, rusername) != PAM_SUCCESS)
-		login_exit(1);
-
-	SCPYL(user_name, lusername);
-	envp = &zero;
-	lusername[0] = '\0';
 }
 
 /*
@@ -1906,9 +1821,7 @@ setup_credentials(void)
 static uint_t
 get_audit_id(void)
 {
-	if (rflag)
-		return (ADT_rlogin);
-	else if (hflag)
+	if (hflag)
 		return (ADT_telnet);
 	else if (zflag)
 		return (ADT_zlogin);
@@ -2004,7 +1917,7 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 	(void) time(&utmpx.ut_tv.tv_sec);
 	utmpx.ut_pid = getpid();
 
-	if (rflag || hflag) {
+	if (hflag) {
 		SCPYN(utmpx.ut_host, remote_host);
 		tmplen = strlen(remote_host) + 1;
 		if (tmplen < sizeof (utmpx.ut_host))
@@ -2053,7 +1966,7 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 		if (!sublogin) {
 			/*
 			 * no utmpx entry already setup
-			 * (init or rlogind/telnetd)
+			 * (init or telnetd)
 			 */
 			(void) puts(errmsg);
 
@@ -2161,9 +2074,7 @@ establish_user_environment(char **renvp)
 	(void) memcpy(&envinit[basicenv], newenv, sizeof (newenv));
 
 	/* Set up environment */
-	if (rflag) {
-		ENVSTRNCAT(term, terminal);
-	} else if (hflag) {
+	if (hflag) {
 		if (strlen(terminal)) {
 			ENVSTRNCAT(term, terminal);
 		}

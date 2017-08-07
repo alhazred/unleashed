@@ -327,7 +327,6 @@ COMMON_SUBDIRS=		\
 	rmdir		\
 	rmformat	\
 	rmmount		\
-	rmt		\
 	rmvolmgr	\
 	roles		\
 	rpcbind		\

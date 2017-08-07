@@ -95,9 +95,6 @@ SYMBOL_VERSION SUNW_1.4 {
 	if_nametoindex	{ TYPE = FUNCTION };
 	in6addr_any	{ TYPE = DATA; SIZE = 0x10 };
 	in6addr_loopback	{ TYPE = DATA; SIZE = 0x10 };
-	rcmd_af	{ TYPE = FUNCTION };
-	rexec_af	{ TYPE = FUNCTION };
-	rresvport_af	{ TYPE = FUNCTION };
 } SUNW_1.3;
 
 # Due to mistakes made early in the history of this library, there are
@@ -154,10 +151,6 @@ SYMBOL_VERSION SUNW_0.7 {
 	htons			{ TYPE = FUNCTION };
 	ntohl			{ TYPE = FUNCTION };
 	ntohs			{ TYPE = FUNCTION };
-	rcmd	{ TYPE = FUNCTION };
-	rexec	{ TYPE = FUNCTION };
-	rresvport	{ TYPE = FUNCTION };
-	ruserok	{ TYPE = FUNCTION };
 	setnetent	{ TYPE = FUNCTION };
 	setprotoent	{ TYPE = FUNCTION };
 	setservent	{ TYPE = FUNCTION };
@@ -228,7 +221,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
     global:
 	bindresvport	{ TYPE = FUNCTION };
 	bootparams_getbyname	{ TYPE = FUNCTION };
-	rresvport_addr	{ TYPE = FUNCTION };
 	_ruserpass	{ TYPE = FUNCTION };
     local:
 	*;

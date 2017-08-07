@@ -12,8 +12,6 @@ MAN = byteorder.3socket \
       inet.3socket \
       inet6_opt.3socket \
       inet6_rth.3socket \
-      rcmd.3socket \
-      rexec.3socket \
       sctp_bindx.3socket \
       sctp_getladdrs.3socket \
       sctp_getpaddrs.3socket \

@@ -330,18 +330,6 @@ int		getnameinfo(const struct sockaddr *_RESTRICT_KYWD,
 int getnetgrent(char **, char **, char **);
 int setnetgrent(const char *);
 int endnetgrent(void);
-int rcmd(char **, unsigned short,
-	const char *, const char *, const char *, int *);
-int rcmd_af(char **, unsigned short,
-	const char *, const char *, const char *, int *, int);
-int rresvport_af(int *, int);
-int rresvport_addr(int *, struct sockaddr_storage *);
-int rexec(char **, unsigned short,
-	const char *, const char *, const char *, int *);
-int rexec_af(char **, unsigned short,
-	const char *, const char *, const char *, int *, int);
-int rresvport(int *);
-int ruserok(const char *, int, const char *, const char *);
 /* BIND */
 struct hostent	*gethostbyname2(const char *, int);
 void		herror(const char *);

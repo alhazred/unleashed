@@ -15,7 +15,6 @@
 #include <setjmp.h>
 #include "restore.h"
 #include <byteorder.h>
-#include <rmt.h>
 #include <sys/mtio.h>
 #include <utime.h>
 #include <sys/errno.h>
@@ -35,7 +34,6 @@ int mt = -1;
 static int	continuemap = 0;
 char		magtape[BUFSIZ];
 int		pipein = 0;
-char		*host;		/* used in dumprmt.c */
 daddr32_t	rec_position;
 static char	*archivefile;	/* used in metamucil.c */
 static int	bct;		/* block # index into tape record buffer */
@@ -101,58 +99,42 @@ setinput(char *source, char *archive)
 		done(1);
 	}
 
-	if (strchr(source, ':')) {
-		char *tape;
-
-		host = source;
-		tape = strchr(host, ':');
-		*tape++ = '\0';
-		if (strlen(tape) > (sizeof (magtape) - 1)) {
-			(void) fprintf(stderr, gettext("Tape name too long\n"));
-			done(1);
-		}
-		(void) strcpy(magtape, tape);
-		if (rmthost(host, ntrec) == 0)
-			done(1);
-	} else {
-		if (strlen(source) > (sizeof (magtape) - 1)) {
-			(void) fprintf(stderr, gettext("Tape name too long\n"));
-			done(1);
-		}
-		/* Not remote, no need for privileges */
-		__priv_relinquish();
-		host = NULL;
-		if (strcmp(source, "-") == 0) {
-			/*
-			 * Since input is coming from a pipe we must establish
-			 * our own connection to the terminal.
-			 */
-			terminal = fopen("/dev/tty", "r");
+	if (strlen(source) > (sizeof (magtape) - 1)) {
+		(void) fprintf(stderr, gettext("Tape name too long\n"));
+		done(1);
+	}
+	/* Not remote, no need for privileges */
+	__priv_relinquish();
+	if (strcmp(source, "-") == 0) {
+		/*
+		 * Since input is coming from a pipe we must establish
+		 * our own connection to the terminal.
+		 */
+		terminal = fopen("/dev/tty", "r");
+		if (terminal == NULL) {
+			int saverr = errno;
+			char *msg =
+			    gettext("Cannot open(\"/dev/tty\")");
+			errno = saverr;
+			perror(msg);
+			terminal = fopen("/dev/null", "r");
 			if (terminal == NULL) {
-				int saverr = errno;
-				char *msg =
-				    gettext("Cannot open(\"/dev/tty\")");
+				saverr = errno;
+				msg = gettext(
+				    "Cannot open(\"/dev/null\")");
 				errno = saverr;
 				perror(msg);
-				terminal = fopen("/dev/null", "r");
-				if (terminal == NULL) {
-					saverr = errno;
-					msg = gettext(
-					    "Cannot open(\"/dev/null\")");
-					errno = saverr;
-					perror(msg);
-					done(1);
-				}
-			}
-			pipein++;
-			if (archive) {
-				(void) fprintf(stderr, gettext(
-	    "Cannot specify an archive file when reading from a pipe\n"));
 				done(1);
 			}
 		}
-		(void) strcpy(magtape, source);
+		pipein++;
+		if (archive) {
+			(void) fprintf(stderr, gettext(
+			    "Cannot specify an archive file when reading from a pipe\n"));
+			done(1);
+		}
 	}
+	(void) strcpy(magtape, source);
 }
 
 void
@@ -195,12 +177,6 @@ setup(void)
 			done(1);
 		}
 		volno = 0;
-	} else if (host) {
-		if ((mt = rmtopen(magtape, O_RDONLY)) < 0) {
-			perror(magtape);
-			done(1);
-		}
-		volno = 1;
 	} else {
 		if (pipein)
 			mt = 0;
@@ -526,14 +502,9 @@ with the last volume and work towards the first.\n"));
 	 * the device once without prompting to enable unattended
 	 * operation.
 	 */
-	if (host)
-		(void) fprintf(stderr, gettext(
-"Mount volume %d\nthen enter volume name on host %s (default: %s) "),
-		    newvol, host,  magtape);
-	else
-		(void) fprintf(stderr, gettext(
-		    "Mount volume %d\nthen enter volume name (default: %s) "),
-		    newvol, magtape);
+	(void) fprintf(stderr, gettext(
+	    "Mount volume %d\nthen enter volume name (default: %s) "),
+	    newvol, magtape);
 	(void) fflush(stderr);
 	/* LINTED tbfsize is limited to a few MB */
 	(void) fgets(tbf, (int)tbfsize, terminal);
@@ -550,9 +521,7 @@ with the last volume and work towards the first.\n"));
 		if (magtape[i - 1] == '\n')
 			magtape[i - 1] = '\0';
 	}
-	if ((host != NULL && (mt = rmtopen(magtape, O_RDONLY)) == -1) ||
-	    (host == NULL &&
-	    (mt = open(magtape, O_RDONLY|O_LARGEFILE)) == -1)) {
+	if ((mt = open(magtape, O_RDONLY|O_LARGEFILE)) == -1) {
 		int error = errno;
 		(void) fprintf(stderr, gettext("Cannot open %s: %s\n"),
 		    magtape, strerror(error));
@@ -686,10 +655,7 @@ setdumpnum(void)
 	}
 	tcom.mt_op = MTFSF;
 	tcom.mt_count = dumpnum - 1;
-	if (host)
-		retval = rmtioctl(MTFSF, dumpnum - 1);
-	else
-		retval = ioctl(mt, (int)MTIOCTOP, (char *)&tcom);
+	retval = ioctl(mt, (int)MTIOCTOP, (char *)&tcom);
 	if (retval < 0)
 		perror("ioctl MTFSF");
 }
@@ -1515,10 +1481,7 @@ top:
 	cnt = ntrec*tp_bsize;
 	rd = 0;
 getmore:
-	if (host)
-		i = rmtread(&tbf[rd], cnt);
-	else
-		i = read(mt, &tbf[rd], cnt);
+	i = read(mt, &tbf[rd], cnt);
 	/*
 	 * Check for mid-tape short read error.
 	 * If found, return rest of buffer.
@@ -1581,9 +1544,7 @@ getmore:
 		/* LINTED: unsigned->signed conversion ok */
 		i = (int)(ntrec*tp_bsize);
 		bzero(tbf, (size_t)i);
-		if ((host != 0 && rmtseek(i, 1) < 0) ||
-		    (host == 0 && (lseek64(mt, (offset_t)i, 1) ==
-		    (off64_t)-1))) {
+		if (lseek64(mt, (offset_t)i, 1) == (off64_t)-1) {
 			perror(gettext("continuation failed"));
 			done(1);
 		}
@@ -1646,10 +1607,7 @@ findtapeblksize(int arfile)
 		/*LINTED [tbf = malloc()]*/
 		((struct s_spcl *)&tbf[i * tp_bsize])->c_magic = 0;
 	bct = 0;
-	if (host && arfile == TAPE_FILE)
-		tape_rec_size = rmtread(tbf, ntrec * tp_bsize);
-	else
-		tape_rec_size = read(mt, tbf, ntrec * tp_bsize);
+	tape_rec_size = read(mt, tbf, ntrec * tp_bsize);
 	recsread++;
 	rec_position++;
 	if (tape_rec_size == (ssize_t)-1) {
@@ -1693,11 +1651,7 @@ closemt(int mode)
 		return;
 	if (offline || mode == FORCE_OFFLINE)
 		(void) fprintf(stderr, gettext("Rewinding tape\n"));
-	if (host) {
-		if (offline || mode == FORCE_OFFLINE)
-			(void) rmtioctl(MTOFFL, 1);
-		rmtclose();
-	} else if (pipein) {
+	if (pipein) {
 		char buffy[MAXBSIZE];
 
 		while (read(mt, buffy, sizeof (buffy)) > 0) {
@@ -2075,19 +2029,11 @@ autoload_tape(void)
 		(void) fprintf(stderr,
 		    gettext("Attempting to autoload next volume\n"));
 		for (tries = 0; tries < autoload_tries; tries++) {
-			if (host) {
-				if (rmtopen(magtape, O_RDONLY) >= 0) {
-					rmtclose();
-					result = 1;
-					break;
-				}
-			} else {
-				if ((fd = open(magtape, O_RDONLY|O_LARGEFILE,
-				    0600)) >= 0) {
-					(void) close(fd);
-					result = 1;
-					break;
-				}
+			if ((fd = open(magtape, O_RDONLY|O_LARGEFILE,
+			    0600)) >= 0) {
+				(void) close(fd);
+				result = 1;
+				break;
 			}
 			(void) sleep(autoload_period);
 		}
@@ -2096,10 +2042,7 @@ autoload_tape(void)
 			(void) fprintf(stderr,
 			    gettext("Autoload timed out\n"));
 		} else {
-			if ((host != NULL &&
-			    (mt = rmtopen(magtape, O_RDONLY)) == -1) ||
-			    (host == NULL &&
-			    (mt = open(magtape, O_RDONLY|O_LARGEFILE)) == -1)) {
+			if ((mt = open(magtape, O_RDONLY|O_LARGEFILE)) == -1) {
 				(void) fprintf(stderr, gettext(
 				    "Autoload could not re-open tape\n"));
 				result = 0;

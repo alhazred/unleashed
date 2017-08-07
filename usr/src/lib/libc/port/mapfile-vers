@@ -3425,9 +3425,6 @@ $endif
 	if_indextoname;
 	if_nameindex;
 	if_nametoindex;
-	rcmd_af;
-	rexec_af;
-	rresvport_af;
 	__xnet_bind;
 	__xnet_connect;
 	__xnet_getsockopt;
@@ -3458,10 +3455,6 @@ $endif
 	getservbyport_r;
 	getservent;
 	getservent_r;
-	rcmd;
-	rexec;
-	rresvport;
-	ruserok;
 	setnetent;
 	setprotoent;
 	setservent;
@@ -3508,7 +3501,6 @@ $endif
 	getnetmaskbynet;
 	bindresvport;
 	bootparams_getbyname;
-	rresvport_addr;
 	_ruserpass;
 # FIXME: pending a name for our OS, these symbols originally from libnsl are
 # marked private.

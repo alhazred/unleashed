@@ -42,7 +42,6 @@ file path=usr/bin/rup mode=0555
 file path=usr/bin/ruptime mode=0555
 file path=usr/bin/rusers mode=0555
 file path=usr/bin/whois mode=0555
-file path=usr/sbin/rmt mode=0555
 file path=usr/sbin/rwall mode=0555
 file path=usr/sbin/snoop mode=0555
 file path=usr/sbin/spray mode=0555
@@ -52,7 +51,6 @@ file path=usr/share/man/man1/ruptime.1
 file path=usr/share/man/man1/rusers.1
 file path=usr/share/man/man1/whois.1
 file path=usr/share/man/man1m/rdate.1m
-file path=usr/share/man/man1m/rmt.1m
 file path=usr/share/man/man1m/rwall.1m
 file path=usr/share/man/man1m/snoop.1m
 file path=usr/share/man/man1m/spray.1m

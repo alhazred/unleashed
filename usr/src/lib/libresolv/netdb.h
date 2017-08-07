@@ -138,12 +138,6 @@ int setprotoent(int);
 int endprotoent(void);
 int setnetgrent(const char *);
 int endnetgrent(void);
-int rcmd(char **ahost, unsigned short inport,
-	const char *luser, const char *ruser, const char *cmd, int *fd2p);
-int rexec(char **ahost, unsigned short inport,
-	const char *user, const char *passwd, const char *cmd, int *fd2p);
-int rresvport(int *);
-int ruserok(const char *rhost, int suser, const char *ruser, const char *luser);
 #else
 struct hostent	*gethostbyname_r();
 struct hostent	*gethostbyaddr_r();
@@ -185,10 +179,6 @@ int setprotoent();
 int endprotoent();
 int setnetgrent();
 int endnetgrent();
-int rcmd();
-int rexec();
-int rresvport();
-int ruserok();
 #endif
 
 /*

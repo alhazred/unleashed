@@ -622,12 +622,6 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	<see>login(1)</see>
 	<see>dtlogin</see>
     </event>
-    <event id="AUE_rlogin" instance_of="AUE_generic_login" header="0"
-	idNo="28" omit="JNI">
-	<title>rlogin</title>
-	<program>/usr/sbin/login</program>
-	<see>login(1) - rlogin</see>
-    </event>
     <event id="AUE_telnet" instance_of="AUE_generic_login" header="0"
 	idNo="29" omit="JNI">
 	<title>telnet login</title>

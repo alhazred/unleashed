@@ -454,11 +454,6 @@ extern int ptrace(int, pid_t, int, int);
 	defined(__EXTENSIONS__)
 extern ssize_t pwrite(int, const void *, size_t, off_t);
 #endif
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
-/* per RFC 3542; This is also defined in netdb.h */
-extern int rcmd_af(char **, unsigned short, const char *, const char *,
-	const char *, int *, int);
-#endif
 extern ssize_t read(int, void *, size_t);
 #if !defined(__XOPEN_OR_POSIX) || \
 	defined(_XPG4_2) || defined(__EXTENSIONS__)
@@ -479,15 +474,8 @@ using std::rename;
 #endif /* (!defined(__XOPEN_OR_POSIX) || (defined(_XPG3)... */
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern int resolvepath(const char *, char *, size_t);
-/* per RFC 3542; This is also defined in netdb.h */
-extern int rexec_af(char **, unsigned short, const char *, const char *,
-	const char *, int *, int);
 #endif /* !defined(__XOPEN_OR_POSIX)|| defined(__EXTENSIONS__) */
 extern int rmdir(const char *);
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
-/* per RFC 3542; This is also defined in netdb.h */
-extern int rresvport_af(int *, int);
-#endif
 
 #if !defined(__XOPEN_OR_POSIX) || (defined(_XPG4_2) && !defined(_XPG6)) || \
 	defined(__EXTENSIONS__)

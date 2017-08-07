@@ -168,17 +168,6 @@ Diskette. Dump to diskette.
 Dump file. Use \fIdump_file\fR as the file to dump to, instead of
 \fB/dev/rmt/0\fR. If \fIdump_file\fR is specified as \fB\(mi\fR, dump to
 standard output.
-.sp
-If the name of the file is of the form \fImachine\fR\fB:\fR\fIdevice,\fR the
-dump is done from the specified machine over the network using \fBrmt\fR(1M).
-Since \fBufsdump\fR is normally run by root, the name of the local machine must
-appear in the \fB/.rhosts\fR file of the remote machine. If the file is
-specified as \fIuser\fR\fB@\fR\fImachine\fR\fB:\fR\fIdevice,\fR \fBufsdump\fR
-will attempt to execute as the specified user on the remote machine. The
-specified user must have a \fB\&.rhosts\fR file on the remote machine that
-allows the user invoking the command from the local machine to access the
-remote machine.
-.RE
 
 .sp
 .ne 2
@@ -545,16 +534,6 @@ dump date record
 .sp .6
 .RS 4n
 to find group \fBsys\fR
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/etc/hosts\fR\fR
-.ad
-.sp .6
-.RS 4n
-to gain access to remote system with drive
 .RE
 
 .sp

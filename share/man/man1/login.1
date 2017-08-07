@@ -12,7 +12,7 @@ login \- sign on to the system
 .nf
 \fBlogin\fR [\fB-p\fR] [\fB-d\fR \fIdevice\fR] [\fB-R\fR \fIrepository\fR] [\fB-s\fR \fIservice\fR]
      [\fB-t\fR \fIterminal\fR] [\fB-u\fR \fIidentity\fR] [\fB-U\fR \fIruser\fR]
-     [\fB-h\fR \fIhostname\fR \fI[terminal]\fR | \fB-r\fR \fIhostname\fR]
+     [\fB-h\fR \fIhostname\fR \fI[terminal]\fR | \fIhostname\fR]
      [\fIname\fR [\fIenviron\fR]...]
 .fi
 
@@ -197,10 +197,6 @@ other  password   required   pam_authtok_store.so.1
 If there are no entries for the service, then the entries for the \fBother\fR
 service is used. If multiple authentication modules are listed, then the user
 can be prompted for multiple passwords.
-.sp
-.LP
-When \fBlogin\fR is invoked through \fBrlogind\fR or \fBtelnetd\fR, the service
-name used by \fBPAM\fR is \fBrlogin\fR or \fBtelnet\fR, respectively.
 .SH OPTIONS
 .LP
 The following options are supported:
@@ -243,15 +239,6 @@ Used to pass environment variables to the login shell.
 .sp
 .ne 2
 .na
-\fB\fB-r\fR \fIhostname\fR\fR
-.ad
-.RS 26n
-Used by \fBin.rlogind\fR(1M) to pass information about the remote host.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB-R\fR \fIrepository\fR\fR
 .ad
 .RS 26n
@@ -281,20 +268,6 @@ Specifies the "\fBidentity\fR" string associated with the user who is being
 authenticated. This usually is \fBnot\fR be the same as that user's Unix login
 name. For Kerberized login sessions, this is the Kerberos principal name
 associated with the user.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-U\fR \fIruser\fR\fR
-.ad
-.RS 26n
-Indicates the name of the person attempting to login on the remote side of the
-rlogin connection. When \fBin.rlogind\fR(1M) is operating in Kerberized mode,
-that daemon processes the terminal and remote user name information prior to
-invoking \fBlogin\fR, so the "\fBruser\fR" data is indicated using this command
-line parameter. Normally (non-Kerberos authenticated \fBrlogin\fR), the
-\fBlogin\fR daemon reads the remote user information from the client.
 .RE
 
 .SH EXIT STATUS
@@ -632,9 +605,9 @@ Interface Stability	Committed
 .SH SEE ALSO
 .LP
 \fBcsh\fR(1), \fBexit\fR(1), \fBksh\fR(1), \fBksh93\fR(1), \fBmail\fR(1),
-\fBmailx\fR(1), \fBnewgrp\fR(1), \fBpasswd\fR(1), \fBrlogin\fR(1),
+\fBmailx\fR(1), \fBnewgrp\fR(1), \fBpasswd\fR(1),
 \fBrsh\fR(1), \fBsh\fR(1), \fBshell_builtins\fR(1), \fBtelnet\fR(1),
-\fBumask\fR(1), \fBin.rlogind\fR(1M), \fBin.telnetd\fR(1M), \fBlogins\fR(1M),
+\fBumask\fR(1), \fBin.telnetd\fR(1M), \fBlogins\fR(1M),
 \fBquota\fR(1M), \fBsu\fR(1M), \fBsulogin\fR(1M), \fBsyslogd\fR(1M),
 \fBuseradd\fR(1M), \fBuserdel\fR(1M), \fBpam\fR(3PAM), \fBrcmd\fR(3SOCKET),
 \fBsyslog\fR(3C), \fBttyname\fR(3C), \fBauth_attr\fR(4), \fBexec_attr\fR(4),

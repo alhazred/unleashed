@@ -48,7 +48,6 @@ file path=usr/share/man/man5/pam_dial_auth.5
 file path=usr/share/man/man5/pam_ldap.5
 file path=usr/share/man/man5/pam_list.5
 file path=usr/share/man/man5/pam_passwd_auth.5
-file path=usr/share/man/man5/pam_rhosts_auth.5
 file path=usr/share/man/man5/pam_roles.5
 file path=usr/share/man/man5/pam_sample.5
 file path=usr/share/man/man5/pam_timestamp.5

@@ -75,16 +75,6 @@ authentication management  \fBPAM\fR module for dialups
 .sp
 .ne 2
 .na
-\fB\fB/usr/lib/security/pam_rhosts_auth.so.1\fR\fR
-.ad
-.sp .6
-.RS 4n
-authentication management  \fBPAM\fR modules that use \fBruserok()\fR
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB/usr/lib/security/pam_sample.so.1\fR\fR
 .ad
 .sp .6
@@ -114,7 +104,7 @@ MT Level	MT-Safe with exceptions
 \fBpvs\fR(1),  \fBIntro\fR(3),  \fBpam\fR(3PAM), \fBpam.conf\fR(4),
 \fBattributes\fR(5), \fBpam_authtok_check\fR(5), \fBpam_authtok_get\fR(5),
 \fBpam_authtok_store\fR(5), \fBpam_dial_auth\fR(5), \fBpam_dhkeys\fR(5),
-\fBpam_passwd_auth\fR(5), \fBpam_rhosts_auth\fR(5), \fBpam_sample\fR(5),
+\fBpam_passwd_auth\fR(5), \fBpam_sample\fR(5),
 \fBpam_unix_account\fR(5), \fBpam_unix_auth\fR(5), \fBpam_unix_session\fR(5)
 .SH NOTES
 .sp

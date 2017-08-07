@@ -591,7 +591,6 @@ OBJECTS += \
 	common/uwin/log__L.o \
 	common/uwin/rand48.o \
 	common/uwin/random.o \
-	common/uwin/rcmd.o \
 	common/uwin/rint.o \
 	common/uwin/support.o \
 	common/vec/vecargs.o \

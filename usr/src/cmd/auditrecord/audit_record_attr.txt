@@ -2296,37 +2296,6 @@ label=AUE_reboot_solaris
 #	subject,tuser1,root,other,root,other,10422,497,0 0 tmach2
 #	return,success,0
 
-label=AUE_rexd
-  program=/usr/sbin/rpc.rexd
-  title=rpc.rexd
-  format=[text]1:text2:text3:[text]4:[text]5
-    comment=error message (failure only):
-    comment="Remote execution requested by&colon;" hostname:
-    comment="Username&colon;" username:
-    comment="User id&colon;" user ID (failure only):
-    comment="Command line&colon;" command attempted
-# See audit_rexd.c
-
-label=AUE_rexecd
-  program=/usr/sbin/rpc.rexecd
-  title=rpc.rexecd
-  format=[text]1:text2:text3:text4
-    comment=error message (failure only):
-    comment="Remote execution requested by&colon;" hostname:
-    comment="Username&colon;" username:
-    comment="Command line&colon;" command attempted
-# See audit_rexecd.c
-
-label=AUE_rshd
-  program=/usr/sbin/in.rshd
-  title=in.rshd
-  format=text1:text2:[text]3:[text]4
-    comment="cmd" command:
-    comment="remote user" remote user:
-    comment="local user" local user:
-    comment=failure message
-# See audit_rshd.c
-
 label=AUE_shutdown_solaris
   title=shutdown
   program=/usr/ucb/shutdown

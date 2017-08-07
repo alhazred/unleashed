@@ -63,7 +63,6 @@ MAN = Intro.5 \
       pam_ldap.5 \
       pam_list.5 \
       pam_passwd_auth.5 \
-      pam_rhosts_auth.5 \
       pam_roles.5 \
       pam_sample.5 \
       pam_smb_passwd.5 \

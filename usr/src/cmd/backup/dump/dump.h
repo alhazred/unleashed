@@ -109,7 +109,6 @@ char	*disk;		/* name of the disk file */
 char	*dname;		/* name to put in /etc/dumpdates */
 int	disk_dynamic;	/* true if disk refers to dynamic storage */
 char	*tape;		/* name of the tape file */
-char	*host;		/* name of the remote tape host (may be "user@host") */
 char	*dumpdev;	/* hostname:device for current volume */
 char	*sdumpdev;	/* short form of dumpdev (no user name if remote) */
 char	*increm;	/* name of file containing incremental information */

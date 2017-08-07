@@ -49,7 +49,7 @@ static void audit_logout(adt_session_data_t *);
  */
 
 /*
- * There is no information passed to login.c from rlogin or telnet
+ * There is no information passed to login.c from telnet
  * about the terminal id.  They both set the tid before they
  * exec login; the value is picked up by adt_start_session() and is
  * carefully *not* overwritten by adt_load_hostname().
@@ -102,7 +102,6 @@ audit_success(uint_t event_id, struct passwd *pwd, char *optional_text)
 	if (adt_audit_enabled()) {
 		switch (event_id) {
 		case ADT_login:
-		case ADT_rlogin:
 		case ADT_telnet:
 		case ADT_zlogin:
 			audit_logout(ah);	/* fork to catch logout */
@@ -222,7 +221,7 @@ audit_failure(uint_t event_id, int failure_code, struct passwd *pwd,
 		gid = pwd->pw_gid;
 	}
 	/*
-	 * If this is a remote login, in.rlogind or in.telnetd has
+	 * If this is a remote login, in.telnetd has
 	 * already set the terminal id, in which case
 	 * adt_load_hostname() will use the preset terminal id and
 	 * ignore hostname.  (If no remote host and ttyname is NULL,

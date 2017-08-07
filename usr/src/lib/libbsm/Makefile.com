@@ -47,9 +47,6 @@ OBJECTS=	adr.o \
 		audit_mountd.o \
 		audit_plugin.o \
 		audit_reboot.o \
-		audit_rexd.o \
-		audit_rexecd.o \
-		audit_rshd.o \
 		audit_scf.o \
 		audit_settid.o \
 		audit_shutdown.o \

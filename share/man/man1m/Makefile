@@ -165,7 +165,6 @@ MAN = 6to4relay.1m \
       in.ndpd.1m \
       in.rarpd.1m \
       in.rdisc.1m \
-      in.rexecd.1m \
       in.ripngd.1m \
       in.routed.1m \
       in.rwhod.1m \
@@ -335,7 +334,6 @@ MAN = 6to4relay.1m \
       rem_drv.1m \
       repquota.1m \
       rmmount.1m \
-      rmt.1m \
       rmvolmgr.1m \
       roleadd.1m \
       roledel.1m \

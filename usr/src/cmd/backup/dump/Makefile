@@ -57,7 +57,7 @@ ROLLPOFILES=	roll_log.po
 HEADERS=	../../../../../include/protocols/dumprestore.h \
 	../../fs.d/ufs/roll_log/roll_log.h ../include/byteorder.h \
 	../include/memutils.h \
-	../include/rmt.h dump.h dumpusg.h
+	dump.h dumpusg.h
 
 CLOBBERFILES +=	$(PRODUCT) $(DEBUGPRODUCTS) dumpdates
 

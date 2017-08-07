@@ -42,7 +42,6 @@ SUBDIRS = \
 	ldap		\
 	list		\
 	passwd_auth	\
-	rhosts_auth	\
 	roles		\
 	sample		\
 	smb		\

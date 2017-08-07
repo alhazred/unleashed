@@ -27,24 +27,24 @@
 SYNCPROG=	syncinit syncloop syncstat
 
 PROG=		6to4relay arp if_mpadm \
-		in.comsat in.fingerd in.rarpd in.rexecd \
+		in.comsat in.fingerd in.rarpd \
 		in.rwhod in.telnetd in.tftpd ipaddrsel \
 		ndp $(SYNCPROG)
 
-MANIFEST=	rarp.xml telnet.xml comsat.xml finger.xml rexec.xml
+MANIFEST=	rarp.xml telnet.xml comsat.xml finger.xml
 SVCMETHOD=	svc-sockfilter
 
 ROOTFS_PROG=	hostconfig route soconfig
 SBINLINKS=	hostconfig route
 
 RPCSVCPROG=	hostconfig
-AUDITPROG=	in.rexecd in.telnetd
-PAMPROG=	in.rexecd in.telnetd
+AUDITPROG=	in.telnetd
+PAMPROG=	in.telnetd
 SOCKETPROG=	6to4relay arp hostconfig if_mpadm in.comsat \
-		in.fingerd in.rarpd in.rexecd \
+		in.fingerd in.rarpd \
 		in.rwhod in.telnetd in.tftpd ipaddrsel ndp route
 NSLPROG=	6to4relay arp hostconfig in.comsat in.rarpd \
-		in.rexecd in.rwhod in.telnetd \
+		in.rwhod in.telnetd \
 		in.tftpd ipaddrsel ndp route
 CMDPROG=	in.telnetd
 K5PROGS=	in.telnetd

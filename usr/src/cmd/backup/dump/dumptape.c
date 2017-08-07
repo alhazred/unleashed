@@ -32,9 +32,9 @@
  */
 
 #include "dump.h"
-#include <rmt.h>
 #include <setjmp.h>
 #include <sys/fdio.h>
+#include <sys/mtio.h>
 #include <sys/mkdev.h>
 #include <assert.h>
 #include <limits.h>
@@ -1032,25 +1032,7 @@ nextdevice()
 {
 	char	*cp;
 
-	if (host != NULL)	/* we set the host only once in ufsdump */
-		return;
-
-	host = NULL;
-	if (strchr(tape, ':')) {
-		if (diskette) {
-			msg(gettext("Cannot do remote dump to diskette\n"));
-			Exit(X_ABORT);
-		}
-		host = tape;
-		tape = strchr(host, ':');
-		*tape++ = 0;
-		cp = strchr(host, '@');	/* user@host? */
-		if (cp != NULL)
-			cp++;
-		else
-			cp = host;
-	} else
-		cp = spcl.c_host;
+	cp = spcl.c_host;
 	/*
 	 * dumpdev is provided for use in prompts and is of
 	 * the form:
@@ -1090,34 +1072,14 @@ isrewind(int f)
 	int	unit;
 	int	rewind;
 
-	if (host) {
-		c = strrchr(tape, '/');
-		if (c == NULL)
-			c = tape;
-		else
-			c++;
-		/*
-		 * If the last component begins or ends with an 'n', it is
-		 * assumed to be a non-rewind device.
-		 */
-		if (c[0] == 'n' || c[strlen(c)-1] == 'n')
-			rewind = 0;
-		else if ((strstr(tape, "mt") || strstr(tape, "st")) &&
-		    sscanf(tape, "%*[a-zA-Z/]%d", &unit) == 1 &&
-		    (unit & MT_NOREWIND))
-			rewind = 0;
-		else
-			rewind = 1;
-	} else {
-		if (fstat64(f, &sbuf) < 0) {
-			msg(gettext(
-			    "Cannot obtain status of output device `%s'\n"),
-				tape);
-			dumpabort();
-			/*NOTREACHED*/
-		}
-		rewind = minor(sbuf.st_rdev) & MT_NOREWIND ? 0 : 1;
+	if (fstat64(f, &sbuf) < 0) {
+		msg(gettext(
+		    "Cannot obtain status of output device `%s'\n"),
+		    tape);
+		dumpabort();
+		/*NOTREACHED*/
 	}
+	rewind = minor(sbuf.st_rdev) & MT_NOREWIND ? 0 : 1;
 	return (rewind);
 }
 
@@ -1153,19 +1115,13 @@ just_rewind()
 		 * Space to the end of the tape.
 		 * Backup first in case we already read the EOF.
 		 */
-		if (host) {
-			(void) rmtioctl(MTBSR, 1);
-			if (rmtioctl(MTEOM, 1) < 0)
-				(void) rmtioctl(MTFSF, 1);
-		} else {
-			static struct mtop bsr = { MTBSR, 1 };
-			static struct mtop eom = { MTEOM, 1 };
-			static struct mtop fsf = { MTFSF, 1 };
+		static struct mtop bsr = { MTBSR, 1 };
+		static struct mtop eom = { MTEOM, 1 };
+		static struct mtop fsf = { MTFSF, 1 };
 
-			(void) ioctl(to, MTIOCTOP, &bsr);
-			if (ioctl(to, MTIOCTOP, &eom) < 0)
-				(void) ioctl(to, MTIOCTOP, &fsf);
-		}
+		(void) ioctl(to, MTIOCTOP, &bsr);
+		if (ioctl(to, MTIOCTOP, &eom) < 0)
+			(void) ioctl(to, MTIOCTOP, &fsf);
 	}
 
 	/*
@@ -1190,12 +1146,7 @@ trewind()
 		close_rewind();
 	} else {
 		just_rewind();
-		if (host)
-			rmtclose();
-		else {
-			(void) close(to);
-			to = -1;
-		}
+		(void) close(to);
 	}
 }
 
@@ -1220,21 +1171,15 @@ close_rewind()
 		/* tape is probably rewinding */
 		msg(rewinding);
 	}
-	if (host) {
-		if (offline || autoload)
-			(void) rmtioctl(MTOFFL, 0);
-		rmtclose();
-	} else {
-		if (offline || autoload) {
-			static struct mtop offl = { MTOFFL, 0 };
+	if (offline || autoload) {
+		static struct mtop offl = { MTOFFL, 0 };
 
-			(void) ioctl(to, MTIOCTOP, &offl);
-			if (diskette)
-				(void) ioctl(to, FDEJECT, 0);
-		}
-		(void) close(to);
-		to = -1;
+		(void) ioctl(to, MTIOCTOP, &offl);
+		if (diskette)
+			(void) ioctl(to, FDEJECT, 0);
 	}
+	(void) close(to);
+	to = -1;
 }
 
 void
@@ -1253,23 +1198,6 @@ changevol()
 	filenum = 1;
 	nextdevice();
 	(void) strcpy(spcl.c_label, tlabel);
-	if (host) {
-		char	*rhost = host;
-		char	*cp = strchr(host, '@');
-		if (cp == NULL)
-			cp = host;
-		else
-			cp++;
-
-		if (rmthost(rhost, ntrec) == 0) {
-			msg(gettext("Cannot connect to tape host `%s'\n"), cp);
-			dumpabort();
-			/*NOTREACHED*/
-		}
-		if (rhost != host)
-			free(rhost);
-	}
-
 	/*
 	 * Make volume switching as automatic as possible
 	 * while avoiding overwriting volumes.  We will
@@ -1303,22 +1231,15 @@ changevol()
 		 * Exabyte 8200 under 2.7 on an Ultra 2).
 		 */
 		for (tries = 0; tries < autoload_tries; tries++) {
-			if (host) {
-				if (rmtopen(tape, O_RDONLY) >= 0) {
-					rmtclose();
-					return;
-				}
-			} else {
-				int f, m;
+			int f, m;
 
-				m = (access(tape, F_OK) == 0) ? 0 : O_CREAT;
-				if ((f = doingverify ?
-				    safe_device_open(tape, O_RDONLY, 0600) :
-				    safe_device_open(tape, O_RDONLY|m, 0600))
-				    >= 0) {
-					(void) close(f);
-					return;
-				}
+			m = (access(tape, F_OK) == 0) ? 0 : O_CREAT;
+			if ((f = doingverify ?
+			    safe_device_open(tape, O_RDONLY, 0600) :
+			    safe_device_open(tape, O_RDONLY|m, 0600))
+			    >= 0) {
+				(void) close(f);
+				return;
 			}
 			(void) sleep(autoload_period);
 		}
@@ -1530,8 +1451,7 @@ restore_check_point:
 		    dumpdev);
 		if (doingverify) {
 			/* 1 for stdout */
-			while ((to = host ? rmtopen(tape, O_RDONLY) :
-			    pipeout ? 1 :
+			while ((to = pipeout ? 1 :
 			    safe_device_open(tape, O_RDONLY, 0600)) < 0) {
 				perror(tape);
 				if (autoload) {
@@ -1555,21 +1475,14 @@ restore_check_point:
 			 * reverse direction and one in the forward
 			 * direction) before the verify pass.
 			 */
-			if (host) {
-				if (rmtioctl(MTBSF, 2) >= 0)
-					(void) rmtioctl(MTFSF, 1);
-				else
-					(void) rmtioctl(MTNBSF, 1);
-			} else {
-				static struct mtop bsf = { MTBSF, 2 };
-				static struct mtop fsf = { MTFSF, 1 };
-				static struct mtop nbsf = { MTNBSF, 1 };
+			static struct mtop bsf = { MTBSF, 2 };
+			static struct mtop fsf = { MTFSF, 1 };
+			static struct mtop nbsf = { MTNBSF, 1 };
 
-				if (ioctl(to, MTIOCTOP, &bsf) >= 0)
-					(void) ioctl(to, MTIOCTOP, &fsf);
-				else
-					(void) ioctl(to, MTIOCTOP, &nbsf);
-			}
+			if (ioctl(to, MTIOCTOP, &bsf) >= 0)
+				(void) ioctl(to, MTIOCTOP, &fsf);
+			else
+				(void) ioctl(to, MTIOCTOP, &nbsf);
 		} else {
 			/*
 			 * XXX Add logic to test for "tape" being a
@@ -1594,8 +1507,8 @@ restore_check_point:
 					(void) sigvec(SIGALRM, &sv, &osv);
 					(void) alarm(15);
 				}
-				while ((to = host ? rmtopen(tape, O_WRONLY) :
-				    safe_device_open(tape, O_WRONLY, 0600)) < 0)
+				while ((to = safe_device_open(tape, O_WRONLY,
+				    0600)) < 0)
 					(void) sleep(10);
 				(void) alarm(0);
 				(void) sigvec(SIGALRM, &osv,
@@ -1609,10 +1522,8 @@ restore_check_point:
 				 */
 				if (pipeout)
 					to = 1;
-				else while ((to = host ?
-				    rmtopen(tape, O_WRONLY) :
-				    safe_device_open(tape, O_WRONLY|m, 0600))
-				    < 0)
+				else while ((to = safe_device_open(tape,
+				    O_WRONLY|m, 0600)) < 0)
 					if (!query_once(buf, 1)) {
 						dumpabort();
 						/*NOTREACHED*/
@@ -1620,8 +1531,7 @@ restore_check_point:
 			}
 		}
 		if (!pipeout) {
-			tapeout = host ? rmtstatus(&mt) >= 0 :
-			    ioctl(to, MTIOCGET, &mt) >= 0;	/* set state */
+			tapeout = ioctl(to, MTIOCGET, &mt) >= 0;	/* set state */
 			/*
 			 * Make sure the tape is positioned
 			 * where it is supposed to be
@@ -2074,21 +1984,13 @@ dowrite(int cmd)
 
 		tp = begin->b_data;
 		(void) sighold(SIGUSR1);
-		if (host) {
-			if (!doingverify)
-				siz = rmtwrite(tp, writesize);
-			else if ((siz = rmtread(rbuf, writesize)) ==
-			    writesize && bcmp(rbuf, tp, writesize))
-				siz = -1;
-		} else {
-			if (!doingverify)
-				siz = write(to, tp, writesize);
-			else if ((siz = read(to, rbuf, writesize)) ==
-			    writesize && bcmp(rbuf, tp, writesize))
-				siz = -1;
-			if (siz < 0 && diskette && errno == ENOSPC)
-				siz = 0;	/* really EOF */
-		}
+		if (!doingverify)
+			siz = write(to, tp, writesize);
+		else if ((siz = read(to, rbuf, writesize)) ==
+		    writesize && bcmp(rbuf, tp, writesize))
+			siz = -1;
+		if (siz < 0 && diskette && errno == ENOSPC)
+			siz = 0;	/* really EOF */
 		(void) sigrelse(SIGUSR1);
 		if (siz < 0 ||
 		    (pipeout && siz != writesize)) {
@@ -2406,8 +2308,7 @@ positiontape(char *msgbuf)
 	 * To avoid writing tape marks at inappropriate places, we open the
 	 * device read-only, position it, close it, and reopen it for writing.
 	 */
-	while ((to = host ? rmtopen(tape, O_RDONLY) :
-	    safe_device_open(tape, O_RDONLY|m, 0600)) < 0) {
+	while ((to = safe_device_open(tape, O_RDONLY|m, 0600)) < 0) {
 		if (autoload) {
 			if (!query_once(msgbuf, 1)) {
 				dumpabort();
@@ -2421,33 +2322,19 @@ positiontape(char *msgbuf)
 		}
 	}
 
-	if (host) {
-		if (rmtstatus(&mt) >= 0 &&
-		    rmtioctl(MTREW, 1) >= 0 &&
-		    filenum > 1) {
-			msg(info, dumpdev, filenum);
-			if (rmtioctl(MTFSF, filenum-1) < 0) {
-				msg(fail, filenum);
-				dumpabort();
-				/*NOTREACHED*/
-			}
+	if (ioctl(to, MTIOCGET, &mt) >= 0 &&
+	    ioctl(to, MTIOCTOP, &rew) >= 0 &&
+	    filenum > 1) {
+		msg(info, dumpdev, filenum);
+		fsf.mt_count = filenum - 1;
+		if (ioctl(to, MTIOCTOP, &fsf) < 0) {
+			msg(fail, filenum);
+			dumpabort();
+			/*NOTREACHED*/
 		}
-		rmtclose();
-	} else {
-		if (ioctl(to, MTIOCGET, &mt) >= 0 &&
-		    ioctl(to, MTIOCTOP, &rew) >= 0 &&
-		    filenum > 1) {
-			msg(info, dumpdev, filenum);
-			fsf.mt_count = filenum - 1;
-			if (ioctl(to, MTIOCTOP, &fsf) < 0) {
-				msg(fail, filenum);
-				dumpabort();
-				/*NOTREACHED*/
-			}
-		}
-		(void) close(to);
-		to = -1;
 	}
+	(void) close(to);
+	to = -1;
 
 	free(info);
 	free(fail);

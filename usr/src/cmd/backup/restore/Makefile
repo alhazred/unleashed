@@ -33,7 +33,7 @@ POFILE=		ufsrestore.po
 # XXX automatically generate the list when needed.
 HEADERS=	../../../../../include/protocols/dumprestore.h \
 	../include/byteorder.h ../include/memutils.h \
-	../include/rmt.h restore.h
+	restore.h
 
 CLOBBERFILES +=	$(PRODUCT) $(DEBUGPRODUCTS)
 

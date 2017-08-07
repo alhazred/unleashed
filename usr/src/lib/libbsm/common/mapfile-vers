@@ -214,15 +214,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	audit_reboot_fail;
 	audit_reboot_setup;
 	audit_reboot_success;
-	audit_rexd_fail;
-	audit_rexd_setup;
-	audit_rexd_success;
-	audit_rexecd_fail;
-	audit_rexecd_setup;
-	audit_rexecd_success;
-	audit_rshd_fail;
-	audit_rshd_setup;
-	audit_rshd_success;
 	audit_settid;
 	audit_shutdown_fail;
 	audit_shutdown_setup;
