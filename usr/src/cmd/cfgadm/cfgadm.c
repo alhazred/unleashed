@@ -678,8 +678,6 @@ confirm_interactive(
 	void *appdata_ptr,
 	const char *message)
 {
-	static char yeschr[YESNO_STR_MAX + 2];
-	static char nochr[YESNO_STR_MAX + 2];
 	static int inited = 0;
 
 	/*
@@ -688,11 +686,9 @@ confirm_interactive(
 	 * but this function is generalized for the future.
 	 */
 	if (!inited) {
-		(void) strncpy(yeschr, nl_langinfo(YESSTR), YESNO_STR_MAX + 1);
-		(void) strncpy(nochr, nl_langinfo(NOSTR), YESNO_STR_MAX + 1);
+		init_yes();
 		inited = 1;
 	}
-
 
 	(void) fprintf(stderr, "%s? ", message);
 	return (yes());
