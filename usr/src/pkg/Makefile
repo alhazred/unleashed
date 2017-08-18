@@ -141,9 +141,9 @@ $(PDIR)/developer-build-onbld.dep:= PKGROOT= $(TOOLSROOT)
 # this in your environment.  This setting has no impact on tools that
 # don't examine packaging versions.
 #
-PKGVERS_COMPONENT= 0.5.11
+PKGVERS_COMPONENT= 1.0
 PKGVERS_BUILTON= 5.11
-PKGVERS_BRANCH= -2017.20
+PKGVERS_BRANCH=
 PKGVERS= $(PKGVERS_COMPONENT),$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 
 #

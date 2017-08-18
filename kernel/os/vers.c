@@ -25,7 +25,7 @@
 struct utsname utsname = {
 	.sysname = "Unleashed",
 	.nodename = "",
-	.release = "11.0",
+	.release = "1.0",
 	.version = UTS_VERSION,
 	.machine = UTS_PLATFORM,
 };
