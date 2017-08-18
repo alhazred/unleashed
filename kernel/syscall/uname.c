@@ -44,23 +44,20 @@ int
 uname(struct utsname *buf)
 {
 	const char *name_to_use = uts_nodename();
-	const struct utsname *info;
 
-	info = utsname_get();
-
-	if (copyout(info->sysname, buf->sysname, strlen(info->sysname) + 1))
+	if (copyout(utsname.sysname, buf->sysname, strlen(utsname.sysname) + 1))
 		return (set_errno(EFAULT));
 
 	if (copyout(name_to_use, buf->nodename, strlen(name_to_use)+1))
 		return (set_errno(EFAULT));
 
-	if (copyout(info->release, buf->release, strlen(info->release) + 1))
+	if (copyout(utsname.release, buf->release, strlen(utsname.release) + 1))
 		return (set_errno(EFAULT));
 
-	if (copyout(info->version, buf->version, strlen(info->version) + 1))
+	if (copyout(utsname.version, buf->version, strlen(utsname.version) + 1))
 		return (set_errno(EFAULT));
 
-	if (copyout(info->machine, buf->machine, strlen(info->machine) + 1))
+	if (copyout(utsname.machine, buf->machine, strlen(utsname.machine) + 1))
 		return (set_errno(EFAULT));
 
 	return (0);

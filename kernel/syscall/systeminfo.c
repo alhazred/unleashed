@@ -68,19 +68,19 @@ systeminfo(int command, char *buf, long count)
 	 */
 	switch (command) {
 	case SI_SYSNAME:
-		kstr = utsname_get()->sysname;
+		kstr = utsname.sysname;
 		break;
 	case SI_HOSTNAME:
 		kstr = uts_nodename();
 		break;
 	case SI_RELEASE:
-		kstr = utsname_get()->release;
+		kstr = utsname.release;
 		break;
 	case SI_VERSION:
-		kstr = utsname_get()->version;
+		kstr = utsname.version;
 		break;
 	case SI_MACHINE:
-		kstr = utsname_get()->machine;
+		kstr = utsname.machine;
 		break;
 #ifdef _LP64
 	case SI_ARCHITECTURE_64:

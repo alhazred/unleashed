@@ -30,12 +30,6 @@ struct utsname utsname = {
 	.machine = UTS_PLATFORM,
 };
 
-const struct utsname *
-utsname_get(void)
-{
-	return &utsname;
-}
-
 void utsname_set_machine(const char *machine)
 {
 	strncpy(utsname.machine, machine, _SYS_NMLN);
