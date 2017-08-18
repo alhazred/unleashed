@@ -19,7 +19,7 @@
 # information about overriding the defaults.
 #
 set name=pkg.fmri \
-    value=pkg:/system/ficl@4.1.0,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
+    value=pkg:/system/ficl@4.1.0,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 set name=pkg.description value="Forth Inspired Command Language"
 set name=pkg.summary value="FICL Forth Implementation"
 set name=info.classification value=org.opensolaris.category.2008:System/Core

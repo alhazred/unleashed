@@ -13,7 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 set name=pkg.fmri \
-    value=pkg:/library/libressl@2.5.4,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
+    value=pkg:/library/libressl@2.5.4,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 set name=pkg.description \
     value="LibreSSL - TLS/crypto stack forked from OpenSSL"
 set name=pkg.summary value="LibreSSL - TLS/crypto stack forked from OpenSSL"

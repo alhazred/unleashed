@@ -25,7 +25,7 @@
 #
 
 set name=pkg.fmri \
-    value=pkg:/service/network/smtp/sendmail@8.14.4,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
+    value=pkg:/service/network/smtp/sendmail@8.14.4,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 set name=pkg.obsolete value=true
 set name=org.opensolaris.noincorp value=true
 set name=variant.arch value=$(ARCH)

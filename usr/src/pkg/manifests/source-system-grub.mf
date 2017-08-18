@@ -26,7 +26,7 @@
 #
 
 set name=pkg.fmri \
-    value=pkg:/source/system/grub@0.97,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
+    value=pkg:/source/system/grub@0.97,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 set name=pkg.description value="Source for GNU GRUB"
 set name=pkg.obsolete value=true
 set name=pkg.summary \

@@ -28,7 +28,7 @@
 <transform file path=.*\.(pm|bs) -> default mode 0444>
 <transform file path=.*\.so -> default mode 0555>
 set name=pkg.fmri \
-    value=pkg:/runtime/perl$(PERL_PKGVERS)/module/sun-solaris@0.5.11,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
+    value=pkg:/runtime/perl$(PERL_PKGVERS)/module/sun-solaris@0.5.11,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 set name=pkg.summary value="Perl $(PERL_VERSION) Sun::Solaris Modules"
 set name=info.classification \
     value=org.opensolaris.category.2008:Development/Perl

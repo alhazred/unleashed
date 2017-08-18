@@ -30,7 +30,7 @@
 #
 <include global_zone_only_component>
 set name=pkg.fmri \
-    value=pkg:/system/boot/grub@0.97,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
+    value=pkg:/system/boot/grub@0.97,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 $(sparc_ONLY)set name=pkg.description value="GRUB libraries"
 $(i386_ONLY)set name=pkg.description value="Multiboot Boot Loader"
 set name=pkg.obsolete value=true
