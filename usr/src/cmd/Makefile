@@ -189,7 +189,6 @@ COMMON_SUBDIRS=		\
 	hotplugd	\
 	ibd_upgrade	\
 	iconv		\
-	id		\
 	idmap		\
 	infocmp		\
 	init		\
@@ -551,7 +550,6 @@ MSGSUBDIRS=		\
 	hostname	\
 	hotplug		\
 	iconv		\
-	id		\
 	idmap		\
 	isaexec		\
 	iscsiadm	\

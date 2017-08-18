@@ -48,7 +48,6 @@ file path=usr/xpg4/bin/expr mode=0555
 file path=usr/xpg4/bin/find mode=0555
 file path=usr/xpg4/bin/getconf mode=0555
 file path=usr/xpg4/bin/grep mode=0555
-file path=usr/xpg4/bin/id mode=0555
 file path=usr/xpg4/bin/link mode=0555
 file path=usr/xpg4/bin/ls mode=0555
 file path=usr/xpg4/bin/m4 mode=0555

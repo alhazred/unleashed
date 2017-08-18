@@ -71,7 +71,7 @@ main(int argc, char *argv[])
 	gid_t *idp;
 	uid_t uid, euid;
 	gid_t gid, egid, prgid;
-	int c, aflag = 0, project_flag = 0;
+	int c, project_flag = 0;
 	struct passwd *pwp;
 	int i, j;
 	int groupmax = sysconf(_SC_NGROUPS_MAX);
@@ -85,7 +85,7 @@ main(int argc, char *argv[])
 #define	TEXT_DOMAIN "SYS_TEST"
 #endif
 	(void) textdomain(TEXT_DOMAIN);
-	while ((c = getopt(argc, argv, "Ggunarp")) != EOF) {
+	while ((c = getopt(argc, argv, "Ggunrp")) != EOF) {
 		switch (c) {
 			case 'G':
 				if (mode != CURR)
@@ -97,10 +97,6 @@ main(int argc, char *argv[])
 				if (mode != CURR)
 					return (usage());
 				mode = GROUP;
-				break;
-
-			case 'a':
-				aflag++;
 				break;
 
 			case 'n':
@@ -133,12 +129,12 @@ main(int argc, char *argv[])
 
 	/* -n and -r must be combined with one of -[Ggu] */
 	/* -r cannot be combined with -G */
-	/* -a and -p cannot be combined with -[Ggu] */
+	/* -p cannot be combined with -[Ggu] */
 
 	if ((mode == CURR && (nflag || rflag)) ||
 		(mode == ALLGROUPS && rflag) ||
 		(argc != 1 && argc != 2) ||
-		(mode != CURR && (project_flag || aflag)))
+		(mode != CURR && project_flag))
 		return (usage());
 	if (argc == 2) {
 		if ((pwp = getpwnam(argv[1])) == PWNULL) {
@@ -193,65 +189,27 @@ main(int argc, char *argv[])
 		if (gid != egid)
 			prid(EGID, egid);
 
-		if (aflag) {
-			if (user)
-				i = getusergroups(groupmax, groupids, user,
-				    prgid);
-			else
-				i = getgroups(groupmax, groupids);
-			if (i == -1)
-				perror("getgroups");
-			else if (i > 0) {
-				(void) printf(" groups=");
-				for (idp = groupids; i--; idp++) {
-					(void) printf("%u", *idp);
-					if (gr = getgrgid(*idp))
-						(void) printf("(%s)",
-							gr->gr_name);
-					if (i)
-						(void) putchar(',');
-				}
+		if (user)
+			i = getusergroups(groupmax, groupids, user,
+			    prgid);
+		else
+			i = getgroups(groupmax, groupids);
+		if (i == -1)
+			perror("getgroups");
+		else if (i > 1) {
+			(void) printf(" groups=");
+			for (idp = groupids; i--; idp++) {
+				if (*idp == egid)
+					continue;
+				(void) printf("%u", *idp);
+				if (gr = getgrgid(*idp))
+					(void) printf("(%s)",
+						gr->gr_name);
+				if (i)
+					(void) putchar(',');
 			}
 		}
-#ifdef XPG4
-		/*
-		 * POSIX requires us to show all supplementary groups
-		 * groups other than the effective group already listed.
-		 *
-		 * This differs from -a above, because -a always shows
-		 * all groups including the effective group in the group=
-		 * line.
-		 *
-		 * It would be simpler if SunOS could just adopt this
-		 * POSIX behavior, as it is so incredibly close to the
-		 * the norm already.
-		 *
-		 * Then the magic -a flag could just indicate whether or
-		 * not we are suppressing the effective group id.
-		 */
-		else {
-			if (user)
-				i = getusergroups(groupmax, groupids, user,
-				    prgid);
-			else
-				i = getgroups(groupmax, groupids);
-			if (i == -1)
-				perror("getgroups");
-			else if (i > 1) {
-				(void) printf(" groups=");
-				for (idp = groupids; i--; idp++) {
-					if (*idp == egid)
-						continue;
-					(void) printf("%u", *idp);
-					if (gr = getgrgid(*idp))
-						(void) printf("(%s)",
-							gr->gr_name);
-					if (i)
-						(void) putchar(',');
-				}
-			}
-		}
-#endif
+
 		if (project_flag) {
 			struct project proj;
 			void *projbuf;
@@ -296,9 +254,10 @@ static int
 usage()
 {
 	(void) fprintf(stderr, gettext(
-	    "Usage: id [-ap] [user]\n"
+	    "Usage: id [user]\n"
 	    "       id -G [-n] [user]\n"
 	    "       id -g [-nr] [user]\n"
+	    "       id -p [user]\n"
 	    "       id -u [-nr] [user]\n"));
 	return (2);
 }
