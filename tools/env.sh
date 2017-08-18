@@ -117,7 +117,7 @@ export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
 # PKGPUBLISHER controls the publisher setting for the repository.
 #
 export PKGARCHIVE="${CODEMGR_WS}/packages/${MACH}/nightly"
-export PKGPUBLISHER='unleashed'
+#export PKGPUBLISHER='unleashed'
 
 # Package manifest format version.
 export PKGFMT_OUTPUT='v1'
