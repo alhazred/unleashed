@@ -153,7 +153,7 @@ ip_anon_register(rcm_handle_t *hdl)
 	struct ifaddrlist *al = NULL, *al6 = NULL;
 	char errbuf[ERRBUFSIZE];
 	char treg[IP_REG_SIZE], tstr[IP_REG_SIZE];
-	int num_ifs, num_ifs6,  i, ret;
+	int num_ifs, num_ifs6,  i;
 	ip_status_t *tlist, *tentry;
 
 	(void) mutex_lock(&ip_list_lock);

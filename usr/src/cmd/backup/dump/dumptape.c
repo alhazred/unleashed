@@ -1068,8 +1068,6 @@ int
 isrewind(int f)
 {
 	struct stat64 sbuf;
-	char    *c;
-	int	unit;
 	int	rewind;
 
 	if (fstat64(f, &sbuf) < 0) {

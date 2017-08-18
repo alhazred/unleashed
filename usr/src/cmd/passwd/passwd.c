@@ -1415,7 +1415,6 @@ static struct spwd *
 _lc_getspent_r(struct spwd *result, char *buffer, int buflen)
 {
 	nss_XbyY_args_t arg;
-	char		*nam;
 
 	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2spwd);
 	/* No key to fill in */

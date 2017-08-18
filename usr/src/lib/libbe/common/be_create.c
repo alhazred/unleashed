@@ -1610,7 +1610,6 @@ _be_destroy(const char *root_ds, be_destroy_data_t *dd)
 static int
 be_destroy_zones(char *be_name, char *be_root_ds, be_destroy_data_t *dd)
 {
-	int		i;
 	int		ret = BE_SUCCESS;
 	int		force_umnt = BE_UNMOUNT_FLAG_NULL;
 	char		*zonepath_ds = NULL;
@@ -1857,7 +1856,7 @@ be_destroy_zone_roots_callback(zfs_handle_t *zhp, void *data)
 static int
 be_copy_zones(char *obe_name, char *obe_root_ds, char *nbe_root_ds)
 {
-	int		i, num_retries;
+	int		num_retries;
 	int		ret = BE_SUCCESS;
 	int		iret = 0;
 	char		*zone_be_name = NULL;

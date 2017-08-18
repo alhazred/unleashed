@@ -2289,7 +2289,6 @@ static int
 be_mount_zones(zfs_handle_t *be_zhp, be_mount_data_t *md)
 {
 	char		*zonepath_ds = NULL;
-	int		k;
 	int		ret = BE_SUCCESS;
 	FILE *cookie;
 	struct zoneent *ze;
@@ -2364,7 +2363,6 @@ be_unmount_zones(be_unmount_data_t *ud)
 {
 	char		alt_zonepath[MAXPATHLEN];
 	char		*zonepath_ds = NULL;
-	int		k;
 	int		ret = BE_SUCCESS;
 	FILE		*cookie;
 	struct zoneent	*ze;

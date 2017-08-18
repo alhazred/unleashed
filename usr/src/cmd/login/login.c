@@ -263,11 +263,6 @@ static	char	remote_host[HMAX];
 static	char	zone_name[ZONENAME_MAX];
 
 /*
- * Illegal passwd entries.
- */
-static	struct	passwd nouser = { "", "no:password", (uid_t)-1 };
-
-/*
  * Log file support
  */
 static	char	*log_entry[LOGTRYS];
@@ -356,9 +351,7 @@ static	void	exec_the_shell(void);
 static	int	process_chroot_logins(void);
 static 	void	chdir_to_dir_user(void);
 static	void	validate_account(void);
-static	void	doremoteterm(char *);
 static	int	get_options(int, char **);
-static	void	getstr(char *, int, char *);
 static 	int	legalenvvar(char *);
 static	void	check_for_console(void);
 static	void	check_for_dueling_unix(char *);
@@ -1204,28 +1197,6 @@ legalenvvar(char *s)
 	return (1);
 }
 
-
-/*
- * getstr		- Get a string from standard input
- *			  Calls exit if read(2) fails.
- */
-
-static void
-getstr(char *buf, int cnt, char *err)
-{
-	char c;
-
-	do {
-		if (read(0, &c, 1) != 1)
-			login_exit(1);
-		*buf++ = c;
-	} while (--cnt > 1 && c != 0);
-
-	*buf = 0;
-	err = err; 	/* For lint */
-}
-
-
 /*
  * defaults 		- read defaults
  */
@@ -1487,49 +1458,6 @@ usage(void)
 
 }
 
-/*
- * doremoteterm		- Sets the appropriate ioctls for a remote terminal
- */
-static char	*speeds[] = {
-	"0", "50", "75", "110", "134", "150", "200", "300",
-	"600", "1200", "1800", "2400", "4800", "9600", "19200", "38400",
-	"57600", "76800", "115200", "153600", "230400", "307200", "460800",
-	"921600"
-};
-
-#define	NSPEEDS	(sizeof (speeds) / sizeof (speeds[0]))
-
-
-static void
-doremoteterm(char *term)
-{
-	struct termios tp;
-	char *cp = strchr(term, '/'), **cpp;
-	char *speed;
-
-	(void) ioctl(0, TCGETS, &tp);
-
-	if (cp) {
-		*cp++ = '\0';
-		speed = cp;
-		cp = strchr(speed, '/');
-
-		if (cp)
-			*cp++ = '\0';
-
-		for (cpp = speeds; cpp < &speeds[NSPEEDS]; cpp++)
-			if (strcmp(*cpp, speed) == 0) {
-				(void) cfsetospeed(&tp, cpp-speeds);
-				break;
-			}
-	}
-
-	tp.c_lflag |= ECHO|ICANON;
-	tp.c_iflag |= IGNPAR|ICRNL;
-
-	(void) ioctl(0, TCSETS, &tp);
-
-}
 
 /*
  *		*** Account validation routines ***

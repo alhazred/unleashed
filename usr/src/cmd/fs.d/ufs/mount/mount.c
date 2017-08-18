@@ -94,7 +94,6 @@ static void	enable_logging(char *, char *);
 static void	fixopts(struct mnttab *, char *);
 static void	mountfs(struct mnttab *);
 static void	replace_opts(char *, int, char *, char *);
-static int	replace_opts_dflt(char *, int, const char *, const char *);
 static void	rmopt(struct mnttab *, char *);
 static void	rpterr(char *, char *);
 static void	usage(void);
@@ -727,71 +726,6 @@ replace_opts(char *options, int flag, char *trueopt, char *falseopt)
 	}
 }
 
-/*
- * "trueopt" and "falseopt" are two settings of a Boolean option and "dflt" is
- * a default value for the option.  Rewrite the contents of options to include
- * only the last mentioned occurrence of trueopt and falseopt.  If neither is
- * mentioned, append one or the other to options, according to the value of
- * dflt.  Return the resulting value of the option in boolean form.
- *
- * Note that the routine is implemented to have the resulting occurrence of
- * trueopt or falseopt appear at the end of the resulting option string.
- *
- * N.B.	This routine should take the place of replace_opts, but there are
- *	probably some compatibility issues to resolve before doing so.  It
- *	should certainly be used to handle new options that don't have
- *	compatibility issues.
- */
-static int
-replace_opts_dflt(
-	char *options,
-	int dflt,
-	const char *trueopt,
-	const char *falseopt)
-{
-	char *f;
-	char *tmpoptsp;
-	int last;
-	char tmptopts[MNTMAXSTR];
-
-	/*
-	 * Transfer the contents of options to tmptopts, in anticipation of
-	 * copying a subset of the contents back to options.
-	 */
-	(void) strcpy(tmptopts, options);
-	tmpoptsp = tmptopts;
-	(void) strcpy(options, "");
-
-	/*
-	 * Loop over each option value, copying non-matching values back into
-	 * options and updating the last seen occurrence of trueopt or
-	 * falseopt.
-	 */
-	last = dflt;
-	for (f = getnextopt(&tmpoptsp); *f; f = getnextopt(&tmpoptsp)) {
-		/* Check for both forms of the option of interest. */
-		if (strcmp(f, trueopt) == 0) {
-			last = 1;
-		} else if (strcmp(f, falseopt) == 0) {
-			last = 0;
-		} else {
-			/* Not what we're looking for; transcribe. */
-			if (options[0] != '\0')
-				(void) strcat(options, ",");
-			(void) strcat(options, f);
-		}
-	}
-
-	/*
-	 * Transcribe the correct form of the option of interest, using the
-	 * default value if it wasn't overwritten above.
-	 */
-	if (options[0] != '\0')
-		(void) strcat(options, ",");
-	(void) strcat(options, last ? trueopt : falseopt);
-
-	return (last);
-}
 
 static void
 rpterr(char *bs, char *mp)

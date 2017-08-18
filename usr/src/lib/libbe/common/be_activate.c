@@ -992,7 +992,6 @@ be_promote_zone_ds(char *be_name, char *be_root_ds)
 	zfs_handle_t	*zhp = NULL;
 	zfs_handle_t	*z_zhp = NULL;
 	boolean_t	be_mounted = B_FALSE;
-	int		zone_index = 0;
 	int		err = BE_SUCCESS;
 	FILE 		*cookie;
 	struct zoneent	*ze;
