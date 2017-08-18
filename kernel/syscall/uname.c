@@ -48,20 +48,20 @@ uname(struct utsname *buf)
 
 	info = utsname_get();
 
-	if (copyout(info->sysname, buf->sysname, strlen(info->sysname) + 1)) {
+	if (copyout(info->sysname, buf->sysname, strlen(info->sysname) + 1))
 		return (set_errno(EFAULT));
-	}
-	if (copyout(name_to_use, buf->nodename, strlen(name_to_use)+1)) {
+
+	if (copyout(name_to_use, buf->nodename, strlen(name_to_use)+1))
 		return (set_errno(EFAULT));
-	}
-	if (copyout(info->release, buf->release, strlen(info->release) + 1)) {
+
+	if (copyout(info->release, buf->release, strlen(info->release) + 1))
 		return (set_errno(EFAULT));
-	}
-	if (copyout(info->version, buf->version, strlen(info->version) + 1)) {
+
+	if (copyout(info->version, buf->version, strlen(info->version) + 1))
 		return (set_errno(EFAULT));
-	}
-	if (copyout(info->machine, buf->machine, strlen(info->machine) + 1)) {
+
+	if (copyout(info->machine, buf->machine, strlen(info->machine) + 1))
 		return (set_errno(EFAULT));
-	}
+
 	return (0);
 }
