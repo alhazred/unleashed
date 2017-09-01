@@ -528,7 +528,7 @@ segkp_get_internal(
 			}
 			pp = pl[0];
 		} else {
-			ASSERT(page_exists(&kvp,
+			ASSERT(page_exists(&kvp.v_object,
 			    (uoff_t)(uintptr_t)va) == NULL);
 
 			if ((pp = page_create_va(&kvp.v_object,
