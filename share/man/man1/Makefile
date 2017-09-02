@@ -83,7 +83,6 @@ MAN = acctcom.1 \
       dump.1 \
       dumpcs.1 \
       ed.1 \
-      egrep.1 \
       eject.1 \
       elfdump.1 \
       elfedit.1 \
@@ -99,7 +98,6 @@ MAN = acctcom.1 \
       exstr.1 \
       factor.1 \
       fdformat.1 \
-      fgrep.1 \
       filesync.1 \
       find.1 \
       finger.1 \
@@ -119,7 +117,6 @@ MAN = acctcom.1 \
       gettxt.1 \
       glob.1 \
       gprof.1 \
-      grep.1 \
       groups.1 \
       hash.1 \
       head.1 \

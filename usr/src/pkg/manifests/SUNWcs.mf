@@ -704,14 +704,12 @@ file path=usr/bin/dumpcs mode=0555
 file path=usr/bin/dumpkeys mode=0555
 file path=usr/bin/echo mode=0555
 file path=usr/bin/ed mode=0555
-file path=usr/bin/egrep mode=0555
 file path=usr/bin/eject mode=0555
 file path=usr/bin/env mode=0555
 file path=usr/bin/expr mode=0555
 file path=usr/bin/false mode=0555
 file path=usr/bin/fdetach mode=0555
 file path=usr/bin/fdformat mode=4555
-file path=usr/bin/fgrep mode=0555
 file path=usr/bin/find mode=0555
 file path=usr/bin/fmt mode=0555
 file path=usr/bin/fmtmsg mode=0555
@@ -1386,6 +1384,9 @@ hardlink path=usr/bin/$(ARCH64)/rksh target=ksh93
 hardlink path=usr/bin/$(ARCH64)/rksh93 target=ksh93
 hardlink path=usr/bin/$(ARCH64)/w target=uptime
 hardlink path=usr/bin/bg target=../../usr/bin/alias
+hardlink path=usr/bin/bzegrep target=../../usr/bin/grep
+hardlink path=usr/bin/bzfgrep target=../../usr/bin/grep
+hardlink path=usr/bin/bzgrep target=../../usr/bin/grep
 hardlink path=usr/bin/cd target=../../usr/bin/alias
 hardlink path=usr/bin/cksum target=../../usr/bin/alias
 hardlink path=usr/bin/cmp target=../../usr/bin/alias
@@ -1396,9 +1397,11 @@ hardlink path=usr/bin/decrypt target=../../usr/lib/isaexec
 hardlink path=usr/bin/digest target=../../usr/lib/isaexec
 hardlink path=usr/bin/dispgid target=../../usr/bin/ckgid
 hardlink path=usr/bin/dispuid target=../../usr/bin/ckuid
+hardlink path=usr/bin/egrep target=../../usr/bin/grep
 hardlink path=usr/bin/encrypt target=../../usr/lib/isaexec
 hardlink path=usr/bin/fc target=../../usr/bin/alias
 hardlink path=usr/bin/fg target=../../usr/bin/alias
+hardlink path=usr/bin/fgrep target=../../usr/bin/grep
 hardlink path=usr/bin/getopts target=../../usr/bin/alias
 hardlink path=usr/bin/hash target=../../usr/bin/alias
 hardlink path=usr/bin/jobs target=../../usr/bin/alias
@@ -1408,6 +1411,9 @@ hardlink path=usr/bin/ksh target=../../usr/lib/isaexec
 hardlink path=usr/bin/ksh93 target=../../usr/lib/isaexec
 hardlink path=usr/bin/ln target=../../usr/bin/cp
 hardlink path=usr/bin/logname target=../../usr/bin/alias
+hardlink path=usr/bin/lzegrep target=../../usr/bin/grep
+hardlink path=usr/bin/lzfgrep target=../../usr/bin/grep
+hardlink path=usr/bin/lzgrep target=../../usr/bin/grep
 hardlink path=usr/bin/mac target=../../usr/lib/isaexec
 hardlink path=usr/bin/mv target=../../usr/bin/cp
 hardlink path=usr/bin/newtask target=../../usr/lib/isaexec
@@ -1431,6 +1437,7 @@ hardlink path=usr/bin/ps target=../../usr/lib/isaexec
 hardlink path=usr/bin/read target=../../usr/bin/alias
 hardlink path=usr/bin/red target=../../usr/bin/ed
 hardlink path=usr/bin/rev target=../../usr/bin/alias
+hardlink path=usr/bin/rgrep target=../../usr/bin/grep
 hardlink path=usr/bin/rksh target=../../usr/lib/isaexec
 hardlink path=usr/bin/rksh93 target=../../usr/lib/isaexec
 hardlink path=usr/bin/savecore target=../../usr/lib/isaexec
@@ -1448,6 +1455,12 @@ hardlink path=usr/bin/uptime target=../../usr/lib/isaexec
 hardlink path=usr/bin/w target=../../usr/lib/isaexec
 hardlink path=usr/bin/wait target=../../usr/bin/alias
 hardlink path=usr/bin/wc target=../../usr/bin/alias
+hardlink path=usr/bin/xzegrep target=../../usr/bin/grep
+hardlink path=usr/bin/xzfgrep target=../../usr/bin/grep
+hardlink path=usr/bin/xzgrep target=../../usr/bin/grep
+hardlink path=usr/bin/zegrep target=../../usr/bin/grep
+hardlink path=usr/bin/zfgrep target=../../usr/bin/grep
+hardlink path=usr/bin/zgrep target=../../usr/bin/grep
 hardlink path=usr/lib/fs/hsfs/fstyp target=../../../sbin/fstyp
 hardlink path=usr/lib/fs/ufs/dcopy target=../../../../usr/lib/fs/ufs/clri
 hardlink path=usr/lib/fs/ufs/fstyp target=../../../sbin/fstyp

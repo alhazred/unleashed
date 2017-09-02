@@ -132,7 +132,6 @@ COMMON_SUBDIRS=		\
 	dumpcs		\
 	ed		\
 	eeprom		\
-	egrep		\
 	eject		\
 	emul64ioctl	\
 	enhance		\
@@ -148,7 +147,6 @@ COMMON_SUBDIRS=		\
 	fdisk		\
 	ficl		\
 	filesync	\
-	fgrep		\
 	find		\
 	flowadm		\
 	flowstat	\
@@ -174,8 +172,6 @@ COMMON_SUBDIRS=		\
 	getopt		\
 	gettext		\
 	gettxt		\
-	grep		\
-	grep_xpg4	\
 	groups		\
 	growfs		\
 	grpck		\
@@ -526,7 +522,6 @@ MSGSUBDIRS=		\
 	expand		\
 	expr		\
 	fcinfo		\
-	fgrep		\
 	filesync	\
 	find		\
 	flowadm		\
@@ -541,8 +536,6 @@ MSGSUBDIRS=		\
 	getent		\
 	gettext		\
 	gettxt		\
-	grep		\
-	grep_xpg4	\
 	grpck		\
 	gss		\
 	halt		\
