@@ -1557,7 +1557,7 @@ static void
 ts_tick(kthread_t *t)
 {
 	tsproc_t *tspp = (tsproc_t *)(t->t_cldata);
-	boolean_t call_cpu_surrender = B_FALSE;
+	bool call_cpu_surrender = false;
 	pri_t	oldpri = t->t_pri;
 
 	ASSERT(MUTEX_HELD(&(ttoproc(t))->p_lock));
@@ -1609,13 +1609,13 @@ ts_tick(kthread_t *t)
 				tspp->ts_timeleft =
 				    ts_dptbl[tspp->ts_cpupri].ts_quantum;
 			} else {
-				call_cpu_surrender = B_TRUE;
+				call_cpu_surrender = true;
 			}
 			TRACE_2(TR_FAC_DISP, TR_TICK,
 			    "tick:tid %p old pri %d", t, oldpri);
 		} else if (t->t_state == TS_ONPROC &&
 		    t->t_pri < t->t_disp_queue->disp_maxrunpri) {
-			call_cpu_surrender = B_TRUE;
+			call_cpu_surrender = true;
 		}
 	}
 

@@ -715,11 +715,11 @@ sysdc_update(void *arg)
 	mutex_enter(&sysdc_pset_lock);
 	for (cur = list_head(&sysdc_psets); cur != NULL;
 	    cur = list_next(&sysdc_psets, cur)) {
-		boolean_t breaking = (cur->sdp_should_break != 0);
+		bool breaking = (cur->sdp_should_break != 0);
 
 		if (cur->sdp_need_break != breaking) {
 			DTRACE_PROBE2(sdc__pset__break, sysdc_pset_t *, cur,
-			    boolean_t, breaking);
+			    bool, breaking);
 		}
 		cur->sdp_onproc_time = 0;
 		cur->sdp_onproc_threads = 0;

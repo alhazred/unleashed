@@ -351,7 +351,7 @@ static id_t	fss_cid;
 
 static int	fss_quantum = 11;
 
-static void	fss_newpri(fssproc_t *, boolean_t);
+static void	fss_newpri(fssproc_t *, bool);
 static void	fss_update(void *);
 static int	fss_update_list(int);
 static void	fss_change_priority(kthread_t *, fssproc_t *);
@@ -920,7 +920,7 @@ fss_init(id_t cid, int clparmsz, classfuncs_t **clfuncspp)
  * reset back to 1 and another runnable thread in the project can run.
  */
 static void
-fss_newpri(fssproc_t *fssproc, boolean_t quanta_up)
+fss_newpri(fssproc_t *fssproc, bool quanta_up)
 {
 	kthread_t *tp;
 	fssproj_t *fssproj;
@@ -1397,7 +1397,7 @@ fss_update_list(int i)
 				    fssproc);
 			goto next;
 		}
-		fss_newpri(fssproc, B_FALSE);
+		fss_newpri(fssproc, false);
 		updated = 1;
 
 		fss_umdpri = fssproc->fss_umdpri;
@@ -1930,7 +1930,7 @@ fss_forkret(kthread_t *t, kthread_t *ct)
 	thread_lock(t);
 
 	fssproc = FSSPROC(t);
-	fss_newpri(fssproc, B_FALSE);
+	fss_newpri(fssproc, false);
 	fssproc->fss_timeleft = fss_quantum;
 	t->t_pri = fssproc->fss_umdpri;
 	ASSERT(t->t_pri >= 0 && t->t_pri <= fss_maxglobpri);
@@ -2031,7 +2031,7 @@ fss_parmsset(kthread_t *t, void *parmsp, id_t reqpcid, cred_t *reqpcredp)
 	fssproc->fss_uprilim = reqfssuprilim;
 	fssproc->fss_upri = reqfssupri;
 	fssproc->fss_nice = nice;
-	fss_newpri(fssproc, B_FALSE);
+	fss_newpri(fssproc, false);
 
 	if ((fssproc->fss_flags & FSSKPRI) != 0) {
 		thread_unlock(t);
@@ -2347,8 +2347,8 @@ fss_tick(kthread_t *t)
 {
 	fssproc_t *fssproc;
 	fssproj_t *fssproj;
-	boolean_t call_cpu_surrender = B_FALSE;
-	boolean_t cpucaps_enforce = B_FALSE;
+	bool call_cpu_surrender = false;
+	bool cpucaps_enforce = false;
 
 	ASSERT(MUTEX_HELD(&(ttoproc(t))->p_lock));
 
@@ -2407,7 +2407,7 @@ fss_tick(kthread_t *t)
 			}
 			fssproc->fss_flags &= ~FSSRESTORE;
 
-			fss_newpri(fssproc, B_TRUE);
+			fss_newpri(fssproc, true);
 			new_pri = fssproc->fss_umdpri;
 			ASSERT(new_pri >= 0 && new_pri <= fss_maxglobpri);
 
@@ -2420,7 +2420,7 @@ fss_tick(kthread_t *t)
 			if (thread_change_pri(t, new_pri, 0)) {
 				fssproc->fss_timeleft = fss_quantum;
 			} else {
-				call_cpu_surrender = B_TRUE;
+				call_cpu_surrender = true;
 			}
 		} else if (t->t_state == TS_ONPROC &&
 		    t->t_pri < t->t_disp_queue->disp_maxrunpri) {
@@ -2429,7 +2429,7 @@ fss_tick(kthread_t *t)
 			 * waiting for a processor, then thread surrenders
 			 * the processor.
 			 */
-			call_cpu_surrender = B_TRUE;
+			call_cpu_surrender = true;
 		}
 	}
 
@@ -2442,7 +2442,7 @@ fss_tick(kthread_t *t)
 		 * queue so that it gets charged for the CPU time from its
 		 * quantum even before that quantum expires.
 		 */
-		fss_newpri(fssproc, B_FALSE);
+		fss_newpri(fssproc, false);
 		if (t->t_pri != fssproc->fss_umdpri)
 			fss_change_priority(t, fssproc);
 
@@ -2453,7 +2453,7 @@ fss_tick(kthread_t *t)
 		 * cpu-surrender again.
 		 */
 		if (!(fssproc->fss_flags & FSSBACKQ))
-			call_cpu_surrender = B_TRUE;
+			call_cpu_surrender = true;
 	}
 
 	if (call_cpu_surrender) {

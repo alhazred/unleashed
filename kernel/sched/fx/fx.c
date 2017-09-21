@@ -1239,7 +1239,7 @@ fx_stop(kthread_t *t, int why, int what)
 static void
 fx_tick(kthread_t *t)
 {
-	boolean_t call_cpu_surrender = B_FALSE;
+	bool call_cpu_surrender = false;
 	fxproc_t *fxpp;
 
 	ASSERT(MUTEX_HELD(&(ttoproc(t))->p_lock));
@@ -1305,11 +1305,11 @@ fx_tick(kthread_t *t)
 		if (thread_change_pri(t, new_pri, 0)) {
 			fxpp->fx_timeleft = fxpp->fx_pquantum;
 		} else {
-			call_cpu_surrender = B_TRUE;
+			call_cpu_surrender = true;
 		}
 	} else if (t->t_state == TS_ONPROC &&
 	    t->t_pri < t->t_disp_queue->disp_maxrunpri) {
-		call_cpu_surrender = B_TRUE;
+		call_cpu_surrender = true;
 	}
 
 	if (call_cpu_surrender) {
