@@ -73,7 +73,6 @@ COMMON_SUBDIRS=		\
 	busstat		\
 	cal		\
 	calendar	\
-	captoinfo	\
 	cdrw		\
 	cfgadm		\
 	checkeq		\
@@ -82,7 +81,6 @@ COMMON_SUBDIRS=		\
 	chmod		\
 	chown		\
 	chroot		\
-	clear		\
 	cmd-crypto	\
 	cmd-inet	\
 	col		\
@@ -186,7 +184,6 @@ COMMON_SUBDIRS=		\
 	ibd_upgrade	\
 	iconv		\
 	idmap		\
-	infocmp		\
 	init		\
 	initpkg		\
 	intrd		\
@@ -370,7 +367,6 @@ COMMON_SUBDIRS=		\
 	sysdef		\
 	syseventadm	\
 	syslogd		\
-	tabs		\
 	tail		\
 	tar		\
 	tbl		\
@@ -379,7 +375,6 @@ COMMON_SUBDIRS=		\
 	th_tools	\
 	tip		\
 	touch		\
-	tput		\
 	tr		\
 	trapstat	\
 	troff		\
@@ -634,11 +629,9 @@ MSGSUBDIRS=		\
 	swap		\
 	syseventadm	\
 	syseventd	\
-	tabs		\
 	tar		\
 	tbl		\
 	touch		\
-	tput		\
 	troff		\
 	tty		\
 	ttymon		\

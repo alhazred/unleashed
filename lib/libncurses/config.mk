@@ -1,0 +1,48 @@
+.include <unleashed.mk>
+
+NCURSES_DIR=${.CURDIR}/../../../contrib/ncurses
+NCURSES_INC=${NCURSES_DIR}/include
+NCURSES_SRC=${NCURSES_DIR}/ncurses
+NCURSES_TINFO=${NCURSES_SRC}/tinfo
+NCURSES_SERIAL=${NCURSES_SRC}/tty
+NCURSES_BASE=${NCURSES_SRC}/base
+NCURSES_TRACE=${NCURSES_SRC}/trace
+NCURSES_WIDE=${NCURSES_SRC}/widechar
+
+
+SHLIB_MAJOR=	6
+SHLIB_MINOR=	0
+
+CFLAGS+=	-D_XOPEN_SOURCE_EXTENDED
+CFLAGS+=	-DENABLE_WIDEC
+SW_WIDEC=	1
+SW_TYPE=	cchar_t
+
+AWK		= awk
+CC		= gcc
+CPP		= gcc -E
+SHELL		= /bin/sh
+
+ENABLE_WIDEC=   1
+CFLAGS+=	-Wall --param max-inline-insns-single=1200
+CFLAGS+=	-DHAVE_CONFIG_H -I${.CURDIR} -I${NCURSES_INC} -I${NCURSES_SRC} -I${BSDOBJDIR}/libncurses/ncurses -D__EXTENSIONS__ -D_FILE_OFFSET_BITS=64  -DNDEBUG
+
+DBG=
+
+USE_BIG_STRINGS = 1
+
+TERMINFO        = /usr/share/terminfo
+TERMINFO_CAPS=  ${NCURSES_INC}/Caps
+TERMINFO_SRC    = ${NCURSES_DIR}/misc/terminfo.src
+TIC_PATH        = /usr/bin/tic
+
+BSDOBJDIR?=     ${.OBJDIR:tA:H:H}
+
+.PATH: ${NCURSES_INC}
+.PATH: ${NCURSES_SRC}
+.PATH: ${NCURSES_TINFO}
+.PATH: ${NCURSES_BASE}
+.PATH: ${NCURSES_SERIAL}
+.PATH: ${NCURSES_TRACE}
+.PATH: ${NCURSES_WIDE}
+.PATH: ${BSDOBJDIR}/libncurses/ncurses

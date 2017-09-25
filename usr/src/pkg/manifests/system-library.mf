@@ -823,7 +823,6 @@ $(i386_ONLY)link path=usr/lib/$(ARCH64)/libfdisk.so \
     target=../../../lib/$(ARCH64)/libfdisk.so.1
 $(i386_ONLY)link path=usr/lib/$(ARCH64)/libfdisk.so.1 \
     target=../../../lib/$(ARCH64)/libfdisk.so.1
-link path=usr/lib/$(ARCH64)/libform.so target=libform.so.1
 link path=usr/lib/$(ARCH64)/libfstyp.so target=./libfstyp.so.1
 link path=usr/lib/$(ARCH64)/libgen.so \
     target=../../../lib/$(ARCH64)/libgen.so.1
@@ -860,7 +859,6 @@ link path=usr/lib/$(ARCH64)/libmd5.so \
     target=../../../lib/$(ARCH64)/libmd5.so.1
 link path=usr/lib/$(ARCH64)/libmd5.so.1 \
     target=../../../lib/$(ARCH64)/libmd5.so.1
-link path=usr/lib/$(ARCH64)/libmenu.so target=libmenu.so.1
 link path=usr/lib/$(ARCH64)/libmp.so target=../../../lib/$(ARCH64)/libmp.so.2
 link path=usr/lib/$(ARCH64)/libmp.so.2 \
     target=../../../lib/$(ARCH64)/libmp.so.2
@@ -878,7 +876,6 @@ link path=usr/lib/$(ARCH64)/libpam.so \
     target=../../../lib/$(ARCH64)/libpam.so.1
 link path=usr/lib/$(ARCH64)/libpam.so.1 \
     target=../../../lib/$(ARCH64)/libpam.so.1
-link path=usr/lib/$(ARCH64)/libpanel.so target=libpanel.so.1
 link path=usr/lib/$(ARCH64)/libpkcs11.so target=libpkcs11.so.1
 link path=usr/lib/$(ARCH64)/libposix4.so \
     target=../../../lib/$(ARCH64)/librt.so.1
@@ -1066,7 +1063,6 @@ link path=usr/lib/libelf.so.1 target=../../lib/libelf.so.1
 link path=usr/lib/libexacct.so target=./libexacct.so.1
 $(i386_ONLY)link path=usr/lib/libfdisk.so target=../../lib/libfdisk.so.1
 $(i386_ONLY)link path=usr/lib/libfdisk.so.1 target=../../lib/libfdisk.so.1
-link path=usr/lib/libform.so target=./libform.so.1
 link path=usr/lib/libfstyp.so target=./libfstyp.so.1
 link path=usr/lib/libgen.so target=../../lib/libgen.so.1
 link path=usr/lib/libgen.so.1 target=../../lib/libgen.so.1
@@ -1092,7 +1088,6 @@ link path=usr/lib/libmd.so target=../../lib/libmd.so.1
 link path=usr/lib/libmd.so.1 target=../../lib/libmd.so.1
 link path=usr/lib/libmd5.so target=../../lib/libmd5.so.1
 link path=usr/lib/libmd5.so.1 target=../../lib/libmd5.so.1
-link path=usr/lib/libmenu.so target=./libmenu.so.1
 link path=usr/lib/libmp.so target=../../lib/libmp.so.2
 link path=usr/lib/libmp.so.1 target=../../lib/libmp.so.1
 link path=usr/lib/libmp.so.2 target=../../lib/libmp.so.2
@@ -1104,7 +1099,6 @@ link path=usr/lib/libnvpair.so target=../../lib/libnvpair.so.1
 link path=usr/lib/libnvpair.so.1 target=../../lib/libnvpair.so.1
 link path=usr/lib/libpam.so target=../../lib/libpam.so.1
 link path=usr/lib/libpam.so.1 target=../../lib/libpam.so.1
-link path=usr/lib/libpanel.so target=./libpanel.so.1
 link path=usr/lib/libpkcs11.so target=./libpkcs11.so.1
 link path=usr/lib/libposix4.so target=../../lib/librt.so.1
 link path=usr/lib/libposix4.so.1 target=../../lib/librt.so.1

@@ -37,5 +37,4 @@ file path=usr/share/man/man5/smf_security.5
 file path=usr/share/man/man5/smf_template.5
 file path=usr/share/man/man5/standards.5
 file path=usr/share/man/man5/sticky.5
-file path=usr/share/man/man5/term.5
 file path=usr/share/man/man5/tzfile.5

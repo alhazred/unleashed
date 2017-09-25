@@ -664,7 +664,6 @@ file path=usr/bin/atrm group=sys mode=4755
 file path=usr/bin/auths mode=0555
 file path=usr/bin/basename mode=0555
 file path=usr/bin/busstat mode=0555
-file path=usr/bin/captoinfo mode=0555
 file path=usr/bin/cat mode=0555
 file path=usr/bin/chgrp mode=0555
 file path=usr/bin/chmod mode=0555
@@ -680,7 +679,6 @@ file path=usr/bin/ckstr mode=0555
 file path=usr/bin/cktime mode=0555
 file path=usr/bin/ckuid mode=0555
 file path=usr/bin/ckyorn mode=0555
-file path=usr/bin/clear mode=0555
 file path=usr/bin/coreadm mode=0555
 file path=usr/bin/cp mode=0555
 file path=usr/bin/cpio mode=0555
@@ -731,7 +729,6 @@ file path=usr/bin/hostid mode=0555
 file path=usr/bin/hostname mode=0555
 file path=usr/bin/iconv mode=0555
 file path=usr/bin/id mode=0555
-file path=usr/bin/infocmp mode=0555
 file path=usr/bin/install mode=0555
 file path=usr/bin/iostat mode=0555
 file path=usr/bin/isainfo mode=0555
@@ -798,12 +795,9 @@ file path=usr/bin/stty mode=0555
 file path=usr/bin/su group=sys mode=4555
 file path=usr/bin/svcprop mode=0555
 file path=usr/bin/svcs mode=0555
-file path=usr/bin/tabs mode=0555
 file path=usr/bin/tail mode=0555
-file path=usr/bin/tic mode=0555
 file path=usr/bin/time mode=0555
 file path=usr/bin/tip mode=4511 owner=uucp
-file path=usr/bin/tput mode=0555
 file path=usr/bin/tr mode=0555
 file path=usr/bin/true mode=0555
 file path=usr/bin/tty mode=0555

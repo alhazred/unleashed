@@ -1,0 +1,24 @@
+$mapfile_version 2
+SYMBOL_SCOPE {
+global:
+bottom_panel;
+ceiling_panel;
+del_panel;
+ground_panel;
+hide_panel;
+move_panel;
+new_panel;
+panel_above;
+panel_below;
+panel_hidden;
+panel_userptr;
+panel_window;
+replace_panel;
+set_panel_userptr;
+show_panel;
+top_panel;
+update_panels;
+update_panels_sp;
+local:
+*;
+};
