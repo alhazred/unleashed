@@ -74,8 +74,8 @@
 #define	TEXT_DOMAIN	"SYS_TEST"	/* use this only if it wasn't */
 #endif
 
-#include <curses.h>
-#include <term.h>
+#include <ncurses/curses.h>
+#include <ncurses/term.h>
 
 #define	LOGIN_WIDTH	8
 #define	ZONE_WIDTH	28

@@ -23,7 +23,7 @@
 # Use is subject to license terms.
 #
 
-ROOTTERMINFO = $(ROOTSHLIB)/terminfo
+ROOTTERMINFO = $(ROOT)/usr/share/terminfo
 
 $(PROG).core: $(OBJS) $(KMDBLIBS) $(MAPFILE)
 	$(LD) -r $(LD_BREDUCE) $(LD_ZNOVERSION) $(LD_ZDEFS) -M$(MAPFILE) -o $@ $(OBJS) \

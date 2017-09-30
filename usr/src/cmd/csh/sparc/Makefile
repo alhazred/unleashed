@@ -32,7 +32,7 @@ CERRWARN += -Wno-clobbered
 CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-extra
 
-LDLIBS += -lcurses
+LDLIBS += -lncurses
 
 MAPFILES =	../mapfile-intf $(MAPFILE.NGB)
 LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)

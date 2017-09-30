@@ -59,67 +59,25 @@
 #include <sys/types.h>
 #endif
 
-/*
- * Handle the different sources of terminal control string and size
- * information. Note that if no terminal information database is available,
- * ANSI VT100 control sequences are used.
- */
-#if defined(USE_TERMINFO) || defined(USE_TERMCAP)
-/*
- * Include curses.h or ncurses/curses.h depending on which is available.
- */
-#ifdef HAVE_CURSES_H
-#include <curses.h>
-#elif defined(HAVE_NCURSES_CURSES_H)
 #include <ncurses/curses.h>
-#endif
-/*
- * Include term.h where available.
- */
-#if defined(HAVE_TERM_H)
-#include <term.h>
-#elif defined(HAVE_NCURSES_TERM_H)
 #include <ncurses/term.h>
-#endif
 /*
  * When using termcap, include termcap.h on systems that have it.
  * Otherwise assume that all prototypes are provided by curses.h.
  */
 #if defined(USE_TERMCAP) && defined(HAVE_TERMCAP_H)
-#include <termcap.h>
+#include <ncurses/termcap.h>
 #endif
 
-/*
- * Under Solaris default Curses the output function that tputs takes is
- * declared to have a char argument. On all other systems and on Solaris
- * X/Open Curses (Issue 4, Version 2) it expects an int argument (using
- * c89 or options -I /usr/xpg4/include -L /usr/xpg4/lib -R /usr/xpg4/lib
- * selects XPG4v2 Curses on Solaris 2.6 and later).
- *
- * Similarly, under Mac OS X, the return value of the tputs output
- * function is declared as void, whereas it is declared as int on
- * other systems.
- */
-#if defined __sun && defined __SVR4 && !defined _XOPEN_CURSES
-typedef int TputsRetType;
-typedef char TputsArgType;              /* int tputs(char c, FILE *fp) */
-#define TPUTS_RETURNS_VALUE 1
-#elif defined(__APPLE__) && defined(__MACH__)
-typedef void TputsRetType;
-typedef int TputsArgType;               /* void tputs(int c, FILE *fp) */
-#define TPUTS_RETURNS_VALUE 0
-#else
 typedef int TputsRetType;
 typedef int TputsArgType;               /* int tputs(int c, FILE *fp) */
 #define TPUTS_RETURNS_VALUE 1
-#endif
 
 /*
  * Use the above specifications to prototype our tputs callback function.
  */
 static TputsRetType gl_tputs_putchar(TputsArgType c);
 
-#endif  /* defined(USE_TERMINFO) || defined(USE_TERMCAP) */
 
 /*
  * If the library is being compiled without filesystem access facilities,

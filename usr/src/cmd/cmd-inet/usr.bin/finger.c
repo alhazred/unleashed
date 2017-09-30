@@ -95,8 +95,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <fcntl.h>
-#include <curses.h>
-#include <unctrl.h>
+#include <ncurses/curses.h>
 #include <maillock.h>
 #include <deflt.h>
 #include <unistd.h>

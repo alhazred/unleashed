@@ -31,7 +31,7 @@
  * service processor modem - if present)
  */
 
-#include <curses.h>
+#include <ncurses/curses.h>
 #include <libintl.h>
 #include <pthread.h>
 #include <signal.h>

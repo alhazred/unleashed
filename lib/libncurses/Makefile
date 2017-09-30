@@ -1,4 +1,4 @@
-SUBDIR=	 ncurses \
+SUBDIR=	ncurses \
 	form menu panel \
 	man
 

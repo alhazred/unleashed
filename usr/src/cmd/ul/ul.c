@@ -22,8 +22,8 @@
 #include <getwidth.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <curses.h>
-#include <term.h>
+#include <ncurses/curses.h>
+#include <ncurses/term.h>
 #include <string.h>
 
 #define	IESC	L'\033'
@@ -69,7 +69,7 @@ int scrw[4];
 
 void setmode(int newmode);
 void outc(wchar_t c);
-int outchar(char c);
+int outchar(int c);
 void initcap(void);
 void reverse(void);
 void fwd(void);
@@ -568,10 +568,10 @@ printf("so %s se %s us %s ue %s me %s\n",
 	must_use_uc = (UNDER_CHAR && !ENTER_UNDERLINE);
 }
 
-int
-outchar(char c)
+int 
+outchar(int c)
 {
-	(void) putchar(c&0177);
+	(void) putchar(c);
 	return (0);
 }
 

@@ -44,7 +44,7 @@ include $(SRCDIR)/Makefile.com
 CFLAGS		+= -R /usr/platform/$(PLATFORM)/lib
 
 LDLIBS		+= -L$(ROOT)/usr/platform/$(PLATFORM)/lib
-LDLIBS		+= -lrsc -lcurses
+LDLIBS		+= -lrsc -lncurses
 
 .KEEP_STATE:
 

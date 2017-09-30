@@ -37,13 +37,14 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include <utility.h>
 #include <zlib.h>
-
 #include <sys/filio.h>
 #include <sys/fs/decomp.h>
+#include <strings.h>
 
 #include "message.h"
+
+#define	MIN(x, y)	((x) < (y) ? (x) : (y))
 
 static void	setup_infile(char *);
 static void	setup_outfile(char *);

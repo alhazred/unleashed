@@ -229,7 +229,6 @@ dir path=usr/share/doc/ksh/images/callouts
 dir path=usr/share/lib
 dir path=usr/share/lib/mailx
 dir path=usr/share/lib/pub
-dir path=usr/share/lib/tabset
 dir path=usr/share/lib/xml group=sys
 dir path=usr/share/lib/xml/dtd group=sys
 dir path=usr/share/lib/xml/style group=sys
@@ -1329,17 +1328,6 @@ file path=usr/share/doc/ksh/images/tag_perf.png
 file path=usr/share/doc/ksh/shell_styleguide.docbook
 file path=usr/share/lib/mailx/mailx.help
 file path=usr/share/lib/mailx/mailx.help.~
-file path=usr/share/lib/tabset/3101
-file path=usr/share/lib/tabset/beehive
-file path=usr/share/lib/tabset/hds
-file path=usr/share/lib/tabset/hds3
-file path=usr/share/lib/tabset/std
-file path=usr/share/lib/tabset/stdcrt
-file path=usr/share/lib/tabset/teleray
-file path=usr/share/lib/tabset/vt100
-file path=usr/share/lib/tabset/wyse-adds
-file path=usr/share/lib/tabset/xerox1720
-file path=usr/share/lib/termcap
 file path=usr/share/lib/unittab
 file path=usr/share/lib/xml/dtd/adt_record.dtd.1
 file path=usr/share/lib/xml/dtd/kmfpolicy.dtd
@@ -1705,6 +1693,10 @@ link path=var/ld/32 target=.
 link path=var/ld/64 target=$(ARCH64)
 depend fmri=library/libressl type=require
 #
+# Depend on terminfo data.
+#
+depend fmri=library/ncurses type=require
+#
 # intrd and others use the illumos-defaulted perl interpreter
 #
 depend fmri=runtime/perl$(PERL_PKGVERS) type=require
@@ -1720,10 +1712,6 @@ depend fmri=system/boot/loader type=require
 # The loadkeys binary needs the keytables.
 #
 depend fmri=system/data/keyboard/keytables type=require
-#
-# Depend on terminfo data.
-#
-depend fmri=system/data/terminfo type=require
 #
 # Depend on zoneinfo data.
 #

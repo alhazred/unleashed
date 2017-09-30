@@ -2,7 +2,7 @@
 
 NOMAN=
 
-CLEANFILES+=	run_tic.sed run_tic.sh terminfo.tmp
+CLEANFILES+=	run_tic.sed run_tic.sh terminfo.tmp termcap
 CLEANDIRS+=	terminfo
 
 TINFODIR=	${SHAREDIR}/terminfo
@@ -20,9 +20,12 @@ run_tic.sed:
 terminfo.tmp: run_tic.sed ${TSOURCE}
 	sed -f run_tic.sed ${TSOURCE} > $@
 
+#termcap: terminfo.tmp
+#	egrep -v '^(#|$$)' terminfo.tmp > $@
+
 # termorarily use gnu tic
 install: terminfo.tmp
-	TIC_PATH=/usr/gnu/bin/tic \
+	TIC_PATH=/usr/bin/tic \
 	DESTDIR=${DESTDIR} \
         prefix=${prefix} \
         exec_prefix=${exec_prefix} \
@@ -34,5 +37,10 @@ install: terminfo.tmp
         source=terminfo.tmp \
         cross_compiling=no \
         sh ${MISCDIR}/run_tic.sh  2>/dev/null
+	egrep -v '^(#|$$)' terminfo.tmp > ${DESTDIR}/etc/termcap
+
+
+#	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g sys -m 644 termcap \
+#		${DESTDIR}/etc/termcap
 
 .include <bsd.prog.mk>

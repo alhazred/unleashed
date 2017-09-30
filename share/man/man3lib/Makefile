@@ -12,7 +12,6 @@ MAN = libMPAPI.3lib \
       libcontract.3lib \
       libcpc.3lib \
       libcrypt.3lib \
-      libcurses.3lib \
       libdat.3lib \
       libdevid.3lib \
       libdevinfo.3lib \

@@ -100,7 +100,6 @@ SUBDIRS +=				\
 	libcrypt	\
 	libcryptoutil	\
 	libctf		\
-	libcurses	\
 	libdevice	\
 	libdevid	\
 	libdevinfo	\
@@ -205,7 +204,6 @@ SUBDIRS +=				\
 	libsys		\
 	libsysevent	\
 	libtecla	\
-	libtermcap	\
 	libthread	\
 	libumem		\
 	libuuid		\
@@ -215,8 +213,6 @@ SUBDIRS +=				\
 	libvscan	\
 	libw		\
 	libwrap		\
-	libxcurses	\
-	libxcurses2	\
 	libxnet		\
 	libzfs		\
 	libzfs_core	\
@@ -287,7 +283,6 @@ MSGSUBDIRS=		\
 	libcfgadm	\
 	libcmd		\
 	libcontract	\
-	libcurses	\
 	libdhcputil	\
 	libdiskmgt	\
 	libdladm	\
@@ -349,7 +344,6 @@ HDRSUBDIRS=				\
 	libcpc		\
 	libcryptoutil	\
 	libctf		\
-	libcurses	\
 	libdevice	\
 	libdevid	\
 	libdevinfo	\
@@ -424,14 +418,12 @@ HDRSUBDIRS=				\
 	libsun_ima	\
 	libsysevent	\
 	libtecla	\
-	libtermcap	\
 	libumem		\
 	libuutil	\
 	libvolmgt	\
 	libvrrpadm	\
 	libvscan	\
 	libwrap		\
-	libxcurses2	\
 	libzfs		\
 	libzfs_core	\
 	libzonestat	\
@@ -555,7 +547,6 @@ libds:		libsysevent
 libdtrace:	libproc libgen libctf libmapmalloc
 libefi:		libuuid
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
-libeti:		libcurses
 libexacct/demo:	libexacct libproject
 libfcoe:	libdladm
 libficl:	libuuid libumem
@@ -601,8 +592,6 @@ libstmfproxy: 	libstmf libpthread
 libsum: 	libast
 libsun_ima:	libdevinfo libsysevent
 libsysevent:	libsecdb
-libtecla:	libcurses
-libtermcap:	libcurses
 libtsalarm:	libpcp
 libuuid:	libdlpi
 libv12n:	libds libuuid

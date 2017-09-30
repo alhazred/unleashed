@@ -29,13 +29,14 @@ PROG= pg
 include ../Makefile.cmd
 
 CFLAGS += -DSINGLE
-LDLIBS += -lgen -lcurses
+LDLIBS += -lgen -lncurses
 XGETFLAGS += -a -x $(PROG).xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-
+CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-clobbered
+CERRWARN += -Wno-unused-variable
 
 .KEEP_STATE:
 

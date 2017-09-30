@@ -371,9 +371,9 @@ COMMON_SUBDIRS=		\
 	tar		\
 	tbl		\
 	tcpd		\
-	terminfo	\
 	th_tools	\
 	tip		\
+	terminfo	\
 	touch		\
 	tr		\
 	trapstat	\
@@ -751,7 +751,7 @@ _dc: $(DCSUBDIRS)
 #
 fs.d: fstyp
 ksh:	shcomp isaexec
-mdb:	terminfo
+mdb: 	terminfo
 fmt:	mailx
 
 $(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS) $(AUDITSUBDIRS): FRC

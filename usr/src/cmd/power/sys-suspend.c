@@ -37,7 +37,6 @@
 #include <unistd.h>
 #include <libintl.h>
 #include <locale.h>
-#include <utility.h>
 #include <signal.h>
 #include <errno.h>
 #include <setjmp.h>

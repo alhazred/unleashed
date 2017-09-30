@@ -41,7 +41,8 @@ include ../../Makefile.cmd
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
-LDLIBS		+= -lcurses -ldtrace -lkstat
+CPPFLAGS	+= -I$(ROOT)/usr/include/ncurses
+LDLIBS		+= -lncurses -ldtrace -lkstat
 
 FILEMODE	= 0555
 

@@ -52,8 +52,8 @@
 #include <dirent.h>
 #include <string.h>
 #include <locale.h>
-#include <curses.h>
-#include <term.h>
+#include <ncurses/curses.h>
+#include <ncurses/term.h>
 #include <termios.h>
 #include <stdlib.h>
 #include <widec.h>
@@ -87,8 +87,6 @@
 #ifdef NOTERMINFO
 #undef TERMINFO
 #endif
-
-#include <term.h>
 
 #define	BFSIZE	16
 /* this bit equals 1 in lflags of structure lbuf if *namep is to be used */

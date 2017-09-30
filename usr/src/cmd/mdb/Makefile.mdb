@@ -93,10 +93,11 @@ SRCS += \
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -D_MDB -I. -I../.. -I../../../common
+CPPFLAGS += -I$(NATIVE_ADJUNCT)/include/ncurses
 
 C99MODE=	$(C99_ENABLE)
 
-LDLIBS += -lcurses -lkvm -lproc -lrtld_db -lctf -lumem -ldisasm -lscf
+LDLIBS += -lncurses -lkvm -lproc -lrtld_db -lctf -lumem -ldisasm -lscf
 
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-char-subscripts
@@ -104,6 +105,7 @@ CERRWARN += -Wno-clobbered
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-unused-variable
+CERRWARN += -Wno-implicit-function-declaration
 
 PROG = mdb
 OBJS = $(SRCS:%.c=%.o) mdb_demangle.o mdb_lex.o mdb_grammar.o

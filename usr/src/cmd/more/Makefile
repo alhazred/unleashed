@@ -29,10 +29,11 @@ DATA= more.help
 
 include ../Makefile.cmd
 
-LDLIBS += -lcurses
+LDLIBS += -lncurses
 
 ROOTLIBDATA= $(DATA:%=$(ROOTLIB)/%)
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
+CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 
 $(ROOTLIBDATA) :=	FILEMODE =	0644
 

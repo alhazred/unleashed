@@ -128,7 +128,7 @@ for term in $termlist; do
 		case "$type" in
 		TIO_ATTR_REQSTR|TIO_ATTR_STR)
 			data="\"`tput -T $term $attr | od -bv |
-			    sed 's/^[0-9]*//;s/ /\\\\\\\\/g;/^\$/d'`\""
+			    sed 's/^[0-9]*//;s/ \\000//g;s/ /\\\\\\\\/g;/^\$/d'`\""
 			[ "$data" = '""' ] && data=NULL
 			;;
 		TIO_ATTR_BOOL)

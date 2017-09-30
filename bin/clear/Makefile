@@ -12,7 +12,8 @@ CFLAGS+=	-DSET_NCURSES_CH_T=cchar_t
 CFLAGS+=	-DSET_NEED_WCHAR_H=1
 CFLAGS+=	-I${PROGSDIR}
 CFLAGS+=	-I.
-CFLAGS+=	-I${NCURSES_DIR}/include
+CFLAGS+=	-I${SRCTOP}/proto/root_i386/usr/include/ncurses
+CFLAGS+=        -I${NCURSES_DIR}/include
 CFLAGS+=	-I${.CURDIR}
 CFLAGS+=	-I${.OBJDIR}
 
@@ -34,6 +35,6 @@ tty_settings.o: ${PROGSDIR}/tty_settings.c
 
 SRCS+=	clear.c clear_cmd.c tty_settings.c
 
-all: libs
+#all: libs
 
 .include <bsd.prog.mk>

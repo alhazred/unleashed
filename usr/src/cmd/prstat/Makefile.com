@@ -31,8 +31,9 @@ SRCS = $(OBJS:%.o=../%.c)
 
 include ../../Makefile.cmd
 
+CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 CERRWARN += -Wno-parentheses
-LDLIBS += -lcurses -lproject
+LDLIBS += -lncurses -lproject
 
 FILEMODE = 0555
 

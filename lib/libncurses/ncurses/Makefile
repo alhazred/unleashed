@@ -23,23 +23,26 @@ GENSRCS= \
 
 HEADERS=	curses.h termcap.h unctrl.h ncurses_dll.h term.h
 
+.PATH:  ${.CURDIR}
+
 curses.h: Caps \
 		curses.head \
 		curses.tail \
 		MKkey_defs.sh
-	cat ${NCURSES_INC}/curses.head >${NCURSES_INC}/$@
-	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKkey_defs.sh ${TERMINFO_CAPS} >>${NCURSES_INC}/$@
-	${SHELL} -c 'if test "cchar_t" = "cchar_t" ; then cat ${NCURSES_INC}/curses.wide >>${NCURSES_INC}/$@ ; fi'
-	cat ${NCURSES_INC}/curses.tail >>${NCURSES_INC}/$@
+	cat ${NCURSES_INC}/curses.head >$@
+	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKkey_defs.sh ${TERMINFO_CAPS} >> $@
+	${SHELL} -c 'if test "cchar_t" = "cchar_t" ; then cat ${NCURSES_INC}/curses.wide >> $@ ; fi'
+	cat ${NCURSES_INC}/curses.tail >> $@
+	#mv -f $@ ${NCURSES_INC}
 
 hashsize.h: MKhashsize.sh Caps
-	${SHELL} ${NCURSES_INC}/MKhashsize.sh ${TERMINFO_CAPS} >${NCURSES_INC}/$@
+	${SHELL} ${NCURSES_INC}/MKhashsize.sh ${TERMINFO_CAPS} > $@
 
 ncurses_def.h: ncurses_defs MKncurses_def.sh
-	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKncurses_def.sh ${NCURSES_INC}/ncurses_defs >${NCURSES_INC}/$@
+	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKncurses_def.sh ${NCURSES_INC}/ncurses_defs > $@
 
 parametrized.h: MKparametrized.sh Caps
-	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKparametrized.sh ${TERMINFO_CAPS} >${NCURSES_INC}/$@
+	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKparametrized.sh ${TERMINFO_CAPS} > $@
 
 names.c: MKnames.awk Caps 
 	${AWK} -f ${NCURSES_TINFO}/MKnames.awk bigstrings=${USE_BIG_STRINGS} ${TERMINFO_CAPS} >$@
@@ -54,7 +57,7 @@ lib_gen.c : MKlib_gen.sh curses.h
 	${SHELL} -e ${NCURSES_BASE}/MKlib_gen.sh "${CPP} ${CFLAGS}" ${AWK} generated < ${NCURSES_INC}/curses.h >$@
 
 init_keytry.h: make_keys keys.list
-	env PATH=${BSDOBJDIR}/libncurses/ncurses:${PATH} make_keys ${NCURSES_SRC}/keys.list >$@
+	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} make_keys ${NCURSES_SRC}/keys.list >$@
 
 keys.list: MKkeys_list.sh Caps
 	AWK=${AWK} ${SHELL} ${NCURSES_TINFO}/MKkeys_list.sh ${TERMINFO_CAPS} | LC_ALL=C sort >$@
@@ -76,7 +79,7 @@ comp_captab.c: ${HEADERS} \
 		MKcaptab.sh \
 		MKcaptab.awk \
 		make_hash
-	env PATH=${BSDOBJDIR}/libncurses/ncurses:${PATH} ${SHELL} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
+	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} ${SHELL} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
 
 lib_keyname.c: keys.list MKkeyname.awk
 	${AWK} -f ${NCURSES_BASE}/MKkeyname.awk bigstrings=${USE_BIG_STRINGS} ${NCURSES_SRC}/keys.list >$@
@@ -270,10 +273,12 @@ SRCS+=	charable.c \
 	widechars.c
 
 
-includes:
+includes: curses.h
+	@test -f ${NCURSES_INC}/curses.h || \
+		mv -f curses.h ${NCURSES_INC}
 	@test -d ${DESTDIR}/usr/include/ncurses || \
 		mkdir -p ${DESTDIR}/usr/include/ncurses
-	@for i in $(HEADERS); do \
+	@for i in ${HEADERS}; do \
 	j="${INSTALL} ${INSTALL_COPY} ${INC_INSTALL_OWN} -m 0644 ${NCURSES_INC}/$$i \
 		${DESTDIR}/usr/include/ncurses"; \
 	echo $$j; \
@@ -310,7 +315,7 @@ CLEANFILES=	${GENSRCS} ${GENHDRS} fallback.c ${NCURSES_DIR}/comp_captab.c lib_ge
 SHLIB_LDADD+=  -M${NCURSES_SRC}/mapfile
 realbuild: ${MAPFILE}
 
-beforebuild: ${GENHDRS}
+beforebuild: clean ${GENHDRS}
 
 .ifdef DESTDIR
 afterinstall: includes pc_files misc_files

@@ -94,7 +94,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <strings.h>
-#include <utility.h>
+
 #include <libintl.h>
 #include <zone.h>
 #include <termios.h>

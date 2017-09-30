@@ -22,7 +22,7 @@ DEFS	=  -DVFORK -DFILEC -DBSD_COMP -DFIVE	# No TELL when MBCHAR
 CPPFLAGS= -I. $(DEFS) $(MBCHAR) $(CPPFLAGS.master)
 CPPFLAGS +=	-I../../sh
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-LDLIBS += -lcurses
+LDLIBS += -lncurses
 
 CERRWARN += -Wno-implicit-function-declaration
 CERRWARN += -Wno-uninitialized

@@ -34,7 +34,6 @@
 <include system-library.man3cfgadm.inc>
 <include system-library.man3commputil.inc>
 <include system-library.man3contract.inc>
-<include system-library.man3curses.inc>
 <include system-library.man3devid.inc>
 <include system-library.man3devinfo.inc>
 <include system-library.man3dlpi.inc>
@@ -66,7 +65,6 @@
 <include system-library.man3sysevent.inc>
 <include system-library.man3uuid.inc>
 <include system-library.man3volmgt.inc>
-<include system-library.man3xcurses.inc>
 <include system-library.man3xnet.inc>
 <include system-library.man4.inc>
 <include system-library.man5.inc>
@@ -132,7 +130,6 @@ dir path=usr/share/man/man3c_db
 dir path=usr/share/man/man3cfgadm
 dir path=usr/share/man/man3commputil
 dir path=usr/share/man/man3contract
-dir path=usr/share/man/man3curses
 dir path=usr/share/man/man3devid
 dir path=usr/share/man/man3devinfo
 dir path=usr/share/man/man3dlpi
@@ -165,7 +162,6 @@ dir path=usr/share/man/man3socket
 dir path=usr/share/man/man3sysevent
 dir path=usr/share/man/man3uuid
 dir path=usr/share/man/man3volmgt
-dir path=usr/share/man/man3xcurses
 dir path=usr/share/man/man3xnet
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7p
@@ -185,7 +181,6 @@ file path=lib/$(ARCH64)/libcmdutils.so.1
 file path=lib/$(ARCH64)/libcontract.so.1
 file path=lib/$(ARCH64)/libcryptoutil.so.1
 file path=lib/$(ARCH64)/libctf.so.1
-file path=lib/$(ARCH64)/libcurses.so.1
 file path=lib/$(ARCH64)/libdevice.so.1
 file path=lib/$(ARCH64)/libdevid.so.1
 file path=lib/$(ARCH64)/libdevinfo.so.1
@@ -227,7 +222,6 @@ file path=lib/$(ARCH64)/libsecdb.so.1
 file path=lib/$(ARCH64)/libsendfile.so.1
 file path=lib/$(ARCH64)/libsocket.so.1
 file path=lib/$(ARCH64)/libsysevent.so.1
-file path=lib/$(ARCH64)/libtermcap.so.1
 file path=lib/$(ARCH64)/libthread.so.1
 file path=lib/$(ARCH64)/libumem.so.1
 file path=lib/$(ARCH64)/libuuid.so.1
@@ -259,7 +253,6 @@ file path=lib/libcmdutils.so.1
 file path=lib/libcontract.so.1
 file path=lib/libcryptoutil.so.1
 file path=lib/libctf.so.1
-file path=lib/libcurses.so.1
 file path=lib/libdevice.so.1
 file path=lib/libdevid.so.1
 file path=lib/libdevinfo.so.1
@@ -310,7 +303,6 @@ file path=lib/libsendfile.so.1
 file path=lib/libsocket.so.1
 file path=lib/libsqlite-sys.so.2.8.15
 file path=lib/libsysevent.so.1
-file path=lib/libtermcap.so.1
 file path=lib/libthread.so.1
 file path=lib/libumem.so.1
 file path=lib/libuuid.so.1
@@ -336,7 +328,6 @@ file path=usr/lib/$(ARCH64)/libcrypt.so.1
 file path=usr/lib/$(ARCH64)/libdisasm.so.1
 file path=usr/lib/$(ARCH64)/libdll.so.1
 file path=usr/lib/$(ARCH64)/libexacct.so.1
-file path=usr/lib/$(ARCH64)/libform.so.1
 file path=usr/lib/$(ARCH64)/libfstyp.so.1
 file path=usr/lib/$(ARCH64)/libhotplug.so.1
 file path=usr/lib/$(ARCH64)/libidmap.so.1
@@ -351,10 +342,8 @@ file path=usr/lib/$(ARCH64)/liblm.so.1
 file path=usr/lib/$(ARCH64)/libmail.so.1
 file path=usr/lib/$(ARCH64)/libmalloc.so.1
 file path=usr/lib/$(ARCH64)/libmapmalloc.so.1
-file path=usr/lib/$(ARCH64)/libmenu.so.1
 file path=usr/lib/$(ARCH64)/libmtmalloc.so.1
 file path=usr/lib/$(ARCH64)/libnls.so.1
-file path=usr/lib/$(ARCH64)/libpanel.so.1
 file path=usr/lib/$(ARCH64)/libpcidb.so.1
 file path=usr/lib/$(ARCH64)/libpkcs11.so.1
 file path=usr/lib/$(ARCH64)/libproject.so.1
@@ -407,7 +396,6 @@ file path=usr/lib/libcrypt.so.1
 file path=usr/lib/libdisasm.so.1
 file path=usr/lib/libdll.so.1
 file path=usr/lib/libexacct.so.1
-file path=usr/lib/libform.so.1
 file path=usr/lib/libfstyp.so.1
 file path=usr/lib/libhotplug.so.1
 file path=usr/lib/libidmap.so.1
@@ -423,10 +411,8 @@ file path=usr/lib/liblm.so.1
 file path=usr/lib/libmail.so.1
 file path=usr/lib/libmalloc.so.1
 file path=usr/lib/libmapmalloc.so.1
-file path=usr/lib/libmenu.so.1
 file path=usr/lib/libmtmalloc.so.1
 file path=usr/lib/libnls.so.1
-file path=usr/lib/libpanel.so.1
 file path=usr/lib/libpcidb.so.1
 file path=usr/lib/libpkcs11.so.1
 file path=usr/lib/libproject.so.1
@@ -520,11 +506,6 @@ file path=usr/lib/security/pkcs11_kernel.so.1
 file path=usr/lib/security/pkcs11_softtoken.so.1
 file path=usr/lib/straddr.so.2
 file path=usr/lib/watchmalloc.so.1
-# XXX: Obsoleted by open i18n?
-file path=usr/xpg4/lib/$(ARCH64)/libcurses.so.1
-file path=usr/xpg4/lib/$(ARCH64)/libcurses.so.2
-file path=usr/xpg4/lib/libcurses.so.1
-file path=usr/xpg4/lib/libcurses.so.2
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode
@@ -591,7 +572,6 @@ link path=lib/$(ARCH64)/libc_db.so target=libc_db.so.1
 link path=lib/$(ARCH64)/libcontract.so target=libcontract.so.1
 link path=lib/$(ARCH64)/libcryptoutil.so target=libcryptoutil.so.1
 link path=lib/$(ARCH64)/libctf.so target=libctf.so.1
-link path=lib/$(ARCH64)/libcurses.so target=libcurses.so.1
 link path=lib/$(ARCH64)/libdevice.so target=libdevice.so.1
 link path=lib/$(ARCH64)/libdevid.so target=libdevid.so.1
 link path=lib/$(ARCH64)/libdevinfo.so target=libdevinfo.so.1
@@ -629,9 +609,6 @@ link path=lib/$(ARCH64)/libsecdb.so target=libsecdb.so.1
 link path=lib/$(ARCH64)/libsendfile.so target=libsendfile.so.1
 link path=lib/$(ARCH64)/libsocket.so target=libsocket.so.1
 link path=lib/$(ARCH64)/libsysevent.so target=libsysevent.so.1
-link path=lib/$(ARCH64)/libtermcap.so target=libtermcap.so.1
-link path=lib/$(ARCH64)/libtermlib.so target=libtermlib.so.1
-link path=lib/$(ARCH64)/libtermlib.so.1 target=libcurses.so.1
 link path=lib/$(ARCH64)/libthread.so target=libthread.so.1
 link path=lib/$(ARCH64)/libthread_db.so target=libc_db.so.1
 link path=lib/$(ARCH64)/libthread_db.so.1 target=libc_db.so.1
@@ -653,7 +630,6 @@ link path=lib/libc_db.so target=libc_db.so.1
 link path=lib/libcontract.so target=libcontract.so.1
 link path=lib/libcryptoutil.so target=./libcryptoutil.so.1
 link path=lib/libctf.so target=libctf.so.1
-link path=lib/libcurses.so target=libcurses.so.1
 link path=lib/libdevice.so target=libdevice.so.1
 link path=lib/libdevid.so target=libdevid.so.1
 link path=lib/libdevinfo.so target=libdevinfo.so.1
@@ -693,9 +669,6 @@ link path=lib/libsecdb.so target=libsecdb.so.1
 link path=lib/libsendfile.so target=libsendfile.so.1
 link path=lib/libsocket.so target=libsocket.so.1
 link path=lib/libsysevent.so target=./libsysevent.so.1
-link path=lib/libtermcap.so target=libtermcap.so.1
-link path=lib/libtermlib.so target=libtermlib.so.1
-link path=lib/libtermlib.so.1 target=libcurses.so.1
 link path=lib/libthread.so target=libthread.so.1
 link path=lib/libthread_db.so target=libc_db.so.1
 link path=lib/libthread_db.so.1 target=libc_db.so.1
@@ -705,35 +678,17 @@ link path=lib/libw.so target=libw.so.1
 link path=lib/libxnet.so target=libxnet.so.1
 link path=lib/secure/32 target=.
 link path=lib/secure/64 target=$(ARCH64)
-link path=usr/ccs/lib/$(ARCH64)/libcurses.so \
-    target=../../../../lib/$(ARCH64)/libcurses.so.1
-link path=usr/ccs/lib/$(ARCH64)/libform.so \
-    target=../../../lib/$(ARCH64)/libform.so.1
 link path=usr/ccs/lib/$(ARCH64)/libgen.so \
     target=../../../../lib/$(ARCH64)/libgen.so.1
 link path=usr/ccs/lib/$(ARCH64)/libl.so \
     target=../../../lib/$(ARCH64)/libl.so.1
 link path=usr/ccs/lib/$(ARCH64)/libmalloc.so \
     target=../../../lib/$(ARCH64)/libmalloc.so.1
-link path=usr/ccs/lib/$(ARCH64)/libmenu.so \
-    target=../../../lib/$(ARCH64)/libmenu.so.1
-link path=usr/ccs/lib/$(ARCH64)/libpanel.so \
-    target=../../../lib/$(ARCH64)/libpanel.so.1
-link path=usr/ccs/lib/$(ARCH64)/libtermcap.so \
-    target=../../../../lib/$(ARCH64)/libtermcap.so.1
-link path=usr/ccs/lib/$(ARCH64)/libtermlib.so \
-    target=../../../../lib/$(ARCH64)/libcurses.so.1
 link path=usr/ccs/lib/$(ARCH64)/liby.so \
     target=../../../lib/$(ARCH64)/liby.so.1
-link path=usr/ccs/lib/libcurses.so target=../../../lib/libcurses.so.1
-link path=usr/ccs/lib/libform.so target=../../lib/libform.so.1
 link path=usr/ccs/lib/libgen.so target=../../../lib/libgen.so.1
 link path=usr/ccs/lib/libl.so target=../../lib/libl.so.1
 link path=usr/ccs/lib/libmalloc.so target=../../lib/libmalloc.so.1
-link path=usr/ccs/lib/libmenu.so target=../../lib/libmenu.so.1
-link path=usr/ccs/lib/libpanel.so target=../../lib/libpanel.so.1
-link path=usr/ccs/lib/libtermcap.so target=../../../lib/libtermcap.so.1
-link path=usr/ccs/lib/libtermlib.so target=../../../lib/libcurses.so.1
 link path=usr/ccs/lib/liby.so target=../../lib/liby.so.1
 link path=usr/lib/$(ARCH64)/libadm.so \
     target=../../../lib/$(ARCH64)/libadm.so.1
@@ -778,10 +733,6 @@ link path=usr/lib/$(ARCH64)/libctf.so \
     target=../../../lib/$(ARCH64)/libctf.so.1
 link path=usr/lib/$(ARCH64)/libctf.so.1 \
     target=../../../lib/$(ARCH64)/libctf.so.1
-link path=usr/lib/$(ARCH64)/libcurses.so \
-    target=../../../lib/$(ARCH64)/libcurses.so.1
-link path=usr/lib/$(ARCH64)/libcurses.so.1 \
-    target=../../../lib/$(ARCH64)/libcurses.so.1
 link path=usr/lib/$(ARCH64)/libdevice.so \
     target=../../../lib/$(ARCH64)/libdevice.so.1
 link path=usr/lib/$(ARCH64)/libdevice.so.1 \
@@ -946,14 +897,6 @@ link path=usr/lib/$(ARCH64)/libsysevent.so \
     target=../../../lib/$(ARCH64)/libsysevent.so.1
 link path=usr/lib/$(ARCH64)/libsysevent.so.1 \
     target=../../../lib/$(ARCH64)/libsysevent.so.1
-link path=usr/lib/$(ARCH64)/libtermcap.so \
-    target=../../../lib/$(ARCH64)/libtermcap.so.1
-link path=usr/lib/$(ARCH64)/libtermcap.so.1 \
-    target=../../../lib/$(ARCH64)/libtermcap.so.1
-link path=usr/lib/$(ARCH64)/libtermlib.so \
-    target=../../../lib/$(ARCH64)/libcurses.so.1
-link path=usr/lib/$(ARCH64)/libtermlib.so.1 \
-    target=../../../lib/$(ARCH64)/libcurses.so.1
 link path=usr/lib/$(ARCH64)/libthread.so \
     target=../../../lib/$(ARCH64)/libthread.so.1
 link path=usr/lib/$(ARCH64)/libthread.so.1 \
@@ -1038,8 +981,6 @@ link path=usr/lib/libcrypt_i.so target=./libcrypt.so
 link path=usr/lib/libcrypt_i.so.1 target=./libcrypt.so.1
 link path=usr/lib/libctf.so target=../../lib/libctf.so.1
 link path=usr/lib/libctf.so.1 target=../../lib/libctf.so.1
-link path=usr/lib/libcurses.so target=../../lib/libcurses.so.1
-link path=usr/lib/libcurses.so.1 target=../../lib/libcurses.so.1
 link path=usr/lib/libdevice.so target=../../lib/libdevice.so.1
 link path=usr/lib/libdevice.so.1 target=../../lib/libdevice.so.1
 link path=usr/lib/libdevid.so target=../../lib/libdevid.so.1
@@ -1140,10 +1081,6 @@ link path=usr/lib/libsoftcrypto.so target=./libsoftcrypto.so.1
 link path=usr/lib/libsys.so target=./libsys.so.1
 link path=usr/lib/libsysevent.so target=../../lib/libsysevent.so.1
 link path=usr/lib/libsysevent.so.1 target=../../lib/libsysevent.so.1
-link path=usr/lib/libtermcap.so target=../../lib/libtermcap.so.1
-link path=usr/lib/libtermcap.so.1 target=../../lib/libtermcap.so.1
-link path=usr/lib/libtermlib.so target=../../lib/libcurses.so.1
-link path=usr/lib/libtermlib.so.1 target=../../lib/libcurses.so.1
 link path=usr/lib/libthread.so target=../../lib/libthread.so.1
 link path=usr/lib/libthread.so.1 target=../../lib/libthread.so.1
 link path=usr/lib/libthread_db.so target=../../lib/libc_db.so.1
@@ -1252,9 +1189,7 @@ link path=usr/lib/security/pam_unix_session.so target=./pam_unix_session.so.1
 link path=usr/lib/security/pkcs11_kernel.so target=./pkcs11_kernel.so.1
 link path=usr/lib/security/pkcs11_softtoken.so target=./pkcs11_softtoken.so.1
 link path=usr/lib/straddr.so target=./straddr.so.2
-link path=usr/xpg4/lib/$(ARCH64)/libcurses.so target=libcurses.so.2
 link path=usr/xpg4/lib/64 target=$(ARCH64)
-link path=usr/xpg4/lib/libcurses.so target=./libcurses.so.2
 #
 # libses.so needs to dlopen(3C) plugins from usr/lib/scsi/plugins/ses/vendor/,
 # a dependency which cannot be automatically derived

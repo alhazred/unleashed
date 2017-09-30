@@ -33,7 +33,7 @@ SRCS=           $(OBJS:%.o=../%.c)
 
 include ../../Makefile.cmd
 
-LDLIBS += -lsec -lnvpair -lcmdutils -lcurses
+LDLIBS += -lsec -lnvpair -lcmdutils -lncurses
 $(XPG4) := CFLAGS += -DXPG4
 
 # Include all XPG4 changes in the XPG6 version
@@ -41,6 +41,7 @@ $(XPG6) := CFLAGS += -DXPG4 -DXPG6
 $(XPG6) := CFLAGS64 += -DXPG4 -DXPG6
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
+CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 
 .KEEP_STATE:
 

@@ -88,7 +88,8 @@
 #undef ERR
 #endif
 
-#include <curses.h>
+#include <ncurses/curses.h>
+#include <sys/termios.h>
 
 #define	KEY_ESC	(0x01b)			/* Escape key code */
 #define	KEY_DEL (0x07f)			/* ASCII DEL key code */
@@ -309,9 +310,10 @@ static const char *termio_susp(termio_data_t *, int);
 static void termio_winch(int, siginfo_t *, ucontext_t *, void *);
 static void termio_tstp(int, siginfo_t *, ucontext_t *, void *);
 
-extern const char *tigetstr(const char *);
+extern char *tigetstr(const char *);
 extern int tigetflag(const char *);
 extern int tigetnum(const char *);
+extern int setupterm(const char *, int, int *);
 
 static const mdb_io_ops_t termio_ops = {
 	termio_read,

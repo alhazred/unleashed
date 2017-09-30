@@ -44,7 +44,6 @@ INCS +=		-I$(SRCDIR)
 LDLIBS +=	-lc -lnvpair
 CPPFLAGS +=	$(INCS)
 
-
 .KEEP_STATE:
 
 all: $(LIBS)

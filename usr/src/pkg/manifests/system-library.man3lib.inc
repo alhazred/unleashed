@@ -25,7 +25,6 @@ file path=usr/share/man/man3lib/libcfgadm.3lib
 file path=usr/share/man/man3lib/libcommputil.3lib
 file path=usr/share/man/man3lib/libcontract.3lib
 file path=usr/share/man/man3lib/libcrypt.3lib
-file path=usr/share/man/man3lib/libcurses.3lib
 file path=usr/share/man/man3lib/libdevid.3lib
 file path=usr/share/man/man3lib/libdevinfo.3lib
 file path=usr/share/man/man3lib/libdl.3lib

@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <curses.h>
+#include <ncurses/curses.h>
 #include <signal.h>
 #include <fcntl.h>
 #include "powertop.h"

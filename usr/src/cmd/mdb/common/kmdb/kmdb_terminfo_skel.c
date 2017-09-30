@@ -36,7 +36,7 @@
 
 #include <strings.h>
 #include <unistd.h>
-#include <curses.h>
+#include <ncurses/curses.h>
 
 #include <mdb/mdb_io.h>
 #include <mdb/mdb_debug.h>
@@ -98,7 +98,7 @@ restartterm(char *name, int fd, int *err)
 	return (status);
 }
 
-const char *
+char *
 tigetstr(const char *name)
 {
 	const termio_attr_t *tap;
@@ -107,7 +107,7 @@ tigetstr(const char *name)
 		if (strcmp(tap->ta_name, name) == 0) {
 			if (tap->ta_type == TIO_ATTR_REQSTR ||
 			    tap->ta_type == TIO_ATTR_STR)
-				return (tap->ta_data);
+				return ((char *)tap->ta_data);
 			else
 				return ((char *)-1);
 		}

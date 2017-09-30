@@ -64,9 +64,9 @@
 #  endif
 #  undef ISASCII
 #  undef ISPRINT
-#  include <curses.h>
+#  include <ncurses/curses.h>
 # else /* SOLARIS */
-#  include <ncurses.h>
+#  include <ncurses/curses.h>
 # endif /* SOLARIS */
 #endif /* STATETOP */
 #include "kmem.h"

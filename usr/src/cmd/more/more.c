@@ -95,8 +95,9 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <curses.h>
-#include <term.h>
+#include <ncurses/curses.h>
+#include <sys/termio.h>
+#include <ncurses/term.h>
 #include <sys/ioctl.h>
 #include <setjmp.h>
 #include <sys/stat.h>

@@ -18,58 +18,37 @@
 #
 # CDDL HEADER END
 #
-# Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
+#
+# Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# Copyright 2011 Nexenta Systems, Inc. All rights reserved.
+# ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-PROG=		terminfo
-TABSETSRC=	3101 beehive hds hds3 std stdcrt teleray vt100 wyse-adds xerox1720
-TERMCAPSRC=	termcap.src
-TERMINFOSRC=	terminfo.src
 
-include		../Makefile.cmd
-
-FILEMODE=	0644
-
-TIC=		/usr/bin/tic
-
-ROOTSHARELIBDIR	= $(ROOT)/usr/share/lib
-ROOTTABDIR	= $(ROOTSHARELIBDIR)/tabset
-ROOTTERMDIR	= $(ROOTSHARELIBDIR)/terminfo
-DIRS		= $(ROOTTERMDIR) $(ROOTTABDIR)
-
-RELROOTETC	= ../usr/share/lib
-ROOTLIBSYMLINK	= $(ROOTLIB)/tabset
-RELROOTLIB	= ../share/lib
-
-ROOTTABSET	= $(TABSETSRC:%=$(ROOTTABDIR)/%)
-
-$(ROOTTABDIR)/%:	tabset/%
-		$(INS.file)
+clean :=	TARGET = clean
+clobber :=	TARGET = clobber
 
 .KEEP_STATE:
 
-all:		$(TERMCAPSRC) $(TERMINFOSRC)
+all clean clobber install: 
 
-$(DIRS):
-		$(INS.dir)
+check:
 
-$(ROOTTERMDIR)/s/sun: $(TERMINFOSRC)
-		TERMINFO=$(ROOTTERMDIR) $(TIC) $(TERMINFOSRC) 2>/dev/null
+lint:
 
-$(ROOTSHARELIBDIR)/termcap:
-		$(EGREP) -v '^(#|$$)' $(TERMCAPSRC) > $@
+install_h:
 
-install:	all $(ROOTTERMDIR) $(ROOTTERMDIR)/s/sun $(ROOTTABDIR) \
-		$(ROOTTABSET) $(ROOTSHARELIBDIR)/termcap \
-		$(ROOTLIBSYMLINK)
+all: 	FRC 
+	@cd $(CODEMGR_WS)/share/terminfo; bmake 
 
-$(ROOTLIBSYMLINK):
-		$(RM) $@; $(SYMLINK) $(RELROOTLIB)/tabset $@
+install:
+	@cd $(CODEMGR_WS)/share/terminfo; bmake install DESTDIR=$(ROOT) 
 
+clean: 
+	@cd $(CODEMGR_WS)/share/terminfo; bmake clean 
 
-clean:
+clobber: clean
 
-clobber:
+FRC:
+

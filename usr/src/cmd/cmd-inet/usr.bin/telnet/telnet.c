@@ -41,7 +41,7 @@ static char sccsid[] = "@(#)telnet.c	8.1 (Berkeley) 6/6/93";
 #include <netdb.h>
 #include <sys/types.h>
 
-#include <curses.h>
+#include <ncurses/curses.h>
 #include <signal.h>
 /*
  * By the way, we need to include curses.h before telnet.h since,

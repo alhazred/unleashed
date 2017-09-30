@@ -63,6 +63,7 @@ dir path=usr/share/terminfo/v
 dir path=usr/share/terminfo/w
 dir path=usr/share/terminfo/x
 dir path=usr/share/terminfo/z
+file path=etc/termcap mode=0644
 file path=usr/bin/clear mode=0555
 file path=usr/bin/infocmp mode=0555
 file path=usr/bin/ncurses-config mode=0555

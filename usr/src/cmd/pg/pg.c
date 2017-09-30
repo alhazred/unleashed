@@ -36,8 +36,9 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <wchar.h>
-#include <curses.h>
-#include <term.h>
+#include <ncurses/curses.h>
+#include <ncurses/term.h>
+#include <sys/termio.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <regexpr.h>

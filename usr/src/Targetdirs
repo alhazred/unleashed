@@ -581,14 +581,8 @@ $(DIRLINKS:%=$(ROOT)%):= \
 # Special symlinks to populate usr/ccs/lib, whose objects
 # have actually been moved to usr/lib
 # Rather than adding another set of rules, we add usr/lib/lwp files here
-$(ROOT)/usr/ccs/lib/libcurses.so:= 	REALPATH=../../../lib/libcurses.so.1
-$(ROOT)/usr/ccs/lib/libform.so:=	REALPATH=../../lib/libform.so.1
 $(ROOT)/usr/ccs/lib/libgen.so:=		REALPATH=../../../lib/libgen.so.1
 $(ROOT)/usr/ccs/lib/libmalloc.so:=	REALPATH=../../lib/libmalloc.so.1
-$(ROOT)/usr/ccs/lib/libmenu.so:=	REALPATH=../../lib/libmenu.so.1
-$(ROOT)/usr/ccs/lib/libpanel.so:=	REALPATH=../../lib/libpanel.so.1
-$(ROOT)/usr/ccs/lib/libtermlib.so:=	REALPATH=../../../lib/libcurses.so.1
-$(ROOT)/usr/ccs/lib/libtermcap.so:=	REALPATH=../../../lib/libtermcap.so.1
 $(ROOT)/usr/ccs/lib/values-Xa.o:=	REALPATH=../../lib/values-Xa.o
 $(ROOT)/usr/ccs/lib/values-Xc.o:=	REALPATH=../../lib/values-Xc.o
 $(ROOT)/usr/ccs/lib/values-Xs.o:=	REALPATH=../../lib/values-Xs.o
@@ -601,22 +595,10 @@ $(ROOT)/usr/lib/lwp/libthread.so.1:=	REALPATH=../libthread.so.1
 $(ROOT)/usr/lib/lwp/libthread_db.so.1:=	REALPATH=../libthread_db.so.1
 
 # symlinks to populate usr/ccs/lib/$(MACH64)
-$(ROOT)/usr/ccs/lib/$(MACH64)/libcurses.so:= \
-	REALPATH=../../../../lib/$(MACH64)/libcurses.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/libform.so:= \
-	REALPATH=../../../lib/$(MACH64)/libform.so.1
 $(ROOT)/usr/ccs/lib/$(MACH64)/libgen.so:= \
 	REALPATH=../../../../lib/$(MACH64)/libgen.so.1
 $(ROOT)/usr/ccs/lib/$(MACH64)/libmalloc.so:= \
 	REALPATH=../../../lib/$(MACH64)/libmalloc.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/libmenu.so:= \
-	REALPATH=../../../lib/$(MACH64)/libmenu.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/libpanel.so:= \
-	REALPATH=../../../lib/$(MACH64)/libpanel.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/libtermlib.so:= \
-	REALPATH=../../../../lib/$(MACH64)/libcurses.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/libtermcap.so:= \
-	REALPATH=../../../../lib/$(MACH64)/libtermcap.so.1
 $(ROOT)/usr/ccs/lib/$(MACH64)/values-Xa.o:= \
 	REALPATH=../../../lib/$(MACH64)/values-Xa.o
 $(ROOT)/usr/ccs/lib/$(MACH64)/values-Xc.o:= \
@@ -639,14 +621,8 @@ $(ROOT)/usr/lib/lwp/$(MACH64)/libthread_db.so.1:= \
 	REALPATH=../../$(MACH64)/libthread_db.so.1
 
 SYM.USRCCSLIB= \
-	/usr/ccs/lib/libcurses.so \
-	/usr/ccs/lib/libform.so \
 	/usr/ccs/lib/libgen.so \
 	/usr/ccs/lib/libmalloc.so \
-	/usr/ccs/lib/libmenu.so \
-	/usr/ccs/lib/libpanel.so \
-	/usr/ccs/lib/libtermlib.so \
-	/usr/ccs/lib/libtermcap.so \
 	/usr/ccs/lib/values-Xa.o \
 	/usr/ccs/lib/values-Xc.o \
 	/usr/ccs/lib/values-Xs.o \
@@ -659,14 +635,8 @@ SYM.USRCCSLIB= \
 	/usr/lib/lwp/libthread_db.so.1
 
 SYM.USRCCSLIB64= \
-	/usr/ccs/lib/$(MACH64)/libcurses.so \
-	/usr/ccs/lib/$(MACH64)/libform.so \
 	/usr/ccs/lib/$(MACH64)/libgen.so \
 	/usr/ccs/lib/$(MACH64)/libmalloc.so \
-	/usr/ccs/lib/$(MACH64)/libmenu.so \
-	/usr/ccs/lib/$(MACH64)/libpanel.so \
-	/usr/ccs/lib/$(MACH64)/libtermlib.so \
-	/usr/ccs/lib/$(MACH64)/libtermcap.so \
 	/usr/ccs/lib/$(MACH64)/values-Xa.o \
 	/usr/ccs/lib/$(MACH64)/values-Xc.o \
 	/usr/ccs/lib/$(MACH64)/values-Xs.o \
@@ -705,8 +675,6 @@ $(ROOT)/usr/lib/libcryptoutil.so.1:=	REALPATH=../../lib/libcryptoutil.so.1
 $(ROOT)/usr/lib/libcryptoutil.so:=	REALPATH=../../lib/libcryptoutil.so.1
 $(ROOT)/usr/lib/libctf.so.1:=		REALPATH=../../lib/libctf.so.1
 $(ROOT)/usr/lib/libctf.so:=		REALPATH=../../lib/libctf.so.1
-$(ROOT)/usr/lib/libcurses.so.1:=	REALPATH=../../lib/libcurses.so.1
-$(ROOT)/usr/lib/libcurses.so:=		REALPATH=../../lib/libcurses.so.1
 $(ROOT)/usr/lib/libdevice.so.1:=	REALPATH=../../lib/libdevice.so.1
 $(ROOT)/usr/lib/libdevice.so:=		REALPATH=../../lib/libdevice.so.1
 $(ROOT)/usr/lib/libdevid.so.1:=		REALPATH=../../lib/libdevid.so.1
@@ -794,10 +762,6 @@ $(ROOT)/usr/lib/libsocket.so.1:=	REALPATH=../../lib/libsocket.so.1
 $(ROOT)/usr/lib/libsocket.so:=		REALPATH=../../lib/libsocket.so.1
 $(ROOT)/usr/lib/libsysevent.so.1:=	REALPATH=../../lib/libsysevent.so.1
 $(ROOT)/usr/lib/libsysevent.so:=	REALPATH=../../lib/libsysevent.so.1
-$(ROOT)/usr/lib/libtermcap.so.1:=	REALPATH=../../lib/libtermcap.so.1
-$(ROOT)/usr/lib/libtermcap.so:=		REALPATH=../../lib/libtermcap.so.1
-$(ROOT)/usr/lib/libtermlib.so.1:=	REALPATH=../../lib/libcurses.so.1
-$(ROOT)/usr/lib/libtermlib.so:=		REALPATH=../../lib/libcurses.so.1
 $(ROOT)/usr/lib/libthread.so.1:=	REALPATH=../../lib/libthread.so.1
 $(ROOT)/usr/lib/libthread.so:=		REALPATH=../../lib/libthread.so.1
 $(ROOT)/usr/lib/libthread_db.so.1:=	REALPATH=../../lib/libc_db.so.1
@@ -870,10 +834,6 @@ $(ROOT)/usr/lib/$(MACH64)/libctf.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libctf.so.1
 $(ROOT)/usr/lib/$(MACH64)/libctf.so:= \
 	REALPATH=../../../lib/$(MACH64)/libctf.so.1
-$(ROOT)/usr/lib/$(MACH64)/libcurses.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libcurses.so.1
-$(ROOT)/usr/lib/$(MACH64)/libcurses.so:= \
-	REALPATH=../../../lib/$(MACH64)/libcurses.so.1
 $(ROOT)/usr/lib/$(MACH64)/libdevice.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libdevice.so.1
 $(ROOT)/usr/lib/$(MACH64)/libdevice.so:= \
@@ -1028,14 +988,6 @@ $(ROOT)/usr/lib/$(MACH64)/libsysevent.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libsysevent.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsysevent.so:= \
 	REALPATH=../../../lib/$(MACH64)/libsysevent.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtermcap.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libtermcap.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtermcap.so:= \
-	REALPATH=../../../lib/$(MACH64)/libtermcap.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtermlib.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libcurses.so.1
-$(ROOT)/usr/lib/$(MACH64)/libtermlib.so:= \
-	REALPATH=../../../lib/$(MACH64)/libcurses.so.1
 $(ROOT)/usr/lib/$(MACH64)/libthread.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libthread.so.1
 $(ROOT)/usr/lib/$(MACH64)/libthread.so:= \
@@ -1120,8 +1072,6 @@ SYM.USRLIB= \
 	/usr/lib/libcontract.so.1 \
 	/usr/lib/libctf.so \
 	/usr/lib/libctf.so.1 \
-	/usr/lib/libcurses.so \
-	/usr/lib/libcurses.so.1 \
 	/usr/lib/libdevice.so \
 	/usr/lib/libdevice.so.1 \
 	/usr/lib/libdevid.so \
@@ -1203,10 +1153,6 @@ SYM.USRLIB= \
 	/usr/lib/libsocket.so.1 \
 	/usr/lib/libsysevent.so \
 	/usr/lib/libsysevent.so.1 \
-	/usr/lib/libtermcap.so \
-	/usr/lib/libtermcap.so.1 \
-	/usr/lib/libtermlib.so \
-	/usr/lib/libtermlib.so.1 \
 	/usr/lib/libthread.so \
 	/usr/lib/libthread.so.1 \
 	/usr/lib/libthread_db.so \
@@ -1265,8 +1211,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libcontract.so.1 \
 	/usr/lib/$(MACH64)/libctf.so \
 	/usr/lib/$(MACH64)/libctf.so.1 \
-	/usr/lib/$(MACH64)/libcurses.so \
-	/usr/lib/$(MACH64)/libcurses.so.1 \
 	/usr/lib/$(MACH64)/libdevice.so \
 	/usr/lib/$(MACH64)/libdevice.so.1 \
 	/usr/lib/$(MACH64)/libdevid.so \
@@ -1344,10 +1288,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libsocket.so.1 \
 	/usr/lib/$(MACH64)/libsysevent.so \
 	/usr/lib/$(MACH64)/libsysevent.so.1 \
-	/usr/lib/$(MACH64)/libtermcap.so \
-	/usr/lib/$(MACH64)/libtermcap.so.1 \
-	/usr/lib/$(MACH64)/libtermlib.so \
-	/usr/lib/$(MACH64)/libtermlib.so.1 \
 	/usr/lib/$(MACH64)/libthread.so \
 	/usr/lib/$(MACH64)/libthread.so.1 \
 	/usr/lib/$(MACH64)/libthread_db.so \
