@@ -296,7 +296,7 @@ pc_files:
 tabset= std stdcrt vt100 vt300
 
 misc_files:
-	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINOWN} \
+	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINGRP} \
 		-m 555 ${NCURSES_DIR}/misc/ncurses-config ${DESTDIR}/usr/bin/
 	@test -d ${DESTDIR}/usr/share/tabset || \
 		mkdir -p ${DESTDIR}/usr/share/tabset
