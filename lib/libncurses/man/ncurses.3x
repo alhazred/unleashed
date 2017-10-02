@@ -55,7 +55,7 @@
 .SH NAME
 \fBncurses\fR \- CRT screen handling and optimization package
 .SH SYNOPSIS
-\fB#include <ncurses/curses.h>\fR
+\fB#include <curses.h>\fR
 .br
 .SH DESCRIPTION
 The \fBncurses\fR library routines give the user a terminal-independent method
@@ -1196,7 +1196,7 @@ developer using \fBncurses\fP:
 \-\-disable\-overwrite
 The standard include for \fBncurses\fP is as noted in \fBSYNOPSIS\fP:
 .NS
-\fB#include <ncurses/curses.h>\fR
+\fB#include <curses.h>\fR
 .NE
 .IP
 This option is used to avoid filename conflicts when \fBncurses\fP
@@ -1204,7 +1204,7 @@ is not the main implementation of curses of the computer.
 If \fBncurses\fP is installed disabling overwrite, it puts its headers in
 a subdirectory, e.g.,
 .NS
-\fB#include <ncurses/curses.h>\fR
+\fB#include <curses.h>\fR
 .NE
 .IP
 It also omits a symbolic link which would allow you to use \fB\-lcurses\fP

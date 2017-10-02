@@ -52,8 +52,8 @@
 #include <dirent.h>
 #include <string.h>
 #include <locale.h>
-#include <ncurses/curses.h>
-#include <ncurses/term.h>
+#include <curses.h>
+#include <term.h>
 #include <termios.h>
 #include <stdlib.h>
 #include <widec.h>

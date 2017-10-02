@@ -59,14 +59,14 @@
 #include <sys/types.h>
 #endif
 
-#include <ncurses/curses.h>
-#include <ncurses/term.h>
+#include <curses.h>
+#include <term.h>
 /*
  * When using termcap, include termcap.h on systems that have it.
  * Otherwise assume that all prototypes are provided by curses.h.
  */
 #if defined(USE_TERMCAP) && defined(HAVE_TERMCAP_H)
-#include <ncurses/termcap.h>
+#include <termcap.h>
 #endif
 
 typedef int TputsRetType;

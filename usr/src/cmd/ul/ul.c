@@ -22,8 +22,8 @@
 #include <getwidth.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <ncurses/curses.h>
-#include <ncurses/term.h>
+#include <curses.h>
+#include <term.h>
 #include <string.h>
 
 #define	IESC	L'\033'

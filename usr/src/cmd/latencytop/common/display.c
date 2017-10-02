@@ -30,7 +30,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <dirent.h>
-#include <ncurses/curses.h>
+#include <curses.h>
 #include <time.h>
 #include <wchar.h>
 #include <ctype.h>

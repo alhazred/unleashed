@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ncurses/curses.h>
+#include <curses.h>
 #include <sys/termios.h>
 #include <sys/types.h>
 #include <widec.h>

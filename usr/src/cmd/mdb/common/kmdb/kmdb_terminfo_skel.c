@@ -36,7 +36,7 @@
 
 #include <strings.h>
 #include <unistd.h>
-#include <ncurses/curses.h>
+#include <curses.h>
 
 #include <mdb/mdb_io.h>
 #include <mdb/mdb_debug.h>

@@ -88,7 +88,7 @@
 #undef ERR
 #endif
 
-#include <ncurses/curses.h>
+#include <curses.h>
 #include <sys/termios.h>
 
 #define	KEY_ESC	(0x01b)			/* Escape key code */
