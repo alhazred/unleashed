@@ -33,7 +33,6 @@ curses.h: Caps \
 	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKkey_defs.sh ${TERMINFO_CAPS} >> $@
 	${SHELL} -c 'if test "cchar_t" = "cchar_t" ; then cat ${NCURSES_INC}/curses.wide >> $@ ; fi'
 	cat ${NCURSES_INC}/curses.tail >> $@
-	#mv -f $@ ${NCURSES_INC}
 
 hashsize.h: MKhashsize.sh Caps
 	${SHELL} ${NCURSES_INC}/MKhashsize.sh ${TERMINFO_CAPS} > $@
@@ -57,7 +56,7 @@ lib_gen.c : MKlib_gen.sh curses.h
 	${SHELL} -e ${NCURSES_BASE}/MKlib_gen.sh "${CPP} ${CFLAGS}" ${AWK} generated < ${NCURSES_INC}/curses.h >$@
 
 init_keytry.h: make_keys keys.list
-	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} make_keys ${NCURSES_SRC}/keys.list >$@
+	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} make_keys keys.list >$@
 
 keys.list: MKkeys_list.sh Caps
 	AWK=${AWK} ${SHELL} ${NCURSES_TINFO}/MKkeys_list.sh ${TERMINFO_CAPS} | LC_ALL=C sort >$@
@@ -82,7 +81,7 @@ comp_captab.c: ${HEADERS} \
 	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} ${SHELL} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
 
 lib_keyname.c: keys.list MKkeyname.awk
-	${AWK} -f ${NCURSES_BASE}/MKkeyname.awk bigstrings=${USE_BIG_STRINGS} ${NCURSES_SRC}/keys.list >$@
+	${AWK} -f ${NCURSES_BASE}/MKkeyname.awk bigstrings=${USE_BIG_STRINGS} keys.list >$@
 
 unctrl.c: MKunctrl.awk
 	echo | ${AWK} -f ${NCURSES_BASE}/MKunctrl.awk bigstrings=${USE_BIG_STRINGS} >$@

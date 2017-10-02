@@ -18,11 +18,6 @@ CFLAGS+=	-I${.OBJDIR}
 
 LDADD=          -lncurses
 
-# TODO: build libncurses first
-libs:
-	${.MAKE} -C ${SRCTOP}/lib/libncurses/ncurses
-
-
 clear.o: ${PROGSDIR}/clear.c
 	${CC} ${CFLAGS} -c ${PROGSDIR}/clear.c -o $@
 
@@ -33,7 +28,5 @@ tty_settings.o: ${PROGSDIR}/tty_settings.c
 	${CC} ${CFLAGS} -c ${PROGSDIR}/tty_settings.c -o $@
 
 SRCS+=	clear.c clear_cmd.c tty_settings.c
-
-#all: libs
 
 .include <bsd.prog.mk>
