@@ -326,7 +326,7 @@ main(int argc, char **argv)
     if (term == 0 || *term == '\0')
 	quit(2, "No value for $TERM and no -T specified");
 
-    fd = save_tty_settings(&tty_settings);
+    fd = STDOUT_FILENO;
 
     if (setupterm(term, fd, &errret) != OK && errret <= 0)
 	quit(3, "unknown terminal \"%s\"", term);
