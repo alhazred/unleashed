@@ -37,8 +37,6 @@ include ../Makefile.cmd
 SUBDIRS=	$(MACH)
 $(BUILD64)SUBDIRS += $(MACH64)
 
-CPPFLAGS += -I$(ROOT)/usr/include/ncurses
-
 all	:=	TARGET = all
 install	:=	TARGET = install
 clean	:=	TARGET = clean

@@ -4,7 +4,6 @@
 prefix=/usr
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
-includedir=${prefix}/include/ncurses
 abi_version=6
 major_version=6
 version=6.0.20170916
@@ -16,4 +15,4 @@ URL: http://invisible-island.net/ncurses
 Requires.private: ncurses
 Libs:  -lform
 Libs.private: 
-Cflags:  -D__EXTENSIONS__ -I${includedir}
+Cflags:  -D__EXTENSIONS__

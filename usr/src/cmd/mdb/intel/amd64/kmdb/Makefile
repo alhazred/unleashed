@@ -57,7 +57,6 @@ STANDLIBS += $(ROOT)/usr/lib/amd64/libstandsaveargs.so
 
 INCDIRS += $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
 INCDIRS += $(SRC)/common/dis/i386
-INCDIRS += $(NATIVE_ADJUNCT)/include/ncurses
 
 CPPFLAGS += -DDIS_TEXT
 

@@ -39,7 +39,6 @@ POFILE= talk.po
 
 CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-DSYSV -DSTRNET -DBSD_COMP
-CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 LDLIBS +=	-lncurses
 
 .KEEP_STATE:
