@@ -17,7 +17,6 @@ set name=pkg.fmri \
 set name=pkg.description \
     value="A CRT screen handling and optimization package."
 set name=pkg.summary value="A CRT screen handling and optimization package."
-dir path=usr/include/ncurses
 dir path=usr/share/man/man3x
 dir path=usr/share/tabset
 dir path=usr/share/terminfo
@@ -72,15 +71,15 @@ file path=usr/bin/tic mode=0555
 file path=usr/bin/toe mode=0555
 file path=usr/bin/tput mode=0555
 file path=usr/bin/tset mode=0555
-file path=usr/include/ncurses/curses.h mode=0644
-file path=usr/include/ncurses/eti.h mode=0644
-file path=usr/include/ncurses/form.h mode=0644
-file path=usr/include/ncurses/menu.h mode=0644
-file path=usr/include/ncurses/ncurses_dll.h mode=0644
-file path=usr/include/ncurses/panel.h mode=0644
-file path=usr/include/ncurses/term.h mode=0644
-file path=usr/include/ncurses/termcap.h mode=0644
-file path=usr/include/ncurses/unctrl.h mode=0644
+file path=usr/include/curses.h mode=0644
+file path=usr/include/eti.h mode=0644
+file path=usr/include/form.h mode=0644
+file path=usr/include/menu.h mode=0644
+file path=usr/include/ncurses_dll.h mode=0644
+file path=usr/include/panel.h mode=0644
+file path=usr/include/term.h mode=0644
+file path=usr/include/termcap.h mode=0644
+file path=usr/include/unctrl.h mode=0644
 file path=usr/lib/$(ARCH64)/libform.so.6.0 mode=0555
 file path=usr/lib/$(ARCH64)/libmenu.so.6.0 mode=0555
 file path=usr/lib/$(ARCH64)/libncurses.so.6.0 mode=0555
@@ -2961,7 +2960,7 @@ hardlink path=usr/share/terminfo/z/zt-1 target=../h/htx11
 hardlink path=usr/share/terminfo/z/ztx target=../h/htx11
 hardlink path=usr/share/terminfo/z/ztx-1-a target=../h/htx11
 hardlink path=usr/share/terminfo/z/ztx11 target=../h/htx11
-link path=usr/include/ncurses/ncurses.h target=curses.h
+link path=usr/include/ncurses.h target=curses.h
 link path=usr/lib/$(ARCH64)/libform.so target=libform.so.6.0
 link path=usr/lib/$(ARCH64)/libform.so.6 target=libform.so.6.0
 link path=usr/lib/$(ARCH64)/libmenu.so target=libmenu.so.6.0

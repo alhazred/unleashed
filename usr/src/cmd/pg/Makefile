@@ -32,7 +32,6 @@ CFLAGS += -DSINGLE
 LDLIBS += -lgen -lncurses
 XGETFLAGS += -a -x $(PROG).xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-clobbered

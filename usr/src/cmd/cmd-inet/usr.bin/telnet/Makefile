@@ -43,7 +43,6 @@ include		../../../Makefile.cmd
 
 CPPFLAGS +=	-DKLUDGELINEMODE -DUSE_TERMIO -DENV_HACK -DOLD_ENVIRON
 CPPFLAGS +=	$(AUTH_INCLUDES)
-CPPFLAGS += -I$(ADJUNCT_PROTO)/usr/include/ncurses
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-unused-function

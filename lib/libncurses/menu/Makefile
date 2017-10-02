@@ -47,11 +47,11 @@ SHLIB_LDADD+=  ${LDADD}
 HEADERS=	menu.h eti.h
 
 includes:
-	@test -d ${DESTDIR}/usr/include/ncurses || \
-		mkdir ${DESTDIR}/usr/include/ncurses
+	@test -d ${DESTDIR}/usr/include || \
+		mkdir ${DESTDIR}/usr/include
 	@for i in $(HEADERS); do \
 	j="${INSTALL} ${INSTALL_COPY} ${INC_INSTALL_OWN} -m 0644 ${NCURSES_DIR}/menu/$$i \
-		${DESTDIR}/usr/include/ncurses"; \
+		${DESTDIR}/usr/include"; \
 	echo $$j; \
 	eval "$$j"; \
 	done;

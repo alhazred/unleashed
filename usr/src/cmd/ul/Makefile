@@ -29,7 +29,6 @@ PROG= ul
 
 include ../Makefile.cmd
 
-CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 LDLIBS += -lncurses
 
 .KEEP_STATE:

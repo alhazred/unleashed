@@ -93,7 +93,6 @@ SRCS += \
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 CPPFLAGS += -D_MDB -I. -I../.. -I../../../common
-CPPFLAGS += -I$(NATIVE_ADJUNCT)/include/ncurses
 
 C99MODE=	$(C99_ENABLE)
 

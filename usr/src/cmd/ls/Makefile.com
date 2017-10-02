@@ -41,7 +41,6 @@ $(XPG6) := CFLAGS += -DXPG4 -DXPG6
 $(XPG6) := CFLAGS64 += -DXPG4 -DXPG6
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
-CPPFLAGS += -I$(ROOT)/usr/include/ncurses
 
 .KEEP_STATE:
 

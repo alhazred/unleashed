@@ -61,7 +61,7 @@ LDLIBS		+= $(LIBBPF)
 
 CPPFLAGS	+= -I. -DIPFILTER_LOOKUP -DIPFILTER_LOG
 
-ipfstat.o	:=	CPPFLAGS += -DSTATETOP -I$(ROOT)/usr/include/ncurses
+ipfstat.o	:=	CPPFLAGS += -DSTATETOP
 ipfstat		:=	LDLIBS += -lncurses
 
 ipftest		:=	LDLIBS += -lmd

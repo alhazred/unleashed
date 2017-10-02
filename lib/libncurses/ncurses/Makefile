@@ -276,15 +276,15 @@ SRCS+=	charable.c \
 includes: curses.h
 	@test -f ${NCURSES_INC}/curses.h || \
 		mv -f curses.h ${NCURSES_INC}
-	@test -d ${DESTDIR}/usr/include/ncurses || \
-		mkdir -p ${DESTDIR}/usr/include/ncurses
+	@test -d ${DESTDIR}/usr/include || \
+		mkdir -p ${DESTDIR}/usr/include
 	@for i in ${HEADERS}; do \
 	j="${INSTALL} ${INSTALL_COPY} ${INC_INSTALL_OWN} -m 0644 ${NCURSES_INC}/$$i \
-		${DESTDIR}/usr/include/ncurses"; \
+		${DESTDIR}/usr/include"; \
 	echo $$j; \
 	eval "$$j"; \
 	done;
-	cd ${DESTDIR}/usr/include/ncurses && ln -fs curses.h ncurses.h
+	cd ${DESTDIR}/usr/include && ln -fs curses.h ncurses.h
 
 pc_files:
 	@test -d ${DESTDIR}/usr/lib/pkgconfig || \
