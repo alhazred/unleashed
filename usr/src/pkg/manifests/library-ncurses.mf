@@ -216,12 +216,15 @@ file path=usr/share/man/man3x/mitem_userptr.3x
 file path=usr/share/man/man3x/mitem_value.3x
 file path=usr/share/man/man3x/mitem_visible.3x
 file path=usr/share/man/man3x/ncurses.3x
+file path=usr/share/man/man3x/new_pair.3x
 file path=usr/share/man/man3x/panel.3x
 file path=usr/share/man/man3x/resizeterm.3x
 file path=usr/share/man/man3x/term_variables.3x
 file path=usr/share/man/man3x/wresize.3x
+file path=usr/share/man/man5/scr_dump.5
 file path=usr/share/man/man5/term.5
 file path=usr/share/man/man5/terminfo.5
+file path=usr/share/man/man5/user_caps.5
 file path=usr/share/man/man7/term.7
 file path=usr/share/tabset/std mode=0644
 file path=usr/share/tabset/stdcrt mode=0644
