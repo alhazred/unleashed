@@ -1,5 +1,5 @@
 .\"***************************************************************************
-.\" Copyright (c) 1998-2016,2017 Free Software Foundation, Inc.              *
+.\" Copyright (c) 1998-2010,2015 Free Software Foundation, Inc.                        *
 .\"                                                                          *
 .\" Permission is hereby granted, free of charge, to any person obtaining a  *
 .\" copy of this software and associated documentation files (the            *
@@ -26,7 +26,7 @@
 .\" authorization.                                                           *
 .\"***************************************************************************
 .\"
-.\" $Id: curs_kernel.3x,v 1.22 2017/01/07 19:25:15 tom Exp $
+.\" $Id: curs_kernel.3x,v 1.20 2015/07/21 01:10:11 tom Exp $
 .de bP
 .IP \(bu 4
 ..
@@ -48,7 +48,7 @@
 .ad
 .hy
 .SH SYNOPSIS
-\fB#include <curses.h>\fR
+\fB#include <ncurses/curses.h>\fR
 .sp
 \fBint def_prog_mode(void);\fR
 .br
@@ -83,12 +83,12 @@ current terminal modes as the "program" (in \fBcurses\fR) or "shell"
 (not in \fBcurses\fR) state for use by the \fBreset_prog_mode\fR and
 \fBreset_shell_mode\fR routines.  This is done automatically by
 \fBinitscr\fR.  There is one such save area for each screen context
-allocated by \fBnewterm\fR.
+allocated by \fBnewterm()\fR.
 .SS reset_prog_mode, reset_shell_mode
 .PP
 The \fBreset_prog_mode\fR and \fBreset_shell_mode\fR routines restore
 the terminal to "program" (in \fBcurses\fR) or "shell" (out of
-\fBcurses\fR) state.  These are done automatically by \fBendwin\fR(3X)
+\fBcurses\fR) state.  These are done automatically by \fBendwin\fR
 and, after an \fBendwin\fR, by \fBdoupdate\fR, so they normally are
 not called.
 .SS resetty, savetty

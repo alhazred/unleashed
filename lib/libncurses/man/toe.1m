@@ -1,5 +1,5 @@
 .\"***************************************************************************
-.\" Copyright (c) 1998-2015,2017 Free Software Foundation, Inc.              *
+.\" Copyright (c) 1998-2010,2011 Free Software Foundation, Inc.              *
 .\"                                                                          *
 .\" Permission is hereby granted, free of charge, to any person obtaining a  *
 .\" copy of this software and associated documentation files (the            *
@@ -26,23 +26,19 @@
 .\" authorization.                                                           *
 .\"***************************************************************************
 .\"
-.\" $Id: toe.1m,v 1.29 2017/02/18 17:10:26 tom Exp $
-.TH @TOE@ 1M ""
-.ie \n(.g .ds `` \(lq
-.el       .ds `` ``
-.ie \n(.g .ds '' \(rq
-.el       .ds '' ''
+.\" $Id: toe.1m,v 1.26 2012/01/01 00:40:51 tom Exp $
+.TH toe 1M ""
 .ds n 5
-.ds d @TERMINFO@
+.ds d /usr/local/share/terminfo
 .SH NAME
-\fB@TOE@\fR \- table of (terminfo) entries
+\fBtoe\fR \- table of (terminfo) entries
 .SH SYNOPSIS
-\fB@TOE@\fR [\fB\-v\fR[\fIn\fR]] [\fB\-ahsuUV\fR] \fIfile...\fR
+\fBtoe\fR [\fB\-v\fR[\fIn\fR]] [\fB\-ahsuUV\fR] \fIfile...\fR
 .br
 .SH DESCRIPTION
 .PP
 With no options,
-\fB@TOE@\fR lists all available terminal types by primary name
+\fBtoe\fR lists all available terminal types by primary name
 with descriptions.
 File arguments specify the directories to be scanned; if no
 such arguments are given,
@@ -57,14 +53,11 @@ There are other options intended for use by terminfo file maintainers:
 report on all of the terminal databases which ncurses would search,
 rather than only the first one that it finds.
 .IP
-If the \fB\-s\fR is also given, \fB@TOE@\fR
+If the \fB\-s\fR is also given, \fBtoe\fR
 adds a column to the report,
 showing (like \fBconflict\fP(1)) which entries which 
 belong to a given terminal database.
 An "*" marks entries which differ, and "+" marks equivalent entries.
-.IP
-Without the \fB\-s\fP option, \fB@TOE@\fR does not attempt to merge
-duplicates in its report
 .TP
 \fB\-s\fR
 sort the output by the entry names.
@@ -72,7 +65,7 @@ sort the output by the entry names.
 \fB\-u\fR \fIfile\fR
 says to write a report to the standard output,
 listing dependencies in the given terminfo/termcap source file.
-The report condenses the \*(``use\*('' relation:
+The report condenses the `use' relation:
 each line consists of the primary name of a terminal that
 has use capabilities,
 followed by a colon,
@@ -84,7 +77,7 @@ followed by a newline
 \fB\-U\fR \fIfile\fR
 says to write a report to the standard output,
 listing reverse dependencies in the given terminfo/termcap source file.
-The report reverses the \*(``use\*('' relation:
+The report reverses the `use' relation:
 each line consists of the primary name of a
 terminal that occurs in use capabilities,
 followed by a colon,
@@ -94,11 +87,9 @@ followed by a newline.
 .TP
 \fB\-v\fR\fIn\fR
 specifies that (verbose) output be written to standard error,
-showing \fB@TOE@\fR's progress.
-.IP
+showing \fBtoe\fR's progress.
 The optional parameter \fIn\fR is a number from 1 to 10,
-interpreted as for \fB@TIC@\fR(1M).
-If ncurses is built without tracing support, the optional parameter is ignored.
+interpreted as for \fBtic\fR(1M).
 .TP
 \fB\-V\fR
 reports the version of ncurses which was used in this program,
@@ -108,12 +99,12 @@ and exits.
 \fB\*d/?/*\fR
 Compiled terminal description database.
 .SH SEE ALSO
-\fB@TIC@\fR(1M),
-\fB@INFOCMP@\fR(1M),
-\fB@CAPTOINFO@\fR(1M),
-\fB@INFOTOCAP@\fR(1M),
+\fBtic\fR(1M),
+\fBinfocmp\fR(1M),
+\fBcaptoinfo\fR(1M),
+\fBinfotocap\fR(1M),
 \fBcurses\fR(3X),
 \fBterminfo\fR(\*n).
 .PP
 This describes \fBncurses\fR
-version @NCURSES_MAJOR@.@NCURSES_MINOR@ (patch @NCURSES_PATCH@).
+version 6.0 (patch 20150808).

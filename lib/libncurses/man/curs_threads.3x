@@ -26,7 +26,7 @@
 .\" authorization.                                                           *
 .\"***************************************************************************
 .\"
-.\" $Id: curs_threads.3x,v 1.23 2015/12/05 18:47:04 tom Exp $
+.\" $Id: curs_threads.3x,v 1.21 2015/04/11 10:23:49 tom Exp $
 .TH curs_threads 3X ""
 .de bP
 .IP \(bu 4
@@ -34,11 +34,12 @@
 .na
 .hy 0
 .SH NAME
-\fBcurs_threads\fR \- \fBcurses\fR thread support
+\fBuse_screen\fR,
+\fBuse_window\fR \- \fBcurses\fR thread support
 .ad
 .hy
 .SH SYNOPSIS
-\fB#include <curses.h>\fR
+\fB#include <ncurses/curses.h>\fR
 .sp
 \fBtypedef int (*NCURSES_WINDOW_CB)(WINDOW *, void *);\fR
 .br
@@ -66,7 +67,7 @@ configuration which hide the mutex's needed to prevent concurrent
 use of the global variables when configured for threading.
 .PP
 In addition to forcing access to members of the \fBWINDOW\fP structure
-to be via functions (see \fBcurs_opaque\fP(3X)),
+to be via functions (see \fBcurs_opaque\fP(3x)),
 it makes functions of the common global variables,
 e.g.,
 COLORS,

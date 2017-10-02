@@ -1,6 +1,6 @@
 '\" t
 .\"***************************************************************************
-.\" Copyright (c) 1998-2016,2017 Free Software Foundation, Inc.              *
+.\" Copyright (c) 1998-2014,2015 Free Software Foundation, Inc.              *
 .\"                                                                          *
 .\" Permission is hereby granted, free of charge, to any person obtaining a  *
 .\" copy of this software and associated documentation files (the            *
@@ -27,21 +27,17 @@
 .\" authorization.                                                           *
 .\"***************************************************************************
 .\"
-.\" $Id: infocmp.1m,v 1.66 2017/08/13 00:21:55 tom Exp $
-.TH @INFOCMP@ 1M ""
-.ie \n(.g .ds `` \(lq
-.el       .ds `` ``
-.ie \n(.g .ds '' \(rq
-.el       .ds '' ''
+.\" $Id: infocmp.1m,v 1.56 2015/05/23 20:50:00 tom Exp $
+.TH infocmp 1M ""
 .ds n 5
 .de bP
 .IP \(bu 4
 ..
-.ds d @TERMINFO@
+.ds d /usr/local/share/terminfo
 .SH NAME
-\fB@INFOCMP@\fR \- compare or print out \fIterminfo\fR descriptions
+\fBinfocmp\fR \- compare or print out \fIterminfo\fR descriptions
 .SH SYNOPSIS
-\fB@INFOCMP@\fR [\fB\-\
+\fBinfocmp\fR [\fB\-\
 1\
 C\
 D\
@@ -54,7 +50,6 @@ L\
 T\
 U\
 V\
-W\
 c\
 d\
 e\
@@ -70,13 +65,13 @@ u\
 x\
 \fR]
 .br
-      [\fB\-v\fR \fIn\fR] [\fB\-s d\fR| \fBi\fR| \fBl\fR| \fBc\fR] [\fB\-Q\fR \fIn\fR] [\fB\-R \fR\fBsubset\fR]
+      [\fB\-v\fR \fIn\fR] [\fB\-s d\fR| \fBi\fR| \fBl\fR| \fBc\fR] [\fB\-R \fR\fBsubset\fR]
 .br
       [\fB\-w\fR\ \fIwidth\fR] [\fB\-A\fR\ \fIdirectory\fR] [\fB\-B\fR\ \fIdirectory\fR]
 .br
       [\fItermname\fR...]
 .SH DESCRIPTION
-\fB@INFOCMP@\fR can be used to compare a binary \fBterminfo\fR entry with other
+\fBinfocmp\fR can be used to compare a binary \fBterminfo\fR entry with other
 terminfo entries, rewrite a \fBterminfo\fR description to take advantage of the
 \fBuse=\fR terminfo field, or print out a \fBterminfo\fR description from the
 binary file (\fBterm\fR) in a variety of formats.
@@ -89,50 +84,31 @@ If no options are specified and zero or one \fItermnames\fR are specified, the
 If more than one \fItermname\fR is specified,
 the \fB\-d\fR option will be assumed.
 .SS Comparison Options [\-d] [\-c] [\-n]
-\fB@INFOCMP@\fR compares the \fBterminfo\fR description of the first terminal
+\fBinfocmp\fR compares the \fBterminfo\fR description of the first terminal
 \fItermname\fR with each of the descriptions given by the entries for the other
 terminal's \fItermnames\fR.
 If a capability is defined for only one of the
-terminals, the value returned depends on the type of the capability:
-.bP
-\fBF\fR for missing boolean variables
-.bP
-\fBNULL\fR for missing integer or string variables
+terminals, the value returned will depend on the type of the capability:
+\fBF\fR for boolean variables, \fB\-1\fR for integer variables, and \fBNULL\fR
+for string variables.
 .PP
-Use the \fB\-q\fP option to show the distinction between
-\fIabsent\fP and \fIcancelled\fP capabilities.
-.PP
-These options produce a list which you can use to compare two
-or more terminal descriptions:
-.TP 5
-\fB\-d\fR
-produces a list of each capability that is \fIdifferent\fP
+The \fB\-d\fR option produces a list of each capability that is different
 between two entries.
-Each item in the list shows \*(``:\*('' after the capability name,
-followed by the capability values, separated by a comma.
-.TP
-\fB\-c\fR
-produces a list of each capability that is \fIcommon\fP between
+This option is useful to show the difference between two
+entries, created by different people, for the same or similar terminals.
+.PP
+The \fB\-c\fR option produces a list of each capability that is common between
 two or more entries.
-Missing capabilities are ignored.
-Each item in the list shows \*(``=\*('' after the capability name,
-followed by the capability value.
-.IP
-The \fB\-u\fR option provides a related output,
-showing the first terminal description rewritten to use the second
-as a building block via the \*(``use=\*('' clause. 
-.TP
-\fB\-n\fR
-produces a list of each capability that is in \fInone\fP of the given entries.
-Each item in the list shows \*(``!\*('' before the capability name.
-.IP
-Normally only the conventional capabilities are shown.
-Use the \fB\-x\fP option to add the BSD-compatibility
-capabilities (names prefixed with \*(``OT\*('').
-.IP
-If no \fItermnames\fR are given,
-\fB@INFOCMP@\fR uses the environment variable \fBTERM\fR
-for each of the \fItermnames\fR.
+Capabilities that are not set are ignored.
+This option can be
+used as a quick check to see if the \fB\-u\fR option is worth using.
+.PP
+The \fB\-n\fR option produces a list of each capability that is in none of
+the given entries.
+If no \fItermnames\fR are given, the environment variable \fBTERM\fR
+will be used for both of the \fItermnames\fR.
+This can be used as a quick
+check to see if anything was left out of a description.
 .SS Source Listing Options [\-I] [\-L] [\-C] [\-r]
 The \fB\-I\fR, \fB\-L\fR, and \fB\-C\fR options will produce a source listing for
 each terminal named.
@@ -153,7 +129,7 @@ used for the terminal name.
 The source produced by the \fB\-C\fR option may be used directly as a
 \fBtermcap\fR entry, but not all parameterized strings can be changed to
 the \fBtermcap\fR format.
-\fB@INFOCMP@\fR will attempt to convert most of the
+\fBinfocmp\fR will attempt to convert most of the
 parameterized information, and anything not converted will be plainly marked in
 the output and commented out.
 These should be edited by hand.
@@ -161,7 +137,7 @@ These should be edited by hand.
 For best results when converting to \fBtermcap\fP format,
 you should use both \fB\-C\fP and \fB\-r\fP.
 Normally a termcap description is limited to 1023 bytes.
-\fB@INFOCMP@\fP trims away less essential parts to make it fit.
+infocmp trims away less essential parts to make it fit.
 If you are converting to one of the (rare) termcap implementations
 which accept an unlimited size of termcap,
 you may want to add the \fB\-T\fP option.
@@ -171,7 +147,7 @@ and trim excess whitespace (use the \fB\-0\fP option for that).
 All padding information for strings will be collected together and placed
 at the beginning of the string where \fBtermcap\fR expects it.
 Mandatory
-padding (padding information with a trailing \*(``/\*('') will become optional.
+padding (padding information with a trailing '/') will become optional.
 .PP
 All \fBtermcap\fR variables no longer supported by \fBterminfo\fR, but which
 are derivable from other \fBterminfo\fR variables, will be output.
@@ -225,7 +201,7 @@ In this manner, it is possible to retrofit generic terminfo
 entries into a terminal's description.
 Or, if two similar terminals exist, but
 were coded at different times or by different people so that each description
-is a full description, using \fB@INFOCMP@\fR will show what can be done to change
+is a full description, using \fBinfocmp\fR will show what can be done to change
 one description to be relative to the other.
 .PP
 A capability will get printed with an at-sign (@) if it no longer exists in the
@@ -238,27 +214,27 @@ different value for the capability than that in the first \fItermname\fR.
 .PP
 The order of the other \fItermname\fR entries is significant.
 Since the
-terminfo compiler \fB@TIC@\fR does a left-to-right scan of the capabilities,
+terminfo compiler \fBtic\fR does a left-to-right scan of the capabilities,
 specifying two \fBuse=\fR entries that contain differing entries for the same
 capabilities will produce different results depending on the order that the
 entries are given in.
-\fB@INFOCMP@\fR will flag any such inconsistencies between
+\fBinfocmp\fR will flag any such inconsistencies between
 the other \fItermname\fR entries as they are found.
 .PP
 Alternatively, specifying a capability \fIafter\fR a \fBuse=\fR entry that
 contains that capability will cause the second specification to be ignored.
-Using \fB@INFOCMP@\fR to recreate a description can be a useful check to make
+Using \fBinfocmp\fR to recreate a description can be a useful check to make
 sure that everything was specified correctly in the original source
 description.
 .PP
 Another error that does not cause incorrect compiled files, but will slow down
 the compilation time, is specifying extra \fBuse=\fR fields that are
 superfluous.
-\fB@INFOCMP@\fR will flag any other \fItermname use=\fR fields that
+\fBinfocmp\fR will flag any other \fItermname use=\fR fields that
 were not needed.
 .SS Changing Databases [\-A \fIdirectory\fR] [\-B \fIdirectory\fR]
 Like other \fBncurses\fP utilities,
-\fB@INFOCMP@\fP looks for the terminal descriptions in several places.
+infocmp looks for the terminal descriptions in several places.
 You can use the \fBTERMINFO\fP and \fBTERMINFO_DIRS\fP environment variables
 to override the compiled-in default list of places to search
 (see \fBcurses\fP(3X) for details).
@@ -289,12 +265,12 @@ the fields will be printed several to a line to a maximum width
 of 60 characters.
 .TP
 \fB\-a\fR
-tells \fB@INFOCMP@\fP to retain commented-out capabilities rather than discarding
+tells \fBinfocmp\fP to retain commented-out capabilities rather than discarding
 them.
 Capabilities are commented by prefixing them with a period.
 .TP
 \fB\-D\fR
-tells \fB@INFOCMP@\fP to print the database locations that it knows about, and exit.
+tells \fBinfocmp\fP to print the database locations that it knows about, and exit.
 .TP 5
 \fB\-E\fR
 Dump the capabilities of the given terminal as tables, needed in
@@ -404,13 +380,7 @@ DEC[+\-]ARM/auto-repeat mode
 It also recognizes a SGR action corresponding to ANSI/ISO 6429/ECMA Set
 Graphics Rendition, with the values NORMAL, BOLD, UNDERLINE, BLINK, and
 REVERSE.
-All but NORMAL may be prefixed with
-.RS
-.bP
-\*(``+\*('' (turn on) or
-.bP
-\*(``\-\*('' (turn off).
-.RE
+All but NORMAL may be prefixed with `+' (turn on) or `\-' (turn off).
 .IP
 An SGR0 designates an empty highlight sequence (equivalent to {SGR:NORMAL}).
 .TP 5
@@ -420,33 +390,9 @@ Set output format to terminfo.
 \fB\-p\fR
 Ignore padding specifications when comparing strings.
 .TP 5
-\fB\-Q\fR \fIn\fR
-Rather than show source in terminfo (text) format,
-print the compiled (binary) format in hexadecimal or base64 form,
-depending on the option's value:
-.RS 8
-.TP 3
-1
-hexadecimal
-.TP 3
-2
-base64
-.TP 3
-3
-hexadecimal and base64
-.RE
-.TP 5
 \fB\-q\fR
-This makes the output a little shorter:
-.RS
-.bP
 Make the comparison listing shorter by omitting subheadings, and using
-\*(``\-\*('' for absent capabilities, \*(``@\*('' for canceled rather than \*(``NULL\*(''.
-.bP
-However, show differences between absent and cancelled capabilities.
-.bP
-Omit the \*(``Reconstructed from\*('' comment for source listings.
-.RE
+"\-" for absent capabilities, "@" for canceled rather than "NULL".
 .TP 5
 \fB\-R\fR\fIsubset\fR
 Restrict output to a given subset.
@@ -454,20 +400,12 @@ This option is for use with archaic
 versions of terminfo like those on SVr1, Ultrix, or HP/UX that do not support
 the full set of SVR4/XSI Curses terminfo; and variants such as AIX
 that have their own extensions incompatible with SVr4/XSI.
-.RS
-.bP
+.IP
 Available terminfo
-subsets are \*(``SVr1\*('', \*(``Ultrix\*('', \*(``HP\*('', and \*(``AIX\*(''; see \fBterminfo\fR(\*n) for
+subsets are "SVr1", "Ultrix", "HP", and "AIX"; see \fBterminfo\fR(\*n) for
 details.
-.bP
-You can also choose the subset \*(``BSD\*('' which selects only capabilities
+You can also choose the subset "BSD" which selects only capabilities
 with termcap equivalents recognized by 4.4BSD.
-The \fB\-C\fP option sets the \*(``BSD\*('' subset as a side-effect.
-.bP
-If you select any other value for \fB\-R\fP,
-it is the same as no subset, i.e., all capabilities are used.
-The \fB\-I\fP option likewise selects no subset as a side-effect.
-.RE
 .TP
 \fB\-s \fR\fI[d|i|l|c]\fR
 The \fB\-s\fR option sorts the fields within each type according to the argument
@@ -500,14 +438,14 @@ This is mainly useful for testing and analysis, since the compiled
 descriptions are limited (e.g., 1023 for termcap, 4096 for terminfo).
 .TP
 \fB\-t\fR
-tells \fB@TIC@\fP to discard commented-out capabilities.
+tells \fBtic\fP to discard commented-out capabilities.
 Normally when translating from terminfo to termcap,
 untranslatable capabilities are commented-out.
 .TP 5
 \fB\-U\fR
-tells \fB@INFOCMP@\fP to not post-process the data after parsing the source file.
+tells \fBinfocmp\fP to not post-process the data after parsing the source file.
 This feature helps when comparing the actual contents of two source files,
-since it excludes the inferences that \fB@INFOCMP@\fP makes to fill in missing
+since it excludes the inferences that \fBinfocmp\fP makes to fill in missing
 data.
 .TP 5
 \fB\-V\fR
@@ -515,14 +453,7 @@ reports the version of ncurses which was used in this program, and exits.
 .TP 5
 \fB\-v\fR \fIn\fR
 prints out tracing information on standard error as the program runs.
-.IP
-The optional parameter \fIn\fR is a number from 1 to 10, inclusive,
-indicating the desired level of detail of information.
-If ncurses is built without tracing support, the optional parameter is ignored.
-.TP
-\fB\-W\fR
-By itself, the \fB\-w\fP option will not force long strings to be wrapped.
-Use the \fB\-W\fP option to do this.
+Higher values of n induce greater verbosity.
 .TP 5
 \fB\-w\fR \fIwidth\fR
 changes the output to \fIwidth\fR characters.
@@ -530,7 +461,7 @@ changes the output to \fIwidth\fR characters.
 \fB\-x\fR
 print information for user-defined capabilities.
 These are extensions to the terminfo repertoire which can be loaded
-using the \fB\-x\fR option of \fB@TIC@\fP.
+using the \fB\-x\fR option of \fBtic\fP.
 .SH FILES
 .TP 20
 \*d
@@ -542,7 +473,6 @@ The
 \fB\-E\fR,
 \fB\-F\fR,
 \fB\-G\fR,
-\fB\-Q\fR,
 \fB\-R\fR,
 \fB\-T\fR,
 \fB\-V\fR,
@@ -557,30 +487,24 @@ The
 \fB\-t\fR
 options are not supported in SVr4 curses.
 .PP
-SVr4 infocmp does not distinguish between absent and cancelled capabilities.
-Also, it shows missing integer capabilities as \fB\-1\fP
-(the internal value used to represent missing integers).
-This implementation shows those as \*(``NULL\*('',
-for consistency with missing strings.
-.PP
-The \fB\-r\fR option's notion of \*(``termcap\*('' capabilities is System V Release 4's.
+The \fB\-r\fR option's notion of `termcap' capabilities is System V Release 4's.
 Actual BSD curses versions will have a more restricted set.
 To see only the
 4.4BSD set, use \fB\-r\fR \fB\-RBSD\fR.
 .SH BUGS
-The \fB\-F\fR option of \fB@INFOCMP@\fR(1M) should be a \fB@TOE@\fR(1M) mode.
+The \fB\-F\fR option of \fBinfocmp\fR(1M) should be a \fBtoe\fR(1M) mode.
 .SH SEE ALSO
-\fB@CAPTOINFO@\fR(1M),
-\fB@INFOTOCAP@\fR(1M),
-\fB@TIC@\fR(1M),
-\fB@TOE@\fR(1M),
+\fBcaptoinfo\fR(1M),
+\fBinfotocap\fR(1M),
+\fBtic\fR(1M),
+\fBtoe\fR(1M),
 \fBcurses\fR(3X),
 \fBterminfo\fR(\*n).
 .sp
 http://invisible-island.net/ncurses/tctest.html
 .PP
 This describes \fBncurses\fR
-version @NCURSES_MAJOR@.@NCURSES_MINOR@ (patch @NCURSES_PATCH@).
+version 6.0 (patch 20150808).
 .SH AUTHOR
 Eric S. Raymond <esr@snark.thyrsus.com>
 and
