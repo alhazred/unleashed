@@ -40,6 +40,8 @@ changed.
  - routeadm(1m), svc:/network/routing/legacy-routing,
    svc:/network/ipv[46]-forwarding removed. use ipadm to manage forwarding and
    smf to manage the routing-related daemons.
+ + libcurses, libxcurses, libxcurses2, terminfo were replaced by ncurses
+ + grep(1) replaced with a version imported from FreeBSD
  + errc(3), warnc(3) were added to libc
  + fts(3) added to libc
  + reallocarray(3) added to libc
