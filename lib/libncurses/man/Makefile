@@ -119,9 +119,11 @@ MAN=	\
 	mitem_userptr.3x \
 	mitem_value.3x \
 	mitem_visible.3x \
+	new_pair.3x \
 	ncurses.3x \
 	panel.3x \
 	resizeterm.3x \
+	scr_dump.5 \
 	tabs.1 \
 	term.5 \
 	term.7 \
@@ -131,6 +133,7 @@ MAN=	\
 	toe.1m \
 	tput.1 \
 	tset.1 \
+	user_caps.5 \
 	wresize.3x
 
 all clean cleandir depend includes obj tags:
