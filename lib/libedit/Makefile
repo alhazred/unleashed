@@ -13,8 +13,8 @@ MAN=	editline.3 editrc.5 editline.7
 
 LIBEDITDIR?=${.CURDIR}
 
-INCS= histedit.h
-INCSDIR=/usr/include
+INCS=	${.CURDIR}/histedit.h
+SHLIB_LDADD+=   -M${.CURDIR}/mapfile -lncurses
 
 CLEANFILES+=common.h.tmp emacs.h.tmp fcns.h.tmp func.h.tmp
 CLEANFILES+=help.h.tmp vi.h.tmp tc1.o tc1 .depend
@@ -77,4 +77,4 @@ includes:
 		${DESTDIR}/usr/include
 
 .include <bsd.lib.mk>
-.include <bsd.subdir.mk>
+${SOBJS}: ${BUILDFIRST}
