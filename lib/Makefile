@@ -1,4 +1,4 @@
-SUBDIR=	libc libcrypto libncurses libssl libtls
+SUBDIR=	libc libcrypto libedit libncurses libssl libtls
 
 
 MAKEOBJDIRPREFIX?=	/usr/obj/${MACHINE}
