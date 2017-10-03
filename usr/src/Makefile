@@ -95,7 +95,7 @@ check :=		TARGET= check
 #	cd pkg and do a 'make install'
 #
 
-all: mapfiles sgs .WAIT $(SUBDIRS) pkg
+all: mapfiles sgs .WAIT $(SUBDIRS)
 
 #
 # The _msg build is a two-step process.  First, the _msg dependency
@@ -105,15 +105,9 @@ all: mapfiles sgs .WAIT $(SUBDIRS) pkg
 # they were staged in $(ROOT)/catalog, and the results placed into the
 # proto area.
 #
-# The stage-licenses target causes the license files needed for
-# packaging to be pulled from $(SRC) and staged in $(ROOT)/licenses.
-#
-install: install1 install2 _msg stage-licenses
+install: install1 install2 _msg
 	@cd msg; pwd; $(MAKE) _msg
 	@rm -rf "$(ROOT)/catalog"
-
-stage-licenses: install2
-	@cd pkg; pwd; $(MAKE) stage-licenses
 
 install1: mapfiles sgs
 
