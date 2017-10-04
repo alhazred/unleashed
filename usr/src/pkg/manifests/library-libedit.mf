@@ -12,7 +12,8 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-set name=pkg.fmri value=pkg:/library/libedit@$(PKGVERS)
+set name=pkg.fmri \
+    value=pkg:/library/libedit@5.2,$(PKGVERS_BUILTON)-$(PKGVERS_BRANCH)
 set name=pkg.description value="editline library (libedit)"
 set name=pkg.summary value="editline library (libedit)"
 dir path=usr
