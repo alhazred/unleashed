@@ -1,13 +1,15 @@
 .include "${.CURDIR:H}/config.mk"
 
-.NOTPARALLEL:	make_hash comp_captab.c
-
 LIB=	ncurses
+LINKS=	${LIBDIR}/libncurses.${LD_so} ${LIBDIR}/libcurses.${LD_so}
+SYMLINKS=	libcurses.${LD_so} ${LIBDIR}/libcurses.so
+SYMLINKS+=	libcurses.${LD_so} ${LIBDIR}/libcurses.so.${SHLIB_MAJOR}
+SYMLINKS+=	curses.h ${INCDIR}/ncurses.h
 
+# does not include init_keytry.h, which is generated later
 GENHDRS= \
 	curses.h \
 	hashsize.h \
-	init_keytry.h \
 	ncurses_def.h \
 	parametrized.h
 
@@ -21,7 +23,16 @@ GENSRCS= \
 	names.c \
 	unctrl.c
 
-HEADERS=	curses.h termcap.h unctrl.h ncurses_dll.h term.h
+BUILDFIRST = ${GENHDRS} init_keytry.h
+# includes generated <init_keytry.h>
+COPTS.init_keytry.c += -I.
+.NOPATH: curses.h
+
+INCS=	curses.h \
+	${NCURSES_INC}/termcap.h \
+	${NCURSES_INC}/unctrl.h \
+	${NCURSES_INC}/ncurses_dll.h \
+	${NCURSES_INC}/term.h
 
 .PATH:  ${.CURDIR}
 
@@ -53,10 +64,10 @@ fallback.c : MKfallback.sh Caps
 	${SHELL} -e ${NCURSES_TINFO}/MKfallback.sh ${TERMINFO} ${TERMINFO_SRC} ${TIC_PATH} >$@
 
 lib_gen.c : MKlib_gen.sh curses.h 
-	${SHELL} -e ${NCURSES_BASE}/MKlib_gen.sh "${CPP} ${CFLAGS}" ${AWK} generated < ${NCURSES_INC}/curses.h >$@
+	${SHELL} -e ${NCURSES_BASE}/MKlib_gen.sh "${CPP} ${CFLAGS}" ${AWK} generated < curses.h >$@
 
 init_keytry.h: make_keys keys.list
-	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} make_keys keys.list >$@
+	./make_keys keys.list >$@
 
 keys.list: MKkeys_list.sh Caps
 	AWK=${AWK} ${SHELL} ${NCURSES_TINFO}/MKkeys_list.sh ${TERMINFO_CAPS} | LC_ALL=C sort >$@
@@ -64,21 +75,23 @@ keys.list: MKkeys_list.sh Caps
 expanded.c: curses.priv.h MKexpanded.sh
 	${SHELL} -e ${NCURSES_SERIAL}/MKexpanded.sh "${CPP} ${CFLAGS}" >$@
 
-make_keys: ${GENSRCS} make_keys.c ncurses_def.h
-	${CC} -o $@ ${CFLAGS} ${NCURSES_TINFO}/make_keys.c
+# includes <names.c> so add -I.
+make_keys: ${GENHDRS} make_keys.c names.c
+	${CC} -o $@ ${CFLAGS} -I. ${NCURSES_TINFO}/make_keys.c
 
-make_hash: ${HEADERS} \
+make_hash: ${GENHDRS} \
 	make_hash.c \
 	hashsize.h \
 	ncurses_def.h
 	${CC} -o $@ ${CFLAGS} ${NCURSES_TINFO}/make_hash.c
 
-comp_captab.c: ${HEADERS} \
+# expects 'make_hash' in PATH
+comp_captab.c: ${GENHDRS} \
 		hashsize.h \
 		MKcaptab.sh \
 		MKcaptab.awk \
 		make_hash
-	env PATH=${BSDOBJDIR}/libncurses/ncurses:${CURDIR}:${PATH} ${SHELL} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
+	PATH=.:${PATH} ${SHELL} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
 
 lib_keyname.c: keys.list MKkeyname.awk
 	${AWK} -f ${NCURSES_BASE}/MKkeyname.awk bigstrings=${USE_BIG_STRINGS} keys.list >$@
@@ -271,19 +284,11 @@ SRCS+=	charable.c \
 	lib_wunctrl.c \
 	widechars.c
 
-
 includes: curses.h
-	@test -f ${NCURSES_INC}/curses.h || \
-		mv -f curses.h ${NCURSES_INC}
-	@test -d ${DESTDIR}/usr/include || \
-		mkdir -p ${DESTDIR}/usr/include
-	@for i in ${HEADERS}; do \
-	j="${INSTALL} ${INSTALL_COPY} ${INC_INSTALL_OWN} -m 0644 ${NCURSES_INC}/$$i \
-		${DESTDIR}/usr/include"; \
-	echo $$j; \
-	eval "$$j"; \
-	done;
-	cd ${DESTDIR}/usr/include && ln -fs curses.h ncurses.h
+.if !empty(INCS)
+	${INSTALL} -d ${INC_INSTALL_OWN} -m 755 ${DESTDIR}${INCSDIR}
+	${INSTALL} ${INC_COPY} ${INC_INSTALL_OWN} -m ${INCMODE} ${INCS} ${DESTDIR}${INCSDIR}
+.endif
 
 pc_files:
 	@test -d ${DESTDIR}/usr/lib/pkgconfig || \
@@ -307,16 +312,15 @@ misc_files:
 	done;
 
 
-CLEANFILES=	${GENSRCS} ${GENHDRS} fallback.c ${NCURSES_DIR}/comp_captab.c lib_gen.c init_keytry.h keys.list make_hash \
-		make_keys make_hash.dep make_keys.dep ${NCURSES_INC}/curses.h 
+CLEANFILES=	${GENSRCS} ${GENHDRS} fallback.c lib_gen.c init_keytry.h keys.list make_hash \
+		make_keys make_hash.dep make_keys.dep
 		
 
 SHLIB_LDADD+=  -M${NCURSES_SRC}/mapfile
 realbuild: ${MAPFILE}
 
-beforebuild: clean ${GENHDRS}
-
-.ifdef DESTDIR
-afterinstall: includes pc_files misc_files
+afterinstall: incinstall pc_files misc_files
+.if !empty(SYMLINKS)
+	@set ${SYMLINKS}; ${_SYMLINKS_SCRIPT}
 .endif
 .include <bsd.lib.mk>
