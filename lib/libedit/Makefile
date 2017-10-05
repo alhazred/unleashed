@@ -77,4 +77,3 @@ includes:
 		${DESTDIR}/usr/include
 
 .include <bsd.lib.mk>
-${SOBJS}: ${BUILDFIRST}
