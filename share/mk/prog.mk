@@ -219,6 +219,8 @@ realinstall: beforeinstall
 .include <nls.mk>
 .endif
 
+BUILDAFTER+= ${PROG} ${OBJS}
+
 .include <obj.mk>
 .include <dep.mk>
 .include <subdir.mk>

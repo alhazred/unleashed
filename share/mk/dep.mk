@@ -124,4 +124,14 @@ cleandepend:
 .endif
 .endif
 
+BUILDFIRST ?=
+BUILDAFTER ?=
+.if !empty(BUILDAFTER)
+.  for i in ${BUILDFIRST}
+.    if !exists($i)
+${BUILDAFTER}: $i
+.    endif
+.  endfor
+.endif
+
 .endif

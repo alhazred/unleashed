@@ -394,6 +394,8 @@ realinstall: beforeinstall
 .include <nls.mk>
 .endif
 
+BUILDAFTER+= ${_LIBS} ${OBJS} ${POBJS} ${SOBJS}
+
 .include <obj.mk>
 .include <inc.mk>
 .include <dep.mk>
