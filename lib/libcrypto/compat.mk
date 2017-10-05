@@ -11,13 +11,14 @@ SHAREMODE?=	444
 
 # we don't use MAPFILE_VERS here, because that would cause us to ignore
 # shlib_version
-SHLIB_LDADD+=	-M${.OBJDIR}/mapfile
+SHLIB_LDADD+=	-Mmapfile
+.NOPATH: mapfile ${VERSION_SCRIPT}
 mapfile: ${VERSION_SCRIPT}
 	{ echo '$$mapfile_version 2'; \
 	    printf 'SYMBOL_SCOPE '; \
 	    cat ${VERSION_SCRIPT}; } > $@
 CLEANFILES+=	mapfile
-realbuild: mapfile
+BUILDFIRST+=	mapfile
 # XXX OPENSSL_cpuid_setup needs this
 SHLIB_LDADD+= -z textoff
 
