@@ -33,18 +33,9 @@ CFLAGS+=	-I${BSDOBJDIR}/ncurses/ncurses
 LDADD+= -L${BSDOBJDIR}/ncurses/ncurses -lncurses
 SHLIB_LDADD+=  ${LDADD}
 
-HEADERS=	panel.h
+INCS=	${SRCDIR}/panel.h
 
-includes:
-	@test -d ${DESTDIR}/usr/include || \
-		mkdir ${DESTDIR}/usr/include
-	@for i in $(HEADERS); do \
-	j="${INSTALL} ${INSTALL_COPY} ${INC_INSTALL_OWN} -m 0644 ${NCURSES_DIR}/panel/$$i \
-		${DESTDIR}/usr/include"; \
-	echo $$j; \
-	eval "$$j"; \
-	done;
-
+includes: incinstall
 
 pc_files:
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
