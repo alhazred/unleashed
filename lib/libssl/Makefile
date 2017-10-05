@@ -63,6 +63,9 @@ all: ${PC_FILES}
 ${PC_FILES}: ${.CURDIR}/../libcrypto/opensslv.h
 	/bin/sh ${.CURDIR}/generate_pkgconfig.sh -c ${.CURDIR} -o ${.OBJDIR}
 
+beforeinstall:
+	nm -o lib${LIB}.so | egrep -w 'printf|fprintf' && \
+	    (echo please fix stdio usage in this library; false) || true
 .for p in ${PC_FILES}
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
 	    -m ${SHAREMODE} ${.OBJDIR}/$p ${DESTDIR}/usr/lib/pkgconfig/
