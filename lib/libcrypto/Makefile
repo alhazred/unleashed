@@ -428,6 +428,8 @@ SRCS+= wp_block.c
 
 all beforedepend: ${GENERATED}
 
+BUILDFIRST = ${GENERATED}
+
 .include "compat.mk"
 .include <bsd.lib.mk>
 
