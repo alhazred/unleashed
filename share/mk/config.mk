@@ -7,6 +7,4 @@ CFLAGS+=	-m64
 LDFLAGS+=	-m64
 AFLAGS+=	-m64
 LIBDIR?=	${libprefix}/lib/amd64
-.elif ${MACHINE} == "i86pc"
-MACHINE=	i386
 .endif
