@@ -192,7 +192,7 @@ static void ql_process_idc_event(ql_adapter_state_t *);
  */
 static uint8_t	ql_enable_pm = 1;
 static int	ql_flash_sbus_fpga = 0;
-uint32_t	ql_os_release_level;
+uint32_t	ql_os_release_level = 11;
 uint32_t	ql_disable_aif = 0;
 uint32_t	ql_disable_msi = 0;
 uint32_t	ql_disable_msix = 0;
@@ -590,22 +590,8 @@ static struct modlinkage modlinkage = {
 int
 _init(void)
 {
-	uint16_t	w16;
 	int		rval = 0;
 
-	/* Get OS major release level. */
-	for (w16 = 0; w16 < sizeof (utsname.release); w16++) {
-		if (utsname.release[w16] == '.') {
-			w16++;
-			break;
-		}
-	}
-	if (w16 < sizeof (utsname.release)) {
-		(void) ql_bstr_to_dec(&utsname.release[w16],
-		    &ql_os_release_level, 0);
-	} else {
-		ql_os_release_level = 0;
-	}
 	if (ql_os_release_level < 6) {
 		cmn_err(CE_WARN, "%s Unsupported OS release level = %d",
 		    QL_NAME, ql_os_release_level);
