@@ -1,4 +1,0 @@
-set name=pkg.fmri value=pkg:/crypto/ca-certificates@1.0.1
-set name=pkg.renamed value=true
-set name=org.opensolaris.noincorp value=true
-depend fmri=pkg:/library/libressl type=require
