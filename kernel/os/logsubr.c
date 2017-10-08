@@ -247,8 +247,8 @@ log_init(void)
 	/*
 	 * Now that logging is enabled, emit the boot banner.
 	 */
-	printf("\rUnleashed version %s %u-bit\n",
-	    utsname.version, NBBY * (uint_t)sizeof (void *));
+	printf("\rUnleashed %s %u-bit\n",
+	    utsname.release, NBBY * (uint_t)sizeof (void *));
 #ifdef DEBUG
 	printf("DEBUG enabled\n");
 #endif
