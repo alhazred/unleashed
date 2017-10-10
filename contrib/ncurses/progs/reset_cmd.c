@@ -1,5 +1,5 @@
 /****************************************************************************
- * Copyright (c) 2016 Free Software Foundation, Inc.                        *
+ * Copyright (c) 2016,2017 Free Software Foundation, Inc.                   *
  *                                                                          *
  * Permission is hereby granted, free of charge, to any person obtaining a  *
  * copy of this software and associated documentation files (the            *
@@ -52,7 +52,7 @@
 #include <sys/ptem.h>
 #endif
 
-MODULE_ID("$Id: reset_cmd.c,v 1.11 2016/12/24 23:20:57 tom Exp $")
+MODULE_ID("$Id: reset_cmd.c,v 1.13 2017/10/07 20:56:03 tom Exp $")
 
 /*
  * SCO defines TIOCGSIZE and the corresponding struct.  Other systems (SunOS,
@@ -80,25 +80,15 @@ static bool use_reset = FALSE;	/* invoked as reset */
 static bool use_init = FALSE;	/* invoked as init */
 
 static void
-exit_error(void)
+failed(const char *msg)
 {
+    int code = errno;
+
+    (void) fprintf(stderr, "%s: %s: %s\n", _nc_progname, msg, strerror(code));
     restore_tty_settings();
     (void) fprintf(my_file, "\n");
     fflush(my_file);
-    ExitProgram(EXIT_FAILURE);
-    /* NOTREACHED */
-}
-
-static void
-failed(const char *msg)
-{
-    char temp[BUFSIZ];
-
-    _nc_STRCPY(temp, _nc_progname, sizeof(temp));
-    _nc_STRCAT(temp, ": ", sizeof(temp));
-    _nc_STRNCAT(temp, msg, sizeof(temp), sizeof(temp) - strlen(temp) - 2);
-    perror(temp);
-    exit_error();
+    ExitProgram(ErrSystem(code));
     /* NOTREACHED */
 }
 
@@ -496,17 +486,23 @@ send_init_strings(int fd GCC_UNUSED, TTY * old_settings)
 				  ? reset_2string
 				  : init_2string);
 
+#if defined(set_lr_margin)
 	if (set_lr_margin != 0) {
 	    need_flush |= sent_string(TPARM_2(set_lr_margin, 0,
 					      columns - 1));
-	} else if (set_left_margin_parm != 0
-		   && set_right_margin_parm != 0) {
+	} else
+#endif
+#if defined(set_left_margin_parm) && defined(set_right_margin_parm)
+	    if (set_left_margin_parm != 0
+		&& set_right_margin_parm != 0) {
 	    need_flush |= sent_string(TPARM_1(set_left_margin_parm, 0));
 	    need_flush |= sent_string(TPARM_1(set_right_margin_parm,
 					      columns - 1));
-	} else if (clear_margins != 0
-		   && set_left_margin != 0
-		   && set_right_margin != 0) {
+	} else
+#endif
+	    if (clear_margins != 0
+		&& set_left_margin != 0
+		&& set_right_margin != 0) {
 	    need_flush |= sent_string(clear_margins);
 	    if (carriage_return != 0) {
 		need_flush |= sent_string(carriage_return);
