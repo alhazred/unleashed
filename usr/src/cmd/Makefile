@@ -60,8 +60,6 @@ COMMON_SUBDIRS=		\
 	audio		\
 	auths		\
 	autopush	\
-	awk		\
-	awk_xpg4	\
 	backup		\
 	bart		\
 	basename	\
@@ -467,8 +465,6 @@ MSGSUBDIRS=		\
 	auditset	\
 	auths		\
 	autopush	\
-	awk		\
-	awk_xpg4	\
 	backup		\
 	bart		\
 	basename	\

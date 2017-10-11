@@ -1,4 +1,4 @@
-SUBDIR=	banner cat clear dis echo env false grep id infocmp localedef mandoc make nc openssl pax \
+SUBDIR=	awk banner cat clear dis echo env false grep id infocmp localedef mandoc make nc openssl pax \
 	puname pwd sed size tabs tic time toe tput true tset tsort tzselect uname utmp_update \
 	xinstall yes zic
 

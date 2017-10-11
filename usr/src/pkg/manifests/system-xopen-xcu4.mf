@@ -35,7 +35,6 @@ dir path=usr group=sys
 dir path=usr/xpg4
 dir path=usr/xpg4/bin
 file path=usr/xpg4/bin/at group=sys mode=4755
-file path=usr/xpg4/bin/awk mode=0555
 file path=usr/xpg4/bin/batch mode=0555
 file path=usr/xpg4/bin/chgrp mode=0555
 file path=usr/xpg4/bin/chown mode=0555
@@ -67,6 +66,7 @@ license lic_CDDL license=lic_CDDL
 license lic_OSBL license=lic_OSBL
 license lic_OSBL_preamble license=lic_OSBL_preamble
 link path=usr/xpg4/bin/alias target=../../bin/alias
+hardlink path=usr/xpg4/bin/awk target=../../bin/awk
 link path=usr/xpg4/bin/basename target=../../bin/basename
 link path=usr/xpg4/bin/bg target=../../bin/alias
 link path=usr/xpg4/bin/cd target=../../bin/alias
