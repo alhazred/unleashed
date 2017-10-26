@@ -23,7 +23,6 @@
 #
 
 PROG= who
-XPG4PROG= who
 DCFILE=$(PROG).dc
 UTMPS= utmpx
 ROOTADM= $(ROOT)/var/adm
@@ -42,14 +41,14 @@ $(ROOTADM)/%: %
 
 .KEEP_STATE:
 
-$(XPG4):= CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 
-all: $(PROG) $(UTMPS) $(XPG4)
+all: $(PROG) $(UTMPS)
 
 $(UTMPS):
 	touch $@
 
-install: all $(ROOTPROG) $(ROOTUTMPS) $(SYMSETC) $(ROOTXPG4PROG)
+install: all $(ROOTPROG) $(ROOTUTMPS) $(SYMSETC)
 
 $(SYMSETC):
 	-$(RM) $@; $(SYMLINK) ../var/adm/$(@F) $@

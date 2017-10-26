@@ -26,42 +26,26 @@
 #
 
 PROG= chown
-XPG4PROG= chown
-XD= exobjs.xpg4
 EXOBJS= chown.o
-XPG4EXOBJS= exobjs.xpg4/chown.o
 
 include ../Makefile.cmd
 
-$(XPG4) :=	CFLAGS += -DXPG4
+CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 LDLIBS += -lcmdutils -lsec
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
 $(PROG):	$(EXOBJS)
 	$(LINK.c) -o $@ $(EXOBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-$(XPG4):	$(XD) $(XPG4EXOBJS)
-	$(LINK.c) -o $@ $(XPG4EXOBJS) $(LDLIBS)
-	$(POST_PROCESS)
-
-
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 clean:
-	-@rm -rf $(EXOBJS) $(XD)
+	-@rm -rf $(EXOBJS)
 
-
-$(XPG4EXOBJS):	$(XD)
-
-$(XD)/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-$(XD):
-	-@mkdir -p $@
 
 include ../Makefile.targ

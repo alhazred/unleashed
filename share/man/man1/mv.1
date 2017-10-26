@@ -9,7 +9,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH MV 1 "Jul 17, 2007"
+.TH MV 1 "Oct 25, 2017"
 .SH NAME
 mv \- move files
 .SH SYNOPSIS
@@ -21,16 +21,6 @@ mv \- move files
 .LP
 .nf
 \fB/usr/bin/mv\fR [\fB-fi\fR] \fIsource\fR... \fItarget_dir\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/mv\fR [\fB-fi\fR] \fIsource\fR \fItarget_file\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/mv\fR [\fB-fi\fR] \fIsource\fR... \fItarget_dir\fR
 .fi
 
 .SH DESCRIPTION
@@ -103,7 +93,7 @@ If unable to preserve owner and group id, \fBmv\fR clears \fBS_ISUID\fR and
 \fBS_ISGID\fR bits in the target. \fBmv\fR prints a diagnostic message to
 stderr if unable to clear these bits, though the exit code is not affected.
 \fBmv\fR might be unable to preserve extended attributes if the target file
-system does not have extended attribute support. \fB/usr/xpg4/bin/mv\fR prints
+system does not have extended attribute support. \fBmv\fR prints
 a diagnostic message to stderr for all other failed attempts to duplicate file
 characteristics. The exit code is not affected.
 .sp
@@ -137,12 +127,6 @@ not a terminal.
 other answer prevents \fBmv\fR from overwriting the \fItarget\fR.
 .RE
 
-.SS "/usr/bin/mv"
-.sp
-.LP
-Specifying both the \fB-f\fR and the \fB-i\fR options is not considered an
-error. The \fB-f\fR option overrides the \fB-i\fR option.
-.SS "/usr/xpg4/bin/mv"
 .sp
 .LP
 Specifying both the \fB-f\fR and the \fB-i\fR options is not considered an
@@ -226,21 +210,6 @@ An error occurred.
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/mv"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Stable
-.TE
-
-.SS "/usr/xpg4/bin/mv"
 .sp
 
 .sp

@@ -67,9 +67,9 @@ create_client_ipf_rules()
 			# Get corresponding IPv4/IPv6 addresses
 			#
 			servers=`getent ipnodes $ypsvr | \
-			    /usr/xpg4/bin/awk '$1 ~ !/:/{ print $1 }'`
+			    /usr/bin/awk '$1 ~ !/:/{ print $1 }'`
 			servers_6=`getent ipnodes $ypsvr | \
-			    /usr/xpg4/bin/awk '$1 ~ /:/{ print $1 }'`
+			    /usr/bin/awk '$1 ~ /:/{ print $1 }'`
 
 			if [ -n "$servers" ]; then
 				server_addrs="$server_addrs $servers"

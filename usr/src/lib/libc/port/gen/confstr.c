@@ -101,12 +101,8 @@ confstr(int name, char *buf, size_t length)
 	/* Keep _CS_PATH in sync with execvp.c */
 
 	if (name == _CS_PATH) {
-		if (__xpg6 & _C99SUSv3_XPG6_sysconf_version)
-			path = "/usr/xpg6/bin:/usr/xpg4/bin:/usr/ccs/bin:"
-			    "/usr/bin:/opt/SUNWspro/bin";
-		else
-			path = "/usr/xpg4/bin:/usr/ccs/bin:/usr/bin:"
-			    "/opt/SUNWspro/bin";
+		path = "/usr/bin:/usr/ccs/bin:"
+		    "/opt/SUNWspro/bin";
 
 		conf_length = strlen(path) + 1;
 		if (length != 0) {

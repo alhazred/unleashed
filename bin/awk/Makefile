@@ -11,7 +11,6 @@ CFLAGS+= -DHAS_ISBLANK -I. -I${AWKSRC} -D_FILE_OFFSET_BITS=64
 LDADD=	-lm
 
 LINKS=	${BINDIR}/awk ${BINDIR}/nawk
-LINKS+=	${BINDIR}/awk ${BINDIR}/../xpg4/bin/awk
 
 CLEANFILES= awkgram.c maketab.dep maketab proctab.c ytab.h
 

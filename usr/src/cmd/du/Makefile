@@ -25,33 +25,26 @@
 #
 
 PROG=du
-XPG4PROG= du
 
 include ../Makefile.cmd
 
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
-$(XPG4) := CFLAGS += -DXPG4
+CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 POFILE = du_cmd.po
 POFILES = du.po
-POFILES_XPG4 = du.po.xpg4
-$(POFILES_XPG4)	:= CFLAGS += -DXPG4
 CLOBBERFILES += $(POFILES_XPG4)
 LDLIBS += -lcmdutils
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
-$(POFILE):	$(POFILES) $(POFILES_XPG4)
-	$(RM) $@; cat $(POFILES) $(POFILES_XPG4) > $@
-
-%.po.xpg4:	%.c
-	$(COMPILE.cpp) $< > $<.i
-	$(BUILD.po)
+$(POFILE):	$(POFILES)
+	$(RM) $@; cat $(POFILES) > $@
 
 clean:
 

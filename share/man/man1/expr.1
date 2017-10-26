@@ -9,7 +9,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH EXPR 1 "Aug 29, 2003"
+.TH EXPR 1 "Oct 25, 2017"
 .SH NAME
 expr \- evaluate arguments as an expression
 .SH SYNOPSIS
@@ -18,24 +18,7 @@ expr \- evaluate arguments as an expression
 \fB/usr/bin/expr\fR \fIargument\fR...
 .fi
 
-.LP
-.nf
-\fB/usr/xpg4/bin/expr\fR \fIargument\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/expr\fR \fIargument\fR...
-.fi
-
 .SH DESCRIPTION
-.SS "/usr/bin/expr, /usr/xpg4/bin/expr"
-.sp
-.LP
-The \fBexpr\fR utility evaluates the expression and writes the result to
-standard output. The character \fB0\fR is written to indicate a zero value and
-nothing is written to indicate a null string.
-.SS "/usr/xpg6/bin/expr"
 .sp
 .LP
 The \fBexpr\fR utility evaluates the expression and writes the result to
@@ -124,8 +107,7 @@ second argument, which must be an internationalized basic regular expression
 (BRE), except that all patterns are anchored to the beginning of the string.
 That is, only sequences starting at the first character of a string are matched
 by the regular expression. See \fBregex\fR(5) and NOTES. Normally, the
-\fB/usr/bin/expr\fR matching operator returns the number of bytes matched and
-the \fB/usr/xpg4/bin/expr\fR matching operator returns the number of characters
+\fBexpr\fR matching operator returns the number of characters
 matched (\fB0\fR on failure). If the second argument contains at least one BRE
 sub-expression [\e(...\e)], the matching operator returns the string
 corresponding to \e1.
@@ -242,18 +224,6 @@ example$ \fBexpr //$a : '.*/\e(.*\e)'\fR
 .in -2
 .sp
 
-.SS "/usr/bin/expr"
-.LP
-\fBExample 4 \fRReturning the number of bytes in a variable
-.sp
-.in +2
-.nf
-example$ \fBexpr "$VAR" : '.*'\fR
-.fi
-.in -2
-.sp
-
-.SS "/usr/xpg4/bin/expr"
 .LP
 \fBExample 5 \fRReturning the number of characters in a variable
 .sp

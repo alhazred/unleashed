@@ -25,9 +25,6 @@
 # Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
 #
 
-# Solaris needs /usr/xpg6/bin:/usr/xpg4/bin because the tools in /usr/bin are not POSIX-conformant
-export PATH=/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin
-
 # Make sure all math stuff runs in the "C" locale to avoid problems
 # with alternative # radix point representations (e.g. ',' instead of
 # '.' in de_DE.*-locales). This needs to be set _before_ any
@@ -123,7 +120,7 @@ function do_directory
 		fi
 		
 		if ${nflags.readable} ; then
-			# note that /usr/xpg4/bin/file does not use $'\t' as seperator - we
+			# note that /usr/file does not use $'\t' as seperator - we
 			# have to use ':' instead.
 			file -h "$i" | IFS=' ' read dummy node.filetype
 		fi

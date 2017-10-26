@@ -73,8 +73,6 @@ dirs="	$CODEMGR_WS/proto \
 	$CODEMGR_WS/proto/root_$MACH/usr/ccs/bin \
 	$CODEMGR_WS/proto/root_$MACH/usr/include \
 	$CODEMGR_WS/proto/root_$MACH/usr/include/sys \
-	$CODEMGR_WS/proto/root_$MACH/usr/xpg4 \
-	$CODEMGR_WS/proto/root_$MACH/usr/xpg4/bin \
 	$CODEMGR_WS/proto/root_$MACH/etc \
 	$CODEMGR_WS/proto/root_$MACH/etc/lib \
 	$CODEMGR_WS/proto/root_$MACH/opt \

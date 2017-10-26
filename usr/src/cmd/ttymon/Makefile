@@ -25,14 +25,10 @@
 #
 
 PROG= stty ttymon ttyadm sttydefs
-XPG4PROG= stty
 
 # the 'stty' objects have to be made in a separate directory
 # since only they are built with the -DEUC flag (see below).
 STTYOBJ=	sttyobjs/stty.o sttyobjs/sttytable.o sttyobjs/sttyparse.o
-
-XPG4STTYOBJ=	sttyobjs.xpg4/stty.o sttyobjs.xpg4/sttytable.o \
-		sttyobjs.xpg4/sttyparse.o
 
 TTYMONOBJ=	ttymon.o tmglobal.o tmhandler.o tmpmtab.o tmttydefs.o \
 		tmparse.o tmsig.o tmsac.o tmchild.o tmautobaud.o tmterm.o \
@@ -44,7 +40,7 @@ TTYADMOBJ=	ttyadm.o tmutil.o admutil.o
 STTYDEFSOBJ=	sttydefs.o admutil.o tmttydefs.o tmparse.o sttytable.o \
 		sttyparse.o 
 
-OBJS= $(STTYOBJ) $(XPG4STTYOBJ) $(TTYMONOBJ) $(TTYADMOBJ) $(STTYDEFSOBJ)
+OBJS= $(STTYOBJ) $(TTYMONOBJ) $(TTYADMOBJ) $(STTYDEFSOBJ)
 STTYSRC= stty.c sttytable.c sttyparse.c
 TTYMONSRC= $(TTYMONOBJ:%.o=%.c)
 TTYADMSRC= $(TTYADMOBJ:%.o=%.c)
@@ -60,13 +56,12 @@ include ../Makefile.cmd
 # If debug is needed, then:  CPPFLAGS += -DDEBUG
 # fix for 1111333 - turn on SYS_NAME so /etc/issue will be read if it exists
 CPPFLAGS += -DSYS_NAME
-$(XPG4):= CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 ttymon := LDLIBS += -lsec -ldevinfo
 
 # Only stty can be built with -DEUC.  ttymon will dump core unless further
 # changes are made to it.
 $(STTYOBJ) := CPPFLAGS += -DEUC
-$(XPG4STTYOBJ) := CPPFLAGS += -DEUC
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-variable
@@ -94,32 +89,18 @@ $(ROOTUSRSBINF) :=		FILEMODE =	0755
 $(LIBSAFD)/% : %
 	$(INS.file)
 
-# /usr/xpg6/bin/stty is a symlink to /usr/bin/stty
-ROOTXPG6SYMLINK= $(ROOTXPG6BIN)/stty
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
 stty:	sttyobjs $(STTYOBJ)
 	$(LINK.c) $(STTYOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-stty.xpg4: $(XPG4STTYOBJ)
-	$(LINK.c) $(XPG4STTYOBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG4STTYOBJ): sttyobjs.xpg4
-
 sttyobjs/%.o:	%.c
 	$(COMPILE.c) -o $@ $<
 
-sttyobjs.xpg4/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
 sttyobjs:
-	-@mkdir -p $@
-
-sttyobjs.xpg4:
 	-@mkdir -p $@
 
 ttymon:	$(TTYMONOBJ)
@@ -134,14 +115,9 @@ sttydefs: $(STTYDEFSOBJ)
 	$(LINK.c) $(STTYDEFSOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all $(DIRS) $(ROOTLIBF) $(ROOTUSRSBINF) $(ROOTBINF) \
-	$(ROOTXPG4PROG) $(ROOTXPG6SYMLINK)
+install: all $(DIRS) $(ROOTLIBF) $(ROOTUSRSBINF) $(ROOTBINF)
 	-$(RM) $(ROOTETC)/getty
 	-$(SYMLINK) ../usr/lib/saf/ttymon $(ROOTETC)/getty
-
-$(ROOTXPG6SYMLINK): $(ROOTBINF)
-	-$(RM) $@
-	-$(SYMLINK) ../../bin/$(BINF) $@
 
 $(POFILE):      $(POFILES)
 	$(RM) $@

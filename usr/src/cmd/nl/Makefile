@@ -26,12 +26,8 @@
 # only occur in ./nl.c, not in ../expr/compile.c.
 
 PROG= nl
-XPG4PROG= nl
 
-NLOBJ= nlobjs/$(PROG).o nlobjs/compile.o
-XPG4NLOBJ= nlobjs.xpg4/$(PROG).o nlobjs.xpg4/compile.o
-
-OBJS = $(NLOBJ) $(XPG4NLOBJ)
+OBJS= $(PROG).o compile.o
 SRCS = nl.c ../expr/compile.c
 
 include ../Makefile.cmd
@@ -39,42 +35,26 @@ include ../Makefile.cmd
 LDLIBS += -lgen
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-variable
-$(XPG4):= CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 
 MAPFILE.INT =	../expr/mapfile-intf
 LDFLAGS +=	$(MAPFILE.INT:%=-Wl,-M%)
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
-$(PROG): nlobjs $(NLOBJ) $(MAPFILE.INT)
-	$(LINK.c) $(NLOBJ) -o $@ $(LDLIBS)
+$(PROG): $(OBJS) $(MAPFILE.INT)
+	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-$(XPG4): nlobjs.xpg4 $(XPG4NLOBJ) $(MAPFILE.INT)
-	$(LINK.c) $(XPG4NLOBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-nlobjs/%.o:   %.c
+%.o:   %.c
 	$(COMPILE.c) -o $@ $<
 
-nlobjs/%.o:   ../expr/%.c
+%.o:   ../expr/%.c
 	$(COMPILE.c) -o $@ $<
-
-nlobjs.xpg4/%.o:      %.c
-	$(COMPILE.c) -o $@ $<
-
-nlobjs.xpg4/%.o:      ../expr/%.c
-	$(COMPILE.c) -o $@ $<
-
-nlobjs:
-	-@mkdir -p $@
-
-nlobjs.xpg4:
-	-@mkdir -p $@
 
 clean:
 	$(RM) $(OBJS)

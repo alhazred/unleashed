@@ -10,23 +10,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH RM 1 "Nov 20, 2007"
+.TH RM 1 "Oct 25, 2017"
 .SH NAME
 rm, rmdir \- remove directory entries
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/rm\fR [\fB-f\fR] [\fB-i\fR] \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/bin/rm\fR \fB-rR\fR [\fB-f\fR] [\fB-i\fR] \fIdirname\fR... [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/rm\fR [\fB-fiRr\fR] \fIfile\fR...
+\fB/usr/bin/rm\fR [\fB-fiRr\fR] \fIfile\fR...
 .fi
 
 .LP
@@ -41,7 +31,6 @@ rm, rmdir \- remove directory entries
 .fi
 
 .SH DESCRIPTION
-.SS "/usr/bin/rm /usr/xpg4/bin/rm"
 .sp
 .LP
 The \fBrm\fR utility removes the directory entry specified by each \fIfile\fR
@@ -92,8 +81,7 @@ be specified before the parent, so that the parent directory is empty when
 .SH OPTIONS
 .sp
 .LP
-The following options are supported for \fB/usr/bin/rm\fR and
-\fB/usr/xpg4/bin/rm\fR:
+The following options are supported:
 .sp
 .ne 2
 .na
@@ -123,38 +111,6 @@ error message.
 Same as \fB-r\fR option.
 .RE
 
-.SS "/usr/bin/rm"
-.sp
-.LP
-The following options are supported for \fB/usr/bin/rm\fR only:
-.sp
-.ne 2
-.na
-\fB\fB-f\fR\fR
-.ad
-.RS 6n
-Removes all files (whether write-protected or not) in a directory without
-prompting the user. In a write-protected directory, however, files are never
-removed (whatever their permissions are), but no messages are displayed. If the
-removal of a write-protected directory is attempted, this option does not
-suppress an error message.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB-i\fR\fR
-.ad
-.RS 6n
-Interactive. With this option, \fBrm\fR prompts for confirmation before
-removing any files. It overrides the \fB-f\fR option and remains in effect even
-if the standard input is not a terminal.
-.RE
-
-.SS "/usr/xpg4/bin/rm"
-.sp
-.LP
-The following options are supported for \fB/usr/xpg4/bin/rm\fR only:
 .sp
 .ne 2
 .na
@@ -277,7 +233,6 @@ bytes).
 .sp
 .LP
 The following examples are valid for the commands shown.
-.SS "/usr/bin/rm, /usr/xpg4/bin/rm"
 .LP
 \fBExample 1 \fRRemoving Directories
 .sp
@@ -390,7 +345,7 @@ An error occurred. One or more directories could not be deleted.
 .sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "/usr/bin/rm, /usr/bin/rmdir"
+.SS "/usr/bin/rmdir"
 .sp
 
 .sp
@@ -403,7 +358,7 @@ _
 CSI	Enabled
 .TE
 
-.SS "/usr/xpg4/bin/rm"
+.SS "/usr/bin/rm"
 .sp
 
 .sp

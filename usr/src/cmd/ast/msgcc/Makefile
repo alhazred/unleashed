@@ -59,7 +59,7 @@ msgcc:	msgcc.sh
 	rm -f msgcc ; \
 	{ \
 		print "#!/usr/bin/ksh93" ; \
-		print "export PATH=/usr/ast/bin:/usr/xpg6/bin:/usr/xpg4/bin:/usr/bin:\$${PATH}" ; \
+		print "export PATH=/usr/ast/bin:/usr/bin:\$${PATH}" ; \
 		print "builtin date" ; \
 		cat "msgcc.sh" ; \
 	} >msgcc ; \

@@ -29,7 +29,6 @@
 #
 
 PROG=		ipcs
-XPG4PROG=	$(PROG)
 
 include ../Makefile.cmd
 
@@ -39,11 +38,7 @@ LDLIBS +=	-lproject
 
 all: $(PROG)
 
-install: all $(ROOTXPG4PROG)
-
-$(ROOTXPG4PROG):	$(ROOTPROG)
-	-$(RM) $(ROOTXPG4PROG)
-	-$(LN) -s ../../bin/$(PROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 clean:
 

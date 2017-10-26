@@ -7,19 +7,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH M4 1 "Jul 3, 2007"
+.TH M4 1 "Oct 25, 2017"
 .SH NAME
 m4 \- macro processor
 .SH SYNOPSIS
 .LP
 .nf
 \fB/usr/bin/m4\fR [\fB-e\fR] [\fB-s\fR] [\fB-B\fR \fIint\fR] [\fB-H\fR \fIint\fR] [\fB-S\fR \fIint\fR]
-     [\fB-T\fR \fIint\fR] [\fB-D\fR\fIname\fR [\fI=val\fR]] ... [\fB-U\fR \fIname\fR] ... [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/m4\fR [\fB-e\fR] [\fB-s\fR] [\fB-B\fR \fIint\fR] [\fB-H\fR \fIint\fR] [\fB-S\fR \fIint\fR]
      [\fB-T\fR \fIint\fR] [\fB-D\fR\fIname\fR [...\fI=val\fR]] [\fB-U\fR \fIname\fR] ... [\fIfile\fR]...
 .fi
 
@@ -490,22 +484,6 @@ or all diversions if no argument. Text can be undiverted into another
 diversion. Undiverting discards the diverted text.
 .RE
 
-.SS "/usr/bin/m4"
-.sp
-.ne 2
-.na
-\fB\fBeval\fR\fR
-.ad
-.RS 8n
-Evaluates its argument as an arithmetic expression, using 32-bit signed-integer
-arithmetic. The following operators are supported: parentheses, unary -, unary
-+, !, ~, *, /, %, +, -, relationals, bitwise &, |, &&, and ||. Octal and hex
-numbers can be specified as in C. The second argument specifies the radix for
-the result; the default is 10. The third argument  can be used to specify the
-minimum number of digits in the result.
-.RE
-
-.SS "/usr/xpg4/bin/m4"
 .sp
 .ne 2
 .na
@@ -701,7 +679,7 @@ file.
 .sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "\fB/usr/xpg4/bin/m4\fR"
+.SS "\fB/usr/bin/m4\fR"
 .sp
 
 .sp

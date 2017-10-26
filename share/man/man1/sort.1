@@ -9,20 +9,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH SORT 1 "Nov 19, 2001"
+.TH SORT 1 "Oct 25, 2017"
 .SH NAME
 sort \- sort, merge, or sequence check text files
 .SH SYNOPSIS
 .LP
 .nf
 \fB/usr/bin/sort\fR [\fB-bcdfimMnru\fR] [\fB-k\fR \fIkeydef\fR] [\fB-o\fR \fIoutput\fR]
-     [\fB-S\fR \fIkmem\fR] [\fB-t\fR \fIchar\fR] [\fB-T\fR \fIdirectory\fR] [\fB-y\fR [\fIkmem\fR]]
-     [\fB-z\fR \fIrecsz\fR] [+\fIpos1\fR [-\fIpos2\fR]] [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/sort\fR [\fB-bcdfimMnru\fR] [\fB-k\fR \fIkeydef\fR] [\fB-o\fR \fIoutput\fR]
      [\fB-S\fR \fIkmem\fR] [\fB-t\fR \fIchar\fR] [\fB-T\fR \fIdirectory\fR] [\fB-y\fR [\fIkmem\fR]]
      [\fB-z\fR \fIrecsz\fR] [+\fIpos1\fR [-\fIpos2\fR]] [\fIfile\fR]...
 .fi
@@ -50,18 +43,7 @@ The following options alter the default behavior:
 .RS 6n
 Checks that the single input file is ordered as specified by the arguments and
 the collating sequence of the current locale. The exit code is set and no
-output is produced unless the file is out of sort.
-.RE
-
-.SS "/usr/xpg4/bin/sort"
-.sp
-.ne 2
-.na
-\fB\fB-c\fR\fR
-.ad
-.RS 16n
-Same as \fB/usr/bin/sort\fR except no output is produced under any
-circumstances.
+output is produced under any circumstances.
 .RE
 
 .sp
@@ -620,19 +602,6 @@ Temporary files
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/sort"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-.TE
-
-.SS "/usr/xpg4/bin/sort"
 .sp
 
 .sp

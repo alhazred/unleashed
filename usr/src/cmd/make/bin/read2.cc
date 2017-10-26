@@ -1159,8 +1159,7 @@ special_reader(Name target, register Name_vector depes, Cmd_line command)
 		sccs_get_rule = sccs_get_posix_rule;
 			/* turn keep state off being SunPro make specific */
 		keep_state = false;
-		/* Use /usr/xpg4/bin/sh on Solaris */
-		MBSTOWCS(wcs_buffer, "/usr/xpg4/bin/sh");
+		MBSTOWCS(wcs_buffer, "/usr/bin/sh");
 		(void) SETVAR(shell_name, GETNAME(wcs_buffer, FIND_LENGTH), false);
 		if (trace_reader) {
 			(void) printf("%s:\n", posix_name->string_mb);

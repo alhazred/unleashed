@@ -15,7 +15,6 @@
 
 
 PROG=		tail
-XPG4PROG=	$(PROG)
 
 OBJS=		forward.o misc.o read.o reverse.o tail.o
 SRCS=	 	$(OBJS:%.o=%.c)
@@ -41,11 +40,7 @@ $(PROG):	$(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all .WAIT $(ROOTPROG) $(ROOTXPG4PROG)
-
-$(ROOTXPG4PROG):
-	-$(RM) $@
-	-$(LN) -s ../../bin/$(PROG) $@
+install: all .WAIT $(ROOTPROG)
 
 
 clean:

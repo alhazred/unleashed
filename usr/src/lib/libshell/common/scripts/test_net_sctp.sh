@@ -29,8 +29,6 @@
 # test_net_sctp - a simple ksh93 SCTP demo
 #
 
-export PATH=/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin
-
 set -o xtrace
 set -o errexit
 

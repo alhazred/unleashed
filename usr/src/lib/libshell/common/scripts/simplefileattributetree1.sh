@@ -29,9 +29,6 @@
 # simplefileattributetree1 - build a simple file tree (including file attributes)
 #
 
-# Solaris needs /usr/xpg6/bin:/usr/xpg4/bin because the tools in /usr/bin are not POSIX-conformant
-export PATH=/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin
-
 # Make sure all math stuff runs in the "C" locale to avoid problems
 # with alternative # radix point representations (e.g. ',' instead of
 # '.' in de_DE.*-locales). This needs to be set _before_ any
@@ -154,11 +151,11 @@ typeset -r simplefileattributetree1_usage=$'+
 [+NAME?simplefileattributetree1 - generate compound variable tree which contains file names and their attributes]
 [+DESCRIPTION?\bsimplefileattributetree1\b is a simple variable tree 
 	demo which builds a compound variable tree based on the output
-	of /usr/xpg4/bin/file which contains the file name, the file attributes
+	of /usr/bin/file which contains the file name, the file attributes
 	and optionally file type and content]
 [b:benchmark?Print time needed to generate the tree.]
 [c:includecontent?Include the file\'s content in the tree, split into 1kb blocks.]
-[t:includefiletype?Include the file type (output of /usr/xpg4/bin/file).]
+[t:includefiletype?Include the file type (output of /usr/bin/file).]
 
 path
 
@@ -219,7 +216,7 @@ for (( i=0 ; i < ${#findls_lines[@]} ; i++ )) ; do
 	typeset treenode.basename="${ basename "${treenode.filepath}" ; }"
 	
 	if ${appconfig.do_record.filetype} ; then
-		# Using /usr/(xpg4/)*/bin/file requires a |fork()|+|exec()| which makes the script a few hundred times slower... ;-(
+		# Using /usr/bin/file requires a |fork()|+|exec()| which makes the script a few hundred times slower... ;-(
 		typeset treenode.filetype="$(file "${treenode.filepath}")"
 	fi
 	

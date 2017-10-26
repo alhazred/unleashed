@@ -6,7 +6,7 @@
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Path of default shell */
-#define DEFSHELL_CUSTOM "/usr/xpg4/bin/sh"
+#define DEFSHELL_CUSTOM "/usr/bin/sh"
 
 /* Shell spec to use by default */
 /* #undef DEFSHELL_INDEX */

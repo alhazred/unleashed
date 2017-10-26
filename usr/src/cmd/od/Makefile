@@ -13,7 +13,6 @@
 # Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
 #
 PROG=		od
-XPG4PROG=	$(PROG)
 
 OBJS=		od.o
 SRCS=	 	$(OBJS:%.o=%.c)
@@ -40,11 +39,7 @@ $(PROG):	$(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all .WAIT $(ROOTPROG) $(ROOTXPG4PROG)
-
-$(ROOTXPG4PROG):
-	-$(RM) $@
-	-$(LN) -s ../../bin/$(PROG) $@
+install: all .WAIT $(ROOTPROG)
 
 
 clean:

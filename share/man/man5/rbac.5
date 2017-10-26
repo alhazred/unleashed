@@ -199,7 +199,7 @@ should be changed to
 .sp
 .in +2
 .nf
-WHO=`/usr/xpg4/bin/id -n -u`
+WHO=`/usr/bin/id -n -u`
 if [ ! "$WHO" = "root" ]
 then
        echo "$PROG: ERROR: you are not authorized to run this script."

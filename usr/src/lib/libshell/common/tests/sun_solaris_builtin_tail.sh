@@ -24,9 +24,7 @@
 #
 
 #
-# Test whether the ksh93/libcmd tail builtin is compatible to
-# Solaris/SystemV { /usr/bin/tail, /usr/xpg4/bin/tail } and
-# POSIX "tail"
+# Test whether the ksh93/libcmd tail builtin is compatible
 #
 
 # test setup
@@ -384,7 +382,6 @@ function test_tail_fifo_2
 	return 0
 }
 
-# fixme: This should test /usr/bin/tail and /usr/xpg4/bin/tail in Solaris
 test_tail_fifo_1 "tail"
 test_tail_fifo_2 "tail"
 
@@ -440,8 +437,8 @@ function followtest1
 followtest1 "test5a" "tail" true
 # fixme: later we should test this, too:
 #followtest1 "test5b" "tail" false
-#followtest1 "test5c" "/usr/xpg4/bin/tail" true
-#followtest1 "test5d" "/usr/xpg4/bin/tail" false
+#followtest1 "test5c" "/usr/bin/tail" true
+#followtest1 "test5d" "/usr/bin/tail" false
 #followtest1 "test5e" "/usr/bin/tail" true
 #followtest1 "test5f" "/usr/bin/tail" false
 
@@ -486,7 +483,7 @@ function followtest2
 }
 
 followtest2 "test6a" "tail"
-followtest2 "test6b" "/usr/xpg4/bin/tail"
+followtest2 "test6b" "tail"
 # fixme: later we should test this, too:
 #followtest2 "test6c" "/usr/bin/tail"
 

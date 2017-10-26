@@ -24,45 +24,31 @@
 #
 
 PROG=		rm
-XPG4PROG=	rm
 RMOBJ1=		rm.o
 RMOBJ=		$(RMOBJ1) getresponse.o
-XPG4RMOBJ=	$(RMOBJ:%.o=xpg4_%.o)
 SRCS= 		$(RMOBJ1:%.o=%.c) $(SRC)/common/util/getresponse.c
 
 include ../Makefile.cmd
 
 CERRWARN += -Wno-parentheses
-$(XPG4) := CFLAGS += -DXPG4
+CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64  -I $(SRC)/common/util
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 $(PROG): $(RMOBJ) 
 	$(LINK.c) $(RMOBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG4): $(XPG4RMOBJ)
-	$(LINK.c) $(XPG4RMOBJ) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
 %.o:    $(SRC)/common/util/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 	$(POST_PROCESS_O)
 
-xpg4_%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-xpg4_%.o:	$(SRC)/common/util/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
 clean:
-	$(RM) $(RMOBJ) $(XPG4RMOBJ)
+	$(RM) $(RMOBJ)
 
 
 include ../Makefile.targ

@@ -27,7 +27,6 @@
 #
 
 PROG= basename
-XPG4PROG = $(PROG)
 
 include ../Makefile.cmd
 
@@ -35,13 +34,8 @@ include ../Makefile.cmd
 
 all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 clean:
-
-
-$(ROOTXPG4PROG):
-	-$(RM) $@
-	-$(LN) -s ../../bin/$(PROG) $@
 
 include ../Makefile.targ

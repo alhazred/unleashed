@@ -295,12 +295,6 @@ DIRS= \
 	/usr/share/lib/xml \
 	/usr/share/lib/xml/dtd \
 	/usr/share/man \
-	/usr/xpg4 \
-	/usr/xpg4/bin \
-	/usr/xpg4/include \
-	/usr/xpg4/lib \
-	/usr/xpg6 \
-	/usr/xpg6/bin \
 	/var  \
 	/var/adm  \
 	/var/adm/exacct \
@@ -418,7 +412,6 @@ DIRS64= \
 	/usr/lib/smbsrv/$(MACH64) \
 	/usr/lib/abi/$(MACH64) \
 	/usr/sbin/$(MACH64) \
-	/usr/xpg4/lib/$(MACH64) \
 	/var/ld/$(MACH64)
 
 # /var/mail/:saved is built directly by the rootdirs target in
@@ -468,7 +461,6 @@ SYM.DIRS64= \
 	/usr/lib/lwp/64 \
 	/usr/lib/secure/64 \
 	/usr/lib/security/64 \
-	/usr/xpg4/lib/64 \
 	/var/ld/64 \
 
 # prepend the ROOT prefix
@@ -568,7 +560,6 @@ $(BUILD64) $(ROOT)/usr/lib/lwp/64:=	LINKDEST=$(MACH64)
 $(BUILD64) $(ROOT)/usr/lib/link_audit/64:=	LINKDEST=$(MACH64)
 $(BUILD64) $(ROOT)/usr/lib/secure/64:=	LINKDEST=$(MACH64)
 $(BUILD64) $(ROOT)/usr/lib/security/64:=	LINKDEST=$(MACH64)
-$(BUILD64) $(ROOT)/usr/xpg4/lib/64:=	LINKDEST=$(MACH64)
 $(BUILD64) $(ROOT)/var/ld/64:=		LINKDEST=$(MACH64)
 
 #

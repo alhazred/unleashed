@@ -80,7 +80,7 @@ fi
 STATUS=$?
 if [ $STATUS -eq 1 ]
 then
-	/usr/xpg4/bin/grep -q "^[<>]" $tmpdir/d3a$$
+	grep -q "^[<>]" $tmpdir/d3a$$
 	RET=$?
 	if [ $RET -eq 1 ]
 	then
@@ -105,7 +105,7 @@ fi
 STATUS=$?
 if [ $STATUS -eq 1 ]
 then
-	/usr/xpg4/bin/grep -q "^[<>]" $tmpdir/d3b$$
+	grep -q "^[<>]" $tmpdir/d3b$$
 	RET=$?
 	if [ $RET -eq 1 ]
 	then

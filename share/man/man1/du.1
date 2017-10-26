@@ -9,19 +9,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH DU 1 "March 14, 2017"
+.TH DU 1 "Oct 25, 2017"
 .SH NAME
 du \- summarize disk usage
 .SH SYNOPSIS
 .LP
 .nf
 \fB/usr/bin/du\fR [\fB-Adorx\fR] [\fB-a\fR | \fB-s\fR] [\fB-h\fR | \fB-k\fR | \fB-m\fR] [\fB-H\fR | \fB-L\fR]
-     [\fIfile\fR ...]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/du\fR [\fB-Adorx\fR] [\fB-a\fR | \fB-s\fR] [\fB-h\fR | \fB-k\fR | \fB-m\fR] [\fB-H\fR | \fB-L\fR]
      [\fIfile\fR ...]
 .fi
 
@@ -38,15 +32,13 @@ allocated to any extended attributes encountered.
 Files with multiple links will be counted and written for only one entry. The
 directory entry that is selected in the report is unspecified. By default, file
 sizes are written in 512-byte units, rounded up to the next 512-byte unit.
-.SS "/usr/xpg4/bin/du"
 .LP
 When \fBdu\fR cannot obtain file attributes or read directories (see
 \fBstat\fR(2)), it will report an error condition and the final exit status
 will be affected.
 .SH OPTIONS
 .LP
-The following options are supported for \fB/usr/bin/du\fR and
-\fB/usr/xpg4/bin/du\fR:
+The following options are supported:
 .sp
 .ne 2
 .na
@@ -151,9 +143,7 @@ does nothing if \fB-s\fR is used.
 .ad
 .RS 6n
 Generate diagnostic messages about unreadable directories and files whose
-status cannot be obtained. /usr/bin/du is silent if these conditions arise and
-\fB-r\fR is not specified. \fB/usr/xpg4/bin/du\fR acts as though \fB-r\fR is
-always specified.
+status cannot be obtained (default option). 
 .RE
 
 .sp
@@ -234,19 +224,6 @@ An error occurred.
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/du"
-
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Stable
-.TE
-
-.SS "/usr/xpg4/bin/du"
 
 .TS
 box;

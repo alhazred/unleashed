@@ -26,39 +26,28 @@
 #
 
 PROG=		ls
-XPG4PROG=	ls
-XPG6PROG=	ls
 OBJS=           $(PROG).o
 SRCS=           $(OBJS:%.o=../%.c)
 
 include ../../Makefile.cmd
 
 LDLIBS += -lsec -lnvpair -lcmdutils -lncurses
-$(XPG4) := CFLAGS += -DXPG4
 
 # Include all XPG4 changes in the XPG6 version
-$(XPG6) := CFLAGS += -DXPG4 -DXPG6
-$(XPG6) := CFLAGS64 += -DXPG4 -DXPG6
+CFLAGS += -DXPG4 -DXPG6
+CFLAGS64 += -DXPG4 -DXPG6
 
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:
 
-all:	$(PROG) $(XPG4) $(XPG6)
+all:	$(PROG)
 
 
 clean:
 	$(RM) $(CLEANFILES)
 
 include ../../Makefile.targ
-
-%.xpg4: ../%.c
-	$(LINK.c) -o $@ $< $(LDLIBS)
-	$(POST_PROCESS)
-
-%.xpg6: ../%.c
-	$(LINK.c) -o $@ $< $(LDLIBS) 
-	$(POST_PROCESS)
 
 %: ../%.c
 	$(LINK.c) -o $@ $< $(LDLIBS)

@@ -28,7 +28,6 @@
 # cmd/nohup/Makefile
 # 
 
-XPG4PROG = nohup
 PROG = nohup
 
 include ../Makefile.cmd

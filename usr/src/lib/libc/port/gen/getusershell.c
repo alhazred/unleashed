@@ -70,8 +70,6 @@ const char *okshells[] = {
 	"/bin/pfbash",
 	"/bin/pftcsh",
 	"/bin/pfzsh",
-	"/usr/xpg4/bin/sh",
-	"/usr/xpg4/bin/pfsh",
 	"/sbin/pfsh",
 	"/usr/sfw/bin/zsh",
 	NULL

@@ -25,19 +25,15 @@
 #
 
 PROG=		nm
-XPG4PROG=	nm
 
 ARFORMAT=	PORTAR
 
 include 	../../../Makefile.cmd
 include 	../../Makefile.com
 
-COMOBJS=	nm.o
+OBJS=	nm.o
 
-OBJS=		$(COMOBJS)
-XPG4OBJS=	objs.xpg4/nm.o
-
-SRCS=		$(COMOBJS:%.o=../common/%.c)
+#SRCS=		$(COMOBJS:%.o=../common/%.c)
 
 LLDFLAGS =	'-R$$ORIGIN/../../lib'
 INCLIST=	-I../../include -I../../include/i386 \
@@ -48,38 +44,26 @@ CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master) -I$(ELFCAP)
 CERRWARN +=	-Wno-uninitialized
 
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf
-objs.xpg4/%.o := CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 
 $(DEMOBJS):=	DEFLIST = -DELF_OBJ
-
-objs.xpg4/%.o:	../common/%.c
-		$(COMPILE.c) -o $@ $<
 
 %.o:		../common/%.c
 		$(COMPILE.c) $<
 
 .KEEP_STATE:
 
-all:		$(PROG) $(XPG4)
+all:		$(PROG)
 
 $(PROG):	$(OBJS)
 		$(LINK.c) $(OBJS) -o $@ $(LLDFLAGS) $(LDLIBS)
 		$(POST_PROCESS)
 
-$(XPG4):	$(XPG4OBJS)
-		$(LINK.c) $(XPG4OBJS) -o $@ $(LDLIBS)
-		$(POST_PROCESS)
-
-$(XPG4OBJS):	objs.xpg4
-
-objs.xpg4:
-	-@mkdir -p $@
-
 package \
-install:	all $(VAR_SGSBINPROG) $(ROOTXPG4PROG) $(VAR_SGSCCSLINK)
+install:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
 
 clean:
-		$(RM) $(OBJS) $(XPG4OBJS) $(CLEANFILES)
+		$(RM) $(OBJS) $(CLEANFILES)
 
 include		../../../Makefile.targ
 include		../../Makefile.targ

@@ -2315,4 +2315,3 @@ license lic_CDDL license=lic_CDDL
 depend fmri=system/file-system/zfs/tests type=require
 #depend fmri=system/test/fio type=require
 depend fmri=system/test/testrunner type=require
-depend fmri=system/xopen/xcu4 type=require

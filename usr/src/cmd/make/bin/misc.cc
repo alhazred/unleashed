@@ -674,11 +674,7 @@ load_cached_names(void)
 	dollar->dollar = false;
 
 	/* Set the value of $(SHELL) */
-	if (posix) {
-	  MBSTOWCS(wcs_buffer, "/usr/xpg4/bin/sh");
-	} else {
-	  MBSTOWCS(wcs_buffer, "/bin/sh");
-	}
+	MBSTOWCS(wcs_buffer, "/bin/sh");
 	(void) SETVAR(shell_name, GETNAME(wcs_buffer, FIND_LENGTH), false);
 
 	/*

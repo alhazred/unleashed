@@ -46,7 +46,6 @@ system shells are used in its place:
 \fB/usr/bin/pfksh\fR             \fB/usr/bin/pfsh\fR
 \fB/usr/bin/sh\fR                \fB/usr/bin/tcsh\fR
 \fB/usr/bin/zsh\fR               \fB/usr/sfw/bin/zsh\fR
-\fB/usr/xpg4/bin/sh\fR
 .fi
 .in -2
 

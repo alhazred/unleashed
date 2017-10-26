@@ -9,48 +9,28 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License. You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.
 .\"  See the License for the specific language governing permissions and limitations under the License. When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with
 .\" the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH TR 1 "Mar 3, 2009"
+.TH TR 1 "Oct 25, 2017"
 .SH NAME
 tr \- translate characters
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/tr\fR [\fB-cds\fR] [\fIstring1\fR [\fIstring2\fR]]
+\fB/usr/bin/tr\fR [\fB-c\fR | \fB-C\fR] [\fB-s\fR] \fIstring1\fR \fIstring2\fR
 .fi
 
 .LP
 .nf
-\fB/usr/xpg4/bin/tr\fR [\fB-cs\fR] \fIstring1\fR \fIstring2\fR
+\fB/usr/bin/tr\fR \fB-s\fR [\fB-c\fR | \fB-C\fR] \fIstring1\fR
 .fi
 
 .LP
 .nf
-\fB/usr/xpg4/bin/tr\fR \fB-s\fR | \fB-d\fR [\fB-c\fR] \fIstring1\fR
+\fB/usr/bin/tr\fR \fB-d\fR [\fB-c\fR | \fB-C\fR] \fIstring1\fR
 .fi
 
 .LP
 .nf
-\fB/usr/xpg4/bin/tr\fR \fB-ds\fR [\fB-c\fR] \fIstring1\fR \fIstring2\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/tr\fR [\fB-c\fR | \fB-C\fR] [\fB-s\fR] \fIstring1\fR \fIstring2\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/tr\fR \fB-s\fR [\fB-c\fR | \fB-C\fR] \fIstring1\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/tr\fR \fB-d\fR [\fB-c\fR | \fB-C\fR] \fIstring1\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/tr\fR \fB-ds\fR [\fB-c\fR | \fB-C\fR] \fIstring1\fR \fIstring2\fR
+\fB/usr/bin/tr\fR \fB-ds\fR [\fB-c\fR | \fB-C\fR] \fIstring1\fR \fIstring2\fR
 .fi
 
 .SH DESCRIPTION
@@ -269,17 +249,6 @@ other character, other than an octal digit, following the backslash are
 unspecified.
 .RE
 
-.SS "/usr/xpg4/bin/tr"
-.sp
-.ne 2
-.na
-\fB\fIc-c\fR\fR
-.ad
-.RS 7n
-
-.RE
-
-.SS "/usr/bin/tr"
 .sp
 .ne 2
 .na
@@ -370,8 +339,7 @@ expression is used to map multiple characters to one, it is only valid when it
 occurs in \fIstring2\fR. If \fIn\fR has a leading \fB0\fR, it is interpreted
 as an octal value. Otherwise, it is interpreted as a decimal value.
 .sp
-If \fIn\fR is omitted or is \fB0\fR, \fB/usr/bin/tr\fR interprets this as huge;
-\fB/usr/xpg4/bin/tr\fR and \fB/usr/xpg6/bin/tr\fR interprets this as large
+If \fIn\fR is omitted or is \fB0\fR, \fB/usr/bin/tr\fR interprets this as large
 enough to extend the\fIstring2\fR-based sequence to the length of the
 \fIstring1\fR-based sequence.
 .RE
@@ -478,36 +446,6 @@ l | l .
 ATTRIBUTE TYPE	ATTRIBUTE VALUE
 _
 CSI	Enabled
-.TE
-
-.SS "/usr/xpg4/bin/tr"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Committed
-_
-Standard	See \fBstandards\fR(5).
-.TE
-
-.SS "/usr/xpg6/bin/tr"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
 _
 Interface Stability	Committed
 _
@@ -523,6 +461,6 @@ Standard	See \fBstandards\fR(5).
 .SH NOTES
 .sp
 .LP
-Unlike some previous versions, \fB/usr/xpg4/bin/tr\fR correctly processes
+Unlike some previous versions, \fB/usr/bin/tr\fR correctly processes
 \fBNUL\fR characters in its input stream. \fBNUL\fR characters can be stripped
 by using \fBtr\fR \fB-d\fR \fB\&'\e000'\fR.

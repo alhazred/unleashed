@@ -539,7 +539,7 @@ do
 done
 
 if [ -z "$MAILTO" -o "$MAILTO" = "nobody" ]; then
-	MAILTO=`/usr/xpg4/bin/id -un`
+	MAILTO=`/usr/bin/id -un`
 	export MAILTO
 fi
 

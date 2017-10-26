@@ -32,11 +32,10 @@ checktest()
 }
 
 # 
-# Test cases for 'tail', some based on CoreUtils test cases (validated
-# with legacy Solaris 'tail' and/or xpg4 'tail').  Note that this is designed
-# to be able to run on BSD systems as well to check our behavior against
-# theirs (some behavior that is known to be idiosyncratic to illumos is
-# skipped on non-illumos systems).
+# Test cases for 'tail', some based on CoreUtils test cases. Note that
+# this is designed to be able to run on BSD systems as well to check
+# our behavior against theirs (some behavior that is known to be
+# idiosyncratic to illumos is skipped on non-illumos systems).
 #
 PROG=/usr/bin/tail
 CMD=`basename $0`
@@ -44,10 +43,6 @@ DIR=""
 
 while [[ $# -gt 0 ]]; do
 	case $1 in
-	    -x)
-		PROG=/usr/xpg4/bin/tail
-		shift
-		;;
 	    -o)
 		PROG=$2
 		shift 2
@@ -58,7 +53,7 @@ while [[ $# -gt 0 ]]; do
 		;;
 	    *)
 		echo "Usage: tailtests.sh" \
-		    "[-x][-o <override tail executable>]" \
+		    "[-o <override tail executable>]" \
 		    "[-d <override output directory>]"
 		exit 1
 		;;

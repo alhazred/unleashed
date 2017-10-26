@@ -61,7 +61,6 @@ USRSBINFF=	ncheck
 ETC2SBIN=	mount umount
 ETC2USRSBIN=	clri fsdb mkfs fsck labelit dcopy volcopy ff ncheck
 USRBIN2USRSBIN=	df
-USRXPG4BIN2USRSBIN= df
 
 FSLIB=		fslib.o
 
@@ -75,7 +74,6 @@ ROOTETCMNTTAB=		$(MNTTAB:%=$(ROOTETC)/%)
 SYMETC2SBIN	=	$(ETC2SBIN:%=$(ROOTETC)/%)
 SYMETC2USRSBIN	=	$(ETC2USRSBIN:%=$(ROOTETC)/%)
 SYMUSRBIN2USRSBIN=	$(USRBIN2USRSBIN:%=$(ROOTBIN)/%)
-SYMUSRXPG4BIN2USRSBIN=	$(USRXPG4BIN2USRSBIN:%=$(ROOTXPG4BIN)/%)
 SYMDEVNM=		$(ROOTUSRSBIN)/devnm
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE
@@ -144,7 +142,7 @@ install: $(FSLIB) .WAIT $(SUBDIRS) .WAIT install_local
 install_local:	all_local $(ROOTSBINPROG) $(ROOTUSRSBINF) $(ROOTUSRSBINCLRI) \
 		$(ROOTUSRSBINFF) $(ROOTETCMNTTAB) $(ROOTETCDEFAULTFILES) \
 		$(SYMETC2SBIN) $(SYMETC2USRSBIN) \
-		$(SYMUSRBIN2USRSBIN) $(SYMUSRXPG4BIN2USRSBIN) $(SYMDEVNM) \
+		$(SYMUSRBIN2USRSBIN) $(SYMDEVNM) \
 		$(ROOTUSRSBINLINKS)
 
 # Links from /etc to /sbin such as /etc/mount -> ../sbin/mount
@@ -158,10 +156,6 @@ $(SYMETC2USRSBIN):
 # Links from /usr/bin to /usr/sbin such as /usr/bin/df -> ../sbin/df
 $(SYMUSRBIN2USRSBIN):
 	-$(RM) $@; $(SYMLINK) ../sbin/$(@F) $@
-
-# Links from /usr/xpg4/bin to /usr/sbin such as /usr/xpg4/bin/df -> ../sbin/df
-$(SYMUSRXPG4BIN2USRSBIN):
-	-$(RM) $@; $(SYMLINK) ../../sbin/$(@F) $@
 
 # Links from /usr/sbin to /sbin such as /usr/sbin/mount -> ../../sbin/mount
 $(ROOTUSRSBINLINKS):

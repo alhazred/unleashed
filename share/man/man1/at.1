@@ -9,7 +9,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH AT 1 "Apr 13, 2005"
+.TH AT 1 "Oct 25, 2017"
 .SH NAME
 at, batch \- execute commands at a later time
 .SH SYNOPSIS
@@ -38,34 +38,6 @@ at, batch \- execute commands at a later time
 .LP
 .nf
 \fB/usr/bin/batch\fR [\fB-p\fR \fIproject\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/at\fR [\fB-c\fR | \fB-k\fR | \fB-s\fR] [\fB-m\fR] [\fB-f\fR \fIfile\fR] [\fB-p\fR \fIproject\fR]
-     [\fB-q\fR \fIqueuename\fR] \fB-t\fR \fItime\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/at\fR [\fB-c\fR | \fB-k\fR | \fB-s\fR] [\fB-m\fR] [\fB-f\fR \fIfile\fR] [\fB-p\fR \fIproject\fR]
-     [\fB-q\fR \fIqueuename\fR] \fItimespec\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/at\fR \fB-l\fR [\fB-p\fR \fIproject\fR] [\fB-q\fR \fIqueuename\fR]
-     [\fIat_job_id.\fR \fI\&..\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/at\fR \fB-r\fR \fIat_job_id.\fR \fI\&..\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/batch\fR [\fB-p\fR \fIproject\fR]
 .fi
 
 .SH DESCRIPTION
@@ -118,7 +90,6 @@ Commands of the forms:
 .in +2
 .nf
 /usr/bin/batch [-p project]
-/usr/xpg4/bin/batch [-p project]
 .fi
 .in -2
 .sp
@@ -129,8 +100,7 @@ are respectively equivalent to:
 .sp
 .in +2
 .nf
-/usr/bin/at -q b [-p project] now
-/usr/xpg4/bin/at -q b -m [-p project] now
+/usr/bin/at -q b -m [-p project] now
 .fi
 .in -2
 .sp
@@ -636,37 +606,7 @@ _
 Interface Stability	Standard
 .TE
 
-.SS "/usr/xpg4/bin/at"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Not enabled
-_
-Interface Stability	Standard
-.TE
-
 .SS "/usr/bin/batch"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Standard
-.TE
-
-.SS "/usr/xpg4/bin/batch"
 .sp
 
 .sp

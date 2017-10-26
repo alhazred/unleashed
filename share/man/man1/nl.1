@@ -7,20 +7,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH NL 1 "Mar 28, 1995"
+.TH NL 1 "Oct 25, 2017"
 .SH NAME
 nl \- line numbering filter
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/nl\fR [\fB-p\fR] [\fB-b\fR [\fItype\fR]] [\fB-d\fR [\fIdelim\fR]] [\fB-f\fR [\fItype\fR]]
-     [\fB-h\fR [\fItype\fR]] [\fB-i\fR [\fIincr\fR]] [\fB-l\fR [\fInum\fR]] [\fB-n\fR [\fIformat\fR]]
-     [\fB-s\fR [\fIsep\fR]] [\fB-w\fR [\fIwidth\fR]] [\fB-v\fR [\fIstartnum\fR]] [\fIfile\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/nl\fR [\fB-p\fR] [\fB-b\fR \fItype\fR] [\fB-d\fR \fIdelim\fR] [\fB-f\fR \fItype\fR]
+\fB/usr/bin/nl\fR [\fB-p\fR] [\fB-b\fR \fItype\fR] [\fB-d\fR \fIdelim\fR] [\fB-f\fR \fItype\fR]
      [\fB-h\fR \fItype\fR] [\fB-i\fR \fIincr\fR] [\fB-l\fR \fInum\fR] [\fB-n\fR \fIformat\fR] [\fB-s\fR \fIsep\fR]
      [\fB-w\fR \fIwidth\fR] [\fB-v\fR \fIstartnum\fR] [\fIfile\fR]
 .fi
@@ -69,11 +62,10 @@ logical page body.
 .LP
 Command options may appear in any order and may be intermingled with an
 optional file name. Only one file may be named. The specified default is used
-when the option is not entered on the command line. \fB/usr/xpg4/bin/nl\fR
+when the option is not entered on the command line. \fBnl\fR
 options require option arguments.  A \fBSPACE\fR character \fBmay\fR separate
 options from option arguments. \fB/usr/bin/nl\fR options  \fBmay\fR have option
-arguments. If option-arguments of \fB/usr/bin/nl\fR options are not specified,
-these options result in the default. The supported options are:
+arguments. The supported options are: 
 .sp
 .ne 2
 .na
@@ -340,7 +332,7 @@ Shared object containing string transformation library routines
 .sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "/usr/xpg4/bin/nl"
+.SS "/usr/bin/nl"
 .sp
 
 .sp

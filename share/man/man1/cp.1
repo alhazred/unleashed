@@ -10,7 +10,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH CP 1 "Apr 15, 2013"
+.TH CP 1 "Oct 25, 2017"
 .SH NAME
 cp \- copy files
 .SH SYNOPSIS
@@ -32,26 +32,6 @@ cp \- copy files
 .LP
 .nf
 \fB/usr/bin/cp\fR [\fB-R\fR | \fB-R\fR [\fB-H\fR | \fB-L\fR | \fB-P\fR]] [\fB-afip@/\fR] \fIsource_dir\fR... \fItarget\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/cp\fR [\fB-afip@/\fR] \fIsource_file\fR \fItarget_file\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/cp\fR [\fB-afip@/\fR] \fIsource_file\fR... \fItarget\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/cp\fR [\fB-r\fR | \fB-R\fR [\fB-H\fR | \fB-L\fR | \fB-P\fR]] [\fB-afip@/\fR] \fIsource_dir\fR... \fItarget\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/cp\fR [\fB-R\fR | \fB-R\fR [\fB-H\fR | \fB-L\fR | \fB-P\fR]] [\fB-afip@/\fR] \fIsource_dir\fR... \fItarget\fR
 .fi
 
 .SH DESCRIPTION
@@ -88,8 +68,7 @@ copies all files and subdirectories.
 .SH OPTIONS
 .sp
 .LP
-The following options are supported for both \fB/usr/bin/cp\fR and
-\fB/usr/xpg4/bin/cp\fR:
+The following options are supported:
 .sp
 .ne 2
 .na
@@ -236,30 +215,10 @@ remaining operands) exits with a \fBnon-zero\fR exit status.
 Specifying more than one of the mutually-exclusive options \fB-H\fR, \fB-L\fR,
 and \fB-P\fR is not considered an error. The last option specified determines
 the behavior of the utility.
-.SS "/usr/bin/cp"
 .sp
 .LP
 If the \fB-p\fR option is specified with either the \fB-@\fR option or the
-\fB-/\fR option, \fB/usr/bin/cp\fR behaves as follows
-.RS +4
-.TP
-.ie t \(bu
-.el o
-When both \fB-p\fR and \fB-@\fR are specified in any order, the copy fails if
-extended attributes cannot be copied.
-.RE
-.RS +4
-.TP
-.ie t \(bu
-.el o
-When both \fB-p\fR and \fB-/\fR are specified in any order, the copy fails if
-extended system attributes cannot be copied.
-.RE
-.SS "/usr/xpg4/bin/cp"
-.sp
-.LP
-If the \fB-p\fR option is specified with either the \fB-@\fR option or the
-\fB-/\fR option, /\fBusr/xpg4/bin/cp\fR behaves as follows:
+\fB-/\fR option, /\fBusr/bin/cp\fR behaves as follows:
 .RS +4
 .TP
 .ie t \(bu
@@ -469,21 +428,6 @@ An error occurred.
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/cp"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Committed
-.TE
-
-.SS "/usr/xpg4/bin/cp"
 .sp
 
 .sp

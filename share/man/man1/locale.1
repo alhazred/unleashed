@@ -182,7 +182,7 @@ a user-supplied response is affirmative:
 .sp
 .in +2
 .nf
-\fBif printf "%s\en" "$response" | /usr/xpg4/bin/grep -Eq\e
+\fBif printf "%s\en" "$response" | /usr/bin/grep -Eq\e
         "$(locale yesexpr)"
 then
     affirmative processing goes here

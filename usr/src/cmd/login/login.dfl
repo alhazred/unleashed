@@ -49,8 +49,6 @@ ALTSHELL=YES
 # PATH sets the initial shell PATH variable
 # sample with GNU tools in front of the path
 # PATH=/usr/gnu/bin:/usr/bin:/usr/sbin:/sbin
-# sample with XPG4 tools in front of the path
-# PATH=/usr/xpg4/bin:/usr/bin:/usr/sbin:/sbin
 PATH=/usr/bin:/usr/sbin:/sbin:/usr/gnu/bin
 
 # SUPATH sets the initial shell PATH variable for root

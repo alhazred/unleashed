@@ -125,29 +125,13 @@ execvpe(const char *name, char *const *argv, char *const *envp)
 		return (-1);
 	}
 	if ((pathstr = getenv("PATH")) == NULL) {
-		/*
-		 * XPG4:  pathstr is equivalent to CSPATH, except that
-		 * :/usr/sbin is appended when root, and pathstr must end
-		 * with a colon when not root.  Keep these paths in sync
-		 * with CSPATH in confstr.c.  Note that pathstr must end
-		 * with a colon when not root so that when name doesn't
-		 * contain '/', the last call to execat() will result in an
-		 * attempt to execv name from the current directory.
-		 */
 		if (geteuid() == 0 || getuid() == 0) {
-			if (__xpg4 == 0) {	/* not XPG4 */
-				pathstr = "/usr/sbin:/usr/ccs/bin:/usr/bin";
-			} else {		/* XPG4 (CSPATH + /usr/sbin) */
-				pathstr = "/usr/xpg4/bin:/usr/ccs/bin:/usr/bin:"
+			pathstr = "/usr/bin:/usr/ccs/bin:/usr/bin:"
 				    "/opt/SUNWspro/bin:/usr/sbin";
-			}
+			
 		} else {
-			if (__xpg4 == 0) {	/* not XPG4 */
-				pathstr = "/usr/ccs/bin:/usr/bin:";
-			} else {		/* XPG4 (CSPATH) */
-				pathstr = "/usr/xpg4/bin:/usr/ccs/bin:"
-				    "/usr/bin:/opt/SUNWspro/bin:";
-			}
+				pathstr = "/usr/bin:/usr/ccs/bin:"
+				    "/opt/SUNWspro/bin:";
 		}
 	}
 	cp = strchr(name, '/')? (const char *)"": pathstr;

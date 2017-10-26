@@ -25,22 +25,19 @@
 #
 
 PROG= nice
-XPG4PROG= nice
-OBJS= nice.o
+OBJS= nice.o values-xpg4.o
 
 include ../Makefile.cmd
 
-clean $(XPG4) := OBJS += values-xpg4.o
-
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-$(PROG) $(XPG4): $$(OBJS)
+$(PROG): $$(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 values-xpg4.o: ../../lib/crt/common/values-xpg4.c
 	$(COMPILE.c) -o $@ ../../lib/crt/common/values-xpg4.c

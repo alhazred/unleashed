@@ -23,54 +23,36 @@
 #
 
 PROG=		mv
-XPG4PROG=	mv
 OBJS1=		mv.o
-OBJS=           $(OBJS1) getresponse.o
+OBJS=           $(OBJS1) getresponse.o values-xpg4.o
 CPFILE=		cp
 LNFILE=		ln
-XPG4OBJS=	$(OBJS:%.o=xpg4_%.o)
 SRCS=		$(OBJS1:%.o=%.c) $(SRC)/common/util/getresponse.c
 
 ROOTLINKS= $(ROOTBIN)/$(CPFILE) $(ROOTBIN)/$(LNFILE)
-ROOTXPG4LINKS= $(ROOTXPG4BIN)/$(CPFILE) $(ROOTXPG4BIN)/$(LNFILE)
 
 include ../Makefile.cmd
-
-clean $(XPG4)	:= OBJS += values-xpg4.o
 
 CLOBBERFILES += $(CPFILE) $(LNFILE)
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
-$(XPG4) := CFLAGS += -DXPG4
+CFLAGS += -DXPG4
 XGETFLAGS += -a -x mv.xcl
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
 
 $(PROG) := LDLIBS += -lcmdutils -lavl -lsec -lnvpair
-$(XPG4) := LDLIBS += -lcmdutils -lavl -lsec -lnvpair
 
 .KEEP_STATE:
 
-all:	$(PROG) $(CPFILE) $(LNFILE) $(XPG4)
+all:	$(PROG) $(CPFILE) $(LNFILE)
 
 $(PROG):	$$(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-$(XPG4):	$$(XPG4OBJS)
-	$(LINK.c) -o $@ $(XPG4OBJS) $(LDLIBS)
-	$(POST_PROCESS)
-
 %.o:    $(SRC)/common/util/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
-	$(POST_PROCESS_O)
-
-xpg4_%.o:    %.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-xpg4_%.o:    $(SRC)/common/util/%.c
-	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
 %values-xpg4.o:		../../lib/crt/common/values-xpg4.c
@@ -82,18 +64,14 @@ $(CPFILE):	$(PROG)
 $(LNFILE):	$(PROG)
 	@$(RM) $(LNFILE); $(LN) $(PROG) $(LNFILE)
 
-install: all $(ROOTXPG4PROG) $(ROOTLINKS) $(ROOTXPG4LINKS)
+install: all $(ROOTLINKS)
 
 $(ROOTLINKS):	$(ROOTPROG)
 	$(RM) $@
 	$(LN) $(ROOTPROG) $@
 
-$(ROOTXPG4LINKS):	$(ROOTXPG4PROG)
-	$(RM) $@
-	$(LN) $(ROOTXPG4PROG) $@
-
 clean:
-	$(RM) $(OBJS) $(XPG4OBJS)
+	$(RM) $(OBJS)
 
 
 include ../Makefile.targ

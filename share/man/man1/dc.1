@@ -3,18 +3,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH DC 1 "Aug 29, 2003"
+.TH DC 1 "Oct 25, 2017"
 .SH NAME
 dc \- desk calculator
 .SH SYNOPSIS
 .LP
 .nf
 \fB/usr/bin/dc\fR [\fIfilename\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/dc\fR [\fIfilename\fR]
 .fi
 
 .SH DESCRIPTION
@@ -31,11 +26,9 @@ taken from that file until its end, then from the standard input.
 C-like syntax that implements functions. \fBbc\fR also provides reasonable
 control structures for programs. See \fBbc\fR(1).
 .SH USAGE
-.SS "/usr/bin/dc, /usr/xpg6/bin/dc"
 .sp
 .LP
-The following constructions are recognized under both \fB/usr/bin/dc\fR and
-\fB/usr/xpg6/bin/dc\fR:
+The following constructions are recognized:
 .sp
 .ne 2
 .na
@@ -298,29 +291,9 @@ Displays \fBdc\fR debugging information.
 Used by  \fBbc\fR(1) for array operations.
 .RE
 
-.SS "/usr/bin/dc"
 .sp
 .LP
-The following construction is recognized under \fB/usr/bin/dc\fR, using the
-scale of whatever the result is.
-.sp
-.ne 2
-.na
-\fB\fB+ \(mi / * % ^\fR\fR
-.ad
-.RS 18n
-The top two values on the stack are added (\fB+\fR), subtracted (\fB\(mi\fR),
-multiplied (\fB*\fR), divided (\fB/\fR), remaindered (\fB%\fR), or
-exponentiated (\fB^\fR). The two entries are popped off the stack; the result
-is pushed on the stack in their place. Any fractional part of an exponent is
-ignored.
-.RE
-
-.SS "/usr/xpg6/bin/dc"
-.sp
-.LP
-The following construction is recognized under \fB/usr/xpg6/bin/dc\fR. The
-results of division are forced to be a scale of 20.
+The results of division are forced to be a scale of 20.
 .sp
 .ne 2
 .na

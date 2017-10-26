@@ -756,7 +756,7 @@ close($fh1);
 
 
 start("Test getprojid");
-($s) = `/usr/xpg4/bin/id -p` =~ /projid=(\d+)/;
+($s) = `/usr/bin/id -p` =~ /projid=(\d+)/;
 defined($s) && $s == getprojid() ? pass() : fail();
 
 start("Test fgetprojent");

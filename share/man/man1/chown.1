@@ -10,11 +10,10 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH CHOWN 1 "Jul 11, 2008"
+.TH CHOWN 1 "Oct 25, 2017"
 .SH NAME
 chown \- change file ownership
 .SH SYNOPSIS
-.SS "/usr/bin/chown"
 .LP
 .nf
 \fB/usr/bin/chown\fR [\fB-fhR\fR] \fIowner\fR[:\fIgroup\fR] \fIfile\fR...
@@ -35,27 +34,6 @@ chown \- change file ownership
 \fB/usr/bin/chown\fR \fB-s\fR \fB-R\fR [\fB-f\fR] [\fB-H\fR | \fB-L\fR | \fB-P\fR] \fIownersid\fR[:\fIgroupsid\fR] \fIfile\fR...
 .fi
 
-.SS "/usr/xpg4/bin/chown"
-.LP
-.nf
-\fB/usr/xpg4/bin/chown\fR [\fB-fhR\fR] \fIowner\fR[:\fIgroup\fR] \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/chown\fR \fB-s\fR [\fB-fhR\fR] \fIownersid\fR[:\fIgroupsid\fR] \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/chown\fR \fB-R\fR [\fB-f\fR] [\fB-H\fR | \fB-L\fR | \fB-P\fR] \fIowner\fR[:\fIgroup\fR] \fIfile\fR...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/chown\fR \fB-s\fR \fB-R\fR [\fB-f\fR] [\fB-H\fR | \fB-L\fR | \fB-P\fR] \fIownersid\fR[:\fIgroupsid\fR] \fIfile\fR...
-.fi
-
 .SS "ksh93"
 .LP
 .nf
@@ -63,7 +41,6 @@ chown \- change file ownership
 .fi
 
 .SH DESCRIPTION
-.SS "/usr/bin/chown and /usr/xpg4/bin/chown"
 .sp
 .LP
 The \fBchown\fR utility sets the user \fBID\fR of the file named by each
@@ -121,7 +98,6 @@ be specified as either a user name or a numeric user id. The group ownership of
 each file can also be changed to \fIgroup\fR by appending \fI:group\fR to the
 user name.
 .SH OPTIONS
-.SS "/usr/bin/chown and /usr/xpg4/bin/chown"
 .sp
 .LP
 The following options are supported:
@@ -199,27 +175,8 @@ a file system that supports storing SIDs, such as ZFS.
 Specifying more than one of the mutually-exclusive options \fB-H\fR, \fB-L\fR,
 or \fB-P\fR is not considered an error. The last option specified determines
 the behavior of \fBchown\fR.
-.SS "/usr/bin/chown"
 .sp
 .LP
-The following options are supported:
-.sp
-.ne 2
-.na
-\fB\fB-R\fR\fR
-.ad
-.RS 6n
-Recursive. \fBchown\fR descends through the directory, and any subdirectories,
-setting the specified ownership \fBID\fR as it proceeds. When a symbolic link
-is encountered, the owner of the target file is changed, unless the \fB-h\fR or
-\fB-P\fR option is specified. However, no recursion takes place, unless the
-\fB-H\fR or \fB-L\fR option is specified.
-.RE
-
-.SS "/usr/xpg4/bin/chown"
-.sp
-.LP
-The following options are supported:
 .sp
 .ne 2
 .na
@@ -514,23 +471,6 @@ System password file
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/chown"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled. See NOTES.
-_
-Interface Stability	Committed
-_
-Standard	See \fBstandards\fR(5).
-.TE
-
-.SS "/usr/xpg4/bin/chown"
 .sp
 
 .sp

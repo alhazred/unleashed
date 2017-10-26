@@ -30,9 +30,6 @@
 # plaintext conversion.
 #
 
-# Solaris needs /usr/xpg6/bin:/usr/xpg4/bin because the tools in /usr/bin are not POSIX-conformant
-export PATH=/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin
-
 function printmsg
 {
 	print -u2 "$*"

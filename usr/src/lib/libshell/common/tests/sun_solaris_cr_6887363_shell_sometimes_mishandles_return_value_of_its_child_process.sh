@@ -84,8 +84,6 @@ cat <<EOF
 # Test derived from Sun's SnapShots Functional Suite
 # 
 
-export PATH=/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin
-
 # WARNING: make sure "expr" and "grep" are _external_ commands in this test
 
 # start test
@@ -172,7 +170,7 @@ out="$(unset VMALLOC_OPTIONS VMDEBUG ; cat_test | ${SHELL} 2>&1)" || err_exit "U
 [[ "${out}" != "" ]] || err_exit "No output from test"
 
 # filter output and check it
-out2="$(/usr/xpg4/bin/egrep -v '^((read-seq|read-rand|syncread-seq|syncread-seq)[[:space:][:blank:]]*)*$' <<<"${out}")"
+out2="$(egrep -v '^((read-seq|read-rand|syncread-seq|syncread-seq)[[:space:][:blank:]]*)*$' <<<"${out}")"
 [[ "${out2}" == "" ]] || err_exit "Unexpected output '${out2}'"
 
 

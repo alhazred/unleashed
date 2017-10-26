@@ -272,7 +272,7 @@ main(int argc, char *argv[])
 	/* Sun OS make standart */
 	svr4 = false;  
 	posix = false;
-	if(!strcmp(argv_zero_string, "/usr/xpg4/bin/make")) {
+	if(!strcmp(argv_zero_string, "/usr/bin/make")) {
 		svr4 = false;
 		posix = true;
 	} else {

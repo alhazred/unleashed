@@ -24,7 +24,6 @@
 #
 
 PROG= pr
-XPG4PROG= pr
 
 include ../Makefile.cmd
 
@@ -33,14 +32,14 @@ DCFILE = $(PROG).dc
 
 CERRWARN += -Wno-parentheses
 
-$(XPG4):= CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 $(POFILE) := XGETFLAGS += -a -x pr.xcl
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 clean:
 

@@ -44,8 +44,6 @@ install: all $(ROOTBINPFEXEC)
 		$(RM) $(ROOTBIN)/pf$$s; \
 		$(LN) $(ROOTBIN)/pfexec $(ROOTBIN)/pf$$s; \
 	done
-	$(RM) $(ROOTXPG4BIN)/pfsh
-	$(SYMLINK) ../../bin/pfexec $(ROOTXPG4BIN)/pfsh
 	$(RM) $(ROOTSBIN)/pfsh
 	$(SYMLINK) ../usr/bin/pfexec $(ROOTSBIN)/pfsh
 

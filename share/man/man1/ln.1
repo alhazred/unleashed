@@ -9,28 +9,18 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH LN 1 "Mar 25, 2004"
+.TH LN 1 "Oct 25, 2017"
 .SH NAME
 ln \- make hard or symbolic links to files
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/ln\fR [\fB-fns\fR] \fIsource_file\fR [\fItarget\fR]
+\fB/usr/bin/ln\fR [\fB-fs\fR] \fIsource_file\fR [\fItarget\fR]
 .fi
 
 .LP
 .nf
-\fB/usr/bin/ln\fR [\fB-fns\fR] \fIsource_file\fR... \fItarget\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ln\fR [\fB-fs\fR] \fIsource_file\fR [\fItarget\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ln\fR [\fB-fs\fR] \fIsource_file\fR... \fItarget\fR
+\fB/usr/bin/ln\fR [\fB-fs\fR] \fIsource_file\fR... \fItarget\fR
 .fi
 
 .SH DESCRIPTION
@@ -76,14 +66,6 @@ systems and may refer to directories.
 File permissions for \fItarget\fR may be different from those displayed with an
 \fB-l\fR listing of the \fBls\fR(1) command. To display the permissions of
 \fItarget\fR, use \fBls\fR \fB-lL\fR. See \fBstat\fR(2) for more information.
-.SS "/usr/bin/ln"
-.sp
-.LP
-If \fB/usr/bin/ln\fR determines that the mode of \fItarget\fR forbids writing,
-it prints the mode (see \fBchmod\fR(1)), asks for a response, and reads the
-standard input for one line. If the response is affirmative, the link occurs,
-if permissible. Otherwise, the command exits.
-.SS "/usr/xpg4/bin/ln"
 .sp
 .LP
 When creating a hard link, and the source file is itself a symbolic link, the
@@ -92,8 +74,7 @@ the symbolic link object itself (\fIsource_file\fR).
 .SH OPTIONS
 .sp
 .LP
-The following options are supported for both \fB/usr/bin/ln\fR and
-\fB/usr/xpg4/bin/ln\fR:
+The following options are supported:
 .sp
 .ne 2
 .na
@@ -143,8 +124,7 @@ The following option is supported for \fB/usr/bin/ln\fR only:
 .RS 6n
 If \fItarget\fR is an existing file, writes a diagnostic message to stderr and
 goes on to any remaining \fIsource_file\fRs. The \fB-f\fR option overrides this
-option. This is the default behavior for \fB/usr/bin/ln\fR and
-\fB/usr/xpg4/bin/ln\fR, and is silently ignored.
+option. This is the default behavior and is silently ignored.
 .RE
 
 .SH OPERANDS
@@ -220,19 +200,6 @@ l | l .
 ATTRIBUTE TYPE	ATTRIBUTE VALUE
 _
 CSI	Enabled
-.TE
-
-.SS "/usr/xpg4/bin/ln"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
 _
 Interface Stability	Standard
 .TE
@@ -268,7 +235,7 @@ When you change to a directory (see \fBcd\fR(1)) through a symbolic link, using
 within the file system. This means that the parent of the new working directory
 is not the parent of the symbolic link, but rather, the parent of the
 pointed-to directory. This will also happen when using \fBcd\fR with the
-\fB-P\fR option from \fB/usr/bin/ksh\fR or \fB/usr/xpg4/bin/sh\fR. For
+\fB-P\fR option from \fB/usr/bin/ksh\fR or \fB/usr/bin/sh\fR. For
 instance, in the following case, the final working directory is \fB/usr\fR and
 not \fB/home/user/linktest\fR.
 .sp

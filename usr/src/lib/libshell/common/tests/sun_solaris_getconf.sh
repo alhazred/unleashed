@@ -107,9 +107,6 @@ EOF
 
 print -r -- "$getconf_test_functions" | source /dev/stdin
 
-# future versions of this test should test the following ${PATH}s, too:
-# "/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin" \
-#"/usr/xpg4/bin:/bin:/usr/bin" \
 for i in \
     "/usr/bin:/bin" \
     "/bin:/usr/bin"
@@ -140,9 +137,6 @@ do
     (( mismatch     >  0 )) && err_exit "getconf/normal test found ${mismatch} differences (PATH=${PATH})."
     
     # run the same test in a seperate shell
-    # (we explicitly test this because ast-ksh.2007-01-11 picks up /usr/xpg6/bin/getconf
-    # if /usr/xpg6/bin/ comes in ${PATH} before /usr/bin (this happens only of ${PATH}
-    # contains /usr/xpg6/bin before ksh93 is started)).
     ${SHELL} -c "integer mismatch ; \
         integer getconf_keys ; \
         ${getconf_test_functions} ; \

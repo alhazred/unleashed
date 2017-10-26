@@ -29,7 +29,6 @@
 #
 
 PROG = sort
-XPG4PROG = sort
 
 include ../Makefile.cmd
 
@@ -42,7 +41,7 @@ CLOBBERFILES = $(DCFILE) $(POFILE) $(POFILES)
 
 .KEEP_STATE:
 
-$(XPG4) := CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 XGETFLAGS += -a -x sort.xcl
 
 SUBDIRS =        $(MACH)

@@ -807,7 +807,7 @@ service_is_enabled()
 #
 is_valid_v4addr()
 { 
-	echo $1 | /usr/xpg4/bin/awk 'NF != 1 { exit 1 } \
+	echo $1 | /usr/bin/awk 'NF != 1 { exit 1 } \
 	$1 !~ /^((25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])\.){3}\
 	(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])$/ \
 	{ exit 1 }'
@@ -821,7 +821,7 @@ is_valid_v4addr()
 #
 is_valid_v6addr()
 {
-	echo $1 | /usr/xpg4/bin/awk 'NF != 1 { exit 1 } \
+	echo $1 | /usr/bin/awk 'NF != 1 { exit 1 } \
 	# 1:2:3:4:5:6:7:8
 	$1 !~ /^([a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/ &&
 	# 1:2:3::6:7:8

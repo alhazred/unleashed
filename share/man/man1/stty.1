@@ -11,38 +11,18 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License. You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.
 .\"  See the License for the specific language governing permissions and limitations under the License. When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with
 .\" the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH STTY 1 "Dec 30, 2016"
+.TH STTY 1 "Oct 25, 2017"
 .SH NAME
 stty \- set the options for a terminal
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/stty\fR [\fB-a\fR] [\fB-g\fR]
+\fB/usr/bin/stty\fR [\fB-a\fR | \fB-g\fR]
 .fi
 
 .LP
 .nf
 \fB/usr/bin/stty\fR [\fImodes\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/stty\fR [\fB-a\fR | \fB-g\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/stty\fR [\fImodes\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/stty\fR [\fB-a\fR | \fB-g\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/stty\fR [\fImodes\fR]
 .fi
 
 .SH DESCRIPTION
@@ -1113,7 +1093,6 @@ stty cs8 -icanon min 1 time 0 -isig -xcase \e
 
 .RE
 
-.SS "/usr/bin/stty, /usr/xpg6/bin/stty"
 .ne 2
 .na
 \fB\fBnl\fR (\fB-nl\fR)\fR
@@ -1123,7 +1102,6 @@ Unset (set) \fBicrnl\fR, \fBonlcr\fR. In addition \fB-nl\fR unsets \fBinlcr\fR,
 \fBigncr\fR, \fBocrnl\fR, and \fBonlret\fR.
 .RE
 
-.SS "/usr/xpg4/bin/stty"
 .ne 2
 .na
 \fB\fBnl\fR (\fB-nl\fR)\fR
@@ -1295,19 +1273,7 @@ An error occurred.
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "/usr/xpg4/bin/stty"
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-Interface Stability	Committed
-_
-Standard	See \fBstandards\fR(5).
-.TE
-
-.SS "/usr/xpg6/bin/stty"
+.SS "/usr/bin/stty"
 .TS
 box;
 c | c

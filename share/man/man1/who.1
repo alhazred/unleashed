@@ -9,18 +9,23 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH WHO 1 "Nov 3, 2000"
+.TH WHO 1 "Oct 25, 2017"
 .SH NAME
 who \- who is on the system
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/who\fR [\fB-abdHlmpqrstTu\fR] [\fIfile\fR]
+\fB/usr/bin/who\fR [\fB-abdHlmpqrtTu\fR] [\fIfile\fR]
 .fi
 
 .LP
 .nf
 \fB/usr/bin/who\fR \fB-q\fR [\fB-n\fR \fIx\fR] [\fIfile\fR]
+.fi
+
+.LP
+.nf
+\fB/usr/bin/who\fR \fB-s\fR [\fB-bdHlmpqrtu\fR] [\fIfile\fR]
 .fi
 
 .LP
@@ -31,31 +36,6 @@ who \- who is on the system
 .LP
 .nf
 \fB/usr/bin/who\fR am I
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/who\fR [\fB-abdHlmpqrtTu\fR] [\fIfile\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/who\fR \fB-q\fR [\fB-n\fR \fIx\fR] [\fIfile\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/who\fR \fB-s\fR [\fB-bdHlmpqrtu\fR] [\fIfile\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/who\fR am i
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/who\fR am I
 .fi
 
 .SH DESCRIPTION
@@ -272,46 +252,6 @@ Indicates the current \fIrun-level\fR of the \fBinit\fR process.
 (Default) Lists only the \fIname\fR, \fIline\fR, and \fItime\fR fields.
 .RE
 
-.SS "/usr/bin/who"
-.sp
-.ne 2
-.na
-\fB\fB-T\fR \fR
-.ad
-.RS 7n
-Same as the \fB-s\fR option, except that the \fIstate\fR \fIidle\fR, \fIpid\fR,
-and \fIcomment\fR, fields are also written. \fIstate\fR is one of the following
-characters:
-.sp
-.ne 2
-.na
-\fB\fB+\fR \fR
-.ad
-.RS 9n
-The terminal allows write access to other users.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB\(mi\fR \fR
-.ad
-.RS 9n
-The terminal denies write access to other users.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB?\fR \fR
-.ad
-.RS 9n
-The terminal write-access state cannot be determined.
-.RE
-
-.RE
-
-.SS "/usr/xpg4/bin/who"
 .sp
 .ne 2
 .na
@@ -445,7 +385,7 @@ Historic user and accounting information
 .sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "/usr/xpg4/bin/who"
+.SS "/usr/bin/who"
 .sp
 
 .sp

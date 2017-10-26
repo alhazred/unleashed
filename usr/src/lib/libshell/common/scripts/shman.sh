@@ -25,9 +25,6 @@
 # Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
 #
 
-# Solaris needs /usr/xpg6/bin:/usr/xpg4/bin because the tools in /usr/bin are not POSIX-conformant
-export PATH=/usr/xpg6/bin:/usr/xpg4/bin:/bin:/usr/bin
-
 # Make sure all math stuff runs in the "C" locale to avoid problems
 # with alternative # radix point representations (e.g. ',' instead of
 # '.' in de_DE.*-locales). This needs to be set _before_ any
@@ -144,7 +141,7 @@ function browse_manpage
 	# (currently '/')
 	doc_title="${doc_title//\//}"
 
-	# check if we have "less" installed, if not fall back to /usr/xpg4/bin/more
+	# check if we have "less" installed, if not fall back to /usr/bin/more
 	if which less >/dev/null 2>&1 ; then
 		# use "cat" here to avoid that "less" may try funny things
 		cat <"${doc_filename}" | less -I -M $"--prompt=MManual\ page\ ${doc_title}\ ?ltline\ %lt?L/%L.:"
@@ -159,7 +156,7 @@ function browse_manpage
 			# note: we need to support /dev/stdin
 			cat <"${doc_filename}" >"./${doc_title}"
 
-			/usr/xpg4/bin/more "${doc_title}"
+			/usr/bin/more "${doc_title}"
 
 			rm -f "${doc_title}"
 		)

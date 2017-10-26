@@ -10,7 +10,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH CRONTAB 1 "Mar 6, 2017"
+.TH CRONTAB 1 "Oct 25, 2017"
 .SH NAME
 crontab \- user crontab file
 .SH SYNOPSIS
@@ -32,46 +32,6 @@ crontab \- user crontab file
 .LP
 .nf
 \fB/usr/bin/crontab\fR \fB-r\fR [\fIusername\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/crontab\fR [\fIfilename\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/crontab\fR \fB-e\fR [\fIusername\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/crontab\fR \fB-l\fR [\fIusername\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/crontab\fR \fB-r\fR [\fIusername\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/crontab\fR [\fIfilename\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/crontab\fR \fB-e\fR [\fIusername\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/crontab\fR \fB-l\fR [\fIusername\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/crontab\fR \fB-r\fR [\fIusername\fR]
 .fi
 
 .SH DESCRIPTION
@@ -459,20 +419,9 @@ entries that return those variable to their default values.
 See \fBenviron\fR(5) for descriptions of the following environment variables
 that affect the execution of \fBcrontab\fR: \fBLANG\fR, \fBLC_ALL\fR,
 \fBLC_CTYPE\fR, \fBLC_MESSAGES\fR, and \fBNLSPATH\fR.
-.SS "\fB/usr/bin/crontab\fR"
 .ne 2
 .na
-\fB\fBEDITOR\fR\fR
-.ad
-.RS 10n
-Determine the editor to be invoked when the \fB-e\fR option is specified. This
-is overridden by the \fBVISUAL\fR environmental variable. The default editor is
-\fBvi\fR(1).
-.RE
-
 .sp
-.ne 2
-.na
 \fB\fBPATH\fR\fR
 .ad
 .RS 10n
@@ -491,24 +440,13 @@ specified. If \fBVISUAL\fR is not specified, then the environment variable
 \fBEDITOR\fR is used. If that is not set, the default is \fBvi\fR(1).
 .RE
 
-.SS "\fB/usr/xpg4/bin/crontab\fR"
 .ne 2
 .na
 \fB\fBEDITOR\fR\fR
 .ad
 .RS 10n
 Determine the editor to be invoked when the \fB-e\fR option is specified. The
-default editor is \fB/usr/xpg4/bin/vi\fR.
-.RE
-
-.SS "\fB/usr/xpg6/bin/crontab\fR"
-.ne 2
-.na
-\fB\fBEDITOR\fR\fR
-.ad
-.RS 10n
-Determine the editor to be invoked when the \fB-e\fR option is specified. The
-default editor is \fB/usr/xpg6/bin/vi\fR.
+default editor is \fB/usr/bin/vi\fR.
 .RE
 
 .SH EXIT STATUS
@@ -590,28 +528,6 @@ spool area for \fBcrontab\fR
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "\fB/usr/bin/crontab\fR"
-
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-Interface Stability	Standard
-.TE
-
-.SS "\fB/usr/xpg4/bin/crontab\fR"
-
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-Interface Stability	Standard
-.TE
-
-.SS "\fB/usr/xpg6/bin/crontab\fR"
 
 .TS
 box;

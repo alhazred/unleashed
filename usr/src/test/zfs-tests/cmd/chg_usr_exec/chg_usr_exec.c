@@ -31,7 +31,7 @@
 #include <errno.h>
 #include <pwd.h>
 
-#define	EXECSHELL	"/usr/xpg4/bin/sh"
+#define	EXECSHELL	"/usr/bin/sh"
 
 int
 main(int argc, char *argv[])

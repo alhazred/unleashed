@@ -23,22 +23,15 @@
 #
 
 PROG= expr
-XPG4PROG= expr
-XPG6PROG= expr
 
-EXPROBJ= exprobjs/expr.o exprobjs/compile.o
-XPG4EXPROBJ= exprobjs.xpg4/expr.o exprobjs.xpg4/compile.o
-XPG6EXPROBJ= exprobjs.xpg6/expr.o exprobjs.xpg6/compile.o
-
-OBJS= $(EXPROBJ) $(XPG4EXPROBJ) $(XPG6EXPROBJ)
+OBJS= expr.o compile.o
 SRCS= expr.c compile.c
 
 include ../Makefile.cmd
 
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-extra
-$(XPG4) := CFLAGS += -DXPG4
-$(XPG6) := CFLAGS += -DXPG6
+CFLAGS += -DXPG4 -DXPG6
 
 XGETFLAGS += -a -x expr.xcl
 
@@ -49,39 +42,13 @@ LDFLAGS +=	$(MAPFILES:%=-Wl,-M%)
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4) $(XPG6)
+all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG) $(ROOTXPG6PROG)
+install: all $(ROOTPROG)
 
-$(PROG): exprobjs $(EXPROBJ) $(MAPFILES)
-	$(LINK.c) $(EXPROBJ) -o $@ $(LDLIBS)
+$(PROG): $(OBJS) $(MAPFILES)
+	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
-
-$(XPG4): exprobjs.xpg4 $(XPG4EXPROBJ) $(MAPFILES)
-	$(LINK.c) $(XPG4EXPROBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG6): exprobjs.xpg6 $(XPG6EXPROBJ) $(MAPFILES)
-	$(LINK.c) $(XPG6EXPROBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-exprobjs/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-exprobjs.xpg4/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-exprobjs.xpg6/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-exprobjs:
-	-@mkdir -p $@
-
-exprobjs.xpg4:
-	-@mkdir -p $@
-
-exprobjs.xpg6:
-	-@mkdir -p $@
 
 clean:
 	$(RM) $(OBJS)

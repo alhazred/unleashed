@@ -61,30 +61,6 @@ ALIASPROG= \
 	wait \
 	wc
 
-XPG4ALIASPROG= \
-	alias \
-	bg \
-	cd \
-	command \
-	fc \
-	fg \
-	getopts \
-	hash \
-	jobs \
-	kill \
-	read \
-	test \
-	type \
-	ulimit \
-	umask \
-	unalias \
-	wait
-
-XPG4SH= \
-	sh
-
-ROOTXPG4ALIAS= \
-	$(XPG4SH:%=$(ROOTXPG4BIN)/%) $(XPG4ALIASPROG:%=$(ROOTXPG4BIN)/%)
 ROOTALIASPROG= $(ALIASPROG:%=$(ROOTBIN)/%)
 
 include ../../Makefile.cmd
@@ -96,12 +72,6 @@ CERRWARN += -Wno-parentheses
 .KEEP_STATE:
 
 all: $(PROG)
-
-$(XPG4ALIASPROG:%=$(ROOTXPG4BIN)/%):
-	$(RM) $@; $(SYMLINK) ../../bin/alias $@
-
-$(XPG4SH:%=$(ROOTXPG4BIN)/%):
-	$(RM) $@; $(SYMLINK) ../../bin/ksh93 $@
 
 $(ALIASPROG:%=$(ROOTBIN)/%): $(ROOTPROG)
 	$(RM) $@; $(LN) $(ROOTPROG) $@
@@ -136,7 +106,7 @@ CFLAGS64 += \
 
 ROOTCMDDIR=$(ROOT)/usr/bin
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG) $(ROOTALIASPROG) $(ROOTXPG4ALIAS)
+install: all $(ROOTPROG) $(ROOTALIASPROG)
 
 $(PROG):	$(OBJECTS)
 	$(RM) alias

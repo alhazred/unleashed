@@ -7,23 +7,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH ED 1 "Dec 10, 2003"
+.TH ED 1 "Oct 25, 2017"
 .SH NAME
 ed, red \- text editor
 .SH SYNOPSIS
 .LP
 .nf
 \fB/usr/bin/ed\fR [\fB-s\fR | \fB-\fR] [\fB-p\fR \fIstring\fR] [\fB-x\fR] [\fB-C\fR] [\fIfile\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ed\fR [\fB-s\fR | \fB-\fR] [\fB-p\fR \fIstring\fR] [\fB-x\fR] [\fB-C\fR] [\fIfile\fR]
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/ed\fR [\fB-s\fR | \fB-\fR] [\fB-p\fR \fIstring\fR] [\fB-x\fR] [\fB-C\fR] [\fIfile\fR]
 .fi
 
 .LP
@@ -116,11 +106,8 @@ then the second address is calculated. This feature can be used to determine
 the starting line for forward and backward searches (see Rules 5 and 6, above).
 The second address of any two-address sequence must correspond to a line in the
 buffer that follows the line corresponding to the first address.
-.sp
-.LP
-For \fB/usr/xpg6/gbin/ed\fR, the address can be omitted on either side of the
-comma or semicolon separator, in which case the resulting address pairs are as
-follows:
+The address can be omitted on either side of the comma or semicolon
+separator, in which case the resulting address pairs are as follows:
 .sp
 
 .sp
@@ -236,24 +223,8 @@ current line (\fB\&.\fR) is left at the last line input, or, if there were
 none, at the first line that was not deleted. If the lines deleted were
 originally at the end of the buffer, the current line number will be set to the
 address of the new last line. If no lines remain in the buffer, the current
-line number will be set to 0.
-.sp
-.ne 2
-.na
-\fB\fB/usr/xpg4/bin/ed\fR\fR
-.ad
-.RS 20n
-Address 0 is not legal for this command.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/usr/xpg6/bin/ed\fR\fR
-.ad
-.RS 20n
-Address 0 is valid for this command. It is interpreted as if the address 1 were
-specified.
+line number will be set to 0. Address 0 is valid for this command. It is
+interpreted as if the address 1 were specified.
 .RE
 
 .RE
@@ -427,24 +398,8 @@ before the addressed line in the buffer. The current line (\fB\&.\fR) is left
 at the last inserted line, or, if there were none, at the addressed line. This
 command differs from the \fBa\fR command only in the placement of the input
 text. The maximum number of characters that may be entered from a terminal is
-256 per line (including the new-line character).
-.sp
-.ne 2
-.na
-\fB\fB/usr/xpg4/bin/ed\fR\fR
-.ad
-.RS 20n
-Address 0 is not legal for this command.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/usr/xpg6/bin/ed\fR\fR
-.ad
-.RS 20n
-Address 0 is valid for this command. It is interpreted as if the address 1 were
-specified.
+256 per line (including the new-line character). Address 0 is valid for this
+command. It is interpreted as if the address 1 were specified.
 .RE
 
 .RE
@@ -489,8 +444,8 @@ significant byte first.
 Long lines are folded, with the point of folding indicated by writing
 backslash/newline character. The length at which folding occurs is unspecified,
 but should be appropriate for the output device. The end of each line is marked
-with a \fB$\fR. When using the \fB/usr/xpg6/bin/ed\fR command, the end of each
-line is marked with a \fB$\fR due to folding, and \fB$\fR characters within the
+with a \fB$\fR. The end of each line is marked with a 
+\fB$\fR due to folding, and \fB$\fR characters within the
 text are written with a preceding backslash. An \fBl\fR command can be appended
 to any other command other than \fBe\fR, \fBE\fR, \fBf\fR, \fBq\fR, \fBQ\fR,
 \fBr\fR, \fBw\fR, or \fB!\fR. The current line number is set to the address of
@@ -1113,7 +1068,7 @@ Work is saved here if the terminal is hung up.
 .sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
-.SS "/usr/bin/ed, /usr/bin/red"
+.SS "/usr/bin/red"
 .sp
 
 .sp
@@ -1126,22 +1081,7 @@ _
 CSI	Enabled
 .TE
 
-.SS "/usr/xpg4/bin/ed"
-.sp
-
-.sp
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Standard
-.TE
-
-.SS "/usr/xpg6/bin/ed"
+.SS "/usr/bin/ed"
 .sp
 
 .sp

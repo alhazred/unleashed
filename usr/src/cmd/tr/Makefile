@@ -15,8 +15,6 @@
 
 
 PROG=		tr
-XPG4PROG=	$(PROG)
-XPG6PROG=	$(PROG)
 
 OBJS=		tr.o str.o cset.o cmap.o
 SRCS=	 	$(OBJS:%.o=%.c)
@@ -43,11 +41,7 @@ $(PROG):	$(OBJS)
 	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all .WAIT $(ROOTPROG) $(ROOTXPG4PROG) $(ROOTXPG6PROG)
-
-$(ROOTXPG4PROG) $(ROOTXPG6PROG):
-	-$(RM) $@
-	-$(LN) -s ../../bin/$(PROG) $@
+install: all .WAIT $(ROOTPROG)
 
 
 clean:

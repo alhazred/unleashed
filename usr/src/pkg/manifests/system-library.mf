@@ -165,9 +165,6 @@ dir path=usr/share/man/man3volmgt
 dir path=usr/share/man/man3xnet
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7p
-dir path=usr/xpg4
-dir path=usr/xpg4/lib
-dir path=usr/xpg4/lib/$(ARCH64)
 $(i386_ONLY)file path=etc/flash/precreation/caplib group=sys mode=0500
 file path=lib/$(ARCH64)/c_synonyms.so.1
 file path=lib/$(ARCH64)/ld.so.1
@@ -1189,7 +1186,6 @@ link path=usr/lib/security/pam_unix_session.so target=./pam_unix_session.so.1
 link path=usr/lib/security/pkcs11_kernel.so target=./pkcs11_kernel.so.1
 link path=usr/lib/security/pkcs11_softtoken.so target=./pkcs11_softtoken.so.1
 link path=usr/lib/straddr.so target=./straddr.so.2
-link path=usr/xpg4/lib/64 target=$(ARCH64)
 #
 # libses.so needs to dlopen(3C) plugins from usr/lib/scsi/plugins/ses/vendor/,
 # a dependency which cannot be automatically derived

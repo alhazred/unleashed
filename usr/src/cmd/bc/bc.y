@@ -968,11 +968,8 @@ main(int argc, char **argv)
 	dup(p[0]);
 	(void) close(p[0]);
 	(void) close(p[1]);
-#ifdef XPG6
-	execl("/usr/xpg6/bin/dc", "dc", "-", 0);
-#else
+
 	execl("/usr/bin/dc", "dc", "-", 0);
-#endif
 
 	return (1);
 }

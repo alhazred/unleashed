@@ -48,9 +48,6 @@
 #include "cron.h"
 #include "getresponse.h"
 
-#if !defined(XPG4) && !defined(XPG6)
-#define	_XPG_NOTDEFINED
-#endif
 #define	VIPATH	"vi"
 
 #define	TMPFILE		"_cron"		/* prefix for tmp file */
@@ -284,16 +281,9 @@ main(int argc, char **argv)
 			if (stat(edtemp, &stbuf) < 0)
 				crabort("can't stat temporary file");
 			omodtime = stbuf.st_mtime;
-#ifdef _XPG_NOTDEFINED
-			editor = getenv("VISUAL");
-			if (editor == NULL) {
-#endif
-				editor = getenv("EDITOR");
-				if (editor == NULL)
-					editor = VIPATH;
-#ifdef _XPG_NOTDEFINED
-			}
-#endif
+			editor = getenv("EDITOR");
+			if (editor == NULL)
+				editor = VIPATH;
 			buflen = strlen(editor) + strlen(edtemp) + 2;
 			buf = xmalloc(buflen);
 			(void) snprintf(buf, buflen, "%s %s", editor, edtemp);

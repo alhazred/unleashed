@@ -46,7 +46,6 @@
 #
 
 PROG = sort
-XPG4PROG = sort
 
 BASE_OBJS = \
 	check.o \
@@ -66,10 +65,9 @@ INVOKE_OBJS = invoke.o $(BASE_OBJS)
 CONVERT_OBJS = convert.o $(BASE_OBJS)
 STATS_OBJS = main.o statistics.o $(BASE_OBJS)
 
-XPG4OBJS = $(OBJS:%.o=xpg4_%.o)
 SRCS =  $(OBJS:%.o=../common/%.c)
 LNTS =	$(OBJS:%.o=%.ln)
-CLEANFILES = $(OBJS) $(XPG4OBJS) $(LNTS)
+CLEANFILES = $(OBJS) $(LNTS)
 
 include ../../Makefile.cmd
 
@@ -84,7 +82,7 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-unused-function
 
-$(XPG4)	:=	CFLAGS += -DXPG4
+CFLAGS += -DXPG4
 
 debug :=	SORT_DEBUG = -g -DDEBUG
 debug :=	COPTFLAG =
@@ -97,7 +95,7 @@ stats	:=	COPTFLAG64 =
 
 .PARALLEL : $(OBJS) $(XPG4OBJS) $(LNTS)
 
-all : $(PROG) $(XPG4)
+all : $(PROG)
 
 debug : $(PROG) convert invoke
 
@@ -106,14 +104,10 @@ clean :
 
 include ../../Makefile.targ
 
-# rules for $(PROG) and $(XPG4)
+# rules for $(PROG)
 
 $(PROG) : $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG4) : $(XPG4OBJS)
-	$(LINK.c) -o $@ $(XPG4OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
 invoke: $(INVOKE_OBJS)
@@ -129,10 +123,5 @@ stats: $(STATS_OBJS)
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-xpg4_%.o : ../common/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
 
 %.o : ../common/%.h types.h
-
-xpg4_%.o : ../common/%.h types.h

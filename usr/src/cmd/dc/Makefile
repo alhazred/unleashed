@@ -24,10 +24,7 @@
 #
 
 PROG= dc
-XPG6PROG= dc
-XD= exobjs.xpg6
 EXOBJS= dc.o
-XPG6EXOBJS= exobjs.xpg6/dc.o 
 
 include ../Makefile.cmd
 
@@ -39,33 +36,19 @@ CERRWARN += -Wno-uninitialized
 
 .KEEP_STATE:
 
-all: $(MAPFILE.NGB) $(PROG) $(XPG6)
+all: $(MAPFILE.NGB) $(PROG)
 
 $(PROG): $(EXOBJS)
 	$(LINK.c) -o $@ $(EXOBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
 
-$(XPG6): $(XD) $(XPG6EXOBJS)
-	$(LINK.c) -o $@ $(XPG6EXOBJS) $(LDLIBS)
-	$(POST_PROCESS)
-
-
-install: all $(ROOTPROG) $(ROOTXPG6PROG)
+install: all $(ROOTPROG)
 
 clean:
-	-@rm -rf $(EXOBJS) $(XD) $(PROG) $(XPG6)
-
-
-$(XPG6EXOBJS): $(XD)
-
-$(XD)/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-$(XD):
-	-@mkdir -p $@
+	-@rm -rf $(EXOBJS) $(PROG)
 
 
 include ../Makefile.targ
 
-$(XPG6) := CFLAGS += -DXPG6
+CFLAGS += -DXPG6

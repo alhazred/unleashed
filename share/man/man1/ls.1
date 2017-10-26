@@ -11,29 +11,13 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License"). You may not use this file except in compliance with the License. You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.
 .\"  See the License for the specific language governing permissions and limitations under the License. When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE. If applicable, add the following below this CDDL HEADER, with the
 .\" fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH LS 1 "Nov 24, 2014"
+.TH LS 1 "Oct 25, 2017"
 .SH NAME
 ls \- list contents of directory
 .SH SYNOPSIS
 .LP
 .nf
 \fB/usr/bin/ls\fR [\fB-aAbcCdeEfFghHiklLmnopqrRsStuUwvVx1@\fR]
-     [\fB-/ c\fR | \fBv\fR] [\fB-% atime | crtime | ctime | mtime | all\fR]
-     [--block-size size] [--color[=\fIwhen\fR]] [--file-type]
-     [--si] [--time-style \fIstyle\fR] [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/ls\fR [\fB-aAbcCdeEfFghHiklLmnopqrRsStuUwvVx1@\fR]
-     [\fB-/ c\fR | \fBv\fR] [\fB-% atime | crtime | ctime | mtime | all\fR]
-     [--block-size size] [--color[=\fIwhen\fR]] [--file-type]
-     [--si] [--time-style \fIstyle\fR] [\fIfile\fR]...
-.fi
-
-.LP
-.nf
-\fB/usr/xpg6/bin/ls\fR [\fB-aAbcCdeEfFghHiklLmnopqrRsStuUwvVx1@\fR]
      [\fB-/ c\fR | \fBv\fR] [\fB-% atime | crtime | ctime | mtime | all\fR]
      [--block-size size] [--color[=\fIwhen\fR]] [--file-type]
      [--si] [--time-style \fIstyle\fR] [\fIfile\fR]...
@@ -317,18 +301,6 @@ is on.
 The 1000 bit is turned on, and execution is off (undefined bit-state).
 .RE
 
-.SS "/usr/bin/ls"
-.ne 2
-.na
-\fB\fBl\fR\fR
-.ad
-.sp .6
-.RS 4n
-Mandatory locking occurs during access (on a regular file, the set-group-ID bit
-is on and the group execution bit is off).
-.RE
-
-.SS "/usr/xpg4/bin/ls and /usr/xpg6/bin/ls"
 .ne 2
 .na
 \fB\fBL\fR\fR
@@ -817,7 +789,6 @@ match is found. The \fBno\fR (normal file) type matches any file.
 .SH OPTIONS
 .LP
 The following options are supported:
-.SS "/usr/bin/ls, /usr/xpg4/bin/ls, and /usr/xpg6/bin/ls"
 .LP
 The following options are supported for all three versions:
 .sp
@@ -2228,84 +2199,6 @@ all files.
 
 .RE
 
-.SS "/usr/bin/ls"
-.ne 2
-.na
-\fB\fB-F\fR\fR
-.ad
-.sp .6
-.RS 4n
-Marks directories with a trailing slash (\fB/\fR), doors with a trailing
-greater-than sign (\fB>\fR), executable files with a trailing asterisk
-(\fB*\fR), \fBFIFO\fRs with a trailing vertical bar (\fB|\fR), symbolic links
-with a trailing "at" sign (\fB@\fR), and \fBAF_UNIX\fR address family sockets
-with a trailing equals sign (\fB=\fR). Follows \fBsymlinks\fR named as
-operands.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB--file-type\fR\fR
-.ad
-.sp .6
-.RS 4n
-Marks entries as with \fB-F\fR with the exception of executable files.
-Executable files are not marked. Follows symlinks named as operands.
-.RE
-
-.sp
-.LP
-Specifying more than one of the options in the following mutually exclusive
-pairs is not considered an error: \fB-C\fR and \fB-l\fR (ell), \fB-m\fR and
-\fB-l\fR (ell), \fB-x\fR and \fB-l\fR (ell), \fB-@\fR and \fB-l\fR (ell). The
-\fB-l\fR option overrides the other option specified in each pair.
-.sp
-.LP
-Specifying more than one of the options in the following mutually exclusive
-groups is not considered an error: \fB-C\fR and \fB-1\fR (one), \fB-H\fR and
-\fB-L\fR, \fB-c\fR and \fB-u\fR, and \fB-e\fR and \fB-E\fR, and \fB-t\fR and
-\fB-S\fR. The last option specifying a specific timestamp (\fB-c\fR, \fB-u\fR,
-\fB-% atime\fR , \fB-% crtime\fR, \fB-% ctime\fR, and \fB-% mtime\fR)
-determines the timestamps used for sorting or in long format listings. The last
-option \fB-t\fR, \fB-S\fR, or \fB-U\fR determines the sorting behavior.
-.SS "/usr/xpg4/bin/ls"
-.ne 2
-.na
-\fB\fB-F\fR\fR
-.ad
-.sp .6
-.RS 4n
-Marks directories with a trailing slash (\fB/\fR), doors with a trailing
-greater-than sign (\fB>\fR), executable files with a trailing asterisk
-(\fB*\fR), \fBFIFO\fRs with a trailing vertical bar (\fB|\fR), symbolic links
-with a trailing "at" sign (\fB@\fR), and \fBAF_UNIX\fR address family sockets
-with a trailing equals sign (\fB=\fR). Follows symlinks named as operands.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB--file-type\fR\fR
-.ad
-.sp .6
-.RS 4n
-Marks entries as with \fB-F\fR with the exception of executable files.
-Executable files are not marked. Follows symlinks named as operands.
-.RE
-
-.sp
-.LP
-Specifying more than one of the options in the following groups of mutually
-exclusive options is not considered an error: \fB-C\fR and \fB-l\fR (ell),
-\fB-m\fR and \fB-l\fR (ell), \fB-x\fR and \fB-l\fR (ell), \fB-@\fR and \fB-l\fR
-(ell), \fB-C\fR and \fB-1\fR (one), \fB-H\fR and \fB-L\fR, \fB-c\fR and
-\fB-u\fR, \fB-e\fR and \fB-E\fR, \fB-t\fR and \fB-S\fR and \fB-U\fR. The last
-option specifying a specific timestamp (\fB-c\fR, \fB-u\fR, \fB-% atime\fR ,
-\fB-% crtime\fR, \fB-% ctime\fR, and \fB-% mtime\fR) determines the timestamps
-used for sorting or in long format listings. The last \fB-t\fR, \fB-S\fR, or
-\fB-U\fR option determines the sorting behavior.
-.SS "/usr/xpg6/bin/ls"
 .ne 2
 .na
 \fB\fB-F\fR\fR
@@ -2705,56 +2598,6 @@ terminal information database
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/ls"
-
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Committed
-_
-Standard	See below.
-.TE
-
-.sp
-.LP
-For all options except \fB-A\fR, \fB-b\fR, \fB-e\fR, \fB-E,\fR \fB-h\fR,
-\fB-S\fR, U \fB-v\fR, \fB-V\fR, \fB-@\fR, \fB-/\fR, \fB-%\fR, \fB--all\fR,
-\fB--almost-all\fR, \fB--block-size\fR, \fB--classify\fR, \fB--color\fR,
-\fB--colour\fR, \fB--dereference\fR, \fB--dereference-command-line\fR,
-\fB--escape\fR, \fB--file-type\fR, \fB--full-time\fR, \fB--human-readable\fR,
-\fB--ignore-backups\fR, \fB--inode\fR, \fB--no-group\fR,
-\fB--numeric-uid-gid\fR, \fB--reverse\fR, \fB--recursive\fR, \fB--si\fR,
-\fB--size\fR, and \fB--time-style\fR, see \fBstandards\fR(5).
-.SS "/usr/xpg4/bin/ls"
-
-.TS
-box;
-c | c
-l | l .
-ATTRIBUTE TYPE	ATTRIBUTE VALUE
-_
-CSI	Enabled
-_
-Interface Stability	Committed
-_
-Standard	See below.
-.TE
-
-.sp
-.LP
-For all options except \fB-A\fR, \fB-b\fR, \fB-e\fR, \fB-E,\fR \fB-h\fR,
-\fB-S\fR, U \fB-v\fR, \fB-V\fR, \fB-@\fR, \fB-/\fR, \fB-%\fR, \fB--all\fR,
-\fB--almost-all\fR, \fB--block-size\fR, \fB--classify\fR, \fB--color\fR,
-\fB--colour\fR, \fB--dereference\fR, \fB--dereference-command-line\fR,
-\fB--escape\fR, \fB--file-type\fR, \fB--full-time\fR, \fB--human-readable\fR,
-\fB--ignore-backups\fR, \fB--inode\fR, \fB--no-group\fR,
-\fB--numeric-uid-gid\fR, \fB--reverse\fR, \fB--recursive\fR, \fB--si\fR,
-\fB--size\fR, and \fB--time-style\fR, see \fBstandards\fR(5).
-.SS "/usr/xpg6/bin/ls"
 
 .TS
 box;

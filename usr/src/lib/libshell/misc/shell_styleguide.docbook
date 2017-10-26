@@ -203,11 +203,7 @@ chgrp sys bar
           <member>sync</member>
           </simplelist>
           Those builtins can be enabled via <literal>$ builtin name_of_builtin #</literal> in shell
-          scripts (note that ksh93 builtins implement exact POSIX behaviour - some
-          commands in Solaris <filename>/usr/bin/</filename> directory implement pre-POSIX behaviour.
-          Add <literal>/usr/xpg6/bin/:/usr/xpg4/bin</literal> before
-          <filename>/usr/bin/</filename> in <envar>${PATH}</envar> to test whether your script works with
-          the XPG6/POSIX versions)
+          scripts
           </para>
       </section>
 
@@ -310,9 +306,8 @@ if (( mybool==1 )) ; then do_something_1 ; fi
           variables in multibyte locales and make sure all commands used in your
           script can handle such characters (e.g. lots of commands in Solaris's
           <filename>/usr/bin/</filename> are <emphasis>not</emphasis> able to handle such values - either use ksh93
-          builtin constructs (which are guaranteed to be multibyte-aware) or
-          commands from <filename>/usr/xpg4/bin/</filename> and/or <filename>/usr/xpg6/bin</filename>)
-          </para>
+          builtin constructs (which are guaranteed to be multibyte-aware)
+          /<para>
       </section>
 
 
@@ -352,9 +347,9 @@ done
           At least
           <simplelist type="inline">
               <member>print</member>
-              <member>/usr/bin/fgrep</member><member>/usr/xpg4/bin/fgrep</member>
-              <member>/usr/bin/grep</member> <member>/usr/xpg4/bin/grep</member>
-              <member>/usr/bin/egrep</member><member>/usr/xpg4/bin/egrep</member>
+              <member>/usr/bin/fgrep</member>
+              <member>/usr/bin/grep</member>
+              <member>/usr/bin/egrep</member>
           </simplelist>
           support <literal>--</literal> as "end of arguments"-terminator.
           </para></note>
@@ -617,7 +612,6 @@ permitted, and there is no separate scope.  Functions defined
 with the function name syntax, maintain compatibility.
 This also affects function traces.
 </para></blockquote>
-(this issue also affects <filename>/usr/xpg4/bin/sh</filename> in Solaris 10 because it is based on ksh88. This is a bug.).          
           </para></warning>
 
       </section>

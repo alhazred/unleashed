@@ -50,10 +50,6 @@ extern "C" {
 #define	SUSRBINCMDLIST(f)	\
 	{ "/usr/sbin/"	#f, NV_BLTIN|NV_BLTINOPT|NV_NOFREE, bltin(f) },
 /* POSIX compatible commands */
-#define	XPG6CMDLIST(f)	\
-	{ "/usr/xpg6/bin/" #f, NV_BLTIN|NV_BLTINOPT|NV_NOFREE, bltin(f) },
-#define	XPG4CMDLIST(f)	\
-	{ "/usr/xpg4/bin/" #f, NV_BLTIN|NV_BLTINOPT|NV_NOFREE, bltin(f) },
 #ifdef SHOPT_USR_GNU_BIN_BUILTINS
 /* GNU coreutils compatible commands */
 #define	GNUCMDLIST(f)	\
@@ -63,7 +59,7 @@ extern "C" {
 #endif
 /*
  * Make all ksh93 builtins accessible when /usr/ast/bin was added to
- * /usr/xpg6/bin:/usr/xpg4/bin:/usr/ccs/bin:/usr/bin:/bin:/opt/SUNWspro/bin
+ * /usr/ccs/bin:/usr/bin:/bin:/opt/SUNWspro/bin
  */
 #define	ASTCMDLIST(f)	\
 	{ "/usr/ast/bin/" #f, NV_BLTIN|NV_BLTINOPT|NV_NOFREE, bltin(f) },
@@ -76,14 +72,11 @@ extern "C" {
 /* Generated data, do not edit. */
 ASTCMDLIST(basename)
 GNUCMDLIST(basename)
-XPG4CMDLIST(basename)
 ASTCMDLIST(cat)
 BINCMDLIST(cat)
 ASTCMDLIST(chgrp)
-// XPG4CMDLIST(chgrp)
 ASTCMDLIST(chmod)
 ASTCMDLIST(chown)
-// XPG4CMDLIST(chown)
 BINCMDLIST(chown)
 ASTCMDLIST(cksum)
 BINCMDLIST(cksum)
@@ -94,38 +87,30 @@ ASTCMDLIST(comm)
 BINCMDLIST(comm)
 GNUCMDLIST(comm)
 ASTCMDLIST(cp)
-// XPG4CMDLIST(cp)
 ASTCMDLIST(cut)
 BINCMDLIST(cut)
 GNUCMDLIST(cut)
 ASTCMDLIST(date)
-// XPG4CMDLIST(date)
 ASTCMDLIST(dirname)
 BINCMDLIST(dirname)
 GNUCMDLIST(dirname)
 ASTCMDLIST(egrep)
-XPG4CMDLIST(egrep)
 ASTCMDLIST(expr)
 GNUCMDLIST(expr)
-XPG6CMDLIST(expr)
 ASTCMDLIST(fds)
 ASTCMDLIST(fgrep)
-XPG4CMDLIST(fgrep)
 ASTCMDLIST(fmt)
 ASTCMDLIST(fold)
 BINCMDLIST(fold)
 GNUCMDLIST(fold)
 ASTCMDLIST(grep)
-XPG4CMDLIST(grep)
 ASTCMDLIST(head)
 BINCMDLIST(head)
 ASTCMDLIST(id)
-XPG4CMDLIST(id)
 ASTCMDLIST(join)
 BINCMDLIST(join)
 GNUCMDLIST(join)
 ASTCMDLIST(ln)
-// XPG4CMDLIST(ln)
 ASTCMDLIST(logname)
 BINCMDLIST(logname)
 GNUCMDLIST(logname)
@@ -140,7 +125,6 @@ ASTCMDLIST(mktemp)
 BINCMDLIST(mktemp)
 GNUCMDLIST(mktemp)
 ASTCMDLIST(mv)
-// XPG4CMDLIST(mv)
 ASTCMDLIST(paste)
 BINCMDLIST(paste)
 GNUCMDLIST(paste)
@@ -151,13 +135,11 @@ ASTCMDLIST(readlink)
 ASTCMDLIST(rev)
 BINCMDLIST(rev)
 ASTCMDLIST(rm)
-XPG4CMDLIST(rm)
 ASTCMDLIST(rmdir)
 BINCMDLIST(rmdir)
 GNUCMDLIST(rmdir)
 GNUCMDLIST(sleep)
 ASTCMDLIST(stty)
-// XPG4CMDLIST(stty)
 ASTCMDLIST(sum)
 BINCMDLIST(sum)
 ASTCMDLIST(sync)
@@ -167,7 +149,6 @@ SBINCMDLIST(sync)
 SUSRBINCMDLIST(sync)
 ASTCMDLIST(tail)
 BINCMDLIST(tail)
-XPG4CMDLIST(tail)
 ASTCMDLIST(tee)
 BINCMDLIST(tee)
 GNUCMDLIST(tee)

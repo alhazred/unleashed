@@ -24,8 +24,6 @@
 #
 
 PROG= 			xargs
-# /usr/xpg6/bin/xargs is a symlink to /usr/bin/xargs
-ROOTXPG6SYMLINK= 	$(ROOTXPG6BIN)/xargs
 
 OBJS1=			xargs.o
 OBJS=			$(OBJS1) getresponse.o
@@ -41,7 +39,7 @@ CERRWARN += -Wno-parentheses
 
 all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG6SYMLINK)
+install: all $(ROOTPROG)
 
 $(PROG):	$(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
@@ -50,10 +48,6 @@ $(PROG):	$(OBJS)
 %.o:	$(SRC)/common/util/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 	$(POST_PROCESS_O)
-
-$(ROOTXPG6SYMLINK):	$(ROOTPROG)
-	-$(RM)	$@
-	-$(SYMLINK)	../../bin/$(PROG) $@
 
 clean:
 	$(RM) $(OBJS)

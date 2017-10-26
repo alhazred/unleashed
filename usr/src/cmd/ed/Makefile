@@ -24,15 +24,10 @@
 #
 
 PROG= ed
-XPG4PROG= ed
-XPG6PROG= ed
 
 EDOBJ= ed.o compile.o
-XPG4EDOBJ= edobjs.xpg4/ed.o edobjs.xpg4/compile.o  values-xpg4.o
-XPG6EDOBJ= edobjs.xpg6/ed.o edobjs.xpg6/compile.o  values-xpg6.o
-OBJS= $(EDOBJ) $(XPG4EDOBJ) $(XPG6EDOBJ)
 SRCS= ./ed.c ../expr/compile.c 
-
+OBJS = $(EDOBJ) values-xpg6.o
 POFILES= $(EDOBJ:%.o=%.po)
 
 include ../Makefile.cmd
@@ -41,8 +36,7 @@ CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-uninitialized
-$(XPG4) := CFLAGS += -DXPG4  
-$(XPG6) := CFLAGS += -DXPG6 -I$(SRC)/lib/libc/inc 
+CFLAGS += -DXPG4 -DXPG6 -I$(SRC)/lib/libc/inc
 LDLIBS += -lmapmalloc -lgen -lcrypt_i
 XGETFLAGS += -a -x ed.xcl
 
@@ -58,57 +52,28 @@ POFILE= ed_cmd.po
 
 .KEEP_STATE:
 
-all:	$(PROG) $(XPG4) $(XPG6)
+all:	$(PROG)
 
-$(PROG): $(EDOBJ) $(MAPFILE.INT)
-	$(LINK.c) $(EDOBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG4): edobjs.xpg4 $(XPG4EDOBJ) $(MAPFILE.INT) 
-	$(LINK.c) $(XPG4EDOBJ) -o $@ $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG6): edobjs.xpg6 $(XPG6EDOBJ)  $(MAPFILE.INT)
-	$(LINK.c) $(XPG6EDOBJ) -o $@ $(LDLIBS)
+$(PROG): $(OBJS) $(MAPFILE.INT)
+	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
 
 compile.o:	../expr/compile.c 
 	$(COMPILE.c) -o $@ ../expr/compile.c
 
-edobjs.xpg4/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-edobjs.xpg4/%.o:	../expr/compile.c
-	$(COMPILE.c) -o $@ $<
-
-edobjs.xpg6/%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-
-edobjs.xpg6/%.o:	../expr/compile.c
-	$(COMPILE.c) -o $@ $<
-
-edobjs.xpg4:
-	-@mkdir -p $@
-
-edobjs.xpg6:
-	-@mkdir -p $@
-
 $(POFILE): $(POFILES)
 	$(RM) $@
 	cat $(POFILES) > $@
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG) $(ROOTXPG6PROG)
+install: all $(ROOTPROG)
 	$(RM) $(ROOTBIN)/red
 	$(LN) $(ROOTBIN)/ed $(ROOTBIN)/red
-
-values-xpg4.o: ../../lib/crt/common/values-xpg4.c
-	$(COMPILE.c) -o $@ ../../lib/crt/common/values-xpg4.c
 
 values-xpg6.o: ../../lib/crt/common/values-xpg6.c
 	$(COMPILE.c) -o $@ ../../lib/crt/common/values-xpg6.c
 
 clean:
-	-@rm -rf $(OBJS) $(XPG4) $(XPG6) edobjs.xpg4 edobjs.xpg6 \
+	-@rm -rf $(OBJS) \
 		compile.c.i
 
 

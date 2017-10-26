@@ -24,15 +24,13 @@
 #
 
 PROG=		find
-XPG4PROG=	find
 FINDOBJS1=	find.o
 FINDOBJS=	$(FINDOBJS1) getresponse.o
-XPG4FINDOBJS=	$(FINDOBJS:%.o=xpg4_%.o)		
 SRCS=		$(FINDOBJS1:%.o=%.c) $(SRC)/common/util/getresponse.c
 
 include ../Makefile.cmd
 
-$(XPG4)	:= CFLAGS += -DXPG4
+CFLAGS += -DXPG4
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
 
 CERRWARN += -Wno-switch
@@ -43,32 +41,20 @@ LDLIBS += -lsec
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG)
+install: all $(ROOTPROG)
 
 $(PROG):	$(FINDOBJS)
 	$(LINK.c) -o $@ $(FINDOBJS) $(LDLIBS)
-	$(POST_PROCESS)
-
-$(XPG4):	$(XPG4FINDOBJS)
-	$(LINK.c) -o $@ $(XPG4FINDOBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
 %.o:	$(SRC)/common/util/%.c
 	$(COMPILE.c) $(OUTPUT_OPTION) $<
 	$(POST_PROCESS_O)
 
-xpg4_%.o:	%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-xpg4_%.o:	$(SRC)/common/util/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
 clean:
-	$(RM) $(FINDOBJS) $(XPG4FINDOBJS)
+	$(RM) $(FINDOBJS)
 
 
 include ../Makefile.targ

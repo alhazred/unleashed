@@ -29,4 +29,4 @@
 
 include ../Makefile.com
 
-install: all $(ROOTPROG) $(ROOTXPG4PROG) $(ROOTXPG6PROG)
+install: all $(ROOTPROG)

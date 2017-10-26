@@ -27,12 +27,9 @@
 #
 
 PROG= link 
-XPG4PROG= link
-OBJS= link.o
+OBJS= link.o values-xpg4.o
 
 include ../Makefile.cmd
-
-clean $(XPG4) := OBJS += values-xpg4.o
 
 FILEMODE= 0555
 
@@ -40,13 +37,13 @@ CERRWARN += -Wno-parentheses
 
 .KEEP_STATE:
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
-$(PROG) $(XPG4): $$(OBJS)
+$(PROG): $$(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-install: all $(ROOTUSRSBINPROG) $(ROOTXPG4PROG)
+install: all $(ROOTUSRSBINPROG)
 
 values-xpg4.o: ../../lib/crt/common/values-xpg4.c
 	$(COMPILE.c) -o $@ ../../lib/crt/common/values-xpg4.c

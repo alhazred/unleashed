@@ -34,18 +34,13 @@
 .\" add the following below this CDDL HEADER, with the fields enclosed by
 .\" brackets "[]" replaced with your own identifying information:
 .\" Portions Copyright [yyyy] [name of copyright owner]
-.TH FIND 1 "Sep 5, 2011"
+.TH FIND 1 "Oct 25, 2017"
 .SH NAME
 find \- find files
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/find\fR [\fB-E\fR] [\fB-H\fR | \fB-L\fR] \fIpath\fR... \fIexpression\fR
-.fi
-
-.LP
-.nf
-\fB/usr/xpg4/bin/find\fR [\fB-H\fR | \fB-L\fR] \fIpath\fR... \fIexpression\fR
+\fB/usr/bin/find\fR [\fB-H\fR | \fB-L\fR] \fIpath\fR... \fIexpression\fR
 .fi
 
 .SH DESCRIPTION
@@ -480,10 +475,7 @@ shell file name generation characters (see \fBsh\fR(1)) can be used. A
 backslash (\fB\|\e\|\fR) is used as an escape character within the pattern. The
 pattern should be escaped or quoted when \fBfind\fR is invoked from the shell.
 .sp
-Unless the character '\fB\&.\fR' is explicitly specified in the beginning of
-\fIpattern\fR, a current file name beginning with '\fB\&.\fR' does not match
-\fIpattern\fR when using \fB/usr/bin/find\fR. \fB/usr/xpg4/bin/find\fR does not
-make this distinction; wildcard file name generation characters can match file
+Wildcard file name generation characters can match file
 names beginning with '\fB\&.\fR'.
 .RE
 

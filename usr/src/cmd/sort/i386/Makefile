@@ -30,4 +30,4 @@
 
 include ../Makefile.com
 
-install : all $(ROOTPROG32) $(ROOTXPG4PROG)
+install : all $(ROOTPROG32)

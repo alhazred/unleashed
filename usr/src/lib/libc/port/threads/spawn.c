@@ -455,14 +455,14 @@ posix_spawnp(
 			if (!xpg4)
 				pathstr = "/usr/sbin:/usr/ccs/bin:/usr/bin";
 			else
-				pathstr = "/usr/xpg4/bin:/usr/ccs/bin:"
-				    "/usr/bin:/opt/SUNWspro/bin:/usr/sbin";
+				pathstr = "/usr/bin:/usr/ccs/bin:"
+				    "/opt/SUNWspro/bin:/usr/sbin";
 		} else {
 			if (!xpg4)
 				pathstr = "/usr/ccs/bin:/usr/bin:";
 			else
-				pathstr = "/usr/xpg4/bin:/usr/ccs/bin:"
-				    "/usr/bin:/opt/SUNWspro/bin:";
+				pathstr = "/usr/bin:/usr/ccs/bin:"
+				    "/opt/SUNWspro/bin:";
 		}
 	}
 

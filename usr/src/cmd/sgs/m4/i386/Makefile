@@ -24,27 +24,11 @@
 #
 
 PROG=		m4
-XPG4PROG=	m4
 
 include 	../../../Makefile.cmd
 include		../../../sgs/Makefile.var
 
-COBJS=		m4.o  m4ext.o  m4macs.o
-
-YOBJS=		m4objs/m4y.o
-XPG4YOBJS=	m4objs.xpg4/m4y_xpg4.o
-
-OBJS=		$(COBJS:%=m4objs/%) $(YOBJS)
-XPG4OBJS=	$(COBJS:%=m4objs.xpg4/%) $(XPG4YOBJS)
-ALLOBJS=	$(OBJS) $(XPG4OBJS)
-
-YBLTSRCS=	../common/m4y.c
-XPG4BLTSRCS=	../common/m4y_xpg4.c
-BLTSRCS=	$(YBLTSRCS) $(XPG4BLTSRCS)
-
-YSRCS=		$(COBJS:%.o=../common/%.c) $(YBLTSRCS)
-XPG4SRCS=	$(COBJS:%.o=../common/%.c) $(XPG4BLTSRCS)
-SRCS=		$(COBJS:%.o=../common/%.c) $(BLTSRCS)
+OBJS=		m4.o  m4ext.o  m4macs.o m4y_xpg4.o
 
 INCLIST=	-I../common
 DEFLIST=	-DELF
@@ -55,35 +39,23 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-uninitialized
 
-CLEANFILES +=	$(BLTSRCS)
+CPPFLAGS += -DXPG4
 
-m4objs.xpg4/%.o := CPPFLAGS += -DXPG4
-
-m4objs/%.o m4objs.xpg4/%.o: ../common/%.c
+%.o: ../common/%.c
 		$(COMPILE.c) -o $@ $<
 
 .KEEP_STATE:
 
-all:		$(PROG) $(XPG4)
+all:		$(PROG)
 
 $(PROG):	$(OBJS)
 		$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 		$(POST_PROCESS)
 
-$(XPG4):	$(XPG4OBJS)
-		$(LINK.c) $(XPG4OBJS) -o $@ $(LDLIBS)
-		$(POST_PROCESS)
 
-$(OBJS):	m4objs
-
-$(XPG4OBJS):	m4objs.xpg4
-
-m4objs m4objs.xpg4:
-		-@mkdir -p $@
-
-install:	all $(VAR_SGSBINPROG) $(ROOTXPG4PROG) $(VAR_SGSCCSLINK)
+install:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
 
 clean:
-		$(RM) $(ALLOBJS) $(CLEANFILES)
+		$(RM) $(OBJS)
 
 include		../../../Makefile.targ

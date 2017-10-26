@@ -269,7 +269,7 @@ builtin getconf
 getconf UNIVERSE - att # override sticky default 'UNIVERSE = foo'
 
 [[ $(PATH=/usr/ucb/bin:/usr/bin echo -n ucb) == 'ucb' ]] || err_exit "ucb universe echo ignores -n option"
-[[ $(PATH=/usr/xpg/bin:/usr/bin echo -n att) == '-n att' ]] || err_exit "att universe echo does not ignore -n option"
+[[ echo -n att) == '-n att' ]] || err_exit "att universe echo does not ignore -n option"
 
 PATH=$path
 

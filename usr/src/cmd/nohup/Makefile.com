@@ -23,35 +23,29 @@
 # Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
 #
 # cmd/nohup/Makefile.com
 # 
 
-XPG4PROG = nohup
 PROG = nohup
 
 OBJS = nohup.o
-XPG4OBJS = $(OBJS:%.o=xpg4_%.o)
 SRCS = $(OBJS:%.o=../%.c)
 LNTS = $(OBJS:%.o=%.ln)
-CLEANFILES = $(OBJS) $(XPG4OBJS) $(LNTS)
+CLEANFILES = $(OBJS) $(LNTS)
 
 include ../../Makefile.cmd
 
 
-$(XPG4) := CPPFLAGS += -DXPG4
+CPPFLAGS += -DXPG4
 
-# not needed for xpg4/nohup
-EXTRALIBS = -lproc
-
-TARGETS = $(PROG) $(XPG4)
+TARGETS = $(PROG)
 
 .KEEP_STATE:
 
-.PARALLEL: $(OBJS) $(XPG4OBJS) $(LNTS)
+.PARALLEL: $(OBJS) $(LNTS)
 
-all: $(PROG) $(XPG4)
+all: $(PROG)
 
 clean:
 	$(RM) $(CLEANFILES)
@@ -59,17 +53,10 @@ clean:
 include ../../Makefile.targ
 
 $(PROG): $(OBJS)
-	$(LINK.c) -o $@ $(OBJS) $(LDLIBS) $(EXTRALIBS)
-	$(POST_PROCESS)
-
-$(XPG4): $(XPG4OBJS)
-	$(LINK.c) -o $@ $(XPG4OBJS) $(LDLIBS)
+	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
 %.o: ../%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-xpg4_%.o: ../%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)

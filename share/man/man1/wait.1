@@ -25,7 +25,7 @@ wait \- await process completion
 \fBwait\fR [\fIpid\fR]...
 .fi
 
-.SS "/bin/jsh /bin/ksh /usr/xpg4/bin/sh"
+.SS "/bin/jsh /bin/ksh /usr/bin/sh"
 .LP
 .nf
 \fBwait\fR [\fIpid\fR]...
@@ -234,7 +234,7 @@ in those environments.
 Although the exact value used when a process is terminated by a signal is
 unspecified, if it is known that a signal terminated a process, a script can
 still reliably figure out which signal is using \fBkill\fR, as shown by the
-following (\fB/bin/ksh\fR and \fB/usr/xpg4/bin/sh\fR):
+following (\fB/bin/ksh\fR and \fB/usr/bin/sh\fR):
 
 .sp
 .in +2
@@ -253,7 +253,7 @@ echo $pid was terminated by a SIG$(kill -l $(($?\(mi128))) signal.
 .sp
 .LP
 If the following sequence of commands is run in less than 31 seconds
-(\fB/bin/ksh\fR and \fB/usr/xpg4/bin/sh\fR):
+(\fB/bin/ksh\fR and \fB/usr/bin/sh\fR):
 
 .sp
 .in +2
