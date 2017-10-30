@@ -53,8 +53,8 @@ extern "C" {
 #define	SIGQUIT	3	/* quit (ASCII FS) */
 #define	SIGILL	4	/* illegal instruction (not reset when caught) */
 #define	SIGTRAP	5	/* trace trap (not reset when caught) */
-#define	SIGIOT	6	/* IOT instruction */
-#define	SIGABRT 6	/* used by abort, replace SIGIOT in the future */
+#define	SIGABRT 6	/* abort */
+#define	SIGIOT	SIGABRT	/* compatibility */
 #define	SIGEMT	7	/* EMT instruction */
 #define	SIGFPE	8	/* floating point exception */
 #define	SIGKILL	9	/* kill (cannot be caught or ignored) */
