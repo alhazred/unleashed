@@ -15,7 +15,6 @@
 #
 
 file path=usr/share/man/man1/Intro.1
-file path=usr/share/man/man1/alias.1
 file path=usr/share/man/man1/allocate.1
 file path=usr/share/man/man1/amt.1
 file path=usr/share/man/man1/at.1
@@ -102,7 +101,6 @@ file path=usr/share/man/man1/keylogin.1
 file path=usr/share/man/man1/keylogout.1
 file path=usr/share/man/man1/kill.1
 file path=usr/share/man/man1/kmfcfg.1
-file path=usr/share/man/man1/ksh93.1
 file path=usr/share/man/man1/kvmstat.1
 file path=usr/share/man/man1/ld.so.1.1
 file path=usr/share/man/man1/let.1
@@ -163,7 +161,6 @@ file path=usr/share/man/man1/sed.1
 file path=usr/share/man/man1/set.1
 file path=usr/share/man/man1/setfacl.1
 file path=usr/share/man/man1/setpgrp.1
-file path=usr/share/man/man1/shcomp.1
 file path=usr/share/man/man1/shell_builtins.1
 file path=usr/share/man/man1/shift.1
 file path=usr/share/man/man1/sleep.1
