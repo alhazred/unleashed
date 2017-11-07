@@ -43,13 +43,13 @@ ROOTETCSECURITY =	$(ROOTETC)/security
 EFILES =	user_attr
 EFILESRC =	$(EFILES:%=%)
 ETCFILES =	$(EFILES:%=$(ROOTETC)/%)
-ETCDFILES =	$(EFILES:%=$(ROOTETC)/%.d/SUNWcs)
+ETCDFILES =	$(EFILES:%=$(ROOTETC)/%.d/core-os)
 
 ESDFILES =	auth_attr exec_attr prof_attr
 ESFILES =		$(ESDFILES) policy.conf
 ESSRC =			$(ESFILES:%=%)
 ETCSECURITYFILES =	$(ESFILES:%=$(ROOTETCSECURITY)/%)
-ETCSECURITYDFILES =	$(ESDFILES:%=$(ROOTETCSECURITY)/%.d/SUNWcs)
+ETCSECURITYDFILES =	$(ESDFILES:%=$(ROOTETCSECURITY)/%.d/core-os)
 
 
 MFSTFILES =	rbac.xml
@@ -98,13 +98,13 @@ $(ROOTETCSECURITY):
 $(ROOTETCSECURITY)/%: %
 	$(INS.file)
 
-$(ROOTETCSECURITY)/%.d/SUNWcs: %
+$(ROOTETCSECURITY)/%.d/core-os: %
 	$(INS.rename)
 
 $(ROOTETC)/% : %
 	$(INS.file)
 
-$(ROOTETC)/%.d/SUNWcs: %
+$(ROOTETC)/%.d/core-os: %
 	$(INS.rename)
 
 $(MANIFESTDIR):

@@ -17,6 +17,7 @@
 
 file path=usr/share/man/man4/dir_ufs.4
 file path=usr/share/man/man4/driver.conf.4
+file path=usr/share/man/man4/path_to_inst.4
 file path=usr/share/man/man4/pci.4
 file path=usr/share/man/man4/priv_names.4
 file path=usr/share/man/man4/proc.4
