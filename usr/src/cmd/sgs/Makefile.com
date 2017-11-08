@@ -128,7 +128,7 @@ CHKMSGFLAGS =	$(SGSMSGTARG:%=-m %) $(SGSMSGCHK:%=-m %)
 # previous releases.  We use mapfiles to scope, but don't bother versioning.
 
 native :=	DYNFLAGS = -R$(SGSLIBDIR) -L$(SGSLIBDIR) $(ZNOVERSION) \
-			$(HSONAME)
+			$(MAPFILES:%=-Wl,-M%) $(HSONAME)
 
 # Comment out the following two lines to have the sgs built from the system
 # link-editor, rather than the local proto link-editor.

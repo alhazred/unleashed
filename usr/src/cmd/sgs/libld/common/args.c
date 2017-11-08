@@ -421,6 +421,10 @@ check_flags(Ofl_desc * ofl, int argc)
 			ld_eprintf(ofl, ERR_WARNING, MSG_INTL(MSG_ARG_NODEFLIB),
 			    MSG_INTL(MSG_MARG_RPATH));
 
+		/* Default to -zdefs */
+		if (zdflag != SET_FALSE)
+			ofl->ofl_flags |= FLG_OF_NOUNDEF;
+
 		/*
 		 * By default, text relocation warnings are given when building
 		 * an executable unless the -b flag is specified.  This option
@@ -483,9 +487,6 @@ check_flags(Ofl_desc * ofl, int argc)
 			 */
 			ofl->ofl_flags |= FLG_OF_EXEC;
 
-			if (zdflag != SET_FALSE)
-				ofl->ofl_flags |= FLG_OF_NOUNDEF;
-
 			/*
 			 * -z textwarn is the default for executables, and
 			 * only an explicit -z text* option can change that,
@@ -546,6 +547,8 @@ check_flags(Ofl_desc * ofl, int argc)
 			/*
 			 * Dynamic relocatable object.
 			 */
+			if (zdflag == SET_UNKNOWN)
+				ofl->ofl_flags &= ~FLG_OF_NOUNDEF;
 			if (ztflag == NULL)
 				ofl->ofl_flags1 |= FLG_OF1_TEXTOFF;
 			ofl->ofl_guideflags |= FLG_OFG_NO_TEXT;

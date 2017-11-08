@@ -56,7 +56,7 @@ REMOVE_GCC_PREFIX=echo $(LDFLAGS) | $(SED) -e 's/-Wl,//g'
 $(STANDLIBRARY): $(OBJS) $(LINKTEST_OBJ)
 	$(LD) $(LD_BREDUCE) $(LD_ZDEFS) $(REMOVE_GCC_PREFIX:sh) -o $@.linktest $(OBJS) $(LINKTEST_OBJ)
 	rm $@.linktest
-	$(LD) $(REMOVE_GCC_PREFIX:sh) -o $@ $(OBJS)
+	$(LD) $(LD_ZNODEFS) $(REMOVE_GCC_PREFIX:sh) -o $@ $(OBJS)
 
 clobber: $(TYPES:%=clobber.%)
 

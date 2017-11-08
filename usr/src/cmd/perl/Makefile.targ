@@ -18,6 +18,8 @@ $(PERLEXT):= LDLIBS += -lc
 $(PERLEXT64):= LDLIBS += -lc
 
 # Allow for undefined symbols satisfied by perl
+$(PERLEXT):= DYNFLAGS += $(ZNODEFS)
+$(PERLEXT64):= DYNFLAGS += $(ZNODEFS)
 $(PERLEXT):= ZDEFS =
 $(PERLEXT64):= ZDEFS =
 
