@@ -96,7 +96,6 @@ file path=opt/onbld/bin/mapfilechk mode=0555
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
-file path=opt/onbld/bin/which_scm mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
 file path=opt/onbld/etc/SampleLinks
 file path=opt/onbld/etc/SamplePkgLinks
@@ -193,7 +192,6 @@ file path=opt/onbld/man/man1onbld/interface_cmp.1onbld
 file path=opt/onbld/man/man1onbld/make_pkg_db.1onbld
 file path=opt/onbld/man/man1onbld/mapfilechk.1onbld
 file path=opt/onbld/man/man1onbld/ndrgen.1onbld
-file path=opt/onbld/man/man1onbld/which_scm.1onbld
 file path=opt/onbld/man/man1onbld/wsdiff.1onbld
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

@@ -192,10 +192,6 @@ webrev
 	review materials.  Can automatically find edited files or use a
 	manually-generated list.
 
-which_scm
-	Reports the current Source Code Management (SCM) system in use
-	and the top-level directory of the workspace.
-
 wsdiff
 	Detect object differences between two ON proto areas. Used by
 	nightly(1) to determine what changed between two builds. Handy

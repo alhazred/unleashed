@@ -33,7 +33,6 @@ SHFILES= \
 	elfcmp \
 	genoffsets \
 	protocmp.terse \
-	which_scm
 
 PERLFILES= \
 	check_rtime \
@@ -71,7 +70,6 @@ MAN1ONBLDFILES= \
 	interface_check.1onbld \
 	interface_cmp.1onbld \
 	mapfilechk.1onbld \
-	which_scm.1onbld \
 	wsdiff.1onbld
 
 MAN1ONBLDLINKS= \

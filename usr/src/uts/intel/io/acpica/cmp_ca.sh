@@ -35,10 +35,8 @@ ACINC=$ACDIR/include
 
 DIFF="diff -w"
 
-#
-# Use which_scm to get the current WS path
-#
-which_scm | read WS_SCM WSDIR
+WSDIR="$CODEMGR_WS"
+[ -z "$WSDIR" ] || { echo "$0: error: CODEMGR_WS not set in env" >&2; exit 1; }
 
 WSSRC=usr/src/uts/intel/io/acpica
 WSHDR=arch/x86/include/sys/acpi

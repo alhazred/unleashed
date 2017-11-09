@@ -49,17 +49,6 @@ unset CDPATH
 # may be a relative path, and we need to do this before changing directory.
 nightly_path=`whence $0`
 
-#
-# Keep track of where we found nightly so we can invoke the matching
-# which_scm script.  If that doesn't work, don't go guessing, just rely
-# on the $PATH settings, which will generally give us either /opt/onbld
-# or the user's workspace.
-#
-WHICH_SCM=$(dirname $nightly_path)/which_scm
-if [[ ! -x $WHICH_SCM ]]; then
-	WHICH_SCM=which_scm
-fi
-
 function fatal_error
 {
 	print -u2 "nightly: $*"
@@ -830,25 +819,6 @@ if [ "$w_FLAG" = "y" -a -d "$ROOT" ]; then
     mv $ROOT $ROOT.prev
 fi
 
-# Echo the SCM types of $CODEMGR_WS
-function child_wstype {
-	typeset scm_type junk
-
-	# Probe CODEMGR_WS to determine its type
-	if [[ -d $CODEMGR_WS ]]; then
-		$WHICH_SCM | read scm_type junk || exit 1
-	fi
-
-	case "$scm_type" in
-	none|git|mercurial)
-		;;
-	*)	scm_type=none
-		;;
-	esac
-
-	echo $scm_type
-}
-
 function run_bmake {
 	echo "\n==== bmake $@ ====\n" >&2
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
@@ -885,8 +855,6 @@ function bmake_build_step_user_dir {
 	bmake_build_step_args $1 $2 \
 		DESTDIR=$ROOT
 }
-
-SCM_TYPE=$(child_wstype)
 
 # Safeguards
 [[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
