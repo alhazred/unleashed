@@ -131,24 +131,6 @@ find_elf
 	output per object. Used by check_rtime and interface_check to locate
 	the objects to examine.
 
-findunref
-	Finds all files in a source tree that have access times older than a
-	certain time and are not in a specified list of exceptions.  Since
-	'nightly' timestamps the start of the build, and findunref uses its
-	timestamp (by default), this can be used to find all files that were
-	unreferenced during a nightly build).  Since some files are only used
-	during a SPARC or Intel build, 'findunref' needs to be run on
-	workspaces from both architectures and the results need to be merged.
-	For instance, if $INTELSRC and $SPARCSRC are set to the usr/src
-	directories of your Intel and SPARC nightly workspaces, then you
-	can merge the results like so:
-
-	$ findunref $INTELSRC $INTELSRC/tools/findunref/exception_list | \
-	  sort > ~/unref-i386.out
-	$ findunref $SPARCSRC $SPARCSRC/tools/findunref/exception_list | \
-	  sort > ~/unref-sparc.out
-	$ comm -12 ~/unref-i386.out ~/unref-sparc.out > ~/unref.out
-
 hdrchk
 	checks headers for compliance with OS/Net standards (form, includes,
 	C++ guards).

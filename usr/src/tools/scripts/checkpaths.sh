@@ -96,22 +96,6 @@ do
 	fi
 done
 
-# Two entries in the findunref exception_list deal with things created
-# by nightly.  Otherwise, this test could be run on an unmodifed (and
-# unbuilt) workspace.  We handle this by flagging the one that is
-# present only on a built workspace (./*.out) and the one that's
-# present only after a run of findunref (./*.ref) with ISUSED, and
-# disabling all checks of them.  The assumption is that the entries
-# marked with ISUSED are always known to be good, thus the Latin quote
-# at the top of the file.
-#
-# The exception_list is generated from whichever input files are appropriate
-# for this workspace, so checking it obviates the need to check the inputs.
-
-if [ -r $SRC/tools/findunref/exception_list ]; then
-	validate_paths -k ISUSED -r -e '^\*' $SRC/tools/findunref/exception_list
-fi
-
 if [ -f $SRC/tools/opensolaris/license-list ]; then
 	sed -e 's/$/.descrip/' < $SRC/tools/opensolaris/license-list | \
 		validate_paths -n SRC/tools/opensolaris/license-list

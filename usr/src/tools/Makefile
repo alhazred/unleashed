@@ -31,7 +31,6 @@ COMMON_SUBDIRS= \
 	codereview \
 	ctf \
 	depcheck \
-	findunref \
 	ndrgen \
 	onbld \
 	pmodes \

@@ -336,13 +336,11 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 	-R	default group of options for building a release (-mp)
 	-U	update proto area in the parent
 	-V VERS set the build version string to VERS
-	-f	find unreferenced files
 	-i	do an incremental build (no "make clobber")
 	-m	send mail to $MAILTO at end of build
 	-p	create packages
 	-r	check ELF runtime attributes in the proto area
-	-u	update proto_list_$MACH and friends in the parent workspace;
-		when used with -f, also build an unrefmaster.out in the parent
+	-u	update proto_list_$MACH and friends in the parent workspace
 	-w	report on differences between previous and current proto areas
 '
 #
@@ -355,7 +353,6 @@ NIGHTLY_OPTIONS variable in the <env_file> as follows:
 A_FLAG=n
 C_FLAG=n
 D_FLAG=n
-f_FLAG=n
 i_FLAG=n; i_CMD_LINE_FLAG=n
 M_FLAG=n
 m_FLAG=n
@@ -506,8 +503,6 @@ do
 	  C )	C_FLAG=y
 		;;
 	  D )	D_FLAG=y
-		;;
-	  f )	f_FLAG=y
 		;;
 	  G )   ;;
 	  I )	m_FLAG=y
@@ -818,19 +813,6 @@ EOF
 	echo "" >&2
 fi
 
-if [ "$f_FLAG" = "y" ]; then
-	if [ "$i_FLAG" = "y" ]; then
-		echo "WARNING: the -f flag cannot be used during incremental" \
-		    "builds; ignoring -f\n" >&2
-		f_FLAG=n
-	fi
-	if [ "${p_FLAG}" != "y" ]; then
-		echo "WARNING: the -f flag requires -p;" \
-		    "ignoring -f\n" >&2
-		f_FLAG=n
-	fi
-fi
-
 if [ "$w_FLAG" = "y" -a ! -d $ROOT ]; then
 	echo "WARNING: -w specified, but $ROOT does not exist;" \
 	    "ignoring -w\n" >&2
@@ -1010,9 +992,6 @@ else
 	use_tools $TOOLS_PROTO
 fi
 
-# timestamp the start of the normal build; the findunref tool uses it.
-touch $SRC/.build.tstamp
-
 normal_build
 
 ORIG_SRC=$SRC
@@ -1175,24 +1154,6 @@ fi
 echo "\n==== Find core files ====\n" >&2
 
 find $abssrcdirs -name core -a -type f -exec file {} \; >&2
-
-if [ "$f_FLAG" = "y" -a "$build_ok" = "y" ]; then
-	echo "\n==== Diff unreferenced files (since last build) ====\n" >&2
-	rm -f $SRC/unref-${MACH}.ref
-	if [ -f $SRC/unref-${MACH}.out ]; then
-		mv $SRC/unref-${MACH}.out $SRC/unref-${MACH}.ref
-	fi
-
-	findunref -S $SCM_TYPE -t $SRC/.build.tstamp -s usr $CODEMGR_WS \
-	    ${TOOLS}/findunref/exception_list | \
-	    sort > $SRC/unref-${MACH}.out
-
-	if [ ! -f $SRC/unref-${MACH}.ref ]; then
-		cp $SRC/unref-${MACH}.out $SRC/unref-${MACH}.ref
-	fi
-
-	diff $SRC/unref-${MACH}.ref $SRC/unref-${MACH}.out >&2
-fi
 
 # Verify that the usual lists of files, such as exception lists,
 # contain only valid references to files.  If the build has failed,
