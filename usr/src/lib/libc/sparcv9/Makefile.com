@@ -146,6 +146,7 @@ GENOBJS=			\
 	ecvt.o			\
 	endian.o		\
 	fts.o			\
+	freezero.o		\
 	getctxt.o		\
 	lock.o			\
 	makectxt.o		\

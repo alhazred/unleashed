@@ -150,6 +150,7 @@ GENOBJS=			\
 	endian.o		\
 	errlst.o		\
 	fts.o			\
+	freezero.o		\
 	getctxt.o		\
 	ladd.o			\
 	lmul.o			\
