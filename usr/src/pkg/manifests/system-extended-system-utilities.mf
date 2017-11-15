@@ -127,6 +127,7 @@ file path=usr/bin/puname mode=0555
 file path=usr/bin/sdiff mode=0555
 file path=usr/bin/spell mode=0555
 file path=usr/bin/split mode=0555
+file path=usr/bin/stat mode=0555
 file path=usr/bin/unexpand mode=0555
 file path=usr/bin/units mode=0555
 file path=usr/bin/unix2dos mode=0555
@@ -203,6 +204,7 @@ file path=usr/share/man/man1/sdiff.1
 file path=usr/share/man/man1/sort.1
 file path=usr/share/man/man1/spell.1
 file path=usr/share/man/man1/split.1
+file path=usr/share/man/man1/stat.1
 file path=usr/share/man/man1/units.1
 file path=usr/share/man/man1/unix2dos.1
 file path=usr/share/man/man1/yes.1
@@ -237,6 +239,7 @@ hardlink path=usr/bin/ptime target=../../usr/lib/isaexec
 hardlink path=usr/bin/ptree target=../../usr/lib/isaexec
 hardlink path=usr/bin/pwait target=../../usr/lib/isaexec
 hardlink path=usr/bin/pwdx target=../../usr/lib/isaexec
+hardlink path=usr/bin/readlink target=../../usr/bin/stat
 hardlink path=usr/bin/sort target=../../usr/lib/isaexec
 hardlink path=usr/bin/uncompress target=../../usr/bin/compress
 hardlink path=usr/bin/zcat target=../../usr/bin/compress
