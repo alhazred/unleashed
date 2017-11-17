@@ -1084,7 +1084,6 @@ SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
 	fdwalk;
 	_fdwalk;
 	fstatat;
-	_fstatat;
 	futimesat;
 	_futimesat;
 	getcpuid;
@@ -1101,7 +1100,6 @@ SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
 	_meminfo;
 	ngettext;
 	openat;
-	_openat;
 	printstack;
 	priocntl;
 	priocntlset;
@@ -1148,9 +1146,7 @@ $if lf64
 	attropen64;
 	_attropen64;
 	fstatat64;
-	_fstatat64;
 	openat64;
-	_openat64;
 $endif
 } SUNW_1.20.4;
 
@@ -1537,14 +1533,12 @@ SYMBOL_VERSION SUNW_1.1 {	# SunOS 5.6 (Solaris 2.6)
 
 $if lf64
 	creat64;
-	_creat64;
 	fgetpos64;
 	fopen64;
 	freopen64;
 	fseeko64;
 	fsetpos64;
 	fstat64;
-	_fstat64;
 	fstatvfs64;
 	_fstatvfs64;
 	ftello64;
@@ -1557,11 +1551,9 @@ $if lf64
 	getrlimit64;
 	_getrlimit64;
 	lockf64;
-	_lockf64;
 	lseek64;
 	_lseek64;
 	lstat64;
-	_lstat64;
 	mkstemp64;
 	_mkstemp64;
 	mmap64;
@@ -1569,12 +1561,9 @@ $if lf64
 	nftw64;
 	_nftw64;
 	open64;
-	_open64;
 	__posix_readdir_r;
 	pread64;
-	_pread64;
 	pwrite64;
-	_pwrite64;
 	readdir64;
 	_readdir64;
 	readdir64_r;
@@ -1585,7 +1574,6 @@ $if lf64
 	_s_fcntl		{ FLAGS = NODYNSORT };
 	s_ioctl;
 	stat64;
-	_stat64;
 	statvfs64;
 	_statvfs64;
 	tell64;
@@ -2169,12 +2157,10 @@ $endif
 	_cleanup;
 	clearerr;
 	clock;
-	_close;
 	close;
 	closedir;
 	_closedir;
 	creat;
-	_creat;
 	ctermid;
 	ctime;
 	cuserid;
@@ -2209,7 +2195,6 @@ $endif
 	_fchown;
 	fclose;
 	fcntl;
-	_fcntl;
 	fdetach;
 	_fdetach;
 	fdopen;
@@ -2227,7 +2212,6 @@ $endif
 	fmtmsg;
 	_fmtmsg;
 	fopen;
-	_fork;
 	fork;
 	fpathconf;
 	_fpathconf;
@@ -2240,11 +2224,9 @@ $endif
 	fseek;
 	fsetpos;
 	fstat;
-	_fstat;
 	fstatvfs;
 	_fstatvfs;
 	fsync;
-	_fsync;
 	ftell;
 	ftok;
 	_ftok;
@@ -2269,7 +2251,6 @@ $endif
 	_getgroups;
 	getlogin;
 	getmsg;
-	_getmsg;
 	getopt;
 	_getopt;
 	getpass;
@@ -2281,7 +2262,6 @@ $endif
 	getpid;
 	_getpid;
 	getpmsg;
-	_getpmsg;
 	getppid;
 	_getppid;
 	getpwnam;
@@ -2342,14 +2322,12 @@ $endif
 	localeconv;
 	localtime;
 	lockf;
-	_lockf;
 	longjmp;
 	lsearch;
 	_lsearch;
 	lseek;
 	_lseek;
 	lstat;
-	_lstat;
 	makecontext;
 	_makecontext;
 	mblen;
@@ -2384,11 +2362,8 @@ $endif
 	msgget;
 	_msgget;
 	msgrcv;
-	_msgrcv;
 	msgsnd;
-	_msgsnd;
 	msync;
-	_msync;
 	munlock;
 	_munlock;
 	munmap;
@@ -2400,13 +2375,11 @@ $endif
 	nl_langinfo;
 	_nl_langinfo;
 	open;
-	_open;
 	opendir;
 	_opendir;
 	pathconf;
 	_pathconf;
 	pause;
-	_pause;
 	pclose;
 	_pclose;
 	perror;
@@ -2426,9 +2399,7 @@ $endif
 	putenv;
 	_putenv;
 	putmsg;
-	_putmsg;
 	putpmsg;
-	_putpmsg;
 	puts;
 	putw;
 	_putw;
@@ -2436,13 +2407,11 @@ $endif
 	raise;
 	rand;
 	read;
-	_read;
 	readdir;
 	_readdir;
 	readlink;
 	_readlink;
 	readv;
-	_readv;
 	remove;
 	rename;
 	_rename;
@@ -2511,7 +2480,6 @@ $endif
 	_siglongjmp;
 	signal;
 	sigpause;
-	_sigpause;
 	sigpending;
 	_sigpending;
 	sigprocmask;
@@ -2527,14 +2495,11 @@ $endif
 	sigsetjmp;
 	_sigsetjmp		{ FLAGS = NODYNSORT };
 	sigsuspend;
-	_sigsuspend;
 	sleep;
-	_sleep;
 	sprintf;
 	srand;
 	sscanf;
 	stat;
-	_stat;
 	statvfs;
 	_statvfs;
 	stime;
@@ -2574,7 +2539,6 @@ $endif
 	_sysconf;
 	system;
 	tcdrain;
-	_tcdrain;
 	tcflow;
 	_tcflow;
 	tcflush;
@@ -2640,15 +2604,12 @@ $endif
 	wait;
 	_wait;
 	waitid;
-	_waitid;
 	waitpid;
 	_waitpid;
 	wcstombs;
 	wctomb;
 	write;
-	_write;
 	writev;
-	_writev;
 	_xftw;
 
 $if _ELF32
@@ -2971,8 +2932,6 @@ $endif
 	_findiop;
 	__fini_daemon_priv;
 	_finite;
-	_fork1			{ FLAGS = NODYNSORT };
-	_forkall		{ FLAGS = NODYNSORT };
 	_fpclass;
 	_fpgetmask;
 	_fpgetround;

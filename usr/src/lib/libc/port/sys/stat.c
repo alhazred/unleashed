@@ -32,28 +32,24 @@
 
 #if !defined(_LP64) && _FILE_OFFSET_BITS == 64
 
-#pragma weak _fstatat64 = fstatat64
 int
 fstatat64(int fd, const char *name, struct stat64 *sb, int flags)
 {
 	return (syscall(SYS_fstatat64, fd, name, sb, flags));
 }
 
-#pragma weak _stat64 = stat64
 int
 stat64(const char *name, struct stat64 *sb)
 {
 	return (fstatat64(AT_FDCWD, name, sb, 0));
 }
 
-#pragma weak _lstat64 = lstat64
 int
 lstat64(const char *name, struct stat64 *sb)
 {
 	return (fstatat64(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
 }
 
-#pragma weak _fstat64 = fstat64
 int
 fstat64(int fd, struct stat64 *sb)
 {
@@ -62,28 +58,24 @@ fstat64(int fd, struct stat64 *sb)
 
 #else	/* !defined(_LP64) && _FILE_OFFSET_BITS == 64 */
 
-#pragma weak _fstatat = fstatat
 int
 fstatat(int fd, const char *name, struct stat *sb, int flags)
 {
 	return (syscall(SYS_fstatat, fd, name, sb, flags));
 }
 
-#pragma weak _stat = stat
 int
 stat(const char *name, struct stat *sb)
 {
 	return (fstatat(AT_FDCWD, name, sb, 0));
 }
 
-#pragma weak _lstat = lstat
 int
 lstat(const char *name, struct stat *sb)
 {
 	return (fstatat(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
 }
 
-#pragma weak _fstat = fstat
 int
 fstat(int fd, struct stat *sb)
 {

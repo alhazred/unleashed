@@ -40,52 +40,6 @@
 #include <sys/door.h>
 
 /*
- * These leading-underbar symbols exist because mistakes were made
- * in the past that put them into non-SUNWprivate versions of
- * the libc mapfiles.  They should be eliminated, but oh well...
- */
-#pragma weak _fork = fork
-#pragma weak _read = read
-#pragma weak _write = write
-#pragma weak _getmsg = getmsg
-#pragma weak _getpmsg = getpmsg
-#pragma weak _putmsg = putmsg
-#pragma weak _putpmsg = putpmsg
-#pragma weak _sleep = sleep
-#pragma weak _close = close
-#pragma weak _creat = creat
-#pragma weak _fcntl = fcntl
-#pragma weak _fsync = fsync
-#pragma weak _lockf = lockf
-#pragma weak _msgrcv = msgrcv
-#pragma weak _msgsnd = msgsnd
-#pragma weak _msync = msync
-#pragma weak _open = open
-#pragma weak _openat = openat
-#pragma weak _pause = pause
-#pragma weak _readv = readv
-#pragma weak _sigpause = sigpause
-#pragma weak _sigsuspend = sigsuspend
-#pragma weak _tcdrain = tcdrain
-#pragma weak _waitid = waitid
-#pragma weak _writev = writev
-
-#if !defined(_LP64)
-#pragma weak _creat64 = creat64
-#pragma weak _lockf64 = lockf64
-#pragma weak _open64 = open64
-#pragma weak _openat64 = openat64
-#pragma weak _pread64 = pread64
-#pragma weak _pwrite64 = pwrite64
-#endif
-
-/*
- * These are SUNWprivate, but they are being used by Sun Studio libcollector.
- */
-#pragma weak _fork1 = fork1
-#pragma weak _forkall = forkall
-
-/*
  * atfork_lock protects the pthread_atfork() data structures.
  *
  * fork_lock does double-duty.  Not only does it (and atfork_lock)
