@@ -67,7 +67,6 @@ file path=opt/onbld/bin/$(ARCH)/ctfstrip mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/elfextract mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth mode=0555
 $(sparc_ONLY)file path=opt/onbld/bin/$(ARCH)/forth_preload.so.1 mode=0555
-$(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/mbh_patch mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen1 mode=0555
 file path=opt/onbld/bin/$(ARCH)/pmodes mode=0555

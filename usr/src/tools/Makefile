@@ -45,7 +45,6 @@ sparc_SUBDIRS= \
 
 i386_SUBDIRS=		\
 	elfextract	\
-	mbh_patch	\
 	btxld
 
 SUBDIRS= \
