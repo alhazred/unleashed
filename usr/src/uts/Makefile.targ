@@ -79,7 +79,7 @@ $(OBJS_DIR)/vers.o: $(OBJECTS)
 	$(COMPILE.c) -DUTS_RELEASE=\"`$(ECHO) $(RELEASE) | sed -e 's/ /_/g'`\" \
 	    -DUTS_VERSION=\"`$(ECHO) $(PATCHID) | sed -e 's/ /_/g'`\" \
 	    -DUTS_SYSNAME=\"$(SYSNAME)\" \
-	    -DUTS_PLATFORM=\"$(UNAME_M)\" -o $@ $(CODEMGR_WS)/kernel/os/vers.c
+	    -DUTS_PLATFORM=\"$(UNAME_M)\" -o $@ $(SRCTOP)/kernel/os/vers.c
 	$(CTFCONVERT_O)
 	$(POST_PROCESS_O)
 

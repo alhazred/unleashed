@@ -42,7 +42,7 @@ UTSBASE	= ../..
 MODULE		= ip6
 OBJECTS		= $(IP6_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/ip
+CONF_SRCDIR	= $(SRCTOP)/kernel/net/ip
 
 #
 #	Include common rules.

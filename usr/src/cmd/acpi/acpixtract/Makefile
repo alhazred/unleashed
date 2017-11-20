@@ -22,7 +22,7 @@ SRCS = $(OBJS:.o=.c)
 
 CERRWARN += -Wno-unused-function
 
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/include/sys/acpi -DACPI_XTRACT_APP
+CPPFLAGS += -I$(SRCTOP)/arch/x86/include/sys/acpi -DACPI_XTRACT_APP
 
 .KEEP_STATE:
 

@@ -41,9 +41,9 @@ MODSRCS_DIR = ../../../../i86pc/modules/unix/
 CPPFLAGS += -DMP -D_MACHDEP -D__xpv
 CPPFLAGS += -I../../../../common
 CPPFLAGS += -I$(SRC)/uts/common
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86xpv/include
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86xpv/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 
 CERRWARN += -Wno-char-subscripts

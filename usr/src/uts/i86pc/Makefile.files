@@ -240,9 +240,9 @@ AMD_IOMMU_OBJS +=	amd_iommu.o amd_iommu_impl.o amd_iommu_acpi.o \
 #	Build up defines and paths.
 #
 ALL_DEFS	+= -Di86pc
-INC_PATH	+= -I$(CODEMGR_WS)/include
-INC_PATH	+= -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
-INC_PATH	+= -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86xpv/include
+INC_PATH	+= -I$(SRCTOP)/include
+INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86xpv/include
 INC_PATH	+= -I$(UTSBASE)/i86pc -I$(SRC)/common
 INC_PATH	+= -I$(UTSBASE)/i86xpv -I$(UTSBASE)/common/xen
 

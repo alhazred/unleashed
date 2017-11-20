@@ -18,13 +18,13 @@
 # Helper program to run nltest
 
 
-[ -n "$CODEMGR_WS" ] || {
-  echo "Need a buildenv to set CODEMGR_WS=..."
+[ -n "$SRCTOP" ] || {
+  echo "Need a buildenv to set SRCTOP=..."
   exit 1;
 }
 
 
-ROOT=${CODEMGR_WS}/proto/root_i386
+ROOT=${SRCTOP}/proto/root_i386
 LD_LIBRARY_PATH=$ROOT/usr/lib:$ROOT/lib
 export LD_LIBRARY_PATH
 

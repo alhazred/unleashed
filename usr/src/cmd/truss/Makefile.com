@@ -44,8 +44,8 @@ C99MODE=	$(C99_ENABLE)
 
 LDLIBS	+= -lproc -lrtld_db -lc_db -lnvpair
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/fs/zfs
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs
+CPPFLAGS += -I$(SRCTOP)/include
 # SOL_ROUTE
 print.o := CPPFLAGS += -D__EXTENSIONS__
 

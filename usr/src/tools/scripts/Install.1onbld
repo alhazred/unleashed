@@ -100,7 +100,7 @@ will not automatically invoke
 If \-w is not specified,
 .B Install
 uses the current
-workspace (as indicated by $CODEMGR_WS).  If there is no current workspace,
+workspace (as indicated by $SRCTOP).  If there is no current workspace,
 .B Install
 checks to see if you are in an appropriate source directory, e.g. uts/sun4c;
 if so,

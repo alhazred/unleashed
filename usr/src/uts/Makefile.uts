@@ -505,14 +505,14 @@ $(OBJS_DIR)/unix_bb.o	:= XAOPT =
 #
 # Privilege files
 #
-PRIVS_AWK = $(CODEMGR_WS)/tools/privs.awk
-PRIVS_DEF = $(CODEMGR_WS)/kernel/os/priv_defs
+PRIVS_AWK = $(SRCTOP)/tools/privs.awk
+PRIVS_DEF = $(SRCTOP)/kernel/os/priv_defs
 
 #
 # USB device data
 #
-USBDEVS_AWK =	$(CODEMGR_WS)/tools/usbdevs2h.awk
-USBDEVS_DATA =	$(CODEMGR_WS)/kernel/drivers/usb/usbdevs
+USBDEVS_AWK =	$(SRCTOP)/tools/usbdevs2h.awk
+USBDEVS_DATA =	$(SRCTOP)/kernel/drivers/usb/usbdevs
 
 
 #
@@ -521,4 +521,4 @@ USBDEVS_DATA =	$(CODEMGR_WS)/kernel/drivers/usb/usbdevs
 #
 CTFCVTFLAGS += -X
 
-INC_PATH += -I${CODEMGR_WS}/include
+INC_PATH += -I${SRCTOP}/include

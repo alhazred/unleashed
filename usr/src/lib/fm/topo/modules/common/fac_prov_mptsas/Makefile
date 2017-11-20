@@ -31,4 +31,4 @@ MODULESRCS = fac_prov_mptsas.c
 
 include ../../Makefile.plugin
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include

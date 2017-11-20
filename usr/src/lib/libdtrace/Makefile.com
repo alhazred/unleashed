@@ -173,14 +173,14 @@ pics/dt_lex.o pics/dt_grammar.o := CFLAGS64 += $(YYCFLAGS)
 ../common/dt_errtags.c: ../common/mkerrtags.sh ../common/dt_errtags.h
 	sh ../common/mkerrtags.sh < ../common/dt_errtags.h > $@
 
-../common/dt_names.c: ../common/mknames.sh $(CODEMGR_WS)/include/sys/dtrace.h
-	sh ../common/mknames.sh < $(CODEMGR_WS)/include/sys/dtrace.h > $@
+../common/dt_names.c: ../common/mknames.sh $(SRCTOP)/include/sys/dtrace.h
+	sh ../common/mknames.sh < $(SRCTOP)/include/sys/dtrace.h > $@
 
-../common/errno.d: ../common/mkerrno.sh $(CODEMGR_WS)/include/sys/errno.h
-	sh ../common/mkerrno.sh < $(CODEMGR_WS)/include/sys/errno.h > $@
+../common/errno.d: ../common/mkerrno.sh $(SRCTOP)/include/sys/errno.h
+	sh ../common/mkerrno.sh < $(SRCTOP)/include/sys/errno.h > $@
 
-../common/signal.d: ../common/mksignal.sh $(CODEMGR_WS)/include/sys/iso/signal_iso.h
-	sh ../common/mksignal.sh < $(CODEMGR_WS)/include/sys/iso/signal_iso.h > $@
+../common/signal.d: ../common/mksignal.sh $(SRCTOP)/include/sys/iso/signal_iso.h
+	sh ../common/mksignal.sh < $(SRCTOP)/include/sys/iso/signal_iso.h > $@
 
 ../common/%.sed: ../common/%.sed.in
 	$(COMPILE.cpp) -D_KERNEL $< | tr -d ' ' | tr '"' '@' | \

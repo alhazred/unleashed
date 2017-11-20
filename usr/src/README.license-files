@@ -91,7 +91,7 @@ properly communicate the license terms.  What do you do next?
 	      license=path/to/most/common/license/file
 
    C. For your new license files, the path you use in your license
-      actions should be relative to ${CODEMGR_WS}.
+      actions should be relative to ${SRCTOP}.
 
    D. Empty packages: if your package delivers nothing (or, more strictly
       speaking, nothing besides directories) you should include the Sun

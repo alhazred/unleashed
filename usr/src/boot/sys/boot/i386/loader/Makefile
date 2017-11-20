@@ -19,7 +19,7 @@ include $(SRC)/boot/Makefile.version
 
 CFLAGS=		-O2
 CPPFLAGS=	-DSTAND -nostdinc -I../../../../include -I../../..
-CPPFLAGS +=	-I$(CODEMGR_WS)/arch/x86/include/sys/acpi
+CPPFLAGS +=	-I$(SRCTOP)/arch/x86/include/sys/acpi
 LOADER=		zfsloader
 NEWVERSWHAT=	"ZFS enabled bootstrap loader" x86
 MAN=
@@ -107,7 +107,7 @@ CPPFLAGS +=	-I../btx/lib
 include ../Makefile.inc
 
 # For multiboot2.h, must be last, to avoid conflicts
-CPPFLAGS +=	-I$(CODEMGR_WS)/include
+CPPFLAGS +=	-I$(SRCTOP)/include
 
 vers.c:	../../common/newvers.sh $(SRC)/boot/Makefile.version
 	$(SH) ../../common/newvers.sh ${LOADER_VERSION} ${NEWVERSWHAT}

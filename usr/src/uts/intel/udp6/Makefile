@@ -41,7 +41,7 @@ UTSBASE	= ../..
 MODULE		= udp6
 OBJECTS		= $(UDP6_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/udp
+CONF_SRCDIR	= $(SRCTOP)/kernel/net/udp
 
 #
 #	Include common rules.

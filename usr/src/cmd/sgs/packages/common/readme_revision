@@ -129,7 +129,7 @@ if ($debug == 0) {
 
 # For debug mode, add diagnostic data
 # 
-($wsname = $ENV{'CODEMGR_WS'}) ne '' || ($wsname = 'unknown');
+($wsname = $ENV{'SRCTOP'}) ne '' || ($wsname = 'unknown');
 @wsname = split /\//, $wsname;
 $wsname = $wsname[$#wsname];
 

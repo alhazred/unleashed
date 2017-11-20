@@ -31,8 +31,8 @@
 LIBIPF=		../../lib/$(MACH)/libipf.a
 LIBIPF64=		../../lib/$(MACH64)/libipf.a
 
-COMMONIPF=	$(CODEMGR_WS)/kernel/net/ipf
-KERNELIPF=	$(CODEMGR_WS)/include/inet/pfil
+COMMONIPF=	$(SRCTOP)/kernel/net/ipf
+KERNELIPF=	$(SRCTOP)/include/inet/pfil
 
 CPPFLAGS	+= -I$(COMMONIPF) -I$(KERNELIPF) -DSUNDDI -DUSE_INET6 \
 		   -DSOLARIS2=11

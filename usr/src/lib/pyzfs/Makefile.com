@@ -46,8 +46,8 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -lnvpair -lpython$(PYTHON_VERSION) -lzfs
 CERRWARN +=	-Wno-unused-variable
 CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/python$(PYTHON_VERSION)
-CPPFLAGS +=	-I$(CODEMGR_WS)/kernel/fs/zfs
-CPPFLAGS +=	-I$(CODEMGR_WS)/kernel/fs/zfs/common
+CPPFLAGS +=	-I$(SRCTOP)/kernel/fs/zfs
+CPPFLAGS +=	-I$(SRCTOP)/kernel/fs/zfs/common
 
 .KEEP_STATE:
 

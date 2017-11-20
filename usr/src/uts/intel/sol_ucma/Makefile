@@ -52,7 +52,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 # path for header files
 #
 #
-INCLUDE_PATH += -I$(CODEMGR_WS)/include/sys/ib/clients/ofv/sol_ucma
+INCLUDE_PATH += -I$(SRCTOP)/include/sys/ib/clients/ofv/sol_ucma
 
 # For now, disable these compiler warnings; maintainers should endeavor to
 # investigate and remove these for maximum coverage.  Please do not carry

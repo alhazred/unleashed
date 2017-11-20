@@ -41,7 +41,7 @@ OBJECTS = $(COMMON_OBJS) $(LIB_OBJS)
 include ../../Makefile.lib
 
 COMMON_SRCDIR = ../../../common/smbios
-COMMON_HDR = $(CODEMGR_WS)/include/sys/smbios.h
+COMMON_HDR = $(SRCTOP)/include/sys/smbios.h
 
 SRCS = $(COMMON_OBJS:%.o=$(COMMON_SRCDIR)/%.c) $(LIB_OBJS:%.o=../common/%.c)
 LIBS = $(DYNLIB)

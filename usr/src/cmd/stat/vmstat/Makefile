@@ -30,7 +30,7 @@ SRCS =$(OBJS:%.o=%.c) $(COMMON_SRCS)
 include $(SRC)/cmd/Makefile.cmd
 include $(SRC)/cmd/stat/Makefile.stat
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 LDLIBS += -ldevinfo -lkstat -lavl
 CFLAGS += -I${STATCOMMONDIR}

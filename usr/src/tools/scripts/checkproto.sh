@@ -44,8 +44,8 @@ done
 
 shift `expr $OPTIND - 1`
 
-if [ $# = 0 -a "${CODEMGR_WS}" != "" ]; then
-	WS=${CODEMGR_WS}
+if [ $# = 0 -a "${SRCTOP}" != "" ]; then
+	WS=${SRCTOP}
 elif [ $# -ne 1 ]; then
 	usage
 else

@@ -39,8 +39,8 @@ else
 	isa64=unknown
 fi
 
-if [[ -n "$CODEMGR_WS" ]]; then
-	sysroot=$CODEMGR_WS/proto/root_$isa
+if [[ -n "$SRCTOP" ]]; then
+	sysroot=$SRCTOP/proto/root_$isa
 elif [[ -n "$ROOT" ]]; then
 	sysroot=$ROOT
 else

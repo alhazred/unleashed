@@ -28,15 +28,15 @@
 # Quis custodiet ipsos custodies?
 
 if [ -z "$SRC" ]; then
-	SRC=$CODEMGR_WS/usr/src
+	SRC=$SRCTOP/usr/src
 fi
 
-if [ -z "$CODEMGR_WS" -o ! -d "$CODEMGR_WS" -o ! -d "$SRC" ]; then
+if [ -z "$SRCTOP" -o ! -d "$SRCTOP" -o ! -d "$SRC" ]; then
 	echo "$0: must be run from within a workspace."
 	exit 1
 fi
 
-cd $CODEMGR_WS || exit 1
+cd $SRCTOP || exit 1
 
 # Use -b to tell this script to ignore derived (built) objects.
 if [ "$1" = "-b" ]; then
@@ -56,7 +56,7 @@ if [ "$b_flg" = y ]; then
 elif [ $# -gt 0 ]; then
 	rootlist=$*
 else
-	rootlist="$CODEMGR_WS/proto/root_sparc $CODEMGR_WS/proto/root_i386"
+	rootlist="$SRCTOP/proto/root_sparc $SRCTOP/proto/root_i386"
 fi
 
 for ROOT in $rootlist
@@ -86,7 +86,7 @@ do
 		# These are the new-style packaging exception lists,
 		# from the repository-wide exception_lists/ directory.
 		#
-		e="$CODEMGR_WS/exception_lists/packaging"
+		e="$SRCTOP/exception_lists/packaging"
 		for f in $e; do
 			if [ -f $f ]; then
 				nawk 'NF == 1 || /[ 	]\+'$arch'$/ { print; }' \

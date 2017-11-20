@@ -121,7 +121,7 @@ $(OBJS_DIR)/instr_size.ln :=	EXTRA_OPTIONS	= -I$(SRC)/common/dis/i386
 
 CFLAGS += -DDIS_MEM
 
-$(OBJS_DIR)/decompress.o :=	EXTRA_OPTIONS	= -I$(CODEMGR_WS)/kernel/zmod
+$(OBJS_DIR)/decompress.o :=	EXTRA_OPTIONS	= -I$(SRCTOP)/kernel/zmod
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
@@ -168,9 +168,9 @@ $(UNIX_O):	$(OBJECTS) $(CTFEXTRAOBJS)
 	$(LD) -r -o $@ $(OBJECTS) $(OBJS_DIR)/vers.o
 
 $(DBOOT_BIN):	$(DBOOT_OBJS_DIR) $(DBOOT_OBJECTS) \
-		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot
+		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot
 	$(LD) -dn -e _start -M \
-		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot \
+		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot \
 		-o $(DBOOT_BIN) $(DBOOT_OBJECTS)
 
 $(DBOOT_O):	$(DBOOT_BIN)

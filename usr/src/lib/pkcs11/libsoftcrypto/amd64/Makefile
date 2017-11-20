@@ -61,7 +61,7 @@ CFLAGS +=	-fno-strict-aliasing \
 		-fno-optimize-sibling-calls \
 		-O2
 CPPFLAGS +=	-I$(CRYPTODIR) -I$(UTSDIR) -D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 ASFLAGS +=	$(AS_PICFLAGS) -D_ASM
 BIGNUM_FLAGS +=	-DPSR_MUL
 CLEANFILES +=	arcfour-x86_64.s

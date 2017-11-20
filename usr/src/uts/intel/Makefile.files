@@ -278,7 +278,7 @@ BOOTDEV_OBJS +=		\
 	bootdev.o
 
 INC_PATH	+= -I$(UTSBASE)/intel
-INC_PATH	+= -I$(CODEMGR_WS)/arch/x86/include
+INC_PATH	+= -I$(SRCTOP)/arch/x86/include
 
 
 CPR_INTEL_OBJS +=	cpr_intel.o

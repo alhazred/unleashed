@@ -27,7 +27,7 @@ MDBTGT = kvm
 MODSRCS = stmf_sbd.c
 
 UTSBASE = ../../../../../uts
-COMSTARBASE = $(CODEMGR_WS)/kernel/comstar
+COMSTARBASE = $(SRCTOP)/kernel/comstar
 STMFSBDBASE = $(COMSTARBASE)/lu/stmf_sbd
 
 include ../../../../Makefile.cmd
@@ -35,6 +35,6 @@ include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
-CPPFLAGS += -I$(CODEMGR_WS)/include/sys
+CPPFLAGS += -I$(SRCTOP)/include
+CPPFLAGS += -I$(SRCTOP)/include/sys
 CPPFLAGS += -I$(STMFSBDBASE)

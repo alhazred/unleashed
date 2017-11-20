@@ -48,7 +48,7 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-address
 
 CPPFLAGS += -D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 
 LDLIBS +=	-lc -ldevice -ldevinfo -lrcm

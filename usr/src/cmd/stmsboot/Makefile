@@ -33,7 +33,7 @@ STMSBOOT_UTIL = stmsboot_util
 OBJS = $(STMSBOOT_UTIL).o
 SRCS = $(OBJS:%.o=%.c)
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 POFILES = $(SRCS:.c=.po) $(SHFILES:%=%.po)
 POFILE = pstmsboot.po

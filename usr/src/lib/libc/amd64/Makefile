@@ -1084,8 +1084,8 @@ CPPFLAGS=	-D$(MACH64) -D__$(MACH64) $(THREAD_DEBUG) \
 ASFLAGS=	$(AS_PICFLAGS) -D_ASM $(CPPFLAGS) \
 		$(amd64_AS_XARCH)
 
-# proc64_id.o is built with defines in $(CODEMGR_WS)/arch/x86/include/sys/x86_archext.h
-pics/proc64_id.o	:= CFLAGS64 += -I$(CODEMGR_WS)/arch/x86/include
+# proc64_id.o is built with defines in $(SRCTOP)/arch/x86/include/sys/x86_archext.h
+pics/proc64_id.o	:= CFLAGS64 += -I$(SRCTOP)/arch/x86/include
 
 # Inform the run-time linker about libc specialized initialization
 RTLDINFO =	-z rtldinfo=tls_rtldinfo

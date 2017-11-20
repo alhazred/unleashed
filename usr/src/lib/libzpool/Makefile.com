@@ -36,8 +36,8 @@ OBJECTS=$(ZFS_COMMON_OBJS) $(ZFS_SHARED_OBJS) $(KERNEL_OBJS)
 # include library definitions
 include ../../Makefile.lib
 
-ZFS_COMMON_SRCS=	$(ZFS_COMMON_OBJS:%.o=$(CODEMGR_WS)/kernel/fs/zfs/%.c)
-ZFS_SHARED_SRCS=	$(ZFS_SHARED_OBJS:%.o=$(CODEMGR_WS)/kernel/fs/zfs/common/%.c)
+ZFS_COMMON_SRCS=	$(ZFS_COMMON_OBJS:%.o=$(SRCTOP)/kernel/fs/zfs/%.c)
+ZFS_SHARED_SRCS=	$(ZFS_SHARED_OBJS:%.o=$(SRCTOP)/kernel/fs/zfs/common/%.c)
 KERNEL_SRCS=		$(KERNEL_OBJS:%.o=../common/%.c)
 
 SRCS=$(ZFS_COMMON_SRCS) $(ZFS_SHARED_SRCS) $(KERNEL_SRCS)
@@ -47,8 +47,8 @@ SRCDIR=		../common
 MAPFILES =
 
 INCS += -I../common
-INCS += -I$(CODEMGR_WS)/kernel/fs/zfs
-INCS += -I$(CODEMGR_WS)/kernel/fs/zfs/common
+INCS += -I$(SRCTOP)/kernel/fs/zfs
+INCS += -I$(SRCTOP)/kernel/fs/zfs/common
 INCS += -I../../../common
 
 CLEANFILES += ../common/zfs.h
@@ -77,11 +77,11 @@ include ../../Makefile.targ
 
 EXTPICS= $(DTRACE_OBJS:%=pics/%)
 
-pics/%.o: $(CODEMGR_WS)/kernel/fs/zfs/%.c ../common/zfs.h
+pics/%.o: $(SRCTOP)/kernel/fs/zfs/%.c ../common/zfs.h
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-pics/%.o: $(CODEMGR_WS)/kernel/fs/zfs/common/%.c ../common/zfs.h
+pics/%.o: $(SRCTOP)/kernel/fs/zfs/common/%.c ../common/zfs.h
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 

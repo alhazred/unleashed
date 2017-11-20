@@ -24,6 +24,6 @@
 
 include ../Makefile.com
 
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
 
 install: all $(ROOTUSRSBINPROG) $(ROOTMAN1MFILES)

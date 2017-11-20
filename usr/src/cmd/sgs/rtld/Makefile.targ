@@ -55,7 +55,7 @@ pics/%.o:	$(SGSTOOLS)/common/%.c
 		$(COMPILE.c) -o $@ $<
 		$(POST_PROCESS_O)
 
-pics/%.o:	$(CODEMGR_WS)/arch/x86/kernel/krtld/$(BITS)/%.c
+pics/%.o:	$(SRCTOP)/arch/x86/kernel/krtld/$(BITS)/%.c
 		$(COMPILE.c) -o $@ $<
 		$(POST_PROCESS_O)
 

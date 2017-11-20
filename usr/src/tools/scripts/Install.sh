@@ -820,7 +820,7 @@ function okexit {
 RCOPTS=""
 LIBCREATE="no"
 LIBSRC=""
-ENV_PATH=$CODEMGR_WS
+ENV_PATH=$SRCTOP
 OBJD="debug"
 KMDB="yes"
 

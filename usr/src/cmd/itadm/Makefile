@@ -28,7 +28,7 @@ PROG=		itadm
 
 include ../Makefile.cmd
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 LDLIBS += -lgen -lsecdb -lscf -lstmf -lnvpair -liscsit
 

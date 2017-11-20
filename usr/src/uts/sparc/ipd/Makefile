@@ -20,7 +20,7 @@ UTSBASE	= ../..
 MODULE		= ipd
 OBJECTS		= $(IPD_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/ipd
+CONF_SRCDIR	= $(SRCTOP)/kernel/net/ipd
 
 include $(UTSBASE)/sparc/Makefile.sparc
 

@@ -35,7 +35,7 @@ include ../../Makefile.amd64
 include ../../../Makefile.module
 include ../../../common/modules/zfs/Makefile.zfs
 
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/fs/zfs
+CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs
 
 C99MODE=	$(C99_ENABLE)
 

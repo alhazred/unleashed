@@ -44,9 +44,9 @@
 #
 export NIGHTLY_OPTIONS='-CAmpr'
 
-# CODEMGR_WS - where is your workspace at
-#export CODEMGR_WS="$HOME/ws/illumos-gate"
-export CODEMGR_WS="`git rev-parse --show-toplevel`"
+# SRCTOP - where is your workspace at
+#export SRCTOP="$HOME/ws/illumos-gate"
+export SRCTOP="`git rev-parse --show-toplevel`"
 
 # Maximum number of dmake jobs.  The recommended number is 2 + NCPUS,
 # where NCPUS is the number of logical CPUs on your build system.
@@ -94,12 +94,12 @@ export MAILTO="$LOGNAME"
 export BUILD_PROJECT=''
 
 # You should not need to change the next three lines
-export ATLOG="$CODEMGR_WS/log"
+export ATLOG="$SRCTOP/log"
 export LOGFILE="$ATLOG/nightly.log"
 export MACH="$(uname -p)"
 
-export ROOT="$CODEMGR_WS/proto/root_${MACH}"
-export SRC="$CODEMGR_WS/usr/src"
+export ROOT="$SRCTOP/proto/root_${MACH}"
+export SRC="$SRCTOP/usr/src"
 
 #
 #	build environment variables, including version info for mcs, motd,
@@ -116,7 +116,7 @@ export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
 #
 # PKGPUBLISHER controls the publisher setting for the repository.
 #
-export PKGARCHIVE="${CODEMGR_WS}/packages/${MACH}/nightly"
+export PKGARCHIVE="${SRCTOP}/packages/${MACH}/nightly"
 #export PKGPUBLISHER='unleashed'
 
 # Package manifest format version.

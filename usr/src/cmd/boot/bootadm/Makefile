@@ -44,7 +44,7 @@ LDLIBS += -lficl-sys -lmd -lcryptoutil -lnvpair -lgen
 LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
-CPPFLAGS +=	-I$(CODEMGR_WS)/include -I$(SRC)/common -I$(SRC)/common/ficl
+CPPFLAGS +=	-I$(SRCTOP)/include -I$(SRC)/common -I$(SRC)/common/ficl
 CERRWARN +=	-Wall -Wno-unknown-pragmas
 
 C99MODE=	$(C99_ENABLE)

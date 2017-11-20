@@ -75,7 +75,7 @@ If this option is not specified an attempt is made to determine this automatical
 If no branch is specified and none can be determined automatically \fBorigin/master\fR is used\.
 
 .SH "FILES"
-\fBgit nits\fR and \fBgit pbchk\fR support NOT files of the form used by Cadmium with Mercurial\. These are looked for in \fB$CODEMGR_WS/\.git/\fR and in \fB$CODEMGR_WS/exception_lists/\fR as normal\. The files are named after the check from which they exclude files\.
+\fBgit nits\fR and \fBgit pbchk\fR support NOT files of the form used by Cadmium with Mercurial\. These are looked for in \fB$SRCTOP/\.git/\fR and in \fB$SRCTOP/exception_lists/\fR as normal\. The files are named after the check from which they exclude files\.
 
 .IP "\(bu" 4
 \fBcopyright\.NOT\fR: exclude files listed from copyright checking

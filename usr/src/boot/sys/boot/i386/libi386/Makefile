@@ -77,7 +77,7 @@ CFLAGS += -Dalloca=__builtin_alloca
 
 CFLAGS +=	-I../../common -I../common \
 		-I../btx/lib \
-		-I$(CODEMGR_WS)/arch/x86/include/sys/acpi \
+		-I$(SRCTOP)/arch/x86/include/sys/acpi \
 		-I../../.. -I.
 # the location of libstand
 CFLAGS +=	-I../../../../lib/libstand/

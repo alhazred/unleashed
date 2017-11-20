@@ -1094,7 +1094,7 @@ if ($opt{d}) {
 	# User specified dependency directory - make sure it exists.
 	-d $opt{d} || die "$Prog: $opt{d} is not a directory\n";
 	$Proto = $opt{d};
-} elsif ($ENV{CODEMGR_WS}) {
+} elsif ($ENV{SRCTOP}) {
 	my $Root;
 
 	# Without a user specified dependency directory see if we're

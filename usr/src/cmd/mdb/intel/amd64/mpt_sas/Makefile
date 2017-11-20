@@ -32,6 +32,6 @@ include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 CERRWARN += -Wno-trigraphs

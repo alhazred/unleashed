@@ -38,7 +38,7 @@ LIBS=	$(DYNLIB)
 SRCDIR =	../common
 
 INCS += -I$(SRCDIR)
-INCS += -I$(CODEMGR_WS)/include
+INCS += -I$(SRCTOP)/include
 
 C99MODE=	$(C99_ENABLE)
 LDLIBS +=	-lc -lnvpair -lstmf -luuid -lscf

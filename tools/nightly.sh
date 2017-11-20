@@ -137,8 +137,8 @@ function build {
 	#	Before we build anything via dmake, we need to install
 	#	bmake-ified headers to the proto area
 	#
-	bmake_build_step_user_dir $CODEMGR_WS/include all
-	bmake_build_step_user_dir $CODEMGR_WS/include install
+	bmake_build_step_user_dir $SRCTOP/include all
+	bmake_build_step_user_dir $SRCTOP/include install
 
 	#
 	#	Build the legacy part of the source
@@ -450,12 +450,12 @@ else
 fi
 
 # Check if we have sufficient data to continue...
-[[ -v CODEMGR_WS ]] || \
-	fatal_error "Error: Variable CODEMGR_WS not set."
-[[ -d "${CODEMGR_WS}" ]] || \
-	fatal_error "Error: ${CODEMGR_WS} is not a directory."
-[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || \
-	fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
+[[ -v SRCTOP ]] || \
+	fatal_error "Error: Variable SRCTOP not set."
+[[ -d "${SRCTOP}" ]] || \
+	fatal_error "Error: ${SRCTOP} is not a directory."
+[[ -f "${SRCTOP}/usr/src/Makefile" ]] || \
+	fatal_error "Error: ${SRCTOP}/usr/src/Makefile not found."
 
 #
 # place ourselves in a new task, respecting BUILD_PROJECT if set.
@@ -543,7 +543,7 @@ if [ -z "$RELEASE_DATE" ]; then
 	RELEASE_DATE=$(LC_ALL=C date +"%B %Y")
 fi
 BUILD_DATE=$(LC_ALL=C date +%Y-%b-%d)
-BASEWSDIR=$(basename $CODEMGR_WS)
+BASEWSDIR=$(basename $SRCTOP)
 DEV_CM="\"@(#)illumos Development: $LOGNAME $BUILD_DATE [$BASEWSDIR]\""
 RELEASE_MICRO=$(( ($(date +%Y) * 12 + $(date +%m) - 1) - (2010 * 12 + 8 - 1) ))
 
@@ -643,7 +643,7 @@ function newdir {
 }
 newdirlist=
 
-[ -d $CODEMGR_WS ] || newdir $CODEMGR_WS || exit 1
+[ -d $SRCTOP ] || newdir $SRCTOP || exit 1
 
 # since this script assumes the build is from full source, it nullifies
 # variables likely to have been set by a "ws" script; nullification
@@ -711,7 +711,7 @@ function logshuffle {
 	run_hook POST_NIGHTLY $state
 	run_hook SYS_POST_NIGHTLY $state
 
-	echo "Subject: Nightly ${MACH} Build of `basename ${CODEMGR_WS}` ${state}." \
+	echo "Subject: Nightly ${MACH} Build of `basename ${SRCTOP}` ${state}." \
 		> ${LLOG}/mail_msg
 	cat $build_time_file $mail_msg_file \
 		>> ${LLOG}/mail_msg
@@ -822,7 +822,7 @@ fi
 function run_bmake {
 	echo "\n==== bmake $@ ====\n" >&2
 	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		SRCTOP=$CODEMGR_WS \
+		SRCTOP=$SRCTOP \
 		bmake -j $DMAKE_MAX_JOBS \
 			VERBOSE=yes \
 			"$@"
@@ -846,7 +846,7 @@ function bmake_build_step_args {
 
 # usage: bmake_build_step_user <target>
 function bmake_build_step_user {
-	bmake_build_step_args $CODEMGR_WS $1 \
+	bmake_build_step_args $SRCTOP $1 \
 		DESTDIR=$ROOT
 }
 
@@ -857,16 +857,16 @@ function bmake_build_step_user_dir {
 }
 
 # Safeguards
-[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
-[[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
-[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
+[[ -v SRCTOP ]] || fatal_error "Error: Variable SRCTOP not set."
+[[ -d "${SRCTOP}" ]] || fatal_error "Error: ${SRCTOP} is not a directory."
+[[ -f "${SRCTOP}/usr/src/Makefile" ]] || fatal_error "Error: ${SRCTOP}/usr/src/Makefile not found."
 
 #
 #	Generate the cfgparam files
 #
 # We have to do this before running *any* make commands.
 #
-bmake_build_step_args $CODEMGR_WS gen-config || build_extras_ok=n
+bmake_build_step_args $SRCTOP gen-config || build_extras_ok=n
 
 #
 #	Decide whether to clobber
@@ -918,7 +918,7 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
 	echo "\n==== bmake cleandir ====\n"
-	run_bmake -C $CODEMGR_WS cleandir
+	run_bmake -C $SRCTOP cleandir
 else
 	echo "\n==== No clobber at `date` ====\n"
 fi
@@ -963,7 +963,7 @@ fi
 normal_build
 
 ORIG_SRC=$SRC
-BINARCHIVE=${CODEMGR_WS}/bin-${MACH}.cpio.Z
+BINARCHIVE=${SRCTOP}/bin-${MACH}.cpio.Z
 
 if [ "$build_ok" = "y" ]; then
 	echo "\n==== Creating protolist system file at `date` ====" \

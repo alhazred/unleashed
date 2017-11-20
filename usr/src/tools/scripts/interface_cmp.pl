@@ -100,8 +100,8 @@ sub LoadExceptions {
 
 		# If this is an activated workspace, use the exception
 		# file found in the exceptions_list directory.
-		if (defined($ENV{CODEMGR_WS})) {
-			$file = "$ENV{CODEMGR_WS}/exception_lists/interface_cmp";
+		if (defined($ENV{SRCTOP})) {
+			$file = "$ENV{SRCTOP}/exception_lists/interface_cmp";
 			last FILE if (-f $file);
 		}
 

@@ -77,7 +77,7 @@ install:	$(INSTALL_DEPS)
 
 # customized section for transforming firmware binary
 ELFWRAP		= elfwrap
-BINSRC		= $(CODEMGR_WS)/kernel/drivers/net/wifi/uath/uath_fw
+BINSRC		= $(SRCTOP)/kernel/drivers/net/wifi/uath/uath_fw
 BINDEST		= $(UTSBASE)/intel/uathfw
 BINCOPY		= uathbin
 ORIGIN_SRC	= uathfw.bin

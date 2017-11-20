@@ -35,8 +35,8 @@ ACINC=$ACDIR/include
 
 DIFF="diff -w"
 
-WSDIR="$CODEMGR_WS"
-[ -z "$WSDIR" ] || { echo "$0: error: CODEMGR_WS not set in env" >&2; exit 1; }
+WSDIR="$SRCTOP"
+[ -z "$WSDIR" ] || { echo "$0: error: SRCTOP not set in env" >&2; exit 1; }
 
 WSSRC=usr/src/uts/intel/io/acpica
 WSHDR=arch/x86/include/sys/acpi

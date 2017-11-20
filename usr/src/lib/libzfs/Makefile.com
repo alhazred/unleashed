@@ -63,8 +63,8 @@ LIBS=	$(DYNLIB)
 SRCDIR =	../common
 
 INCS += -I$(SRCDIR)
-INCS += -I$(CODEMGR_WS)/kernel/fs/zfs
-INCS += -I$(CODEMGR_WS)/kernel/fs/zfs/common
+INCS += -I$(SRCTOP)/kernel/fs/zfs
+INCS += -I$(SRCTOP)/kernel/fs/zfs/common
 INCS += -I../../libc/inc
 
 C99MODE=	$(C99_ENABLE)
@@ -74,13 +74,13 @@ CPPFLAGS +=	$(INCS) -D_LARGEFILE64_SOURCE=1
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\
-	$(OBJS_SHARED:%.o=$(CODEMGR_WS)/kernel/fs/zfs/common/%.c)
+	$(OBJS_SHARED:%.o=$(SRCTOP)/kernel/fs/zfs/common/%.c)
 
 .KEEP_STATE:
 
 all: $(LIBS)
 
-pics/%.o: $(CODEMGR_WS)/kernel/fs/zfs/common/%.c
+pics/%.o: $(SRCTOP)/kernel/fs/zfs/common/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 

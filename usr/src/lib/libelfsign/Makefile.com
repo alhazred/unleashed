@@ -38,7 +38,7 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lmd -lelf -lkmf -lcryptoutil -lc
 
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 .KEEP_STATE:
 

@@ -42,9 +42,9 @@ unset mdb_exec build root		# Local variables
 # If we select the user's workspace, we also set $root to their proto area
 # to force MDB to use shared libraries installed there as well.
 #
-if [ -n "$CODEMGR_WS" -a -x $CODEMGR_WS/proto/root_$mach/usr/bin/mdb ]; then
-	mdb_exec=$CODEMGR_WS/proto/root_$mach/usr/bin/mdb
-	root=$CODEMGR_WS/proto/root_$mach
+if [ -n "$SRCTOP" -a -x $SRCTOP/proto/root_$mach/usr/bin/mdb ]; then
+	mdb_exec=$SRCTOP/proto/root_$mach/usr/bin/mdb
+	root=$SRCTOP/proto/root_$mach
 elif [ -x /usr/bin/mdb -a ! -d /mdb ]; then
 	mdb_exec=/usr/bin/mdb
 	root=$mdb_lib/$mach/%R/%V
@@ -127,12 +127,12 @@ fi
 
 #
 # If a proto area was set either by specifying a build number, or by using
-# mdb from $CODEMGR_WS, set LD_LIBRARY_PATH accordingly.  This allows mdb to
+# mdb from $SRCTOP, set LD_LIBRARY_PATH accordingly.  This allows mdb to
 # pick up the appropriate libkvm.so to examine dumps from that build.
 # We also add the -R flag to the mdb command line so that mdb will modify
 # its default macro include and module library paths to use the build root.
 #
-if [ -n "$build" -o "$root" = "$CODEMGR_WS/proto/root_$mach" ]; then
+if [ -n "$build" -o "$root" = "$SRCTOP/proto/root_$mach" ]; then
 	if [ -n "$build" -a ! -d $root ]; then
 		echo "mdb: $root is missing or not a directory" >& 2
 		exit 1

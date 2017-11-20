@@ -31,7 +31,7 @@ include ../../Makefile.plugin
 
 CPPFLAGS += -I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(KMFDIR)/include -I.
 CPPFLAGS += -I$(SRC)/uts/sun4v/io/px
-INCDIRS = $(CODEMGR_WS)/include
+INCDIRS = $(SRCTOP)/include
 CFLAGS += -I$(INCDIRS)
 
 LDFLAGS += -L$(ROOT)/usr/lib/fm -R/usr/lib/fm

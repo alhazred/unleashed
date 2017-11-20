@@ -39,7 +39,7 @@
 #
 #	Section 1: C object build rules
 #
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/conf/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/conf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -63,7 +63,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/io/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/io/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -83,7 +83,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/acpi/acpinex/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-SBD_IOCTL	= $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include/sys/sbd_ioctl.h
+SBD_IOCTL	= $(SRCTOP)/arch/x86/kernel/platform/i86pc/include/sys/sbd_ioctl.h
 DRMACH_IO	= $(UTSBASE)/i86pc/io/acpi/drmach_acpi
 DRMACH_GENERR	= $(DRMACH_IO)/sbdgenerr
 DR_IO		= $(UTSBASE)/i86pc/io/dr
@@ -167,26 +167,26 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/tzmon/%.c
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/ml/%.s
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/ml/%.s
 	$(COMPILE.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/os/%.c
 	$(COMPILE.c) -fno-stack-protector -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/os/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/os/%.c
 	$(COMPILE.c) -fno-stack-protector -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/os/cpupm/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/os/cpupm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/vm/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/vm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -202,7 +202,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/pciex/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/os/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -218,11 +218,11 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/xsvc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/xen/os/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/xen/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -237,27 +237,27 @@ DBOOT_DEFS	+= -D_MACHDEP -D_KMEMUSER -U_KERNEL -D_I32LPx
 DBOOT_FLAGS	= $(C99MODE) $(CERRWARN) $(CCNOAUTOINLINE)
 
 DBOOT_CC_INCL	= -I$(SRC)/common -I$(SRC)/common/util $(INCLUDE_PATH) \
-		  -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot
+		  -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot
 DBOOT_AS_INCL	= $(AS_INC_PATH)
 
 DBOOT_AS	= $($(MACH)_AS)
 
-$(DBOOT_OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/%.c
+$(DBOOT_OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/%.c
 	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
 
-$(DBOOT_OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/%.c
+$(DBOOT_OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/%.c
 	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
 
 $(DBOOT_OBJS_DIR)/%.o:		$(UTSBASE)/intel/ia32/%.s
 	$(DBOOT_AS) -D_ASM $(DBOOT_DEFS) $(DBOOT_AS_INCL) -o $@ $<
 
-$(DBOOT_OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/font/%.c
+$(DBOOT_OBJS_DIR)/%.o:		$(SRCTOP)/kernel/font/%.c
 	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
 
 $(DBOOT_OBJS_DIR)/$(VGATEXT_FONT).c:	\
 	$(VGATEXT_FONT_DIR)/$(VGATEXT_FONT_SRC).bdf	\
-	$(CODEMGR_WS)/tools/bdf_to_c.awk
-	$(AWK) -f $(CODEMGR_WS)/tools/bdf_to_c.awk	\
+	$(SRCTOP)/tools/bdf_to_c.awk
+	$(AWK) -f $(SRCTOP)/tools/bdf_to_c.awk	\
 		$(VGATEXT_FONT_DIR)/$(VGATEXT_FONT_SRC).bdf > $@
 
 $(DBOOT_OBJS_DIR)/%.o:		$(DBOOT_OBJS_DIR)/%.c
@@ -275,16 +275,16 @@ $(DBOOT_OBJS_DIR)/%.o:		$(COMMONBASE)/util/%.c
 $(DBOOT_OBJS_DIR)/%.o:		$(COMMONBASE)/util/i386/%.s
 	$(DBOOT_AS) -D_ASM $(DBOOT_DEFS) $(DBOOT_AS_INCL) -o $@ $<
 
-$(DBOOT_OBJS_DIR)/%.o:		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/dboot/%.s
+$(DBOOT_OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/%.s
 	$(DBOOT_AS) -D_ASM $(DBOOT_DEFS) $(DBOOT_AS_INCL) -o $@ $<
 
 #
 # Stuff to build bios_call.o for the kernel.
 #
-MAPFILE_BIOS	= $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/mapfile-bios
-$(OBJS_DIR)/bios_call.o:    $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/bios_call_src.s
+MAPFILE_BIOS	= $(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/mapfile-bios
+$(OBJS_DIR)/bios_call.o:    $(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/bios_call_src.s
 	$(COMPILE.s) -o $(OBJS_DIR)/bios_call_src.o \
-		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/bios_call_src.s
+		$(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/bios_call_src.s
 	$(LD) -dn -M $(MAPFILE_BIOS)  \
 		-o $(OBJS_DIR)/bios_call_src $(OBJS_DIR)/bios_call_src.o
 	@echo "  .data"				> $(OBJS_DIR)/bios_call.s
@@ -300,10 +300,10 @@ $(OBJS_DIR)/bios_call.o:    $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/bi
 #
 # Stuff to build fb_swtch.o for the kernel.
 #
-MAPFILE_FBSWTCH	= $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/mapfile-fb_swtch
-$(OBJS_DIR)/fb_swtch.o:    $(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/fb_swtch_src.s
+MAPFILE_FBSWTCH	= $(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/mapfile-fb_swtch
+$(OBJS_DIR)/fb_swtch.o:    $(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/fb_swtch_src.s
 	$(COMPILE.s) -o $(OBJS_DIR)/fb_swtch_src.o \
-		$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/boot/fb_swtch_src.s
+		$(SRCTOP)/arch/x86/kernel/platform/i86pc/boot/fb_swtch_src.s
 	$(LD) -dn -M $(MAPFILE_FBSWTCH)  \
 		-o $(OBJS_DIR)/fb_swtch_src $(OBJS_DIR)/fb_swtch_src.o
 	@echo "  .data"				> $(OBJS_DIR)/fb_swtch.s

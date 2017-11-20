@@ -36,7 +36,7 @@ LDLIBS += -ldevinfo -lima
 
 CPPFLAGS += -DSOLARIS
 CPPFLAGS += -I.
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-variable

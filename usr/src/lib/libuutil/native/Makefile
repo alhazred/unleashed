@@ -47,7 +47,7 @@ install: all
 
 $(PICS): $(AVLHEADERS)
 
-sys/%: $(CODEMGR_WS)/include/sys/%
+sys/%: $(SRCTOP)/include/sys/%
 	@mkdir -p sys
 	cp -f $< $@
 

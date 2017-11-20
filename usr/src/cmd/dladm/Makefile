@@ -35,7 +35,7 @@ ROOTCFGFILES=	$(CFGFILES:%=$(ROOTCFGDIR)/%)
 include		$(SRC)/cmd/Makefile.cmd
 include		$(SRC)/cmd/Makefile.ctf
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 XGETFLAGS +=	-a -x $(PROG).xcl
 

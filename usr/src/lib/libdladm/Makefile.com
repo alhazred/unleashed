@@ -45,7 +45,7 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-uninitialized
 CPPFLAGS +=	-I$(SRCDIR)
-CPPFLAGS +=	-I$(CODEMGR_WS)/include
+CPPFLAGS +=	-I$(SRCTOP)/include
 
 .KEEP_STATE:
 

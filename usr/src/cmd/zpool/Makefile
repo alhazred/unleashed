@@ -41,7 +41,7 @@ SRCS += $(STAT_COMMON_SRCS)
 
 LDLIBS += -lzfs -lnvpair -ldevid -lefi -ldiskmgt -luutil -lumem
 
-INCS += -I$(CODEMGR_WS)/kernel/fs/zfs/common -I$(STATCOMMONDIR)
+INCS += -I$(SRCTOP)/kernel/fs/zfs/common -I$(STATCOMMONDIR)
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG

@@ -57,7 +57,7 @@ EMLXS_CFLAGS            = $(EMLXS_FLAGS)
 EMLXS_LFLAGS            = $(EMLXS_FLAGS)
 CFLAGS	                += $(EMLXS_CFLAGS) -DEMLXS_ARCH=\"$(CLASS)\"
 
-INC_PATH	+= -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/emlxs
+INC_PATH	+= -I$(SRCTOP)/include/sys/fibre-channel/fca/emlxs
 
 LDFLAGS		+= -dy -Nmisc/fctl
 

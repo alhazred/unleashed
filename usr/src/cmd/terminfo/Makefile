@@ -40,13 +40,13 @@ lint:
 install_h:
 
 all: 	FRC 
-	@cd $(CODEMGR_WS)/share/terminfo; bmake 
+	@cd $(SRCTOP)/share/terminfo; bmake 
 
 install:
-	@cd $(CODEMGR_WS)/share/terminfo; bmake install DESTDIR=$(ROOT) 
+	@cd $(SRCTOP)/share/terminfo; bmake install DESTDIR=$(ROOT) 
 
 clean: 
-	@cd $(CODEMGR_WS)/share/terminfo; bmake clean 
+	@cd $(SRCTOP)/share/terminfo; bmake clean 
 
 clobber: clean
 

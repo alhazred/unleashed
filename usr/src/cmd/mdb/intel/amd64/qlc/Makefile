@@ -33,10 +33,10 @@ include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
-CPPFLAGS += -I$(CODEMGR_WS)/include/sys/fibre-channel
-CPPFLAGS += -I$(CODEMGR_WS)/include/sys/fibre-channel/fca/qlc
-CPPFLAGS += -I$(CODEMGR_WS)/include/sys/fibre-channel/impl
+CPPFLAGS += -I$(SRCTOP)/include
+CPPFLAGS += -I$(SRCTOP)/include/sys/fibre-channel
+CPPFLAGS += -I$(SRCTOP)/include/sys/fibre-channel/fca/qlc
+CPPFLAGS += -I$(SRCTOP)/include/sys/fibre-channel/impl
 
 C99MODE=	$(C99_ENABLE)
 

@@ -32,7 +32,7 @@ SRCS= $(OBJS:%.o=../%.c)
 include ../../Makefile.cmd
 
 INCS +=	-I../../../lib/libzpool/common
-INCS +=	-I$(CODEMGR_WS)/kernel/fs/zfs
+INCS +=	-I$(SRCTOP)/kernel/fs/zfs
 
 LDLIBS += -lzpool -lzfs -lnvpair
 

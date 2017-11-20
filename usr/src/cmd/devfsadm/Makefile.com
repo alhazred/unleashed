@@ -86,7 +86,7 @@ DEVLINKTAB_SRC = $(COMMON)/$(DEVLINKTAB).sh
 COMPAT_LINKS = disks tapes ports audlinks devlinks drvconfig
 
 CPPFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS \
-		-I$(COMMON) -I$(CODEMGR_WS)/include -I$(MODLOADDIR)
+		-I$(COMMON) -I$(SRCTOP)/include -I$(MODLOADDIR)
 CFLAGS += $(C_PICFLAGS)
 
 

@@ -61,7 +61,7 @@ VAR_PLAT_amd64=		intel/amd64
 # The avl.h and avl_impl.h files are under include/sys.
 #
 VAR_AVLDIR=		$(SRCBASE)/common/avl
-VAR_AVLINCDIR=		-I $(CODEMGR_WS)/include
+VAR_AVLINCDIR=		-I $(SRCTOP)/include
 
 #
 # VAR_DTRDIR - directory to find dtrace_data.c in.

@@ -188,7 +188,7 @@ set the build version string to VERS, overriding VERSION
 Here is a list of prominent environment variables that
 .I nightly
 references and the meaning of each variable.
-.B CODEMGR_WS
+.B SRCTOP
 .RS 5
 The root of your workspace, including whatever metadata is kept by
 the source code management system.  This is the workspace in which the
@@ -199,7 +199,7 @@ build will be done.
 .RS 5
 Root of OS-Net source code, referenced by the Makefiles.  It is
 the starting point of build activity.  It should be expressed
-in terms of $CODEMGR_WS.
+in terms of $SRCTOP.
 .RE
 .LP
 .B ROOT
@@ -207,7 +207,7 @@ in terms of $CODEMGR_WS.
 Root of the proto area for the build.  The makefiles direct
 installation of build products to this area and
 direct references to these files by builds of commands and other
-targets.  It should be expressed in terms of $CODEMGR_WS.
+targets.  It should be expressed in terms of $SRCTOP.
 .RE
 .LP
 .B TOOLS_ROOT
@@ -270,7 +270,7 @@ set this for you based on its options.
 .LP
 .B PKGARCHIVE
 .RS 5
-The destination for packages.  This may be relative to $CODEMGR_WS for
+The destination for packages.  This may be relative to $SRCTOP for
 private packages.
 .RE
 .LP

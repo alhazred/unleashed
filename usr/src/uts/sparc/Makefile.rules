@@ -56,7 +56,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/sparc/fpu/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/proc/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/fs/proc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 

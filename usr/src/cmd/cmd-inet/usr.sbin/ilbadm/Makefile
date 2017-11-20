@@ -33,7 +33,7 @@ include	../../../Makefile.ctf
 include ../../Makefile.cmd-inet
 
 LDLIBS +=	-lcmdutils -lilb -linetutil -lkstat
-CPPFLAGS +=	-I$(SRC)/lib/libilb/common -I$(CODEMGR_WS)/include
+CPPFLAGS +=	-I$(SRC)/lib/libilb/common -I$(SRCTOP)/include
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-parentheses

@@ -111,7 +111,7 @@ $(RPCSVCPROG)		:=	LDLIBS += -lrpcsvc
 $(K5PROGS)		:=	LDFLAGS += $(KRUNPATH) \
 				-L$(ROOT)$(KLIBDIR_DO) -L$(ROOT)$(KLIBDIR_GL)
 $(K5PROGS)		:=	K5LIBS=  -lmech_krb5
-$(K5PROGS)		:=	CPPFLAGS += -I$(CODEMGR_WS)/include \
+$(K5PROGS)		:=	CPPFLAGS += -I$(SRCTOP)/include \
 				-I$(SRC)/uts/common/ \
 				-I$(SRC)/uts/common/gssapi/mechs/krb5/include \
 				-I$(SRC)/lib/gss_mechs/mech_krb5/include \

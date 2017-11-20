@@ -183,9 +183,9 @@ Exceptions to the rules enforced by
 are be specified using an exception file. The \fB-e\fP option is used to
 specify an explicit exception file. Otherwise, if used in an activated
 workspace, the default exception file is
-$CODEMGR_WS/exception_list/interface_check
+$SRCTOP/exception_list/interface_check
 if that file exists. If not used in an activated workspace, or if
-$CODEMGR_WS/exception_list/interface_check does not exist,
+$SRCTOP/exception_list/interface_check does not exist,
 .I interface_check
 will use
 .I /opt/onbld/etc/exception_list/interface_check
@@ -366,7 +366,7 @@ interface.err
 .SH FILES
 .LP
 .RS 5
-$CODEMGR_WS/exception_list/interface_check
+$SRCTOP/exception_list/interface_check
 /opt/onbld/etc/exception_list/interface_check
 .SH SEE ALSO
 .BR find_elf(1ONBLD),

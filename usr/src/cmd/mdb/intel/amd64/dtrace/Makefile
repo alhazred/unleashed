@@ -38,9 +38,9 @@ include ../../../Makefile.module
 MODULE_BUILD_TYPE = mdb
 MODSRCS_DIR = ../../../common/modules/dtrace
 
-CPPFLAGS += -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
 LDLIBS	+= -ldtrace -lm
 CLEANFILES += dof_names.c
 
-dof_names.c: $(MODSRCS_DIR)/mkdof.sh $(CODEMGR_WS)/include/sys/dtrace.h
-	sh $(MODSRCS_DIR)/mkdof.sh < $(CODEMGR_WS)/include/sys/dtrace.h > $@
+dof_names.c: $(MODSRCS_DIR)/mkdof.sh $(SRCTOP)/include/sys/dtrace.h
+	sh $(MODSRCS_DIR)/mkdof.sh < $(SRCTOP)/include/sys/dtrace.h > $@

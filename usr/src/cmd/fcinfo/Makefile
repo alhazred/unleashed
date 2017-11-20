@@ -59,7 +59,7 @@ INCS += -I.
 INCS += -I$(SRC)/lib/hbaapi/common
 INCS += -I$(COMMONBASE)/cmdparse
 INCS += -I$(SRC)/lib/libfcoe/common
-INCS += -I$(CODEMGR_WS)/include
+INCS += -I$(SRCTOP)/include
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG

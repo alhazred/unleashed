@@ -70,7 +70,7 @@ LIBS =		$(DYNLIB)
 LDLIBS +=	-lcryptoutil -lc
 
 CPPFLAGS +=	-I$(INCDIR) -I$(SRCDIR)
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 
 CERRWARN +=	-Wno-unused-label

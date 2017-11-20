@@ -45,7 +45,7 @@ FILEMODE = 0755
 
 CPPFLAGS += -I../../lib/libzpool/common
 CPPFLAGS += -I../../lib/libscf/inc
-CPPFLAGS += -I$(CODEMGR_WS)/kernel/fs/zfs
+CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs
 
 CERRWARN += -Wno-unused-label
 

@@ -68,11 +68,11 @@ CLOBBERFILES	+= $(GENUNIX)
 CLEANFILES	+= $(LIBSTUBS) $(LIBGEN)
 BINARY		=
 
-CPPFLAGS	+= -I$(CODEMGR_WS)/include
+CPPFLAGS	+= -I$(SRCTOP)/include
 CPPFLAGS	+= -I$(SRC)/common
-CPPFLAGS	+= -I$(CODEMGR_WS)/kernel/fs/zfs
+CPPFLAGS	+= -I$(SRCTOP)/kernel/fs/zfs
 
-CPPFLAGS	+= -I$(CODEMGR_WS)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

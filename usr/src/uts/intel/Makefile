@@ -66,7 +66,7 @@ clobber: clobber.targ
 # processor architectures and and should be kept in sync. If they are changed in
 # this file make sure that sparc rules are updated as well.
 #
-PRIVS_C = $(CODEMGR_WS)/kernel/os/priv_const.c
+PRIVS_C = $(SRCTOP)/kernel/os/priv_const.c
 
 $(PRIVS_C): $(PRIVS_AWK) $(PRIVS_DEF)
 	$(AWK) -f $(PRIVS_AWK) < $(PRIVS_DEF) cfile=$@

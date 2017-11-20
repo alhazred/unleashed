@@ -39,7 +39,7 @@ CERRWARN += -Wno-parentheses
 CPPFLAGS_sparc += -I$(SRC)/uts/sfmmu
 CPPFLAGS_sparc += -I$(SRC)/uts/sun4u/sunfire
 CPPFLAGS += $(CPPFLAGS_$(MACH))
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 FILEMODE= 0555
 

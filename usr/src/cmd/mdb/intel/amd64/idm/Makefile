@@ -38,6 +38,6 @@ include ../../../Makefile.module
 
 CPPFLAGS += -I$(ISCSITBASE)
 CPPFLAGS += -I$(ISCSIBASE)
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 CERRWARN += -Wno-uninitialized

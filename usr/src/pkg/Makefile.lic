@@ -36,12 +36,12 @@ include $(SRC)/Makefile.master
 # For license files in the open source tree, always copy them from src
 # into the license staging directory in the proto area
 #
-$(LICROOT)/usr/src/%: $(CODEMGR_WS)/usr/src/%
+$(LICROOT)/usr/src/%: $(SRCTOP)/usr/src/%
 	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
 	$(PKGDEBUG)$(INS.file)
 
 # this is a terrible hack, we're reaching into bmake-build source tree to
 # grab the license file
-$(LICROOT)/%: $(CODEMGR_WS)/%
+$(LICROOT)/%: $(SRCTOP)/%
 	$(PKGDEBUG)if [ ! -d $(@D) ]; then mkdir -p $(@D); fi
 	$(PKGDEBUG)$(INS.file)

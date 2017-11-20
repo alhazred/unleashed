@@ -203,9 +203,9 @@ fi
 shift
 
 # Check if we have sufficient data to continue...
-[[ -v CODEMGR_WS ]] || fatal_error "Error: Variable CODEMGR_WS not set."
-[[ -d "${CODEMGR_WS}" ]] || fatal_error "Error: ${CODEMGR_WS} is not a directory."
-[[ -f "${CODEMGR_WS}/usr/src/Makefile" ]] || fatal_error "Error: ${CODEMGR_WS}/usr/src/Makefile not found."
+[[ -v SRCTOP ]] || fatal_error "Error: Variable SRCTOP not set."
+[[ -d "${SRCTOP}" ]] || fatal_error "Error: ${SRCTOP} is not a directory."
+[[ -f "${SRCTOP}/usr/src/Makefile" ]] || fatal_error "Error: ${SRCTOP}/usr/src/Makefile not found."
 
 POUND_SIGN="#"
 # have we set RELEASE_DATE in our env file?
@@ -213,7 +213,7 @@ if [ -z "$RELEASE_DATE" ]; then
 	RELEASE_DATE=$(LC_ALL=C date +"%B %Y")
 fi
 BUILD_DATE=$(LC_ALL=C date +%Y-%b-%d)
-BASEWSDIR=$(basename -- "${CODEMGR_WS}")
+BASEWSDIR=$(basename -- "${SRCTOP}")
 DEV_CM="\"@(#)illumos Development: $LOGNAME $BUILD_DATE [$BASEWSDIR]\""
 export DEV_CM RELEASE_DATE POUND_SIGN
 

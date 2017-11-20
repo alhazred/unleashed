@@ -41,7 +41,7 @@ UTSBASE	= ../..
 MODULE		= tcp6
 OBJECTS		= $(TCP6_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
-CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/tcp
+CONF_SRCDIR	= $(SRCTOP)/kernel/net/tcp
 
 #
 # Extra for $(MODULE).check target

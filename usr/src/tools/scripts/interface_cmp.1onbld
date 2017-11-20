@@ -110,9 +110,9 @@ Exceptions to the rules enforced by
 are specified using an exception file. The \fB-e\fP option is used to
 specify an explicit exception file. Otherwise, if used in an activated
 workspace, the default exception file is
-$CODEMGR_WS/exception_list/interface_cmp
+$SRCTOP/exception_list/interface_cmp
 if that file exists. If not used in an activated workspace, or if
-$CODEMGR_WS/exception_list/interface_cmp does not exist,
+$SRCTOP/exception_list/interface_cmp does not exist,
 .I interface_cmp
 will use
 .I /opt/onbld/etc/exception_list/interface_cmp

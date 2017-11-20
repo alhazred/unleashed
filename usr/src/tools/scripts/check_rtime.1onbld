@@ -47,7 +47,7 @@ uses \fBldd(1)\fP to verify dependencies. This implies that
 by default any object inspected will bind to its dependencies
 as they are found in the \fBunderlying\fP system.  Use of the \fB-D\fP, \fB-d\fP
 option, or the existence of the environment variables
-\fB$CODEMGR_WS/$ROOT\fP instruct
+\fB$SRCTOP/$ROOT\fP instruct
 .I check_rtime
 to establish an alternative dependency mapping using
 runtime configuration files generated with \fBcrle(1)\fP.
@@ -430,9 +430,9 @@ Exceptions to the rules enforced by
 are specified using an exception file. The \fB-e\fP option is used to
 specify an explicit exception file. Otherwise, if used in an activated
 workspace, the default exception file is
-$CODEMGR_WS/exception_list/check_rtime
+$SRCTOP/exception_list/check_rtime
 if that file exists. If not used in an activated workspace, or if
-$CODEMGR_WS/exception_list/check_rtime does not exist,
+$SRCTOP/exception_list/check_rtime does not exist,
 .I check_rtime
 will use
 .I /opt/onbld/etc/exception_list/check_rtime
@@ -631,7 +631,7 @@ their requirements.
 To achieve this,
 .I check_rtime
 uses the shared objects specified with the \fB-D\fP or \fB-d\fP options.
-If neither option is specified, and the \fB$CODEMGR_WS\fP and \fB$ROOT\fP
+If neither option is specified, and the \fB$SRCTOP\fP and \fB$ROOT\fP
 environment variables are defined, the proto area for the workspace
 is used. The objects found are used
 to create runtime configuration files via \fBcrle(1)\fP, that establish
@@ -653,7 +653,7 @@ When the \fB-D\fP or \fB-d\fP option isn't in use,
 uses the following environment variables to
 establish an alternative dependency mapping:
 .LP
-.B CODEMGR_WS
+.B SRCTOP
 .RS 4
 The root of your workspace, which is the directory
 containing \fICodemgr_wsdata\fP. Existence of this environment variable
@@ -692,7 +692,7 @@ foo: has wrong class or data encoding
 .SH FILES
 .LP
 .RS 5
-$CODEMGR_WS/exception_list/check_rtime
+$SRCTOP/exception_list/check_rtime
 /opt/onbld/etc/exception_list/check_rtime
 .SH SEE ALSO
 .B crle(1),

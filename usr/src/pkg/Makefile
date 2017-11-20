@@ -435,9 +435,9 @@ repository-metadata: publish_pkgs
 publish_pkgs: $(REPOS:%=$(PKGDEST)/repo.%) $(PDIR)/gendeps .WAIT $(PUB_PKGS)
 
 #
-# Before publishing, we want to pull the license files from $CODEMGR_WS
+# Before publishing, we want to pull the license files from $SRCTOP
 # into the proto area.  This allows us to NOT pass $SRC (or
-# $CODEMGR_WS) as a basedir for publication.
+# $SRCTOP) as a basedir for publication.
 #
 $(PUB_PKGS): stage-licenses
 
@@ -677,7 +677,7 @@ license-list: makesilent
 # Staging the license and description files in the proto area allows
 # us to do proper unreferenced file checking of both license and
 # description files without blanket exceptions, and to pull license
-# content without reference to $CODEMGR_WS during publication.
+# content without reference to $SRCTOP during publication.
 #
 stage-licenses: license-list FRC
 	$(PKGDEBUG)$(MAKE) -e -f Makefile.lic \
@@ -689,12 +689,12 @@ stage-licenses: license-list FRC
 
 protocmp: makesilent
 	@validate_pkg -a $(PKGMACH) -v \
-		$(EXCEPTIONS:%=-e $(CODEMGR_WS)/exception_lists/%) \
+		$(EXCEPTIONS:%=-e $(SRCTOP)/exception_lists/%) \
 		-m $(PDIR) -p $(PKGROOT) -p $(TOOLSROOT)
 
 pmodes: makesilent
 	@validate_pkg -a $(PKGMACH) -M -m $(PDIR) \
-		-e $(CODEMGR_WS)/exception_lists/pmodes 
+		-e $(SRCTOP)/exception_lists/pmodes 
 
 check: protocmp pmodes
 

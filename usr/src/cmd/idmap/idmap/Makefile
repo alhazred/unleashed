@@ -29,7 +29,7 @@ CLIENTSRCS =	$(CLIENTOBJS:%.o=%.c)
 POFILES = 	$(CLIENTOBJS:.o=.po)
 OBJS =		$(CLIENTOBJS)
 SRCS =		$(CLIENTSRCS)
-IDMAP_PROT_DIR =        $(CODEMGR_WS)/include/rpcsvc
+IDMAP_PROT_DIR =        $(SRCTOP)/include/rpcsvc
 
 include ../../Makefile.cmd
 

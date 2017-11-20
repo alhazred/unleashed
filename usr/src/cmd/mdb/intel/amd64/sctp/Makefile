@@ -34,6 +34,6 @@ include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64
 
-CPPFLAGS += -I$(CODEMGR_WS)/include/inet
+CPPFLAGS += -I$(SRCTOP)/include/inet
 
 include ../../../Makefile.module

@@ -30,7 +30,7 @@ MODULESRCS = disk.c disk_common.c disk_mptsas.c
 
 include ../../Makefile.plugin
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 LDLIBS += -ldevinfo -ldevid -lcfgadm -ldiskstatus
 

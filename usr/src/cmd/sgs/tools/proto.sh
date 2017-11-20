@@ -33,8 +33,8 @@
 #	5.11, 5.10, and 5.9.
 #
 
-if [ "X$CODEMGR_WS" = "X" -o "X$MACH" = "X" ] ; then
-	echo "usage: CODEMGR_WS and MACH environment variables must be set"
+if [ "X$SRCTOP" = "X" -o "X$MACH" = "X" ] ; then
+	echo "usage: SRCTOP and MACH environment variables must be set"
 	exit 1
 fi
 
@@ -56,36 +56,36 @@ case $RELEASE in
 	exit 1;;
 esac
 
-dirs="	$CODEMGR_WS/proto \
-	$CODEMGR_WS/proto/root_$MACH \
-	$CODEMGR_WS/proto/root_$MACH/lib \
-	$CODEMGR_WS/proto/root_$MACH/usr \
-	$CODEMGR_WS/proto/root_$MACH/usr/demo \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/abi \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/link_audit \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/mdb \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/mdb/proc \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/pics \
-	$CODEMGR_WS/proto/root_$MACH/usr/4lib \
-	$CODEMGR_WS/proto/root_$MACH/usr/bin \
-	$CODEMGR_WS/proto/root_$MACH/usr/ccs \
-	$CODEMGR_WS/proto/root_$MACH/usr/ccs/bin \
-	$CODEMGR_WS/proto/root_$MACH/usr/include \
-	$CODEMGR_WS/proto/root_$MACH/usr/include/sys \
-	$CODEMGR_WS/proto/root_$MACH/etc \
-	$CODEMGR_WS/proto/root_$MACH/etc/lib \
-	$CODEMGR_WS/proto/root_$MACH/opt \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/bin \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/doc \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/lib \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/man \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/man/man1 \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/man/man1l \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/man/man3t \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/man/man3l \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/man/man3x"
+dirs="	$SRCTOP/proto \
+	$SRCTOP/proto/root_$MACH \
+	$SRCTOP/proto/root_$MACH/lib \
+	$SRCTOP/proto/root_$MACH/usr \
+	$SRCTOP/proto/root_$MACH/usr/demo \
+	$SRCTOP/proto/root_$MACH/usr/lib \
+	$SRCTOP/proto/root_$MACH/usr/lib/abi \
+	$SRCTOP/proto/root_$MACH/usr/lib/link_audit \
+	$SRCTOP/proto/root_$MACH/usr/lib/mdb \
+	$SRCTOP/proto/root_$MACH/usr/lib/mdb/proc \
+	$SRCTOP/proto/root_$MACH/usr/lib/pics \
+	$SRCTOP/proto/root_$MACH/usr/4lib \
+	$SRCTOP/proto/root_$MACH/usr/bin \
+	$SRCTOP/proto/root_$MACH/usr/ccs \
+	$SRCTOP/proto/root_$MACH/usr/ccs/bin \
+	$SRCTOP/proto/root_$MACH/usr/include \
+	$SRCTOP/proto/root_$MACH/usr/include/sys \
+	$SRCTOP/proto/root_$MACH/etc \
+	$SRCTOP/proto/root_$MACH/etc/lib \
+	$SRCTOP/proto/root_$MACH/opt \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/bin \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/doc \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/lib \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/man \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/man/man1 \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/man/man1l \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/man/man3t \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/man/man3l \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/man/man3x"
 
 #
 # Add 64bit directories
@@ -100,16 +100,16 @@ fi
 if [ "${MACH64}x" != x ]; then
 
 	dirs="$dirs \
-	$CODEMGR_WS/proto/root_$MACH/lib/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/bin/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/ccs/bin/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/abi/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/link_audit/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/mdb/proc/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/usr/lib/pics/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/bin/$MACH64 \
-	$CODEMGR_WS/proto/root_$MACH/opt/SUNWonld/lib/$MACH64 \
+	$SRCTOP/proto/root_$MACH/lib/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/bin/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/ccs/bin/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/lib/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/lib/abi/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/lib/link_audit/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/lib/mdb/proc/$MACH64 \
+	$SRCTOP/proto/root_$MACH/usr/lib/pics/$MACH64 \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/bin/$MACH64 \
+	$SRCTOP/proto/root_$MACH/opt/SUNWonld/lib/$MACH64 \
 	"
 fi
 
@@ -152,8 +152,8 @@ do
 	fi
 done
 
-SYSLIB=$CODEMGR_WS/proto/root_$MACH/lib
-USRLIB=$CODEMGR_WS/proto/root_$MACH/usr/lib
+SYSLIB=$SRCTOP/proto/root_$MACH/lib
+USRLIB=$SRCTOP/proto/root_$MACH/usr/lib
 
 if [ ! -h $USRLIB/ld.so.1 ]; then
 	rm -f $USRLIB/ld.so.1
@@ -190,6 +190,6 @@ fi
 #
 #
 if [ $IS_THIS_UNIFIED = 0 ] ; then
-	rm -fr $CODEMGR_WS/proto/root_$MACH/lib
-	ln -s $CODEMGR_WS/proto/root_$MACH/usr/lib $CODEMGR_WS/proto/root_$MACH/lib
+	rm -fr $SRCTOP/proto/root_$MACH/lib
+	ln -s $SRCTOP/proto/root_$MACH/usr/lib $SRCTOP/proto/root_$MACH/lib
 fi

@@ -47,7 +47,7 @@ CHECKHDRS=	$(HDRS:%.h=%.check)
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 -I$(CMDINETCOMMONDIR)
 CPPFLAGS +=	-I$(LIB_INC)
-CPPFLAGS +=	-I$(CODEMGR_WS)/include
+CPPFLAGS +=	-I$(SRCTOP)/include
 
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-uninitialized

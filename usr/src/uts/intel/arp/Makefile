@@ -41,7 +41,7 @@ MODULE		= arp
 OBJECTS		= $(ARP_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 ROOTLINK	= $(ROOT_STRMOD_DIR)/$(MODULE)
-CONF_SRCDIR	= $(CODEMGR_WS)/kernel/net/arp
+CONF_SRCDIR	= $(SRCTOP)/kernel/net/arp
 
 #
 # Extra for $(MODULE).check target

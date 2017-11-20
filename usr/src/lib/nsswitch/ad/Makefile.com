@@ -28,7 +28,7 @@
 LIBRARY =	libnss_ad.a
 VERS =		.1
 OBJECTS =	getpwnam.o getspent.o getgrent.o ad_common.o
-IDMAP_PROT_DIR =	$(CODEMGR_WS)/include/rpcsvc
+IDMAP_PROT_DIR =	$(SRCTOP)/include/rpcsvc
 
 # include common nsswitch library definitions.
 include		../../Makefile.com

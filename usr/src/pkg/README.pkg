@@ -43,7 +43,7 @@ change the packaging manifests themselves.
 
 The build rules create a package repository.  Separate DEBUG and
 non-DEBUG versions are built, and are available at:
-    $CODEMGR_WS/packages/$MACH/nightly[-nd]/repo.redist
+    $SRCTOP/packages/$MACH/nightly[-nd]/repo.redist
 
 Building Packages
 -----------------
@@ -154,7 +154,7 @@ Alternatively, you can manually start a pkg.depot(1M) server to
 serve the generated repository to multiple test machines.
 
 	Start up a depot on your build machine.
-	    cd $CODEMGR_WS/packages/$MACH/nightly[-nd]
+	    cd $SRCTOP/packages/$MACH/nightly[-nd]
 	    /usr/lib/pkg.depotd -d repo.redist -p <port> &
 
 	    Make SURE you choose an unused port and the depot

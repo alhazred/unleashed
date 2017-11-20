@@ -58,8 +58,8 @@ if $opt_R; then
 	export ROOT
 fi
 
-if [ -z "$SRC" -a -z "$CODEMGR_WS" ]; then
-	echo "$PNAME: \$SRC or \$CODEMGR_WS must be set" >& 2
+if [ -z "$SRC" -a -z "$SRCTOP" ]; then
+	echo "$PNAME: \$SRC or \$SRCTOP must be set" >& 2
 	exit 1
 fi
 
@@ -69,7 +69,7 @@ if [ -z "$ROOT" ]; then
 fi
 
 if [ -z "$SRC" ]; then
-	SRC="$CODEMGR_WS/usr/src"
+	SRC="$SRCTOP/usr/src"
 	export SRC
 fi
 

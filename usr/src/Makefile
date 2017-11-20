@@ -165,7 +165,7 @@ $(ROOTDIRS) $(MSGDIRS):
 
 libheaders: bldtools
 	@cd lib; pwd; $(MAKE) install_h
-	@cd $(CODEMGR_WS)/lib/libncurses/ncurses; pwd; bmake includes DESTDIR=$(ROOT)
+	@cd $(SRCTOP)/lib/libncurses/ncurses; pwd; bmake includes DESTDIR=$(ROOT)
 
 sysheaders: FRC
 	@cd uts; pwd; $(MAKE) install_h

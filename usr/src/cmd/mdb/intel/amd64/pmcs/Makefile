@@ -35,7 +35,7 @@ include $(SRC)/cmd/mdb/Makefile.module
 
 C99MODE = $(C99_ENABLE)
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 CERRWARN += -Wno-switch
 CERRWARN += -Wno-char-subscripts

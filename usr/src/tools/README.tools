@@ -87,7 +87,7 @@ check_rtime
 
 checkproto
 	Runs protocmp and protolist on a workspace (or uses the environment
-	variable CODEMGR_WS to determine the workspace). Checks the proto area
+	variable SRCTOP to determine the workspace). Checks the proto area
 	against the packages.
 
 codereview
@@ -218,7 +218,7 @@ How to do a full build
 3. When 'nightly' is complete, it will send a summary of what happened to
    $MAILTO. Usually, the less info in the mail the better. If you have failures,
    you can go look at the full log of what happened, generally in
-   $CODEMGR_WS/log/log.<date>/nightly.log (the mail_msg it sent and the proto
+   $SRCTOP/log/log.<date>/nightly.log (the mail_msg it sent and the proto
    list are there too). You can also find the individual build logs, like
    'make clobber' and 'make install' output in $SRC, under names like
    clobber-${MACH}.out and install-${MACH}.out (for a DEBUG build). These

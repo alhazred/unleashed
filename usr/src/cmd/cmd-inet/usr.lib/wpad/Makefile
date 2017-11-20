@@ -35,7 +35,7 @@ ROOTMANIFESTDIR = $(ROOTSVCNETWORK)
 LDLIBS    += 	-ldladm -ldlpi
 all install := LDLIBS += -lcrypto
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 .KEEP_STATE:
 

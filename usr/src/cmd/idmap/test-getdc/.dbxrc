@@ -16,7 +16,7 @@
 
 set -o emacs
 
-setenv ROOT ${CODEMGR_WS}/proto/root_i386
+setenv ROOT ${SRCTOP}/proto/root_i386
 setenv LD_LIBRARY_PATH ${ROOT}/usr/lib:${ROOT}/lib
 
 loadobject -load ${ROOT}/usr/lib/libadutils.so.1

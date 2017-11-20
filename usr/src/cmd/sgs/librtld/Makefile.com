@@ -40,7 +40,7 @@ include		$(SRC)/cmd/sgs/Makefile.com
 
 SRCDIR =	../common
 CPPFLAGS +=	-I../../rtld/common -I$(SRCBASE)/lib/libc/inc \
-		-I$(CODEMGR_WS)/include -I$(SRC)/common/sgsrtcid \
+		-I$(SRCTOP)/include -I$(SRC)/common/sgsrtcid \
 		-I$(SRCBASE)/uts/sparc
 DYNFLAGS +=	$(VERSREF) $(CC_USE_PROTO)  '-R$$ORIGIN'
 LDLIBS +=	$(CONVLIBDIR) $(CONV_LIB) $(ELFLIBDIR) -lelf -lc

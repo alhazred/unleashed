@@ -117,7 +117,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/contract/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/cpr/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/cpr/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -169,7 +169,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/devid/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/disp/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/disp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -198,23 +198,23 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/java/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/$(VGATEXT_FONT).c:	$(VGATEXT_FONT_DIR)/$(VGATEXT_FONT_SRC).bdf \
-	$(CODEMGR_WS)/tools/bdf_to_c.awk
-	$(AWK) -f $(CODEMGR_WS)/tools/bdf_to_c.awk	\
+	$(SRCTOP)/tools/bdf_to_c.awk
+	$(AWK) -f $(SRCTOP)/tools/bdf_to_c.awk	\
 		$(VGATEXT_FONT_DIR)/$(VGATEXT_FONT_SRC).bdf > $@
 
 $(OBJS_DIR)/$(VGATEXT_FONT).o:	$(OBJS_DIR)/$(VGATEXT_FONT).c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/font/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/font/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/fs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/nfs/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/fs/nfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -226,11 +226,11 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/smbsrv/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/proc/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/fs/proc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/sharefs/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/fs/sharefs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -246,7 +246,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/fs/smbclnt/smbfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/fs/swapfs/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/fs/swapfs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -353,43 +353,43 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/idmap/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/arp/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/arp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ip/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/ip/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ipnet/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/ipnet/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:                $(CODEMGR_WS)/kernel/net/iptun/%.c
+$(OBJS_DIR)/%.o:                $(SRCTOP)/kernel/net/iptun/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/sctp/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/sctp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/tcp/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/tcp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ilb/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/ilb/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ipf/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/ipf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/ipd/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/ipd/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -397,15 +397,15 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/net/patricia/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/udp/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/udp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/sockmods/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/sockmods/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/net/dlpistub/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/net/dlpistub/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -717,7 +717,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/mxfe/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/drivers/net/wifi/mwl/mwl_fw/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/drivers/net/wifi/mwl/mwl_fw/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -849,7 +849,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/softmac/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/drivers/net/wifi/uath/uath_fw/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/drivers/net/wifi/uath/uath_fw/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -1101,7 +1101,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/iscsi/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:                $(CODEMGR_WS)/kernel/net/kifconf/%.c
+$(OBJS_DIR)/%.o:                $(SRCTOP)/kernel/net/kifconf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -1160,7 +1160,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/nvpair/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/os/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -1192,7 +1192,7 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/crypto/skein/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/syscall/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/syscall/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
@@ -1208,16 +1208,16 @@ $(OBJS_DIR)/%.o:		$(COMMONBASE)/unicode/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/vm/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/vm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(CODEMGR_WS)/kernel/zmod/%.c
+$(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/zmod/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/zlib_obj.o:		$(ZLIB_OBJS:%=$(OBJS_DIR)/%)
-	$(LD) -r -Breduce -M$(CODEMGR_WS)/kernel/zmod/mapfile -o $@ \
+	$(LD) -r -Breduce -M$(SRCTOP)/kernel/zmod/mapfile -o $@ \
 	    $(ZLIB_OBJS:%=$(OBJS_DIR)/%)
 	$(CTFMERGE) -t -f -L VERSION -o $@ $(ZLIB_OBJS:%=$(OBJS_DIR)/%)
 

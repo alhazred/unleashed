@@ -29,7 +29,7 @@ MDBTGT = kvm
 MODSRCS = srpt.c
 
 UTSBASE = ../../../../../uts
-COMSTARBASE = $(CODEMGR_WS)/kernel/comstar
+COMSTARBASE = $(SRCTOP)/kernel/comstar
 SRPTBASE = $(COMSTARBASE)/port/srpt
 
 include ../../../../Makefile.cmd
@@ -37,8 +37,8 @@ include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64
 include ../../../Makefile.module
 
-CPPFLAGS += -I$(CODEMGR_WS)/include
-CPPFLAGS += -I$(CODEMGR_WS)/include/sys
+CPPFLAGS += -I$(SRCTOP)/include
+CPPFLAGS += -I$(SRCTOP)/include/sys
 CPPFLAGS += -I$(SRPTBASE)
 
 C99MODE=	$(C99_ENABLE)

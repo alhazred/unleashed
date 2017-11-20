@@ -30,8 +30,8 @@ POFILE=		zstreamdump.po
 
 include ../Makefile.cmd
 
-INCS +=	-I$(CODEMGR_WS)/kernel/fs/zfs
-INCS +=	-I$(CODEMGR_WS)/kernel/fs/zfs/common
+INCS +=	-I$(SRCTOP)/kernel/fs/zfs
+INCS +=	-I$(SRCTOP)/kernel/fs/zfs/common
 
 LDLIBS += -lzfs -lnvpair
 

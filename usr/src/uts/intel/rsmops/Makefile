@@ -55,7 +55,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 # path for rsm_common.h
 #
-INC_PATH += -I $(CODEMGR_WS)/include/sys/rsm
+INC_PATH += -I $(SRCTOP)/include/sys/rsm
 
 #
 #	Default build targets.

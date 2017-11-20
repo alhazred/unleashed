@@ -49,9 +49,9 @@ Backup format is:
                 applied manually, rather than by the diff.
 
             metadata.tar.gz (handled by CdmMetadataBackup)
-                $CODEMGR_WS/.hg/hgrc
-                $CODEMGR_WS/.hg/localtags
-                $CODEMGR_WS/.hg/patches (Mq data)
+                $SRCTOP/.hg/hgrc
+                $SRCTOP/.hg/localtags
+                $SRCTOP/.hg/patches (Mq data)
 
             clear.tar.gz (handled by CdmClearBackup)
                 <short node>/

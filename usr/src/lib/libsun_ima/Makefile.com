@@ -46,7 +46,7 @@ LDLIBS +=	-lsysevent
 CERRWARN +=	-Wno-parentheses
 
 CPPFLAGS +=	-DSOLARIS
-CPPFLAGS += -I$(CODEMGR_WS)/include
+CPPFLAGS += -I$(SRCTOP)/include
 
 .KEEP_STATE:
 
