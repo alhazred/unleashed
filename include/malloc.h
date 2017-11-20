@@ -67,6 +67,7 @@ namespace std {
 
 void *malloc(size_t);
 void free(void *);
+void freezero(void *, size_t);
 void *realloc(void *, size_t);
 void *reallocarray(void *, size_t, size_t);
 void *recallocarray(void *, size_t, size_t, size_t);
