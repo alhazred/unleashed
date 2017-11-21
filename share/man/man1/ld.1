@@ -35,7 +35,7 @@ ld \- link-editor for object files
 [\fB-z\fR preinitarray=\fIfunction\fR] [\fB-z\fR redlocsym] [\fB-z\fR relaxreloc]
 [\fB-z\fR rescan-now] [\fB-z\fR recan] [\fB-z\fR rescan-start \fI\&...\fR \fB-z\fR rescan-end]]
 [\fB-z\fR target=sparc|x86] [\fB-z\fR text | textwarn | textoff]
-[\fB-z\fR type=exec|reloc|shared]
+[\fB-z\fR type=exec|reloc|shared|pie]
 [\fB-z\fR verbose] [\fB-z\fR wrap=\fIsymbol\fR] \fIfilename\fR...
 .fi
 
@@ -1581,7 +1581,7 @@ executable.
 .sp
 .ne 2
 .na
-\fB-z\fR \fBtype=exec|reloc|shared\fR
+\fB-z\fR \fBtype=exec|reloc|shared|pie\fR
 .ad
 .sp .6
 .RS 4n
