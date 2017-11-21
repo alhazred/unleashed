@@ -136,6 +136,7 @@ extern div_t div(int, int);
 extern _NORETURN_KYWD void exit(int)
 	__NORETURN;
 extern void free(void *);
+extern void freezero(void *, size_t);
 extern char *getenv(const char *);
 extern long int labs(long);
 extern ldiv_t ldiv(long, long);
