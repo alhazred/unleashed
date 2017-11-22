@@ -272,47 +272,6 @@ sub ProcFile {
 		}
 	}
 
-	# Determine whether this ELF executable or shared object has a
-	# conforming mcs(1) comment section.  If the correct $(POST_PROCESS)
-	# macros are used, only a 3 or 4 line .comment section should exist
-	# containing one or two "@(#)SunOS" or "@(#)illumos" identifying
-	# comments (one comment for a non-debug build, and two for a debug
-	# build). The results of the following split should be three or four
-	# lines, the last empty line being discarded by the split.
-	if ($opt{m}) {
-		my(@Mcs, $Con, $Dev);
-
-		@Mcs = split(/\n/, `mcs -p $FullPath 2>&1`);
-
-		$Con = $Dev = $Val = 0;
-		foreach my $Line (@Mcs) {
-			$Val++;
-
-			if (($Val == 3) &&
-			    ($Line !~ /^(@\(#\))?(SunOS|illumos)/)) {
-				$Con = 1;
-				last;
-			}
-			if (($Val == 4) &&
-			    ($Line =~ /^(@\(#\))?(SunOS|illumos)/)) {
-				$Dev = 1;
-				next;
-			}
-			if (($Dev == 0) && ($Val == 4)) {
-				$Con = 1;
-				last;
-			}
-			if (($Dev == 1) && ($Val == 5)) {
-				$Con = 1;
-				last;
-			}
-		}
-		if ($opt{m} && ($Con == 1)) {
-			onbld_elfmod::OutMsg($ErrFH, $ErrTtl, $RelPath,
-		    "non-conforming mcs(1) comment\t<no \$(POST_PROCESS)?>");
-		}
-	}
-
 	# Applications should not contain an executable stack definition.
 	if (($Type eq 'EXEC') && ($ExecStack == 1) &&
 	    (!defined($EXRE_exec_stack) || ($RelPath !~ $EXRE_exec_stack))) {
@@ -1069,7 +1028,6 @@ if ((getopts('D:d:E:e:f:I:imosvw:', \%opt) == 0) ||
 	print "\t[-f listfile]\tuse file list produced by find_elf -r\n";
 	print "\t[-I infofile]\tdirect informational output (-i, -v) to file\n";
 	print "\t[-i]\t\tproduce dynamic table entry information\n";
-	print "\t[-m]\t\tprocess mcs(1) comments\n";
 	print "\t[-o]\t\tproduce one-liner output (prefixed with pathname)\n";
 	print "\t[-s]\t\tprocess .stab and .symtab entries\n";
 	print "\t[-v]\t\tprocess version definition entries\n";

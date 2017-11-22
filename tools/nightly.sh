@@ -1069,7 +1069,7 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 		else
 			rtime_sflag="-s"
 		fi
-		check_rtime -i -m -v $rtime_sflag -o -w $elf_ddir \
+		check_rtime -i -v $rtime_sflag -o -w $elf_ddir \
 			-D object_list  -f object_list -E runtime.err \
 			-I runtime.attr.raw
 		if (( $? != 0 )); then
