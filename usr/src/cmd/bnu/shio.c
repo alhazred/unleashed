@@ -67,7 +67,7 @@ char *cmd, *fi, *fo, *fe;
 		(void) close(Ifn);	/* close connection fd's */
 		(void) close(Ofn);
 		(void) close(0);	/* get stdin from file fi */
-		if (open(fi, 0) != 0)
+		if (open(fi, O_RDONLY) != 0)
 			exit(errno);
 		(void) close(1);	/* divert stdout to fo */
 		if (creat(fo, PUB_FILEMODE) != 1)

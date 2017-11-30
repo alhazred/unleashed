@@ -207,7 +207,7 @@ main(int argc, char **argv)
 			(void) snprintf(flnm, PATH_MAX, "/var/adm/sa/sa%.2d",
 			    curt->tm_mday);
 		}
-		if ((fin = open(flnm, 0)) == -1)
+		if ((fin = open(flnm, O_RDONLY)) == -1)
 			fail(1, "can't open %s", flnm);
 		break;
 	case 1:		/*   Real time data; one cycle   */

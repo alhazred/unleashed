@@ -1919,7 +1919,7 @@ copytemp(char *fn)
 	 * a "-" file is interpreted as fd 0 for pre-/dev/fd systems
 	 * ... let's hope this goes away soon!
 	 */
-	if ((ifd = (strcmp(fn, "-") ? open(fn, 0) : 0)) < 0) {
+	if ((ifd = (strcmp(fn, "-") ? open(fn, O_RDONLY) : 0)) < 0) {
 		(void) fprintf(stderr, "diff: ");
 		(void) fprintf(stderr, gettext("cannot open %s\n"), fn);
 		done();

@@ -4863,7 +4863,7 @@ old_fsdb(int inum, char *special)
 	long		gen;
 	time_t		t;
 
-	f = open(special, 2);
+	f = open(special, O_RDWR);
 	if (f < 0) {
 		perror("open");
 		printf("cannot open %s\n", special);

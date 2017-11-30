@@ -122,7 +122,7 @@ checkLock(char *file)
 	char alpid[SIZEOFPID+2];	/* +2 for '\n' and NULL */
 	int fd;
 
-	fd = open(file, 0);
+	fd = open(file, O_RDONLY);
 	if (fd == -1) {
 		if (errno == ENOENT)  /* file does not exist -- OK */
 			return (0);

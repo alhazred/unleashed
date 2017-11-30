@@ -830,7 +830,7 @@ main(int argc, char **argv)
 	ibf = -1;
 	if (ifile)
 	{
-		ibf = open(ifile, 0);
+		ibf = open(ifile, O_RDONLY);
 	}
 	else
 	{

@@ -163,7 +163,7 @@ main(int argc, char **argv)
 	(void) setsid();
 	if (debug_level <= 1) {
 		closefrom(0);
-		fd = open("/dev/null", 0);
+		fd = open("/dev/null", O_RDONLY);
 		(void) dup2(fd, 1);
 		(void) dup2(fd, 2);
 	}

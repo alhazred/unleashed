@@ -1332,7 +1332,7 @@ initdesc_x(int argc, char *argv[], int is_reinit)
 	didfds = 0;			/* 0, 1, 2 aren't set up */
 
 	if (fstat(0, &buf) < 0)
-		open("/dev/null", 0);
+		open("/dev/null", O_RDONLY);
 
 	(void) fcntl(SHIN = dcopy(0, FSHIN), F_SETFD,  1);
 	(void) fcntl(SHOUT = dcopy(1, FSHOUT), F_SETFD,  1);
@@ -1344,7 +1344,7 @@ initdesc_x(int argc, char *argv[], int is_reinit)
 	 *	Now, 0/1/2 are saved, close them and open them.
 	 */
 	close(0); close(1); close(2);
-	open("/dev/null", 0);
+	open("/dev/null", O_RDONLY);
 	dup(0);
 	dup(0);
 
@@ -1398,7 +1398,7 @@ new_process(void)
  * When a file descriptor is newly allocated, setfd() is
  * used to mark the fact in "fdinuse" list.
  *	For example,
- *		fd = open("newfile", 0);
+ *		fd = open("newfile", O_RDONLY);
  *		setfd(fd);
  *
  * When a file is freed by close() function, unsetfd() is

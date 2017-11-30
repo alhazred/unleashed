@@ -438,7 +438,7 @@ doio(struct command *t, int *pipein, int *pipeout)
 			(void) unsetfd(pipein[1]);
 		} else if ((flags & FINT) && tpgrp == -1) {
 			(void) close(0);	/* no need for unsetfd */
-			(void) open("/dev/null", 0); /* no need for setfd */
+			(void) open("/dev/null", O_RDONLY); /* no need for setfd */
 		} else {
 			fd = dup(OLDSTD);
 			if (fd != -1)

@@ -20,6 +20,7 @@ static char sccsid[] = "@(#) safe_finger.c 1.4 94/12/28 17:42:41";
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -159,7 +160,7 @@ char  **argv;
      */
 
     for (i = 0; i < 3; i++) {
-	if (fstat(i, &st) == -1 && open("/dev/null", 2) != i)
+	if (fstat(i, &st) == -1 && open("/dev/null", O_RDWR) != i)
 	    perror_exit("open /dev/null");
     }
 

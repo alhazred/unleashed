@@ -85,7 +85,7 @@ char   *command;
 
     for (tmp_fd = 0; tmp_fd < 3; tmp_fd++)
 	(void) close(tmp_fd);
-    if (open("/dev/null", 2) != 0) {
+    if (open("/dev/null", O_RDWR) != 0) {
 	error = "open /dev/null: %m";
     } else if (dup(0) != 1 || dup(0) != 2) {
 	error = "dup: %m";

@@ -237,7 +237,7 @@ ypinit(int argc, char **argv)
 		    freopen(logfile, "a", stderr);
 		}
 
-		t = open("/dev/tty", 2);
+		t = open("/dev/tty", O_RDWR);
 
 		setpgrp();
 	}

@@ -306,7 +306,7 @@ getintf(void)
 	/*
 	 * Open the IP provider.
 	 */
-	if ((fd = open(DEVIP, 0)) < 0)
+	if ((fd = open(DEVIP, O_RDONLY)) < 0)
 		syserr(DEVIP);
 
 	/*
@@ -675,7 +675,7 @@ add_arp(struct rarpdev *rdev, uchar_t *ip, uchar_t *laddr)
 	/*
 	 * Open the IP provider.
 	 */
-	if ((fd = open(DEVARP, 0)) < 0)
+	if ((fd = open(DEVARP, O_RDONLY)) < 0)
 		syserr(DEVARP);
 
 	/*
@@ -863,7 +863,7 @@ get_ifdata(char *dev, int unit, ipaddr_t *ipp, ipaddr_t *maskp)
 	/*
 	 * Open the IP provider.
 	 */
-	if ((fd = open(DEVIP, 0)) < 0)
+	if ((fd = open(DEVIP, O_RDONLY)) < 0)
 		syserr(DEVIP);
 
 	/*

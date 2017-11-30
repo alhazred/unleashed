@@ -1415,7 +1415,7 @@ setup_mgmt_door(msg_queue_t *sys_q)
 
 	isnslog(LOG_DEBUG, "setup_mgmt_door", "entered");
 	/* check if a door is already running. */
-	if ((fd = open(ISNS_DOOR_NAME, 0)) >= 0) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) >= 0) {
 		darg.data_ptr = "<?xml version='1.0' encoding='UTF-8'?>"
 				"<isnsRequest><get><isnsObject>"
 				"<DiscoveryDomain name=\"default\">"

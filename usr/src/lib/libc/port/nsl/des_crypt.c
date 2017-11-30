@@ -45,7 +45,7 @@
 #ifdef sun
 #include <sys/ioctl.h>
 #include <sys/des.h>
-#define	getdesfd()	(open("/dev/des", 0, 0))
+#define	getdesfd()	(open("/dev/des", O_RDONLY, 0))
 #else
 #include <des/des.h>
 #endif

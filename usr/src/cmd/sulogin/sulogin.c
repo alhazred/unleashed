@@ -150,7 +150,7 @@ main(int argc, char **argv)
 	}
 
 	/* Do the magic to determine the children */
-	if ((fd = open(SYSMSG, 0)) < 0)
+	if ((fd = open(SYSMSG, O_RDONLY)) < 0)
 		return (EXIT_FAILURE);
 
 	/*

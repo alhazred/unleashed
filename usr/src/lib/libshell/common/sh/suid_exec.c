@@ -153,7 +153,7 @@ int main(int argc,char *argv[])
 	/* Open the script for reading first and then validate it.  This
 	 * prevents someone from pulling a switcheroo while we are validating.
 	 */
-	n = open(p,0);
+	n = open(p, O_RDONLY);
 	if(n == FDIN)
 	{
 		n = dup(n);

@@ -159,7 +159,7 @@ main(int argc, char **argv)
 			}
 			hsp = hs + hoff;
 		}
-		f = open(dp->d_name, 0);
+		f = open(dp->d_name, O_RDONLY);
 		if (f > 0) {
 			int whdrsize = sizeof (*buf) - sizeof (buf->wd_we);
 

@@ -122,7 +122,7 @@ main(int argc, char *argv[])
 		if (pid)
 			exit(0);
 		closefrom(0);
-		i = open("/dev/console", 2);
+		i = open("/dev/console", O_RDWR);
 		(void) dup2(i, 1);
 		(void) dup2(i, 2);
 		setsid();

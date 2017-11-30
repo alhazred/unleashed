@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <assert.h>
+#include <fcntl.h>
 
 extern void err();
 extern int newkeys();
@@ -82,7 +83,7 @@ main(int argc, char *argv[])
 			break;
 		case 'i': /* input is on file, not stdin */
 			close(0);
-			if (open(argv[2], 0) != 0)
+			if (open(argv[2], O_RDONLY) != 0)
 				err(gettext("Can't read input %s"), argv[2]);
 			if (argv[1][2] == 'u') /* unlink */
 				remove = argv[2];

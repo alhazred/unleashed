@@ -1539,7 +1539,7 @@ chgreel(struct file_info *f_p, int dir)
 			strncpy(V_labl.v_volume, vol_tmp, 6);
 		}
 		errno = 0;
-		f_p->f_des = open(f_p->f_dev_p, 0);
+		f_p->f_des = open(f_p->f_dev_p, O_RDONLY);
 		if (f_p->f_des <= 0 || f_p->f_des > 10) {
 			if (dir == INPUT)
 				perror("input ERR");
@@ -1578,7 +1578,7 @@ chgreel(struct file_info *f_p, int dir)
 			close(f_p->f_des);
 			sleep(2);
 			errno = 0;
-			f_p->f_des = open(f_p->f_dev_p, 1);
+			f_p->f_des = open(f_p->f_dev_p, O_WRONLY);
 			if (f_p->f_des <= 0 || f_p->f_des > 10)
 				perror("output ERR");
 			errno = 0;

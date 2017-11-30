@@ -53,7 +53,7 @@
 #define	__des_crypt(a, b, c) 0
 #endif
 #else
-#define	getdesfd()	(open("/dev/des", 0, 0))
+#define	getdesfd()	(open("/dev/des", O_RDONLY, 0))
 #endif
 #else
 #include <des/des.h>

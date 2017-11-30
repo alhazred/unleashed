@@ -103,7 +103,7 @@ register char	*text;
 	sbuflen = strlen(sysbuf);
 	if (_Sf < 0) {
 		errno = 0;
-		_Sf = open(SYSLOG, 1);
+		_Sf = open(SYSLOG, O_WRONLY);
 		if (errno == ENOENT) {
 			_Sf = creat(SYSLOG, LOGFILEMODE);
 			(void) chmod(SYSLOG, LOGFILEMODE);

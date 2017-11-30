@@ -55,7 +55,7 @@ smb_kmod_bind(void)
 	if (smbdrv_fd != -1)
 		(void) close(smbdrv_fd);
 
-	if ((smbdrv_fd = open(SMBDRV_DEVICE_PATH, 0)) < 0) {
+	if ((smbdrv_fd = open(SMBDRV_DEVICE_PATH, O_RDONLY)) < 0) {
 		smbdrv_fd = -1;
 		return (errno);
 	}

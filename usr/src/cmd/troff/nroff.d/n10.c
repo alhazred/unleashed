@@ -47,6 +47,7 @@ Device interfaces
 
 #include <limits.h>
 #include <ctype.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef EUC
@@ -112,7 +113,7 @@ ptinit()
 	char check[50];
 
 	strcat(termtab, devname);
-	if ((fd = open(termtab, 0)) < 0) {
+	if ((fd = open(termtab, O_RDONLY)) < 0) {
 		errprint(gettext("cannot open %s"), termtab);
 		exit(-1);
 	}

@@ -383,7 +383,7 @@ PID_MAX				SVID	SC 1 LMU	30000	cc{
 		int	fd;
 		int	n;
 		char	buf[1024];
-		if ((fd = open("/proc/sys/kernel/pid_max", 0)) < 0)
+		if ((fd = open("/proc/sys/kernel/pid_max", O_RDONLY)) < 0)
 			return 1;
 		if ((n = read(fd, buf, sizeof(buf)-1)) < 2)
 			return 1;

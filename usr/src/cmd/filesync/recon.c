@@ -669,11 +669,11 @@ samecompare(struct file *fp)
 	bool_t same = TRUE;
 
 
-	sfd = open(srcname, 0);
+	sfd = open(srcname, O_RDONLY);
 	if (sfd < 0)
 		return (FALSE);
 
-	dfd = open(dstname, 0);
+	dfd = open(dstname, O_RDONLY);
 	if (dfd < 0) {
 		close(sfd);
 		return (FALSE);

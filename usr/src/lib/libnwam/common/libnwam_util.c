@@ -72,7 +72,7 @@ open_door(const char *door_name, int *door_fdp)
 		}
 	}
 	if (*door_fdp == -1) {
-		*door_fdp = open(door_name, 0);
+		*door_fdp = open(door_name, O_RDONLY);
 		if (*door_fdp == -1)
 			err = errno;
 	}

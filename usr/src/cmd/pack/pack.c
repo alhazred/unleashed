@@ -420,7 +420,7 @@ main(int argc, char *argv[])
 		/* copy argv[k] to filename and count chars in base name */
 		for (i = 0; i < (MAXPATHLEN-3) && (*cp = argv[k][i]); i++)
 			if (*cp++ == '/') sep = i;
-		if ((infile = open(filename, 0)) < 0) {
+		if ((infile = open(filename, O_RDONLY)) < 0) {
 			(void) fprintf(stderr, gettext(
 			    "pack: %s: cannot open: "), filename);
 			perror("");

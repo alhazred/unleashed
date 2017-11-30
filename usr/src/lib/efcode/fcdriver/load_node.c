@@ -161,7 +161,7 @@ is_fcode_file(char *path)
 	extern int check_fcode_header(char *, uchar_t *, int);
 
 	debug_msg(DEBUG_FIND_FCODE, "%s: '%s' -> ", func_name, path);
-	if ((fd = open(path, 0)) < 0) {
+	if ((fd = open(path, O_RDONLY)) < 0) {
 		debug_msg(DEBUG_FIND_FCODE, "%s: '%s' can't open\n", func_name,
 		    path);
 		return (0);

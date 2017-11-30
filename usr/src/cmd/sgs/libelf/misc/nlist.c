@@ -137,7 +137,7 @@ nlist(const char * name, struct nlist * list)
 		p->n_numaux = 0;
 	}
 
-	if ((fd = open(name, 0)) < 0)
+	if ((fd = open(name, O_RDONLY)) < 0)
 		return (-1);
 	if (read(fd, magic_buf, EI_NIDENT) == -1) {
 		(void) close(fd);

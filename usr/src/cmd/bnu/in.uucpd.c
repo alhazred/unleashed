@@ -122,7 +122,7 @@ char **argv;
 #ifdef ATTSVR4
 	setsid();
 #else
-	if ((s = open("/dev/tty", 2)) >= 0) {
+	if ((s = open("/dev/tty", O_RDWR)) >= 0) {
 		ioctl(s, TIOCNOTTY, (char *)0);
 		close(s);
 	}

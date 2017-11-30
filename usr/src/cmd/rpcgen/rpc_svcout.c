@@ -1079,14 +1079,14 @@ write_rpc_svc_fg(char *infile, char *sp)
 		f_print(fout, "%s\t\t(void) close(i);\n", sp);
 	}
 	/* Redirect stderr and stdout to /dev/null */
-	f_print(fout, "%si = open(\"/dev/null\", 2);\n", sp);
+	f_print(fout, "%si = open(\"/dev/null\", O_RDWR);\n", sp);
 	f_print(fout, "%s(void) dup2(i, 1);\n", sp);
 	f_print(fout, "%s(void) dup2(i, 2);\n", sp);
 	/* This removes control of the controlling terminal */
 	if (tirpcflag)
 		f_print(fout, "%ssetsid();\n", sp);
 	else {
-		f_print(fout, "%si = open(\"/dev/tty\", 2);\n", sp);
+		f_print(fout, "%si = open(\"/dev/tty\", O_RDWR);\n", sp);
 		f_print(fout, "%sif (i >= 0) {\n", sp);
 		f_print(fout,
 		    "%s\t(void) ioctl(i, TIOCNOTTY, NULL);\n", sp);

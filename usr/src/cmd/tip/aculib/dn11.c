@@ -30,7 +30,7 @@ dn_dialer(char *num, char *acu)
 
 	if (boolean(value(VERBOSE)))
 		(void) printf("\nstarting call...");
-	if ((dn = open(acu, 1)) < 0) {
+	if ((dn = open(acu, O_WRONLY)) < 0) {
 		if (errno == EBUSY)
 			(void) printf("line busy...");
 		else
@@ -59,7 +59,7 @@ dn_dialer(char *num, char *acu)
 	/*
 	 * open line - will return on carrier
 	 */
-	if ((FD = open(DV, 2)) < 0) {
+	if ((FD = open(DV, O_RDWR)) < 0) {
 		if (errno == EIO)
 			(void) printf("lost carrier...");
 		else

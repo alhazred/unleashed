@@ -17,6 +17,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <fcntl.h>
 
 extern char gfile[];
 
@@ -55,7 +56,7 @@ grepcall(char *in, char *out, char *arg)
 	{
 		sv0 = dup(0);
 		close(0);
-		if (open(argig, 0) != 0)
+		if (open(argig, O_RDONLY) != 0)
 			err("Can't read fgrep index %s", argig);
 		sv1 = dup(1);
 		close(1);

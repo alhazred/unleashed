@@ -244,7 +244,7 @@ main()
 			for (i = 0; i < size; i++)
 				(void) close(i);
 		}
-		i = open("/dev/null", 2);
+		i = open("/dev/null", O_RDWR);
 		(void) dup2(i, 1);
 		(void) dup2(i, 2);
 		openlog("ypxfrd", LOG_NDELAY|LOG_PID, LOG_DAEMON);

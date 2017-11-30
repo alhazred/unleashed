@@ -168,7 +168,7 @@ char *argv[];
 #else
 	chdir("/var/spool/mail");
 #endif /* SYSV */
-	if ((uf = open(UTMPX_FILE, 0)) < 0) {
+	if ((uf = open(UTMPX_FILE, O_RDONLY)) < 0) {
 		syslog(LOG_ERR, "%s: %m", UTMPX_FILE);
 		(void) recv(0, msgbuf, sizeof (msgbuf) - 1, 0);
 		exit(1);

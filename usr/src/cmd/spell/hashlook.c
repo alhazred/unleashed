@@ -116,7 +116,7 @@ prime(char *file)
 #ifdef pdp11	/* because of insufficient address space for buffers */
 	fd = dup(0);
 	close(0);
-	if (open(file, 0) != 0)
+	if (open(file, O_RDONLY) != 0)
 		return (0);
 	f = stdin;
 	if (rhuff(f) == 0 || read(fileno(f), (char *)hindex,

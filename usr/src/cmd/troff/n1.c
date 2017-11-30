@@ -1205,7 +1205,7 @@ n1:
 	if (p[0] == '-' && p[1] == 0) {
 		ifile = 0;
 		strcpy(cfname[ifi], "<standard input>");
-	} else if ((ifile = open(p, 0)) < 0) {
+	} else if ((ifile = open(p, O_RDONLY)) < 0) {
 		errprint(gettext("cannot open file %s"), p);
 		nfo -= mflg;
 		done(02);
@@ -1349,7 +1349,8 @@ caseso()
 
 	lgf++;
 	nextf[0] = 0;
-	if (skip() || !getname() || ((i = open(nextf, 0)) < 0) || (ifi >= NSO)) {
+	if (skip() || !getname() || ((i = open(nextf, O_RDONLY)) < 0) ||
+	    (ifi >= NSO)) {
 		errprint(gettext("can't open file %s"), nextf);
 		done(02);
 	}
@@ -1403,7 +1404,7 @@ casecf()
 	char	buf[512];
 	extern int hpos, esc, po;
 	nextf[0] = 0;
-	if (skip() || !getname() || (fd = open(nextf, 0)) < 0) {
+	if (skip() || !getname() || (fd = open(nextf, O_RDONLY)) < 0) {
 		errprint(gettext("can't open file %s"), nextf);
 		done(02);
 	}

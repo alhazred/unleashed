@@ -46,6 +46,7 @@
 #include "tdef.h"
 #include "dev.h"
 #include <ctype.h>
+#include <fcntl.h>
 #include "ext.h"
 
 /* fitab[f][c] is 0 if c is not on font f */
@@ -699,7 +700,7 @@ char *truename;
 		shortname[2] = '\0';
 	}
 	sprintf(longname, "%s/dev%s/%s.out", fontfile, devname, shortname);
-	if ((k = open(longname, 0)) < 0) {
+	if ((k = open(longname, O_RDONLY)) < 0) {
 		errprint(gettext("Can't open %s"), longname);
 		return(-1);
 	}

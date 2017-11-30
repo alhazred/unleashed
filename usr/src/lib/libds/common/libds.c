@@ -329,7 +329,7 @@ ds_init(void)
 	if (ds_fd >= 0)
 		return (0);
 
-	if ((ds_fd = open(vlds_device, 0)) < 0)
+	if ((ds_fd = open(vlds_device, O_RDONLY)) < 0)
 		return (errno);
 
 	if (dslibtab == NULL) {

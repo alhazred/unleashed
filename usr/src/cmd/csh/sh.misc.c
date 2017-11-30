@@ -216,7 +216,7 @@ donefds(void)
 	 * To avoid NIS+ functions to get hold of 0/1/2,
 	 * use descriptor 0, and dup it to 1 and 2.
 	 */
-	open("/dev/null", 0);
+	open("/dev/null", O_RDONLY);
 	dup(0); dup(0);
 	didfds = 0;
 }

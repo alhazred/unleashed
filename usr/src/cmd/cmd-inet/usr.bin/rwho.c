@@ -106,7 +106,7 @@ again:
 			continue;
 		if (strncmp(dp->d_name, "whod.", 5))
 			continue;
-		f = open(dp->d_name, 0);
+		f = open(dp->d_name, O_RDONLY);
 		if (f < 0)
 			continue;
 		cc = read(f, (char *)&wd, sizeof (struct whod));

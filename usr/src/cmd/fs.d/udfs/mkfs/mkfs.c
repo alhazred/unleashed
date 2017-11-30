@@ -285,7 +285,7 @@ main(int32_t argc, int8_t *argv[])
 	argv = &argv[optind];
 	fsys = argv[0];
 	raw_special = getfullrawname(fsys);
-	fsi = open(raw_special, 0);
+	fsi = open(raw_special, O_RDONLY);
 	if (fsi < 0) {
 		(void) fprintf(stdout,
 			gettext("%s: cannot open\n"), fsys);

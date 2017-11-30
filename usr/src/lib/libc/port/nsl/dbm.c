@@ -70,9 +70,9 @@ dbminit(char *file)
 		errno = ENAMETOOLONG;
 		return (-1);
 	}
-	pagf = open(pagbuf, 2);
+	pagf = open(pagbuf, O_RDWR);
 	if (pagf < 0) {
-		pagf = open(pagbuf, 0);
+		pagf = open(pagbuf, O_RDONLY);
 		dbrdonly = 1;
 	}
 	/*
@@ -82,9 +82,9 @@ dbminit(char *file)
 	 */
 	(void) strlcpy(pagbuf, file, sizeof (pagbuf));
 	(void) strlcat(pagbuf, ".dir", sizeof (pagbuf));
-	dirf = open(pagbuf, 2);
+	dirf = open(pagbuf, O_RDWR);
 	if (dirf < 0) {
-		dirf = open(pagbuf, 0);
+		dirf = open(pagbuf, O_RDONLY);
 		dbrdonly = 1;
 	}
 	if (pagf < 0 || dirf < 0)

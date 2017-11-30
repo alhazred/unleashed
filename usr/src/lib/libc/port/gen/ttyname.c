@@ -626,7 +626,7 @@ get_pri_dirs(void)
 	/*
 	 * if no /etc/ttysrch, use defaults
 	 */
-	if ((fd = open(TTYSRCH, 0)) < 0)
+	if ((fd = open(TTYSRCH, O_RDONLY)) < 0)
 		return (def_srch_dirs);
 
 	if (fstat64(fd, &sb) < 0) {

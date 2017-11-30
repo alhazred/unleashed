@@ -392,7 +392,7 @@ main(int argc, char **argv)
 		if (fork())
 			return (0);
 		(void) close(0);
-		(void) open("/", 0);
+		(void) open("/", O_RDONLY);
 		(void) dup2(0, 1);
 		(void) dup2(0, 2);
 		untty();

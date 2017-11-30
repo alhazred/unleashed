@@ -717,7 +717,7 @@ load_file(char *file, caddr_t prom, volatile socal_reg_t *regs)
 {
 uint_t	wwn_d8, wwn_lo;
 uint_t	wwn_hi;
-int ffd = open(file, 0);
+int ffd = open(file, O_RDONLY);
 
 	wwn_hi = FEPROM_SUN_WWN;
 

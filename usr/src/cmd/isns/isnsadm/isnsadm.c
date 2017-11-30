@@ -304,7 +304,7 @@ handle_association_info(xmlChar *name, association_t assoc)
 	    return (ret);
 	}
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -2564,7 +2564,7 @@ list_node_func(int operandLen, char *operand[], cmdOptions_t *options,
 	    }
 	}
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -2686,7 +2686,7 @@ list_dd_func(int operandLen, char *operand[], cmdOptions_t *options,
 	    }
 	}
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -2797,7 +2797,7 @@ list_ddset_func(int operandLen, char *operand[], cmdOptions_t *options,
 	    }
 	}
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -2905,7 +2905,7 @@ create_dd_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t		darg;
 	int			fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -2971,7 +2971,7 @@ create_ddset_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t		darg;
 	int			fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3041,7 +3041,7 @@ modify_dd_func(int operandLen, char *operand[], cmdOptions_t *options,
 	int	fd, m_flag = 0;
 	uint32_t    id;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3178,7 +3178,7 @@ modify_ddset_func(int operandLen, char *operand[], cmdOptions_t *options,
 	int	fd, m_flag = 0;
 	uint32_t    id;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3310,7 +3310,7 @@ add_node_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t	darg;
 	int	fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3376,7 +3376,7 @@ add_dd_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t	darg;
 	int	fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3443,7 +3443,7 @@ remove_node_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t	darg;
 	int	fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3510,7 +3510,7 @@ remove_dd_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t	darg;
 	int	fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3576,7 +3576,7 @@ delete_dd_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t		darg;
 	int			fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3643,7 +3643,7 @@ delete_ddset_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t		darg;
 	int			fd;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3706,7 +3706,7 @@ i_enableddset(int operandLen, char *operand[], boolean_t enable)
 	door_arg_t		darg;
 	int fd, ret = 0;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}
@@ -3807,7 +3807,7 @@ show_config_func(int operandLen, char *operand[], cmdOptions_t *options,
 	door_arg_t		darg;
 	int			fd, flag = 0;
 
-	if ((fd = open(ISNS_DOOR_NAME, 0)) == -1) {
+	if ((fd = open(ISNS_DOOR_NAME, O_RDONLY)) == -1) {
 	    ret = check_door_error(ERROR_DOOR_OPEN_FAILED, errno);
 	    return (ret);
 	}

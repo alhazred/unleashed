@@ -63,7 +63,7 @@ static int g_desfd = -1;
 #define	getdesfd()	(cdevsw[11].d_open(0, 0) ? -1 : 0)
 #define	ioctl(a, b, c)	(cdevsw[11].d_ioctl(0, b, c, 0) ? -1 : 0)
 #else
-#define	getdesfd()	(open("/dev/des", 0, 0))
+#define	getdesfd()	(open("/dev/des", O_RDONLY, 0))
 #endif	/* _KERNEL */
 #endif	/* sun */
 

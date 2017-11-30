@@ -41,6 +41,7 @@
 
 #include "tdef.h"
 #include <ctype.h>
+#include <fcntl.h>
 #include "ext.h"
 /*
  * troff10.c
@@ -108,7 +109,7 @@ ptinit()
 	strcat(termtab, "/dev");
 	strcat(termtab, devname);
 	strcat(termtab, "/DESC.out");	/* makes "..../devXXX/DESC.out" */
-	if ((fin = open(termtab, 0)) < 0) {
+	if ((fin = open(termtab, O_RDONLY)) < 0) {
 		errprint(gettext("can't open tables for %s"), termtab);
 		done3(1);
 	}

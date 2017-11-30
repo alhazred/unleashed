@@ -1118,7 +1118,7 @@ main(int argc, char *argv[])
 			++bflag;
 			/* try to recover from short reads when reading stdin */
 			++Bflag;
-		} else if ((mt = open(usefile, 0)) < 0)
+		} else if ((mt = open(usefile, O_RDONLY)) < 0)
 			vperror(1, "%s", usefile);
 
 		/* Decompress if the file is compressed */
