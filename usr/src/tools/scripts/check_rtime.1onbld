@@ -24,7 +24,7 @@
 .I check_rtime
 \- check ELF runtime attributes
 .SH SYNOPSIS
-\fBcheck_rtime [-imosv] [-D depfile | -d depdir] [-E errfile] [-e exfile] [-f listfile] [-I infofile] [-w outdir] file | dir, ...\fP
+\fBcheck_rtime [-iosv] [-D depfile | -d depdir] [-E errfile] [-e exfile] [-f listfile] [-I infofile] [-w outdir] file | dir, ...\fP
 .SH DESCRIPTION
 .LP
 .I check_rtime
@@ -406,9 +406,6 @@ analyzed objects to \fIinfofile\fP instead of stdout.
 .B \-i
 Provide dynamic entry information.  Presently only dependencies and
 runpaths are printed.
-.TP
-.B \-m
-Enable \fBmcs(1)\fP checking.
 .TP
 .B \-o
 Produce a one-line output for each condition discovered, prefixed
