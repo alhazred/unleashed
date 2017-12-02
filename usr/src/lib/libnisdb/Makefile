@@ -172,7 +172,7 @@ $(CLNT_PICS) := CPPFLAGS += -I../libc/port/nsl
 
 LIBS = $(DYNLIB)
 ZDEFS=
-LDLIBS += -lldap -lc $(CCNEEDED)
+LDLIBS += -lldap -lc
 
 # A number of interfaces are interposed by numerous applications, therefore
 # prevent direct binding to anything in libnisdb.  Disable libnisdb from

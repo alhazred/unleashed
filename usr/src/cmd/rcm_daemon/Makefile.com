@@ -193,7 +193,7 @@ $(RCM_DAEMON): $(RCM_OBJ) $(MAPFILES)
 	$(POST_PROCESS)
 
 SUNW_%.so: %.o
-	$(LINK.c) -o $@ $(GSHARED) $(ZNODEFS) -h $@ $< $(LDLIBS_MODULES)
+	$(LINK.c) -o $@ $(GSHARED) -h $@ $< $(LDLIBS_MODULES)
 
 %.o: $(COMMON)/%.c
 	$(COMPILE.c) -o $@ $<

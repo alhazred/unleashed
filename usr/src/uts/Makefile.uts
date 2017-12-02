@@ -252,9 +252,7 @@ CTFMERGE_MODULE=	$(CTFMERGE) $(CTFMRGFLAGS) -L VERSION -o $@ $(OBJECTS) \
 # tripping over code that isn't really suitable for shared libraries.
 #
 BUILD.SO		= \
-	$(LD) -o $@ -G $(LD_ZNORELOC) $(DYNFLAGS) -h $(SONAME)
-
-$(LIBGEN)		:= DYNFLAGS = $(LD_ZNODEFS)
+	$(LD) -o $@ -G $(ZNORELOC) -h $(SONAME)
 
 #
 # SONAME defaults for common fake shared libraries.

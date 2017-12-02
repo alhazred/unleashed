@@ -90,7 +90,7 @@ $(ITM) :=	CFLAGS += $(GSHARED) $(C_PICFLAGS) $(ZTEXT) -h $@
 $(ITM) :=	sparc_CFLAGS += -mno-app-regs
 $(ITM) :=	sparcv9_CFLAGS += -mno-app-regs
 
-LDLIBS += -lgen -lc
+LDLIBS += -lgen
 
 MY_NATIVE_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -I. -I..
 MY_NATIVE_LDFLAGS = $(MAPFILE.PGA:%=-Wl,-M%)
