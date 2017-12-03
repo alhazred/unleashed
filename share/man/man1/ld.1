@@ -663,8 +663,8 @@ sections can be manipulated by the \fBmcs\fR(1) utility.
 .sp .6
 .RS 4n
 Combines relocatable object files to produce one relocatable object file.
-Implies \fB-z\fR \fBnodefs\fR. This option cannot be used with the \fB-a\fR
-option.
+\fBld\fR does not complain about unresolved references. This option cannot be
+used with the \fB-a\fR option.
 .RE
 
 .sp
@@ -922,11 +922,14 @@ specified by \fB-L\fR, but you only want the alternate paths to be used.
 .RS 4n
 The \fB-z\fR \fBdefs\fR option and the \fB--no-undefined\fR option force a
 fatal error if any undefined symbols remain at the end of the link. This mode
-is the default, and recommended, as it assures the object being built is
-self-contained. A self-contained object has all symbolic references resolved
+is the default when an executable is built. For historic reasons, this mode is
+\fBnot\fR the default when building a shared object. Use of the \fB-z\fR
+\fBdefs\fR option is recommended, as this mode assures the object being built
+is self-contained. A self-contained object has all symbolic references resolved
 internally, or to the object's immediate dependencies.
 .sp
-The \fB-z\fR \fBnodefs\fR option allows undefined symbols.  When used with
+The \fB-z\fR \fBnodefs\fR option allows undefined symbols. For historic
+reasons, this mode is the default when a shared object is built. When used with
 executables, the behavior of references to such undefined symbols is
 unspecified. Use of the \fB-z\fR \fBnodefs\fR option is not recommended.
 .RE
