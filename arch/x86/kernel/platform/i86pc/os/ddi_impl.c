@@ -1884,7 +1884,7 @@ get_boot_properties(void)
 
 		/*
 		 * special properties:
-		 * si-machine, si-hw-provider
+		 * si-hw-provider
 		 *	goes to kernel data structures.
 		 * bios-boot-device and stdout
 		 *	goes to hardware property list so it may show up
@@ -1892,9 +1892,7 @@ get_boot_properties(void)
 		 *	Install/Upgrade. Once we fix install upgrade,
 		 *	this can be taken out.
 		 */
-		if (strcmp(name, "si-machine") == 0) {
-			utsname_set_machine(bop_staging_area);
-		} else if (strcmp(name, "si-hw-provider") == 0) {
+		if (strcmp(name, "si-hw-provider") == 0) {
 			(void) strncpy(hw_provider, bop_staging_area, SYS_NMLN);
 			hw_provider[SYS_NMLN - 1] = '\0';
 		} else if (strcmp(name, "bios-boot-device") == 0) {
