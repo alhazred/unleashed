@@ -19,6 +19,7 @@
 #include <string.h>
 #include <sys/syscall.h>
 #include <sys/utsname.h>
+#include <sys/cfgparam.h>
 
 int
 uname(struct utsname *name)
@@ -29,6 +30,8 @@ uname(struct utsname *name)
 		strlcpy(name->sysname, "SunOS", sizeof(name->sysname));
 		strlcpy(name->release, "5.11", sizeof(name->release));
 		strlcpy(name->version, "legacy-uname", sizeof(name->version));
+		strlcpy(name->machine, CONFIG_PLATFORM_STR,
+			sizeof(name->machine));
 	}
 	errno = serr;
 	return ret;
