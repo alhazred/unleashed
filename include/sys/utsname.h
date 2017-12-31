@@ -73,11 +73,6 @@ extern int uname(struct utsname *);
  */
 extern char *uts_nodename(void);
 
-/*
- * Routines to access parts of the utsname.
- */
-extern void utsname_set_machine(const char *machine);
-
 #endif	/* !(_KERNEL) */
 
 #ifdef	__cplusplus
