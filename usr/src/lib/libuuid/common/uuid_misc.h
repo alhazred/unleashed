@@ -79,9 +79,6 @@ typedef struct {
 #define	MAX_RETRY		8
 #define	VER1_MASK		0xefff
 
-#define	STATE_FILE		1
-#define	TEMP_FILE		2
-
 #ifdef	__cplusplus
 }
 #endif
