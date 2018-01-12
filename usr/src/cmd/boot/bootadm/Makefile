@@ -30,7 +30,7 @@ PROG= bootadm
 
 SBINLINKS= $(PROG)
 
-OBJS= bootadm.o bootadm_upgrade.o bootadm_digest.o bootadm_loader.o
+OBJS= bootadm.o bootadm_upgrade.o bootadm_loader.o
 SRCS = $(OBJS:.o=.c)
 POFILES= $(OBJS:%.o=%.po)
 
@@ -40,7 +40,7 @@ POFILE= bootadm_cmd.po
 
 .KEEP_STATE:
 
-LDLIBS += -lficl-sys -lmd -lcryptoutil -lnvpair -lgen
+LDLIBS += -lficl-sys -lnvpair -lgen
 LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
