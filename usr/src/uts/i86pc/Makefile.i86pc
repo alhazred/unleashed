@@ -41,17 +41,6 @@ PLATFORM	 = i86pc
 UNAME_M		= $(PLATFORM)
 
 #
-# Definitions for the platform-specific /platform directories.
-#
-# IMPLEMENTATIONS is used to designate i86pc machines which have
-# platform specific modules.  All code specific to a given implementation
-# resides in the appropriately named subdirectory.   This requires
-# these platforms to have their own Makefiles to define ROOT_PLAT_DIRS,
-# USR_PLAT_DIRS, etc.
-#
-IMPLEMENTATIONS	= i86hvm
-
-#
 #	Everybody needs to know how to build modstubs.o and to locate unix.o
 #
 UNIX_DIR	 = $(UTSBASE)/$(PLATFORM)/unix

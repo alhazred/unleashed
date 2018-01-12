@@ -61,7 +61,6 @@ dmod/$(MODULE) := LDLIBS += -lm -lproc
 # kludge until we invent -DDONTINCLUDEMACHPARAM or something.
 #
 CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
-CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86xpv/include
 
 # Needed to include c2/audit.h (from cred.h)
 CPPFLAGS += -I$(SRC)/uts/common

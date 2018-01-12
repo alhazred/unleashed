@@ -22,7 +22,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-SUBDIRS = mdb_kb \
+SUBDIRS = \
 	i40e \
 	generic_cpu \
 	amd_opteron \

@@ -68,7 +68,6 @@ CORE_OBJS +=			\
 	hold_page.o		\
 	hrtimers.o		\
 	htable.o		\
-	hypercall.o		\
 	hypersubr.o		\
 	i86_mmu.o		\
 	ibft.o			\
@@ -119,7 +118,6 @@ CORE_OBJS +=			\
 	trap.o			\
 	turbo.o			\
 	vm_machdep.o		\
-	xpv_platform.o		\
 	x_call.o
 
 #
@@ -242,9 +240,7 @@ AMD_IOMMU_OBJS +=	amd_iommu.o amd_iommu_impl.o amd_iommu_acpi.o \
 ALL_DEFS	+= -Di86pc
 INC_PATH	+= -I$(SRCTOP)/include
 INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
-INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86xpv/include
 INC_PATH	+= -I$(UTSBASE)/i86pc -I$(SRC)/common
-INC_PATH	+= -I$(UTSBASE)/i86xpv -I$(UTSBASE)/common/xen
 
 #
 # Since the assym files are derived, the dependencies must be explicit for

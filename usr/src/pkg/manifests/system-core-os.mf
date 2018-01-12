@@ -796,7 +796,6 @@ file path=usr/lib/devfsadm/linkmod/SUNW_sgen_link.so group=sys
 file path=usr/lib/devfsadm/linkmod/SUNW_smp_link.so group=sys
 file path=usr/lib/devfsadm/linkmod/SUNW_tape_link.so group=sys
 file path=usr/lib/devfsadm/linkmod/SUNW_usb_link.so group=sys
-$(i386_ONLY)file path=usr/lib/devfsadm/linkmod/SUNW_xen_link.so group=sys
 file path=usr/lib/diffh mode=0555
 file path=usr/lib/fs/bootfs/mount mode=0555
 file path=usr/lib/fs/ctfs/mount mode=0555

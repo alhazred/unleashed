@@ -102,12 +102,6 @@ $(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/unix \
     group=sys mode=0555
 $(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/uppc \
     group=sys mode=0555
-$(i86xpv_ONLY)file \
-    path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/xpv_psm group=sys \
-    mode=0555
-$(i86xpv_ONLY)file \
-    path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/xpv_uppc group=sys \
-    mode=0555
 file path=usr/bin/$(ARCH32)/mdb mode=0555
 file path=usr/bin/$(ARCH64)/mdb mode=0555
 file path=usr/include/sys/mdb_modapi.h mode=0644
@@ -128,7 +122,6 @@ file path=usr/lib/mdb/kvm/$(ARCH64)/krtld.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/lofs.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/logindmux.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mac.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/mdb_kb.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mdb_ks.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mm.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/mpt_sas.so group=sys mode=0555
@@ -184,22 +177,6 @@ $(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/unix.so \
     group=sys mode=0555
 $(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/uppc.so \
     group=sys mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/unix.so \
-    group=sys mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv.so \
-    group=sys mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv_psm.so \
-    group=sys mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/$(ARCH64)/xpv_uppc.so \
-    group=sys mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/unix.so group=sys \
-    mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv.so group=sys \
-    mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv_psm.so group=sys \
-    mode=0555
-$(i86xpv_ONLY)file path=usr/platform/i86xpv/lib/mdb/kvm/xpv_uppc.so group=sys \
-    mode=0555
 file path=usr/share/man/man1/adb.1
 file path=usr/share/man/man1/kmdb.1
 file path=usr/share/man/man1/mdb.1

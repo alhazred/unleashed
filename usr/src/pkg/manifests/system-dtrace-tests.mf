@@ -123,8 +123,6 @@ dir path=opt/SUNWdtrt/tst/common/usdt
 dir path=opt/SUNWdtrt/tst/common/ustack
 dir path=opt/SUNWdtrt/tst/common/vars
 dir path=opt/SUNWdtrt/tst/common/version
-$(i386_ONLY)dir path=opt/SUNWdtrt/tst/i86xpv
-$(i386_ONLY)dir path=opt/SUNWdtrt/tst/i86xpv/xdt
 file path=opt/SUNWdtrt/README mode=0444
 file path=opt/SUNWdtrt/bin/$(ARCH32)/chkargs mode=0555
 file path=opt/SUNWdtrt/bin/$(ARCH64)/chkargs mode=0555
@@ -2074,11 +2072,5 @@ file path=opt/SUNWdtrt/tst/common/vars/tst.ucaller.ksh.out mode=0444
 file path=opt/SUNWdtrt/tst/common/vars/tst.uid.d mode=0444
 file path=opt/SUNWdtrt/tst/common/vars/tst.walltimestamp.d mode=0444
 file path=opt/SUNWdtrt/tst/common/version/tst.1.0.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.basic.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.hvmenable.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.memenable.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.schedargs.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.schedenable.ksh \
-    mode=0444
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

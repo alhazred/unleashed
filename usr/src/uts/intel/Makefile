@@ -77,7 +77,7 @@ CLOBBERFILES += $(PRIVS_C)
 # Prerequisites
 #
 # The uts/Makefile defines build parallelism for x86 platforms such that i86pc,
-# i86xpv and intel are all built in parallel. This requires building certain
+# and intel are all built in parallel. This requires building certain
 # parts before the parallel build can start. The uts/Makefile appends the
 # '.prereq' string to the original target and executes this Makefile to build
 # any prerequisites needed before the full parallel build can start. After that

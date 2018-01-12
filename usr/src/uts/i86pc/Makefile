@@ -50,13 +50,13 @@ INITIAL_TARGETS = \
 	cpu/scripts
 
 def all clean clobber: setup genassym unix .WAIT \
-	$(KMODS) $(XMODS) $(IMPLEMENTATIONS)
+	$(KMODS) $(XMODS)
 
 install: install_platforms setup genassym unix .WAIT \
-	$(KMODS) $(XMODS) $(IMPLEMENTATIONS)
+	$(KMODS) $(XMODS)
 
 # list the modules under i86pc.
-modlist: unix $(KMODS) $(XMODS) $(IMPLEMENTATIONS)
+modlist: unix $(KMODS) $(XMODS)
 
 # list the modules for Install -k i86pc.
 modlist.karch: modlist modlist.intel
@@ -70,9 +70,6 @@ genassym unix $(KMODS):	FRC
 setup: FRC
 	@cd cpu/scripts; pwd; $(MAKE) $(TARGET)
 
-$(IMPLEMENTATIONS):     FRC
-	@cd $@; pwd; THISIMPL=$@ $(MAKE) $(NO_STATE) $(TARGET)
-
 $(XMODS):	FRC
 	@if [ -f $@/Makefile  ]; then \
 		cd $@; pwd; $(MAKE) $(NO_STATE) $(TARGET); \
@@ -80,7 +77,7 @@ $(XMODS):	FRC
 		true; \
 	fi
 
-install_h check:	$(IMPLEMENTATIONS) FRC
+install_h check:	FRC
 
 #
 # Definitions for the /platform directory aliases.

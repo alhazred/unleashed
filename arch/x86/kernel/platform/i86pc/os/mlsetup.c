@@ -63,11 +63,6 @@
 #include <sys/pci_cfgspace.h>
 #include <sys/bootvfs.h>
 #include <sys/tsc.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#else
-#include <sys/xpv_support.h>
-#endif
 
 /*
  * some globals for patching the result of cpuid
@@ -183,9 +178,6 @@ mlsetup(struct regs *rp)
 	cpuid_pass1(cpu[0], x86_featureset);
 
 #if !defined(__xpv)
-	if ((get_hwenv() & HW_XEN_HVM) != 0)
-		xen_hvm_init();
-
 	/*
 	 * Before we do anything with the TSCs, we need to work around
 	 * Intel erratum BT81.  On some CPUs, warm reset does not
