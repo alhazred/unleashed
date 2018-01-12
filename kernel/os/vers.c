@@ -29,9 +29,3 @@ struct utsname utsname = {
 	.version = UTS_VERSION,
 	.machine = UTS_PLATFORM,
 };
-
-void utsname_set_machine(const char *machine)
-{
-	strncpy(utsname.machine, machine, _SYS_NMLN);
-	utsname.machine[_SYS_NMLN - 1] = '\0';
-}

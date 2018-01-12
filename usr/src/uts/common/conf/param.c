@@ -25,6 +25,7 @@
  * Copyright 2012 Milan Jurik. All rights reserved.
  */
 
+#include <sys/cfgparam.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/param.h>
@@ -504,32 +505,21 @@ struct var v;			/* System Configuration Information */
  */
 char hw_serial[HW_HOSTID_LEN] = "0";
 
-#if defined(__sparc)
+#if defined(__sparc) || defined(__amd64)
 
-/*
- * On sparc machines, read hw_serial from the firmware at boot time
- * and simply assert Oracle is the hardware provider.
- */
-char architecture[] = "sparcv9";
-char architecture_32[] = "sparc";
-char hw_provider[] = "Oracle Corporation";
+char architecture[] = CONFIG_MACH64_STR;
+char architecture_32[] = CONFIG_MACH_STR;
 
 #elif defined(__i386)
 
-char architecture[] = "i386";
-char architecture_32[] = "i386";
-char hw_provider[SYS_NMLN] = "";
-
-#elif defined(__amd64)
-
-char architecture[] = "amd64";
-char architecture_32[] = "i386";
-char hw_provider[SYS_NMLN] = "";
+char architecture[] = CONFIG_MACH_STR;
+char architecture_32[] = CONFIG_MACH_STR;
 
 #else
 #error "unknown processor architecture"
 #endif
 
+char hw_provider[SYS_NMLN] = "";
 char srpc_domain[SYS_NMLN] = "";
 char platform[SYS_NMLN] = "";	/* read from the devinfo root node */
 

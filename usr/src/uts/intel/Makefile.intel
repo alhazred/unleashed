@@ -284,7 +284,6 @@ DRV_KMODS	+= rpcib
 DRV_KMODS	+= rsm
 DRV_KMODS	+= rts
 DRV_KMODS	+= sad
-DRV_KMODS	+= sd
 DRV_KMODS	+= sdhost
 DRV_KMODS	+= sgen
 DRV_KMODS	+= si3124

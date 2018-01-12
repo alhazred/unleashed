@@ -98,7 +98,6 @@ MANIFEST_SUBDIRS=			\
 	cmd-inet/usr.sbin/in.routed	\
 	cmd-inet/usr.sbin/in.talkd	\
 	cmd-inet/usr.sbin/ipsecutils	\
-	dcs/sparc/sun4u			\
 	dfs.cmds/sharemgr		\
 	fs.d/autofs			\
 	fs.d/nfs/svc			\

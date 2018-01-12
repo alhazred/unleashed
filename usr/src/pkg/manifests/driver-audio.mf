@@ -44,7 +44,6 @@ dir path=usr/share/man/man7d
 dir path=usr/share/man/man7i
 driver name=audio perms="* 0666 root sys"
 driver name=audio1575 alias=pci10b9,5455
-$(sparc_ONLY)driver name=audiocs alias=SUNW,CS4231
 driver name=audioens \
     alias=pci1274,1371 \
     alias=pci1274,5880
@@ -52,7 +51,6 @@ driver name=audiopci alias=pci1274,5000
 driver name=audiots alias=pci10b9,5451
 file path=kernel/drv/$(ARCH64)/audio group=sys
 file path=kernel/drv/$(ARCH64)/audio1575 group=sys
-$(sparc_ONLY)file path=kernel/drv/$(ARCH64)/audiocs group=sys
 file path=kernel/drv/$(ARCH64)/audioens group=sys
 file path=kernel/drv/$(ARCH64)/audiopci group=sys
 file path=kernel/drv/$(ARCH64)/audiots group=sys
@@ -60,7 +58,6 @@ file path=kernel/drv/audio.conf group=sys
 file path=kernel/misc/$(ARCH64)/ac97 group=sys mode=0755
 file path=usr/share/man/man7d/audio.7d
 file path=usr/share/man/man7d/audio1575.7d
-$(sparc_ONLY)file path=usr/share/man/man7d/audiocs.7d
 file path=usr/share/man/man7d/audioens.7d
 file path=usr/share/man/man7d/audiopci.7d
 file path=usr/share/man/man7d/audiots.7d

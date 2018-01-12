@@ -142,7 +142,6 @@ TAR=		/usr/bin/tar
 ASTBINDIR=	/usr/ast/bin
 MSGCC=		$(ASTBINDIR)/msgcc
 MSGFMT=		/usr/bin/msgfmt -s
-SETLEGACYUNAME:sh=  if [ `uname` != SunOS ]; then echo puname; fi
 
 FILEMODE=	644
 DIRMODE=	755

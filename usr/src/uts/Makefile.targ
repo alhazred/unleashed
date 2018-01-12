@@ -67,18 +67,15 @@ $(MODSTUBS_O):	$(MODSTUBS)
 # Build the source file which contains the kernel's utsname,
 # with release, version and machine set as follows:
 #
-#	release: contents of $(RELEASE) (Spaces replaced by '_')
 #	version: contents of $(PATCHID) (Spaces replaced by '_')
-#	sysname: contents of $(SYSNAME)
 #	machine: contents of $(UNAME_M)
 #
 # Build environment information is only contained in the comment section.
 #
 
 $(OBJS_DIR)/vers.o: $(OBJECTS)
-	$(COMPILE.c) -DUTS_RELEASE=\"`$(ECHO) $(RELEASE) | sed -e 's/ /_/g'`\" \
+	$(COMPILE.c) \
 	    -DUTS_VERSION=\"`$(ECHO) $(PATCHID) | sed -e 's/ /_/g'`\" \
-	    -DUTS_SYSNAME=\"$(SYSNAME)\" \
 	    -DUTS_PLATFORM=\"$(UNAME_M)\" -o $@ $(SRCTOP)/kernel/os/vers.c
 	$(CTFCONVERT_O)
 	$(POST_PROCESS_O)

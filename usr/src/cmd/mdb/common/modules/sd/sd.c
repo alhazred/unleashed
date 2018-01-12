@@ -289,7 +289,6 @@ init_softstate_members(mdb_walk_state_t *wsp)
 	return (WALK_NEXT);
 }
 
-#if (!defined(__fibre))
 /*
  *    Function: sd_state_walk_init
  *
@@ -314,35 +313,6 @@ sd_state_walk_init(mdb_walk_state_t *wsp)
 
 	return (init_softstate_members(wsp));
 }
-
-#else
-
-/*
- *    Function: ssd_state_walk_init
- *
- * Description: MDB calls the init function to initiate the walk,
- *		in response to mdb_walk() function called by the
- *		dcmd 'ssd_state' or when the user executes the
- *		walk dcmd '::walk ssd_state'.
- *		The init function initializes the walker to either
- *		the user specified address or the default kernel
- *		'ssd_state' pointer.
- *
- *   Arguments: new mdb_walk_state_t structure
- */
-static int
-ssd_state_walk_init(mdb_walk_state_t *wsp)
-{
-	if (wsp->walk_addr == NULL &&
-	    mdb_readvar(&wsp->walk_addr, "ssd_state") == -1) {
-		mdb_warn("failed to read 'ssd_state'");
-		return (WALK_ERR);
-	}
-
-	return (init_softstate_members(wsp));
-}
-#endif
-
 
 /*
  *    Function: sd_state_walk_step
@@ -699,7 +669,6 @@ sd_callback(uintptr_t addr, const void *walk_data, void *flg_silent)
 	return (SUCCESS);
 }
 
-#if (!defined(__fibre))
 /*
  *    Function: dcmd_sd_state
  *
@@ -770,78 +739,6 @@ dcmd_sd_state(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	return (DCMD_OK);
 }
 
-#else
-
-/*
- *    Function: dcmd_ssd_state
- *
- * Description: Scans through the ssd soft state entries and prints their
- *		contents including of various queues it contains. It uses
- *		'ssd_state' walker to perform a global walk. If a particular
- *		soft state address is specified than it performs the above job
- *		itself (local walk).
- *
- *   Arguments: addr -> user specified address or NULL if no address is
- *			specified.
- *		flags -> integer reflecting whether an address was specified,
- *			 or if it was invoked by the walker in a loop etc.
- *		argc -> the number of arguments supplied to the dcmd.
- *		argv -> the actual arguments supplied by the user.
- */
-/*ARGSUSED*/
-static int
-dcmd_ssd_state(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
-{
-	struct sd_lun	sdLun;
-	uint_t		silent = 0;
-
-	/* Enable the silent mode if '-s' option specified the user */
-	if (mdb_getopts(argc, argv, 's', MDB_OPT_SETBITS, TRUE, &silent, NULL)
-	    != argc) {
-		return (DCMD_USAGE);
-	}
-
-	/*
-	 * If no address is specified on the command line, perform
-	 * a global walk invoking 'sd_state' walker. If a particular address
-	 * is specified then print the soft state and its queues.
-	 */
-	if (!(flags & DCMD_ADDRSPEC)) {
-		mdb_walk("ssd_state", sd_callback, (void *)&silent);
-		return (DCMD_OK);
-	} else {
-		mdb_printf("\nun: %lx\n", addr);
-		mdb_printf("--------------\n");
-
-		/* read the sd_lun struct and print the contents */
-		if (mdb_vread(&sdLun, sizeof (struct sd_lun),
-		    (uintptr_t)addr) == sizeof (sdLun)) {
-			if (!silent) {
-				mdb_set_dot(addr);
-				mdb_eval("$<sd_lun");
-				mdb_printf("---\n");
-			}
-		} else {
-			mdb_warn("failed to read softstate at %p", addr);
-			return (DCMD_OK);
-		}
-
-		/* process Xbuf Attr struct and wait Q for the soft state */
-		process_xbuf((uintptr_t)sdLun.un_xbuf_attr, silent);
-
-		/* process device' cmd wait Q */
-		process_sdlun_waitq((uintptr_t)sdLun.un_waitq_headp, silent);
-
-		/* process device's semoclose wait Q */
-		if (sdLun.un_semoclose._opaque[1] == 0) {
-			process_semo_sleepq(
-			    (uintptr_t)sdLun.un_semoclose._opaque[0], silent);
-		}
-	}
-	return (DCMD_OK);
-}
-#endif
-
 /*
  *    Function: dcmd_buf_avforw
  *
@@ -891,24 +788,15 @@ dcmd_buf_avforw(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 
 static const mdb_dcmd_t dcmds[] = {
 	{ "buf_avforw", ":", "buf_t list via av_forw", dcmd_buf_avforw},
-#if (!defined(__fibre))
 	{ "sd_state", "[-s]", "sd soft state list", dcmd_sd_state},
-#else
-	{ "ssd_state", "[-s]", "ssd soft state list", dcmd_ssd_state},
-#endif
 	{ NULL }
 };
 
 static const mdb_walker_t walkers[] = {
 	{ "buf_avforw", "walk list of buf_t structures via av_forw",
 	buf_avforw_walk_init, buf_avforw_walk_step, buf_avforw_walk_fini },
-#if (!defined(__fibre))
 	{ "sd_state", "walk all sd soft state queues",
 		sd_state_walk_init, sd_state_walk_step, sd_state_walk_fini },
-#else
-	{ "ssd_state", "walk all ssd soft state queues",
-		ssd_state_walk_init, sd_state_walk_step, sd_state_walk_fini },
-#endif
 	{ NULL }
 };
 

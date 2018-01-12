@@ -213,7 +213,6 @@ We supply a set of commonly-used macros for use in package manifests.
 These are the PKGMOG_DEFINES in usr/src/pkg/Makefile.
 
 	$(i386_ONLY)
-	$(sparc_ONLY)
 	$(ARCH)
 	$(ARCH32)
 	$(ARCH64)

@@ -114,7 +114,6 @@ dir path=lib/svc/manifest/network/rpc group=sys
 dir path=lib/svc/manifest/network/shares group=sys
 dir path=lib/svc/manifest/network/ssl group=sys
 dir path=lib/svc/manifest/platform group=sys
-$(sparc_ONLY)dir path=lib/svc/manifest/platform/sun4u group=sys
 dir path=lib/svc/manifest/site group=sys
 dir path=lib/svc/manifest/system group=sys
 dir path=lib/svc/manifest/system/device group=sys
@@ -271,8 +270,6 @@ dir path=var/svc/manifest/network/security group=sys
 dir path=var/svc/manifest/network/shares group=sys
 dir path=var/svc/manifest/network/ssl group=sys
 dir path=var/svc/manifest/platform group=sys
-$(sparc_ONLY)dir path=var/svc/manifest/platform/sun4u group=sys
-$(sparc_ONLY)dir path=var/svc/manifest/platform/sun4v group=sys
 dir path=var/svc/manifest/site group=sys
 dir path=var/svc/manifest/system group=sys
 dir path=var/svc/manifest/system/device group=sys
@@ -406,22 +403,7 @@ file path=etc/svc/profile/ns_files.xml group=sys mode=0444
 file path=etc/svc/profile/ns_ldap.xml group=sys mode=0444
 file path=etc/svc/profile/ns_nis.xml group=sys mode=0444
 file path=etc/svc/profile/ns_none.xml group=sys mode=0444
-$(sparc_ONLY)file path=etc/svc/profile/platform_SUNW,SPARC-Enterprise.xml \
-    group=sys mode=0444
-$(sparc_ONLY)file path=etc/svc/profile/platform_SUNW,Sun-Fire-15000.xml \
-    group=sys mode=0444
-$(sparc_ONLY)file path=etc/svc/profile/platform_SUNW,Sun-Fire-880.xml \
-    group=sys mode=0444
-$(sparc_ONLY)file path=etc/svc/profile/platform_SUNW,Sun-Fire.xml group=sys \
-    mode=0444
-$(sparc_ONLY)file \
-    path=etc/svc/profile/platform_SUNW,Ultra-Enterprise-10000.xml group=sys \
-    mode=0444
-$(sparc_ONLY)file \
-    path=etc/svc/profile/platform_SUNW,UltraSPARC-IIi-Netract.xml group=sys \
-    mode=0444
 file path=etc/svc/profile/platform_none.xml group=sys mode=0444
-$(sparc_ONLY)file path=etc/svc/profile/platform_sun4v.xml group=sys mode=0444
 file path=etc/sysevent/config/README group=sys mode=0444
 file path=etc/sysevent/config/SUNW,EC_dr,ESC_dr_req,sysevent.conf group=sys
 file path=etc/syslog.conf group=sys preserve=true
@@ -814,7 +796,6 @@ file path=usr/lib/devfsadm/linkmod/SUNW_sgen_link.so group=sys
 file path=usr/lib/devfsadm/linkmod/SUNW_smp_link.so group=sys
 file path=usr/lib/devfsadm/linkmod/SUNW_tape_link.so group=sys
 file path=usr/lib/devfsadm/linkmod/SUNW_usb_link.so group=sys
-$(i386_ONLY)file path=usr/lib/devfsadm/linkmod/SUNW_xen_link.so group=sys
 file path=usr/lib/diffh mode=0555
 file path=usr/lib/fs/bootfs/mount mode=0555
 file path=usr/lib/fs/ctfs/mount mode=0555
@@ -1061,7 +1042,6 @@ file path=usr/lib/idmapd mode=0555
 file path=usr/lib/inet/inetd mode=0555
 file path=usr/lib/intrd mode=0555
 file path=usr/lib/isaexec mode=0555
-$(sparc_ONLY)file path=usr/lib/ld.so
 file path=usr/lib/libshare.so.1
 file path=usr/lib/more.help
 file path=usr/lib/newsyslog group=sys mode=0555
@@ -1079,7 +1059,6 @@ file path=usr/lib/rcm/modules/SUNW_ip_rcm.so mode=0555
 file path=usr/lib/rcm/modules/SUNW_mpxio_rcm.so mode=0555
 file path=usr/lib/rcm/modules/SUNW_network_rcm.so mode=0555
 file path=usr/lib/rcm/modules/SUNW_swap_rcm.so mode=0555
-$(sparc_ONLY)file path=usr/lib/rcm/modules/SUNW_ttymux_rcm.so mode=0555
 file path=usr/lib/rcm/modules/SUNW_vlan_rcm.so mode=0555
 file path=usr/lib/rcm/modules/SUNW_vnic_rcm.so mode=0555
 file path=usr/lib/rcm/rcm_daemon mode=0555
@@ -1247,7 +1226,6 @@ file path=usr/sbin/unshareall mode=0555
 file path=usr/sbin/useradd group=sys mode=0555
 file path=usr/sbin/userdel group=sys mode=0555
 file path=usr/sbin/usermod group=sys mode=0555
-$(sparc_ONLY)file path=usr/sbin/virtinfo mode=0555
 file path=usr/sbin/volcopy mode=0555
 file path=usr/sbin/wall group=tty mode=2555
 file path=usr/sbin/zdump mode=0555
@@ -1269,14 +1247,6 @@ file path=var/saf/zsmon/log group=sys preserve=true
 file path=var/spool/cron/crontabs/adm group=sys mode=0600 preserve=true
 file path=var/spool/cron/crontabs/root group=sys mode=0600 preserve=true
 hardlink path=etc/rc2.d/S20sysetup target=../../etc/init.d/sysetup
-$(sparc_ONLY)hardlink path=etc/svc/profile/platform_SUNW,Sun-Fire-V890.xml \
-    target=./platform_SUNW,Sun-Fire-880.xml
-$(sparc_ONLY)hardlink \
-    path=etc/svc/profile/platform_SUNW,UltraSPARC-IIe-NetraCT-40.xml \
-    target=./platform_SUNW,UltraSPARC-IIi-Netract.xml
-$(sparc_ONLY)hardlink \
-    path=etc/svc/profile/platform_SUNW,UltraSPARC-IIe-NetraCT-60.xml \
-    target=./platform_SUNW,UltraSPARC-IIi-Netract.xml
 hardlink path=sbin/rc5 target=../sbin/rc0
 hardlink path=sbin/rc6 target=../sbin/rc0
 hardlink path=usr/bin/$(ARCH32)/encrypt target=decrypt
@@ -1378,7 +1348,6 @@ hardlink path=usr/sbin/pbind target=../../usr/lib/isaexec
 hardlink path=usr/sbin/ports target=./devfsadm
 hardlink path=usr/sbin/poweroff target=./halt
 hardlink path=usr/sbin/prtconf target=../../usr/lib/isaexec
-$(sparc_ONLY)hardlink path=usr/sbin/prtdiag target=../../usr/lib/platexec
 hardlink path=usr/sbin/psrset target=../../usr/lib/isaexec
 hardlink path=usr/sbin/reboot target=./halt
 hardlink path=usr/sbin/rem_drv target=../../usr/lib/isaexec

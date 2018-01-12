@@ -148,7 +148,6 @@ extern int is_grub(const char *);
 extern char *s_strdup(char *);
 extern int is_sparc(void);
 extern int is_zfs(char *);
-extern int bootadm_digest(const char *, char **);
 
 #define	BAM_MAXLINE	8192
 
@@ -182,9 +181,6 @@ extern int bootadm_digest(const char *, char **);
 #define	AMD_UNIX_SPACE	"/amd64/unix "
 #define	UNIX_SPACE	"/unix "
 
-/* xVM kernels */
-#define	XEN_KERNEL_SUBSTR "xen.gz"
-
 /* Boot archives */
 #define	ARCHIVE_PREFIX		"/platform/"
 #define	ARCHIVE_SUFFIX		"/boot_archive"
@@ -198,16 +194,6 @@ extern int bootadm_digest(const char *, char **);
 #define	CACHEDIR_64		"/platform/i86pc/amd64/archive_cache"
 #define	UPDATEDIR_32		"/platform/i86pc/updates"
 #define	UPDATEDIR_64		"/platform/i86pc/amd64/updates"
-
-/* Hypervisors */
-#define	XEN_64			"/boot/amd64/xen.gz"
-#define	XEN_MENU		"/boot/$ISADIR/xen.gz"
-#define	HYPERVISOR_KERNEL	"/platform/i86xpv/kernel/$ISADIR/unix"
-
-/* Helpers */
-#define	MKISOFS_PATH		"/usr/bin/mkisofs"
-#define	DD_PATH_USR		"/usr/bin/dd"
-#define	LOCKFS_PATH		"/usr/sbin/lockfs"
 
 /* A first guess at the number of entries in a menu */
 #define	BAM_ENTRY_NUM		10

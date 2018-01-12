@@ -18,9 +18,9 @@
    ISA64
    'amd64)
 
- (select
+ (const
    PLATFORM
-   ('i86pc 'i86xpv))
+   'i86pc)
 
  (const
    ; Build 64-bit kernel modules

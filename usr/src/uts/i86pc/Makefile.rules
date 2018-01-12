@@ -218,10 +218,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/xsvc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/xen/os/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

@@ -64,7 +64,6 @@ dir path=usr/lib/mdb group=sys
 dir path=usr/lib/mdb/kvm group=sys
 dir path=usr/lib/mdb/kvm/$(ARCH64) group=sys
 dir path=usr/lib/mdb/proc group=sys
-$(sparc_ONLY)dir path=usr/lib/mdb/proc/$(ARCH64) group=sys
 $(i386_ONLY)dir path=usr/lib/mdb/proc/$(ARCH64)
 dir path=usr/lib/python$(PYTHON_VERSION)
 dir path=usr/lib/python$(PYTHON_VERSION)/vendor-packages

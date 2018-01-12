@@ -29,15 +29,7 @@ MACHDEMOFILES= \
 		i386/Makefile \
 		amd64/regs.c \
 		amd64/rdb_mach.h \
-		amd64/Makefile \
-		sparc/regs.c \
-		sparc/m_utils.c \
-		sparc/rdb_mach.h \
-		sparc/Makefile \
-		sparcv9/regs.c \
-		sparcv9/m_utils.c \
-		sparcv9/rdb_mach.h \
-		sparcv9/Makefile
+		amd64/Makefile
 
 DEMOFILES= \
 		00README \
@@ -64,7 +56,6 @@ DEMOFILES= \
 		tests/object_padding_maps \
 		tests/plt_skip \
 		tests/steps \
-		tests/test-sparc-regs \
 		tests/simp.c \
 		tests/sub.c \
 		$(MACHDEMOFILES)
@@ -75,9 +66,7 @@ ROOTDEMODIRS=	$(ROOTDEMODIRBASE) \
 		$(ROOTDEMODIRBASE)/common \
 		$(ROOTDEMODIRBASE)/tests \
 		$(ROOTDEMODIRBASE)/i386 \
-		$(ROOTDEMODIRBASE)/amd64 \
-		$(ROOTDEMODIRBASE)/sparc \
-		$(ROOTDEMODIRBASE)/sparcv9
+		$(ROOTDEMODIRBASE)/amd64
 
 ROOTDEMOFILES=	$(DEMOFILES:%=$(ROOTDEMODIRBASE)/%)
 
@@ -119,12 +108,6 @@ $(ROOTDEMODIRBASE)/common/%:	common/%
 		$(INS.file)
 
 $(ROOTDEMODIRBASE)/tests/%:	tests/%
-		$(INS.file)
-
-$(ROOTDEMODIRBASE)/sparc/%:	sparc/%
-		$(INS.file)
-
-$(ROOTDEMODIRBASE)/sparcv9/%:	sparcv9/%
 		$(INS.file)
 
 $(ROOTDEMODIRBASE)/i386/%:	i386/%

@@ -40,7 +40,6 @@ dir path=opt/SUNWdtrt/tst/$(ARCH)/arrays
 $(i386_ONLY)dir path=opt/SUNWdtrt/tst/$(ARCH)/error
 $(i386_ONLY)dir path=opt/SUNWdtrt/tst/$(ARCH)/funcs
 dir path=opt/SUNWdtrt/tst/$(ARCH)/pid
-$(sparc_ONLY)dir path=opt/SUNWdtrt/tst/$(ARCH)/usdt
 dir path=opt/SUNWdtrt/tst/$(ARCH)/ustack
 dir path=opt/SUNWdtrt/tst/common
 dir path=opt/SUNWdtrt/tst/common/aggs
@@ -124,8 +123,6 @@ dir path=opt/SUNWdtrt/tst/common/usdt
 dir path=opt/SUNWdtrt/tst/common/ustack
 dir path=opt/SUNWdtrt/tst/common/vars
 dir path=opt/SUNWdtrt/tst/common/version
-$(i386_ONLY)dir path=opt/SUNWdtrt/tst/i86xpv
-$(i386_ONLY)dir path=opt/SUNWdtrt/tst/i86xpv/xdt
 file path=opt/SUNWdtrt/README mode=0444
 file path=opt/SUNWdtrt/bin/$(ARCH32)/chkargs mode=0555
 file path=opt/SUNWdtrt/bin/$(ARCH64)/chkargs mode=0555
@@ -145,16 +142,8 @@ $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyout.d \
     mode=0444
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyoutstr.d \
     mode=0444
-$(sparc_ONLY)file \
-    path=opt/SUNWdtrt/tst/$(ARCH)/pid/err.D_PROC_ALIGN.misaligned.d mode=0444
-$(sparc_ONLY)file \
-    path=opt/SUNWdtrt/tst/$(ARCH)/pid/err.D_PROC_ALIGN.misaligned.exe \
-    mode=0555
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.badinstr.d mode=0444
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.badinstr.exe mode=0555
-$(sparc_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.br.d mode=0444
-$(sparc_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.br.d.out mode=0444
-$(sparc_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.br.exe mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.branch.d mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.branch.exe mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.embedded.d mode=0444
@@ -163,8 +152,6 @@ $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.ret.d mode=0444
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.ret.exe mode=0555
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.retlist.exe mode=0555
 $(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.retlist.ksh mode=0444
-$(sparc_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/usdt/tst.tailcall.ksh \
-    mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.annotated.d mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.annotated.d.out mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.annotated.exe mode=0555
@@ -173,8 +160,6 @@ file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.circstack.exe mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.helper.d mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.helper.d.out mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.helper.exe mode=0555
-$(sparc_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.trapstat.ksh \
-    mode=0444
 file path=opt/SUNWdtrt/tst/common/aggs/err.D_AGG_FUNC.bad.d mode=0444
 file path=opt/SUNWdtrt/tst/common/aggs/err.D_AGG_MDIM.bad.d mode=0444
 file path=opt/SUNWdtrt/tst/common/aggs/err.D_AGG_NULL.bad.d mode=0444
@@ -2087,11 +2072,5 @@ file path=opt/SUNWdtrt/tst/common/vars/tst.ucaller.ksh.out mode=0444
 file path=opt/SUNWdtrt/tst/common/vars/tst.uid.d mode=0444
 file path=opt/SUNWdtrt/tst/common/vars/tst.walltimestamp.d mode=0444
 file path=opt/SUNWdtrt/tst/common/version/tst.1.0.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.basic.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.hvmenable.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.memenable.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.schedargs.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/i86xpv/xdt/tst.schedenable.ksh \
-    mode=0444
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
