@@ -1660,11 +1660,7 @@ struct sd_fm_internal {
  * 100 msec. is what we'll wait for certain retries for fibre channel
  * targets, 0 msec for parallel SCSI.
  */
-#if defined(__fibre)
-#define	SD_RETRY_DELAY			(drv_usectohz(100000))
-#else
 #define	SD_RETRY_DELAY			((clock_t)0)
-#endif
 
 /*
  * 60 seconds is what we will wait for to reset the
@@ -1679,11 +1675,7 @@ struct sd_fm_internal {
  * (need to distinguish between Target and Transport failure)
  *
  */
-#if defined(__fibre)
-#define	SD_RETRY_COUNT			3
-#else
 #define	SD_RETRY_COUNT			5
-#endif
 
 /*
  * Number of times we will retry for unit attention.
@@ -1817,13 +1809,7 @@ struct sd_fm_internal {
  * Bit flag telling driver to set the controller type from sd.conf
  * sd-config-list and driver table.
  */
-#if defined(__i386) || defined(__amd64)
 #define	SD_CONF_SET_CTYPE		1
-#elif defined(__fibre)
-#define	SD_CONF_SET_CTYPE		5
-#else
-#define	SD_CONF_SET_CTYPE		1
-#endif
 #define	SD_CONF_BSET_CTYPE		(1 << SD_CONF_SET_CTYPE)
 
 /*
@@ -1832,8 +1818,6 @@ struct sd_fm_internal {
  */
 #if defined(__i386) || defined(__amd64)
 #define	SD_CONF_SET_NOTREADY_RETRIES	10
-#elif defined(__fibre)
-#define	SD_CONF_SET_NOTREADY_RETRIES	1
 #else
 #define	SD_CONF_SET_NOTREADY_RETRIES	2
 #endif
@@ -1845,8 +1829,6 @@ struct sd_fm_internal {
  */
 #if defined(__i386) || defined(__amd64)
 #define	SD_CONF_SET_BUSY_RETRIES 	11
-#elif defined(__fibre)
-#define	SD_CONF_SET_BUSY_RETRIES 	2
 #else
 #define	SD_CONF_SET_BUSY_RETRIES 	5
 #endif

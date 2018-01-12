@@ -36,40 +36,6 @@ extern "C" {
 #include <sys/taskq.h>
 
 
-#if (defined(__fibre))
-/*
- * These #defines are to avoid namespace collisions that occur because this
- * code is currently used to compile two seperate driver modules: sd and ssd.
- * All function names need to be treated this way (even if declared static)
- * in order to allow the debugger to resolve the names properly.
- * It is anticipated that in the near future the ssd module will be obsoleted,
- * at which time this ugliness should go away.
- */
-#define	ddi_xbuf_attr_create		ssd_ddi_xbuf_attr_create
-#define	ddi_xbuf_attr_destroy		ssd_ddi_xbuf_attr_destroy
-#define	ddi_xbuf_attr_register_devinfo	ssd_ddi_xbuf_attr_register_devinfo
-#define	ddi_xbuf_attr_unregister_devinfo	\
-					ssd_ddi_xbuf_attr_unregister_devinfo
-#define	ddi_xbuf_qstrategy		ssd_ddi_xbuf_qstrategy
-#define	ddi_xbuf_done			ssd_ddi_xbuf_done
-#define	ddi_xbuf_get			ssd_ddi_xbuf_get
-#define	xbuf_iostart			ssd_xbuf_iostart
-#define	xbuf_dispatch			ssd_xbuf_dispatch
-#define	xbuf_restart_callback		ssd_xbuf_restart_callback
-#define	xbuf_tq				ssd_xbuf_tq
-#define	xbuf_attr_tq_minalloc		ssd_xbuf_attr_tq_minalloc
-#define	xbuf_attr_tq_maxalloc		ssd_xbuf_attr_tq_maxalloc
-#define	xbuf_mutex			ssd_xbuf_mutex
-#define	xbuf_refcount			ssd_xbuf_refcount
-
-#define	ddi_xbuf_dispatch		ssd_ddi_xbuf_dispatch
-
-#define	ddi_xbuf_flushq			ssd_ddi_xbuf_flushq
-#define	ddi_xbuf_attr_setup_brk		ssd_ddi_xbuf_attr_setup_brk
-
-#endif
-
-
 typedef void *		ddi_xbuf_t;
 
 

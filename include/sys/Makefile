@@ -17,7 +17,6 @@ i386_INCS=			\
 
 sparc_INCSS= 			\
 	mouse.h			\
-	scsi/targets/ssddef.h	\
 	$(MDESCHDRS)
 
 INCDIR=	/usr/include/sys
