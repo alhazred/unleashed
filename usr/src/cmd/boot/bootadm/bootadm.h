@@ -181,9 +181,6 @@ extern int is_zfs(char *);
 #define	AMD_UNIX_SPACE	"/amd64/unix "
 #define	UNIX_SPACE	"/unix "
 
-/* xVM kernels */
-#define	XEN_KERNEL_SUBSTR "xen.gz"
-
 /* Boot archives */
 #define	ARCHIVE_PREFIX		"/platform/"
 #define	ARCHIVE_SUFFIX		"/boot_archive"
@@ -197,11 +194,6 @@ extern int is_zfs(char *);
 #define	CACHEDIR_64		"/platform/i86pc/amd64/archive_cache"
 #define	UPDATEDIR_32		"/platform/i86pc/updates"
 #define	UPDATEDIR_64		"/platform/i86pc/amd64/updates"
-
-/* Hypervisors */
-#define	XEN_64			"/boot/amd64/xen.gz"
-#define	XEN_MENU		"/boot/$ISADIR/xen.gz"
-#define	HYPERVISOR_KERNEL	"/platform/i86xpv/kernel/$ISADIR/unix"
 
 /* A first guess at the number of entries in a menu */
 #define	BAM_ENTRY_NUM		10
