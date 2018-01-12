@@ -47,6 +47,9 @@ SUPPRESSPKGDEP= false
 #
 PKGDEBUG= @
 
+# Hackery to deal with uname transition
+SETLEGACYUNAME:sh=  if [ `uname` != SunOS ]; then echo puname; fi
+
 #
 # Cross platform packaging notes
 #
