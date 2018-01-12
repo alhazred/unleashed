@@ -10,6 +10,7 @@ changed.
 <next> release
 --------------
  - 32-bit x86 kernel support (32-bit x86 applications are still supported)
+ - sparc support
  - Trusted Solaris aka. Trusted Extensions
  - SVR4 pkg support & code
  - solaris10 zone brand

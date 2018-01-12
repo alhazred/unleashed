@@ -34,9 +34,6 @@ set name=pkg.description value="SD/MMC Drivers"
 set name=pkg.summary value="SD/MMC Drivers"
 set name=info.classification \
     value=org.opensolaris.category.2008:Drivers/Storage
-# SUNWsdcard doesn't deliver anything for sparc, but we keep delivering
-# the package on sparc because we can't use direct obsolete support to
-# obsolete only one variant.
 set name=variant.arch value=$(ARCH)
 $(i386_ONLY)dir path=kernel group=sys
 $(i386_ONLY)dir path=kernel/drv group=sys

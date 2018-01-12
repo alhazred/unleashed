@@ -41,7 +41,6 @@ dir path=kernel/drv/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 $(i386_ONLY)driver name=hxge alias=pci108e,aaaa perms="* 0600 root sys"
-$(sparc_ONLY)driver name=hxge alias=pciex108e,aaaa perms="* 0600 root sys"
 file path=kernel/drv/$(ARCH64)/hxge group=sys
 file path=kernel/drv/hxge.conf group=sys preserve=renamenew
 file path=usr/share/man/man7d/hxge.7d

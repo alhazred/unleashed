@@ -53,10 +53,6 @@ i386_DIRS=			\
 	/platform/i86pc		\
 	/lib/libmvec
 
-sparc_DIRS=				\
-	/usr/lib/ldoms
-
-sparc_64ONLY= $(POUND_SIGN)
 64ONLY=  $($(MACH)_64ONLY)
 
 DIRS= \
@@ -176,8 +172,6 @@ DIRS= \
 	/lib/svc/manifest/application/management \
 	/lib/svc/manifest/application/security \
 	/lib/svc/manifest/platform \
-	/lib/svc/manifest/platform/sun4u \
-	/lib/svc/manifest/platform/sun4v \
 	/lib/svc/manifest/site \
 	/lib/svc/method \
 	/lib/svc/monitor \
@@ -358,26 +352,10 @@ DIRS= \
 	/var/svc/manifest/application/print \
 	/var/svc/manifest/application/security \
 	/var/svc/manifest/platform \
-	/var/svc/manifest/platform/sun4u \
-	/var/svc/manifest/platform/sun4v \
 	/var/svc/manifest/site \
 	/var/svc/profile \
 	/var/uucp \
 	/var/tmp
-
-sparcv9_DIRS64= \
-	/platform/sun4u \
-	/platform/sun4u/lib \
-	/platform/sun4u/lib/$(MACH64) \
-	/usr/platform/sun4u \
-	/usr/platform/sun4u/sbin \
-	/usr/platform/sun4u/lib \
-	/platform/sun4v/lib \
-	/platform/sun4v/lib/$(MACH64) \
-	/usr/platform/sun4v/sbin \
-	/usr/platform/sun4v/lib \
-	/usr/platform/sun4u-us3/lib \
-	/usr/platform/sun4u-opl/lib
 
 amd64_DIRS64= \
 	/platform/i86pc/amd64
@@ -446,8 +424,6 @@ SYM.DIRS= \
 	/usr/pub \
 	/usr/tmp \
 	/var/ld/32
-
-sparc_SYM.DIRS64=
 
 SYM.DIRS64= \
 	$($(MACH)_SYM.DIRS64) \
@@ -1169,8 +1145,6 @@ SYM.USRLIB= \
 	/usr/lib/nss_user.so.1 \
 	/usr/lib/fm/libfmevent.so \
 	/usr/lib/fm/libfmevent.so.1
-
-sparcv9_SYM.USRLIB64= 
 
 amd64_SYM.USRLIB64=	\
 	/usr/lib/amd64/libfdisk.so	\

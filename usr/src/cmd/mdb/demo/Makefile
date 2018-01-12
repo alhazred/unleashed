@@ -38,11 +38,9 @@ DEMOFILES = \
 	Makefile.common \
 	Makefile.i386 \
 	Makefile.amd64 \
-	Makefile.sparc \
-	Makefile.sparcv9 \
 	README
 
-DEMOSUBDIRS = common i386 amd64 sparc sparcv9
+DEMOSUBDIRS = common i386 amd64
 
 ROOTDEMODIR = $(ROOT)/usr/demo/mdb
 ROOTDEMOFILES = $(DEMOFILES:%=$(ROOTDEMODIR)/%)
