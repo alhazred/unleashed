@@ -245,9 +245,6 @@ static	int	lufs_logscan(void);
 extern	int	diskread(fileid_t *filep);
 extern	caddr_t	resalloc(enum RESOURCES, size_t, caddr_t, int);
 
-#if defined(__sparcv9)
-#define	LOGBUF_BASEADDR	((caddr_t)(SYSBASE - LOGBUF_MAXSIZE))
-#endif
 
 static int
 lufs_alloc_logbuf(void)

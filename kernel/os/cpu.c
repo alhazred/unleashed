@@ -73,9 +73,6 @@ extern void	mp_cpu_faulted_enter(cpu_t *);
 extern void	mp_cpu_faulted_exit(cpu_t *);
 
 extern int cmp_cpu_to_chip(processorid_t cpuid);
-#ifdef __sparcv9
-extern char *cpu_fru_fmri(cpu_t *cp);
-#endif
 
 static void cpu_add_active_internal(cpu_t *cp);
 static void cpu_remove_active(cpu_t *cp);
@@ -2161,10 +2158,6 @@ static struct {
 	kstat_named_t ci_curr_clock_Hz;
 	kstat_named_t ci_supp_freq_Hz;
 	kstat_named_t ci_pg_id;
-#if defined(__sparcv9)
-	kstat_named_t ci_device_ID;
-	kstat_named_t ci_cpu_fru;
-#endif
 #if defined(__x86)
 	kstat_named_t ci_vendorstr;
 	kstat_named_t ci_family;
@@ -2192,10 +2185,6 @@ static struct {
 	{ "current_clock_Hz",		KSTAT_DATA_UINT64 },
 	{ "supported_frequencies_Hz",	KSTAT_DATA_STRING },
 	{ "pg_id",			KSTAT_DATA_LONG },
-#if defined(__sparcv9)
-	{ "device_ID",			KSTAT_DATA_UINT64 },
-	{ "cpu_fru",			KSTAT_DATA_STRING },
-#endif
 #if defined(__x86)
 	{ "vendor_id",			KSTAT_DATA_STRING },
 	{ "family",			KSTAT_DATA_INT32 },
@@ -2270,11 +2259,6 @@ cpu_info_kstat_update(kstat_t *ksp, int rw)
 	    cp->cpu_pg->cmt_lineage->pg_id : -1;
 	kstat_named_setstr(&cpu_info_template.ci_supp_freq_Hz,
 	    cp->cpu_supp_freqs);
-#if defined(__sparcv9)
-	cpu_info_template.ci_device_ID.value.ui64 =
-	    cpunodes[cp->cpu_id].device_id;
-	kstat_named_setstr(&cpu_info_template.ci_cpu_fru, cpu_fru_fmri(cp));
-#endif
 #if defined(__x86)
 	kstat_named_setstr(&cpu_info_template.ci_vendorstr,
 	    cpuid_getvendorstr(cp));
@@ -2312,10 +2296,6 @@ cpu_info_kstat_create(cpu_t *cp)
 	    sizeof (cpu_info_template) / sizeof (kstat_named_t),
 	    KSTAT_FLAG_VIRTUAL | KSTAT_FLAG_VAR_SIZE, zoneid)) != NULL) {
 		cp->cpu_info_kstat->ks_data_size += 2 * CPU_IDSTRLEN;
-#if defined(__sparcv9)
-		cp->cpu_info_kstat->ks_data_size +=
-		    strlen(cpu_fru_fmri(cp)) + 1;
-#endif
 #if defined(__x86)
 		cp->cpu_info_kstat->ks_data_size += X86_VENDOR_STRLEN;
 #endif

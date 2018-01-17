@@ -366,36 +366,6 @@ shmat(int shmid, caddr_t uaddr, int uflags, uintptr_t *rvp)
 		}
 #endif /* __i386 || __amd64 */
 
-#if defined(__sparcv9)
-		if (addr == 0 &&
-		    pp->p_model == DATAMODEL_LP64 && AS_TYPE_64BIT(as)) {
-			/*
-			 * If no address has been passed in, and this is a
-			 * 64-bit process, we'll try to find an address
-			 * in the predict-ISM zone.
-			 */
-			caddr_t predbase = (caddr_t)PREDISM_1T_BASE;
-			size_t len = PREDISM_BOUND - PREDISM_1T_BASE;
-
-			as_purge(as);
-			if (as_gap(as, size + share_size, &predbase, &len,
-			    AH_LO, NULL) != -1) {
-				/*
-				 * We found an address which looks like a
-				 * candidate.  We want to round it up, and
-				 * then check that it's a valid user range.
-				 * This assures that we won't fail below.
-				 */
-				addr = (caddr_t)P2ROUNDUP((uintptr_t)predbase,
-				    share_size);
-
-				if (valid_usr_range(addr, size, prot,
-				    as, as->a_userlimit) != RANGE_OKAY) {
-					addr = 0;
-				}
-			}
-		}
-#endif /* __sparcv9 */
 
 		if (addr == 0) {
 			for (;;) {

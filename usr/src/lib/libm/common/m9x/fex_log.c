@@ -104,11 +104,7 @@ static struct exc_list {
 	char			*stack[1]; /* actual length is max(1,nstack) */
 } *list = NULL;
 
-#ifdef __sparcv9
-#define FRAMEP(X)	(struct frame *)((char*)(X)+(((long)(X)&1)?2047:0))
-#else
 #define FRAMEP(X)	(struct frame *)(X)
-#endif
 
 #ifdef _LP64
 #define PDIG		"16"

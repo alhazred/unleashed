@@ -1043,11 +1043,7 @@
 	cmp	counter,0
 	ble,pn	%icc,.end
 
-#ifdef	__sparcv9
-	ldx	[%fp+STACK_BIAS+176],stridez
-#else
 	ld	[%fp+STACK_BIAS+92],stridez
-#endif
 
 	ld	[px],%o0
 	add	LOGTBL,4095,EXPTBL

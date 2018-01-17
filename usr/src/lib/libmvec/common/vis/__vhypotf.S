@@ -154,11 +154,7 @@
 	PIC_SET(l7,.CONST_TBL,o3)
 	PIC_SET(l7,__vlibm_TBL_sqrtf,l1)
 
-#ifdef __sparcv9
-	ldx	[%fp+STACK_BIAS+176],stridez
-#else
 	ld	[%fp+STACK_BIAS+92],stridez
-#endif
 	st	%i0,[%fp+tmp_counter]
 
 	stx	%i1,[%fp+tmp_px]

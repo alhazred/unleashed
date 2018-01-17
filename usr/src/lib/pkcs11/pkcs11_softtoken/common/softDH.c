@@ -121,12 +121,7 @@ soft_dh_genkey_pair(soft_object_t *pubkey, soft_object_t *prikey)
 		return (rv);
 	}
 
-#ifdef	__sparcv9
-	/* LINTED */
-	value_bits = (uint32_t)(*((CK_ULONG *)(template.pValue)));
-#else	/* !__sparcv9 */
 	value_bits = *((CK_ULONG *)(template.pValue));
-#endif	/* __sparcv9 */
 
 	free(template.pValue);
 

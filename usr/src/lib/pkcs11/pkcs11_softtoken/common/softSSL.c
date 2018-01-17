@@ -423,12 +423,7 @@ soft_ssl_master_key_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
     CK_ULONG ulAttributeCount, CK_OBJECT_HANDLE_PTR phKey)
 {
 	uchar_t	*pmsecret = OBJ_SEC_VALUE(basekey_p);
-#ifdef	__sparcv9
-	/* LINTED */
-	uint_t pmlen = (uint_t)OBJ_SEC_VALUE_LEN(basekey_p);
-#else	/* __sparcv9 */
 	uint_t pmlen = OBJ_SEC_VALUE_LEN(basekey_p);
-#endif	/* __sparcv9 */
 	CK_SSL3_MASTER_KEY_DERIVE_PARAMS *mkd_params;
 	CK_SSL3_RANDOM_DATA *random_data;
 	CK_VERSION_PTR	pVersion;
@@ -479,15 +474,8 @@ soft_ssl_master_key_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
 	}
 
 	random_data = &mkd_params->RandomInfo;
-#ifdef	__sparcv9
-	/* LINTED */
-	ClientRandomLen = (uint_t)random_data->ulClientRandomLen;
-	/* LINTED */
-	ServerRandomLen = (uint_t)random_data->ulServerRandomLen;
-#else	/* __sparcv9 */
 	ClientRandomLen = random_data->ulClientRandomLen;
 	ServerRandomLen = random_data->ulServerRandomLen;
-#endif	/* __sparcv9 */
 
 	if (random_data->pClientRandom == NULL_PTR || ClientRandomLen == 0 ||
 	    random_data->pServerRandom == NULL_PTR || ServerRandomLen == 0) {
@@ -618,12 +606,7 @@ soft_ssl_key_and_mac_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
     CK_ULONG ulAttributeCount)
 {
 	uchar_t	*msecret = OBJ_SEC_VALUE(basekey_p);
-#ifdef	__sparcv9
-	/* LINTED */
-	uint_t mslen = (uint_t)OBJ_SEC_VALUE_LEN(basekey_p);
-#else	/* __sparcv9 */
 	uint_t mslen = OBJ_SEC_VALUE_LEN(basekey_p);
-#endif	/* __sparcv9 */
 	CK_SSL3_KEY_MAT_PARAMS *km_params;
 	CK_SSL3_RANDOM_DATA *random_data;
 	CK_SSL3_KEY_MAT_OUT *kmo;
@@ -653,15 +636,8 @@ soft_ssl_key_and_mac_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
 	isExport = (km_params->bIsExport == TRUE);
 
 	random_data = &km_params->RandomInfo;
-#ifdef	__sparcv9
-	/* LINTED */
-	ClientRandomLen = (uint_t)random_data->ulClientRandomLen;
-	/* LINTED */
-	ServerRandomLen = (uint_t)random_data->ulServerRandomLen;
-#else	/* __sparcv9 */
 	ClientRandomLen = random_data->ulClientRandomLen;
 	ServerRandomLen = random_data->ulServerRandomLen;
-#endif	/* __sparcv9 */
 
 	if (random_data->pClientRandom == NULL_PTR || ClientRandomLen == 0 ||
 	    random_data->pServerRandom == NULL_PTR || ServerRandomLen == 0) {
@@ -734,12 +710,7 @@ soft_ssl_key_and_mac_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
 
 	/* Now the actual secret derivation */
 
-#ifdef	__sparcv9
-	/* LINTED */
-	size = (uint_t)((mac_key_bytes + secret_key_bytes + iv_bytes) * 2);
-#else	/* __sparcv9 */
 	size = (mac_key_bytes + secret_key_bytes + iv_bytes) * 2;
-#endif	/* __sparcv9 */
 
 	/* Need to handle this better */
 	if (size > MAX_KEYBLOCK)
@@ -862,12 +833,7 @@ soft_ssl_key_and_mac_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
 				rv = CKR_HOST_MEMORY;
 				goto out_err;
 			}
-#ifdef	__sparcv9
-			/* LINTED */
-			soft_ssl_weaken_key(mech, kb, (uint_t)secret_key_bytes,
-#else	/* __sparcv9 */
 			soft_ssl_weaken_key(mech, kb, secret_key_bytes,
-#endif	/* __sparcv9 */
 			    random_data->pClientRandom, ClientRandomLen,
 			    random_data->pServerRandom, ServerRandomLen,
 			    export_keys, B_TRUE);
@@ -893,12 +859,7 @@ soft_ssl_key_and_mac_derive(soft_session_t *sp, CK_MECHANISM_PTR mech,
 
 	if (secret_key_bytes > 0) {
 		if (isExport) {
-#ifdef	__sparcv9
-			/* LINTED */
-			soft_ssl_weaken_key(mech, kb, (uint_t)secret_key_bytes,
-#else	/* __sparcv9 */
 			soft_ssl_weaken_key(mech, kb, secret_key_bytes,
-#endif	/* __sparcv9 */
 			    random_data->pServerRandom, ServerRandomLen,
 			    random_data->pClientRandom, ClientRandomLen,
 			    export_keys + MD5_HASH_SIZE, B_FALSE);

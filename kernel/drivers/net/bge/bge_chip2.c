@@ -3225,9 +3225,6 @@ bge_chip_reset_engine(bge_t *bgep, bge_regno_t regno)
 		 * to avoid.  Hence the need for membar_sync() here.
 		 */
 		ddi_put32(bgep->io_handle, PIO_ADDR(bgep, regno), regval);
-#ifdef	__sparcv9
-		membar_sync();
-#endif	/* __sparcv9 */
 		/*
 		 * On some platforms,system need about 300us for
 		 * link setup.

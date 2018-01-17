@@ -46,11 +46,7 @@ soft_remove_pkcs7_padding(CK_BYTE *pData, CK_ULONG padded_len,
 {
 	CK_RV	rv;
 
-#ifdef	__sparcv9
-	if ((rv = pkcs7_decode(pData, (&padded_len))) != CKR_OK)
-#else	/* !__sparcv9 */
 	if ((rv = pkcs7_decode(pData, (size_t *)(&padded_len))) != CKR_OK)
-#endif	/* __sparcv9 */
 		return (rv);
 
 	*pulDataLen = padded_len;

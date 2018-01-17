@@ -206,15 +206,6 @@ _getaddrinfo(const char *hostname, const char *servname,
 	aip->ai_family = PF_UNSPEC;
 	aip->ai_socktype = 0;
 	aip->ai_protocol = 0;
-#ifdef __sparcv9
-	/*
-	 * We need to clear _ai_pad to preserve binary
-	 * compatibility with previously compiled 64-bit
-	 * applications by guaranteeing the upper 32-bits
-	 * are empty.
-	 */
-	aip->_ai_pad = 0;
-#endif /* __sparcv9 */
 	aip->ai_addrlen = 0;
 	aip->ai_canonname = NULL;
 	aip->ai_addr = NULL;
@@ -245,13 +236,6 @@ _getaddrinfo(const char *hostname, const char *servname,
 		}
 
 		(void) memcpy(aip, hints, sizeof (*aip));
-#ifdef __sparcv9
-		/*
-		 * We need to clear _ai_pad to preserve binary
-		 * compatibility.  See prior comment.
-		 */
-		aip->_ai_pad = 0;
-#endif /* __sparcv9 */
 		switch (aip->ai_socktype) {
 		case ANY:
 			switch (aip->ai_protocol) {

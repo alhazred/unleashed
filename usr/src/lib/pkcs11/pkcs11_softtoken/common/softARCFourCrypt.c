@@ -50,12 +50,7 @@ soft_arcfour_crypt_init(soft_session_t *session_p, CK_MECHANISM_PTR pMechanism,
 	ARCFour_key *keystream;
 	crypto_active_op_t *active_op;
 
-#ifdef	__sparcv9
-	/* LINTED */
-	keyvallen = (int)OBJ_SEC_VALUE_LEN(key_p);
-#else	/* !__sparcv9 */
 	keyvallen = OBJ_SEC_VALUE_LEN(key_p);
-#endif	/* __sparcv9 */
 
 	if ((keyvallen < ARCFOUR_MIN_KEY_BYTES) ||
 	    (keyvallen > ARCFOUR_MAX_KEY_BYTES))

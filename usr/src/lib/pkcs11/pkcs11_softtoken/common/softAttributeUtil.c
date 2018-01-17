@@ -1570,13 +1570,8 @@ soft_build_public_key_object(CK_ATTRIBUTE_PTR template, CK_ULONG ulAttrNum,
 				 * designated place in the public key object.
 				 */
 				n.malloced = 0;
-#ifdef  __sparcv9
-				if (big_init(&n, (int)CHARLEN2BIGNUMLEN(
-				    modulus.big_value_len)) != BIG_OK) {
-#else   /* !__sparcv9 */
 				if (big_init(&n, CHARLEN2BIGNUMLEN(
 				    modulus.big_value_len)) != BIG_OK) {
-#endif  /* __sparcv9 */
 					rv = CKR_HOST_MEMORY;
 					big_finish(&n);
 					goto fail_cleanup;
@@ -2298,27 +2293,15 @@ soft_build_private_key_object(CK_ATTRIBUTE_PTR template, CK_ULONG ulAttrNum,
 			 * The private value x must be less than subprime q.
 			 * Size for big_init is in BIG_CHUNK_TYPE words.
 			 */
-#ifdef	__sparcv9
-			if (big_init(&x,
-			    (int)CHARLEN2BIGNUMLEN(value.big_value_len))
-			    != BIG_OK) {
-#else	/* !__sparcv9 */
 			if (big_init(&x,
 			    CHARLEN2BIGNUMLEN(value.big_value_len))
 			    != BIG_OK) {
-#endif	/* __sparcv9 */
 				rv = CKR_HOST_MEMORY;
 				goto fail_cleanup;
 			}
-#ifdef	__sparcv9
-			if (big_init(&q,
-			    (int)CHARLEN2BIGNUMLEN(subprime.big_value_len))
-			    != BIG_OK) {
-#else	/* !__sparcv9 */
 			if (big_init(&q,
 			    CHARLEN2BIGNUMLEN(subprime.big_value_len))
 			    != BIG_OK) {
-#endif	/* __sparcv9 */
 				rv = CKR_HOST_MEMORY;
 				goto fail_cleanup;
 			}
@@ -5147,15 +5130,8 @@ soft_get_public_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 
 	/* The following attributes belong to RSA */
 	case CKA_MODULUS:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PUB_RSA_MOD(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PUB_RSA_MOD(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5170,15 +5146,8 @@ soft_get_public_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_PUBLIC_EXPONENT:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PUB_RSA_PUBEXPO(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PUB_RSA_PUBEXPO(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5196,29 +5165,13 @@ soft_get_public_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 	case CKA_PRIME:
 
 		if (key->key_type == CKK_DSA)
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PUB_DSA_PRIME(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PUB_DSA_PRIME(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		else
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PUB_DH_PRIME(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PUB_DH_PRIME(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5238,15 +5191,8 @@ soft_get_public_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_SUBPRIME:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PUB_DSA_SUBPRIME(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PUB_DSA_SUBPRIME(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5263,29 +5209,13 @@ soft_get_public_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 	case CKA_BASE:
 
 		if (key->key_type == CKK_DSA)
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PUB_DSA_BASE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PUB_DSA_BASE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		else
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PUB_DH_BASE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PUB_DH_BASE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5306,29 +5236,13 @@ soft_get_public_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 	case CKA_VALUE:
 
 		if (key->key_type == CKK_DSA)
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PUB_DSA_VALUE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PUB_DSA_VALUE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		else
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PUB_DH_VALUE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PUB_DH_VALUE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5363,15 +5277,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 
 	/* The following attributes belong to RSA */
 	case CKA_MODULUS:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_MOD(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_MOD(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5386,15 +5293,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_PRIVATE_EXPONENT:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_PRIEXPO(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_PRIEXPO(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5409,15 +5309,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_PRIME_1:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_PRIME1(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_PRIME1(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		if (len > *value_len) {
 			return (CKR_ATTRIBUTE_VALUE_INVALID);
@@ -5435,15 +5328,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_PRIME_2:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_PRIME2(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_PRIME2(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		if (len > *value_len) {
 			return (CKR_ATTRIBUTE_VALUE_INVALID);
@@ -5461,15 +5347,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_EXPONENT_1:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_EXPO1(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_EXPO1(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		if (len > *value_len) {
 			return (CKR_ATTRIBUTE_VALUE_INVALID);
@@ -5487,15 +5366,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_EXPONENT_2:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_EXPO2(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_EXPO2(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		if (len > *value_len) {
 			return (CKR_ATTRIBUTE_VALUE_INVALID);
@@ -5513,15 +5385,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_COEFFICIENT:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_RSA_COEF(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_RSA_COEF(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		if (len > *value_len) {
 			return (CKR_ATTRIBUTE_VALUE_INVALID);
@@ -5542,29 +5407,13 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 	case CKA_PRIME:
 
 		if (key->key_type == CKK_DSA)
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_DSA_PRIME(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_DSA_PRIME(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		else
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_DH_PRIME(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_DH_PRIME(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5584,15 +5433,8 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 		break;
 
 	case CKA_SUBPRIME:
-#ifdef	__sparcv9
-		len =
-		    /* LINTED */
-		    (uint32_t)
-		    ((biginteger_t *)OBJ_PRI_DSA_SUBPRIME(key))->big_value_len;
-#else	/* !__sparcv9 */
 		len =
 		    ((biginteger_t *)OBJ_PRI_DSA_SUBPRIME(key))->big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5609,29 +5451,13 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 	case CKA_BASE:
 
 		if (key->key_type == CKK_DSA)
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_DSA_BASE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_DSA_BASE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		else
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_DH_BASE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_DH_BASE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 
 		/* This attribute MUST BE set */
 		if (len == 0 || len > *value_len) {
@@ -5652,41 +5478,17 @@ soft_get_private_value(soft_object_t *key, CK_ATTRIBUTE_TYPE type,
 	case CKA_VALUE:
 
 		if (key->key_type == CKK_DSA) {
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_DSA_VALUE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_DSA_VALUE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		} else if (key->key_type == CKK_DH) {
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_DH_VALUE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_DH_VALUE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		} else {
-#ifdef	__sparcv9
-			len =
-			    /* LINTED */
-			    (uint32_t)
-			    ((biginteger_t *)OBJ_PRI_EC_VALUE(key))->
-			    big_value_len;
-#else	/* !__sparcv9 */
 			len =
 			    ((biginteger_t *)OBJ_PRI_EC_VALUE(key))->
 			    big_value_len;
-#endif	/* __sparcv9 */
 		}
 
 		/* This attribute MUST BE set */
