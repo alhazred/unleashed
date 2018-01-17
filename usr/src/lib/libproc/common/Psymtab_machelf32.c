@@ -194,16 +194,7 @@ static char shstr[] =
  * This is the smallest number of PLT relocation entries allowed in a proper
  * .plt section.
  */
-#ifdef	__lint
-/*
- * On x86, lint would complain about unsigned comparison with
- * PLTREL_MIN_ENTRIES. This define fakes up the value of PLTREL_MIN_ENTRIES
- * and silences lint. On SPARC, there is no such issue.
- */
-#define	PLTREL_MIN_ENTRIES	1
-#else
 #define	PLTREL_MIN_ENTRIES	0
-#endif
 
 #ifdef _ELF64
 Elf *

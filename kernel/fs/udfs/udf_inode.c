@@ -90,9 +90,7 @@ kmutex_t ud_sync_busy;
  */
 kmutex_t udf_vfs_mutex;
 struct udf_vfs *udf_vfs_instances;
-#ifndef	__lint
 _NOTE(MUTEX_PROTECTS_DATA(udf_vfs_mutex, udf_vfs_instances))
-#endif
 
 union ihead ud_ihead[UD_HASH_SZ];
 kmutex_t ud_icache_lock;
@@ -102,17 +100,13 @@ kmutex_t ud_icache_lock;
 #define	UD_UNKN		0x2
 struct ud_inode *udf_ifreeh, *udf_ifreet;
 kmutex_t udf_ifree_lock;
-#ifndef	__lint
 _NOTE(MUTEX_PROTECTS_DATA(udf_ifree_lock, udf_ifreeh))
 _NOTE(MUTEX_PROTECTS_DATA(udf_ifree_lock, udf_ifreet))
-#endif
 
 kmutex_t ud_nino_lock;
 int32_t ud_max_inodes = 512;
 int32_t ud_cur_inodes = 0;
-#ifndef	__lint
 _NOTE(MUTEX_PROTECTS_DATA(ud_nino_lock, ud_cur_inodes))
-#endif
 
 uid_t ud_default_uid = 0;
 gid_t ud_default_gid = 3;
@@ -2169,9 +2163,7 @@ ud_init_inodes(void)
 	union ihead *ih = ud_ihead;
 	int index;
 
-#ifndef	__lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 	for (index = 0; index < UD_HASH_SZ; index++, ih++) {
 		ih->ih_head[0] = ih;
 		ih->ih_head[1] = ih;
@@ -2187,7 +2179,5 @@ ud_init_inodes(void)
 	udf_vfs_instances = NULL;
 	mutex_init(&udf_vfs_mutex, NULL, MUTEX_DEFAULT, NULL);
 
-#ifndef	__lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 }

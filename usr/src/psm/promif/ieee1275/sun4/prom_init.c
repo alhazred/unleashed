@@ -50,15 +50,6 @@ char	promif_clntname[PROMIF_CLNTNAMELEN];
  * #pragma weak and thus thinks the routines are used but not defined.  Until
  * lint is enhanced, we workaround this with the following stubs.
  */
-#ifdef	__lint
-void
-plat_setprop_enter(void)
-{}
-
-void
-plat_setprop_exit(void)
-{}
-#endif
 
 /*
  * This 'do-nothing' function is called immediately before and immediately
