@@ -44,9 +44,6 @@
 #include <vm/hat.h>
 #include <vm/as.h>
 #include <sys/mach_mmu.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 #include <sys/ioat.h>
 

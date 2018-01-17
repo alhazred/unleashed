@@ -42,9 +42,6 @@
 #include <sys/sysmacros.h>
 #include <sys/ddidevmap.h>
 #include <sys/avl.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 #include <sys/xsvc.h>
 
@@ -842,20 +839,7 @@ xsvc_devmap(dev_t dev, devmap_cookie_t dhp, offset_t off, size_t len,
 	}
 #endif
 
-#ifdef __xpv
-	/*
-	 * we won't allow guest OSes to devmap mfn/pfns. Maybe we'll relax
-	 * this some later when there is a good reason.
-	 */
-	if (!DOMAIN_IS_INITDOMAIN(xen_info)) {
-		return (-1);
-	}
-
-	/* we will always treat this as a foreign MFN */
-	pfn = xen_assign_pfn(btop(off));
-#else
 	pfn = btop(off);
-#endif
 	/* always work with whole pages */
 
 	off_align = P2ALIGN(off, PAGESIZE);

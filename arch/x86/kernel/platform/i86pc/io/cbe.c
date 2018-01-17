@@ -215,7 +215,6 @@ cbe_unconfigure(void *arg)
 	ASSERT(!CPU_IN_SET(cbe_enabled, ((cpu_t *)arg)->cpu_id));
 }
 
-#ifndef __xpv
 /*
  * declarations needed for time adjustment
  */
@@ -226,30 +225,25 @@ extern void	tsc_resume(void);
  * resume path.
  */
 extern int	tsc_resume_in_cyclic;
-#endif
 
 /*ARGSUSED*/
 static void
 cbe_suspend(cyb_arg_t arg)
 {
-#ifndef __xpv
 	/*
 	 * This is an x86 backend, so let the tsc_suspend
 	 * that is specific to x86 platforms do the work.
 	 */
 	tsc_suspend();
-#endif
 }
 
 /*ARGSUSED*/
 static void
 cbe_resume(cyb_arg_t arg)
 {
-#ifndef __xpv
 	if (tsc_resume_in_cyclic) {
 		tsc_resume();
 	}
-#endif
 }
 
 void

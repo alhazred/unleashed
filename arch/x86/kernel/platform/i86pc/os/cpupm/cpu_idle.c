@@ -920,7 +920,6 @@ cpu_idle_cpr_callb(void *arg, int code)
 void
 cpuidle_cstate_instance(cpu_t *cp)
 {
-#ifndef	__xpv
 	cpupm_mach_state_t	*mach_state =
 	    (cpupm_mach_state_t *)cp->cpu_m.mcpu_pm_mach_state;
 	cpu_acpi_handle_t	handle;
@@ -981,7 +980,6 @@ cpuidle_cstate_instance(cpu_t *cp)
 		CPUSET_ATOMIC_XDEL(dom_cpu_set, cpu_id, result);
 	} while (result < 0);
 	mutex_exit(pm_lock);
-#endif
 }
 
 /*

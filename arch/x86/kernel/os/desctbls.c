@@ -84,10 +84,6 @@
 #include <sys/mach_mmu.h>
 #include <sys/systm.h>
 
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#include <vm/as.h>
-#endif
 
 #include <sys/promif.h>
 #include <sys/bootinfo.h>
@@ -98,9 +94,7 @@
  * cpu0 and default tables and structures.
  */
 user_desc_t	*gdt0;
-#if !defined(__xpv)
 desctbr_t	gdt0_default_r;
-#endif
 
 gate_desc_t	*idt0; 		/* interrupt descriptor table */
 #if defined(__i386)
@@ -369,18 +363,9 @@ set_gatesegd(gate_desc_t *dp, void (*func)(void), selector_t sel,
 void
 gdt_update_usegd(uint_t sidx, user_desc_t *udp)
 {
-#if defined(__xpv)
-
-	uint64_t dpa = CPU->cpu_m.mcpu_gdtpa + sizeof (*udp) * sidx;
-
-	if (HYPERVISOR_update_descriptor(pa_to_ma(dpa), *(uint64_t *)udp))
-		panic("gdt_update_usegd: HYPERVISOR_update_descriptor");
-
-#else	/* __xpv */
 
 	CPU->cpu_gdt[sidx] = *udp;
 
-#endif	/* __xpv */
 }
 
 /*
@@ -390,80 +375,12 @@ gdt_update_usegd(uint_t sidx, user_desc_t *udp)
 int
 ldt_update_segd(user_desc_t *ldp, user_desc_t *udp)
 {
-#if defined(__xpv)
-
-	uint64_t dpa;
-
-	dpa = mmu_ptob(hat_getpfnum(kas.a_hat, (caddr_t)ldp)) |
-	    ((uintptr_t)ldp & PAGEOFFSET);
-
-	/*
-	 * The hypervisor is a little more restrictive about what it
-	 * supports in the LDT.
-	 */
-	if (HYPERVISOR_update_descriptor(pa_to_ma(dpa), *(uint64_t *)udp) != 0)
-		return (EINVAL);
-
-#else	/* __xpv */
 
 	*ldp = *udp;
 
-#endif	/* __xpv */
 	return (0);
 }
 
-#if defined(__xpv)
-
-/*
- * Converts hw format gate descriptor into pseudo-IDT format for the hypervisor.
- * Returns true if a valid entry was written.
- */
-int
-xen_idt_to_trap_info(uint_t vec, gate_desc_t *sgd, void *ti_arg)
-{
-	trap_info_t *ti = ti_arg;	/* XXPV	Aargh - segments.h comment */
-
-	/*
-	 * skip holes in the IDT
-	 */
-	if (GATESEG_GETOFFSET(sgd) == 0)
-		return (0);
-
-	ASSERT(sgd->sgd_type == SDT_SYSIGT);
-	ti->vector = vec;
-	TI_SET_DPL(ti, sgd->sgd_dpl);
-
-	/*
-	 * Is this an interrupt gate?
-	 */
-	if (sgd->sgd_type == SDT_SYSIGT) {
-		/* LINTED */
-		TI_SET_IF(ti, 1);
-	}
-	ti->cs = sgd->sgd_selector;
-#if defined(__amd64)
-	ti->cs |= SEL_KPL;	/* force into ring 3. see KCS_SEL  */
-#endif
-	ti->address = GATESEG_GETOFFSET(sgd);
-	return (1);
-}
-
-/*
- * Convert a single hw format gate descriptor and write it into our virtual IDT.
- */
-void
-xen_idt_write(gate_desc_t *sgd, uint_t vec)
-{
-	trap_info_t trapinfo[2];
-
-	bzero(trapinfo, sizeof (trapinfo));
-	if (xen_idt_to_trap_info(vec, sgd, &trapinfo[0]) == 0)
-		return;
-	if (xen_set_trap_table(trapinfo) != 0)
-		panic("xen_idt_write: xen_set_trap_table() failed");
-}
-
-#endif	/* __xpv */
 
 #if defined(__amd64)
 
@@ -933,7 +850,6 @@ init_idt_common(gate_desc_t *idt)
 	 * Instead a failsafe event is injected into the guest if its selectors
 	 * and/or stack is in a broken state. See xen_failsafe_callback.
 	 */
-#if !defined(__xpv)
 #if defined(__amd64)
 
 	set_gatesegd(&idt[T_DBLFLT], &syserrtrap, KCS_SEL, SDT_SYSIGT, TRP_KPL,
@@ -948,7 +864,6 @@ init_idt_common(gate_desc_t *idt)
 	    0);
 
 #endif	/* __i386 */
-#endif	/* !__xpv */
 
 	/*
 	 * T_EXTOVRFLT coprocessor-segment-overrun not supported.
@@ -1010,15 +925,6 @@ init_idt_common(gate_desc_t *idt)
 	brand_tbl[1].ih_inum = 0;
 }
 
-#if defined(__xpv)
-
-static void
-init_idt(gate_desc_t *idt)
-{
-	init_idt_common(idt);
-}
-
-#else	/* __xpv */
 
 static void
 init_idt(gate_desc_t *idt)
@@ -1063,7 +969,6 @@ init_idt(gate_desc_t *idt)
 	init_idt_common(idt);
 }
 
-#endif	/* __xpv */
 
 /*
  * The kernel does not deal with LDTs unless a user explicitly creates
@@ -1074,14 +979,9 @@ init_idt(gate_desc_t *idt)
 static void
 init_ldt(void)
 {
-#if defined(__xpv)
-	xen_set_ldt(NULL, 0);
-#else
 	wr_ldtr(0);
-#endif
 }
 
-#if !defined(__xpv)
 #if defined(__amd64)
 
 static void
@@ -1158,54 +1058,7 @@ init_tss(void)
 }
 
 #endif	/* __i386 */
-#endif	/* !__xpv */
 
-#if defined(__xpv)
-
-void
-init_desctbls(void)
-{
-	uint_t vec;
-	user_desc_t *gdt;
-
-	/*
-	 * Setup and install our GDT.
-	 */
-	gdt = init_gdt();
-
-	/*
-	 * Store static pa of gdt to speed up pa_to_ma() translations
-	 * on lwp context switches.
-	 */
-	ASSERT(IS_P2ALIGNED((uintptr_t)gdt, PAGESIZE));
-	CPU->cpu_gdt = gdt;
-	CPU->cpu_m.mcpu_gdtpa = pfn_to_pa(va_to_pfn(gdt));
-
-	/*
-	 * Setup and install our IDT.
-	 */
-	ASSERT(NIDT * sizeof (*idt0) <= PAGESIZE);
-	idt0 = (gate_desc_t *)BOP_ALLOC(bootops, (caddr_t)IDT_VA,
-	    PAGESIZE, PAGESIZE);
-	bzero(idt0, PAGESIZE);
-	init_idt(idt0);
-	for (vec = 0; vec < NIDT; vec++)
-		xen_idt_write(&idt0[vec], vec);
-
-	CPU->cpu_idt = idt0;
-
-	/*
-	 * set default kernel stack
-	 */
-	xen_stack_switch(KDS_SEL,
-	    (ulong_t)&dblfault_stack0[sizeof (dblfault_stack0)]);
-
-	xen_init_callbacks();
-
-	init_ldt();
-}
-
-#else	/* __xpv */
 
 void
 init_desctbls(void)
@@ -1263,7 +1116,6 @@ init_desctbls(void)
 	init_ldt();
 }
 
-#endif	/* __xpv */
 
 /*
  * In the early kernel, we need to set up a simple GDT to run on.
@@ -1301,10 +1153,6 @@ brand_interpositioning_enable(void)
 
 	for (i = 0; brand_tbl[i].ih_inum; i++) {
 		idt[brand_tbl[i].ih_inum] = brand_tbl[i].ih_interp_desc;
-#if defined(__xpv)
-		xen_idt_write(&idt[brand_tbl[i].ih_inum],
-		    brand_tbl[i].ih_inum);
-#endif
 	}
 
 #if defined(__amd64)
@@ -1347,10 +1195,6 @@ brand_interpositioning_disable(void)
 
 	for (i = 0; brand_tbl[i].ih_inum; i++) {
 		idt[brand_tbl[i].ih_inum] = brand_tbl[i].ih_default_desc;
-#if defined(__xpv)
-		xen_idt_write(&idt[brand_tbl[i].ih_inum],
-		    brand_tbl[i].ih_inum);
-#endif
 	}
 
 #if defined(__amd64)

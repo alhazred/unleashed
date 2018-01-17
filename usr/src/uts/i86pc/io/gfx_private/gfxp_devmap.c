@@ -49,9 +49,6 @@
 #include <sys/int_fmtio.h>
 #include <sys/gfx_private.h>
 
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 /*
  * Create a dummy ddi_umem_cookie given to gfxp_devmap_umem_setup().
@@ -126,12 +123,7 @@ gfxp_map_devmem(devmap_cookie_t dhc, gfx_maddr_t maddr, size_t length,
 	pfn_t pfn;
 
 
-#ifdef __xpv
-	ASSERT(DOMAIN_IS_INITDOMAIN(xen_info));
-	pfn = xen_assign_pfn(mmu_btop(maddr));
-#else
 	pfn = mmu_btop(maddr);
-#endif
 
 	dhp->dh_pfn = pfn;
 	dhp->dh_len = mmu_ptob(mmu_btopr(length));

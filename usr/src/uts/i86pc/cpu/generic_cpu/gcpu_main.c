@@ -138,14 +138,6 @@ gcpu_post_startup(cmi_hdl_t hdl)
 
 	if (gcpu != NULL)
 		cms_post_startup(hdl);
-#ifdef __xpv
-	/*
-	 * All cpu handles are initialized so we can begin polling now.
-	 * Furthermore, our virq mechanism requires that everything
-	 * be run on cpu 0 so we can assure that by starting from here.
-	 */
-	gcpu_mca_poll_start(hdl);
-#endif
 }
 
 void
@@ -156,20 +148,14 @@ gcpu_post_mpstartup(cmi_hdl_t hdl)
 
 	cms_post_mpstartup(hdl);
 
-#ifndef __xpv
 		/*
 		 * All cpu handles are initialized only once all cpus
 		 * are started, so we can begin polling post mp startup.
 		 */
 		gcpu_mca_poll_start(hdl);
-#endif
 }
 
-#ifdef __xpv
-#define	GCPU_OP(ntvop, xpvop)	xpvop
-#else
 #define	GCPU_OP(ntvop, xpvop)	ntvop
-#endif
 
 cmi_api_ver_t _cmi_api_version = CMI_API_VERSION_3;
 

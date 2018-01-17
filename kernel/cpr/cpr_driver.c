@@ -53,10 +53,8 @@ static int	cpr_is_real_device(dev_info_t *);
  * execute code without going through a complete suspend.  So additions
  * that have platform implications shall need #if[n]def's.
  */
-#ifndef __xpv
 extern void	i_cpr_save_configuration(dev_info_t *);
 extern void	i_cpr_restore_configuration(dev_info_t *);
-#endif
 
 /*
  * Traverse the dev info tree:
@@ -82,25 +80,19 @@ cpr_suspend_devices(dev_info_t *dip)
 		    devi_string(dip, buf));
 		ASSERT((DEVI(dip)->devi_cpr_flags & DCF_CPR_SUSPENDED) == 0);
 
-#ifndef __xpv
 		i_cpr_save_configuration(dip);
-#endif
 
 
 		if (!i_ddi_devi_attached(dip)) {
 			error = DDI_FAILURE;
 		} else {
-#ifndef __xpv
 			if (cpr_test_point != DEVICE_SUSPEND_TO_RAM ||
 			    (cpr_test_point == DEVICE_SUSPEND_TO_RAM &&
 			    cpr_device == ddi_driver_major(dip))) {
-#endif
 				error = devi_detach(dip, DDI_SUSPEND);
-#ifndef __xpv
 			} else {
 				error = DDI_SUCCESS;
 			}
-#endif
 		}
 
 		if (error == DDI_SUCCESS) {
@@ -115,7 +107,6 @@ cpr_suspend_devices(dev_info_t *dip)
 			    devi_string(dip, buf));
 			cpr_err(CE_WARN, "Device is busy or does not "
 			    "support suspend/resume.");
-#ifndef __xpv
 			/*
 			 * the device has failed to suspend however,
 			 * if cpr_test_point == FORCE_SUSPEND_TO_RAM
@@ -126,7 +117,6 @@ cpr_suspend_devices(dev_info_t *dip)
 			if (cpr_test_point == FORCE_SUSPEND_TO_RAM)
 				DEVI(dip)->devi_cpr_flags |= DCF_CPR_SUSPENDED;
 			else
-#endif
 				return (ENXIO);
 		}
 	}
@@ -169,9 +159,7 @@ cpr_resume_devices(dev_info_t *start, int resume_failed)
 		 * Always attempt to restore device configuration before
 		 * attempting resume
 		 */
-#ifndef __xpv
 		i_cpr_restore_configuration(dip);
-#endif
 
 		/*
 		 * There may be background attaches happening on devices
@@ -181,12 +169,8 @@ cpr_resume_devices(dev_info_t *start, int resume_failed)
 		 * the entire tree to clear the suspend flag unless the
 		 * FORCE_SUSPEND_TO_RAM test point is set.
 		 */
-#ifndef __xpv
 		if (did_suspend && (!error ||
 		    cpr_test_point == FORCE_SUSPEND_TO_RAM)) {
-#else
-		if (did_suspend && !error) {
-#endif
 			CPR_DEBUG(CPR_DEBUG2, "Resuming device %s\n",
 			    devi_string(dip, buf));
 			/*
@@ -202,13 +186,9 @@ cpr_resume_devices(dev_info_t *start, int resume_failed)
 				cpr_err(CE_WARN, "Skipping %s, device "
 				    "not ready for resume",
 				    devi_string(dip, buf));
-#ifndef __xpv
 			} else if (cpr_test_point != DEVICE_SUSPEND_TO_RAM ||
 			    (cpr_test_point == DEVICE_SUSPEND_TO_RAM &&
 			    cpr_device == ddi_driver_major(dip))) {
-#else
-			} else {
-#endif
 				if (devi_attach(dip, DDI_RESUME) !=
 				    DDI_SUCCESS) {
 					error = ENXIO;

@@ -22,9 +22,7 @@
 #include <vm/as.h>
 #include <vm/seg_umap.h>
 
-#if !defined(__xpv)
 #include <sys/comm_page.h>
-#endif /* !defined(__xpv) */
 
 /*
  * Map in the comm page.

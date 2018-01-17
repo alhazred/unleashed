@@ -79,10 +79,8 @@ int gcpu_mca_stack_ereport_include = 0;
  */
 int gcpu_mca_telemetry_retries = 5;
 
-#ifndef __xpv
 int gcpu_mca_cmci_throttling_threshold = 10;
 int gcpu_mca_cmci_reenable_threshold = 1000;
-#endif
 
 static gcpu_error_disp_t gcpu_errtypes[] = {
 
@@ -230,11 +228,7 @@ static gcpu_error_disp_t gcpu_unknown = {
 static errorq_t *gcpu_mca_queue;
 static kmutex_t gcpu_mca_queue_lock;
 
-#ifdef __xpv
-static int isxpv = 1;
-#else
 static int isxpv = 0;
-#endif
 
 static const gcpu_error_disp_t *
 gcpu_disp_match(uint16_t code)
@@ -1046,10 +1040,8 @@ gcpu_mca_init(cmi_hdl_t hdl)
 	uint32_t status_skip_mask = 0;
 	size_t mslsz;
 	int i;
-#ifndef __xpv
 	int mcg_ctl2_present;
 	uint32_t cmci_capable = 0;
-#endif
 	if (gcpu == NULL)
 		return;
 
@@ -1083,9 +1075,7 @@ gcpu_mca_init(cmi_hdl_t hdl)
 	 * banks.
 	 */
 	mcg_ctl_present = cap & MCG_CAP_CTL_P;
-#ifndef __xpv
 	mcg_ctl2_present = cap & MCG_CAP_CTL2_P;
-#endif
 
 	/*
 	 * We squirell values away for inspection/debugging.
@@ -1139,16 +1129,11 @@ gcpu_mca_init(cmi_hdl_t hdl)
 
 	}
 
-#ifdef __xpv
-	gcpu_xpv_mca_init(nbanks);
-#endif
 
 	mca->gcpu_mca_nextpoll_idx = GCPU_MCA_LOGOUT_POLLER_1;
 
-#ifndef __xpv
 	mca->gcpu_bank_cmci = kmem_zalloc(sizeof (gcpu_mca_cmci_t) * nbanks,
 	    KM_SLEEP);
-#endif
 
 	/*
 	 * Create our errorq to transport the logout structures.  This
@@ -1222,7 +1207,6 @@ gcpu_mca_init(cmi_hdl_t hdl)
 		 */
 		atomic_or_32(&gcpu->gcpu_shared->gcpus_actv_banks, 1 << i);
 
-#ifndef __xpv
 		/*
 		 * check CMCI capability
 		 */
@@ -1253,15 +1237,11 @@ gcpu_mca_init(cmi_hdl_t hdl)
 			mca->gcpu_bank_cmci[i].drtcmci = 0;
 			mca->gcpu_bank_cmci[i].ncmci = 0;
 		}
-#endif
 	}
 
-#ifndef __xpv
 	if (cmci_capable)
 		cmi_enable_cmci = 1;
-#endif
 
-#ifndef __xpv
 	/*
 	 * Log any valid telemetry lurking in the MCA banks, but do not
 	 * clear the status registers.  Ignore the disposition returned -
@@ -1335,14 +1315,12 @@ gcpu_mca_init(cmi_hdl_t hdl)
 			    cms_bankstatus_val(hdl, i, 0ULL));
 		}
 	}
-#endif
 	/*
 	 * Now let the model-specific support perform further initialization
 	 * of non-architectural features.
 	 */
 	cms_mca_init(hdl, nbanks);
 
-#ifndef __xpv
 	(void) cmi_hdl_wrmsr(hdl, IA32_MSR_MCG_STATUS, 0ULL);
 	membar_producer();
 
@@ -1350,14 +1328,11 @@ gcpu_mca_init(cmi_hdl_t hdl)
 	if (mcg_ctl_present)
 		(void) cmi_hdl_wrmsr(hdl, IA32_MSR_MCG_CTL,
 		    cms_mcgctl_val(hdl, nbanks, -1ULL));
-#endif
 
 	mutex_exit(&gcpu->gcpu_shared->gcpus_cfglock);
 
-#ifndef __xpv
 	/* enable machine-check exception in CR4 */
 	cmi_hdl_enable_mce(hdl);
-#endif
 }
 
 static uint64_t
@@ -1510,7 +1485,6 @@ gcpu_mca_process(cmi_hdl_t hdl, struct regs *rp, int nerr, gcpu_data_t *gcpu,
 
 static uint32_t gcpu_deferrred_polled_clears;
 
-#ifndef __xpv
 static void
 gcpu_cmci_logout(cmi_hdl_t hdl, int bank, gcpu_mca_cmci_t *bank_cmci_p,
     uint64_t status, int what)
@@ -1590,7 +1564,6 @@ gcpu_cmci_throttle(cmi_hdl_t hdl, int bank, gcpu_mca_cmci_t *bank_cmci_p,
 		}
 	}
 }
-#endif
 
 static void
 clear_mc(int first, int last, int ismc, boolean_t clrstatus,
@@ -1672,9 +1645,6 @@ clear_mc(int first, int last, int ismc, boolean_t clrstatus,
 
 serialize:
 		{
-#ifdef __xpv
-			;
-#else
 			/*
 			 * Intel Vol 3A says to execute a serializing
 			 * instruction here, ie CPUID.	Well WRMSR is also
@@ -1685,7 +1655,6 @@ serialize:
 			 */
 			struct cpuid_regs tmp;
 			(void) __cpuid_insn(&tmp);
-#endif
 		}
 	}
 }
@@ -1767,9 +1736,7 @@ gcpu_mca_logout(cmi_hdl_t hdl, struct regs *rp, uint64_t bankmask,
 		    CMI_SUCCESS)
 			continue;
 
-#ifndef __xpv
 		gcpu_cmci_logout(hdl, i, &mca->gcpu_bank_cmci[i], status, what);
-#endif
 
 retry:
 		if (!(status & MSR_MC_STATUS_VAL))
@@ -1790,9 +1757,7 @@ retry:
 		if (status & MSR_MC_STATUS_MISCV)
 			(void) cmi_hdl_rdmsr(hdl, IA32_MSR_MC(i, MISC), &misc);
 
-#ifndef __xpv
 		gcpu_cmci_throttle(hdl, i, &mca->gcpu_bank_cmci[i], what);
-#endif
 
 		/*
 		 * Allow the model-specific code to extract bank telemetry.
@@ -1894,7 +1859,6 @@ retry:
 	}
 }
 
-#ifndef __xpv
 int gcpu_mca_trap_vomit_summary = 0;
 
 /*
@@ -1960,7 +1924,6 @@ gcpu_mca_trap(cmi_hdl_t hdl, struct regs *rp)
 
 	return (mce.mce_disp);
 }
-#endif
 
 /*ARGSUSED*/
 void
@@ -2026,12 +1989,10 @@ gcpu_mca_fini(cmi_hdl_t hdl)
 	 */
 	if (!is_x86_feature(x86_featureset, X86FSET_MCA))
 		return;
-#ifndef __xpv
 	/*
 	 * disable machine check in CR4
 	 */
 	cmi_ntv_hwdisable_mce(hdl);
-#endif
 	mutex_enter(&gcpu->gcpu_shared->gcpus_cfglock);
 	gcpu_mca_poll_fini(hdl);
 	mutex_exit(&gcpu->gcpu_shared->gcpus_cfglock);

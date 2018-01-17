@@ -46,9 +46,6 @@
 #include <sys/ucode.h>
 #include <sys/x86_archext.h>
 #include <sys/x_call.h>
-#ifdef	__xpv
-#include <sys/hypervisor.h>
-#endif
 
 /*
  * AMD-specific equivalence table
@@ -78,10 +75,6 @@ static void ucode_file_reset_intel(ucode_file_t *, processorid_t);
 static uint32_t ucode_load_amd(ucode_file_t *, cpu_ucode_info_t *, cpu_t *);
 static uint32_t ucode_load_intel(ucode_file_t *, cpu_ucode_info_t *, cpu_t *);
 
-#ifdef	__xpv
-static void ucode_load_xpv(ucode_update_t *);
-static void ucode_chipset_amd(uint8_t *, int);
-#endif
 
 static int ucode_equiv_cpu_amd(cpu_t *, uint16_t *);
 
@@ -90,10 +83,8 @@ static ucode_errno_t ucode_locate_amd(cpu_t *, cpu_ucode_info_t *,
 static ucode_errno_t ucode_locate_intel(cpu_t *, cpu_ucode_info_t *,
     ucode_file_t *);
 
-#ifndef __xpv
 static ucode_errno_t ucode_match_amd(uint16_t, cpu_ucode_info_t *,
     ucode_file_amd_t *, int);
-#endif
 static ucode_errno_t ucode_match_intel(int, cpu_ucode_info_t *,
     ucode_header_intel_t *, ucode_ext_table_intel_t *);
 
@@ -362,38 +353,6 @@ ucode_equiv_cpu_amd(cpu_t *cp, uint16_t *eq_sig)
  * specific microcode patches in the container file and disable them
  * by setting their CPU revision to an invalid value.
  */
-#ifdef __xpv
-static void
-ucode_chipset_amd(uint8_t *buf, int size)
-{
-	ucode_header_amd_t *uh;
-	uint32_t *ptr = (uint32_t *)buf;
-	int len = 0;
-
-	/* skip to first microcode patch */
-	ptr += 2; len = *ptr++; ptr += len >> 2; size -= len;
-
-	while (size >= sizeof (ucode_header_amd_t) + 8) {
-		ptr++; len = *ptr++;
-		uh = (ucode_header_amd_t *)ptr;
-		ptr += len >> 2; size -= len;
-
-		if (uh->uh_nb_id) {
-			cmn_err(CE_WARN, "ignoring northbridge-specific ucode: "
-			    "chipset id %x, revision %x",
-			    uh->uh_nb_id, uh->uh_nb_rev);
-			uh->uh_cpu_rev = 0xffff;
-		}
-
-		if (uh->uh_sb_id) {
-			cmn_err(CE_WARN, "ignoring southbridge-specific ucode: "
-			    "chipset id %x, revision %x",
-			    uh->uh_sb_id, uh->uh_sb_rev);
-			uh->uh_cpu_rev = 0xffff;
-		}
-	}
-}
-#endif
 
 /*
  * Populate the ucode file structure from microcode file corresponding to
@@ -410,7 +369,6 @@ ucode_locate_amd(cpu_t *cp, cpu_ucode_info_t *uinfop, ucode_file_t *ufp)
 	int count, rc;
 	ucode_file_amd_t *ucodefp = ufp->amd;
 
-#ifndef __xpv
 	uint16_t eq_sig = 0;
 	int i;
 
@@ -454,59 +412,6 @@ ucode_locate_amd(cpu_t *cp, cpu_ucode_info_t *uinfop, ucode_file_t *ufp)
 			return (EM_OK);
 	}
 	return (EM_NOMATCH);
-#else
-	int size = 0;
-	char c;
-
-	/*
-	 * The xVM case is special. To support mixed-revision systems, the
-	 * hypervisor will choose which patch to load for which CPU, so the
-	 * whole microcode patch container file will have to be loaded.
-	 *
-	 * Since this code is only run on the boot cpu, we don't have to care
-	 * about failing ucode_zalloc() or freeing allocated memory.
-	 */
-	if (cp->cpu_id != 0)
-		return (EM_INVALIDARG);
-
-	(void) snprintf(name, MAXPATHLEN, "/%s/%s/container",
-	    UCODE_INSTALL_PATH, cpuid_getvendorstr(cp));
-
-	if ((fd = kobj_open(name)) == -1)
-		return (EM_OPENFILE);
-
-	/* get the file size by counting bytes */
-	do {
-		count = kobj_read(fd, &c, 1, size);
-		size += count;
-	} while (count);
-
-	ucodefp = ucode_zalloc(cp->cpu_id, sizeof (*ucodefp));
-	ASSERT(ucodefp);
-	ufp->amd = ucodefp;
-
-	ucodefp->usize = size;
-	ucodefp->ucodep = ucode_zalloc(cp->cpu_id, size);
-	ASSERT(ucodefp->ucodep);
-
-	/* load the microcode patch container file */
-	count = kobj_read(fd, (char *)ucodefp->ucodep, size, 0);
-	(void) kobj_close(fd);
-
-	if (count != size)
-		return (EM_FILESIZE);
-
-	/* make sure the container file is valid */
-	rc = ucode->validate(ucodefp->ucodep, ucodefp->usize);
-
-	if (rc != EM_OK)
-		return (rc);
-
-	/* disable chipset-specific patches */
-	ucode_chipset_amd(ucodefp->ucodep, ucodefp->usize);
-
-	return (EM_OK);
-#endif
 }
 
 static ucode_errno_t
@@ -643,7 +548,6 @@ ucode_locate_intel(cpu_t *cp, cpu_ucode_info_t *uinfop, ucode_file_t *ufp)
 	return (rc);
 }
 
-#ifndef __xpv
 static ucode_errno_t
 ucode_match_amd(uint16_t eq_sig, cpu_ucode_info_t *uinfop,
     ucode_file_amd_t *ucodefp, int size)
@@ -684,7 +588,6 @@ ucode_match_amd(uint16_t eq_sig, cpu_ucode_info_t *uinfop,
 
 	return (EM_OK);
 }
-#endif
 
 /*
  * Returns 1 if the microcode is for this processor; 0 otherwise.
@@ -734,14 +637,11 @@ ucode_write(xc_arg_t arg1, xc_arg_t unused2, xc_arg_t unused3)
 {
 	ucode_update_t *uusp = (ucode_update_t *)arg1;
 	cpu_ucode_info_t *uinfop = CPU->cpu_m.mcpu_ucode_info;
-#ifndef __xpv
 	on_trap_data_t otd;
-#endif
 
 	ASSERT(ucode);
 	ASSERT(uusp->ucodep);
 
-#ifndef	__xpv
 	/*
 	 * Check one more time to see if it is really necessary to update
 	 * microcode just in case this is a hyperthreaded processor where
@@ -758,7 +658,6 @@ ucode_write(xc_arg_t arg1, xc_arg_t unused2, xc_arg_t unused3)
 		wrmsr(ucode->write_msr, (uintptr_t)uusp->ucodep);
 
 	no_trap();
-#endif
 	ucode->read_rev(uinfop);
 	uusp->new_rev = uinfop->cui_rev;
 
@@ -770,16 +669,11 @@ static uint32_t
 ucode_load_amd(ucode_file_t *ufp, cpu_ucode_info_t *uinfop, cpu_t *cp)
 {
 	ucode_file_amd_t *ucodefp = ufp->amd;
-#ifdef	__xpv
-	ucode_update_t uus;
-#else
 	on_trap_data_t otd;
-#endif
 
 	ASSERT(ucode);
 	ASSERT(ucodefp);
 
-#ifndef	__xpv
 	kpreempt_disable();
 	if (on_trap(&otd, OT_DATA_ACCESS)) {
 		no_trap();
@@ -792,15 +686,6 @@ ucode_load_amd(ucode_file_t *ufp, cpu_ucode_info_t *uinfop, cpu_t *cp)
 	kpreempt_enable();
 
 	return (ucodefp->uf_header.uh_patch_id);
-#else
-	uus.ucodep = ucodefp->ucodep;
-	uus.usize = ucodefp->usize;
-	ucode_load_xpv(&uus);
-	ucode->read_rev(uinfop);
-	uus.new_rev = uinfop->cui_rev;
-
-	return (uus.new_rev);
-#endif
 }
 
 /*ARGSUSED2*/
@@ -808,78 +693,18 @@ static uint32_t
 ucode_load_intel(ucode_file_t *ufp, cpu_ucode_info_t *uinfop, cpu_t *cp)
 {
 	ucode_file_intel_t *ucodefp = &ufp->intel;
-#ifdef __xpv
-	uint32_t ext_offset;
-	uint32_t body_size;
-	uint32_t ext_size;
-	uint8_t *ustart;
-	uint32_t usize;
-	ucode_update_t uus;
-#endif
 
 	ASSERT(ucode);
 
-#ifdef __xpv
-	/*
-	 * the hypervisor wants the header, data, and extended
-	 * signature tables. We can only get here from the boot
-	 * CPU (cpu #0), we don't need to free as ucode_zalloc() will
-	 * use BOP_ALLOC().
-	 */
-	usize = UCODE_TOTAL_SIZE_INTEL(ucodefp->uf_header->uh_total_size);
-	ustart = ucode_zalloc(cp->cpu_id, usize);
-	ASSERT(ustart);
-
-	body_size = UCODE_BODY_SIZE_INTEL(ucodefp->uf_header->uh_body_size);
-	ext_offset = body_size + UCODE_HEADER_SIZE_INTEL;
-	ext_size = usize - ext_offset;
-	ASSERT(ext_size >= 0);
-
-	(void) memcpy(ustart, ucodefp->uf_header, UCODE_HEADER_SIZE_INTEL);
-	(void) memcpy(&ustart[UCODE_HEADER_SIZE_INTEL], ucodefp->uf_body,
-	    body_size);
-	if (ext_size > 0) {
-		(void) memcpy(&ustart[ext_offset],
-		    ucodefp->uf_ext_table, ext_size);
-	}
-	uus.ucodep = ustart;
-	uus.usize = usize;
-	ucode_load_xpv(&uus);
-	ucode->read_rev(uinfop);
-	uus.new_rev = uinfop->cui_rev;
-#else
 	kpreempt_disable();
 	wrmsr(ucode->write_msr, (uintptr_t)ucodefp->uf_body);
 	ucode->read_rev(uinfop);
 	kpreempt_enable();
-#endif
 
 	return (ucodefp->uf_header->uh_rev);
 }
 
 
-#ifdef	__xpv
-static void
-ucode_load_xpv(ucode_update_t *uusp)
-{
-	xen_platform_op_t op;
-	int e;
-
-	ASSERT(DOMAIN_IS_INITDOMAIN(xen_info));
-
-	kpreempt_disable();
-	op.cmd = XENPF_microcode_update;
-	op.interface_version = XENPF_INTERFACE_VERSION;
-	/*LINTED: constant in conditional context*/
-	set_xen_guest_handle(op.u.microcode.data, uusp->ucodep);
-	op.u.microcode.length = uusp->usize;
-	e = HYPERVISOR_platform_op(&op);
-	if (e != 0) {
-		cmn_err(CE_WARN, "hypervisor failed to accept uCode update");
-	}
-	kpreempt_enable();
-}
-#endif /* __xpv */
 
 static void
 ucode_read_rev_amd(cpu_ucode_info_t *uinfop)
@@ -905,7 +730,6 @@ ucode_read_rev_intel(cpu_ucode_info_t *uinfop)
 static ucode_errno_t
 ucode_extract_amd(ucode_update_t *uusp, uint8_t *ucodep, int size)
 {
-#ifndef __xpv
 	uint32_t *ptr = (uint32_t *)ucodep;
 	ucode_eqtbl_amd_t *eqtbl;
 	ucode_file_amd_t *ufp;
@@ -948,18 +772,6 @@ ucode_extract_amd(ucode_update_t *uusp, uint8_t *ucodep, int size)
 	uusp->ucodep = (uint8_t *)ufp;
 	uusp->usize = count;
 	uusp->expected_rev = ufp->uf_header.uh_patch_id;
-#else
-	/*
-	 * The hypervisor will choose the patch to load, so there is no way to
-	 * know the "expected revision" in advance. This is especially true on
-	 * mixed-revision systems where more than one patch will be loaded.
-	 */
-	uusp->expected_rev = 0;
-	uusp->ucodep = ucodep;
-	uusp->usize = size;
-
-	ucode_chipset_amd(ucodep, size);
-#endif
 
 	return (EM_OK);
 }
@@ -1009,11 +821,7 @@ ucode_extract_intel(ucode_update_t *uusp, uint8_t *ucodep, int size)
 
 		if (tmprc == EM_OK &&
 		    uusp->expected_rev < uhp->uh_rev) {
-#ifndef __xpv
 			uusp->ucodep = (uint8_t *)&curbuf[header_size];
-#else
-			uusp->ucodep = (uint8_t *)curbuf;
-#endif
 			uusp->usize =
 			    UCODE_TOTAL_SIZE_INTEL(uhp->uh_total_size);
 			uusp->expected_rev = uhp->uh_rev;
@@ -1096,18 +904,6 @@ ucode_update(uint8_t *ucodep, int size)
 		if (uusp->ucodep == NULL)
 			continue;
 
-#ifdef	__xpv
-		/*
-		 * for i86xpv, the hypervisor will update all the CPUs.
-		 * the hypervisor wants the header, data, and extended
-		 * signature tables. ucode_write will just read in the
-		 * updated version on all the CPUs after the update has
-		 * completed.
-		 */
-		if (id == 0) {
-			ucode_load_xpv(uusp);
-		}
-#endif
 
 		CPUSET_ADD(cpuset, id);
 		kpreempt_disable();
@@ -1190,15 +986,6 @@ ucode_check(cpu_t *cp)
 
 	ucode->read_rev(uinfop);
 
-#ifdef	__xpv
-	/*
-	 * for i86xpv, the hypervisor will update all the CPUs. We only need
-	 * do do this on one of the CPUs (and there always is a CPU 0).
-	 */
-	if (cp->cpu_id != 0) {
-		return;
-	}
-#endif
 
 	/*
 	 * Check to see if we need ucode update

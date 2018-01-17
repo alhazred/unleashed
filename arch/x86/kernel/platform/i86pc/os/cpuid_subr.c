@@ -60,9 +60,6 @@
 #include <sys/bitmap.h>
 #include <sys/x86_archext.h>
 #include <sys/pci_cfgspace.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 /*
  * AMD socket types.
@@ -384,13 +381,6 @@ synth_amd_info(uint_t family, uint_t model, uint_t step,
 	if (skt_p != NULL) {
 		int platform;
 
-#ifdef __xpv
-		/* PV guest */
-		if (!is_controldom()) {
-			*skt_p = X86_SOCKET_UNKNOWN;
-			return;
-		}
-#endif
 		platform = get_hwenv();
 
 		if ((platform & HW_VIRTUAL) != 0) {

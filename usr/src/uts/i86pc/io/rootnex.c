@@ -67,12 +67,6 @@
 #include <sys/ddi_isa.h>
 #include <sys/apic.h>
 
-#ifdef __xpv
-#include <sys/bootinfo.h>
-#include <sys/hypervisor.h>
-#include <sys/bootconf.h>
-#include <vm/kboot_mmu.h>
-#endif
 
 #if defined(__amd64) && !defined(__xpv)
 #include <sys/immu.h>
@@ -160,14 +154,8 @@ static rootnex_intprop_t rootnex_intprp[] = {
  * If we're dom0, we're using a real device so we need to load
  * the cookies with MFNs instead of PFNs.
  */
-#ifdef __xpv
-typedef maddr_t rootnex_addr_t;
-#define	ROOTNEX_PADDR_TO_RBASE(pa)	\
-	(DOMAIN_IS_INITDOMAIN(xen_info) ? pa_to_ma(pa) : (pa))
-#else
 typedef paddr_t rootnex_addr_t;
 #define	ROOTNEX_PADDR_TO_RBASE(pa)	(pa)
-#endif
 
 static struct cb_ops rootnex_cb_ops = {
 	nodev,		/* open */
@@ -1088,19 +1076,8 @@ rootnex_map_regspec(ddi_map_req_t *mp, caddr_t *vaddrp)
 			    (rp->regspec_bustype > 1 && rp->regspec_addr == 0) ?
 			    ((caddr_t)(uintptr_t)rp->regspec_bustype) :
 			    ((caddr_t)(uintptr_t)rp->regspec_addr);
-#ifdef __xpv
-			if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-				hp->ah_pfn = xen_assign_pfn(
-				    mmu_btop((ulong_t)rp->regspec_addr &
-				    MMU_PAGEMASK));
-			} else {
-				hp->ah_pfn = mmu_btop(
-				    (ulong_t)rp->regspec_addr & MMU_PAGEMASK);
-			}
-#else
 			hp->ah_pfn = mmu_btop((ulong_t)rp->regspec_addr &
 			    MMU_PAGEMASK);
-#endif
 			hp->ah_pnum = mmu_btopr(rp->regspec_size +
 			    (ulong_t)rp->regspec_addr & MMU_PAGEOFFSET);
 		}
@@ -1148,19 +1125,7 @@ rootnex_map_regspec(ddi_map_req_t *mp, caddr_t *vaddrp)
 	}
 
 	rbase = (rootnex_addr_t)(rp->regspec_addr & MMU_PAGEMASK);
-#ifdef __xpv
-	/*
-	 * If we're dom0, we're using a real device so we need to translate
-	 * the MA to a PA.
-	 */
-	if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-		pbase = pfn_to_pa(xen_assign_pfn(mmu_btop(rbase)));
-	} else {
-		pbase = rbase;
-	}
-#else
 	pbase = rbase;
-#endif
 	pgoffset = (ulong_t)rp->regspec_addr & MMU_PAGEOFFSET;
 
 	if (rp->regspec_size == 0) {
@@ -1345,20 +1310,7 @@ rootnex_map_handle(ddi_map_req_t *mp)
 	if (rp->regspec_size == 0)
 		return (DDI_ME_INVAL);
 
-#ifdef __xpv
-	/*
-	 * If we're dom0, we're using a real device so we need to translate
-	 * the MA to a PA.
-	 */
-	if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-		pbase = pfn_to_pa(xen_assign_pfn(mmu_btop(rbase))) |
-		    (rbase & MMU_PAGEOFFSET);
-	} else {
-		pbase = rbase;
-	}
-#else
 	pbase = rbase;
-#endif
 
 	hp->ah_pfn = mmu_btop(pbase);
 	hp->ah_pnum = mmu_btopr(rp->regspec_size + pgoffset);
@@ -5151,22 +5103,3 @@ rootnex_quiesce(dev_info_t *dip)
 #endif
 }
 
-#if defined(__xpv)
-void
-immu_init(void)
-{
-	;
-}
-
-void
-immu_startup(void)
-{
-	;
-}
-/*ARGSUSED*/
-void
-immu_physmem_update(uint64_t addr, uint64_t size)
-{
-	;
-}
-#endif

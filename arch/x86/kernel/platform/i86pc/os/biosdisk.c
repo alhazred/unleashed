@@ -37,9 +37,6 @@
 #include <sys/sunndi.h>
 #include <sys/biosdisk.h>
 #include <sys/psw.h>
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 
 extern int prom_debug;
 
@@ -71,7 +68,6 @@ static int drive_present(uchar_t drivenum);
 static void reset_disk(uchar_t drivenum);
 static int is_eltorito(uchar_t drivenum);
 
-#if !defined(__xpv)
 void
 startup_bios_disk()
 {
@@ -120,7 +116,6 @@ startup_bios_disk()
 		}
 	}
 }
-#endif
 
 static int
 bios_check_extension_present(uchar_t drivenum)

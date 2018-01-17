@@ -41,9 +41,6 @@
 #include <sys/model.h>
 #include <sys/panic.h>
 
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 
 #include "assym.h"
 
@@ -388,14 +385,7 @@ __no_rupdate_msg:
  * [1] They used to, and we relied on it, but this was broken in 3.1.1.
  * Sigh.
  */
-#if defined(__xpv)
-#define	XPV_SYSCALL_PROD						\
-	movq	0x10(%rsp), %rcx;					\
-	movq	0x20(%rsp), %r11;					\
-	movq	0x28(%rsp), %rsp
-#else
 #define	XPV_SYSCALL_PROD /* nothing */
-#endif
 
 
 	ENTRY_NP2(brand_sys_syscall,_allsyscalls)
@@ -602,11 +592,7 @@ _syscall_invoke:
 	movq	REGOFF_RIP(%rsp), %rcx
 	movl	REGOFF_RFL(%rsp), %r11d
 
-#if defined(__xpv)
-	addq	$REGOFF_RIP, %rsp
-#else
 	movq	REGOFF_RSP(%rsp), %rsp
-#endif
 
         /*
          * There can be no instructions between the ALTENTRY below and
@@ -614,42 +600,9 @@ _syscall_invoke:
          * in sn1_brand_syscall_callback for an example.
          */
 	ASSERT_UPCALL_MASK_IS_SET
-#if defined(__xpv)
-	SYSRETQ
-        ALTENTRY(nopop_sys_syscall_swapgs_sysretq)
-
-	/*
-	 * We can only get here after executing a brand syscall
-	 * interposition callback handler and simply need to
-	 * "sysretq" back to userland. On the hypervisor this
-	 * involves the iret hypercall which requires us to construct
-	 * just enough of the stack needed for the hypercall.
-	 * (rip, cs, rflags, rsp, ss).
-	 */
-	movq    %rsp, %gs:CPU_RTMP_RSP		/* save user's rsp */
-	movq	%gs:CPU_THREAD, %r11
-	movq	T_STACK(%r11), %rsp
-
-	movq	%rcx, REGOFF_RIP(%rsp)
-	movl	$UCS_SEL, REGOFF_CS(%rsp)
-	movq	%gs:CPU_RTMP_RSP, %r11
-	movq	%r11, REGOFF_RSP(%rsp)
-	pushfq
-	popq	%r11				/* hypercall enables ints */
-	movq	%r11, REGOFF_RFL(%rsp)
-	movl	$UDS_SEL, REGOFF_SS(%rsp)
-	addq	$REGOFF_RIP, %rsp
-	/*
-	 * XXPV: see comment in SYSRETQ definition for future optimization
-	 *       we could take.
-	 */
-	ASSERT_UPCALL_MASK_IS_SET
-	SYSRETQ
-#else
         ALTENTRY(nopop_sys_syscall_swapgs_sysretq)
 	SWAPGS				/* user gsbase */
 	SYSRETQ
-#endif
         /*NOTREACHED*/
         SET_SIZE(nopop_sys_syscall_swapgs_sysretq)
 

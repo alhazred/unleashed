@@ -88,9 +88,6 @@
 #include <sys/segments.h>
 #include <sys/ontrap.h>
 #include <sys/cpu.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 /*
  * Compare the version of boot that boot says it is against

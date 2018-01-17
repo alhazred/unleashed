@@ -621,11 +621,6 @@ ENTRY_NP(i86_monitor)
 
 #endif	/* __i386 */
 
-#if defined(__xpv)
-	/*
-	 * Defined in C
-	 */
-#else
 
 
 #if defined(__amd64)
@@ -714,7 +709,6 @@ _tsc_lfence_end:
 
 #endif	/* __i386 */
 
-#endif	/* __xpv */
 
 /*
  * Do not use this function for obtaining clock tick.  This

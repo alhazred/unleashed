@@ -31,9 +31,6 @@
  * CPU Module Interface - hardware abstraction.
  */
 
-#ifdef __xpv
-#include <sys/xpv_user.h>
-#endif
 
 #include <sys/types.h>
 #include <sys/cpu_module.h>
@@ -561,7 +558,6 @@ pcii_rment(int bus, int dev, int func, int reg, int asz)
 	mutex_exit(&hbp->pciib_lock);
 }
 
-#ifndef __xpv
 
 /*
  *	 =======================================================
@@ -862,303 +858,12 @@ ntv_online(cmi_hdl_impl_t *hdl, int new_status, int *old_status)
 	return (rc);
 }
 
-#else	/* __xpv */
-
-/*
- *	 =======================================================
- *	|	xVM dom0 methods				|
- *	|	----------------				|
- *	|							|
- *	| These are used when we are running as dom0 in		|
- *	| a Solaris xVM context.				|
- *	---------------------------------------------------------
- */
-
-#define	HDLPRIV(hdl)	((xen_mc_lcpu_cookie_t)(hdl)->cmih_hdlpriv)
-
-extern uint_t _cpuid_vendorstr_to_vendorcode(char *);
-
-
-static uint_t
-xpv_vendor(cmi_hdl_impl_t *hdl)
-{
-	return (_cpuid_vendorstr_to_vendorcode((char *)xen_physcpu_vendorstr(
-	    HDLPRIV(hdl))));
-}
-
-static const char *
-xpv_vendorstr(cmi_hdl_impl_t *hdl)
-{
-	return (xen_physcpu_vendorstr(HDLPRIV(hdl)));
-}
-
-static uint_t
-xpv_family(cmi_hdl_impl_t *hdl)
-{
-	return (xen_physcpu_family(HDLPRIV(hdl)));
-}
-
-static uint_t
-xpv_model(cmi_hdl_impl_t *hdl)
-{
-	return (xen_physcpu_model(HDLPRIV(hdl)));
-}
-
-static uint_t
-xpv_stepping(cmi_hdl_impl_t *hdl)
-{
-	return (xen_physcpu_stepping(HDLPRIV(hdl)));
-}
-
-static uint_t
-xpv_chipid(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_chipid);
-}
-
-static uint_t
-xpv_procnodeid(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_procnodeid);
-}
-
-static uint_t
-xpv_procnodes_per_pkg(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_procnodes_per_pkg);
-}
-
-static uint_t
-xpv_coreid(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_coreid);
-}
-
-static uint_t
-xpv_strandid(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_strandid);
-}
-
-static uint_t
-xpv_strand_apicid(cmi_hdl_impl_t *hdl)
-{
-	return (xen_physcpu_initial_apicid(HDLPRIV(hdl)));
-}
-
-static uint16_t
-xpv_smbiosid(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_smbiosid);
-}
-
-static uint_t
-xpv_smb_chipid(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_smb_chipid);
-}
-
-static nvlist_t *
-xpv_smb_bboard(cmi_hdl_impl_t *hdl)
-{
-	return (hdl->cmih_smb_bboard);
-}
-
-extern uint32_t _cpuid_chiprev(uint_t, uint_t, uint_t, uint_t);
-
-static uint32_t
-xpv_chiprev(cmi_hdl_impl_t *hdl)
-{
-	return (_cpuid_chiprev(xpv_vendor(hdl), xpv_family(hdl),
-	    xpv_model(hdl), xpv_stepping(hdl)));
-}
-
-extern const char *_cpuid_chiprevstr(uint_t, uint_t, uint_t, uint_t);
-
-static const char *
-xpv_chiprevstr(cmi_hdl_impl_t *hdl)
-{
-	return (_cpuid_chiprevstr(xpv_vendor(hdl), xpv_family(hdl),
-	    xpv_model(hdl), xpv_stepping(hdl)));
-}
-
-extern uint32_t _cpuid_skt(uint_t, uint_t, uint_t, uint_t);
-
-static uint32_t
-xpv_getsockettype(cmi_hdl_impl_t *hdl)
-{
-	return (_cpuid_skt(xpv_vendor(hdl), xpv_family(hdl),
-	    xpv_model(hdl), xpv_stepping(hdl)));
-}
-
-extern const char *_cpuid_sktstr(uint_t, uint_t, uint_t, uint_t);
-
-static const char *
-xpv_getsocketstr(cmi_hdl_impl_t *hdl)
-{
-	return (_cpuid_sktstr(xpv_vendor(hdl), xpv_family(hdl),
-	    xpv_model(hdl), xpv_stepping(hdl)));
-}
-
-static id_t
-xpv_logical_id(cmi_hdl_impl_t *hdl)
-{
-	return (xen_physcpu_logical_id(HDLPRIV(hdl)));
-}
-
-static cmi_errno_t
-xpv_rdmsr(cmi_hdl_impl_t *hdl, uint_t msr, uint64_t *valp)
-{
-	switch (msr) {
-	case IA32_MSR_MCG_CAP:
-		*valp = xen_physcpu_mcg_cap(HDLPRIV(hdl));
-		break;
-
-	default:
-		return (CMIERR_NOTSUP);
-	}
-
-	return (CMI_SUCCESS);
-}
-
-/*
- * Request the hypervisor to write an MSR for us.  The hypervisor
- * will only accept MCA-related MSRs, as this is for MCA error
- * simulation purposes alone.  We will pre-screen MSRs for injection
- * so we don't bother the HV with bogus requests.  We will permit
- * injection to any MCA bank register, and to MCG_STATUS.
- */
-
-#define	IS_MCA_INJ_MSR(msr) \
-	(((msr) >= IA32_MSR_MC(0, CTL) && (msr) <= IA32_MSR_MC(10, MISC)) || \
-	(msr) == IA32_MSR_MCG_STATUS)
-
-static cmi_errno_t
-xpv_wrmsr_cmn(cmi_hdl_impl_t *hdl, uint_t msr, uint64_t val, boolean_t intpose)
-{
-	xen_mc_t xmc;
-	struct xen_mc_msrinject *mci = &xmc.u.mc_msrinject;
-
-	if (!(hdl->cmih_flags & CMIH_F_INJACTV))
-		return (CMIERR_NOTSUP);		/* for injection use only! */
-
-	if (!IS_MCA_INJ_MSR(msr))
-		return (CMIERR_API);
-
-	if (panicstr)
-		return (CMIERR_DEADLOCK);
-
-	mci->mcinj_cpunr = xen_physcpu_logical_id(HDLPRIV(hdl));
-	mci->mcinj_flags = intpose ? MC_MSRINJ_F_INTERPOSE : 0;
-	mci->mcinj_count = 1;	/* learn to batch sometime */
-	mci->mcinj_msr[0].reg = msr;
-	mci->mcinj_msr[0].value = val;
-
-	return (HYPERVISOR_mca(XEN_MC_msrinject, &xmc) ==
-	    0 ?  CMI_SUCCESS : CMIERR_NOTSUP);
-}
-
-static cmi_errno_t
-xpv_wrmsr(cmi_hdl_impl_t *hdl, uint_t msr, uint64_t val)
-{
-	return (xpv_wrmsr_cmn(hdl, msr, val, B_FALSE));
-}
-
-
-static cmi_errno_t
-xpv_msrinterpose(cmi_hdl_impl_t *hdl, uint_t msr, uint64_t val)
-{
-	return (xpv_wrmsr_cmn(hdl, msr, val, B_TRUE));
-}
-
-static void
-xpv_int(cmi_hdl_impl_t *hdl, int int_no)
-{
-	xen_mc_t xmc;
-	struct xen_mc_mceinject *mce = &xmc.u.mc_mceinject;
-
-	if (!(hdl->cmih_flags & CMIH_F_INJACTV))
-		return;
-
-	if (int_no != T_MCE) {
-		cmn_err(CE_WARN, "xpv_int: int_no %d unimplemented\n",
-		    int_no);
-	}
-
-	mce->mceinj_cpunr = xen_physcpu_logical_id(HDLPRIV(hdl));
-
-	(void) HYPERVISOR_mca(XEN_MC_mceinject, &xmc);
-}
-
-static int
-xpv_online(cmi_hdl_impl_t *hdl, int new_status, int *old_status)
-{
-	xen_sysctl_t xs;
-	int op, rc, status;
-
-	new_status &= ~P_FORCED;
-
-	switch (new_status) {
-	case P_STATUS:
-		op = XEN_SYSCTL_CPU_HOTPLUG_STATUS;
-		break;
-	case P_FAULTED:
-	case P_OFFLINE:
-		op = XEN_SYSCTL_CPU_HOTPLUG_OFFLINE;
-		break;
-	case P_ONLINE:
-		op = XEN_SYSCTL_CPU_HOTPLUG_ONLINE;
-		break;
-	default:
-		return (-1);
-	}
-
-	xs.cmd = XEN_SYSCTL_cpu_hotplug;
-	xs.interface_version = XEN_SYSCTL_INTERFACE_VERSION;
-	xs.u.cpu_hotplug.cpu = xen_physcpu_logical_id(HDLPRIV(hdl));
-	xs.u.cpu_hotplug.op = op;
-
-	if ((rc = HYPERVISOR_sysctl(&xs)) >= 0) {
-		status = rc;
-		rc = 0;
-		switch (status) {
-		case XEN_CPU_HOTPLUG_STATUS_NEW:
-			*old_status = P_OFFLINE;
-			break;
-		case XEN_CPU_HOTPLUG_STATUS_OFFLINE:
-			*old_status = P_FAULTED;
-			break;
-		case XEN_CPU_HOTPLUG_STATUS_ONLINE:
-			*old_status = P_ONLINE;
-			break;
-		default:
-			return (-1);
-		}
-	}
-
-	return (-rc);
-}
-
-#endif
 
 /*ARGSUSED*/
 static void *
 cpu_search(enum cmi_hdl_class class, uint_t chipid, uint_t coreid,
     uint_t strandid)
 {
-#ifdef __xpv
-	xen_mc_lcpu_cookie_t cpi;
-
-	for (cpi = xen_physcpu_next(NULL); cpi != NULL;
-	    cpi = xen_physcpu_next(cpi)) {
-		if (xen_physcpu_chipid(cpi) == chipid &&
-		    xen_physcpu_coreid(cpi) == coreid &&
-		    xen_physcpu_strandid(cpi) == strandid)
-			return ((void *)cpi);
-	}
-	return (NULL);
-
-#else	/* __xpv */
 
 	cpu_t *cp, *startcp;
 
@@ -1176,22 +881,17 @@ cpu_search(enum cmi_hdl_class class, uint_t chipid, uint_t coreid,
 	} while (cp != startcp);
 	kpreempt_enable();
 	return (NULL);
-#endif	/* __ xpv */
 }
 
 static boolean_t
 cpu_is_cmt(void *priv)
 {
-#ifdef __xpv
-	return (xen_physcpu_is_cmt((xen_mc_lcpu_cookie_t)priv));
-#else /* __xpv */
 	cpu_t *cp = (cpu_t *)priv;
 
 	int strands_per_core = cpuid_get_ncpu_per_chip(cp) /
 	    cpuid_get_ncore_per_chip(cp);
 
 	return (strands_per_core > 1);
-#endif /* __xpv */
 }
 
 /*
@@ -1236,11 +936,7 @@ cmi_hdl_create(enum cmi_hdl_class class, uint_t chipid, uint_t coreid,
 	cmi_hdl_ent_t *ent;
 	uint_t vendor;
 
-#ifdef __xpv
-	ASSERT(class == CMI_HDL_SOLARIS_xVM_MCA);
-#else
 	ASSERT(class == CMI_HDL_NATIVE);
-#endif
 
 	if ((priv = cpu_search(class, chipid, coreid, strandid)) == NULL)
 		return (NULL);
@@ -1250,12 +946,7 @@ cmi_hdl_create(enum cmi_hdl_class class, uint_t chipid, uint_t coreid,
 	 * For Intel, attempt to check if extended topology is available
 	 * CPUID.EAX=0xB. If so, get the number of core and strand bits.
 	 */
-#ifdef __xpv
-	vendor = _cpuid_vendorstr_to_vendorcode(
-	    (char *)xen_physcpu_vendorstr((xen_mc_lcpu_cookie_t)priv));
-#else
 	vendor = cpuid_getvendor((cpu_t *)priv);
-#endif
 	if (vendor == X86_VENDOR_Intel && cmi_ext_topo_check == 0) {
 		cpuid_get_ext_topo(vendor, &cmi_core_nbits, &cmi_strand_nbits);
 		cmi_ext_topo_check = 1;
@@ -1275,23 +966,11 @@ cmi_hdl_create(enum cmi_hdl_class class, uint_t chipid, uint_t coreid,
 	hdl->cmih_strandid = strandid;
 	hdl->cmih_mstrand = cpu_is_cmt(priv);
 	hdl->cmih_hdlpriv = priv;
-#ifdef __xpv
-	hdl->cmih_msrsrc = CMI_MSR_FLAG_RD_INTERPOSEOK |
-	    CMI_MSR_FLAG_WR_INTERPOSEOK;
-
-	/*
-	 * XXX: need hypervisor support for procnodeid, for now assume
-	 * single-node processors (procnodeid = chipid)
-	 */
-	hdl->cmih_procnodeid = xen_physcpu_chipid((xen_mc_lcpu_cookie_t)priv);
-	hdl->cmih_procnodes_per_pkg = 1;
-#else   /* __xpv */
 	hdl->cmih_msrsrc = CMI_MSR_FLAG_RD_HWOK | CMI_MSR_FLAG_RD_INTERPOSEOK |
 	    CMI_MSR_FLAG_WR_HWOK | CMI_MSR_FLAG_WR_INTERPOSEOK;
 	hdl->cmih_procnodeid = cpuid_get_procnodeid((cpu_t *)priv);
 	hdl->cmih_procnodes_per_pkg =
 	    cpuid_get_procnodes_per_pkg((cpu_t *)priv);
-#endif  /* __xpv */
 
 	ent = cmi_hdl_ent_lookup(chipid, coreid, strandid);
 	if (ent->cmae_refcnt != 0 || ent->cmae_hdlp != NULL) {
@@ -1341,11 +1020,7 @@ cmi_read_smbios(cmi_hdl_t ophdl)
 	/* set x86gentopo compatibility */
 	fm_smb_fmacompat();
 
-#ifndef __xpv
 	strand_apicid = ntv_strand_apicid(hdl);
-#else
-	strand_apicid = xpv_strand_apicid(hdl);
-#endif
 
 	if (!x86gentopo_legacy) {
 		/*
@@ -1500,11 +1175,7 @@ cmi_hdl_lookup(enum cmi_hdl_class class, uint_t chipid, uint_t coreid,
 	ent = cmi_hdl_ent_lookup(chipid, coreid, strandid);
 
 	if (class == CMI_HDL_NEUTRAL)
-#ifdef __xpv
-		class = CMI_HDL_SOLARIS_xVM_MCA;
-#else
 		class = CMI_HDL_NATIVE;
-#endif
 
 	if (!cmi_hdl_canref(ent))
 		return (NULL);
@@ -1644,7 +1315,6 @@ cmi_hdl_online(cmi_hdl_t ophdl, int new_status, int *old_status)
 	    new_status, old_status));
 }
 
-#ifndef	__xpv
 /*
  * Return hardware chip instance; cpuid_get_chipid provides this directly.
  */
@@ -1712,7 +1382,6 @@ cmi_ntv_hwdisable_mce(cmi_hdl_t hdl)
 	}
 }
 
-#endif	/* __xpv */
 
 void
 cmi_hdlconf_rdmsr_nohw(cmi_hdl_t ophdl)
@@ -1803,13 +1472,6 @@ cmi_hdl_msrinterpose(cmi_hdl_t ophdl, cmi_mca_regs_t *regs, uint_t nregs)
 void
 cmi_hdl_msrforward(cmi_hdl_t ophdl, cmi_mca_regs_t *regs, uint_t nregs)
 {
-#ifdef __xpv
-	cmi_hdl_impl_t *hdl = IMPLHDL(ophdl);
-	int i;
-
-	for (i = 0; i < nregs; i++, regs++)
-		msri_addent(hdl, regs->cmr_msrnum, regs->cmr_msrval);
-#endif
 }
 
 
@@ -1976,38 +1638,6 @@ cmi_pci_putl(int bus, int dev, int func, int reg, ddi_acc_handle_t hdl,
 }
 
 static const struct cmi_hdl_ops cmi_hdl_ops = {
-#ifdef __xpv
-	/*
-	 * CMI_HDL_SOLARIS_xVM_MCA - ops when we are an xVM dom0
-	 */
-	xpv_vendor,		/* cmio_vendor */
-	xpv_vendorstr,		/* cmio_vendorstr */
-	xpv_family,		/* cmio_family */
-	xpv_model,		/* cmio_model */
-	xpv_stepping,		/* cmio_stepping */
-	xpv_chipid,		/* cmio_chipid */
-	xpv_procnodeid,		/* cmio_procnodeid */
-	xpv_coreid,		/* cmio_coreid */
-	xpv_strandid,		/* cmio_strandid */
-	xpv_procnodes_per_pkg,	/* cmio_procnodes_per_pkg */
-	xpv_strand_apicid,	/* cmio_strand_apicid */
-	xpv_chiprev,		/* cmio_chiprev */
-	xpv_chiprevstr,		/* cmio_chiprevstr */
-	xpv_getsockettype,	/* cmio_getsockettype */
-	xpv_getsocketstr,	/* cmio_getsocketstr */
-	xpv_logical_id,		/* cmio_logical_id */
-	NULL,			/* cmio_getcr4 */
-	NULL,			/* cmio_setcr4 */
-	xpv_rdmsr,		/* cmio_rdmsr */
-	xpv_wrmsr,		/* cmio_wrmsr */
-	xpv_msrinterpose,	/* cmio_msrinterpose */
-	xpv_int,		/* cmio_int */
-	xpv_online,		/* cmio_online */
-	xpv_smbiosid,		/* cmio_smbiosid */
-	xpv_smb_chipid,		/* cmio_smb_chipid */
-	xpv_smb_bboard		/* cmio_smb_bboard */
-
-#else	/* __xpv */
 
 	/*
 	 * CMI_HDL_NATIVE - ops when apparently running on bare-metal
@@ -2038,5 +1668,4 @@ static const struct cmi_hdl_ops cmi_hdl_ops = {
 	ntv_smbiosid,		/* cmio_smbiosid */
 	ntv_smb_chipid,		/* cmio_smb_chipid */
 	ntv_smb_bboard		/* cmio_smb_bboard */
-#endif
 };

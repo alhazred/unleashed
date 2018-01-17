@@ -35,9 +35,6 @@
 #include <sys/machparam.h>
 #include <sys/controlregs.h>
 #include <sys/mach_mmu.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 #include <vm/as.h>
 
 #include <mdb/mdb_modapi.h>
@@ -220,120 +217,13 @@ init_mmu(void)
 void
 free_mmu(void)
 {
-#ifdef __xpv
-	if (mfn_list != NULL)
-		mdb_free(mfn_list, mfn_count * sizeof (mfn_t));
-#endif
 }
 
-#ifdef __xpv
-
-#ifdef _KMDB
-
-/*
- * Convert between MFNs and PFNs.  Since we're in kmdb we can go directly
- * through the machine to phys mapping and the MFN list.
- */
-
-pfn_t
-mdb_mfn_to_pfn(mfn_t mfn)
-{
-	pfn_t pfn;
-	mfn_t tmp;
-	pfn_t *pfn_list;
-
-	if (mfn_list_addr == (uintptr_t)NULL)
-		return (-(pfn_t)1);
-
-	pfn_list = (pfn_t *)xen_virt_start;
-	if (mdb_vread(&pfn, sizeof (pfn), (uintptr_t)(pfn_list + mfn)) == -1)
-		return (-(pfn_t)1);
-
-	if (mdb_vread(&tmp, sizeof (tmp),
-	    (uintptr_t)(mfn_list_addr + (pfn * sizeof (mfn_t)))) == -1)
-		return (-(pfn_t)1);
-
-	if (pfn >= mfn_count || tmp != mfn)
-		return (-(pfn_t)1);
-
-	return (pfn);
-}
-
-mfn_t
-mdb_pfn_to_mfn(pfn_t pfn)
-{
-	mfn_t mfn;
-
-	init_mmu();
-
-	if (mfn_list_addr == (uintptr_t)NULL || pfn >= mfn_count)
-		return (-(mfn_t)1);
-
-	if (mdb_vread(&mfn, sizeof (mfn),
-	    (uintptr_t)(mfn_list_addr + (pfn * sizeof (mfn_t)))) == -1)
-		return (-(mfn_t)1);
-
-	return (mfn);
-}
-
-#else /* _KMDB */
-
-/*
- * Convert between MFNs and PFNs.  Since a crash dump doesn't include the
- * MFN->PFN translation table (it's part of the hypervisor, not our image)
- * we do the MFN->PFN translation by searching the PFN->MFN (mfn_list)
- * table, if it's there.
- */
-
-pfn_t
-mdb_mfn_to_pfn(mfn_t mfn)
-{
-	pfn_t pfn;
-
-	init_mmu();
-
-	if (mfn_list == NULL)
-		return (-(pfn_t)1);
-
-	for (pfn = 0; pfn < mfn_count; ++pfn) {
-		if (mfn_list[pfn] != mfn)
-			continue;
-		return (pfn);
-	}
-
-	return (-(pfn_t)1);
-}
-
-mfn_t
-mdb_pfn_to_mfn(pfn_t pfn)
-{
-	init_mmu();
-
-	if (mfn_list == NULL || pfn >= mfn_count)
-		return (-(mfn_t)1);
-
-	return (mfn_list[pfn]);
-}
-
-#endif /* _KMDB */
-
-static paddr_t
-mdb_ma_to_pa(uint64_t ma)
-{
-	pfn_t pfn = mdb_mfn_to_pfn(mmu_btop(ma));
-	if (pfn == -(pfn_t)1)
-		return (-(paddr_t)1);
-
-	return (mmu_ptob((paddr_t)pfn) | (ma & (MMU_PAGESIZE - 1)));
-}
-
-#else /* __xpv */
 
 #define	mdb_ma_to_pa(ma) (ma)
 #define	mdb_mfn_to_pfn(mfn) (mfn)
 #define	mdb_pfn_to_mfn(pfn) (pfn)
 
-#endif /* __xpv */
 
 /*
  * ::mfntopfn dcmd translates hypervisor machine page number

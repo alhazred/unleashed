@@ -280,14 +280,6 @@
 	 */
 	CLI(%eax)
 
-#if defined(__xpv)
-	/*
-	 * Clear saved_upcall_mask in unused byte of cs slot on stack.
-	 * It can only confuse things.
-	 */
-	movb    $0, REG_OFF(KDIREG_CS)+2(%esp)
-
-#endif
 
 	GET_CPUSAVE_ADDR		/* %eax = cpusave, %ebx = CPU ID */
 
@@ -471,13 +463,11 @@ kdi_slave_entry_patch:
 
 	SAVE_IDTGDT
 
-#if !defined(__xpv)
 	/* Save off %cr0, and clear write protect */
 	movl	%cr0, %ecx
 	movl	%ecx, KRS_CR0(%eax)
 	andl	$_BITNOT(CR0_WP), %ecx
 	movl	%ecx, %cr0
-#endif
 	pushl	%edi
 	movl	%eax, %edi
 
@@ -575,10 +565,8 @@ no_msr:
 	 * Send this CPU back into the world
 	 */
 
-#if !defined(__xpv)
 	movl	KRS_CR0(%eax), %edx
 	movl	%edx, %cr0
-#endif
 
 	pushl	%edi
 	movl	%eax, %edi
@@ -587,18 +575,6 @@ no_msr:
 
 	popl	%edi
 
-#if defined(__xpv)
-	/*
-	 * kmdb might have set PS_T in the saved eflags, so we can't use
-	 * intr_restore, since that restores all of eflags; instead, just
-	 * pick up PS_IE from the saved eflags.
-	 */
-	movl	REG_OFF(KDIREG_EFLAGS)(%esp), %eax
-	testl	$PS_IE, %eax
-	jz	2f
-	STI
-2:
-#endif
 
 	addl	$8, %esp	/* Discard savfp and savpc */
 
@@ -678,12 +654,7 @@ kpass_invaltrap:
 	call	*psm_shutdownf
 	addl	$8, %esp
 
-#if defined(__xpv)
-	pushl	$SHUTDOWN_reboot
-	call	HYPERVISOR_shutdown
-#else
 	call	reset
-#endif
 	/*NOTREACHED*/
 
 	SET_SIZE(kdi_reboot)

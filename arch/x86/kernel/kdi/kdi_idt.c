@@ -155,9 +155,7 @@ struct idt_description {
 	{ T_BOUNDFLT, 0,	kdi_trap5, NULL },
 	{ T_ILLINST, 0,		kdi_trap6, NULL },
 	{ T_NOEXTFLT, 0,	kdi_trap7, NULL },
-#if !defined(__xpv)
 	{ T_DBLFLT, 0,		syserrtrap, NULL },
-#endif
 	{ T_EXTOVRFLT, 0,	kdi_trap9, NULL },
 	{ T_TSSFLT, 0,		kdi_traperr10, NULL },
 	{ T_SEGFLT, 0,		kdi_traperr11, NULL },

@@ -50,12 +50,6 @@
 #include <sys/note.h>
 #include <sys/boot_console.h>
 #include <sys/apic.h>
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#include <sys/evtchn_impl.h>
-
-extern int console_hypervisor_dev_type(int *);
-#endif
 
 
 extern int pseudo_isa;
@@ -295,16 +289,6 @@ isa_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 {
 	int rval;
 
-#if defined(__xpv)
-	/*
-	 * don't allow isa to attach in domU. this can happen if someone sets
-	 * the console wrong, etc. ISA devices assume the H/W is there and
-	 * will cause the domU to panic.
-	 */
-	if (!DOMAIN_IS_INITDOMAIN(xen_info)) {
-		return (DDI_FAILURE);
-	}
-#endif
 
 	switch (cmd) {
 	case DDI_ATTACH:
@@ -774,11 +758,6 @@ isa_intr_ops(dev_info_t *pdip, dev_info_t *rdip, ddi_intr_op_t intr_op,
     ddi_intr_handle_impl_t *hdlp, void *result)
 {
 	struct intrspec *ispec;
-#if defined(__xpv)
-	int cons, ttyn;
-
-	cons = console_hypervisor_dev_type(&ttyn);
-#endif
 	if (pseudo_isa)
 		return (i_ddi_intr_ops(pdip, rdip, intr_op, hdlp, result));
 
@@ -846,15 +825,6 @@ isa_intr_ops(dev_info_t *pdip, dev_info_t *rdip, ddi_intr_op_t intr_op,
 		if (psm_intr_ops == NULL)
 			return (DDI_FAILURE);
 
-#if defined(__xpv)
-		/*
-		 * if the hypervisor is using an isa serial port for the
-		 * console, make sure we don't try to use that interrupt as
-		 * it will cause us to panic when xen_bind_pirq() fails.
-		 */
-		if (cons == CONS_TTY && ispec->intrspec_vec == asy_intrs[ttyn])
-			return (DDI_FAILURE);
-#endif
 		((ihdl_plat_t *)hdlp->ih_private)->ip_ispecp = ispec;
 		if ((*psm_intr_ops)(rdip, hdlp, PSM_INTR_OP_XLATE_VECTOR,
 		    (int *)&hdlp->ih_vector) == PSM_FAILURE)
@@ -1194,11 +1164,6 @@ isa_enumerate(int reprogram)
 	int i8042_intrs[] = {0x1, 0xc};
 	char *acpi_prop;
 	int acpi_enum = 1; /* ACPI is default to be on */
-#if defined(__xpv)
-	int cons, ttyn;
-
-	cons = console_hypervisor_dev_type(&ttyn);
-#endif
 	if (reprogram || !isa_dip)
 		return;
 
@@ -1238,10 +1203,6 @@ isa_enumerate(int reprogram)
 		ushort_t addr = asy_regs[i].regspec_addr;
 		if (!uart_exists(addr))
 			continue;
-#if defined(__xpv)
-		if (cons == CONS_TTY && ttyn == i)
-			continue;
-#endif
 		ndi_devi_alloc_sleep(isa_dip, "asy",
 		    (pnode_t)DEVI_SID_NODEID, &xdip);
 		(void) ndi_prop_update_string(DDI_DEV_T_NONE, xdip,
@@ -1291,11 +1252,6 @@ enumerate_BIOS_serial(dev_info_t *isa_dip)
 	int ret;
 	struct regspec *tmpregs;
 	int tmpregs_len;
-#if defined(__xpv)
-	int cons, ttyn;
-
-	cons = console_hypervisor_dev_type(&ttyn);
-#endif
 
 	/*
 	 * Scan the base I/O addresses of the first four serial ports.
@@ -1370,32 +1326,6 @@ enumerate_BIOS_serial(dev_info_t *isa_dip)
 	 * is in use by the hypervisor.  If it is in use, then remove
 	 * the node from the device tree.
 	 */
-#if defined(__xpv)
-	i = 0;
-
-	for (xdip = ddi_get_child(isa_dip); xdip != NULL; ) {
-		dev_info_t *curdip;
-
-		curdip = xdip;
-		xdip = ddi_get_next_sibling(xdip);
-
-		if (strncmp(ddi_node_name(curdip), "asy", 3) != 0)
-			continue;
-
-		if (cons == CONS_TTY && ttyn == i) {
-			ret = ndi_devi_free(curdip);
-			if (ret != DDI_SUCCESS) {
-				cmn_err(CE_WARN,
-				    "could not remove asy%d node", i);
-			}
-
-			cmn_err(CE_NOTE, "!asy%d unavailable, reserved"
-			    " to hypervisor", i);
-		}
-
-		i++;
-	}
-#endif
 
 }
 

@@ -823,7 +823,6 @@ _patch_xrstor_ebx:
 
 #endif	/* __i386 */
 
-#if !defined(__xpv)
 #if defined(__amd64)
 
 	/*
@@ -1000,7 +999,6 @@ make_frame:
 	SET_SIZE(syserrtrap)
 
 #endif	/* __i386 */
-#endif	/* !__xpv */
 
 	ENTRY_NP(overrun)
 	push	$0
@@ -1055,17 +1053,6 @@ make_frame:
 	ENTRY_NP(pftrap)
 	TRAP_ERR(T_PGFLT)	/* $14 already have error code on stack */
 	INTR_PUSH
-#if defined(__xpv)
-
-#if defined(__amd64)
-	movq	%gs:CPU_VCPU_INFO, %r15
-	movq	VCPU_INFO_ARCH_CR2(%r15), %r15	/* vcpu[].arch.cr2 */
-#elif defined(__i386)
-	movl	%gs:CPU_VCPU_INFO, %esi
-	movl	VCPU_INFO_ARCH_CR2(%esi), %esi	/* vcpu[].arch.cr2 */
-#endif	/* __i386 */
-
-#else	/* __xpv */
 
 #if defined(__amd64)
 	movq	%cr2, %r15
@@ -1073,7 +1060,6 @@ make_frame:
 	movl	%cr2, %esi
 #endif	/* __i386 */
 
-#endif	/* __xpv */
 	jmp	cmntrap_pushed
 	SET_SIZE(pftrap)
 

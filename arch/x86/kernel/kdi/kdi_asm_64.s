@@ -40,9 +40,6 @@
 #include <sys/kdi_regs.h>
 #include <sys/psw.h>
 #include <sys/uadmin.h>
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 #ifdef _ASM
 
@@ -291,15 +288,7 @@
 	subq	$REG_OFF(KDIREG_TRAPNO), %rsp
 	KDI_SAVE_REGS(%rsp)
 
-#ifdef __xpv
-	/*
-	 * Clear saved_upcall_mask in unused byte of cs slot on stack.
-	 * It can only confuse things.
-	 */
-	movb	$0, REG_OFF(KDIREG_CS)+4(%rsp)
-#endif
 
-#if !defined(__xpv)
 	/*
 	 * Switch to the kernel's GSBASE.  Neither GSBASE nor the ill-named
 	 * KGSBASE can be trusted, as the kernel may or may not have already
@@ -319,7 +308,6 @@
 	shrq	$32, %rdx
 	movl	$MSR_AMD_GSBASE, %ecx
 	wrmsr
-#endif	/* __xpv */
 
 	GET_CPUSAVE_ADDR	/* %rax = cpusave, %rbx = CPU ID */
 
@@ -475,13 +463,11 @@ kdi_slave_entry_patch:
 
 	SAVE_IDTGDT
 
-#if !defined(__xpv)
 	/* Save off %cr0, and clear write protect */
 	movq	%cr0, %rcx
 	movq	%rcx, KRS_CR0(%rax)
 	andq	$_BITNOT(CR0_WP), %rcx
 	movq	%rcx, %cr0
-#endif
 
 	/* Save the debug registers and disable any active watchpoints */
 
@@ -574,10 +560,8 @@ no_msr:
 	/*
 	 * Send this CPU back into the world
 	 */
-#if !defined(__xpv)
 	movq	KRS_CR0(%rdi), %rdx
 	movq	%rdx, %cr0
-#endif
 
 	KDI_RESTORE_DEBUGGING_STATE
 
@@ -650,12 +634,7 @@ no_msr:
 	movl	$AD_BOOT, %edi
 	movl	$A_SHUTDOWN, %esi
 	call	*psm_shutdownf
-#if defined(__xpv)
-	movl	$SHUTDOWN_reboot, %edi
-	call	HYPERVISOR_shutdown
-#else
 	call	reset
-#endif
 	/*NOTREACHED*/
 
 	SET_SIZE(kdi_reboot)

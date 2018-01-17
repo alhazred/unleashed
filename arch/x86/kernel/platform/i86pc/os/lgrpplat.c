@@ -778,9 +778,6 @@ lgrp_plat_alloc(lgrp_id_t lgrpid)
 void
 lgrp_plat_config(lgrp_config_flag_t flag, uintptr_t arg)
 {
-#ifdef	__xpv
-	_NOTE(ARGUNUSED(flag, arg));
-#else
 	int	rc, node;
 	cpu_t	*cp;
 	void	*hdl = NULL;
@@ -929,7 +926,6 @@ lgrp_plat_config(lgrp_config_flag_t flag, uintptr_t arg)
 	default:
 		break;
 	}
-#endif	/* __xpv */
 }
 
 
@@ -963,19 +959,10 @@ lgrp_plat_cpu_to_hand(processorid_t id)
 void
 lgrp_plat_init(lgrp_init_stages_t stage)
 {
-#if defined(__xpv)
-#else	/* __xpv */
 	u_longlong_t	value;
-#endif	/* __xpv */
 
 	switch (stage) {
 	case LGRP_INIT_STAGE1:
-#if defined(__xpv)
-		/*
-		 * XXPV	For now, the hypervisor treats all memory equally.
-		 */
-		lgrp_plat_node_cnt = max_mem_nodes = 1;
-#else	/* __xpv */
 
 		/*
 		 * Get boot property for lgroup topology height limit
@@ -1022,7 +1009,6 @@ lgrp_plat_init(lgrp_init_stages_t stage)
 			    lgrp_plat_node_cnt;
 			ASSERT(max_mem_nodes <= MAX_MEM_NODES);
 		}
-#endif	/* __xpv */
 		break;
 
 	case LGRP_INIT_STAGE3:
