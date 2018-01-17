@@ -30,9 +30,6 @@
 #pragma weak __remquol = remquol
 
 #include "libm.h"
-#if defined(__SUNPRO_C)
-#include <sunmath.h>			/* fabsl */
-#endif
 /* INDENT OFF */
 static const int
 	is = -0x7fffffff - 1,

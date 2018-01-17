@@ -44,9 +44,6 @@
 #include "longdouble.h"
 
 #include <math.h>
-#if defined(__SUNPRO_C)
-#include <sunmath.h>
-#endif
 
 #define	GENERIC long double
 static GENERIC

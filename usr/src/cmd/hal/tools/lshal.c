@@ -40,9 +40,6 @@
 #include <dbus/dbus-glib.h>
 #include <libhal.h>
 
-#ifdef __SUNPRO_C
-#define __FUNCTION__ __func__
-#endif
 
 /**
  * @defgroup HalLsHal  List HAL devices

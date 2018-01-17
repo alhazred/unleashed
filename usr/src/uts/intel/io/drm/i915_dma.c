@@ -308,9 +308,7 @@ static int do_validate_cmd(int cmd)
 		default:
 			return 0;	/* disallow everything else */
 		}
-#ifndef __SUNPRO_C
 		break;
-#endif
 	case 0x1:
 		return 0;	/* reserved */
 	case 0x2:
@@ -353,9 +351,7 @@ static int do_validate_cmd(int cmd)
 		return 0;
 	}
 
-#ifndef __SUNPRO_C
 	return 0;
-#endif
 }
 
 static int validate_cmd(int cmd)

@@ -73,9 +73,6 @@
 #include "libm_protos.h"
 #include "libm_macros.h"
 #include <math.h>
-#if defined(__SUNPRO_C)
-#include <sunmath.h>
-#endif
 
 static const double
 	pi 	= 3.14159265358979323846,	/* 400921FB,54442D18 */
