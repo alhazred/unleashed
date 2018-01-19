@@ -85,18 +85,13 @@ fi
 
 case $PLATFORM in
 i386)	PLATFORM=i86pc
-	ISA=i386
-	ARCH64=amd64
 	;;
-i86pc)	ISA=i386
-	ARCH64=amd64
-	;;
+i86pc)	;;
 *)	usage
 	;;
 esac
 
 BOOT_ARCHIVE=platform/$PLATFORM/boot_archive
-BOOT_ARCHIVE_64=platform/$PLATFORM/$ARCH64/boot_archive
 
 function cleanup
 {
@@ -168,25 +163,6 @@ function create_archive
 		rm -f "$archive.hash"
 		mv "${archive}-new" "$archive"
 		mv "$archive.hash-new" "$archive.hash" 2> /dev/null
-	fi
-}
-
-function duplicate_archive
-{
-	src="$1"
-	dst="$2"
-
-	if ! cp "$src" "$dst-new" ; then
-		ERROR=1
-	elif ! cp "$src.hash" "$dst.hash-new" ; then
-		ERROR=1
-		rm "$dst-new"
-	else
-		# remove the hash first, it's better to have a boot archive
-		# without a hash, than one with a hash for its predecessor
-		rm -f "$dst.hash"
-		mv "$dst-new" "$dst"
-		mv "$dst.hash-new" "$dst.hash"
 	fi
 }
 
@@ -275,10 +251,5 @@ if [ $ERROR = 1 ]; then
 	cleanup
 	exit 1
 fi
-
-#
-# For now, use the same archive for both bare and $ARCH64 files.
-#
-duplicate_archive "$ALT_ROOT/$BOOT_ARCHIVE" "$ALT_ROOT/$BOOT_ARCHIVE_64"
 
 [ -n "$rddir" ] && rm -rf "$rddir"
