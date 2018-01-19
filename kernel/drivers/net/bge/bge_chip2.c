@@ -885,12 +885,6 @@ bge_nic_setwin(bge_t *bgep, bge_regno_t base)
 		bgep->lastWriteZeroData = ((base == (bge_regno_t)0) ?
 		    B_TRUE : B_FALSE);
 	}
-#ifdef __sparc
-	if (DEVICE_5717_SERIES_CHIPSETS(bgep) ||
-	    DEVICE_5725_SERIES_CHIPSETS(bgep)) {
-		base = LE_32(base);
-	}
-#endif
 	pci_config_put32(bgep->cfg_handle, PCI_CONF_BGE_MWBAR, base);
 }
 
@@ -912,15 +906,11 @@ bge_nic_get32(bge_t *bgep, bge_regno_t addr)
 	}
 #endif
 
-#ifdef __sparc
-	data = bge_nic_read32(bgep, addr);
-#else
 	bge_nic_setwin(bgep, addr & ~MWBAR_GRANULE_MASK);
 	addr &= MWBAR_GRANULE_MASK;
 	addr += NIC_MEM_WINDOW_OFFSET;
 
 	data = ddi_get32(bgep->io_handle, PIO_ADDR(bgep, addr));
-#endif
 
 	BGE_TRACE(("bge_nic_get32($%p, 0x%lx) = 0x%08x",
 	    (void *)bgep, addr, data));
@@ -947,22 +937,11 @@ bge_nic_put32(bge_t *bgep, bge_regno_t addr, uint32_t data)
 	}
 #endif
 
-#ifdef __sparc
-	if (DEVICE_5717_SERIES_CHIPSETS(bgep) ||
-	    DEVICE_5725_SERIES_CHIPSETS(bgep)) {
-		addr = LE_32(addr);
-	}
-	pci_config_put32(bgep->cfg_handle, PCI_CONF_BGE_MWBAR, addr);
-	data = LE_32(data);
-	pci_config_put32(bgep->cfg_handle, PCI_CONF_BGE_MWDAR, data);
-	pci_config_put32(bgep->cfg_handle, PCI_CONF_BGE_MWBAR, 0);
-#else
 	bge_nic_setwin(bgep, addr & ~MWBAR_GRANULE_MASK);
 	addr &= MWBAR_GRANULE_MASK;
 	addr += NIC_MEM_WINDOW_OFFSET;
 	ddi_put32(bgep->io_handle, PIO_ADDR(bgep, addr), data);
 	BGE_PCICHK(bgep);
-#endif
 }
 
 static uint64_t bge_nic_get64(bge_t *bgep, bge_regno_t addr);
@@ -2622,9 +2601,6 @@ bge_chip_id_init(bge_t *bgep)
 			cidp->chip_label = 5727;
 		}
 		cidp->msi_enabled = bge_enable_msi;
-#ifdef __sparc
-		cidp->mask_pci_int = LE_32(MHCR_MASK_PCI_INT_OUTPUT);
-#endif
 		cidp->bge_dma_rwctrl = LE_32(PDRWCR_VAR_5717);
 		cidp->pci_type = BGE_PCI_E;
 		cidp->mbuf_lo_water_rdma = RDMA_MBUF_LOWAT_5705;
@@ -3249,9 +3225,6 @@ bge_chip_reset_engine(bge_t *bgep, bge_regno_t regno)
 		 * to avoid.  Hence the need for membar_sync() here.
 		 */
 		ddi_put32(bgep->io_handle, PIO_ADDR(bgep, regno), regval);
-#ifdef	__sparcv9
-		membar_sync();
-#endif	/* __sparcv9 */
 		/*
 		 * On some platforms,system need about 300us for
 		 * link setup.
@@ -3669,7 +3642,6 @@ bge_chip_sync(bge_t *bgep)
 	return (retval);
 }
 
-#ifndef __sparc
 static bge_regno_t quiesce_regs[] = {
 	READ_DMA_MODE_REG,
 	DMA_COMPLETION_MODE_REG,
@@ -3703,7 +3675,6 @@ bge_chip_stop_nonblocking(bge_t *bgep)
 	bgep->bge_chip_state = BGE_CHIP_STOPPED;
 }
 
-#endif
 
 /*
  * bge_chip_stop() -- stop all chip processing

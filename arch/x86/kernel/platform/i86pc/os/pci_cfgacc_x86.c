@@ -60,10 +60,6 @@ static caddr_t pci_cfgacc_virt_base = NULL;
 static caddr_t
 pci_cfgacc_map(paddr_t phys_addr)
 {
-#ifdef __xpv
-	phys_addr = pfn_to_pa(xen_assign_pfn(mmu_btop(phys_addr))) |
-	    (phys_addr & MMU_PAGEOFFSET);
-#endif
 	if (khat_running) {
 		pfn_t pfn = mmu_btop(phys_addr);
 		/*

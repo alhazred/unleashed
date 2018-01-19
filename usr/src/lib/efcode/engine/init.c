@@ -42,17 +42,6 @@ safe_malloc(size_t n, char *f, int l)
 	void *p;
 
 	p = malloc((size_t)n);
-#if defined(__sparcv9)
-	/*
-	 * For Ultrasparc, we must force addresses to be less than 4Gb,
-	 * since Fcode assumes that addresses can be stored in 32 bits.
-	 * To get around this would require turning all addresses into
-	 * cookies, which is a lot of work.
-	 */
-	if (((uint64_t)p) >= 0x100000000) {
-		log_message(MSG_WARN, "Malloc returned address > 4Gb\n");
-	}
-#endif	/* __sparcv9 */
 	if (p) {
 		memset(p, 0, (size_t)n);
 	} else

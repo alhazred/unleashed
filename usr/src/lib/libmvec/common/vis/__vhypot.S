@@ -198,11 +198,7 @@
 	PIC_SET(l7,.CONST_TBL,o3)
 	wr	%g0,0x82,%asi
 
-#ifdef __sparcv9
-	ldx	[%fp+STACK_BIAS+176],%l0
-#else
 	ld	[%fp+STACK_BIAS+92],%l0
-#endif
 	ldd	[%o3],DC0
 	sll	%i2,3,stridex
 	mov	%i0,tmp_counter

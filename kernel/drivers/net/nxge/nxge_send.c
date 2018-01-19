@@ -1265,9 +1265,6 @@ nxge_do_softlso(mblk_t *mp, uint32_t mss)
 	int		available, len, left;
 	uint16_t	ip_id;
 	uint32_t	tcp_seq;
-#ifdef __sparc
-	uint32_t	tcp_seq_tmp;
-#endif
 	mblk_t		*datamp;
 	uchar_t		*rptr;
 	mblk_t		*nmp;
@@ -1590,12 +1587,7 @@ nxge_do_softlso(mblk_t *mp, uint32_t mss)
 	niph->ip_len = htons(mss + iphlen + tcphlen);
 	ip_id = ntohs(niph->ip_id);
 	ntcph = (struct tcphdr *)(nmp->b_rptr + ehlen + iphlen);
-#ifdef __sparc
-	bcopy((char *)&ntcph->th_seq, &tcp_seq_tmp, 4);
-	tcp_seq = ntohl(tcp_seq_tmp);
-#else
 	tcp_seq = ntohl(ntcph->th_seq);
-#endif
 
 	ntcph->th_flags &= ~(TH_FIN | TH_PUSH | TH_RST);
 
@@ -1644,12 +1636,7 @@ nxge_do_softlso(mblk_t *mp, uint32_t mss)
 
 		ntcph->th_flags &= ~(TH_FIN | TH_PUSH | TH_RST | TH_URG);
 
-#ifdef __sparc
-		tcp_seq_tmp = htonl(tcp_seq);
-		bcopy(&tcp_seq_tmp, (char *)&ntcph->th_seq, 4);
-#else
 		ntcph->th_seq = htonl(tcp_seq);
-#endif
 		DB_CKSUMFLAGS(nmp) = (uint16_t)hckflags;
 		DB_CKSUMSTART(nmp) = start_offset;
 		DB_CKSUMSTUFF(nmp) = stuff_offset;
@@ -1682,12 +1669,7 @@ nxge_do_softlso(mblk_t *mp, uint32_t mss)
 	niph->ip_len = htons(msgsize(nmp->b_cont) + iphlen + tcphlen);
 	ntcph = (struct tcphdr *)(nmp->b_rptr + ehlen + iphlen);
 	tcp_seq += mss;
-#ifdef __sparc
-	tcp_seq_tmp = htonl(tcp_seq);
-	bcopy(&tcp_seq_tmp, (char *)&ntcph->th_seq, 4);
-#else
 	ntcph->th_seq = htonl(tcp_seq);
-#endif
 	ntcph->th_flags = (otcph->th_flags & ~TH_URG);
 
 	DB_CKSUMFLAGS(nmp) = (uint16_t)hckflags;

@@ -35,14 +35,6 @@
 
 	ENTRY(gethrtime)
 	SYSFASTTRAP(GETHRTIME)
-#if defined(__sparcv9)
-	/*
-	 * Note that the fast trap actually assumes V8 parameter passing
-	 * conventions, so we have to reassemble a 64-bit value here.
-	 */
-	sllx	%o0, 32, %o0
-	or	%o1, %o0, %o0
-#endif
 	RET
 	SET_SIZE(gethrtime)
 
@@ -54,13 +46,5 @@
 
 	ENTRY(gethrvtime)
 	SYSFASTTRAP(GETHRVTIME)
-#if defined(__sparcv9)
-	/*
-	 * Note that the fast trap actually assumes V8 parameter passing
-	 * conventions, so we have to reassemble a 64-bit value here.
-	 */
-	sllx	%o0, 32, %o0
-	or	%o1, %o0, %o0
-#endif
 	RET
 	SET_SIZE(gethrvtime)

@@ -51,9 +51,6 @@
 #include <sys/param.h>
 #include <sys/promif.h>
 #include <sys/cpu_pm.h>
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 #include <sys/mach_intr.h>
 #include <vm/hat_i86.h>
 #include <sys/kdi_machimpl.h>
@@ -89,10 +86,8 @@ static void dummy_scalehrtime(hrtime_t *);
 static uint64_t dummy_unscalehrtime(hrtime_t);
 void cpu_idle(void);
 static void cpu_wakeup(cpu_t *, int);
-#ifndef __xpv
 void cpu_idle_mwait(void);
 static void cpu_wakeup_mwait(cpu_t *, int);
-#endif
 static int mach_cpu_create_devinfo(cpu_t *cp, dev_info_t **dipp);
 
 /*
@@ -172,11 +167,7 @@ ddi_irm_pool_t *apix_irm_pool_p = NULL;
  * True if the generic TSC code is our source of hrtime, rather than whatever
  * the PSM can provide.
  */
-#ifdef __xpv
-int tsc_gethrtime_enable = 0;
-#else
 int tsc_gethrtime_enable = 1;
-#endif
 int tsc_gethrtime_initted = 0;
 
 /*
@@ -201,7 +192,6 @@ void *psm_vt_ops = NULL;
  */
 int	idle_cpu_use_hlt = 1;
 
-#ifndef __xpv
 /*
  * If non-zero, idle cpus will use mwait if available to halt instead of hlt.
  */
@@ -227,7 +217,6 @@ void	(*non_deep_idle_disp_enq_thread)(cpu_t *, int);
  */
 hpet_t hpet;
 
-#endif	/* ifndef __xpv */
 
 uint_t cp_haltset_fanout = 0;
 
@@ -623,7 +612,6 @@ cpu_wakeup(cpu_t *cpu, int bound)
 	}
 }
 
-#ifndef __xpv
 /*
  * Function called by CPU idle notification framework to check whether CPU
  * has been awakened. It will be called with interrupt disabled.
@@ -822,7 +810,6 @@ cpu_wakeup_mwait(cpu_t *cp, int bound)
 	MWAIT_WAKEUP(cpu_seq[cpu_found]); /* write to monitored line */
 }
 
-#endif
 
 void (*cpu_pause_handler)(volatile char *) = NULL;
 
@@ -1024,13 +1011,10 @@ mach_init()
 	 * or idle_cpu_prefer_mwait is not set.
 	 * Allocate monitor/mwait buffer for cpu0.
 	 */
-#ifndef __xpv
 	non_deep_idle_disp_enq_thread = disp_enq_thread;
-#endif
 	if (idle_cpu_use_hlt) {
 		idle_cpu = cpu_idle_adaptive;
 		CPU->cpu_m.mcpu_idle_cpu = cpu_idle;
-#ifndef __xpv
 		if (is_x86_feature(x86_featureset, X86FSET_MWAIT) &&
 		    idle_cpu_prefer_mwait) {
 			if (cpuid_mwait_alloc(CPU) != 0) {
@@ -1054,7 +1038,6 @@ mach_init()
 		if (idle_cpu_no_deep_c) {
 			idle_cpu = non_deep_idle_cpu;
 		}
-#endif
 	}
 
 	mach_smpinit();
@@ -1140,12 +1123,10 @@ mach_smpinit(void)
 	 */
 	if (idle_cpu_use_hlt) {
 		disp_enq_thread = cpu_wakeup;
-#ifndef __xpv
 		if (is_x86_feature(x86_featureset, X86FSET_MWAIT) &&
 		    idle_cpu_prefer_mwait)
 			disp_enq_thread = cpu_wakeup_mwait;
 		non_deep_idle_disp_enq_thread = disp_enq_thread;
-#endif
 	}
 
 	psm_get_ipivect = pops->psm_get_ipivect;
@@ -1182,12 +1163,6 @@ uint64_t cpu_freq_hz;	/* measured (in hertz) */
 
 #define	MEGA_HZ		1000000
 
-#ifdef __xpv
-
-int xpv_cpufreq_workaround = 1;
-int xpv_cpufreq_verbose = 0;
-
-#else	/* __xpv */
 
 static uint64_t
 mach_calchz(uint32_t pit_counter, uint64_t *processor_clks)
@@ -1203,51 +1178,10 @@ mach_calchz(uint32_t pit_counter, uint64_t *processor_clks)
 	return (cpu_hz);
 }
 
-#endif	/* __xpv */
 
 static uint64_t
 mach_getcpufreq(void)
 {
-#if defined(__xpv)
-	vcpu_time_info_t *vti = &CPU->cpu_m.mcpu_vcpu_info->time;
-	uint64_t cpu_hz;
-
-	/*
-	 * During dom0 bringup, it was noted that on at least one older
-	 * Intel HT machine, the hypervisor initially gives a tsc_to_system_mul
-	 * value that is quite wrong (the 3.06GHz clock was reported
-	 * as 4.77GHz)
-	 *
-	 * The curious thing is, that if you stop the kernel at entry,
-	 * breakpoint here and inspect the value with kmdb, the value
-	 * is correct - but if you don't stop and simply enable the
-	 * printf statement (below), you can see the bad value printed
-	 * here.  Almost as if something kmdb did caused the hypervisor to
-	 * figure it out correctly.  And, note that the hypervisor
-	 * eventually -does- figure it out correctly ... if you look at
-	 * the field later in the life of dom0, it is correct.
-	 *
-	 * For now, on dom0, we employ a slightly cheesy workaround of
-	 * using the DOM0_PHYSINFO hypercall.
-	 */
-	if (DOMAIN_IS_INITDOMAIN(xen_info) && xpv_cpufreq_workaround) {
-		cpu_hz = 1000 * xpv_cpu_khz();
-	} else {
-		cpu_hz = (UINT64_C(1000000000) << 32) / vti->tsc_to_system_mul;
-
-		if (vti->tsc_shift < 0)
-			cpu_hz <<= -vti->tsc_shift;
-		else
-			cpu_hz >>= vti->tsc_shift;
-	}
-
-	if (xpv_cpufreq_verbose)
-		printf("mach_getcpufreq: system_mul 0x%x, shift %d, "
-		    "cpu_hz %" PRId64 "Hz\n",
-		    vti->tsc_to_system_mul, vti->tsc_shift, cpu_hz);
-
-	return (cpu_hz);
-#else	/* __xpv */
 	uint32_t pit_counter;
 	uint64_t processor_clks;
 
@@ -1278,7 +1212,6 @@ mach_getcpufreq(void)
 
 	/* We do not know how to calculate cpu frequency for this cpu. */
 	return (0);
-#endif	/* __xpv */
 }
 
 /*
@@ -1426,11 +1359,9 @@ mach_clkinit(int preferred_mode, int *set_mode)
 	if (!is_x86_feature(x86_featureset, X86FSET_TSC) || (cpu_freq == 0))
 		tsc_gethrtime_enable = 0;
 
-#ifndef __xpv
 	if (tsc_gethrtime_enable) {
 		tsc_hrtimeinit(cpu_freq_hz);
 	} else
-#endif
 	{
 		if (pops->psm_hrtimeinit)
 			(*pops->psm_hrtimeinit)();

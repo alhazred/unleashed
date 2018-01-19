@@ -434,9 +434,6 @@ do_core(char *fp, int sig, enum core_types core_type, struct core_globals *cg)
 
 	if (error == 0) {
 		int closerr;
-#if defined(__sparc)
-		(void) flush_user_windows_to_stack(NULL);
-#endif
 		if ((eswp = PTOU(curproc)->u_execsw) == NULL ||
 		    (eswp = findexec_by_magic(eswp->exec_magic)) == NULL) {
 			error = ENOSYS;

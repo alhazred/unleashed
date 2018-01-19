@@ -222,48 +222,6 @@ tnf_opaque_array_1(tnf_ops_t *ops, tnf_opaque_t *opaques,
 	return (tnf_ref32(ops, (tnf_record_p) bufhdr, reference));
 }
 
-#ifdef __sparc
-
-tnf_reference_t
-tnf_opaque32_array_1(tnf_ops_t *ops, tnf_uint32_t *opaques,
-	tnf_record_p reference, tnf_tag_data_t *tag_data)
-{
-	tnf_record_p 	tag_index;
-	size_t		record_size;
-	tnf_uint32_t	*tmp;
-	tnf_uint32_t	*ref_p;
-	tnf_array_header_t 	*bufhdr;
-
-	tag_index = tag_data->tag_index ? tag_data->tag_index :
-		tag_data->tag_desc(ops, tag_data);
-
-	if (!opaques)
-		return (TNF_NULL);
-
-	record_size = sizeof (*bufhdr);
-	tmp = opaques;
-	while (*tmp++)
-		record_size += sizeof (*ref_p);
-
-	ALLOC2(ops, record_size, bufhdr, ops->mode);
-
-	ASSIGN(bufhdr, tag, 		tag_index);
-	/* LINTED assignment of 64-bit integer to 32-bit integer */
-	ASSIGN(bufhdr, self_size, 	record_size);
-
-	tmp = opaques;
-	/* LINTED pointer cast may result in improper alignment */
-	ref_p = (tnf_uint32_t *)((char *)bufhdr + sizeof (*bufhdr));
-	while (*tmp) {
-		*ref_p = tnf_uint32(ops, *tmp, (tnf_reference_t *)ref_p);
-		tmp++;
-		ref_p++;
-	}
-
-	return (tnf_ref32(ops, (tnf_record_p) bufhdr, reference));
-}
-
-#endif /* __sparc */
 
 /*
  * Tag initializer

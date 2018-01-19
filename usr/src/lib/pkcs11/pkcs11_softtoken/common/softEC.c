@@ -264,12 +264,7 @@ soft_ec_key_derive(soft_object_t *basekey, soft_object_t *secretkey,
 	case CKK_RC4:
 	case CKK_AES:
 	case CKK_GENERIC_SECRET:
-#ifdef	__sparcv9
-		/* LINTED */
-		keylen = (uint32_t)OBJ_SEC_VALUE_LEN(secretkey);
-#else	/* !__sparcv9 */
 		keylen = OBJ_SEC_VALUE_LEN(secretkey);
-#endif	/* __sparcv9 */
 		break;
 	}
 

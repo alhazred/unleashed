@@ -530,11 +530,7 @@ parse_mode_bail:
 	return (rc);
 }
 
-#ifdef __sparc
-#define	ATTACHED_TERM_TYPE	"sun"
-#else
 #define	ATTACHED_TERM_TYPE	"sun-color"
-#endif
 
 static void
 kmdb_prom_term_init(kmdb_auxv_t *kav, kmdb_promif_t *pif)
@@ -565,17 +561,6 @@ kmdb_prom_term_init(kmdb_auxv_t *kav, kmdb_promif_t *pif)
 	} else {
 		char *mode = kmdb_get_ttyio_mode(kav, conout);
 
-#ifdef __sparc
-		/*
-		 * Some platforms (Starfire) define a value of `ttya' for
-		 * output-device, but neglect to provide a specific property
-		 * with the characteristics.  We'll provide a default value.
-		 */
-		if (mode == NULL && strcmp(conout, "ttya") == 0) {
-			(void) kmdb_parse_mode(KMDB_PROM_DEF_CONS_MODE,
-			    &pif->pif_tios, 0);
-		} else
-#endif
 		{
 			if (mode == NULL || kmdb_parse_mode(mode,
 			    &pif->pif_tios, 0) < 0) {
@@ -608,17 +593,6 @@ kmdb_prom_term_init(kmdb_auxv_t *kav, kmdb_promif_t *pif)
 	} else {
 		char *mode = kmdb_get_ttyio_mode(kav, conin);
 
-#ifdef __sparc
-		/*
-		 * Some platforms (Starfire) define a value of `ttya' for
-		 * input-device, but neglect to provide a specific property
-		 * with the characteristics.  We'll provide a default value.
-		 */
-		if (mode == NULL && strcmp(conin, "ttya") == 0) {
-			(void) kmdb_parse_mode(KMDB_PROM_DEF_CONS_MODE,
-			    &pif->pif_tios, 1);
-		} else
-#endif
 		{
 			if (mode == NULL || kmdb_parse_mode(mode,
 			    &pif->pif_tios, 1) < 0) {
@@ -698,10 +672,6 @@ kmdb_prom_vtop(uintptr_t virt, physaddr_t *pap)
 	physaddr_t pa;
 	int rc = kmdb_kdi_vtop(virt, &pa);
 
-#ifdef	__sparc
-	if (rc < 0 && errno == EAGAIN)
-		rc = kmdb_prom_translate_virt(virt, &pa);
-#endif
 
 	if (rc == 0 && pap != NULL)
 		*pap = pa;

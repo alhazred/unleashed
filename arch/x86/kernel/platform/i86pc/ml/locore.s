@@ -54,9 +54,6 @@
 #include <sys/pit.h>
 #include <sys/panic.h>
 
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 
 #include "assym.h"
 
@@ -175,7 +172,6 @@
 	popq	%r11
 	movq	%r11, REGOFF_RFL(%rsp)
 
-#if !defined(__xpv)
 	/*
 	 * Enable write protect and alignment check faults.
 	 */
@@ -183,7 +179,6 @@
 	orq	$_CONST(CR0_WP|CR0_AM), %rax
 	andq	$_BITNOT(CR0_WT|CR0_CE), %rax
 	movq	%rax, %cr0
-#endif	/* __xpv */
 
 	/*
 	 * (We just assert this works by virtue of being here) 
@@ -361,7 +356,6 @@ dtrace_badtrap:
 	jmp	_sys_rtt
 	SET_SIZE(cmninttrap)
 
-#if !defined(__xpv)
 	/*
 	 * Handle traps early in boot. Just revectors into C quickly as
 	 * these are always fatal errors.
@@ -373,7 +367,6 @@ dtrace_badtrap:
 	sub	$8, %rsp
 	call	bop_trap
 	SET_SIZE(bop_trap_handler)
-#endif
 
 
 	.globl	dtrace_user_probe
@@ -389,12 +382,7 @@ dtrace_badtrap:
 	movq	%rsp, %rbp
 
 	movl	%gs:CPU_ID, %edx
-#if defined(__xpv)
-	movq	%gs:CPU_VCPU_INFO, %rsi
-	movq	VCPU_INFO_ARCH_CR2(%rsi), %rsi
-#else
 	movq	%cr2, %rsi
-#endif
 	movq	%rsp, %rdi
 
 	ENABLE_INTR_FLAGS

@@ -456,17 +456,6 @@ autopm(void)
 	/*
 	 * for "default" behavior, do not enable autopm if not ESTAR_V3
 	 */
-#if defined(__sparc)
-	if (!bp->isdef || (estar_vers == ESTAR_V3)) {
-		if (ioctl(pm_fd, bp->cmd, NULL) == -1 && errno != bp->Errno) {
-			mesg(MERR, "autopm %s failed, %s\n",
-			    behavior, strerror(errno));
-			return (NOUP);
-		}
-	}
-	(void) strcpy(new_cc.apm_behavior, behavior);
-	return (OKUP);
-#endif
 #if defined(__x86)
 	if (!bp->isdef) {
 		if (ioctl(pm_fd, bp->cmd, NULL) == -1 && errno != bp->Errno) {

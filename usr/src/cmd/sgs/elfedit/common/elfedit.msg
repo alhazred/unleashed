@@ -614,8 +614,6 @@
 # ISA strings. These could be separated into separate message modules
 # on a per-platform basis if their size became large, but this is probably
 # cheaper for this small set of strings.
-@ MSG_ISA_SPARC_32	"sparc"
-@ MSG_ISA_SPARC_64	"sparcv9"
 @ MSG_ISA_X86_32	"i386"
 @ MSG_ISA_X86_64	"amd64"
 

@@ -728,11 +728,7 @@
 	PIC_SET(l7,.CONST_TBL,l2)
 	wr	%g0,0x60,%gsr
 
-#ifdef __sparcv9
-	ldx	[%fp+STACK_BIAS+176],stridez
-#else
 	ld	[%fp+STACK_BIAS+92],stridez
-#endif
 
 	ld	[%i1],%o3
 	add	%l2,2064,%l0

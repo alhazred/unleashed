@@ -42,9 +42,7 @@
 #include <sys/usb/hcd/ehci/ehci_util.h>
 #include <sys/usb/hcd/ehci/ehci_polled.h>
 
-#ifndef __sparc
 extern void invalidate_cache();
-#endif
 
 /*
  * Internal Function Prototypes
@@ -599,11 +597,7 @@ ehci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 
 	while (!((Get_OpReg(ehci_status)) & (EHCI_INTR_USB
 	    |EHCI_INTR_FRAME_LIST_ROLLOVER | EHCI_INTR_USB_ERROR))) {
-#ifndef __sparc
 		invalidate_cache();
-#else
-		;
-#endif
 	}
 
 	intr = (Get_OpReg(ehci_status)) &

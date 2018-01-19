@@ -232,14 +232,8 @@ soft_digest_common(soft_session_t *session_p, CK_BYTE_PTR pData,
 			/*
 			 * this is called by soft_digest()
 			 */
-#ifdef	__sparcv9
-			MD5Update((MD5_CTX *)session_p->digest.context,
-			    /* LINTED */
-			    pData, (uint_t)ulDataLen);
-#else	/* !__sparcv9 */
 			MD5Update((MD5_CTX *)session_p->digest.context,
 			    pData, ulDataLen);
-#endif	/* __sparcv9 */
 			MD5Final(pDigest, (MD5_CTX *)session_p->digest.context);
 		} else {
 			/*
@@ -256,14 +250,8 @@ soft_digest_common(soft_session_t *session_p, CK_BYTE_PTR pData,
 			 * this is called by soft_digest()
 			 */
 
-#ifdef	__sparcv9
-			SHA1Update((SHA1_CTX *)session_p->digest.context,
-			    /* LINTED */
-			    pData, (uint32_t)ulDataLen);
-#else	/* !__sparcv9 */
 			SHA1Update((SHA1_CTX *)session_p->digest.context,
 			    pData, ulDataLen);
-#endif	/* __sparcv9 */
 			SHA1Final(pDigest,
 			    (SHA1_CTX *)session_p->digest.context);
 		} else {
@@ -365,25 +353,13 @@ soft_digest_update(soft_session_t *session_p, CK_BYTE_PTR pPart,
 	switch (session_p->digest.mech.mechanism) {
 
 	case CKM_MD5:
-#ifdef	__sparcv9
-		MD5Update((MD5_CTX *)session_p->digest.context,
-		    /* LINTED */
-		    pPart, (uint_t)ulPartLen);
-#else	/* !__sparcv9 */
 		MD5Update((MD5_CTX *)session_p->digest.context,
 		    pPart, ulPartLen);
-#endif	/* __sparcv9 */
 		break;
 
 	case CKM_SHA_1:
-#ifdef	__sparcv9
-		SHA1Update((SHA1_CTX *)session_p->digest.context,
-		    /* LINTED */
-		    pPart, (uint32_t)ulPartLen);
-#else	/* !__sparcv9 */
 		SHA1Update((SHA1_CTX *)session_p->digest.context,
 		    pPart, ulPartLen);
-#endif	/* __sparcv9 */
 		break;
 
 	case CKM_SHA256:

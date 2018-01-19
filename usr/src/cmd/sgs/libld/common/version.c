@@ -227,10 +227,6 @@ ld_vers_check_defs(Ofl_desc *ofl)
 		 */
 		cnt = 1;
 		for (APLIST_TRAVERSE(vdp->vd_deps, idx2, _vdp)) {
-#if	defined(__lint)
-			/* get lint to think `_vdp' is used... */
-			vdp = _vdp;
-#endif
 			cnt++;
 		}
 		ofl->ofl_verdefsz += (cnt * sizeof (Verdaux));

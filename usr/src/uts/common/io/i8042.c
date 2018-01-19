@@ -44,11 +44,7 @@
  * soft interrupt user impacts the performance of all existing soft interrupt
  * users.  This is not the case on SPARC, however.
  */
-#ifdef __sparc
-#define	USE_SOFT_INTRS
-#else
 #undef	USE_SOFT_INTRS
-#endif
 
 /*
  * The command bytes are different for x86 and for SPARC because on x86,
@@ -173,9 +169,6 @@ struct i8042 {
 #define	I8042_INIT_MUTEXES		0x00000004
 #define	I8042_INIT_INTRS_ENABLED	0x00000010
 	uint_t			intrs_added;
-#ifdef __sparc
-	timeout_id_t		timeout_id;
-#endif
 	/*
 	 * glock is 1 if any child has the [put8] exclusive-access lock
 	 * glock_cv is associated with the condition `glock == 0'
@@ -228,35 +221,6 @@ struct i8042 {
 #define	USECS_PER_WAIT		10
 
 
-#ifdef __sparc
-
-#define	PLATFORM_MATCH(s) (strncmp(ddi_get_name(ddi_root_node()), \
-	(s), strlen(s)) == 0)
-
-/*
- * On some older SPARC platforms that have problems with the
- * interrupt line attached to the PS/2 keyboard/mouse, it
- * may be necessary to change the operating mode of the nexus
- * to a polling-based (instead of interrupt-based) method.
- * this variable is present to enable a worst-case workaround so
- * owners of these systems can still retain a working keyboard.
- *
- * The `i8042_polled_mode' variable can be used to force polled
- * mode for platforms that have this issue, but for which
- * automatic relief is not implemented.
- *
- * In the off chance that one of the platforms is misidentified
- * as requiried polling mode, `i8042_force_interrupt_mode' can
- * be set to force the nexus to use interrupts.
- */
-#define	I8042_MIN_POLL_INTERVAL 1000	/* usecs */
-int i8042_poll_interval = 8000;		/* usecs */
-int i8042_fast_poll_interval;		/* usecs */
-int i8042_slow_poll_interval;		/* usecs */
-
-boolean_t i8042_polled_mode = B_FALSE;
-boolean_t i8042_force_interrupt_mode = B_FALSE;
-#endif /* __sparc */
 
 int max_wait_iterations = MAX_WAIT_ITERATIONS;
 
@@ -283,10 +247,6 @@ static int i8042_bus_config(dev_info_t *, uint_t, ddi_bus_config_op_t,
     void *, dev_info_t **);
 static int i8042_bus_unconfig(dev_info_t *, uint_t,
     ddi_bus_config_op_t, void *);
-#ifdef __sparc
-static int i8042_build_interrupts_property(dev_info_t *dip);
-static boolean_t i8042_is_polling_platform(void);
-#endif
 
 /*
  * bus ops and dev ops structures:
@@ -460,12 +420,6 @@ i8042_cleanup(struct i8042 *global)
 		mutex_exit(&global->i8042_mutex);
 	}
 
-#ifdef __sparc
-	/* If there may be an outstanding timeout, cancel it */
-	if (global->timeout_id != 0) {
-		(void) untimeout(global->timeout_id);
-	}
-#endif
 
 	/* Stop the controller from generating interrupts */
 	if (global->init_state & I8042_INIT_INTRS_ENABLED)
@@ -573,9 +527,6 @@ i8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		DDI_STRICTORDER_ACC,
 	};
 	struct i8042 *global;
-#ifdef __sparc
-	int			interval;
-#endif
 
 	switch (cmd) {
 	case DDI_RESUME:
@@ -616,42 +567,11 @@ i8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	if (ddi_dev_nintrs(dip, &global->nintrs) == DDI_FAILURE)
 		goto fail;
 
-#ifdef __sparc
-	if ((i8042_polled_mode || i8042_is_polling_platform()) &&
-	    !i8042_force_interrupt_mode) {
-		/*
-		 * If we're on a platform that has known
-		 * interrupt issues with the keyboard/mouse,
-		 * use polled mode.
-		 */
-		i8042_polled_mode = B_TRUE;
-		global->nintrs = 0;
-	} else if (global->nintrs == 0) {
-		/*
-		 * If there are no interrupts on the i8042 node,
-		 * we may be on a brain-dead platform that only
-		 * has interrupts properties on i8042's children
-		 * (e.g. some UltraII-based boards)
-		 * In this case, scan first-level children, and
-		 * build a list of interrupts that each child uses,
-		 * then create an `interrupts' property on the nexus node
-		 * that contains the interrupts used by all children
-		 */
-		if (i8042_build_interrupts_property(dip) == DDI_FAILURE ||
-		    ddi_dev_nintrs(dip, &global->nintrs) == DDI_FAILURE ||
-		    global->nintrs == 0) {
-			cmn_err(CE_WARN, "i8042#%d: No interrupts defined!",
-			    ddi_get_instance(global->dip));
-			goto fail;
-		}
-	}
-#else
 	if (global->nintrs == 0) {
 		cmn_err(CE_WARN, "i8042#%d: No interrupts defined!",
 		    ddi_get_instance(global->dip));
 		goto fail;
 	}
-#endif
 
 	if (global->nintrs > MAX_INTERRUPTS)
 		global->nintrs = MAX_INTERRUPTS;
@@ -758,23 +678,6 @@ i8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	i8042_write_command_byte(global, I8042_CMD_ENABLE_ALL);
 	global->init_state |= I8042_INIT_INTRS_ENABLED;
 
-#ifdef __sparc
-	if (i8042_polled_mode) {
-		/*
-		 * Do not allow anyone to set the polling interval
-		 * to an interval more frequent than I8042_MIN_POLL_INTERVAL --
-		 * it could hose the system.
-		 */
-		interval = i8042_poll_interval;
-		if (interval < I8042_MIN_POLL_INTERVAL)
-			interval = I8042_MIN_POLL_INTERVAL;
-		i8042_fast_poll_interval = interval;
-		i8042_slow_poll_interval = interval << 3;
-
-		global->timeout_id = timeout(i8042_timeout, global,
-		    drv_usectohz(i8042_slow_poll_interval));
-	}
-#endif
 
 	return (DDI_SUCCESS);
 
@@ -799,10 +702,6 @@ i8042_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		 * the keyboard can be used to bring the system out of
 		 * suspend.
 		 */
-#ifdef __sparc
-		/* Disable interrupts and controller devices before suspend */
-		i8042_write_command_byte(global, I8042_CMD_DISABLE_ALL);
-#endif
 		return (DDI_SUCCESS);
 
 	case DDI_DETACH:
@@ -956,44 +855,6 @@ i8042_map(
 	}
 }
 
-#ifdef __sparc
-static void
-i8042_timeout(void *arg)
-{
-	struct i8042 *i8042_p = (struct i8042 *)arg;
-	int interval;
-
-	/*
-	 * Allow the polling speed to be changed on the fly --
-	 * catch it here and update the intervals used.
-	 */
-	if (i8042_fast_poll_interval != i8042_poll_interval) {
-		interval = i8042_poll_interval;
-		if (interval < I8042_MIN_POLL_INTERVAL)
-			interval = I8042_MIN_POLL_INTERVAL;
-		i8042_fast_poll_interval = interval;
-		i8042_slow_poll_interval = interval << 3;
-	}
-
-	/*
-	 * If the ISR returned true, start polling at a faster rate to
-	 * increate responsiveness.  Once the keyboard or mouse go idle,
-	 * the ISR will return UNCLAIMED, and we'll go back to the slower
-	 * polling rate.  This gives some positive hysteresis (but not
-	 * negative, since we go back to the slower polling interval after
-	 * only one UNCLAIMED).  This has shown to be responsive enough,
-	 * even for fast typers.
-	 */
-	interval = (i8042_intr((caddr_t)i8042_p) == DDI_INTR_CLAIMED) ?
-	    i8042_fast_poll_interval : i8042_slow_poll_interval;
-
-	if (i8042_polled_mode)
-		i8042_p->timeout_id = timeout(i8042_timeout, arg,
-		    drv_usectohz(interval));
-	else
-		i8042_p->timeout_id = 0;
-}
-#endif
 
 /*
  * i8042 hardware interrupt routine.  Called for both main and aux port
@@ -1624,63 +1485,3 @@ i8042_bus_unconfig(dev_info_t *parent, uint_t flags,
 	return (ndi_busop_bus_unconfig(parent, flags | NDI_UNCONFIG, op, arg));
 }
 
-#ifdef __sparc
-static int
-i8042_build_interrupts_property(dev_info_t *dip)
-{
-	dev_info_t *child = ddi_get_child(dip);
-	uint_t nintr;
-	int *intrs = NULL;
-	int interrupts[MAX_INTERRUPTS];
-	int i = 0;
-
-	/* Walk the children of this node, scanning for interrupts properties */
-	while (child != NULL && i < MAX_INTERRUPTS) {
-
-		if (ddi_prop_lookup_int_array(DDI_DEV_T_ANY, child,
-		    DDI_PROP_DONTPASS, "interrupts", &intrs, &nintr)
-		    == DDI_PROP_SUCCESS && intrs != NULL) {
-
-			while (nintr > 0 && i < MAX_INTERRUPTS) {
-				interrupts[i++] = intrs[--nintr];
-			}
-			ddi_prop_free(intrs);
-		}
-
-		child = ddi_get_next_sibling(child);
-	}
-
-	if (ddi_prop_update_int_array(DDI_DEV_T_NONE, dip, "interrupts",
-	    interrupts, i) != DDI_PROP_SUCCESS) {
-
-		return (DDI_FAILURE);
-	}
-
-	/*
-	 * Oh, the humanity. On the platforms on which we need to
-	 * synthesize an interrupts property, we ALSO need to update the
-	 * device_type property, and set it to "serial" in order for the
-	 * correct interrupt PIL to be chosen by the framework.
-	 */
-	if (ddi_prop_update_string(DDI_DEV_T_NONE, dip, "device_type", "serial")
-	    != DDI_PROP_SUCCESS) {
-
-		return (DDI_FAILURE);
-	}
-
-	return (DDI_SUCCESS);
-}
-
-static boolean_t
-i8042_is_polling_platform(void)
-{
-	/*
-	 * Returns true if this platform is one of the platforms
-	 * that has interrupt issues with the PS/2 keyboard/mouse.
-	 */
-	if (PLATFORM_MATCH("SUNW,UltraAX-"))
-		return (B_TRUE);
-	else
-		return (B_FALSE);
-}
-#endif

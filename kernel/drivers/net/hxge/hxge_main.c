@@ -71,13 +71,8 @@ uint32_t hxge_tx_lb_policy = HXGE_TX_LB_TCPUDP;
  * hxge_rx_bcopy_size_type: receive buffer block size type.
  * hxge_rx_threshold_lo: copy only up to tunable block size type.
  */
-#if defined(__sparc)
-hxge_rxbuf_threshold_t hxge_rx_threshold_hi = HXGE_RX_COPY_6;
-hxge_rxbuf_threshold_t hxge_rx_threshold_lo = HXGE_RX_COPY_4;
-#else
 hxge_rxbuf_threshold_t hxge_rx_threshold_hi = HXGE_RX_COPY_NONE;
 hxge_rxbuf_threshold_t hxge_rx_threshold_lo = HXGE_RX_COPY_NONE;
-#endif
 hxge_rxbuf_type_t hxge_rx_buf_size_type = RCR_PKTBUFSZ_0;
 
 rtrace_t hpi_rtracebuf;

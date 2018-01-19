@@ -93,14 +93,8 @@ soft_aes_crypt_init_common(soft_session_t *session_p,
 					free(soft_aes_ctx);
 					return (CKR_HOST_MEMORY);
 				}
-#ifdef	__sparcv9
-				/* LINTED */
-				aes_init_keysched(OBJ_SEC_VALUE(key_p), (uint_t)
-				    (OBJ_SEC_VALUE_LEN(key_p) * 8), ks);
-#else	/* !__sparcv9 */
 				aes_init_keysched(OBJ_SEC_VALUE(key_p),
 				    (OBJ_SEC_VALUE_LEN(key_p) * 8), ks);
-#endif	/* __sparcv9 */
 				OBJ_KEY_SCHED_LEN(key_p) = size;
 				OBJ_KEY_SCHED(key_p) = ks;
 			}
@@ -114,14 +108,8 @@ soft_aes_crypt_init_common(soft_session_t *session_p,
 		 * Initialize key schedule for AES. aes_init_keysched()
 		 * requires key length in bits.
 		 */
-#ifdef	__sparcv9
-		/* LINTED */
-		aes_init_keysched(OBJ_SEC_VALUE(key_p), (uint_t)
-		    (OBJ_SEC_VALUE_LEN(key_p) * 8), soft_aes_ctx->key_sched);
-#else	/* !__sparcv9 */
 		aes_init_keysched(OBJ_SEC_VALUE(key_p),
 		    (OBJ_SEC_VALUE_LEN(key_p) * 8), soft_aes_ctx->key_sched);
-#endif	/* __sparcv9 */
 	}
 	return (CKR_OK);
 }

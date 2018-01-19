@@ -137,13 +137,8 @@ constants:
 	PIC_SET(l7,__vlibm_TBL_sincos2,o1)
 	mov	%o1,%g1
 	wr	%g0,0x82,%asi		! set %asi for non-faulting loads
-#ifdef __sparcv9
-	stx	%i1,[%fp+xsave]		! save arguments
-	stx	%i3,[%fp+ysave]
-#else
 	st	%i1,[%fp+xsave]		! save arguments
 	st	%i3,[%fp+ysave]
-#endif
 	st	%i0,[%fp+nsave]
 	st	%i2,[%fp+sxsave]
 	st	%i4,[%fp+sysave]
@@ -3232,13 +3227,8 @@ constants:
 	be,pt	%icc,.exit
 ! delay slot
 	nop
-#ifdef __sparcv9
-	ldx	[%fp+xsave],%o1
-	ldx	[%fp+ysave],%o3
-#else
 	ld	[%fp+xsave],%o1
 	ld	[%fp+ysave],%o3
-#endif
 	ld	[%fp+nsave],%o0
 	ld	[%fp+sxsave],%o2
 	ld	[%fp+sysave],%o4

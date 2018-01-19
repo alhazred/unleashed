@@ -4184,9 +4184,6 @@ bge_suspend(bge_t *bgep)
  * This function returns DDI_SUCCESS on success, or DDI_FAILURE on failure.
  * DDI_FAILURE indicates an error condition and should almost never happen.
  */
-#ifdef	__sparc
-#define	bge_quiesce	ddi_quiesce_not_supported
-#else
 static int
 bge_quiesce(dev_info_t *devinfo)
 {
@@ -4207,7 +4204,6 @@ bge_quiesce(dev_info_t *devinfo)
 
 	return (DDI_SUCCESS);
 }
-#endif
 
 /*
  * detach(9E) -- Detach a device from the system

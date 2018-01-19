@@ -42,11 +42,7 @@
 #include <sys/proc.h>
 #include <sys/elf.h>
 
-#ifdef __sparc
-#include <sys/stack.h>		/* for STACK_BIAS */
-#else
 #define	STACK_BIAS		0
-#endif
 
 kvm_t *cookie;
 

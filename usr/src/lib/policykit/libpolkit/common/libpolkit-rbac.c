@@ -33,9 +33,6 @@
 
 #define LIBPOLKIT_MAGIC 0x3117beef
 
-#ifdef __SUNPRO_C
-#define __FUNCTION__ __func__
-#endif
 
 #define LIBPOLKIT_CHECK_CONTEXT(_ctx_, _ret_)				\
 	do {									\

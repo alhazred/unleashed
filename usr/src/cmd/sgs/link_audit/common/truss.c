@@ -59,12 +59,6 @@ static sigset_t		iset;
  *	 should be considered.
  */
 static char	*spec_sym[] = {
-#if	defined(__sparc)
-	".stret1",
-	".stret2",
-	".stret4",
-	".stret8",
-#endif
 	"__getcontext",
 	"_getcontext",
 	"_getsp",

@@ -2591,7 +2591,6 @@ ql_init_pkt(opaque_t fca_handle, fc_packet_t *pkt, int sleep)
 	sp->ha = ha;
 	sp->magic_number = QL_FCA_BRAND;
 	sp->sg_dma.dma_handle = NULL;
-#ifndef __sparc
 	if (CFG_IST(ha, CFG_CTRL_8021)) {
 		/* Setup DMA for scatter gather list. */
 		sp->sg_dma.size = sizeof (cmd6_2400_dma_t);
@@ -2602,7 +2601,6 @@ ql_init_pkt(opaque_t fca_handle, fc_packet_t *pkt, int sleep)
 			rval = FC_NOMEM;
 		}
 	}
-#endif	/* __sparc */
 
 	QL_PRINT_3(CE_CONT, "(%d): done\n", ha->instance);
 
@@ -2902,22 +2900,6 @@ ql_get_cap(opaque_t fca_handle, char *cap, void *ptr)
 	} else if (strcmp(cap, FC_CAP_NOSTREAM_ON_UNALIGN_BUF) == 0) {
 
 		dev_info_t	*psydip = NULL;
-#ifdef __sparc
-		/*
-		 * Disable streaming for certain 2 chip adapters
-		 * below Psycho to handle Psycho byte hole issue.
-		 */
-		if ((CFG_IST(ha, CFG_MULTI_CHIP_ADAPTER)) &&
-		    (!CFG_IST(ha, CFG_SBUS_CARD))) {
-			for (psydip = ddi_get_parent(ha->dip); psydip;
-			    psydip = ddi_get_parent(psydip)) {
-				if (strcmp(ddi_driver_name(psydip),
-				    "pcipsy") == 0) {
-					break;
-				}
-			}
-		}
-#endif	/* __sparc */
 
 		if (psydip) {
 			*rptr = (uint32_t)FC_NO_STREAMING;
@@ -3287,21 +3269,6 @@ ql_ub_alloc(opaque_t fca_handle, uint64_t tokens[], uint32_t size,
 				rval = FC_FAILURE;
 			} else {
 				if (type == FC_TYPE_IS8802_SNAP) {
-#ifdef	__sparc
-					if (ql_get_dma_mem(ha,
-					    &sp->ub_buffer, size,
-					    BIG_ENDIAN_DMA,
-					    QL_DMA_DATA_ALIGN) != QL_SUCCESS) {
-						rval = FC_FAILURE;
-						kmem_free(ubp,
-						    sizeof (fc_unsol_buf_t));
-						kmem_free(sp,
-						    sizeof (ql_srb_t));
-					} else {
-						bufp = sp->ub_buffer.bp;
-						sp->ub_size = size;
-					}
-#else
 					if (ql_get_dma_mem(ha,
 					    &sp->ub_buffer, size,
 					    LITTLE_ENDIAN_DMA,
@@ -3315,7 +3282,6 @@ ql_ub_alloc(opaque_t fca_handle, uint64_t tokens[], uint32_t size,
 						bufp = sp->ub_buffer.bp;
 						sp->ub_size = size;
 					}
-#endif
 				} else {
 					bufp = kmem_zalloc(size, KM_SLEEP);
 					if (bufp == NULL) {
@@ -16580,17 +16546,6 @@ ql_setup_msix(ql_adapter_state_t *ha)
 	 * duplicate the rest of the intr's
 	 * ddi_intr_dup_handler() isn't working on x86 just yet...
 	 */
-#ifdef __sparc
-	for (i = actual; i < hwvect; i++) {
-		if ((ret = ddi_intr_dup_handler(ha->htable[0], (int)i,
-		    &ha->htable[i])) != DDI_SUCCESS) {
-			EL(ha, "failed, intr_dup#=%xh, act=%xh, ret=%xh\n",
-			    i, actual, ret);
-			ql_release_intr(ha);
-			return (ret);
-		}
-	}
-#endif
 
 	/* Setup mutexes */
 	if ((ret = ql_init_mutex(ha)) != DDI_SUCCESS) {

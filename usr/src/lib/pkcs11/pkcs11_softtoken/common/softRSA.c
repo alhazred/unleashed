@@ -858,12 +858,7 @@ soft_rsa_genkey_pair(soft_object_t *pubkey, soft_object_t *prikey)
 		goto clean0;
 	}
 
-#ifdef	__sparcv9
-	/* LINTED */
-	modulus_len = (uint32_t)(*((CK_ULONG *)(template.pValue)));
-#else	/* !__sparcv9 */
 	modulus_len = *((CK_ULONG *)(template.pValue));
-#endif	/* __sparcv9 */
 
 	free(template.pValue);
 

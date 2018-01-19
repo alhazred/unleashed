@@ -60,10 +60,6 @@
 #include <sys/cmn_err.h>
 #include <sys/segments.h>
 #include <sys/clock.h>
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#include <sys/note.h>
-#endif
 
 static void ldt_alloc(proc_t *, uint_t);
 static void ldt_free(proc_t *);
@@ -102,16 +98,7 @@ sysi86(short cmd, uintptr_t arg1, uintptr_t arg2, uintptr_t arg3)
 			if (newpl > oldpl && (error =
 			    secpolicy_sys_config(CRED(), B_FALSE)) != 0)
 				return (set_errno(error));
-#if defined(__xpv)
-			kpreempt_disable();
-			installctx(curthread, NULL, xen_disable_user_iopl,
-			    xen_enable_user_iopl, NULL, NULL,
-			    xen_disable_user_iopl, NULL);
-			xen_enable_user_iopl();
-			kpreempt_enable();
-#else
 			rp->r_ps ^= oldpl ^ newpl;
-#endif
 		} else
 			error = EINVAL;
 		break;
@@ -342,13 +329,8 @@ ssd_to_sgd(struct ssd *ssd, gate_desc_t *sgd)
 static void
 ldt_load(void)
 {
-#if defined(__xpv)
-	xen_set_ldt(get_ssd_base(&curproc->p_ldt_desc),
-	    curproc->p_ldtlimit + 1);
-#else
 	*((system_desc_t *)&CPU->cpu_gdt[GDT_LDT]) = curproc->p_ldt_desc;
 	wr_ldtr(ULDT_SEL);
-#endif
 }
 
 /*
@@ -358,12 +340,8 @@ ldt_load(void)
 void
 ldt_unload(void)
 {
-#if defined(__xpv)
-	xen_set_ldt(NULL, 0);
-#else
 	*((system_desc_t *)&CPU->cpu_gdt[GDT_LDT]) = null_sdesc;
 	wr_ldtr(0);
-#endif
 }
 
 /*ARGSUSED*/
@@ -723,10 +701,6 @@ ldt_alloc(proc_t *pp, uint_t seli)
 	ldt = kmem_zalloc(ldtsz, KM_SLEEP);
 	ASSERT(IS_P2ALIGNED(ldt, PAGESIZE));
 
-#if defined(__xpv)
-	if (xen_ldt_setprot(ldt, ldtsz, PROT_READ))
-		panic("ldt_alloc:xen_ldt_setprot(PROT_READ) failed");
-#endif
 
 	pp->p_ldt = ldt;
 	pp->p_ldtlimit = nsels - 1;
@@ -764,14 +738,6 @@ ldt_free(proc_t *pp)
 		kpreempt_enable();
 	}
 
-#if defined(__xpv)
-	/*
-	 * We are not allowed to make the ldt writable until after
-	 * we tell the hypervisor to unload it.
-	 */
-	if (xen_ldt_setprot(ldt, ldtsz, PROT_READ | PROT_WRITE))
-		panic("ldt_free:xen_ldt_setprot(PROT_READ|PROT_WRITE) failed");
-#endif
 
 	kmem_free(ldt, ldtsz);
 }
@@ -797,24 +763,9 @@ ldt_dup(proc_t *pp, proc_t *cp)
 
 	ldt_alloc(cp, pp->p_ldtlimit);
 
-#if defined(__xpv)
-	/*
-	 * Make child's ldt writable so it can be copied into from
-	 * parent's ldt. This works since ldt_alloc above did not load
-	 * the ldt since its for the child process. If we tried to make
-	 * an LDT writable that is loaded in hw the setprot operation
-	 * would fail.
-	 */
-	if (xen_ldt_setprot(cp->p_ldt, ldtsz, PROT_READ | PROT_WRITE))
-		panic("ldt_dup:xen_ldt_setprot(PROT_READ|PROT_WRITE) failed");
-#endif
 
 	bcopy(pp->p_ldt, cp->p_ldt, ldtsz);
 
-#if defined(__xpv)
-	if (xen_ldt_setprot(cp->p_ldt, ldtsz, PROT_READ))
-		panic("ldt_dup:xen_ldt_setprot(PROT_READ) failed");
-#endif
 	mutex_exit(&cp->p_ldtlock);
 	mutex_exit(&pp->p_ldtlock);
 
@@ -854,17 +805,6 @@ ldt_grow(proc_t *pp, uint_t seli)
 	ldt_unload();
 	kpreempt_enable();
 
-#if defined(__xpv)
-
-	/*
-	 * Make old ldt writable and new ldt read only.
-	 */
-	if (xen_ldt_setprot(oldt, oldtsz, PROT_READ | PROT_WRITE))
-		panic("ldt_grow:xen_ldt_setprot(PROT_READ|PROT_WRITE) failed");
-
-	if (xen_ldt_setprot(nldt, nldtsz, PROT_READ))
-		panic("ldt_grow:xen_ldt_setprot(PROT_READ) failed");
-#endif
 
 	pp->p_ldt = nldt;
 	pp->p_ldtlimit = nsels - 1;

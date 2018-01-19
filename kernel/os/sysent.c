@@ -193,10 +193,6 @@ int	seteuid(uid_t);
 int	setreuid(uid_t, uid_t);
 int	setregid(gid_t, gid_t);
 int	install_utrap(utrap_entry_t type, utrap_handler_t, utrap_handler_t *);
-#ifdef __sparc
-int	sparc_utrap_install(utrap_entry_t type, utrap_handler_t,
-    utrap_handler_t, utrap_handler_t *, utrap_handler_t *);
-#endif
 
 int	syslwp_create(ucontext_t *, int, id_t *);
 void	syslwp_exit();
@@ -360,11 +356,7 @@ typedef int64_t	(*llfcn_t)();	/* for casting one-word returns */
 #define	IF_LP64(true, false)	false
 #endif
 
-#if defined(__sparc)
-#define	IF_sparc(true, false)	true
-#else
 #define	IF_sparc(true, false)	false
-#endif
 
 #if defined(__i386) && !defined(__amd64)
 #define	IF_i386(true, false)	true

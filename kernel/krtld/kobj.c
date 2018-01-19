@@ -280,11 +280,7 @@ static caddr_t _data;
  * variable to modify it - within krtld, of course -
  * outside of krtld, e_data is used in all kernels.
  */
-#if defined(__sparc)
-static caddr_t _edata;
-#else
 extern caddr_t _edata;
-#endif
 
 Addr dynseg = 0;	/* load address of "dynamic" segment */
 size_t dynsize;		/* "dynamic" segment size */
@@ -855,13 +851,6 @@ load_exec(val_t *bootaux, char *filename)
 
 		if (sp->st_name == 0 || sp->st_shndx == SHN_UNDEF)
 			continue;
-#if defined(__sparc)
-		/*
-		 * Register symbols are ignored in the kernel
-		 */
-		if (ELF_ST_TYPE(sp->st_info) == STT_SPARC_REGISTER)
-			continue;
-#endif	/* __sparc */
 
 		sym_insert(mp, mp->strings + sp->st_name, i);
 	}
@@ -2980,21 +2969,6 @@ do_symbols(struct module *mp, Elf64_Addr bss_base)
 		name = mp->strings + sp->st_name;
 		if (sp->st_shndx != SHN_UNDEF && sp->st_shndx != SHN_COMMON)
 			continue;
-#if defined(__sparc)
-		/*
-		 * Register symbols are ignored in the kernel
-		 */
-		if (ELF_ST_TYPE(sp->st_info) == STT_SPARC_REGISTER) {
-			if (*name != '\0') {
-				_kobj_printf(ops, "%s: named REGISTER symbol ",
-				    mp->filename);
-				_kobj_printf(ops, "not supported '%s'\n",
-				    name);
-				err = DOSYM_UNDEF;
-			}
-			continue;
-		}
-#endif	/* __sparc */
 		/*
 		 * TLS symbols are ignored in the kernel
 		 */
@@ -4094,11 +4068,6 @@ kobj_segbrk(caddr_t *spp, size_t size, size_t align, caddr_t limit)
 		alloc_pgsz = lg_pagesize;
 	}
 
-#if defined(__sparc)
-	/* account for redzone */
-	if (limit)
-		limit -= alloc_pgsz;
-#endif	/* __sparc */
 
 	va = ALIGN((uintptr_t)*spp, align);
 	pva = P2ROUNDUP((uintptr_t)*spp, alloc_pgsz);

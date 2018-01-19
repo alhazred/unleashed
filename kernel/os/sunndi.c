@@ -68,10 +68,6 @@
 #include <sys/fs/dv_node.h>
 #include <sys/sunldi_impl.h>
 
-#ifdef __sparc
-#include <sys/archsystm.h>	/* getpil/setpil */
-#include <sys/membar.h>		/* membar_sync */
-#endif
 
 /*
  * ndi property handling

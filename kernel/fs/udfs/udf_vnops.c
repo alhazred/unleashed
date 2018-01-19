@@ -2182,10 +2182,8 @@ udf_l_pathconf(
 }
 
 uint32_t ud_pageio_reads = 0, ud_pageio_writes = 0;
-#ifndef	__lint
 _NOTE(SCHEME_PROTECTS_DATA("safe sharing", ud_pageio_reads))
 _NOTE(SCHEME_PROTECTS_DATA("safe sharing", ud_pageio_writes))
-#endif
 /*
  * Assumption is that there will not be a pageio request
  * to a enbedded file

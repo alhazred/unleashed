@@ -1080,9 +1080,6 @@ pt_stack_common(uintptr_t addr, uint_t flags, int argc,
 	if (flags & DCMD_ADDRSPEC) {
 		bzero(&gregs, sizeof (gregs));
 		gregs.gregs[R_FP] = addr;
-#ifdef __sparc
-		gregs.gregs[R_I7] = saved_pc;
-#endif /* __sparc */
 	} else if (PTL_GETREGS(t, PTL_TID(t), gregs.gregs) != 0) {
 		mdb_warn("failed to get current register set");
 		return (DCMD_ERR);
@@ -3953,10 +3950,6 @@ pt_brkpt_ctor(mdb_tgt_t *t, mdb_sespec_t *sep, void *args)
 		pta->pta_addr = (uintptr_t)s.st_value;
 	}
 
-#ifdef __sparc
-	if (pta->pta_addr & 3)
-		return (set_errno(EMDB_BPALIGN));
-#endif
 
 	if (Paddr_to_map(t->t_pshandle, pta->pta_addr) == NULL)
 		return (set_errno(EMDB_NOMAP));
@@ -4777,32 +4770,6 @@ pt_lwp_setregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid, prgregset_t gregs)
 	return (set_errno(EMDB_NOPROC));
 }
 
-#ifdef	__sparc
-
-/*ARGSUSED*/
-static int
-pt_lwp_getxregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid, prxregset_t *xregs)
-{
-	if (t->t_pshandle != NULL) {
-		return (ptl_err(Plwp_getxregs(t->t_pshandle,
-		    (lwpid_t)tid, xregs)));
-	}
-	return (set_errno(EMDB_NOPROC));
-}
-
-/*ARGSUSED*/
-static int
-pt_lwp_setxregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid,
-    const prxregset_t *xregs)
-{
-	if (t->t_pshandle != NULL) {
-		return (ptl_err(Plwp_setxregs(t->t_pshandle,
-		    (lwpid_t)tid, xregs)));
-	}
-	return (set_errno(EMDB_NOPROC));
-}
-
-#endif	/* __sparc */
 
 /*ARGSUSED*/
 static int
@@ -4835,10 +4802,6 @@ static const pt_ptl_ops_t proc_lwp_ops = {
 	pt_lwp_iter,
 	pt_lwp_getregs,
 	pt_lwp_setregs,
-#ifdef __sparc
-	pt_lwp_getxregs,
-	pt_lwp_setxregs,
-#endif
 	pt_lwp_getfpregs,
 	pt_lwp_setfpregs
 };
@@ -4964,52 +4927,6 @@ pt_tdb_setregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid, prgregset_t gregs)
 	return (0);
 }
 
-#ifdef __sparc
-
-static int
-pt_tdb_getxregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid, prxregset_t *xregs)
-{
-	pt_data_t *pt = t->t_data;
-
-	td_thrhandle_t th;
-	td_err_e err;
-
-	if (t->t_pshandle == NULL)
-		return (set_errno(EMDB_NOPROC));
-
-	if ((err = pt->p_tdb_ops->td_ta_map_id2thr(tap, tid, &th)) != TD_OK)
-		return (set_errno(tdb_to_errno(err)));
-
-	err = pt->p_tdb_ops->td_thr_getxregs(&th, xregs);
-	if (err != TD_OK && err != TD_PARTIALREG)
-		return (set_errno(tdb_to_errno(err)));
-
-	return (0);
-}
-
-static int
-pt_tdb_setxregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid,
-    const prxregset_t *xregs)
-{
-	pt_data_t *pt = t->t_data;
-
-	td_thrhandle_t th;
-	td_err_e err;
-
-	if (t->t_pshandle == NULL)
-		return (set_errno(EMDB_NOPROC));
-
-	if ((err = pt->p_tdb_ops->td_ta_map_id2thr(tap, tid, &th)) != TD_OK)
-		return (set_errno(tdb_to_errno(err)));
-
-	err = pt->p_tdb_ops->td_thr_setxregs(&th, xregs);
-	if (err != TD_OK && err != TD_PARTIALREG)
-		return (set_errno(tdb_to_errno(err)));
-
-	return (0);
-}
-
-#endif	/* __sparc */
 
 static int
 pt_tdb_getfpregs(mdb_tgt_t *t, void *tap, mdb_tgt_tid_t tid,
@@ -5062,10 +4979,6 @@ static const pt_ptl_ops_t proc_tdb_ops = {
 	pt_tdb_iter,
 	pt_tdb_getregs,
 	pt_tdb_setregs,
-#ifdef __sparc
-	pt_tdb_getxregs,
-	pt_tdb_setxregs,
-#endif
 	pt_tdb_getfpregs,
 	pt_tdb_setfpregs
 };

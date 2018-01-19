@@ -96,10 +96,6 @@ hermon_dbr_new_user_page(hermon_state_t *state, uint_t index,
 	    pagesize, B_WRITE, 0, 0, NULL, DDI_UMEM_SLEEP);
 
 	hermon_dma_attr_init(state, &dma_attr);
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-#endif
 	status = ddi_dma_alloc_handle(state->hs_dip, &dma_attr,
 	    DDI_DMA_SLEEP, NULL, &pagep->upg_dmahdl);
 	if (status != DDI_SUCCESS) {
@@ -286,10 +282,6 @@ hermon_dbr_page_alloc(hermon_state_t *state, hermon_dbr_info_t **dinfo)
 	hermon_dma_attr_init(state, &dma_attr);
 	dma_attr.dma_attr_align = pagesize;
 	dma_attr.dma_attr_sgllen = 1;	/* make sure only one cookie */
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-#endif
 
 	status = ddi_dma_alloc_handle(state->hs_dip, &dma_attr,
 	    DDI_DMA_SLEEP, NULL, &dma_hdl);
@@ -2413,11 +2405,6 @@ hermon_queue_alloc(hermon_state_t *state, hermon_qalloc_info_t *qa_info,
 	 */
 	hermon_dma_attr_init(state, &dma_attr);
 	dma_attr.dma_attr_align = qa_info->qa_bind_align;
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS) {
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-	}
-#endif
 
 	/* Allocate a DMA handle */
 	status = ddi_dma_alloc_handle(state->hs_dip, &dma_attr, callback, NULL,

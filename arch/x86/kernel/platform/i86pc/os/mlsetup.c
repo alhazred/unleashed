@@ -111,12 +111,6 @@ mlsetup(struct regs *rp)
 	 */
 	cpu[0]->cpu_self = cpu[0];
 
-#if defined(__xpv)
-	/*
-	 * Point at the hypervisor's virtual cpu structure
-	 */
-	cpu[0]->cpu_m.mcpu_vcpu_info = &HYPERVISOR_shared_info->vcpu_info[0];
-#endif
 
 	/*
 	 * check if we've got special bits to clear or set
@@ -152,17 +146,12 @@ mlsetup(struct regs *rp)
 	 * lgrp_init() and possibly cpuid_pass1() need PCI config
 	 * space access
 	 */
-#if defined(__xpv)
-	if (DOMAIN_IS_INITDOMAIN(xen_info))
-		pci_cfgspace_init();
-#else
 	pci_cfgspace_init();
 	/*
 	 * Initialize the platform type from CPU 0 to ensure that
 	 * determine_platform() is only ever called once.
 	 */
 	determine_platform();
-#endif
 
 	/*
 	 * The first lightweight pass (pass0) through the cpuid data
@@ -177,7 +166,6 @@ mlsetup(struct regs *rp)
 	 */
 	cpuid_pass1(cpu[0], x86_featureset);
 
-#if !defined(__xpv)
 	/*
 	 * Before we do anything with the TSCs, we need to work around
 	 * Intel erratum BT81.  On some CPUs, warm reset does not
@@ -231,7 +219,6 @@ mlsetup(struct regs *rp)
 	    is_x86_feature(x86_featureset, X86FSET_SSE2))
 		patch_tsc_read(TSC_RDTSC_LFENCE);
 
-#endif	/* !__xpv */
 
 #if defined(__i386) && !defined(__xpv)
 	/*
@@ -247,7 +234,6 @@ mlsetup(struct regs *rp)
 	patch_memops(cpuid_getvendor(CPU));
 #endif	/* __amd64 && !__xpv */
 
-#if !defined(__xpv)
 	/* XXPV	what, if anything, should be dorked with here under xen? */
 
 	/*
@@ -273,7 +259,6 @@ mlsetup(struct regs *rp)
 
 	if (is_x86_feature(x86_featureset, X86FSET_SMEP))
 		setcr4(getcr4() | CR4_SMEP);
-#endif /* __xpv */
 
 	/*
 	 * initialize t0
@@ -384,10 +369,6 @@ mlsetup(struct regs *rp)
 	if (bootprop_getval(PLAT_DR_OPTIONS_NAME, &prop_value) == 0) {
 		plat_dr_options = (uint64_t)prop_value;
 	}
-#if defined(__xpv)
-	/* No support of DR operations on xpv */
-	plat_dr_options = 0;
-#else	/* __xpv */
 	/* Flag PLAT_DR_FEATURE_ENABLED should only be set by DR driver. */
 	plat_dr_options &= ~PLAT_DR_FEATURE_ENABLED;
 #ifndef	__amd64
@@ -395,7 +376,6 @@ mlsetup(struct regs *rp)
 	plat_dr_options &= ~PLAT_DR_FEATURE_MEMORY;
 	plat_dr_options &= ~PLAT_DR_FEATURE_CPU;
 #endif	/* __amd64 */
-#endif	/* __xpv */
 
 	/*
 	 * Get value of "plat_dr_physmax" boot option.

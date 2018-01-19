@@ -4444,16 +4444,6 @@ do_page_relocate(
 
 	*nrelocp = 0;
 
-#if defined(__sparc)
-	/*
-	 * We need to wait till OBP has completed
-	 * its boot-time handoff of its resources to the kernel
-	 * before we allow page relocation
-	 */
-	if (page_relocate_ready == 0) {
-		return (EAGAIN);
-	}
-#endif
 
 	/*
 	 * If this is not a base page,
@@ -4531,28 +4521,6 @@ do_page_relocate(
 	}
 #endif /* DEBUG */
 
-#if defined(__sparc)
-	/*
-	 * Let hat_page_relocate() complete the relocation if it's kernel page
-	 */
-	if (VN_ISKAS(targ->p_vnode)) {
-		*replacement = repl;
-		if (hat_page_relocate(target, replacement, nrelocp) != 0) {
-			if (grouplock != 0) {
-				group_page_unlock(targ);
-			}
-			if (dofree) {
-				*replacement = NULL;
-				page_free_replacement_page(repl);
-				page_create_putback(dofree);
-			}
-			VM_STAT_ADD(vmm_vmstats.ppr_krelocfail[szc]);
-			return (EAGAIN);
-		}
-		VM_STAT_ADD(vmm_vmstats.ppr_relocok[szc]);
-		return (0);
-	}
-#endif
 
 	first_repl = repl;
 
@@ -6379,24 +6347,9 @@ page_capture_pre_checks(page_t *pp, uint_t flags)
 {
 	ASSERT(pp != NULL);
 
-#if defined(__sparc)
-	if (pp->p_vnode == &promvp) {
-		return (EPERM);
-	}
-
-	if (PP_ISNORELOC(pp) && !(flags & CAPTURE_GET_CAGE) &&
-	    (flags & CAPTURE_PHYSMEM)) {
-		return (ENOENT);
-	}
-
-	if (PP_ISNORELOCKERNEL(pp)) {
-		return (EPERM);
-	}
-#else
 	if (PP_ISKAS(pp)) {
 		return (EPERM);
 	}
-#endif /* __sparc */
 
 	/* only physmem currently has the restrictions checked below */
 	if (!(flags & CAPTURE_PHYSMEM)) {

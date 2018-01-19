@@ -348,15 +348,9 @@ mmpagelock(struct as *as, caddr_t va)
 	return (i);
 }
 
-#ifdef	__sparc
-
-#define	NEED_LOCK_KVADDR(kva)	mmpagelock(&kas, kva)
-
-#else	/* __i386, __amd64 */
 
 #define	NEED_LOCK_KVADDR(va)	0
 
-#endif	/* __sparc */
 
 /*ARGSUSED3*/
 static int
@@ -639,134 +633,6 @@ mmioctl_page_retire(int cmd, intptr_t data)
 	return (EINVAL);
 }
 
-#ifdef __sparc
-/*
- * Given a syndrome, syndrome type, and address return the
- * associated memory name in the provided data buffer.
- */
-static int
-mmioctl_get_mem_name(intptr_t data)
-{
-	mem_name_t mem_name;
-	void *buf;
-	size_t bufsize;
-	int len, err;
-
-	if ((bufsize = cpu_get_name_bufsize()) == 0)
-		return (ENOTSUP);
-
-	if ((err = mm_read_mem_name(data, &mem_name)) < 0)
-		return (err);
-
-	buf = kmem_alloc(bufsize, KM_SLEEP);
-
-	/*
-	 * Call into cpu specific code to do the lookup.
-	 */
-	if ((err = cpu_get_mem_name(mem_name.m_synd, mem_name.m_type,
-	    mem_name.m_addr, buf, bufsize, &len)) != 0) {
-		kmem_free(buf, bufsize);
-		return (err);
-	}
-
-	if (len >= mem_name.m_namelen) {
-		kmem_free(buf, bufsize);
-		return (ENOSPC);
-	}
-
-	if (copyoutstr(buf, (char *)mem_name.m_name,
-	    mem_name.m_namelen, NULL) != 0) {
-		kmem_free(buf, bufsize);
-		return (EFAULT);
-	}
-
-	kmem_free(buf, bufsize);
-	return (0);
-}
-
-/*
- * Given a syndrome and address return information about the associated memory.
- */
-static int
-mmioctl_get_mem_info(intptr_t data)
-{
-	mem_info_t mem_info;
-	int err;
-
-	if (copyin((void *)data, &mem_info, sizeof (mem_info_t)))
-		return (EFAULT);
-
-	if ((err = cpu_get_mem_info(mem_info.m_synd, mem_info.m_addr,
-	    &mem_info.m_mem_size, &mem_info.m_seg_size, &mem_info.m_bank_size,
-	    &mem_info.m_segments, &mem_info.m_banks, &mem_info.m_mcid)) != 0)
-		return (err);
-
-	if (copyout(&mem_info, (void *)data, sizeof (mem_info_t)) != 0)
-		return (EFAULT);
-
-	return (0);
-}
-
-/*
- * Given a memory name, return its associated serial id
- */
-static int
-mmioctl_get_mem_sid(intptr_t data)
-{
-	mem_name_t mem_name;
-	void *buf;
-	void *name;
-	size_t	name_len;
-	size_t bufsize;
-	int len, err;
-
-	if ((bufsize = cpu_get_name_bufsize()) == 0)
-		return (ENOTSUP);
-
-	if ((err = mm_read_mem_name(data, &mem_name)) < 0)
-		return (err);
-
-	buf = kmem_alloc(bufsize, KM_SLEEP);
-
-	if (mem_name.m_namelen > 1024)
-		mem_name.m_namelen = 1024; /* cap at 1024 bytes */
-
-	name = kmem_alloc(mem_name.m_namelen, KM_SLEEP);
-
-	if ((err = copyinstr((char *)mem_name.m_name, (char *)name,
-	    mem_name.m_namelen, &name_len)) != 0) {
-		kmem_free(buf, bufsize);
-		kmem_free(name, mem_name.m_namelen);
-		return (err);
-	}
-
-	/*
-	 * Call into cpu specific code to do the lookup.
-	 */
-	if ((err = cpu_get_mem_sid(name, buf, bufsize, &len)) != 0) {
-		kmem_free(buf, bufsize);
-		kmem_free(name, mem_name.m_namelen);
-		return (err);
-	}
-
-	if (len > mem_name.m_sidlen) {
-		kmem_free(buf, bufsize);
-		kmem_free(name, mem_name.m_namelen);
-		return (ENAMETOOLONG);
-	}
-
-	if (copyoutstr(buf, (char *)mem_name.m_sid,
-	    mem_name.m_sidlen, NULL) != 0) {
-		kmem_free(buf, bufsize);
-		kmem_free(name, mem_name.m_namelen);
-		return (EFAULT);
-	}
-
-	kmem_free(buf, bufsize);
-	kmem_free(name, mem_name.m_namelen);
-	return (0);
-}
-#endif	/* __sparc */
 
 /*
  * Private ioctls for
@@ -794,21 +660,10 @@ mmioctl(dev_t dev, int cmd, intptr_t data, int flag, cred_t *cred, int *rvalp)
 	case MEM_PAGE_RETIRE_TEST:
 		return (mmioctl_page_retire(cmd, data));
 
-#ifdef __sparc
-	case MEM_NAME:
-		return (mmioctl_get_mem_name(data));
-
-	case MEM_INFO:
-		return (mmioctl_get_mem_info(data));
-
-	case MEM_SID:
-		return (mmioctl_get_mem_sid(data));
-#else
 	case MEM_NAME:
 	case MEM_INFO:
 	case MEM_SID:
 		return (ENOTSUP);
-#endif	/* __sparc */
 	}
 	return (ENXIO);
 }

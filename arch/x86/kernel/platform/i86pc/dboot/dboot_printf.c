@@ -36,9 +36,6 @@
 #include "dboot_printf.h"
 #include "dboot_xboot.h"
 
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 /*
  * This file provides simple output formatting via dboot_printf()

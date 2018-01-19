@@ -77,14 +77,7 @@ kmdb_fault(kreg_t tt, kreg_t pc, kreg_t sp, int cpuid)
 	if (mdb.m_term != NULL) {
 		for (;;) {
 			mdb_iob_printf(mdb.m_err, "\n%s: "
-#if defined(__sparc)
-#ifndef sun4v
-			    "(o)bp, "
-#endif /* sun4v */
-			    "(p)anic"
-#else
 			    "reboo(t)"
-#endif
 			    ", or (d)ebug with self? ", mdb.m_pname);
 			mdb_iob_flush(mdb.m_err);
 
@@ -94,12 +87,6 @@ kmdb_fault(kreg_t tt, kreg_t pc, kreg_t sp, int cpuid)
 			mdb_iob_printf(mdb.m_err, "\n");
 
 			switch (c) {
-#ifdef __sparc
-			case 'p':
-				kmdb_dpi_kernpanic(cpuid);
-				/*NOTREACHED*/
-				continue;
-#endif
 
 #ifndef sun4v
 			case 'o':

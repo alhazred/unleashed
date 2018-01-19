@@ -38,11 +38,7 @@ static void ixgbe_free_tcb_lists(ixgbe_tx_ring_t *);
 static int ixgbe_alloc_rcb_lists(ixgbe_rx_data_t *);
 static void ixgbe_free_rcb_lists(ixgbe_rx_data_t *);
 
-#ifdef __sparc
-#define	IXGBE_DMA_ALIGNMENT	0x0000000000002000ull
-#else
 #define	IXGBE_DMA_ALIGNMENT	0x0000000000001000ull
-#endif
 
 /*
  * DMA attributes for tx/rx descriptors.

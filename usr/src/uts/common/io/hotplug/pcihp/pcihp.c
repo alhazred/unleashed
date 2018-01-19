@@ -4024,18 +4024,5 @@ skip:
 static int
 pcihp_indirect_map(dev_info_t *dip)
 {
-#if defined(__sparc)
-	int rc = DDI_FAILURE;
-
-	if (ddi_prop_get_int(DDI_DEV_T_ANY, ddi_get_parent(dip), 0,
-	    PCI_DEV_CONF_MAP_PROP, DDI_FAILURE) != DDI_FAILURE)
-		rc = DDI_SUCCESS;
-	else
-		if (ddi_prop_get_int(DDI_DEV_T_ANY, ddi_get_parent(dip),
-		    0, PCI_BUS_CONF_MAP_PROP, DDI_FAILURE) != DDI_FAILURE)
-			rc = DDI_SUCCESS;
-	return (rc);
-#else
 	return (DDI_SUCCESS);
-#endif
 }

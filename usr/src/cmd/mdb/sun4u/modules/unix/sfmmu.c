@@ -250,14 +250,8 @@ sfmmu_vtop_impl(uintptr_t addr, sfmmu_t *sfmmup, sfmmu_t *msfmmup,
 		hblktag.htag_bspage = HME_HASH_BSPAGE(addr, hmeshift);
 		hblktag.htag_rehash = hashno;
 
-#ifdef __sparcv9
-		SFMMU_VTOP_DBG_DBG("hblktag=%lx %lx\n",
-				(uint64_t)hblktag.htag_tag[0],
-				(uint64_t)hblktag.htag_tag[1]);
-#else
 		SFMMU_VTOP_DBG_DBG("hblktag=%llx\n",
 				(uint64_t)hblktag.htag_tag);
-#endif
 
 		hmebp = shmebp = HME_HASH_FUNCTION(sfmmup, addr, hmeshift);
 		SFMMU_VTOP_DBG_DBG("hmebp=%p\n", hmebp);
@@ -349,12 +343,7 @@ sfmmu_vtop_print_hmeblk(struct hme_blk *hmeblkp)
 		return;
 
 	mdb_printf("    hblk_nextpa=%llx\n", hmeblkp->hblk_nextpa);
-#ifdef __sparcv9
-	mdb_printf("    hblktag=%lx %lx\n", hmeblkp->hblk_tag.htag_tag[0],
-			hmeblkp->hblk_tag.htag_tag[1]);
-#else
 	mdb_printf("    hblktag=%llx\n", hmeblkp->hblk_tag.htag_tag);
-#endif
 	mdb_printf("    hblk_next=%p\n", hmeblkp->hblk_next);
 	mdb_printf("    hblk_shadow=%p\n", hmeblkp->hblk_shadow);
 	mdb_printf("    hblk_span=%d\n", hmeblkp->hblk_span);

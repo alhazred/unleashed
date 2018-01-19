@@ -38,12 +38,7 @@
 #include <vm/seg_kmem.h>
 #include <vm/seg_kpm.h>
 
-#ifdef __sparc
-#include <sys/cpu_module.h>
-#define	BP_FLUSH(addr, size)	flush_instr_mem((void *)addr, size);
-#else
 #define	BP_FLUSH(addr, size)
-#endif
 
 int bp_force_copy = 0;
 typedef enum {

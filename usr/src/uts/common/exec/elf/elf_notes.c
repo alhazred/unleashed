@@ -139,29 +139,6 @@ setup_note_header(Phdr *v, proc_t *p)
 		v[0].p_filesz += nlwp * sizeof (Note)
 		    + nlwp * roundup(size, sizeof (Word));
 
-#if defined(__sparc)
-	/*
-	 * Figure out the number and sizes of register windows.
-	 */
-	{
-		kthread_t *t = p->p_tlist;
-		do {
-			if ((size = prnwindows(ttolwp(t))) != 0) {
-				size = sizeof (gwindows_t) -
-				    (SPARC_MAXREGWINDOW - size) *
-				    sizeof (struct rwindow);
-				v[0].p_filesz += sizeof (Note) +
-				    roundup(size, sizeof (Word));
-			}
-		} while ((t = t->t_forw) != p->p_tlist);
-	}
-	/*
-	 * Space for the Ancillary State Registers.
-	 */
-	if (p->p_model == DATAMODEL_LP64)
-		v[0].p_filesz += nlwp * sizeof (Note)
-		    + nlwp * roundup(sizeof (asrset_t), sizeof (Word));
-#endif /* __sparc */
 }
 
 int
@@ -173,10 +150,6 @@ write_elfnotes(proc_t *p, int sig, vnode_t *vp, offset_t offset,
 		pstatus_t	pstatus;
 		lwpsinfo_t	lwpsinfo;
 		lwpstatus_t	lwpstatus;
-#if defined(__sparc)
-		gwindows_t	gwindows;
-		asrset_t	asrset;
-#endif /* __sparc */
 		char		xregs[1];
 		aux_entry_t	auxv[__KERN_NAUXV_IMPL];
 		prcred_t	pcred;
@@ -510,37 +483,6 @@ write_elfnotes(proc_t *p, int sig, vnode_t *vp, offset_t offset,
 		if (error)
 			goto done;
 
-#if defined(__sparc)
-		/*
-		 * Unspilled SPARC register windows.
-		 */
-		{
-			size_t size = prnwindows(lwp);
-
-			if (size != 0) {
-				size = sizeof (gwindows_t) -
-				    (SPARC_MAXREGWINDOW - size) *
-				    sizeof (struct rwindow);
-				prgetwindows(lwp, &bigwad->gwindows);
-				error = elfnote(vp, &offset, NT_GWINDOWS,
-				    size, (caddr_t)&bigwad->gwindows,
-				    rlimit, credp);
-				if (error)
-					goto done;
-			}
-		}
-		/*
-		 * Ancillary State Registers.
-		 */
-		if (p->p_model == DATAMODEL_LP64) {
-			prgetasregs(lwp, bigwad->asrset);
-			error = elfnote(vp, &offset, NT_ASRS,
-			    sizeof (asrset_t), (caddr_t)bigwad->asrset,
-			    rlimit, credp);
-			if (error)
-				goto done;
-		}
-#endif /* __sparc */
 
 		if (xregsize) {
 			prgetprxregs(lwp, bigwad->xregs);

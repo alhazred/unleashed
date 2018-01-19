@@ -194,20 +194,7 @@ static char shstr[] =
  * This is the smallest number of PLT relocation entries allowed in a proper
  * .plt section.
  */
-#ifdef	__sparc
-#define	PLTREL_MIN_ENTRIES	4	/* SPARC psABI 3.0 and SCD 2.4 */
-#else
-#ifdef	__lint
-/*
- * On x86, lint would complain about unsigned comparison with
- * PLTREL_MIN_ENTRIES. This define fakes up the value of PLTREL_MIN_ENTRIES
- * and silences lint. On SPARC, there is no such issue.
- */
-#define	PLTREL_MIN_ENTRIES	1
-#else
 #define	PLTREL_MIN_ENTRIES	0
-#endif
-#endif
 
 #ifdef _ELF64
 Elf *
@@ -434,10 +421,6 @@ fake_elf32(struct ps_prochandle *P, file_info_t *fptr, uintptr_t addr,
 		 * we can calculate the size of the plt.
 		 */
 		pltsz = (pltentries + M_PLT_XNumber) * M_PLT_ENTSIZE;
-#if defined(__sparc)
-		/* The sparc PLT always has a (delay slot) nop at the end */
-		pltsz += 4;
-#endif /* __sparc */
 
 		size += sizeof (Shdr);
 		size += roundup(pltsz, SH_ADDRALIGN);
@@ -673,14 +656,6 @@ done_with_plt:
 			}
 		}
 
-#if defined(__sparc)
-		if (sym.st_value != d[DI_PLTGOT]->d_un.d_ptr) {
-			dprintf("warning: DI_PLTGOT (%lx) doesn't match "
-			    ".plt symbol pointer (%lx)",
-			    (long)d[DI_PLTGOT]->d_un.d_ptr,
-			    (long)sym.st_value);
-		}
-#endif /* __sparc */
 
 		if (ndx == 0) {
 			dprintf(

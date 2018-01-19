@@ -92,42 +92,6 @@
 #include <util/qsort.h>
 #include <sys/taskq.h>
 
-#ifdef __xpv
-
-#include <sys/hypervisor.h>
-#include <sys/xen_mmu.h>
-#include <sys/balloon_impl.h>
-
-/*
- * domain 0 pages usable for DMA are kept pre-allocated and kept in
- * distinct lists, ordered by increasing mfn.
- */
-static kmutex_t io_pool_lock;
-static kmutex_t contig_list_lock;
-static page_t *io_pool_4g;	/* pool for 32 bit dma limited devices */
-static page_t *io_pool_16m;	/* pool for 24 bit dma limited legacy devices */
-static long io_pool_cnt;
-static long io_pool_cnt_max = 0;
-#define	DEFAULT_IO_POOL_MIN	128
-static long io_pool_cnt_min = DEFAULT_IO_POOL_MIN;
-static long io_pool_cnt_lowater = 0;
-static long io_pool_shrink_attempts; /* how many times did we try to shrink */
-static long io_pool_shrinks;	/* how many times did we really shrink */
-static long io_pool_grows;	/* how many times did we grow */
-static mfn_t start_mfn = 1;
-static caddr_t io_pool_kva;	/* use to alloc pages when needed */
-
-static int create_contig_pfnlist(uint_t);
-
-/*
- * percentage of phys mem to hold in the i/o pool
- */
-#define	DEFAULT_IO_POOL_PCT	2
-static long io_pool_physmem_pct = DEFAULT_IO_POOL_PCT;
-static void page_io_pool_sub(page_t **, page_t *, page_t *);
-int ioalloc_dbg = 0;
-
-#endif /* __xpv */
 
 uint_t vac_colors = 1;
 
@@ -1023,9 +987,6 @@ memrange_num(pfn_t pfn)
 int
 pfn_2_mtype(pfn_t pfn)
 {
-#if defined(__xpv)
-	return (0);
-#else
 	int	n;
 
 	/* Always start from highest pfn and work our way down */
@@ -1035,10 +996,8 @@ pfn_2_mtype(pfn_t pfn)
 		}
 	}
 	return (n);
-#endif
 }
 
-#if !defined(__xpv)
 /*
  * is_contigpage_free:
  *	returns a page list of contiguous pages. It minimally has to return
@@ -1134,7 +1093,6 @@ retry:
 
 	return (NULL);
 }
-#endif	/* !__xpv */
 
 /*
  * verify that pages being returned from allocator have correct DMA attribute
@@ -1160,7 +1118,6 @@ check_dma(ddi_dma_attr_t *dma_attr, page_t *pp, int cnt)
 }
 #endif
 
-#if !defined(__xpv)
 static page_t *
 page_get_contigpage(pgcnt_t *pgcnt, ddi_dma_attr_t *mattr, int iolock)
 {
@@ -1282,7 +1239,6 @@ page_get_contigpage(pgcnt_t *pgcnt, ddi_dma_attr_t *mattr, int iolock)
 	CONTIG_UNLOCK();
 	return (NULL);
 }
-#endif	/* !__xpv */
 
 /*
  * mnode_range_cnt() calculates the number of memory ranges for mnode and
@@ -1291,10 +1247,6 @@ page_get_contigpage(pgcnt_t *pgcnt, ddi_dma_attr_t *mattr, int iolock)
 int
 mnode_range_cnt(int mnode)
 {
-#if defined(__xpv)
-	ASSERT(mnode == 0);
-	return (1);
-#else	/* __xpv */
 	int	mri;
 	int	mnrcnt = 0;
 
@@ -1321,7 +1273,6 @@ mnode_range_cnt(int mnode)
 	}
 	ASSERT(mnrcnt <= MAX_MNODE_MRANGES);
 	return (mnrcnt);
-#endif	/* __xpv */
 }
 
 /*
@@ -1394,7 +1345,6 @@ mnode_range_setup(mnoderange_t *mnoderanges)
 	mtypetop = last;
 }
 
-#ifndef	__xpv
 /*
  * Update mnoderanges for memory hot-add DR operations.
  */
@@ -1503,7 +1453,6 @@ plat_slice_del(pfn_t start, pfn_t end)
 	mnode_range_del(PFN_2_MEM_NODE(start));
 	mem_node_del_slice(start, end);
 }
-#endif	/* __xpv */
 
 /*ARGSUSED*/
 int
@@ -1511,7 +1460,6 @@ mtype_init(vnode_t *vp, caddr_t vaddr, uint_t *flags, size_t pgsz)
 {
 	int mtype = mtypetop;
 
-#if !defined(__xpv)
 #if defined(__i386)
 	/*
 	 * set the mtype range
@@ -1548,7 +1496,6 @@ mtype_init(vnode_t *vp, caddr_t vaddr, uint_t *flags, size_t pgsz)
 		VM_STAT_COND_ADD((*flags & PG_PANIC), vmm_vmstats.pgpanicalloc);
 		*flags |= PGI_MT_RANGE0;
 	}
-#endif /* !__xpv */
 	return (mtype);
 }
 
@@ -1559,14 +1506,12 @@ int
 mtype_pgr_init(int *flags, page_t *pp, int mnode, pgcnt_t pgcnt)
 {
 	int mtype = mtypetop;
-#if !defined(__xpv)
 	if (RESTRICT16M_ALLOC(freemem, pgcnt, *flags)) {
 		*flags |= PGI_MT_RANGE16M;
 	} else {
 		VM_STAT_ADD(vmm_vmstats.unrestrict16mcnt);
 		*flags |= PGI_MT_RANGE0;
 	}
-#endif
 	return (mtype);
 }
 
@@ -1744,13 +1689,6 @@ page_coloring_init(uint_t l2_sz, int l2_linesz, int l2_assoc)
 	int	i;
 	int	colors;
 
-#if defined(__xpv)
-	/*
-	 * Hypervisor domains currently don't have any concept of NUMA.
-	 * Hence we'll act like there is only 1 memrange.
-	 */
-	i = memrange_num(1);
-#else /* !__xpv */
 	/*
 	 * Reduce the memory ranges lists if we don't have large amounts
 	 * of memory. This avoids searching known empty free lists.
@@ -1768,7 +1706,6 @@ page_coloring_init(uint_t l2_sz, int l2_linesz, int l2_assoc)
 	/* physmax greater than 4g */
 	if (i == MRI_4G)
 		physmax4g = 1;
-#endif /* !__xpv */
 	memranges += i;
 	nranges -= i;
 
@@ -1944,70 +1881,10 @@ page_coloring_setup(caddr_t pcmemaddr)
 	}
 }
 
-#if defined(__xpv)
-/*
- * Give back 10% of the io_pool pages to the free list.
- * Don't shrink the pool below some absolute minimum.
- */
-static void
-page_io_pool_shrink()
-{
-	int retcnt;
-	page_t *pp, *pp_first, *pp_last, **curpool;
-	mfn_t mfn;
-	int bothpools = 0;
-
-	mutex_enter(&io_pool_lock);
-	io_pool_shrink_attempts++;	/* should be a kstat? */
-	retcnt = io_pool_cnt / 10;
-	if (io_pool_cnt - retcnt < io_pool_cnt_min)
-		retcnt = io_pool_cnt - io_pool_cnt_min;
-	if (retcnt <= 0)
-		goto done;
-	io_pool_shrinks++;	/* should be a kstat? */
-	curpool = &io_pool_4g;
-domore:
-	/*
-	 * Loop through taking pages from the end of the list
-	 * (highest mfns) till amount to return reached.
-	 */
-	for (pp = *curpool; pp && retcnt > 0; ) {
-		pp_first = pp_last = pp->p_prev;
-		if (pp_first == *curpool)
-			break;
-		retcnt--;
-		io_pool_cnt--;
-		page_io_pool_sub(curpool, pp_first, pp_last);
-		if ((mfn = pfn_to_mfn(pp->p_pagenum)) < start_mfn)
-			start_mfn = mfn;
-		page_free(pp_first, 1);
-		pp = *curpool;
-	}
-	if (retcnt != 0 && !bothpools) {
-		/*
-		 * If not enough found in less constrained pool try the
-		 * more constrained one.
-		 */
-		curpool = &io_pool_16m;
-		bothpools = 1;
-		goto domore;
-	}
-done:
-	mutex_exit(&io_pool_lock);
-}
-
-#endif	/* __xpv */
 
 uint_t
 page_create_update_flags_x86(uint_t flags)
 {
-#if defined(__xpv)
-	/*
-	 * Check this is an urgent allocation and free pages are depleted.
-	 */
-	if (!(flags & PG_WAIT) && freemem < desfree)
-		page_io_pool_shrink();
-#else /* !__xpv */
 	/*
 	 * page_create_get_something may call this because 4g memory may be
 	 * depleted. Set flags to allow for relocation of base page below
@@ -2015,7 +1892,6 @@ page_create_update_flags_x86(uint_t flags)
 	 */
 	if (physmax4g)
 		flags |= (PGI_PGCPSZC0 | PGI_PGCPHIPRI);
-#endif /* __xpv */
 	return (flags);
 }
 
@@ -2026,1106 +1902,6 @@ bp_color(struct buf *bp)
 	return (0);
 }
 
-#if defined(__xpv)
-
-/*
- * Take pages out of an io_pool
- */
-static void
-page_io_pool_sub(page_t **poolp, page_t *pp_first, page_t *pp_last)
-{
-	if (*poolp == pp_first) {
-		*poolp = pp_last->p_next;
-		if (*poolp == pp_first)
-			*poolp = NULL;
-	}
-	pp_first->p_prev->p_next = pp_last->p_next;
-	pp_last->p_next->p_prev = pp_first->p_prev;
-	pp_first->p_prev = pp_last;
-	pp_last->p_next = pp_first;
-}
-
-/*
- * Put a page on the io_pool list. The list is ordered by increasing MFN.
- */
-static void
-page_io_pool_add(page_t **poolp, page_t *pp)
-{
-	page_t	*look;
-	mfn_t	mfn = mfn_list[pp->p_pagenum];
-
-	if (*poolp == NULL) {
-		*poolp = pp;
-		pp->p_next = pp;
-		pp->p_prev = pp;
-		return;
-	}
-
-	/*
-	 * Since we try to take pages from the high end of the pool
-	 * chances are good that the pages to be put on the list will
-	 * go at or near the end of the list. so start at the end and
-	 * work backwards.
-	 */
-	look = (*poolp)->p_prev;
-	while (mfn < mfn_list[look->p_pagenum]) {
-		look = look->p_prev;
-		if (look == (*poolp)->p_prev)
-			break; /* backed all the way to front of list */
-	}
-
-	/* insert after look */
-	pp->p_prev = look;
-	pp->p_next = look->p_next;
-	pp->p_next->p_prev = pp;
-	look->p_next = pp;
-	if (mfn < mfn_list[(*poolp)->p_pagenum]) {
-		/*
-		 * we inserted a new first list element
-		 * adjust pool pointer to newly inserted element
-		 */
-		*poolp = pp;
-	}
-}
-
-/*
- * Add a page to the io_pool.  Setting the force flag will force the page
- * into the io_pool no matter what.
- */
-static void
-add_page_to_pool(page_t *pp, int force)
-{
-	page_t *highest;
-	page_t *freep = NULL;
-
-	mutex_enter(&io_pool_lock);
-	/*
-	 * Always keep the scarce low memory pages
-	 */
-	if (mfn_list[pp->p_pagenum] < PFN_16MEG) {
-		++io_pool_cnt;
-		page_io_pool_add(&io_pool_16m, pp);
-		goto done;
-	}
-	if (io_pool_cnt < io_pool_cnt_max || force || io_pool_4g == NULL) {
-		++io_pool_cnt;
-		page_io_pool_add(&io_pool_4g, pp);
-	} else {
-		highest = io_pool_4g->p_prev;
-		if (mfn_list[pp->p_pagenum] < mfn_list[highest->p_pagenum]) {
-			page_io_pool_sub(&io_pool_4g, highest, highest);
-			page_io_pool_add(&io_pool_4g, pp);
-			freep = highest;
-		} else {
-			freep = pp;
-		}
-	}
-done:
-	mutex_exit(&io_pool_lock);
-	if (freep)
-		page_free(freep, 1);
-}
-
-
-int contig_pfn_cnt;	/* no of pfns in the contig pfn list */
-int contig_pfn_max;	/* capacity of the contig pfn list */
-int next_alloc_pfn;	/* next position in list to start a contig search */
-int contig_pfnlist_updates;	/* pfn list update count */
-int contig_pfnlist_builds;	/* how many times have we (re)built list */
-int contig_pfnlist_buildfailed;	/* how many times has list build failed */
-int create_contig_pending;	/* nonzero means taskq creating contig list */
-pfn_t *contig_pfn_list = NULL;	/* list of contig pfns in ascending mfn order */
-
-/*
- * Function to use in sorting a list of pfns by their underlying mfns.
- */
-static int
-mfn_compare(const void *pfnp1, const void *pfnp2)
-{
-	mfn_t mfn1 = mfn_list[*(pfn_t *)pfnp1];
-	mfn_t mfn2 = mfn_list[*(pfn_t *)pfnp2];
-
-	if (mfn1 > mfn2)
-		return (1);
-	if (mfn1 < mfn2)
-		return (-1);
-	return (0);
-}
-
-/*
- * Compact the contig_pfn_list by tossing all the non-contiguous
- * elements from the list.
- */
-static void
-compact_contig_pfn_list(void)
-{
-	pfn_t pfn, lapfn, prev_lapfn;
-	mfn_t mfn;
-	int i, newcnt = 0;
-
-	prev_lapfn = 0;
-	for (i = 0; i < contig_pfn_cnt - 1; i++) {
-		pfn = contig_pfn_list[i];
-		lapfn = contig_pfn_list[i + 1];
-		mfn = mfn_list[pfn];
-		/*
-		 * See if next pfn is for a contig mfn
-		 */
-		if (mfn_list[lapfn] != mfn + 1)
-			continue;
-		/*
-		 * pfn and lookahead are both put in list
-		 * unless pfn is the previous lookahead.
-		 */
-		if (pfn != prev_lapfn)
-			contig_pfn_list[newcnt++] = pfn;
-		contig_pfn_list[newcnt++] = lapfn;
-		prev_lapfn = lapfn;
-	}
-	for (i = newcnt; i < contig_pfn_cnt; i++)
-		contig_pfn_list[i] = 0;
-	contig_pfn_cnt = newcnt;
-}
-
-/*ARGSUSED*/
-static void
-call_create_contiglist(void *arg)
-{
-	(void) create_contig_pfnlist(PG_WAIT);
-}
-
-/*
- * Create list of freelist pfns that have underlying
- * contiguous mfns.  The list is kept in ascending mfn order.
- * returns 1 if list created else 0.
- */
-static int
-create_contig_pfnlist(uint_t flags)
-{
-	pfn_t pfn;
-	page_t *pp;
-	int ret = 1;
-
-	mutex_enter(&contig_list_lock);
-	if (contig_pfn_list != NULL)
-		goto out;
-	contig_pfn_max = freemem + (freemem / 10);
-	contig_pfn_list = kmem_zalloc(contig_pfn_max * sizeof (pfn_t),
-	    (flags & PG_WAIT) ? KM_SLEEP : KM_NOSLEEP);
-	if (contig_pfn_list == NULL) {
-		/*
-		 * If we could not create the contig list (because
-		 * we could not sleep for memory).  Dispatch a taskq that can
-		 * sleep to get the memory.
-		 */
-		if (!create_contig_pending) {
-			if (taskq_dispatch(system_taskq, call_create_contiglist,
-			    NULL, TQ_NOSLEEP) != (uintptr_t)NULL)
-				create_contig_pending = 1;
-		}
-		contig_pfnlist_buildfailed++;	/* count list build failures */
-		ret = 0;
-		goto out;
-	}
-	create_contig_pending = 0;
-	ASSERT(contig_pfn_cnt == 0);
-	for (pfn = 0; pfn < mfn_count; pfn++) {
-		pp = page_numtopp_nolock(pfn);
-		if (pp == NULL || !PP_ISFREE(pp))
-			continue;
-		contig_pfn_list[contig_pfn_cnt] = pfn;
-		if (++contig_pfn_cnt == contig_pfn_max)
-			break;
-	}
-	/*
-	 * Sanity check the new list.
-	 */
-	if (contig_pfn_cnt < 2) { /* no contig pfns */
-		contig_pfn_cnt = 0;
-		contig_pfnlist_buildfailed++;
-		kmem_free(contig_pfn_list, contig_pfn_max * sizeof (pfn_t));
-		contig_pfn_list = NULL;
-		contig_pfn_max = 0;
-		ret = 0;
-		goto out;
-	}
-	qsort(contig_pfn_list, contig_pfn_cnt, sizeof (pfn_t), mfn_compare);
-	compact_contig_pfn_list();
-	/*
-	 * Make sure next search of the newly created contiguous pfn
-	 * list starts at the beginning of the list.
-	 */
-	next_alloc_pfn = 0;
-	contig_pfnlist_builds++;	/* count list builds */
-out:
-	mutex_exit(&contig_list_lock);
-	return (ret);
-}
-
-
-/*
- * Toss the current contig pfnlist.  Someone is about to do a massive
- * update to pfn<->mfn mappings.  So we have them destroy the list and lock
- * it till they are done with their update.
- */
-void
-clear_and_lock_contig_pfnlist()
-{
-	pfn_t *listp = NULL;
-	size_t listsize;
-
-	mutex_enter(&contig_list_lock);
-	if (contig_pfn_list != NULL) {
-		listp = contig_pfn_list;
-		listsize = contig_pfn_max * sizeof (pfn_t);
-		contig_pfn_list = NULL;
-		contig_pfn_max = contig_pfn_cnt = 0;
-	}
-	if (listp != NULL)
-		kmem_free(listp, listsize);
-}
-
-/*
- * Unlock the contig_pfn_list.  The next attempted use of it will cause
- * it to be re-created.
- */
-void
-unlock_contig_pfnlist()
-{
-	mutex_exit(&contig_list_lock);
-}
-
-/*
- * Update the contiguous pfn list in response to a pfn <-> mfn reassignment
- */
-void
-update_contig_pfnlist(pfn_t pfn, mfn_t oldmfn, mfn_t newmfn)
-{
-	int probe_hi, probe_lo, probe_pos, insert_after, insert_point;
-	pfn_t probe_pfn;
-	mfn_t probe_mfn;
-	int drop_lock = 0;
-
-	if (mutex_owner(&contig_list_lock) != curthread) {
-		drop_lock = 1;
-		mutex_enter(&contig_list_lock);
-	}
-	if (contig_pfn_list == NULL)
-		goto done;
-	contig_pfnlist_updates++;
-	/*
-	 * Find the pfn in the current list.  Use a binary chop to locate it.
-	 */
-	probe_hi = contig_pfn_cnt - 1;
-	probe_lo = 0;
-	probe_pos = (probe_hi + probe_lo) / 2;
-	while ((probe_pfn = contig_pfn_list[probe_pos]) != pfn) {
-		if (probe_pos == probe_lo) { /* pfn not in list */
-			probe_pos = -1;
-			break;
-		}
-		if (pfn_to_mfn(probe_pfn) <= oldmfn)
-			probe_lo = probe_pos;
-		else
-			probe_hi = probe_pos;
-		probe_pos = (probe_hi + probe_lo) / 2;
-	}
-	if (probe_pos >= 0) {
-		/*
-		 * Remove pfn from list and ensure next alloc
-		 * position stays in bounds.
-		 */
-		if (--contig_pfn_cnt <= next_alloc_pfn)
-			next_alloc_pfn = 0;
-		if (contig_pfn_cnt < 2) { /* no contig pfns */
-			contig_pfn_cnt = 0;
-			kmem_free(contig_pfn_list,
-			    contig_pfn_max * sizeof (pfn_t));
-			contig_pfn_list = NULL;
-			contig_pfn_max = 0;
-			goto done;
-		}
-		ovbcopy(&contig_pfn_list[probe_pos + 1],
-		    &contig_pfn_list[probe_pos],
-		    (contig_pfn_cnt - probe_pos) * sizeof (pfn_t));
-	}
-	if (newmfn == MFN_INVALID)
-		goto done;
-	/*
-	 * Check if new mfn has adjacent mfns in the list
-	 */
-	probe_hi = contig_pfn_cnt - 1;
-	probe_lo = 0;
-	insert_after = -2;
-	do {
-		probe_pos = (probe_hi + probe_lo) / 2;
-		probe_mfn = pfn_to_mfn(contig_pfn_list[probe_pos]);
-		if (newmfn == probe_mfn + 1)
-			insert_after = probe_pos;
-		else if (newmfn == probe_mfn - 1)
-			insert_after = probe_pos - 1;
-		if (probe_pos == probe_lo)
-			break;
-		if (probe_mfn <= newmfn)
-			probe_lo = probe_pos;
-		else
-			probe_hi = probe_pos;
-	} while (insert_after == -2);
-	/*
-	 * If there is space in the list and there are adjacent mfns
-	 * insert the pfn in to its proper place in the list.
-	 */
-	if (insert_after != -2 && contig_pfn_cnt + 1 <= contig_pfn_max) {
-		insert_point = insert_after + 1;
-		ovbcopy(&contig_pfn_list[insert_point],
-		    &contig_pfn_list[insert_point + 1],
-		    (contig_pfn_cnt - insert_point) * sizeof (pfn_t));
-		contig_pfn_list[insert_point] = pfn;
-		contig_pfn_cnt++;
-	}
-done:
-	if (drop_lock)
-		mutex_exit(&contig_list_lock);
-}
-
-/*
- * Called to (re-)populate the io_pool from the free page lists.
- */
-long
-populate_io_pool(void)
-{
-	pfn_t pfn;
-	mfn_t mfn, max_mfn;
-	page_t *pp;
-
-	/*
-	 * Figure out the bounds of the pool on first invocation.
-	 * We use a percentage of memory for the io pool size.
-	 * we allow that to shrink, but not to less than a fixed minimum
-	 */
-	if (io_pool_cnt_max == 0) {
-		io_pool_cnt_max = physmem / (100 / io_pool_physmem_pct);
-		io_pool_cnt_lowater = io_pool_cnt_max;
-		/*
-		 * This is the first time in populate_io_pool, grab a va to use
-		 * when we need to allocate pages.
-		 */
-		io_pool_kva = vmem_alloc(heap_arena, PAGESIZE, VM_SLEEP);
-	}
-	/*
-	 * If we are out of pages in the pool, then grow the size of the pool
-	 */
-	if (io_pool_cnt == 0) {
-		/*
-		 * Grow the max size of the io pool by 5%, but never more than
-		 * 25% of physical memory.
-		 */
-		if (io_pool_cnt_max < physmem / 4)
-			io_pool_cnt_max += io_pool_cnt_max / 20;
-	}
-	io_pool_grows++;	/* should be a kstat? */
-
-	/*
-	 * Get highest mfn on this platform, but limit to the 32 bit DMA max.
-	 */
-	(void) mfn_to_pfn(start_mfn);
-	max_mfn = MIN(cached_max_mfn, PFN_4GIG);
-	for (mfn = start_mfn; mfn < max_mfn; start_mfn = ++mfn) {
-		pfn = mfn_to_pfn(mfn);
-		if (pfn & PFN_IS_FOREIGN_MFN)
-			continue;
-		/*
-		 * try to allocate it from free pages
-		 */
-		pp = page_numtopp_alloc(pfn);
-		if (pp == NULL)
-			continue;
-		PP_CLRFREE(pp);
-		add_page_to_pool(pp, 1);
-		if (io_pool_cnt >= io_pool_cnt_max)
-			break;
-	}
-
-	return (io_pool_cnt);
-}
-
-/*
- * Destroy a page that was being used for DMA I/O. It may or
- * may not actually go back to the io_pool.
- */
-void
-page_destroy_io(page_t *pp)
-{
-	mfn_t mfn = mfn_list[pp->p_pagenum];
-
-	/*
-	 * When the page was alloc'd a reservation was made, release it now
-	 */
-	page_unresv(1);
-	/*
-	 * Unload translations, if any, then hash out the
-	 * page to erase its identity.
-	 */
-	(void) hat_pageunload(pp, HAT_FORCE_PGUNLOAD);
-	page_hashout(pp, false);
-
-	/*
-	 * If the page came from the free lists, just put it back to them.
-	 * DomU pages always go on the free lists as well.
-	 */
-	if (!DOMAIN_IS_INITDOMAIN(xen_info) || mfn >= PFN_4GIG) {
-		page_free(pp, 1);
-		return;
-	}
-
-	add_page_to_pool(pp, 0);
-}
-
-
-long contig_searches;		/* count of times contig pages requested */
-long contig_search_restarts;	/* count of contig ranges tried */
-long contig_search_failed;	/* count of contig alloc failures */
-
-/*
- * Free partial page list
- */
-static void
-free_partial_list(page_t **pplist)
-{
-	page_t *pp;
-
-	while (*pplist != NULL) {
-		pp = *pplist;
-		page_io_pool_sub(pplist, pp, pp);
-		page_free(pp, 1);
-	}
-}
-
-/*
- * Look thru the contiguous pfns that are not part of the io_pool for
- * contiguous free pages.  Return a list of the found pages or NULL.
- */
-page_t *
-find_contig_free(uint_t npages, uint_t flags, uint64_t pfnseg,
-    pgcnt_t pfnalign)
-{
-	page_t *pp, *plist = NULL;
-	mfn_t mfn, prev_mfn, start_mfn;
-	pfn_t pfn;
-	int pages_needed, pages_requested;
-	int search_start;
-
-	/*
-	 * create the contig pfn list if not already done
-	 */
-retry:
-	mutex_enter(&contig_list_lock);
-	if (contig_pfn_list == NULL) {
-		mutex_exit(&contig_list_lock);
-		if (!create_contig_pfnlist(flags)) {
-			return (NULL);
-		}
-		goto retry;
-	}
-	contig_searches++;
-	/*
-	 * Search contiguous pfn list for physically contiguous pages not in
-	 * the io_pool.  Start the search where the last search left off.
-	 */
-	pages_requested = pages_needed = npages;
-	search_start = next_alloc_pfn;
-	start_mfn = prev_mfn = 0;
-	while (pages_needed) {
-		pfn = contig_pfn_list[next_alloc_pfn];
-		mfn = pfn_to_mfn(pfn);
-		/*
-		 * Check if mfn is first one or contig to previous one and
-		 * if page corresponding to mfn is free and that mfn
-		 * range is not crossing a segment boundary.
-		 */
-		if ((prev_mfn == 0 || mfn == prev_mfn + 1) &&
-		    (pp = page_numtopp_alloc(pfn)) != NULL &&
-		    !((mfn & pfnseg) < (start_mfn & pfnseg))) {
-			PP_CLRFREE(pp);
-			page_io_pool_add(&plist, pp);
-			pages_needed--;
-			if (prev_mfn == 0) {
-				if (pfnalign &&
-				    mfn != P2ROUNDUP(mfn, pfnalign)) {
-					/*
-					 * not properly aligned
-					 */
-					contig_search_restarts++;
-					free_partial_list(&plist);
-					pages_needed = pages_requested;
-					start_mfn = prev_mfn = 0;
-					goto skip;
-				}
-				start_mfn = mfn;
-			}
-			prev_mfn = mfn;
-		} else {
-			contig_search_restarts++;
-			free_partial_list(&plist);
-			pages_needed = pages_requested;
-			start_mfn = prev_mfn = 0;
-		}
-skip:
-		if (++next_alloc_pfn == contig_pfn_cnt)
-			next_alloc_pfn = 0;
-		if (next_alloc_pfn == search_start)
-			break; /* all pfns searched */
-	}
-	mutex_exit(&contig_list_lock);
-	if (pages_needed) {
-		contig_search_failed++;
-		/*
-		 * Failed to find enough contig pages.
-		 * free partial page list
-		 */
-		free_partial_list(&plist);
-	}
-	return (plist);
-}
-
-/*
- * Search the reserved io pool pages for a page range with the
- * desired characteristics.
- */
-page_t *
-page_io_pool_alloc(ddi_dma_attr_t *mattr, int contig, pgcnt_t minctg)
-{
-	page_t *pp_first, *pp_last;
-	page_t *pp, **poolp;
-	pgcnt_t nwanted, pfnalign;
-	uint64_t pfnseg;
-	mfn_t mfn, tmfn, hi_mfn, lo_mfn;
-	int align, attempt = 0;
-
-	if (minctg == 1)
-		contig = 0;
-	lo_mfn = mmu_btop(mattr->dma_attr_addr_lo);
-	hi_mfn = mmu_btop(mattr->dma_attr_addr_hi);
-	pfnseg = mmu_btop(mattr->dma_attr_seg);
-	align = maxbit(mattr->dma_attr_align, mattr->dma_attr_minxfer);
-	if (align > MMU_PAGESIZE)
-		pfnalign = mmu_btop(align);
-	else
-		pfnalign = 0;
-
-try_again:
-	/*
-	 * See if we want pages for a legacy device
-	 */
-	if (hi_mfn < PFN_16MEG)
-		poolp = &io_pool_16m;
-	else
-		poolp = &io_pool_4g;
-try_smaller:
-	/*
-	 * Take pages from I/O pool. We'll use pages from the highest
-	 * MFN range possible.
-	 */
-	pp_first = pp_last = NULL;
-	mutex_enter(&io_pool_lock);
-	nwanted = minctg;
-	for (pp = *poolp; pp && nwanted > 0; ) {
-		pp = pp->p_prev;
-
-		/*
-		 * skip pages above allowable range
-		 */
-		mfn = mfn_list[pp->p_pagenum];
-		if (hi_mfn < mfn)
-			goto skip;
-
-		/*
-		 * stop at pages below allowable range
-		 */
-		if (lo_mfn > mfn)
-			break;
-restart:
-		if (pp_last == NULL) {
-			/*
-			 * Check alignment
-			 */
-			tmfn = mfn - (minctg - 1);
-			if (pfnalign && tmfn != P2ROUNDUP(tmfn, pfnalign))
-				goto skip; /* not properly aligned */
-			/*
-			 * Check segment
-			 */
-			if ((mfn & pfnseg) < (tmfn & pfnseg))
-				goto skip; /* crosses seg boundary */
-			/*
-			 * Start building page list
-			 */
-			pp_first = pp_last = pp;
-			nwanted--;
-		} else {
-			/*
-			 * check physical contiguity if required
-			 */
-			if (contig &&
-			    mfn_list[pp_first->p_pagenum] != mfn + 1) {
-				/*
-				 * not a contiguous page, restart list.
-				 */
-				pp_last = NULL;
-				nwanted = minctg;
-				goto restart;
-			} else { /* add page to list */
-				pp_first = pp;
-				nwanted--;
-			}
-		}
-skip:
-		if (pp == *poolp)
-			break;
-	}
-
-	/*
-	 * If we didn't find memory. Try the more constrained pool, then
-	 * sweep free pages into the DMA pool and try again.
-	 */
-	if (nwanted != 0) {
-		mutex_exit(&io_pool_lock);
-		/*
-		 * If we were looking in the less constrained pool and
-		 * didn't find pages, try the more constrained pool.
-		 */
-		if (poolp == &io_pool_4g) {
-			poolp = &io_pool_16m;
-			goto try_smaller;
-		}
-		kmem_reap();
-		if (++attempt < 4) {
-			/*
-			 * Grab some more io_pool pages
-			 */
-			(void) populate_io_pool();
-			goto try_again; /* go around and retry */
-		}
-		return (NULL);
-	}
-	/*
-	 * Found the pages, now snip them from the list
-	 */
-	page_io_pool_sub(poolp, pp_first, pp_last);
-	io_pool_cnt -= minctg;
-	/*
-	 * reset low water mark
-	 */
-	if (io_pool_cnt < io_pool_cnt_lowater)
-		io_pool_cnt_lowater = io_pool_cnt;
-	mutex_exit(&io_pool_lock);
-	return (pp_first);
-}
-
-page_t *
-page_swap_with_hypervisor(struct vnode *vp, uoff_t off, caddr_t vaddr,
-    ddi_dma_attr_t *mattr, uint_t flags, pgcnt_t minctg)
-{
-	uint_t kflags;
-	int order, extra, extpages, i, contig, nbits, extents;
-	page_t *pp, *expp, *pp_first, **pplist = NULL;
-	mfn_t *mfnlist = NULL;
-
-	contig = flags & PG_PHYSCONTIG;
-	if (minctg == 1)
-		contig = 0;
-	flags &= ~PG_PHYSCONTIG;
-	kflags = flags & PG_WAIT ? KM_SLEEP : KM_NOSLEEP;
-	/*
-	 * Hypervisor will allocate extents, if we want contig
-	 * pages extent must be >= minctg
-	 */
-	if (contig) {
-		order = highbit(minctg) - 1;
-		if (minctg & ((1 << order) - 1))
-			order++;
-		extpages = 1 << order;
-	} else {
-		order = 0;
-		extpages = minctg;
-	}
-	if (extpages > minctg) {
-		extra = extpages - minctg;
-		if (!page_resv(extra, kflags))
-			return (NULL);
-	}
-	pp_first = NULL;
-	pplist = kmem_alloc(extpages * sizeof (page_t *), kflags);
-	if (pplist == NULL)
-		goto balloon_fail;
-	mfnlist = kmem_alloc(extpages * sizeof (mfn_t), kflags);
-	if (mfnlist == NULL)
-		goto balloon_fail;
-	pp = page_create_va(&vp->v_object, off, minctg * PAGESIZE, flags,
-			    &kvseg, vaddr);
-	if (pp == NULL)
-		goto balloon_fail;
-	pp_first = pp;
-	if (extpages > minctg) {
-		/*
-		 * fill out the rest of extent pages to swap
-		 * with the hypervisor
-		 */
-		for (i = 0; i < extra; i++) {
-			expp = page_create_va(&vp->v_object,
-			    (uoff_t)(uintptr_t)io_pool_kva,
-			    PAGESIZE, flags, &kvseg, io_pool_kva);
-			if (expp == NULL)
-				goto balloon_fail;
-			(void) hat_pageunload(expp, HAT_FORCE_PGUNLOAD);
-			page_io_unlock(expp);
-			page_hashout(expp, false);
-			page_io_lock(expp);
-			/*
-			 * add page to end of list
-			 */
-			expp->p_prev = pp_first->p_prev;
-			expp->p_next = pp_first;
-			expp->p_prev->p_next = expp;
-			pp_first->p_prev = expp;
-		}
-
-	}
-	for (i = 0; i < extpages; i++) {
-		pplist[i] = pp;
-		pp = pp->p_next;
-	}
-	nbits = highbit(mattr->dma_attr_addr_hi);
-	extents = contig ? 1 : minctg;
-	if (balloon_replace_pages(extents, pplist, nbits, order,
-	    mfnlist) != extents) {
-		if (ioalloc_dbg)
-			cmn_err(CE_NOTE, "request to hypervisor"
-			    " for %d pages, maxaddr %" PRIx64 " failed",
-			    extpages, mattr->dma_attr_addr_hi);
-		goto balloon_fail;
-	}
-
-	kmem_free(pplist, extpages * sizeof (page_t *));
-	kmem_free(mfnlist, extpages * sizeof (mfn_t));
-	/*
-	 * Return any excess pages to free list
-	 */
-	if (extpages > minctg) {
-		for (i = 0; i < extra; i++) {
-			pp = pp_first->p_prev;
-			page_sub(&pp_first, pp);
-			page_io_unlock(pp);
-			page_unresv(1);
-			page_free(pp, 1);
-		}
-	}
-	return (pp_first);
-balloon_fail:
-	/*
-	 * Return pages to free list and return failure
-	 */
-	while (pp_first != NULL) {
-		pp = pp_first;
-		page_sub(&pp_first, pp);
-		page_io_unlock(pp);
-		if (pp->p_vnode != NULL)
-			page_hashout(pp, false);
-		page_free(pp, 1);
-	}
-	if (pplist)
-		kmem_free(pplist, extpages * sizeof (page_t *));
-	if (mfnlist)
-		kmem_free(mfnlist, extpages * sizeof (mfn_t));
-	page_unresv(extpages - minctg);
-	return (NULL);
-}
-
-static void
-return_partial_alloc(page_t *plist)
-{
-	page_t *pp;
-
-	while (plist != NULL) {
-		pp = plist;
-		page_sub(&plist, pp);
-		page_io_unlock(pp);
-		page_destroy_io(pp);
-	}
-}
-
-static page_t *
-page_get_contigpages(
-	struct vnode	*vp,
-	uoff_t	off,
-	int		*npagesp,
-	uint_t		flags,
-	caddr_t		vaddr,
-	ddi_dma_attr_t	*mattr)
-{
-	mfn_t	max_mfn = HYPERVISOR_memory_op(XENMEM_maximum_ram_page, NULL);
-	page_t	*plist;	/* list to return */
-	page_t	*pp, *mcpl;
-	int	contig, anyaddr, npages, getone = 0;
-	mfn_t	lo_mfn;
-	mfn_t	hi_mfn;
-	pgcnt_t	pfnalign = 0;
-	int	align, sgllen;
-	uint64_t pfnseg;
-	pgcnt_t	minctg;
-
-	npages = *npagesp;
-	ASSERT(mattr != NULL);
-	lo_mfn = mmu_btop(mattr->dma_attr_addr_lo);
-	hi_mfn = mmu_btop(mattr->dma_attr_addr_hi);
-	sgllen = mattr->dma_attr_sgllen;
-	pfnseg = mmu_btop(mattr->dma_attr_seg);
-	align = maxbit(mattr->dma_attr_align, mattr->dma_attr_minxfer);
-	if (align > MMU_PAGESIZE)
-		pfnalign = mmu_btop(align);
-
-	contig = flags & PG_PHYSCONTIG;
-	if (npages == -1) {
-		npages = 1;
-		pfnalign = 0;
-	}
-	/*
-	 * Clear the contig flag if only one page is needed.
-	 */
-	if (npages == 1) {
-		getone = 1;
-		contig = 0;
-	}
-
-	/*
-	 * Check if any page in the system is fine.
-	 */
-	anyaddr = lo_mfn == 0 && hi_mfn >= max_mfn;
-	if (!contig && anyaddr && !pfnalign) {
-		flags &= ~PG_PHYSCONTIG;
-		plist = page_create_va(&vp->v_object, off, npages * MMU_PAGESIZE,
-		    flags, &kvseg, vaddr);
-		if (plist != NULL) {
-			*npagesp = 0;
-			return (plist);
-		}
-	}
-	plist = NULL;
-	minctg = howmany(npages, sgllen);
-	while (npages > sgllen || getone) {
-		if (minctg > npages)
-			minctg = npages;
-		mcpl = NULL;
-		/*
-		 * We could want contig pages with no address range limits.
-		 */
-		if (anyaddr && contig) {
-			/*
-			 * Look for free contig pages to satisfy the request.
-			 */
-			mcpl = find_contig_free(minctg, flags, pfnseg,
-			    pfnalign);
-		}
-		/*
-		 * Try the reserved io pools next
-		 */
-		if (mcpl == NULL)
-			mcpl = page_io_pool_alloc(mattr, contig, minctg);
-		if (mcpl != NULL) {
-			pp = mcpl;
-			do {
-				if (!page_hashin(pp, &vp->v_object, off, false)) {
-					panic("page_get_contigpages:"
-					    " hashin failed"
-					    " pp %p, vp %p, off %llx",
-					    (void *)pp, (void *)vp, off);
-				}
-				off += MMU_PAGESIZE;
-				PP_CLRFREE(pp);
-				PP_CLRAGED(pp);
-				page_set_props(pp, P_REF);
-				page_io_lock(pp);
-				pp = pp->p_next;
-			} while (pp != mcpl);
-		} else {
-			/*
-			 * Hypervisor exchange doesn't handle segment or
-			 * alignment constraints
-			 */
-			if (mattr->dma_attr_seg < mattr->dma_attr_addr_hi ||
-			    pfnalign)
-				goto fail;
-			/*
-			 * Try exchanging pages with the hypervisor
-			 */
-			mcpl = page_swap_with_hypervisor(vp, off, vaddr, mattr,
-			    flags, minctg);
-			if (mcpl == NULL)
-				goto fail;
-			off += minctg * MMU_PAGESIZE;
-		}
-		check_dma(mattr, mcpl, minctg);
-		/*
-		 * Here with a minctg run of contiguous pages, add them to the
-		 * list we will return for this request.
-		 */
-		page_list_concat(&plist, &mcpl);
-		npages -= minctg;
-		*npagesp = npages;
-		sgllen--;
-		if (getone)
-			break;
-	}
-	return (plist);
-fail:
-	return_partial_alloc(plist);
-	return (NULL);
-}
-
-/*
- * Allocator for domain 0 I/O pages. We match the required
- * DMA attributes and contiguity constraints.
- */
-/*ARGSUSED*/
-page_t *
-page_create_io(
-	struct vnode	*vp,
-	uoff_t	off,
-	uint_t		bytes,
-	uint_t		flags,
-	struct as	*as,
-	caddr_t		vaddr,
-	ddi_dma_attr_t	*mattr)
-{
-	page_t	*plist = NULL, *pp;
-	int	npages = 0, contig, anyaddr, pages_req;
-	mfn_t	lo_mfn;
-	mfn_t	hi_mfn;
-	pgcnt_t	pfnalign = 0;
-	int	align;
-	int	is_domu = 0;
-	int	dummy, bytes_got;
-	mfn_t	max_mfn = HYPERVISOR_memory_op(XENMEM_maximum_ram_page, NULL);
-
-	ASSERT(mattr != NULL);
-	lo_mfn = mmu_btop(mattr->dma_attr_addr_lo);
-	hi_mfn = mmu_btop(mattr->dma_attr_addr_hi);
-	align = maxbit(mattr->dma_attr_align, mattr->dma_attr_minxfer);
-	if (align > MMU_PAGESIZE)
-		pfnalign = mmu_btop(align);
-
-	/*
-	 * Clear the contig flag if only one page is needed or the scatter
-	 * gather list length is >= npages.
-	 */
-	pages_req = npages = mmu_btopr(bytes);
-	contig = (flags & PG_PHYSCONTIG);
-	bytes = P2ROUNDUP(bytes, MMU_PAGESIZE);
-	if (bytes == MMU_PAGESIZE || mattr->dma_attr_sgllen >= npages)
-		contig = 0;
-
-	/*
-	 * Check if any old page in the system is fine.
-	 * DomU should always go down this path.
-	 */
-	is_domu = !DOMAIN_IS_INITDOMAIN(xen_info);
-	anyaddr = lo_mfn == 0 && hi_mfn >= max_mfn && !pfnalign;
-	if ((!contig && anyaddr) || is_domu) {
-		flags &= ~PG_PHYSCONTIG;
-		plist = page_create_va(&vp->v_object, off, bytes, flags, &kvseg,
-				       vaddr);
-		if (plist != NULL)
-			return (plist);
-		else if (is_domu)
-			return (NULL); /* no memory available */
-	}
-	/*
-	 * DomU should never reach here
-	 */
-	if (contig) {
-		plist = page_get_contigpages(vp, off, &npages, flags, vaddr,
-		    mattr);
-		if (plist == NULL)
-			goto fail;
-		bytes_got = (pages_req - npages) << MMU_PAGESHIFT;
-		vaddr += bytes_got;
-		off += bytes_got;
-		/*
-		 * We now have all the contiguous pages we need, but
-		 * we may still need additional non-contiguous pages.
-		 */
-	}
-	/*
-	 * now loop collecting the requested number of pages, these do
-	 * not have to be contiguous pages but we will use the contig
-	 * page alloc code to get the pages since it will honor any
-	 * other constraints the pages may have.
-	 */
-	while (npages--) {
-		dummy = -1;
-		pp = page_get_contigpages(vp, off, &dummy, flags, vaddr, mattr);
-		if (pp == NULL)
-			goto fail;
-		page_add(&plist, pp);
-		vaddr += MMU_PAGESIZE;
-		off += MMU_PAGESIZE;
-	}
-	return (plist);
-fail:
-	/*
-	 * Failed to get enough pages, return ones we did get
-	 */
-	return_partial_alloc(plist);
-	return (NULL);
-}
-
-/*
- * Lock and return the page with the highest mfn that we can find.  last_mfn
- * holds the last one found, so the next search can start from there.  We
- * also keep a counter so that we don't loop forever if the machine has no
- * free pages.
- *
- * This is called from the balloon thread to find pages to give away.  new_high
- * is used when new mfn's have been added to the system - we will reset our
- * search if the new mfn's are higher than our current search position.
- */
-page_t *
-page_get_high_mfn(mfn_t new_high)
-{
-	static mfn_t last_mfn = 0;
-	pfn_t pfn;
-	page_t *pp;
-	ulong_t loop_count = 0;
-
-	if (new_high > last_mfn)
-		last_mfn = new_high;
-
-	for (; loop_count < mfn_count; loop_count++, last_mfn--) {
-		if (last_mfn == 0) {
-			last_mfn = cached_max_mfn;
-		}
-
-		pfn = mfn_to_pfn(last_mfn);
-		if (pfn & PFN_IS_FOREIGN_MFN)
-			continue;
-
-		/* See if the page is free.  If so, lock it. */
-		pp = page_numtopp_alloc(pfn);
-		if (pp == NULL)
-			continue;
-		PP_CLRFREE(pp);
-
-		ASSERT(PAGE_EXCL(pp));
-		VERIFY(pp->p_object == NULL);
-		ASSERT(pp->p_vnode == NULL);
-		ASSERT(!hat_page_is_mapped(pp));
-		last_mfn--;
-		return (pp);
-	}
-	return (NULL);
-}
-
-#else /* !__xpv */
 
 /*
  * get a page from any list with the given mnode
@@ -3745,7 +2521,6 @@ fail:
 
 	return (NULL);
 }
-#endif /* !__xpv */
 
 
 /*
@@ -3802,29 +2577,13 @@ ppcopy(page_t *frompp, page_t *topp)
 		goto faulted;
 	}
 	if (use_sse_pagecopy)
-#ifdef __xpv
-		page_copy_no_xmm(pp_addr2, pp_addr1);
-#else
 		hwblkpagecopy(pp_addr1, pp_addr2);
-#endif
 	else
 		bcopy(pp_addr1, pp_addr2, PAGESIZE);
 
 	no_fault();
 faulted:
 	if (!kpm_enable) {
-#ifdef __xpv
-		/*
-		 * We can't leave unused mappings laying about under the
-		 * hypervisor, so blow them away.
-		 */
-		if (HYPERVISOR_update_va_mapping((uintptr_t)pp_addr1, 0,
-		    UVMF_INVLPG | UVMF_LOCAL) < 0)
-			panic("HYPERVISOR_update_va_mapping() failed");
-		if (HYPERVISOR_update_va_mapping((uintptr_t)pp_addr2, 0,
-		    UVMF_INVLPG | UVMF_LOCAL) < 0)
-			panic("HYPERVISOR_update_va_mapping() failed");
-#endif
 		mutex_exit(ppaddr_mutex);
 	}
 	kpreempt_enable();
@@ -3875,50 +2634,12 @@ pfnzero(pfn_t pfn, uint_t off, uint_t len)
 	}
 
 	if (use_sse_pagezero) {
-#ifdef __xpv
-		uint_t rem;
-
-		/*
-		 * zero a byte at a time until properly aligned for
-		 * block_zero_no_xmm().
-		 */
-		while (!P2NPHASE(off, ((uint_t)BLOCKZEROALIGN)) && len-- > 0)
-			pp_addr2[off++] = 0;
-
-		/*
-		 * Now use faster block_zero_no_xmm() for any range
-		 * that is properly aligned and sized.
-		 */
-		rem = P2PHASE(len, ((uint_t)BLOCKZEROALIGN));
-		len -= rem;
-		if (len != 0) {
-			block_zero_no_xmm(pp_addr2 + off, len);
-			off += len;
-		}
-
-		/*
-		 * zero remainder with byte stores.
-		 */
-		while (rem-- > 0)
-			pp_addr2[off++] = 0;
-#else
 		hwblkclr(pp_addr2 + off, len);
-#endif
 	} else {
 		bzero(pp_addr2 + off, len);
 	}
 
 	if (!kpm_enable || pfn_is_foreign(pfn)) {
-#ifdef __xpv
-		/*
-		 * On the hypervisor this page might get used for a page
-		 * table before any intervening change to this mapping,
-		 * so blow it away.
-		 */
-		if (HYPERVISOR_update_va_mapping((uintptr_t)pp_addr2, 0,
-		    UVMF_INVLPG) < 0)
-			panic("HYPERVISOR_update_va_mapping() failed");
-#endif
 		mutex_exit(ppaddr_mutex);
 	}
 

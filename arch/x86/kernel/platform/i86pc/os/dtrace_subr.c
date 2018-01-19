@@ -397,9 +397,5 @@ dtrace_safe_defer_signal(void)
 int
 dtrace_mach_aframes(void)
 {
-#ifdef __xpv
-	return (1);
-#else
 	return (0);
-#endif
 }

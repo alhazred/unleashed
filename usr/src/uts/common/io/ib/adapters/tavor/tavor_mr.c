@@ -2339,26 +2339,6 @@ tavor_mr_mem_bind(tavor_state_t *state, tavor_bind_info_t *bind,
 	 */
 	if (dmahdl == NULL) {
 		tavor_dma_attr_init(&dma_attr);
-#ifdef	__sparc
-		/*
-		 * First, disable streaming and switch to consistent if
-		 * configured to do so and IOMMU BYPASS is enabled.
-		 */
-		if (state->ts_cfg_profile->cp_disable_streaming_on_bypass &&
-		    dma_xfer_mode == DDI_DMA_STREAMING &&
-		    bind->bi_bypass == TAVOR_BINDMEM_BYPASS) {
-			dma_xfer_mode = DDI_DMA_CONSISTENT;
-		}
-
-		/*
-		 * Then, if streaming is still specified, then "bypass" is not
-		 * allowed.
-		 */
-		if ((dma_xfer_mode == DDI_DMA_CONSISTENT) &&
-		    (bind->bi_bypass == TAVOR_BINDMEM_BYPASS)) {
-			dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-		}
-#endif
 		/* Allocate a DMA handle for the binding */
 		status = ddi_dma_alloc_handle(state->ts_dip, &dma_attr,
 		    callback, NULL, &bind->bi_dmahdl);

@@ -64,10 +64,6 @@
 
 static	void	pr_settrace(proc_t *, sigset_t *);
 static	int	pr_setfpregs(prnode_t *, prfpregset_t *);
-#if defined(__sparc)
-static	int	pr_setxregs(prnode_t *, prxregset_t *);
-static	int	pr_setasrs(prnode_t *, asrset_t);
-#endif
 static	int	pr_setvaddr(prnode_t *, caddr_t);
 static	int	pr_clearsig(prnode_t *);
 static	int	pr_clearflt(prnode_t *);
@@ -92,10 +88,6 @@ typedef union {
 	sysset_t	sysset;		/* PCSENTRY, PCSEXIT */
 	prgregset_t	prgregset;	/* PCSREG, PCAGENT */
 	prfpregset_t	prfpregset;	/* PCSFPREG */
-#if defined(__sparc)
-	prxregset_t	prxregset;	/* PCSXREG */
-	asrset_t	asrset;		/* PCSASRS */
-#endif
 	prwatch_t	prwatch;	/* PCWATCH */
 	priovec_t	priovec;	/* PCREAD, PCWRITE */
 	prcred_t	prcred;		/* PCSCRED */
@@ -157,14 +149,6 @@ ctlsize(long cmd, size_t resid, arg_t *argp)
 	case PCSFPREG:
 		size += sizeof (prfpregset_t);
 		break;
-#if defined(__sparc)
-	case PCSXREG:
-		size += sizeof (prxregset_t);
-		break;
-	case PCSASRS:
-		size += sizeof (asrset_t);
-		break;
-#endif
 	case PCWATCH:
 		size += sizeof (prwatch_t);
 		break;
@@ -423,18 +407,9 @@ pr_control(long cmd, arg_t *argp, prnode_t *pnp, cred_t *cr)
 		break;
 
 	case PCSXREG:	/* set extra registers */
-#if defined(__sparc)
-		error = pr_setxregs(pnp, &argp->prxregset);
-#else
 		error = EINVAL;
-#endif
 		break;
 
-#if defined(__sparc)
-	case PCSASRS:	/* set ancillary state registers */
-		error = pr_setasrs(pnp, argp->asrset);
-		break;
-#endif
 
 	case PCSVADDR:	/* set virtual address at which to resume */
 		error = pr_setvaddr(pnp, argp->vaddr);
@@ -1710,51 +1685,6 @@ pr_setfpregs32(prnode_t *pnp, prfpregset32_t *prfpregset)
 }
 #endif	/* _SYSCALL32_IMPL */
 
-#if defined(__sparc)
-/* ARGSUSED */
-static int
-pr_setxregs(prnode_t *pnp, prxregset_t *prxregset)
-{
-	proc_t *p = pnp->pr_common->prc_proc;
-	kthread_t *t = pr_thread(pnp);	/* returns locked thread */
-
-	if (!ISTOPPED(t) && !VSTOPPED(t) && !DSTOPPED(t)) {
-		thread_unlock(t);
-		return (EBUSY);
-	}
-	thread_unlock(t);
-
-	if (!prhasx(p))
-		return (EINVAL);	/* No extra register support */
-
-	/* drop p_lock while touching the lwp's stack */
-	mutex_exit(&p->p_lock);
-	prsetprxregs(ttolwp(t), (caddr_t)prxregset);
-	mutex_enter(&p->p_lock);
-
-	return (0);
-}
-
-static int
-pr_setasrs(prnode_t *pnp, asrset_t asrset)
-{
-	proc_t *p = pnp->pr_common->prc_proc;
-	kthread_t *t = pr_thread(pnp);	/* returns locked thread */
-
-	if (!ISTOPPED(t) && !VSTOPPED(t) && !DSTOPPED(t)) {
-		thread_unlock(t);
-		return (EBUSY);
-	}
-	thread_unlock(t);
-
-	/* drop p_lock while touching the lwp's stack */
-	mutex_exit(&p->p_lock);
-	prsetasregs(ttolwp(t), asrset);
-	mutex_enter(&p->p_lock);
-
-	return (0);
-}
-#endif
 
 static int
 pr_setvaddr(prnode_t *pnp, caddr_t vaddr)

@@ -36,9 +36,6 @@
 #include <unistd.h>
 #include <thread.h>
 #include <math.h>
-#if defined(__SUNPRO_C)
-#include <sunmath.h>
-#endif
 #include <fenv.h>
 #include "fex_handler.h"
 #include "fenv_inlines.h"

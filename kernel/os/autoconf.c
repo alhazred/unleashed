@@ -366,11 +366,7 @@ create_devinfo_tree(void)
 	pnode_t nodeid;
 
 	i_ddi_node_cache_init();
-#if defined(__sparc)
-	nodeid = prom_nextnode(0);
-#else /* x86 */
 	nodeid = DEVI_SID_NODEID;
-#endif
 	top_devinfo = i_ddi_alloc_node(NULL, rootname,
 	    nodeid, -1, NULL, KM_SLEEP);
 	ndi_hold_devi(top_devinfo);	/* never release the root */
@@ -395,7 +391,6 @@ create_devinfo_tree(void)
 	 */
 	di_dfs(ddi_root_node(), get_neighbors, 0);
 
-#if !defined(__sparc)
 	/*
 	 * On x86, there is no prom. Create device tree by
 	 * probing pci config space
@@ -404,7 +399,6 @@ create_devinfo_tree(void)
 		extern void impl_setup_ddi(void);
 		impl_setup_ddi();
 	}
-#endif /* x86 */
 }
 
 /*

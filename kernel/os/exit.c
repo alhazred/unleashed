@@ -557,10 +557,6 @@ proc_exit(int why, int what)
 	ASSERT(p == curproc);
 	(void) freectty(B_TRUE);
 
-#if defined(__sparc)
-	if (p->p_utraps != NULL)
-		utrap_free(p);
-#endif
 	if (p->p_semacct)			/* IPC semaphore exit */
 		semexit(p);
 	rv = wstat(why, what);

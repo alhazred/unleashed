@@ -34,9 +34,6 @@
 #include <sys/uio.h>
 #include <sys/cmn_err.h>
 
-#if defined(__sparc)
-#include <sys/stack.h>
-#endif
 
 #define	STACK_BUF_SIZE	64	/* power of 2 */
 
@@ -61,10 +58,6 @@ prusrio(proc_t *p, enum uio_rw rw, struct uio *uiop, int old)
 		allocated = 1;
 	}
 
-#if defined(__sparc)
-	if (p == curproc)
-		(void) flush_user_windows_to_stack(NULL);
-#endif
 
 	switch (rw) {
 	case UIO_READ:

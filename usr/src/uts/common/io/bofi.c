@@ -3145,10 +3145,7 @@ bofi_map(dev_info_t *dip, dev_info_t *rdip,
 		ap->ahi_rep_put32 = bofi_rep_wr32;
 		ap->ahi_rep_put64 = bofi_rep_wr64;
 		ap->ahi_fault_check = bofi_check_acc_hdl;
-#if defined(__sparc)
-#else
 		ap->ahi_acc_attr &= ~DDI_ACCATTR_DIRECT;
-#endif
 		/*
 		 * stick in a pointer to our shadow handle
 		 */

@@ -247,13 +247,8 @@ rctlproc_default_init(struct proc *initp, rctl_alloc_gp_t *gp)
 	/*
 	 * RLIMIT_STACK: deny always, no default action.
 	 */
-#ifdef __sparc
-	rlp64.rlim_cur = DFLSSIZ;
-	rlp64.rlim_max = LONG_MAX;
-#else
 	rlp64.rlim_cur = DFLSSIZ;
 	rlp64.rlim_max = MAXSSIZ;
-#endif
 	(void) rctl_rlimit_set(rctlproc_legacy[RLIMIT_STACK], initp, &rlp64, gp,
 	    RCTL_LOCAL_DENY, 0, kcred);
 

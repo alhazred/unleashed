@@ -116,11 +116,7 @@ static volatile int  debug_consecutive_timeout_after_ocr_g  = 0;
 /* Local static prototypes. */
 static int	mrsas_getinfo(dev_info_t *, ddi_info_cmd_t,  void *, void **);
 static int	mrsas_attach(dev_info_t *, ddi_attach_cmd_t);
-#ifdef __sparc
-static int	mrsas_reset(dev_info_t *, ddi_reset_cmd_t);
-#else
 static int	mrsas_quiesce(dev_info_t *);
-#endif
 static int	mrsas_detach(dev_info_t *, ddi_detach_cmd_t);
 static int	mrsas_open(dev_t *, int, int, cred_t *);
 static int	mrsas_close(dev_t, int, int, cred_t *);
@@ -289,19 +285,11 @@ static struct dev_ops mrsas_ops = {
 	nulldev,		/* probe */
 	mrsas_attach,		/* attach */
 	mrsas_detach,		/* detach */
-#ifdef	__sparc
-	mrsas_reset,		/* reset */
-#else	/* __sparc */
 	nodev,
-#endif	/* __sparc */
 	&mrsas_cb_ops,		/* char/block ops */
 	NULL,			/* bus ops */
 	NULL,			/* power */
-#ifdef __sparc
-	ddi_quiesce_not_needed
-#else	/* __sparc */
 	mrsas_quiesce	/* quiesce */
-#endif	/* __sparc */
 };
 
 static struct modldrv modldrv = {
@@ -1486,44 +1474,6 @@ mrsas_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
  *									      *
  * ************************************************************************** *
  */
-#ifdef __sparc
-/*
- * reset - TBD
- * @dip:
- * @cmd:
- *
- * TBD
- */
-/*ARGSUSED*/
-static int
-mrsas_reset(dev_info_t *dip, ddi_reset_cmd_t cmd)
-{
-	int	instance_no;
-
-	struct mrsas_instance	*instance;
-
-	instance_no = ddi_get_instance(dip);
-	instance = (struct mrsas_instance *)ddi_get_soft_state
-	    (mrsas_state, instance_no);
-
-	con_log(CL_ANN1, (CE_NOTE, "chkpnt:%s:%d", __func__, __LINE__));
-
-	if (!instance) {
-		con_log(CL_ANN, (CE_WARN, "mr_sas:%d could not get adapter "
-		    "in reset", instance_no));
-		return (DDI_FAILURE);
-	}
-
-	instance->func_ptr->disable_intr(instance);
-
-	con_log(CL_ANN1, (CE_CONT, "flushing cache for instance %d",
-	    instance_no));
-
-	flush_cache(instance);
-
-	return (DDI_SUCCESS);
-}
-#else /* __sparc */
 /*ARGSUSED*/
 static int
 mrsas_quiesce(dev_info_t *dip)
@@ -1578,7 +1528,6 @@ mrsas_quiesce(dev_info_t *dip)
 	}
 	return (DDI_SUCCESS);
 }
-#endif	/* __sparc */
 
 /*
  * ************************************************************************** *

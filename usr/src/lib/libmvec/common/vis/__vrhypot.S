@@ -274,11 +274,7 @@
 	PIC_SET(l7,.CONST_TBL,l1)
 	wr	%g0,0x82,%asi
 
-#ifdef __sparcv9
-	ldx	[%fp+STACK_BIAS+176],stridez
-#else
 	ld	[%fp+STACK_BIAS+92],stridez
-#endif
 
 	sll	%i2,3,stridex
 	sethi	%hi(0x7ff00000),_0x7ff00000

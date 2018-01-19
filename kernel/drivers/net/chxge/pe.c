@@ -266,10 +266,6 @@ pe_start(ch_t *sa, mblk_t *mp, uint32_t flg)
 	int freeme = 0;		/* we have an mblk to free in case of error */
 	uint32_t ch_bind_dma_handle(ch_t *, int, caddr_t, cmdQ_ce_t *,
 	    uint32_t);
-#if defined(__sparc)
-	uint32_t ch_bind_dvma_handle(ch_t *, int, caddr_t, cmdQ_ce_t *,
-	    uint32_t);
-#endif
 	int rv;			/* return value on error */
 
 #ifdef CONFIG_CHELSIO_T1_OFFLOAD
@@ -409,61 +405,6 @@ pe_start(ch_t *sa, mblk_t *mp, uint32_t flg)
 				 */
 			}
 
-#if defined(__sparc)
-			if (sa->ch_config.enable_dvma) {
-				lseg = ch_bind_dvma_handle(sa, len,
-				    (void *)mp->b_rptr,
-				    &hmp[nseg], mseg - nseg);
-				if (lseg == NULL) {
-					sa->sge->intr_cnt.tx_no_dvma1++;
-					if ((lseg = ch_bind_dma_handle(sa, len,
-					    (void *)mp->b_rptr,
-					    &hmp[nseg],
-					    mseg - nseg)) == NULL) {
-						sa->sge->intr_cnt.tx_no_dma1++;
-
-						/*
-						 * ran out of space. Gonna bale
-						 */
-						rv = 0;
-
-						/*
-						 * we may have processed
-						 * previous mblks and have
-						 * descriptors. If so, we need
-						 * to free the meta struct
-						 * entries before freeing
-						 * the mblk.
-						 */
-						if (nseg)
-							goto error;
-						goto error1;
-					}
-				}
-			} else {
-				lseg = ch_bind_dma_handle(sa, len,
-				    (void *)mp->b_rptr, &hmp[nseg],
-				    mseg - nseg);
-				if (lseg == NULL) {
-					sa->sge->intr_cnt.tx_no_dma1++;
-
-					/*
-					 * ran out of space. Gona bale
-					 */
-					rv = 0;
-
-					/*
-					 * we may have processed previous
-					 * mblks and have descriptors. If so,
-					 * we need to free the meta struct
-					 * entries before freeing the mblk.
-					 */
-					if (nseg)
-						goto error;
-					goto error1;
-				}
-			}
-#else	/* defined(__sparc) */
 			lseg = ch_bind_dma_handle(sa, len,
 			    (void *)mp->b_rptr, &hmp[nseg],
 			    mseg - nseg);
@@ -485,7 +426,6 @@ pe_start(ch_t *sa, mblk_t *mp, uint32_t flg)
 					goto error;
 				goto error1;
 			}
-#endif	/* defined(__sparc) */
 			nseg += lseg;
 			mp = mp->b_cont;
 		}
@@ -507,40 +447,6 @@ pe_start(ch_t *sa, mblk_t *mp, uint32_t flg)
 		/* we assume that we always have data with one packet */
 		len = MLEN(mp);
 
-#if defined(__sparc)
-		if (sa->ch_config.enable_dvma) {
-			nseg = ch_bind_dvma_handle(sa, len,
-			    (void *)mp->b_rptr,
-			    &hmp[0], 16);
-			if (nseg == NULL) {
-				sa->sge->intr_cnt.tx_no_dvma2++;
-				nseg = ch_bind_dma_handle(sa, len,
-				    (void *)mp->b_rptr,
-				    &hmp[0], 16);
-				if (nseg == NULL) {
-					sa->sge->intr_cnt.tx_no_dma2++;
-
-					/*
-					 * ran out of space. Gona bale
-					 */
-					rv = 0;
-					goto error1;
-				}
-			}
-		} else {
-			nseg = ch_bind_dma_handle(sa, len,
-			    (void *)mp->b_rptr, &hmp[0], 16);
-			if (nseg == NULL) {
-				sa->sge->intr_cnt.tx_no_dma2++;
-
-				/*
-				 * ran out of space. Gona bale
-				 */
-				rv = 0;
-				goto error1;
-			}
-		}
-#else	/* defined(__sparc) */
 		nseg = ch_bind_dma_handle(sa, len,
 		    (void *)mp->b_rptr, &hmp[0], 16);
 		if (nseg == 0) {
@@ -552,7 +458,6 @@ pe_start(ch_t *sa, mblk_t *mp, uint32_t flg)
 			rv = 0;
 			goto error1;
 		}
-#endif	/* defined(__sparc) */
 
 		/*
 		 * dummy arp message to handle PR3309 & PR2928
@@ -584,10 +489,6 @@ error:
 		if (cmp->ce_dh) {
 			if (cmp->ce_flg == DH_DMA)
 				ch_unbind_dma_handle(sa, cmp->ce_dh);
-#if defined(__sparc)
-			else
-				ch_unbind_dvma_handle(sa, cmp->ce_dh);
-#endif
 		}
 		cmp++;
 	}
@@ -1554,21 +1455,6 @@ void
 pe_dma_handle_init(ch_t *chp, int cnt)
 {
 	free_dh_t *dhe;
-#if defined(__sparc)
-	int tcnt = cnt/2;
-
-	for (; cnt; cnt--) {
-		dhe = ch_get_dvma_handle(chp);
-		if (dhe == NULL)
-			break;
-		mutex_enter(&chp->ch_dh_lck);
-		dhe->dhe_next = chp->ch_vdh;
-		chp->ch_vdh = dhe;
-		mutex_exit(&chp->ch_dh_lck);
-	}
-
-	cnt += tcnt;
-#endif
 	while (cnt--) {
 		dhe = ch_get_dma_handle(chp);
 		if (dhe == NULL)

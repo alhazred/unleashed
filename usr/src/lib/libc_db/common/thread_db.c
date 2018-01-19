@@ -1988,26 +1988,7 @@ __td_thr_setfpregs(td_thrhandle_t *th_p, const prfpregset_t *fpregset)
 td_err_e
 __td_thr_getxregsize(td_thrhandle_t *th_p, int *xregsize)
 {
-#if defined(__sparc)
-	struct ps_prochandle *ph_p;
-	td_err_e return_val;
-
-	if ((ph_p = ph_lock_th(th_p, &return_val)) == NULL)
-		return (return_val);
-	if (ps_pstop(ph_p) != PS_OK) {
-		ph_unlock(th_p->th_ta_p);
-		return (TD_DBERR);
-	}
-
-	if (ps_lgetxregsize(ph_p, thr_to_lwpid(th_p), xregsize) != PS_OK)
-		return_val = TD_DBERR;
-
-	(void) ps_pcontinue(ph_p);
-	ph_unlock(th_p->th_ta_p);
-	return (return_val);
-#else	/* __sparc */
 	return (TD_NOXREGS);
-#endif	/* __sparc */
 }
 
 /*
@@ -2018,26 +1999,7 @@ __td_thr_getxregsize(td_thrhandle_t *th_p, int *xregsize)
 td_err_e
 __td_thr_getxregs(td_thrhandle_t *th_p, void *xregset)
 {
-#if defined(__sparc)
-	struct ps_prochandle *ph_p;
-	td_err_e return_val;
-
-	if ((ph_p = ph_lock_th(th_p, &return_val)) == NULL)
-		return (return_val);
-	if (ps_pstop(ph_p) != PS_OK) {
-		ph_unlock(th_p->th_ta_p);
-		return (TD_DBERR);
-	}
-
-	if (ps_lgetxregs(ph_p, thr_to_lwpid(th_p), (caddr_t)xregset) != PS_OK)
-		return_val = TD_DBERR;
-
-	(void) ps_pcontinue(ph_p);
-	ph_unlock(th_p->th_ta_p);
-	return (return_val);
-#else	/* __sparc */
 	return (TD_NOXREGS);
-#endif	/* __sparc */
 }
 
 /*
@@ -2048,26 +2010,7 @@ __td_thr_getxregs(td_thrhandle_t *th_p, void *xregset)
 td_err_e
 __td_thr_setxregs(td_thrhandle_t *th_p, const void *xregset)
 {
-#if defined(__sparc)
-	struct ps_prochandle *ph_p;
-	td_err_e return_val;
-
-	if ((ph_p = ph_lock_th(th_p, &return_val)) == NULL)
-		return (return_val);
-	if (ps_pstop(ph_p) != PS_OK) {
-		ph_unlock(th_p->th_ta_p);
-		return (TD_DBERR);
-	}
-
-	if (ps_lsetxregs(ph_p, thr_to_lwpid(th_p), (caddr_t)xregset) != PS_OK)
-		return_val = TD_DBERR;
-
-	(void) ps_pcontinue(ph_p);
-	ph_unlock(th_p->th_ta_p);
-	return (return_val);
-#else	/* __sparc */
 	return (TD_NOXREGS);
-#endif	/* __sparc */
 }
 
 struct searcher {

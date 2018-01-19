@@ -3116,11 +3116,6 @@ hermon_mr_mem_bind(hermon_state_t *state, hermon_bind_info_t *bind,
 	 */
 	if (dmahdl == NULL) {
 		hermon_dma_attr_init(state, &dma_attr);
-#ifdef	__sparc
-		if (bind->bi_bypass == HERMON_BINDMEM_BYPASS) {
-			dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-		}
-#endif
 
 		/* set RO if needed - tunable set and 'is_buffer' is non-0 */
 		if (is_buffer) {

@@ -48,10 +48,6 @@
 #include <sys/bitmap.h>
 #include <sys/mem_cage.h>
 
-#ifdef __sparc
-#include <sys/ivintr.h>
-#include <sys/panic.h>
-#endif
 
 /*
  * seg_kmem is the primary kernel memory segment driver.  It
@@ -228,25 +224,10 @@ kernelheap_init(
 	size_t heap_size;
 	vmem_t *heaptext_parent;
 	size_t	heap_lp_size = 0;
-#ifdef __sparc
-	size_t kmem64_sz = kmem64_aligned_end - kmem64_base;
-#endif	/* __sparc */
 
 	kernelheap = heap_start;
 	ekernelheap = heap_end;
 
-#ifdef __sparc
-	heap_lp_size = (((uintptr_t)heap_end - (uintptr_t)heap_start) / 4);
-	/*
-	 * Bias heap_lp start address by kmem64_sz to reduce collisions
-	 * in 4M kernel TSB between kmem64 area and heap_lp
-	 */
-	kmem64_sz = P2ROUNDUP(kmem64_sz, MMU_PAGESIZE256M);
-	if (kmem64_sz <= heap_lp_size / 2)
-		heap_lp_size -= kmem64_sz;
-	heap_lp_base = ekernelheap - heap_lp_size;
-	heap_lp_end = heap_lp_base + heap_lp_size;
-#endif	/* __sparc */
 
 	/*
 	 * If this platform has a 'core' heap area, then the space for
@@ -260,12 +241,10 @@ kernelheap_init(
 		textbase = (uintptr_t)core_end - HEAPTEXT_SIZE;
 		core_size -= HEAPTEXT_SIZE;
 	}
-#ifndef __sparc
 	else {
 		ekernelheap -= HEAPTEXT_SIZE;
 		textbase = (uintptr_t)ekernelheap;
 	}
-#endif
 
 	heap_size = (uintptr_t)ekernelheap - (uintptr_t)kernelheap;
 	heap_arena = vmem_init("heap", kernelheap, heap_size, PAGESIZE,
@@ -298,29 +277,8 @@ kernelheap_init(
 	(void) vmem_xalloc(heap_arena, first_avail - kernelheap, PAGESIZE,
 	    0, 0, kernelheap, first_avail, VM_NOSLEEP | VM_BESTFIT | VM_PANIC);
 
-#ifdef __sparc
-	heap32_arena = vmem_create("heap32", (void *)SYSBASE32,
-	    SYSLIMIT32 - SYSBASE32 - HEAPTEXT_SIZE, PAGESIZE, NULL,
-	    NULL, NULL, 0, VM_SLEEP);
-	/*
-	 * Prom claims the physical and virtual resources used by panicbuf
-	 * and inter_vec_table. So reserve space for panicbuf, intr_vec_table,
-	 * reserved interrupt vector data structures from 32-bit heap.
-	 */
-	(void) vmem_xalloc(heap32_arena, PANICBUFSIZE, PAGESIZE, 0, 0,
-	    panicbuf, panicbuf + PANICBUFSIZE,
-	    VM_NOSLEEP | VM_BESTFIT | VM_PANIC);
-
-	(void) vmem_xalloc(heap32_arena, IVSIZE, PAGESIZE, 0, 0,
-	    intr_vec_table, (caddr_t)intr_vec_table + IVSIZE,
-	    VM_NOSLEEP | VM_BESTFIT | VM_PANIC);
-
-	textbase = SYSLIMIT32 - HEAPTEXT_SIZE;
-	heaptext_parent = NULL;
-#else	/* __sparc */
 	heap32_arena = heap_core_arena;
 	heaptext_parent = heap_core_arena;
-#endif	/* __sparc */
 
 	heaptext_arena = vmem_create("heaptext", (void *)textbase,
 	    HEAPTEXT_SIZE, PAGESIZE, NULL, NULL, heaptext_parent, 0, VM_SLEEP);
@@ -419,13 +377,8 @@ boot_alloc(void *inaddr, size_t size, uint_t align)
 		    "BOP_GONE");
 
 	size = ptob(btopr(size));
-#ifdef __sparc
-	if (bop_alloc_chunk(addr, size, align) != (caddr_t)addr)
-		panic("boot_alloc: bop_alloc_chunk failed");
-#else
 	if (BOP_ALLOC(bootops, addr, size, align) != addr)
 		panic("boot_alloc: BOP_ALLOC failed");
-#endif
 	boot_mapin((caddr_t)addr, size);
 	return (addr);
 }
@@ -644,10 +597,8 @@ segkmem_dump(struct seg *seg)
 	if (seg == &kvseg) {
 		vmem_walk(heap_arena, VMEM_ALLOC | VMEM_REENTRANT,
 		    segkmem_dump_range, seg->s_as);
-#ifndef __sparc
 		vmem_walk(heaptext_arena, VMEM_ALLOC | VMEM_REENTRANT,
 		    segkmem_dump_range, seg->s_as);
-#endif
 	} else if (seg == &kvseg_core) {
 		vmem_walk(heap_core_arena, VMEM_ALLOC | VMEM_REENTRANT,
 		    segkmem_dump_range, seg->s_as);
@@ -927,11 +878,9 @@ segkmem_alloc_vn(vmem_t *vmp, size_t size, int vmflag, struct vnode *vp)
 	ASSERT(vp != NULL);
 
 	if (kvseg.s_base == NULL) {
-#ifndef __sparc
 		if (bootops->bsys_alloc == NULL)
 			halt("Memory allocation between bop_alloc() and "
 			    "kmem_alloc().\n");
-#endif
 
 		/*
 		 * There's not a lot of memory to go around during boot,
@@ -1444,65 +1393,6 @@ segkmem_lpsetup()
 {
 	int use_large_pages = 0;
 
-#ifdef __sparc
-
-	size_t memtotal = physmem * PAGESIZE;
-
-	if (heap_lp_base == NULL) {
-		segkmem_lpsize = PAGESIZE;
-		return (0);
-	}
-
-	/* get a platform dependent value of large page size for kernel heap */
-	segkmem_lpsize = get_segkmem_lpsize(segkmem_lpsize);
-
-	if (segkmem_lpsize <= PAGESIZE) {
-		/*
-		 * put virtual space reserved for the large page kernel
-		 * back to the regular heap
-		 */
-		vmem_xfree(heap_arena, heap_lp_base,
-		    heap_lp_end - heap_lp_base);
-		heap_lp_base = NULL;
-		heap_lp_end = NULL;
-		segkmem_lpsize = PAGESIZE;
-		return (0);
-	}
-
-	/* set heap_lp quantum if necessary */
-	if (segkmem_heaplp_quantum == 0 || !ISP2(segkmem_heaplp_quantum) ||
-	    P2PHASE(segkmem_heaplp_quantum, segkmem_lpsize)) {
-		segkmem_heaplp_quantum = segkmem_lpsize;
-	}
-
-	/* set kmem_lp quantum if necessary */
-	if (segkmem_kmemlp_quantum == 0 || !ISP2(segkmem_kmemlp_quantum) ||
-	    segkmem_kmemlp_quantum > segkmem_heaplp_quantum) {
-		segkmem_kmemlp_quantum = segkmem_heaplp_quantum;
-	}
-
-	/* set total amount of memory allowed for large page kernel heap */
-	if (segkmem_kmemlp_max == 0) {
-		if (segkmem_kmemlp_pcnt == 0 || segkmem_kmemlp_pcnt > 100)
-			segkmem_kmemlp_pcnt = 12;
-		segkmem_kmemlp_max = (memtotal * segkmem_kmemlp_pcnt) / 100;
-	}
-	segkmem_kmemlp_max = P2ROUNDUP(segkmem_kmemlp_max,
-	    segkmem_heaplp_quantum);
-
-	/* fix lp kmem preallocation request if necesssary */
-	if (segkmem_kmemlp_min) {
-		segkmem_kmemlp_min = P2ROUNDUP(segkmem_kmemlp_min,
-		    segkmem_heaplp_quantum);
-		if (segkmem_kmemlp_min > segkmem_kmemlp_max)
-			segkmem_kmemlp_min = segkmem_kmemlp_max;
-	}
-
-	use_large_pages = 1;
-	segkmem_lpszc = page_szc(segkmem_lpsize);
-	segkmem_lpshift = page_get_shift(segkmem_lpszc);
-
-#endif
 	return (use_large_pages);
 }
 
@@ -1527,112 +1417,3 @@ segkmem_zio_init(void *zio_mem_base, size_t zio_mem_size)
 	ASSERT(zio_alloc_arena != NULL);
 }
 
-#ifdef __sparc
-
-
-static void *
-segkmem_alloc_ppa(vmem_t *vmp, size_t size, int vmflag)
-{
-	size_t ppaquantum = btopr(segkmem_lpsize) * sizeof (page_t *);
-	void   *addr;
-
-	if (ppaquantum <= PAGESIZE)
-		return (segkmem_alloc(vmp, size, vmflag));
-
-	ASSERT((size & (ppaquantum - 1)) == 0);
-
-	addr = vmem_xalloc(vmp, size, ppaquantum, 0, 0, NULL, NULL, vmflag);
-	if (addr != NULL && segkmem_xalloc(vmp, addr, size, vmflag, 0,
-	    segkmem_page_create, NULL) == NULL) {
-		vmem_xfree(vmp, addr, size);
-		addr = NULL;
-	}
-
-	return (addr);
-}
-
-static void
-segkmem_free_ppa(vmem_t *vmp, void *addr, size_t size)
-{
-	size_t ppaquantum = btopr(segkmem_lpsize) * sizeof (page_t *);
-
-	ASSERT(addr != NULL);
-
-	if (ppaquantum <= PAGESIZE) {
-		segkmem_free(vmp, addr, size);
-	} else {
-		segkmem_free(NULL, addr, size);
-		vmem_xfree(vmp, addr, size);
-	}
-}
-
-void
-segkmem_heap_lp_init()
-{
-	segkmem_lpcb_t *lpcb = &segkmem_lpcb;
-	size_t heap_lp_size = heap_lp_end - heap_lp_base;
-	size_t lpsize = segkmem_lpsize;
-	size_t ppaquantum;
-	void   *addr;
-
-	if (segkmem_lpsize <= PAGESIZE) {
-		ASSERT(heap_lp_base == NULL);
-		ASSERT(heap_lp_end == NULL);
-		return;
-	}
-
-	ASSERT(segkmem_heaplp_quantum >= lpsize);
-	ASSERT((segkmem_heaplp_quantum & (lpsize - 1)) == 0);
-	ASSERT(lpcb->lp_uselp == 0);
-	ASSERT(heap_lp_base != NULL);
-	ASSERT(heap_lp_end != NULL);
-	ASSERT(heap_lp_base < heap_lp_end);
-	ASSERT(heap_lp_arena == NULL);
-	ASSERT(((uintptr_t)heap_lp_base & (lpsize - 1)) == 0);
-	ASSERT(((uintptr_t)heap_lp_end & (lpsize - 1)) == 0);
-
-	/* create large page heap arena */
-	heap_lp_arena = vmem_create("heap_lp", heap_lp_base, heap_lp_size,
-	    segkmem_heaplp_quantum, NULL, NULL, NULL, 0, VM_SLEEP);
-
-	ASSERT(heap_lp_arena != NULL);
-
-	/* This arena caches memory already mapped by large pages */
-	kmem_lp_arena = vmem_create("kmem_lp", NULL, 0, segkmem_kmemlp_quantum,
-	    segkmem_alloc_lpi, segkmem_free_lpi, heap_lp_arena, 0, VM_SLEEP);
-
-	ASSERT(kmem_lp_arena != NULL);
-
-	mutex_init(&lpcb->lp_lock, NULL, MUTEX_DEFAULT, NULL);
-	cv_init(&lpcb->lp_cv, NULL, CV_DEFAULT, NULL);
-
-	/*
-	 * this arena is used for the array of page_t pointers necessary
-	 * to call hat_mem_load_array
-	 */
-	ppaquantum = btopr(lpsize) * sizeof (page_t *);
-	segkmem_ppa_arena = vmem_create("segkmem_ppa", NULL, 0, ppaquantum,
-	    segkmem_alloc_ppa, segkmem_free_ppa, heap_arena, ppaquantum,
-	    VM_SLEEP);
-
-	ASSERT(segkmem_ppa_arena != NULL);
-
-	/* prealloacate some memory for the lp kernel heap */
-	if (segkmem_kmemlp_min) {
-
-		ASSERT(P2PHASE(segkmem_kmemlp_min,
-		    segkmem_heaplp_quantum) == 0);
-
-		if ((addr = segkmem_alloc_lpi(heap_lp_arena,
-		    segkmem_kmemlp_min, VM_SLEEP)) != NULL) {
-
-			addr = vmem_add(kmem_lp_arena, addr,
-			    segkmem_kmemlp_min, VM_SLEEP);
-			ASSERT(addr != NULL);
-		}
-	}
-
-	lpcb->lp_uselp = 1;
-}
-
-#endif

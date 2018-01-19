@@ -171,9 +171,7 @@ _info(struct modinfo *modinfop)
  * differently.
  */
 struct vnode *rootvp;
-#ifndef	__lint
 _NOTE(SCHEME_PROTECTS_DATA("safe sharing", rootvp))
-#endif
 static int32_t
 udf_mount(struct vfs *vfsp, struct vnode *mvp,
 	struct mounta *uap, struct cred *cr)
@@ -789,9 +787,7 @@ remountout:
 	 * is a valid udfs and fill
 	 * the required fields in udf_vfs
 	 */
-#ifndef	__lint
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif
 
 	if ((lbsize = ud_get_lbsize(dev, &avd_loc)) == 0) {
 		error = EINVAL;
@@ -911,9 +907,7 @@ remountout:
 
 	mutex_init(&udf_vfsp->udf_rename_lck, NULL, MUTEX_DEFAULT, NULL);
 
-#ifndef	__lint
 	_NOTE(COMPETING_THREADS_NOW);
-#endif
 	if (error = ud_iget(vfsp, udf_vfsp->udf_ricb_prn,
 	    udf_vfsp->udf_ricb_loc, &rip, NULL, cr)) {
 		mutex_destroy(&udf_vfsp->udf_lock);

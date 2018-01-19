@@ -2592,10 +2592,6 @@ tavor_ci_map_mem_iov(ibc_hca_hdl_t hca, ibt_iov_attr_t *iov_attr,
 
 	state = (tavor_state_t *)hca;
 	tavor_dma_attr_init(&dma_attr);
-#ifdef	__sparc
-	if (state->ts_cfg_profile->cp_iommu_bypass == TAVOR_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-#endif
 
 	nds = 0;
 	max_nds = iov_attr->iov_wr_nds;

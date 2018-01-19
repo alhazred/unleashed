@@ -218,18 +218,11 @@ uint32_t tavor_qp_ackreq_freq		= TAVOR_QP_ACKREQ_FREQ;
  * initialized.  The format for this variable is the same as the corresponding
  * field in the "PCI-X Command Register".
  */
-#ifdef	__sparc
-/*
- * Default SPARC platforms to be 1 outstanding PCI read.
- */
-int tavor_max_out_splt_trans	= 0;
-#else
 /*
  * Default non-SPARC platforms to be the default as set in tavor firmware
  * number of outstanding PCI reads.
  */
 int tavor_max_out_splt_trans	= -1;
-#endif
 
 /*
  * This is a patchable variable that determines the default value for the
@@ -240,20 +233,11 @@ int tavor_max_out_splt_trans	= -1;
  * initialized.  The format for this variable is the same as the corresponding
  * field in the "PCI-X Command Register".
  */
-#ifdef	__sparc
-/*
- * Default SPARC platforms to be 512B read.
- */
-int tavor_max_mem_rd_byte_cnt	= 0;
-static void tavor_check_iommu_bypass(tavor_state_t *state,
-    tavor_cfg_profile_t *cp);
-#else
 /*
  * Default non-SPARC platforms to be the default as set in tavor firmware.
  *
  */
 int tavor_max_mem_rd_byte_cnt	= -1;
-#endif
 
 static void tavor_cfg_wqe_sizes(tavor_cfg_profile_t *cp);
 static void tavor_cfg_prop_lookup(tavor_state_t *state,
@@ -356,17 +340,7 @@ tavor_cfg_profile_init_phase1(tavor_state_t *state)
 	 * with both architecture type and other configuration flags.
 	 */
 	if (tavor_streaming_consistent == 0) {
-#ifdef	__sparc
-		cp->cp_streaming_consistent = DDI_DMA_STREAMING;
-
-		/* Can't do both "streaming" and IOMMU bypass */
-		if (tavor_iommu_bypass != 0) {
-			kmem_free(cp, sizeof (tavor_cfg_profile_t));
-			return (DDI_FAILURE);
-		}
-#else
 		cp->cp_streaming_consistent = DDI_DMA_CONSISTENT;
-#endif
 	} else {
 		cp->cp_streaming_consistent = DDI_DMA_CONSISTENT;
 	}
@@ -574,17 +548,8 @@ tavor_cfg_profile_init_phase2(tavor_state_t *state)
 	 * Set IOMMU bypass or not.  Ensure consistency of flags with
 	 * architecture type.
 	 */
-#ifdef __sparc
-	if (tavor_iommu_bypass == 1) {
-		tavor_check_iommu_bypass(state, cp);
-	} else {
-		cp->cp_iommu_bypass = TAVOR_BINDMEM_NORMAL;
-		cp->cp_disable_streaming_on_bypass = 0;
-	}
-#else
 	cp->cp_iommu_bypass = TAVOR_BINDMEM_NORMAL;
 	cp->cp_disable_streaming_on_bypass = 0;
-#endif
 	/* Set whether QP WQEs will be in DDR or not */
 	cp->cp_qp_wq_inddr = (tavor_qp_wq_inddr == 0) ?
 	    TAVOR_QUEUE_LOCATION_NORMAL : TAVOR_QUEUE_LOCATION_INDDR;
@@ -756,45 +721,3 @@ tavor_cfg_prop_lookup(tavor_state_t *state, tavor_cfg_profile_t *cp)
 	}
 }
 
-#ifdef __sparc
-/*
- * tavor_check_iommu_bypass()
- *    Context: Only called from attach() path context
- */
-static void
-tavor_check_iommu_bypass(tavor_state_t *state, tavor_cfg_profile_t *cp)
-{
-	ddi_dma_handle_t	dmahdl;
-	ddi_dma_attr_t		dma_attr;
-	int			status;
-
-	tavor_dma_attr_init(&dma_attr);
-
-	/* Try mapping for IOMMU bypass (Force Physical) */
-	dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-
-	/*
-	 * Call ddi_dma_alloc_handle().  If this returns DDI_DMA_BADATTR then
-	 * it is not possible to use IOMMU bypass with our PCI bridge parent.
-	 * For example, certain versions of Tomatillo do not support IOMMU
-	 * bypass.  Since the function we are in can only be called if iommu
-	 * bypass was requested in the config profile, we configure for bypass
-	 * if the ddi_dma_alloc_handle() was successful.  Otherwise, we
-	 * configure for non-bypass (ie: normal) mapping.
-	 */
-	status = ddi_dma_alloc_handle(state->ts_dip, &dma_attr,
-	    DDI_DMA_SLEEP, NULL, &dmahdl);
-	if (status == DDI_DMA_BADATTR) {
-		cp->cp_iommu_bypass = TAVOR_BINDMEM_NORMAL;
-		cp->cp_disable_streaming_on_bypass = 0;
-	} else {
-		cp->cp_iommu_bypass = TAVOR_BINDMEM_BYPASS;
-		cp->cp_disable_streaming_on_bypass =
-		    tavor_disable_streaming_on_bypass;
-
-		if (status == DDI_SUCCESS) {
-			ddi_dma_free_handle(&dmahdl);
-		}
-	}
-}
-#endif

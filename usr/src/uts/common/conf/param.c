@@ -248,9 +248,6 @@ void	(*init_tbl[])(void) = {
 };
 
 
-#if defined(__sparc)
-	extern void siron_mp_init();
-#endif
 
 /*
  * Any per cpu resources should be initialized via
@@ -259,9 +256,6 @@ void	(*init_tbl[])(void) = {
 void	(*mp_init_tbl[])(void) = {
 	ftrace_init,
 	cyclic_mp_init,
-#if defined(__sparc)
-	siron_mp_init,
-#endif
 	clock_tick_mp_init,
 	cu_init,
 	callout_mp_init,
@@ -547,12 +541,6 @@ param_calc(int platform_max_nprocs)
 	 * Note: 2^20 is a meg; shifting right by (20 - PAGESHIFT)
 	 * converts pages to megs without integer overflow.
 	 */
-#if defined(__sparc)
-	if (physmem > original_physmem) {
-		physmem = original_physmem;
-		cmn_err(CE_NOTE, "physmem limited to %ld", physmem);
-	}
-#endif
 	if (maxusers == 0) {
 		pgcnt_t physmegs = physmem >> (20 - PAGESHIFT);
 		pgcnt_t virtmegs = vmem_size(heap_arena, VMEM_FREE) >> 20;

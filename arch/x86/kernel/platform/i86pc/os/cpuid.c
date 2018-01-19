@@ -60,11 +60,7 @@
 #include <sys/comm_page.h>
 #include <sys/tsc.h>
 
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#else
 #include <sys/ontrap.h>
-#endif
 
 /*
  * Pass 0 of cpuid feature analysis happens in locore. It contains special code
@@ -235,13 +231,11 @@ extern int disable_smap;
  */
 static int platform_type = -1;
 
-#if !defined(__xpv)
 /*
  * Variable to patch if hypervisor platform detection needs to be
  * disabled (e.g. platform_type will always be HW_NATIVE if this is 0).
  */
 int enable_platform_detection = 1;
-#endif
 
 /*
  * monitor/mwait info.
@@ -486,76 +480,7 @@ extern uint_t _cpuid_vendorstr_to_vendorcode(char *);
  * underlying platform restrictions mean the CPU can be marked
  * as less capable than its cpuid instruction would imply.
  */
-#if defined(__xpv)
-static void
-platform_cpuid_mangle(uint_t vendor, uint32_t eax, struct cpuid_regs *cp)
-{
-	switch (eax) {
-	case 1: {
-		uint32_t mcamask = DOMAIN_IS_INITDOMAIN(xen_info) ?
-		    0 : CPUID_INTC_EDX_MCA;
-		cp->cp_edx &=
-		    ~(mcamask |
-		    CPUID_INTC_EDX_PSE |
-		    CPUID_INTC_EDX_VME | CPUID_INTC_EDX_DE |
-		    CPUID_INTC_EDX_SEP | CPUID_INTC_EDX_MTRR |
-		    CPUID_INTC_EDX_PGE | CPUID_INTC_EDX_PAT |
-		    CPUID_AMD_EDX_SYSC | CPUID_INTC_EDX_SEP |
-		    CPUID_INTC_EDX_PSE36 | CPUID_INTC_EDX_HTT);
-		break;
-	}
-
-	case 0x80000001:
-		cp->cp_edx &=
-		    ~(CPUID_AMD_EDX_PSE |
-		    CPUID_INTC_EDX_VME | CPUID_INTC_EDX_DE |
-		    CPUID_AMD_EDX_MTRR | CPUID_AMD_EDX_PGE |
-		    CPUID_AMD_EDX_PAT | CPUID_AMD_EDX_PSE36 |
-		    CPUID_AMD_EDX_SYSC | CPUID_INTC_EDX_SEP |
-		    CPUID_AMD_EDX_TSCP);
-		cp->cp_ecx &= ~CPUID_AMD_ECX_CMP_LGCY;
-		break;
-	default:
-		break;
-	}
-
-	switch (vendor) {
-	case X86_VENDOR_Intel:
-		switch (eax) {
-		case 4:
-			/*
-			 * Zero out the (ncores-per-chip - 1) field
-			 */
-			cp->cp_eax &= 0x03fffffff;
-			break;
-		default:
-			break;
-		}
-		break;
-	case X86_VENDOR_AMD:
-		switch (eax) {
-
-		case 0x80000001:
-			cp->cp_ecx &= ~CPUID_AMD_ECX_CR8D;
-			break;
-
-		case 0x80000008:
-			/*
-			 * Zero out the (ncores-per-chip - 1) field
-			 */
-			cp->cp_ecx &= 0xffffff00;
-			break;
-		default:
-			break;
-		}
-		break;
-	default:
-		break;
-	}
-}
-#else
 #define	platform_cpuid_mangle(vendor, eax, cp)	/* nothing */
-#endif
 
 /*
  *  Some undocumented ways of patching the results of the cpuid
@@ -608,7 +533,6 @@ cpuid_free_space(cpu_t *cpu)
 	cpu->cpu_m.mcpu_cpi = NULL;
 }
 
-#if !defined(__xpv)
 /*
  * Determine the type of the underlying platform. This is used to customize
  * initialization of various subsystems (e.g. TSC). determine_platform() must
@@ -716,21 +640,6 @@ is_controldom(void)
 	return (0);
 }
 
-#else
-
-int
-get_hwenv(void)
-{
-	return (HW_XEN_PV);
-}
-
-int
-is_controldom(void)
-{
-	return (DOMAIN_IS_INITDOMAIN(xen_info));
-}
-
-#endif	/* __xpv */
 
 static void
 cpuid_intel_getids(cpu_t *cpu, void *feature)
@@ -951,9 +860,7 @@ cpuid_pass1(cpu_t *cpu, uchar_t *featureset)
 	struct cpuid_info *cpi;
 	struct cpuid_regs *cp;
 	int xcpuid;
-#if !defined(__xpv)
 	extern int idle_cpu_prefer_mwait;
-#endif
 
 	/*
 	 * Space statically allocated for BSP, ensure pointer is set
@@ -1117,7 +1024,6 @@ cpuid_pass1(cpu_t *cpu, uchar_t *featureset)
 		if (cpi->cpi_maxeax < 5)
 			mask_ecx &= ~CPUID_INTC_ECX_MON;
 
-#if !defined(__xpv)
 		/*
 		 * Do not use MONITOR/MWAIT to halt in the idle loop on any AMD
 		 * processors.  AMD does not intend MWAIT to be used in the cpu
@@ -1126,7 +1032,6 @@ cpuid_pass1(cpu_t *cpu, uchar_t *featureset)
 		 * Pre-family-10h Opterons do not have the MWAIT instruction.
 		 */
 		idle_cpu_prefer_mwait = 0;
-#endif
 
 		break;
 	case X86_VENDOR_TM:
@@ -1197,17 +1102,6 @@ cpuid_pass1(cpu_t *cpu, uchar_t *featureset)
 		break;
 	}
 
-#if defined(__xpv)
-	/*
-	 * Do not support MONITOR/MWAIT under a hypervisor
-	 */
-	mask_ecx &= ~CPUID_INTC_ECX_MON;
-	/*
-	 * Do not support XSAVE under a hypervisor for now
-	 */
-	xsave_force_disable = B_TRUE;
-
-#endif	/* __xpv */
 
 	if (xsave_force_disable) {
 		mask_ecx &= ~CPUID_INTC_ECX_XSAVE;
@@ -1397,7 +1291,6 @@ cpuid_pass1(cpu_t *cpu, uchar_t *featureset)
 	if (cp->cp_edx & CPUID_INTC_EDX_DE) {
 		add_x86_feature(featureset, X86FSET_DE);
 	}
-#if !defined(__xpv)
 	if (cp->cp_ecx & CPUID_INTC_ECX_MON) {
 
 		/*
@@ -1420,7 +1313,6 @@ cpuid_pass1(cpu_t *cpu, uchar_t *featureset)
 			}
 		}
 	}
-#endif	/* __xpv */
 
 	if (cp->cp_ecx & CPUID_INTC_ECX_VMX) {
 		add_x86_feature(featureset, X86FSET_VMX);
@@ -3040,7 +2932,6 @@ cpuid_syscall32_insn(cpu_t *cpu)
 {
 	ASSERT(cpuid_checkpass((cpu == NULL ? CPU : cpu), 1));
 
-#if !defined(__xpv)
 	if (cpu == NULL)
 		cpu = CPU;
 
@@ -3053,7 +2944,6 @@ cpuid_syscall32_insn(cpu_t *cpu)
 		    (CPI_FEATURES_XTD_EDX(cpi) & CPUID_AMD_EDX_SYSC))
 			return (1);
 	}
-#endif
 	return (0);
 }
 
@@ -4549,7 +4439,6 @@ getl2cacheinfo(cpu_t *cpu, int *csz, int *lsz, int *assoc)
 	return (l2i->l2i_ret);
 }
 
-#if !defined(__xpv)
 
 int
 cpuid_mwait_alloc(cpu_t *cpu)
@@ -4677,12 +4566,10 @@ cpuid_deep_cstates_supported(void)
 	}
 }
 
-#endif	/* !__xpv */
 
 void
 post_startup_cpu_fixups(void)
 {
-#ifndef __xpv
 	/*
 	 * Some AMD processors support C1E state. Entering this state will
 	 * cause the local APIC timer to stop, which we can't deal with at
@@ -4704,7 +4591,6 @@ post_startup_cpu_fixups(void)
 		}
 		no_trap();
 	}
-#endif	/* !__xpv */
 }
 
 /*

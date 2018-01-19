@@ -11288,13 +11288,6 @@ ohci_print_td(
  *
  * define as a wrapper for sparc, or warlock will complain.
  */
-#ifdef	__sparc
-int
-ohci_quiesce(dev_info_t *dip)
-{
-	return (ddi_quiesce_not_supported(dip));
-}
-#else
 int
 ohci_quiesce(dev_info_t *dip)
 {
@@ -11353,4 +11346,3 @@ ohci_quiesce(dev_info_t *dip)
 	_NOTE(COMPETING_THREADS_NOW);
 	return (DDI_SUCCESS);
 }
-#endif	/* __sparc */

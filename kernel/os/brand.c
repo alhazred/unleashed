@@ -35,19 +35,9 @@
 
 #define	SUPPORTED_BRAND_VERSION BRAND_VER_1
 
-#if defined(__sparcv9)
-/* sparcv9 uses system wide brand interposition hooks */
-static void brand_plat_interposition_enable(void);
-static void brand_plat_interposition_disable(void);
-
-struct brand_mach_ops native_mach_ops  = {
-		NULL, NULL
-};
-#else /* !__sparcv9 */
 struct brand_mach_ops native_mach_ops  = {
 		NULL, NULL, NULL, NULL
 };
-#endif /* !__sparcv9 */
 
 brand_t native_brand = {
 		BRAND_VER_1,
@@ -129,11 +119,6 @@ brand_register(brand_t *brand)
 		}
 	}
 
-#if defined(__sparcv9)
-	/* sparcv9 uses system wide brand interposition hooks */
-	if (brand_list == NULL)
-		brand_plat_interposition_enable();
-#endif /* __sparcv9 */
 
 	list->bl_brand = brand;
 	list->bl_refcnt = 0;
@@ -188,11 +173,6 @@ brand_unregister(brand_t *brand)
 	else
 		brand_list = list->bl_next;
 
-#if defined(__sparcv9)
-	/* sparcv9 uses system wide brand interposition hooks */
-	if (brand_list == NULL)
-		brand_plat_interposition_disable();
-#endif /* __sparcv9 */
 
 	mutex_exit(&brand_list_lock);
 
@@ -346,85 +326,6 @@ brand_clearbrand(proc_t *p, boolean_t no_lwps)
 	p->p_brand = &native_brand;
 }
 
-#if defined(__sparcv9)
-/*
- * Currently, only sparc has system level brand syscall interposition.
- * On x86 we're able to enable syscall interposition on a per-cpu basis
- * when a branded thread is scheduled to run on a cpu.
- */
-
-/* Local variables needed for dynamic syscall interposition support */
-static uint32_t	syscall_trap_patch_instr_orig;
-static uint32_t	syscall_trap32_patch_instr_orig;
-
-/* Trap Table syscall entry hot patch points */
-extern void	syscall_trap_patch_point(void);
-extern void	syscall_trap32_patch_point(void);
-
-/* Alternate syscall entry handlers used when branded zones are running */
-extern void	syscall_wrapper(void);
-extern void	syscall_wrapper32(void);
-
-/* Macros used to facilitate sparcv9 instruction generation */
-#define	BA_A_INSTR	0x30800000	/* ba,a addr */
-#define	DISP22(from, to) \
-	((((uintptr_t)(to) - (uintptr_t)(from)) >> 2) & 0x3fffff)
-
-/*ARGSUSED*/
-static void
-brand_plat_interposition_enable(void)
-{
-	ASSERT(MUTEX_HELD(&brand_list_lock));
-
-	/*
-	 * Before we hot patch the kernel save the current instructions
-	 * so that we can restore them later.
-	 */
-	syscall_trap_patch_instr_orig =
-	    *(uint32_t *)syscall_trap_patch_point;
-	syscall_trap32_patch_instr_orig =
-	    *(uint32_t *)syscall_trap32_patch_point;
-
-	/*
-	 * Modify the trap table at the patch points.
-	 *
-	 * We basically replace the first instruction at the patch
-	 * point with a ba,a instruction that will transfer control
-	 * to syscall_wrapper or syscall_wrapper32 for 64-bit and
-	 * 32-bit syscalls respectively.  It's important to note that
-	 * the annul bit is set in the branch so we don't execute
-	 * the instruction directly following the one we're patching
-	 * during the branch's delay slot.
-	 *
-	 * It also doesn't matter that we're not atomically updating both
-	 * the 64 and 32 bit syscall paths at the same time since there's
-	 * no actual branded processes running on the system yet.
-	 */
-	hot_patch_kernel_text((caddr_t)syscall_trap_patch_point,
-	    BA_A_INSTR | DISP22(syscall_trap_patch_point, syscall_wrapper),
-	    4);
-	hot_patch_kernel_text((caddr_t)syscall_trap32_patch_point,
-	    BA_A_INSTR | DISP22(syscall_trap32_patch_point, syscall_wrapper32),
-	    4);
-}
-
-/*ARGSUSED*/
-static void
-brand_plat_interposition_disable(void)
-{
-	ASSERT(MUTEX_HELD(&brand_list_lock));
-
-	/*
-	 * Restore the original instructions at the trap table syscall
-	 * patch points to disable the brand syscall interposition
-	 * mechanism.
-	 */
-	hot_patch_kernel_text((caddr_t)syscall_trap_patch_point,
-	    syscall_trap_patch_instr_orig, 4);
-	hot_patch_kernel_text((caddr_t)syscall_trap32_patch_point,
-	    syscall_trap32_patch_instr_orig, 4);
-}
-#endif /* __sparcv9 */
 
 /*
  * The following functions can be shared among kernel brand modules which

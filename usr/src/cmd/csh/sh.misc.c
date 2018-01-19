@@ -481,12 +481,6 @@ inb:
 			xalloc_bottom = bp;
 		return (rptr);
 	}
-#if defined(__sparc)
-	if (rptr > (char *)&rptr) {
-		/* in the stack frame */
-		goto oob;
-	}
-#endif
 	/*
 	 * can be a memory block returned indirectly from
 	 * library functions. update bottom, and check it again.
@@ -511,12 +505,6 @@ xfree(void *ptr)
 		free(ptr);
 		return;
 	}
-#if defined(__sparc)
-	if (rptr > (char *)&rptr) {
-		/* in the stack frame */
-		return;
-	}
-#endif
 	xalloc_bottom = sbrk(0);
 	if (rptr <= xalloc_bottom) {
 		free(ptr);

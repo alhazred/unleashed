@@ -476,9 +476,6 @@ isa_ified(char *path, char **newpath)
 	    (strncmp("$ISA/", p, 5) == 0)) {
 		(void) memcpy(*newpath, path, p - path);
 		q = *newpath + (p - path);
-#ifdef __sparcv9
-		q += strlcpy(q, "sparcv9/", avail_length);
-#endif
 		(void) strcpy(q, p + 5);
 	} else
 		*newpath = path;
@@ -506,11 +503,7 @@ init_plugin(char *name, kva_t *list, int cnt_flag)
 	char		*path = filepath;
 
 	if (*name != '/') {
-#ifdef  __sparcv9
-		(void) strcpy(filepath, "/usr/lib/security/sparcv9/");
-#else
 		(void) strcpy(filepath, "/usr/lib/security/");
-#endif
 		if (strlcat(filepath, name, MAXPATHLEN) >= MAXPATHLEN)
 			return (NULL);
 	} else {

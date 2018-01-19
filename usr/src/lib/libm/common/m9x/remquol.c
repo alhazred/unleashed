@@ -30,9 +30,6 @@
 #pragma weak __remquol = remquol
 
 #include "libm.h"
-#if defined(__SUNPRO_C)
-#include <sunmath.h>			/* fabsl */
-#endif
 /* INDENT OFF */
 static const int
 	is = -0x7fffffff - 1,
@@ -42,14 +39,7 @@ static const int
 static const long double zero = 0.0L, one = 1.0L;
 /* INDENT ON */
 
-#if defined(__sparc)
-#define	__H0(x)	((int *) &x)[0]
-#define	__H1(x)	((int *) &x)[1]
-#define	__H2(x)	((int *) &x)[2]
-#define	__H3(x)	((int *) &x)[3]
-#else
 #error Unsupported architecture
-#endif
 
 /*
  * On entrance: *quo is initialized to 0, x finite and y non-zero & ordered

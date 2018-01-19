@@ -51,11 +51,7 @@ cpc_t *__cpc = NULL;
 mutex_t __cpc_lock;		/* protects __cpc handle */
 int __cpc_v1_cpuver;		/* CPU version in use by CPCv1 client */
 
-#ifdef __sparc
-uint64_t __cpc_v1_pcr;		/* last bound %pcr value */
-#else
 uint32_t __cpc_v1_pes[2];	/* last bound %pes values */
-#endif /* __sparc */
 
 int
 __cpc_init(void)
@@ -99,12 +95,8 @@ cpc_bind_event(cpc_event_t *this, int flags)
 	 * to fake that behavior for CPCv1 clients.
 	 */
 	__cpc_v1_cpuver = this->ce_cpuver;
-#ifdef __sparc
-	__cpc_v1_pcr = this->ce_pcr;
-#else
 	__cpc_v1_pes[0] = this->ce_pes[0];
 	__cpc_v1_pes[1] = this->ce_pes[1];
-#endif /* __sparc */
 
 	if ((set = __cpc_eventtoset(__cpc, this, flags)) == NULL) {
 		errno = EINVAL;
@@ -131,12 +123,8 @@ int
 cpc_take_sample(cpc_event_t *this)
 {
 	this->ce_cpuver = __cpc_v1_cpuver;
-#ifdef __sparc
-	this->ce_pcr = __cpc_v1_pcr;
-#else
 	this->ce_pes[0] = __cpc_v1_pes[0];
 	this->ce_pes[1] = __cpc_v1_pes[1];
-#endif /* __sparc */
 
 	return (syscall(SYS_cpc, CPC_SAMPLE, -1, this->ce_pic, &this->ce_hrt,
 	    &CPC_TICKREG(this), 0));

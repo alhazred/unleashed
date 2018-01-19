@@ -415,13 +415,11 @@ skip_intr:
 		goto fail;
 	}
 
-#ifndef __sparc
 	/*
 	 * On NCR system,  the driver seen  failure of some commands
 	 * while booting. This delay mysteriously solved the problem.
 	 */
 	ddi_sleep(uhci_attach_wait);
-#endif
 
 	/*
 	 * Create another timeout handler to check whether any

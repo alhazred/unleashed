@@ -279,11 +279,7 @@ _init(void)
 	ASSERT(env);
 	NOTICE;
 
-#if defined(__sparcv9)
-	build_default_search_path("/sparcv9");
-#else
 	build_default_search_path("");
-#endif
 	FORTH(0, "set-default-search-path",	set_default_search_path);
 	FORTH(0, "get-default-search-path",	get_default_search_path);
 }

@@ -60,9 +60,6 @@
 #include <sys/sysevent/eventdefs.h>
 #include <sys/sysevent/pwrctl.h>
 
-#if defined(__sparc)
-#include <sys/machsystm.h>
-#endif
 
 #ifdef	ACPI_POWER_BUTTON
 

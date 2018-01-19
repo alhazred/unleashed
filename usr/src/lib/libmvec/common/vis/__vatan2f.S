@@ -211,11 +211,7 @@
 	PIC_SETUP(l7)
 	PIC_SET(l7,.CONST_TBL,g5)
 
-#ifdef __sparcv9
-	ldx	[%fp+STACK_BIAS+176],%l7
-#else
 	ld	[%fp+STACK_BIAS+92],%l7
-#endif
 
 	st	%i0,[%fp+tmp_counter]
 	sethi	%hi(0x7ffffc00),_0x7fffffff

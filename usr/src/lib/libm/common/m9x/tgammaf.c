@@ -41,9 +41,6 @@
 
 #include "libm.h"
 #include <math.h>
-#if defined(__SUNPRO_C)
-#include <sunmath.h>
-#endif
 #include <sys/isa_defs.h>
 
 #if defined(_BIG_ENDIAN)

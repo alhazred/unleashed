@@ -1659,16 +1659,11 @@ ac97_alloc(dev_info_t *dip, ac97_rd_t rd, ac97_wr_t wr, void *priv)
 	 * property.  (Generally on SPARC, we enable by default.  On
 	 * other systems we do not.)
 	 */
-#ifdef	__sparc
-	ac->flags |= AC97_FLAG_SPEAKER_OK;
-	PROP_FLAG(AC97_PROP_SPEAKER, AC97_FLAG_SPEAKER, 1);
-#else
 	if (ddi_prop_exists(DDI_DEV_T_ANY, dip, DDI_PROP_DONTPASS,
 	    AC97_PROP_SPEAKER)) {
 		ac->flags |= AC97_FLAG_SPEAKER_OK;
 		PROP_FLAG(AC97_PROP_SPEAKER, AC97_FLAG_SPEAKER, 0);
 	}
-#endif
 
 	/*
 	 * Enable microphone boost (20dB normally) by default?

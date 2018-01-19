@@ -127,11 +127,7 @@ constants:
 	PIC_SET(l7,__vlibm_TBL_atan2,o1)
 	wr	%g0,0x82,%asi		! set %asi for non-faulting loads
 	mov	%o1, %g1
-#ifdef __sparcv9
-	ldx	[%fp+STACK_BIAS+0xb0],%l7
-#else
 	ld	[%fp+0x5c],%l7
-#endif
 	ldd	[%o0+0x00],pio2		! load/set up constants
 	ldd	[%o0+0x08],pio2_lo
 	ldd	[%o0+0x10],p1

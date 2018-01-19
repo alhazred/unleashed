@@ -463,12 +463,7 @@ soft_hmac_sign_verify_common(soft_session_t *session_p, CK_BYTE_PTR pData,
 
 	soft_hmac_ctx_t	*hmac_ctx;
 	CK_MECHANISM_TYPE	mechanism;
-#ifdef	__sparcv9
-	/* LINTED */
-	uint_t datalen = (uint_t)ulDataLen;
-#else	/* __sparcv9 */
 	uint_t datalen = ulDataLen;
-#endif	/* __sparcv9 */
 
 	if (sign_op) {
 		hmac_ctx = (soft_hmac_ctx_t *)session_p->sign.context;
@@ -587,12 +582,7 @@ soft_hmac_sign_verify_update(soft_session_t *session_p, CK_BYTE_PTR pPart,
 
 	soft_hmac_ctx_t	*hmac_ctx;
 	CK_MECHANISM_TYPE	mechanism;
-#ifdef	__sparcv9
-	/* LINTED */
-	uint_t partlen = (uint_t)ulPartLen;
-#else	/* __sparcv9 */
 	uint_t partlen = ulPartLen;
-#endif	/* __sparcv9 */
 
 	if (sign_op) {
 		hmac_ctx = (soft_hmac_ctx_t *)session_p->sign.context;

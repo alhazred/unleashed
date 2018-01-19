@@ -863,11 +863,7 @@ system_misc_kstat_update(kstat_t *ksp, int rw)
 	return (0);
 }
 
-#ifdef	__sparc
-extern caddr_t	econtig32;
-#else	/* !__sparc */
 extern caddr_t	econtig;
-#endif	/* __sparc */
 
 /* ARGSUSED */
 static int
@@ -887,17 +883,7 @@ system_pages_kstat_update(kstat_t *ksp, int rw)
 	system_pages_kstat.nfree_calls.value.ul	= kobj_stat.nfree_calls;
 	system_pages_kstat.kernelbase.value.ul	= (ulong_t)KERNELBASE;
 
-#ifdef	__sparc
-	/*
-	 * kstat should REALLY be modified to also report kmem64_base and
-	 * kmem64_end (see sun4u/os/startup.c), as the virtual address range
-	 * [ kernelbase .. econtig ] no longer is truly reflective of the
-	 * kernel's vallocs...
-	 */
-	system_pages_kstat.econtig.value.ul	= (ulong_t)econtig32;
-#else	/* !__sparc */
 	system_pages_kstat.econtig.value.ul	= (ulong_t)econtig;
-#endif	/* __sparc */
 
 	system_pages_kstat.freemem.value.ul	= (ulong_t)freemem;
 	system_pages_kstat.availrmem.value.ul	= (ulong_t)availrmem;

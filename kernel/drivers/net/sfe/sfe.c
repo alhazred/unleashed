@@ -952,7 +952,6 @@ sfe_stop_chip(struct gem_dev *dp)
 	return (GEM_SUCCESS);
 }
 
-#ifndef	__sparc
 /*
  * Stop nic core gracefully for quiesce
  */
@@ -990,7 +989,6 @@ sfe_stop_chip_quiesce(struct gem_dev *dp)
 	}
 	return (DDI_SUCCESS);
 }
-#endif
 
 /*
  * Setup media mode
@@ -2339,9 +2337,6 @@ sfedetach(dev_info_t *dip, ddi_detach_cmd_t cmd)
  * This function returns DDI_SUCCESS on success, or DDI_FAILURE on failure.
  * DDI_FAILURE indicates an error condition and should almost never happen.
  */
-#ifdef	__sparc
-#define	sfe_quiesce	ddi_quiesce_not_supported
-#else
 static int
 sfe_quiesce(dev_info_t *dip)
 {
@@ -2357,7 +2352,6 @@ sfe_quiesce(dev_info_t *dip)
 
 	return (ret);
 }
-#endif
 
 /* ======================================================== */
 /*

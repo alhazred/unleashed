@@ -34,13 +34,6 @@
 
 #define	SIZES	1
 
-#if defined(__xpv)
-\
-\ XXPV	This seems to need to be first to avoid a namespace collision
-\	with another header file in the list below.
-\
-#include <sys/hypervisor.h>
-#endif
 
 #include <sys/types.h>
 #include <sys/bootsvcs.h>
@@ -140,11 +133,3 @@ pcb	PCBSIZE
 	pcb_fpu.fpu_regs	PCB_FPU_REGS
 	pcb_fpu.fpu_flags	PCB_FPU_FLAGS
 
-#if defined(__xpv)
-
-vcpu_info
-	evtchn_upcall_pending	VCPU_INFO_EVTCHN_UPCALL_PENDING
-	evtchn_upcall_mask	VCPU_INFO_EVTCHN_UPCALL_MASK
-	arch.cr2		VCPU_INFO_ARCH_CR2
-
-#endif	/* __xpv */

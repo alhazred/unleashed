@@ -82,12 +82,6 @@
 #include <nfs/nfs_clnt.h>
 
 /* Ultra-specific kstat includes */
-#ifdef __sparc
-#include <vm/hat_sfmmu.h>	/* from /usr/platform/sun4u/include */
-#include <sys/simmstat.h>	/* from /usr/platform/sun4u/include */
-#include <sys/sysctrl.h>	/* from /usr/platform/sun4u/include */
-#include <sys/fhc.h>		/* from /usr/include */
-#endif
 
 /*
  * Solaris #defines SP, which conflicts with the perl definition of SP
@@ -445,198 +439,27 @@ save_nfs(HV *self, kstat_t *kp, int strip_str)
  * Definition in /usr/platform/sun4u/include/vm/hat_sfmmu.h
  */
 
-#ifdef __sparc
-static void
-save_sfmmu_global_stat(HV *self, kstat_t *kp, int strip_str)
-{
-	struct sfmmu_global_stat *sfmmugp;
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	PERL_ASSERT(kp->ks_data_size == sizeof (struct sfmmu_global_stat));
-	sfmmugp = (struct sfmmu_global_stat *)(kp->ks_data);
-
-	SAVE_INT32(self, sfmmugp, sf_tsb_exceptions);
-	SAVE_INT32(self, sfmmugp, sf_tsb_raise_exception);
-	SAVE_INT32(self, sfmmugp, sf_pagefaults);
-	SAVE_INT32(self, sfmmugp, sf_uhash_searches);
-	SAVE_INT32(self, sfmmugp, sf_uhash_links);
-	SAVE_INT32(self, sfmmugp, sf_khash_searches);
-	SAVE_INT32(self, sfmmugp, sf_khash_links);
-	SAVE_INT32(self, sfmmugp, sf_swapout);
-	SAVE_INT32(self, sfmmugp, sf_tsb_alloc);
-	SAVE_INT32(self, sfmmugp, sf_tsb_allocfail);
-	SAVE_INT32(self, sfmmugp, sf_tsb_sectsb_create);
-	SAVE_INT32(self, sfmmugp, sf_scd_1sttsb_alloc);
-	SAVE_INT32(self, sfmmugp, sf_scd_2ndtsb_alloc);
-	SAVE_INT32(self, sfmmugp, sf_scd_1sttsb_allocfail);
-	SAVE_INT32(self, sfmmugp, sf_scd_2ndtsb_allocfail);
-	SAVE_INT32(self, sfmmugp, sf_tteload8k);
-	SAVE_INT32(self, sfmmugp, sf_tteload64k);
-	SAVE_INT32(self, sfmmugp, sf_tteload512k);
-	SAVE_INT32(self, sfmmugp, sf_tteload4m);
-	SAVE_INT32(self, sfmmugp, sf_tteload32m);
-	SAVE_INT32(self, sfmmugp, sf_tteload256m);
-	SAVE_INT32(self, sfmmugp, sf_tsb_load8k);
-	SAVE_INT32(self, sfmmugp, sf_tsb_load4m);
-	SAVE_INT32(self, sfmmugp, sf_hblk_hit);
-	SAVE_INT32(self, sfmmugp, sf_hblk8_ncreate);
-	SAVE_INT32(self, sfmmugp, sf_hblk8_nalloc);
-	SAVE_INT32(self, sfmmugp, sf_hblk1_ncreate);
-	SAVE_INT32(self, sfmmugp, sf_hblk1_nalloc);
-	SAVE_INT32(self, sfmmugp, sf_hblk_slab_cnt);
-	SAVE_INT32(self, sfmmugp, sf_hblk_reserve_cnt);
-	SAVE_INT32(self, sfmmugp, sf_hblk_recurse_cnt);
-	SAVE_INT32(self, sfmmugp, sf_hblk_reserve_hit);
-	SAVE_INT32(self, sfmmugp, sf_get_free_success);
-	SAVE_INT32(self, sfmmugp, sf_get_free_throttle);
-	SAVE_INT32(self, sfmmugp, sf_get_free_fail);
-	SAVE_INT32(self, sfmmugp, sf_put_free_success);
-	SAVE_INT32(self, sfmmugp, sf_put_free_fail);
-	SAVE_INT32(self, sfmmugp, sf_pgcolor_conflict);
-	SAVE_INT32(self, sfmmugp, sf_uncache_conflict);
-	SAVE_INT32(self, sfmmugp, sf_unload_conflict);
-	SAVE_INT32(self, sfmmugp, sf_ism_uncache);
-	SAVE_INT32(self, sfmmugp, sf_ism_recache);
-	SAVE_INT32(self, sfmmugp, sf_recache);
-	SAVE_INT32(self, sfmmugp, sf_steal_count);
-	SAVE_INT32(self, sfmmugp, sf_pagesync);
-	SAVE_INT32(self, sfmmugp, sf_clrwrt);
-	SAVE_INT32(self, sfmmugp, sf_pagesync_invalid);
-	SAVE_INT32(self, sfmmugp, sf_kernel_xcalls);
-	SAVE_INT32(self, sfmmugp, sf_user_xcalls);
-	SAVE_INT32(self, sfmmugp, sf_tsb_grow);
-	SAVE_INT32(self, sfmmugp, sf_tsb_shrink);
-	SAVE_INT32(self, sfmmugp, sf_tsb_resize_failures);
-	SAVE_INT32(self, sfmmugp, sf_tsb_reloc);
-	SAVE_INT32(self, sfmmugp, sf_user_vtop);
-	SAVE_INT32(self, sfmmugp, sf_ctx_inv);
-	SAVE_INT32(self, sfmmugp, sf_tlb_reprog_pgsz);
-	SAVE_INT32(self, sfmmugp, sf_region_remap_demap);
-	SAVE_INT32(self, sfmmugp, sf_create_scd);
-	SAVE_INT32(self, sfmmugp, sf_join_scd);
-	SAVE_INT32(self, sfmmugp, sf_leave_scd);
-	SAVE_INT32(self, sfmmugp, sf_destroy_scd);
-}
-#endif
 
 /*
  * Definition in /usr/platform/sun4u/include/vm/hat_sfmmu.h
  */
 
-#ifdef __sparc
-static void
-save_sfmmu_tsbsize_stat(HV *self, kstat_t *kp, int strip_str)
-{
-	struct sfmmu_tsbsize_stat *sfmmutp;
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	PERL_ASSERT(kp->ks_data_size == sizeof (struct sfmmu_tsbsize_stat));
-	sfmmutp = (struct sfmmu_tsbsize_stat *)(kp->ks_data);
-
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_8k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_16k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_32k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_64k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_128k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_256k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_512k);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_1m);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_2m);
-	SAVE_INT32(self, sfmmutp, sf_tsbsz_4m);
-}
-#endif
 
 /*
  * Definition in /usr/platform/sun4u/include/sys/simmstat.h
  */
 
-#ifdef __sparc
-static void
-save_simmstat(HV *self, kstat_t *kp, int strip_str)
-{
-	uchar_t	*simmstatp;
-	SV	*list;
-	int	i;
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	PERL_ASSERT(kp->ks_data_size == sizeof (uchar_t) * SIMM_COUNT);
-
-	list = newSVpv("", 0);
-	for (i = 0, simmstatp = (uchar_t *)(kp->ks_data);
-	i < SIMM_COUNT - 1; i++, simmstatp++) {
-		sv_catpvf(list, "%d,", *simmstatp);
-	}
-	sv_catpvf(list, "%d", *simmstatp);
-	hv_store(self, "status", 6, list, 0);
-}
-#endif
 
 /*
  * Used by save_temperature to make CSV lists from arrays of
  * short temperature values
  */
 
-#ifdef __sparc
-static SV *
-short_array_to_SV(short *shortp, int len)
-{
-	SV  *list;
-
-	list = newSVpv("", 0);
-	for (; len > 1; len--, shortp++) {
-		sv_catpvf(list, "%d,", *shortp);
-	}
-	sv_catpvf(list, "%d", *shortp);
-	return (list);
-}
-
-/*
- * Definition in /usr/platform/sun4u/include/sys/fhc.h
- */
-
-static void
-save_temperature(HV *self, kstat_t *kp, int strip_str)
-{
-	struct temp_stats *tempsp;
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	PERL_ASSERT(kp->ks_data_size == sizeof (struct temp_stats));
-	tempsp = (struct temp_stats *)(kp->ks_data);
-
-	SAVE_UINT32(self, tempsp, index);
-	hv_store(self, "l1", 2, short_array_to_SV(tempsp->l1, L1_SZ), 0);
-	hv_store(self, "l2", 2, short_array_to_SV(tempsp->l2, L2_SZ), 0);
-	hv_store(self, "l3", 2, short_array_to_SV(tempsp->l3, L3_SZ), 0);
-	hv_store(self, "l4", 2, short_array_to_SV(tempsp->l4, L4_SZ), 0);
-	hv_store(self, "l5", 2, short_array_to_SV(tempsp->l5, L5_SZ), 0);
-	SAVE_INT32(self, tempsp, max);
-	SAVE_INT32(self, tempsp, min);
-	SAVE_INT32(self, tempsp, state);
-	SAVE_INT32(self, tempsp, temp_cnt);
-	SAVE_INT32(self, tempsp, shutdown_cnt);
-	SAVE_INT32(self, tempsp, version);
-	SAVE_INT32(self, tempsp, trend);
-	SAVE_INT32(self, tempsp, override);
-}
-#endif
 
 /*
  * Not actually defined anywhere - just a short.  Yuck.
  */
 
-#ifdef __sparc
-static void
-save_temp_over(HV *self, kstat_t *kp, int strip_str)
-{
-	short *shortp;
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	PERL_ASSERT(kp->ks_data_size == sizeof (short));
-
-	shortp = (short *)(kp->ks_data);
-	hv_store(self, "override", 8, newSViv(*shortp), 0);
-}
-#endif
 
 /*
  * Defined in /usr/platform/sun4u/include/sys/sysctrl.h
@@ -644,70 +467,11 @@ save_temp_over(HV *self, kstat_t *kp, int strip_str)
  * enumerating *some* of the array indexes.)
  */
 
-#ifdef __sparc
-static void
-save_ps_shadow(HV *self, kstat_t *kp, int strip_str)
-{
-	uchar_t *ucharp;
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	PERL_ASSERT(kp->ks_data_size == SYS_PS_COUNT);
-
-	ucharp = (uchar_t *)(kp->ks_data);
-	hv_store(self, "core_0", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_1", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_2", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_3", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_4", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_5", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_6", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "core_7", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "pps_0", 5, newSViv(*ucharp++), 0);
-	hv_store(self, "clk_33", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "clk_50", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "v5_p", 4, newSViv(*ucharp++), 0);
-	hv_store(self, "v12_p", 5, newSViv(*ucharp++), 0);
-	hv_store(self, "v5_aux", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "v5_p_pch", 8, newSViv(*ucharp++), 0);
-	hv_store(self, "v12_p_pch", 9, newSViv(*ucharp++), 0);
-	hv_store(self, "v3_pch", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "v5_pch", 6, newSViv(*ucharp++), 0);
-	hv_store(self, "p_fan", 5, newSViv(*ucharp++), 0);
-}
-#endif
 
 /*
  * Definition in /usr/platform/sun4u/include/sys/fhc.h
  */
 
-#ifdef __sparc
-static void
-save_fault_list(HV *self, kstat_t *kp, int strip_str)
-{
-	struct ft_list	*faultp;
-	int		i;
-	char		name[KSTAT_STRLEN + 7];	/* room for 999999 faults */
-
-	/* PERL_ASSERT(kp->ks_ndata == 1); */
-	/* PERL_ASSERT(kp->ks_data_size == sizeof (struct ft_list)); */
-
-	for (i = 1, faultp = (struct ft_list *)(kp->ks_data);
-	    i <= 999999 && i <= kp->ks_data_size / sizeof (struct ft_list);
-	    i++, faultp++) {
-		(void) snprintf(name, sizeof (name), "unit_%d", i);
-		hv_store(self, name, strlen(name), newSViv(faultp->unit), 0);
-		(void) snprintf(name, sizeof (name), "type_%d", i);
-		hv_store(self, name, strlen(name), newSViv(faultp->type), 0);
-		(void) snprintf(name, sizeof (name), "fclass_%d", i);
-		hv_store(self, name, strlen(name), newSViv(faultp->fclass), 0);
-		(void) snprintf(name, sizeof (name), "create_time_%d", i);
-		hv_store(self, name, strlen(name),
-		    NEW_UV(faultp->create_time), 0);
-		(void) snprintf(name, sizeof (name), "msg_%d", i);
-		hv_store(self, name, strlen(name), newSVpv(faultp->msg, 0), 0);
-	}
-}
-#endif
 
 /*
  * We need to be able to find the function corresponding to a particular raw
@@ -741,17 +505,6 @@ build_raw_kstat_lookup()
 	SAVE_FNP(raw_kstat_lookup, save_sysinfo, "unix:sysinfo");
 	SAVE_FNP(raw_kstat_lookup, save_vminfo, "unix:vminfo");
 	SAVE_FNP(raw_kstat_lookup, save_nfs, "nfs:mntinfo");
-#ifdef __sparc
-	SAVE_FNP(raw_kstat_lookup, save_sfmmu_global_stat,
-	    "unix:sfmmu_global_stat");
-	SAVE_FNP(raw_kstat_lookup, save_sfmmu_tsbsize_stat,
-	    "unix:sfmmu_tsbsize_stat");
-	SAVE_FNP(raw_kstat_lookup, save_simmstat, "unix:simm-status");
-	SAVE_FNP(raw_kstat_lookup, save_temperature, "unix:temperature");
-	SAVE_FNP(raw_kstat_lookup, save_temp_over, "unix:temperature override");
-	SAVE_FNP(raw_kstat_lookup, save_ps_shadow, "unix:ps_shadow");
-	SAVE_FNP(raw_kstat_lookup, save_fault_list, "unix:fault_list");
-#endif
 }
 
 /*

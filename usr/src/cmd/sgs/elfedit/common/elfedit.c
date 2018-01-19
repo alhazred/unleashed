@@ -153,15 +153,6 @@ STATE_T state;
  *	isa_I_str - For 64-bit programs, the same as isa_i_str. For
  *		32-bit programs, an empty string.
  */
-#ifdef __sparc
-#ifdef __sparcv9
-static const char *isa_i_str = MSG_ORIG(MSG_ISA_SPARC_64);
-static const char *isa_I_str = MSG_ORIG(MSG_ISA_SPARC_64);
-#else
-static const char *isa_i_str = MSG_ORIG(MSG_ISA_SPARC_32);
-static const char *isa_I_str = MSG_ORIG(MSG_STR_EMPTY);
-#endif
-#endif
 
 #ifdef __i386
 static const char *isa_i_str = MSG_ORIG(MSG_ISA_X86_32);

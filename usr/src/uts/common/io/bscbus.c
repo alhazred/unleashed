@@ -40,10 +40,6 @@
 #include <sys/errno.h>
 #include <sys/file.h>
 
-#if defined(__sparc)
-#include <sys/intr.h>
-#include <sys/membar.h>
-#endif
 
 #include <sys/kmem.h>
 #include <sys/modctl.h>
@@ -2321,12 +2317,8 @@ static int
 bscbus_intr_op(dev_info_t *dip, dev_info_t *rdip, ddi_intr_op_t op,
     ddi_intr_handle_impl_t *hdlp, void *result)
 {
-#if defined(__sparc)
-	return (i_ddi_intr_ops(dip, rdip, op, hdlp, result));
-#else
 	_NOTE(ARGUNUSED(dip, rdip, op, hdlp, result))
 	return (DDI_FAILURE);
-#endif
 }
 
 /*

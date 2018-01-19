@@ -3020,14 +3020,6 @@ cmlb_uselabel(struct cmlb_lun *cl, struct dk_label *labp, int flags)
 
 	/* Validate the magic number of the label. */
 	if (labp->dkl_magic != DKL_MAGIC) {
-#if defined(__sparc)
-		if (!ISREMOVABLE(cl) && !ISHOTPLUGGABLE(cl)) {
-			if (!(flags & CMLB_SILENT))
-				cmlb_log(CMLB_DEVINFO(cl), CMLB_LABEL(cl),
-				    CE_WARN,
-				    "Corrupt label; wrong magic number\n");
-		}
-#endif
 		return (CMLB_LABEL_IS_INVALID);
 	}
 

@@ -1152,8 +1152,4 @@ ficlSystemCompilePlatform(ficlSystem *pSys)
 	ficlDictionarySetConstant(env, "arch-i386", FICL_TRUE);
 	ficlDictionarySetConstant(env, "arch-sparc", FICL_FALSE);
 #endif
-#ifdef __sparc
-	ficlDictionarySetConstant(env, "arch-i386", FICL_FALSE);
-	ficlDictionarySetConstant(env, "arch-sparc", FICL_TRUE);
-#endif
 }

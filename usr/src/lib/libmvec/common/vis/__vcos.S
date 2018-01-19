@@ -256,13 +256,8 @@ constants:
 ! f60 qq1
 ! f62 qq2
 
-#ifdef __sparcv9
-	stx	%i1,[%fp+xsave]		! save arguments
-	stx	%i3,[%fp+ysave]
-#else
 	st	%i1,[%fp+xsave]		! save arguments
 	st	%i3,[%fp+ysave]
-#endif
 
 	st	%i0,[%fp+nsave]
 	st	%i2,[%fp+sxsave]
@@ -2947,13 +2942,8 @@ constants:
 
 ! ========== huge range (use C code) ==========
 
-#ifdef __sparcv9
-	ldx	[%fp+xsave],%o1
-	ldx	[%fp+ysave],%o3
-#else
 	ld	[%fp+xsave],%o1
 	ld	[%fp+ysave],%o3
-#endif
 	ld	[%fp+nsave],%o0
 	ld	[%fp+sxsave],%o2
 	ld	[%fp+sysave],%o4

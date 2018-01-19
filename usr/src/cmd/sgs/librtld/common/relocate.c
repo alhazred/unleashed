@@ -473,16 +473,8 @@ update_reloc(Cache *ocache, Cache *icache, Cache *_icache, const char *name,
 		 * offset and size.
 		 */
 		/* BEGIN CSTYLED */
-#if	!defined(__lint)
 		if ((ircache == (Cache *)0) || (rel->r_offset < bgn) ||
 			(rel->r_offset > end)) {
-#else
-		/*
-		 * lint sees `bgn' and `end' as potentially referenced
-		 * before being set.
-		 */
-		if (ircache == (Cache *)0) {
-#endif
 			_icache = icache;
 			_icache++;
 

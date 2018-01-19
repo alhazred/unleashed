@@ -1725,9 +1725,6 @@ fan_thr(void *args)
 	pthread_cond_t	env_monitor_cv = PTHREAD_COND_INITIALIZER;
 	env_fan_t	*fanp;
 
-#ifdef	__lint
-	args = args;
-#endif
 
 	for (;;) {
 		/*

@@ -61,9 +61,6 @@
 #include <sys/sunndi.h>
 #include <sys/vmem.h>
 #include <sys/pci_impl.h>
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 #include <sys/mach_intr.h>
 #include <vm/hat_i86.h>
 #include <sys/x86_archext.h>
@@ -231,19 +228,10 @@ FP hardware exhibits Pentium floating point divide problem\n");
 	 * attach the isa nexus to get ACPI resource usage
 	 * isa is "kind of" a pseudo node
 	 */
-#if defined(__xpv)
-	if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-		if (pseudo_isa)
-			(void) i_ddi_attach_pseudo_node("isa");
-		else
-			(void) i_ddi_attach_hw_nodes("isa");
-	}
-#else
 	if (pseudo_isa)
 		(void) i_ddi_attach_pseudo_node("isa");
 	else
 		(void) i_ddi_attach_hw_nodes("isa");
-#endif
 }
 
 /*
@@ -1007,14 +995,6 @@ page_create_io_wrapper(void *addr, size_t len, int vmflag, void *arg)
 	    PG_EXCL | ((vmflag & VM_NOSLEEP) ? 0 : PG_WAIT), &kas, addr, arg));
 }
 
-#ifdef __xpv
-static void
-segkmem_free_io(vmem_t *vmp, void * ptr, size_t size)
-{
-	extern void page_destroy_io(page_t *);
-	segkmem_xfree(vmp, ptr, size, page_destroy_io);
-}
-#endif
 
 static void *
 segkmem_alloc_io_4P(vmem_t *vmp, size_t size, int vmflag)
@@ -1120,11 +1100,7 @@ kmem_io_init(int a)
 
 	kmem_io[a].kmem_io_arena = vmem_create(io_arena_params[a].io_name,
 	    NULL, 0, PAGESIZE, io_arena_params[a].io_alloc,
-#ifdef __xpv
-	    segkmem_free_io,
-#else
 	    segkmem_free,
-#endif
 	    heap_arena, 0, VM_SLEEP);
 
 	for (c = 0; c < KA_NCACHE; c++) {
@@ -1221,14 +1197,9 @@ ka_init(void)
 {
 	int a;
 	paddr_t maxphysaddr;
-#if !defined(__xpv)
 	extern pfn_t physmax;
 
 	maxphysaddr = mmu_ptob((paddr_t)physmax) + MMU_PAGEOFFSET;
-#else
-	maxphysaddr = mmu_ptob((paddr_t)HYPERVISOR_memory_op(
-	    XENMEM_maximum_ram_page, NULL)) + MMU_PAGEOFFSET;
-#endif
 
 	ASSERT(maxphysaddr <= io_arena_params[0].io_limit);
 
@@ -1779,17 +1750,6 @@ int
 impl_keep_instance(dev_info_t *dip)
 {
 
-#if defined(__xpv)
-	/*
-	 * Do not persist instance numbers assigned to devices in dom0
-	 */
-	dev_info_t *pdip;
-	if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-		if (((pdip = ddi_get_parent(dip)) != NULL) &&
-		    (strcmp(ddi_get_name(pdip), "xpvd") == 0))
-			return (DDI_SUCCESS);
-	}
-#endif
 	return (DDI_FAILURE);
 }
 
@@ -2511,10 +2471,8 @@ pci_peekpoke_check(dev_info_t *dip, dev_info_t *rdip,
 void
 impl_setup_ddi(void)
 {
-#if !defined(__xpv)
 	extern void startup_bios_disk(void);
 	extern int post_fastreboot;
-#endif
 	dev_info_t *xdip, *isa_dip;
 	rd_existing_t rd_mem_prop;
 	int err;
@@ -2527,10 +2485,6 @@ impl_setup_ddi(void)
 	(void) BOP_GETPROP(bootops,
 	    "ramdisk_end", (void *)&ramdisk_end);
 
-#ifdef __xpv
-	ramdisk_start -= ONE_GIG;
-	ramdisk_end -= ONE_GIG;
-#endif
 	rd_mem_prop.phys = ramdisk_start;
 	rd_mem_prop.size = ramdisk_end - ramdisk_start + 1;
 
@@ -2564,10 +2518,8 @@ impl_setup_ddi(void)
 	 */
 	check_driver_disable();
 
-#if !defined(__xpv)
 	if (!post_fastreboot)
 		startup_bios_disk();
-#endif
 	/* do bus dependent probes. */
 	impl_bus_initialprobe();
 }
@@ -2645,18 +2597,6 @@ impl_bus_initialprobe(void)
 	struct bus_probe *probe;
 
 	/* load modules to install bus probes */
-#if defined(__xpv)
-	if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-		if (modload("misc", "pci_autoconfig") < 0) {
-			panic("failed to load misc/pci_autoconfig");
-		}
-
-		if (modload("drv", "isa") < 0)
-			panic("failed to load drv/isa");
-	}
-
-	(void) modload("misc", "xpv_autoconfig");
-#else
 	if (modload("misc", "pci_autoconfig") < 0) {
 		panic("failed to load misc/pci_autoconfig");
 	}
@@ -2665,7 +2605,6 @@ impl_bus_initialprobe(void)
 
 	if (modload("drv", "isa") < 0)
 		panic("failed to load drv/isa");
-#endif
 
 	probe = bus_probes;
 	while (probe) {
@@ -2928,15 +2867,7 @@ i_ddi_paddr_to_pfn(paddr_t paddr)
 {
 	pfn_t pfn;
 
-#ifdef __xpv
-	if (DOMAIN_IS_INITDOMAIN(xen_info)) {
-		pfn = xen_assign_pfn(mmu_btop(paddr));
-	} else {
-		pfn = mmu_btop(paddr);
-	}
-#else
 	pfn = mmu_btop(paddr);
-#endif
 
 	return (pfn);
 }

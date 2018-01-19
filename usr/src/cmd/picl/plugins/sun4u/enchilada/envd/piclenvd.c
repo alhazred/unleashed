@@ -1886,9 +1886,6 @@ dimm_fan_thr(void *args)
 	pthread_mutex_t	env_monitor_mutex = PTHREAD_MUTEX_INITIALIZER;
 	pthread_cond_t	env_monitor_cv = PTHREAD_COND_INITIALIZER;
 
-#ifdef	__lint
-	args = args;
-#endif
 
 	for (;;) {
 		/*

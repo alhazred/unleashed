@@ -198,10 +198,6 @@ kmdb_promio_create(char *name)
 	(void) strlcpy(pdp->pio_name, name, MAXPATHLEN);
 	pdp->pio_fd = hdl;
 
-#ifdef __sparc
-	pdp->pio_ti.c_oflag |= ONLCR;
-	pdp->pio_ti.c_iflag |= ICRNL;
-#endif
 	pdp->pio_ti.c_lflag |= ECHO;
 
 	io->io_data = pdp;

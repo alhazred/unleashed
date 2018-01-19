@@ -152,9 +152,6 @@ static int e1000g_rem_intrs(struct e1000g *);
 static int e1000g_enable_intrs(struct e1000g *);
 static int e1000g_disable_intrs(struct e1000g *);
 static boolean_t e1000g_link_up(struct e1000g *);
-#ifdef __sparc
-static boolean_t e1000g_find_mac_address(struct e1000g *);
-#endif
 static void e1000g_get_phy_state(struct e1000g *);
 static int e1000g_fm_error_cb(dev_info_t *dip, ddi_fm_error_t *err,
     const void *impl_data);
@@ -276,11 +273,7 @@ uint32_t e1000g_mblks_pending = 0;
  * after the system board level DR operation. For this reason, the global
  * variable e1000g_force_detach must be B_FALSE on SPARC platform.
  */
-#ifdef __sparc
-boolean_t e1000g_force_detach = B_FALSE;
-#else
 boolean_t e1000g_force_detach = B_TRUE;
-#endif
 private_devi_list_t *e1000g_private_devi_list = NULL;
 
 /*
@@ -825,11 +818,7 @@ e1000g_set_driver_params(struct e1000g *Adapter)
 	/* Enable the TTL workaround for 82541/82547 */
 	e1000_set_ttl_workaround_state_82541(hw, B_TRUE);
 
-#ifdef __sparc
-	Adapter->strip_crc = B_TRUE;
-#else
 	Adapter->strip_crc = B_FALSE;
-#endif
 
 	/* setup the maximum MTU size of the chip */
 	e1000g_setup_max_mtu(Adapter);
@@ -939,32 +928,9 @@ e1000g_set_bufsize(struct e1000g *Adapter)
 	uint64_t tx_size;
 
 	dev_info_t *devinfo = Adapter->dip;
-#ifdef __sparc
-	ulong_t iommu_pagesize;
-#endif
 	/* Get the system page size */
 	Adapter->sys_page_sz = ddi_ptob(devinfo, (ulong_t)1);
 
-#ifdef __sparc
-	iommu_pagesize = dvma_pagesize(devinfo);
-	if (iommu_pagesize != 0) {
-		if (Adapter->sys_page_sz == iommu_pagesize) {
-			if (iommu_pagesize > 0x4000)
-				Adapter->sys_page_sz = 0x4000;
-		} else {
-			if (Adapter->sys_page_sz > iommu_pagesize)
-				Adapter->sys_page_sz = iommu_pagesize;
-		}
-	}
-	if (Adapter->lso_enable) {
-		Adapter->dvma_page_num = E1000_LSO_MAXLEN /
-		    Adapter->sys_page_sz + E1000G_DEFAULT_DVMA_PAGE_NUM;
-	} else {
-		Adapter->dvma_page_num = Adapter->max_frame_size /
-		    Adapter->sys_page_sz + E1000G_DEFAULT_DVMA_PAGE_NUM;
-	}
-	ASSERT(Adapter->dvma_page_num >= E1000G_DEFAULT_DVMA_PAGE_NUM);
-#endif
 
 	Adapter->min_frame_size = ETHERMIN + ETHERFCSL;
 
@@ -1402,13 +1368,6 @@ e1000g_init(struct e1000g *Adapter)
 	}
 
 	result = 0;
-#ifdef __sparc
-	/*
-	 * First, we try to get the local ethernet address from OBP. If
-	 * failed, then we get it from the EEPROM of NIC card.
-	 */
-	result = e1000g_find_mac_address(Adapter);
-#endif
 	/* Get the local ethernet address. */
 	if (!result) {
 		mutex_enter(&e1000g_nvm_lock);
@@ -5828,77 +5787,6 @@ e1000g_set_external_loopback_10(struct e1000g *Adapter)
 	E1000_WRITE_REG(hw, E1000_CTRL, ctrl);
 }
 
-#ifdef __sparc
-static boolean_t
-e1000g_find_mac_address(struct e1000g *Adapter)
-{
-	struct e1000_hw *hw = &Adapter->shared;
-	uchar_t *bytes;
-	struct ether_addr sysaddr;
-	uint_t nelts;
-	int err;
-	boolean_t found = B_FALSE;
-
-	/*
-	 * The "vendor's factory-set address" may already have
-	 * been extracted from the chip, but if the property
-	 * "local-mac-address" is set we use that instead.
-	 *
-	 * We check whether it looks like an array of 6
-	 * bytes (which it should, if OBP set it).  If we can't
-	 * make sense of it this way, we'll ignore it.
-	 */
-	err = ddi_prop_lookup_byte_array(DDI_DEV_T_ANY, Adapter->dip,
-	    DDI_PROP_DONTPASS, "local-mac-address", &bytes, &nelts);
-	if (err == DDI_PROP_SUCCESS) {
-		if (nelts == ETHERADDRL) {
-			while (nelts--)
-				hw->mac.addr[nelts] = bytes[nelts];
-			found = B_TRUE;
-		}
-		ddi_prop_free(bytes);
-	}
-
-	/*
-	 * Look up the OBP property "local-mac-address?". If the user has set
-	 * 'local-mac-address? = false', use "the system address" instead.
-	 */
-	if (ddi_prop_lookup_byte_array(DDI_DEV_T_ANY, Adapter->dip, 0,
-	    "local-mac-address?", &bytes, &nelts) == DDI_PROP_SUCCESS) {
-		if (strncmp("false", (caddr_t)bytes, (size_t)nelts) == 0) {
-			if (localetheraddr(NULL, &sysaddr) != 0) {
-				bcopy(&sysaddr, hw->mac.addr, ETHERADDRL);
-				found = B_TRUE;
-			}
-		}
-		ddi_prop_free(bytes);
-	}
-
-	/*
-	 * Finally(!), if there's a valid "mac-address" property (created
-	 * if we netbooted from this interface), we must use this instead
-	 * of any of the above to ensure that the NFS/install server doesn't
-	 * get confused by the address changing as Solaris takes over!
-	 */
-	err = ddi_prop_lookup_byte_array(DDI_DEV_T_ANY, Adapter->dip,
-	    DDI_PROP_DONTPASS, "mac-address", &bytes, &nelts);
-	if (err == DDI_PROP_SUCCESS) {
-		if (nelts == ETHERADDRL) {
-			while (nelts--)
-				hw->mac.addr[nelts] = bytes[nelts];
-			found = B_TRUE;
-		}
-		ddi_prop_free(bytes);
-	}
-
-	if (found) {
-		bcopy(hw->mac.addr, hw->mac.perm_addr,
-		    ETHERADDRL);
-	}
-
-	return (found);
-}
-#endif
 
 static int
 e1000g_add_intrs(struct e1000g *Adapter)

@@ -40,9 +40,6 @@
 \	some other header file in the list below.
 \
 
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 
 #include <sys/types.h>
 #include <sys/bootsvcs.h>
@@ -167,11 +164,3 @@ rm_platter
 	rm_temp_idt_lim		TEMPIDTOFF
 	rm_longmode64_addr	LM64OFF
 
-#if defined(__xpv)
-
-vcpu_info
-	evtchn_upcall_pending	VCPU_INFO_EVTCHN_UPCALL_PENDING
-	evtchn_upcall_mask	VCPU_INFO_EVTCHN_UPCALL_MASK
-	arch.cr2		VCPU_INFO_ARCH_CR2
-
-#endif	/* __xpv */

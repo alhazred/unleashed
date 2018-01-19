@@ -97,9 +97,6 @@
 #include <sys/bootinfo.h>
 #include <sys/promif.h>
 #include <sys/mach_mmu.h>
-#if defined(__xpv)
-#include <sys/hypervisor.h>
-#endif
 #include <sys/contract/process_impl.h>
 
 #define	USER	0x10000		/* user-mode flag added to trap type */
@@ -1723,11 +1720,9 @@ showregs(uint_t type, struct regs *rp, caddr_t addr)
 	    (uint_t)getcr0(), FMT_CR0, (uint_t)getcr4(), FMT_CR4);
 
 	printf("cr2: %lx", getcr2());
-#if !defined(__xpv)
 	printf("cr3: %lx", getcr3());
 #if defined(__amd64)
 	printf("cr8: %lx\n", getcr8());
-#endif
 #endif
 	printf("\n");
 
@@ -1784,11 +1779,6 @@ static int
 instr_is_iret(caddr_t pc)
 {
 
-#if defined(__xpv)
-	extern void nopop_sys_rtt_syscall(void);
-	return ((pc == (caddr_t)nopop_sys_rtt_syscall) ? 1 : 0);
-
-#else
 
 #if defined(__amd64)
 	static const uint8_t iret_insn[2] = { 0x48, 0xcf };	/* iretq */
@@ -1798,7 +1788,6 @@ instr_is_iret(caddr_t pc)
 #endif	/* __i386 */
 	return (bcmp(pc, iret_insn, sizeof (iret_insn)) == 0);
 
-#endif	/* __xpv */
 }
 
 #if defined(__i386)
@@ -2006,7 +1995,6 @@ kern_gpfault(struct regs *rp)
  * dump_tss() - Display the TSS structure
  */
 
-#if !defined(__xpv)
 #if defined(__amd64)
 
 static void
@@ -2054,7 +2042,6 @@ dump_tss(void)
 }
 
 #endif	/* __amd64 */
-#endif	/* !__xpv */
 
 #if defined(TRAPTRACE)
 
@@ -2299,10 +2286,8 @@ panic_showtrap(struct panic_trap_info *tip)
 	dump_ttrace();
 #endif
 
-#if !defined(__xpv)
 	if (tip->trap_type == T_DBLFLT)
 		dump_tss();
-#endif
 }
 
 void

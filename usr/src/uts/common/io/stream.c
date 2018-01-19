@@ -4034,11 +4034,7 @@ isuioq(queue_t *q)
 		return (STREAM(q)->sd_struiowrq == q);
 }
 
-#if defined(__sparc)
-int disable_putlocks = 0;
-#else
 int disable_putlocks = 1;
-#endif
 
 /*
  * called by create_putlock.

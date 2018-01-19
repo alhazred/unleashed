@@ -72,9 +72,6 @@
 #include <sys/atomic.h>
 #include <sys/gfx_private.h>
 
-#ifdef __xpv
-#include <sys/hypervisor.h>
-#endif
 
 /*
  * Create a kva mapping for a pa (start..start+size) with
@@ -94,14 +91,6 @@ gfxp_map_kernel_space(uint64_t start, size_t size, uint32_t mode)
 	if (size == 0)
 		return (0);
 
-#ifdef __xpv
-	/*
-	 * The hypervisor doesn't allow r/w mappings to some pages, such as
-	 * page tables, gdt, etc. Detect %cr3 to notify users of this interface.
-	 */
-	if (start == mmu_ptob(mmu_btop(getcr3())))
-		return (0);
-#endif
 
 	if (mode == GFXP_MEMORY_CACHED)
 		hat_attr = HAT_STORECACHING_OK;
@@ -117,12 +106,7 @@ gfxp_map_kernel_space(uint64_t start, size_t size, uint32_t mode)
 	if (cvaddr == NULL)
 		return (NULL);
 
-#ifdef __xpv
-	ASSERT(DOMAIN_IS_INITDOMAIN(xen_info));
-	pfn = xen_assign_pfn(mmu_btop(base));
-#else
 	pfn = btop(base);
-#endif
 
 	hat_devload(kas.a_hat, cvaddr, ptob(npages), pfn,
 	    PROT_READ|PROT_WRITE|hat_attr, hat_flags);
@@ -156,12 +140,7 @@ gfxp_unmap_kernel_space(gfxp_kva_t address, size_t size)
 int
 gfxp_va2pa(struct as *as, caddr_t addr, uint64_t *pa)
 {
-#ifdef __xpv
-	ASSERT(DOMAIN_IS_INITDOMAIN(xen_info));
-	*pa = pa_to_ma(pfn_to_pa(hat_getpfnum(as->a_hat, addr)));
-#else
 	*pa = pfn_to_pa(hat_getpfnum(as->a_hat, addr));
-#endif
 	return (0);
 }
 
@@ -247,12 +226,7 @@ gfxp_munlock_user_memory(caddr_t address, size_t length)
 gfx_maddr_t
 gfxp_convert_addr(paddr_t paddr)
 {
-#ifdef __xpv
-	ASSERT(DOMAIN_IS_INITDOMAIN(xen_info));
-	return (pfn_to_pa(xen_assign_pfn(btop(paddr))));
-#else
 	return ((gfx_maddr_t)paddr);
-#endif
 }
 
 /*
@@ -313,14 +287,6 @@ gfxp_load_kernel_space(uint64_t start, size_t size,
 	if (size == 0)
 		return;
 
-#ifdef __xpv
-	/*
-	 * The hypervisor doesn't allow r/w mappings to some pages, such as
-	 * page tables, gdt, etc. Detect %cr3 to notify users of this interface.
-	 */
-	if (start == mmu_ptob(mmu_btop(getcr3())))
-		return;
-#endif
 
 	if (mode == GFXP_MEMORY_CACHED)
 		hat_attr = HAT_STORECACHING_OK;
@@ -334,12 +300,7 @@ gfxp_load_kernel_space(uint64_t start, size_t size,
 	base = start - pgoffset;
 	npages = btopr(size + pgoffset);
 
-#ifdef __xpv
-	ASSERT(DOMAIN_IS_INITDOMAIN(xen_info));
-	pfn = xen_assign_pfn(mmu_btop(base));
-#else
 	pfn = btop(base);
-#endif
 
 	hat_devload(kas.a_hat, cvaddr, ptob(npages), pfn,
 	    PROT_READ|PROT_WRITE|hat_attr, hat_flags);

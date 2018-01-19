@@ -69,11 +69,7 @@ static const char DTRACE_SHSTRTAB32[] = "\0"
 ".SUNW_dof\0"		/* 11 */
 ".strtab\0"		/* 21 */
 ".symtab\0"		/* 29 */
-#ifdef __sparc
-".rela.SUNW_dof";	/* 37 */
-#else
 ".rel.SUNW_dof";	/* 37 */
-#endif
 
 static const char DTRACE_SHSTRTAB64[] = "\0"
 ".shstrtab\0"		/* 1 */
@@ -93,11 +89,7 @@ typedef struct dt_link_pair {
 
 typedef struct dof_elf32 {
 	uint32_t de_nrel;		/* relocation count */
-#ifdef __sparc
-	Elf32_Rela *de_rel;		/* array of relocations for sparc */
-#else
 	Elf32_Rel *de_rel;		/* array of relocations for x86 */
-#endif
 	uint32_t de_nsym;		/* symbol count */
 	Elf32_Sym *de_sym;		/* array of symbols */
 	uint32_t de_strlen;		/* size of of string table */
@@ -117,11 +109,7 @@ prepare_elf32(dtrace_hdl_t *dtp, const dof_hdr_t *dof, dof_elf32_t *dep)
 	uint32_t count = 0;
 	size_t base;
 	Elf32_Sym *sym;
-#ifdef __sparc
-	Elf32_Rela *rel;
-#else
 	Elf32_Rel *rel;
-#endif
 
 	/*LINTED*/
 	dofs = (dof_sec_t *)((char *)dof + dof->dofh_secoff);
@@ -551,11 +539,7 @@ dump_elf32(dtrace_hdl_t *dtp, const dof_hdr_t *dof, int fd)
 		shp = &elf_file.shdr[ESHDR_REL];
 		shp->sh_name = 37; /* DTRACE_SHSTRTAB32[37] = ".rel.SUNW_dof" */
 		shp->sh_flags = SHF_ALLOC;
-#ifdef __sparc
-		shp->sh_type = SHT_RELA;
-#else
 		shp->sh_type = SHT_REL;
-#endif
 		shp->sh_entsize = sizeof (de.de_rel[0]);
 		shp->sh_link = ESHDR_SYMTAB;
 		shp->sh_info = ESHDR_DOF;
