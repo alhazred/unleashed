@@ -390,11 +390,7 @@ static const unsigned char	keytab_base_set2[] = {
 /* scan		state		keycap */
 /* 00 */	INVALID,
 /* 01 */	KEY(120),	/* F9 */
-#if defined(__sparc)
-/* 02 */	KEY(K8042_STOP), /* STOP */
-#else
 /* 02 */	INVALID,	/* F7?  Old code says so but manual doesn't */
-#endif
 /* 03 */	KEY(116),	/* F5 */
 /* 04 */	KEY(114),	/* F3 */
 /* 05 */	KEY(112),	/* F1 */

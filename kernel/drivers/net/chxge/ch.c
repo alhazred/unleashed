@@ -86,9 +86,6 @@ static void ch_set_name(ch_t *chp, int unit);
 static void ch_free_name(ch_t *chp);
 static void ch_get_prop(ch_t *chp);
 
-#if defined(__sparc)
-static void ch_free_dvma_handles(ch_t *chp);
-#endif
 
 /* GLD interfaces */
 static int ch_reset(gld_mac_info_t *);
@@ -199,11 +196,7 @@ static struct cb_ops cb_ch_ops = {
 	nochpoll,	/* cb_chpoll */
 	ddi_prop_op,	/* report driver property information - prop_op(9e) */
 	&chinfo,	/* cb_stream */
-#if defined(__sparc)
-	D_MP | D_64BIT,
-#else
 	D_MP,		/* cb_flag (supports multi-threading) */
-#endif
 	CB_REV,		/* cb_rev */
 	nodev,		/* cb_aread */
 	nodev		/* cb_awrite */
@@ -834,9 +827,6 @@ ch_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 		mutex_destroy(&chp->ch_dh_lck);
 		mutex_destroy(&chp->mac_lock);
 		ch_free_dma_handles(chp);
-#if defined(__sparc)
-		ch_free_dvma_handles(chp);
-#endif
 		ch_free_name(chp);
 		kmem_free(chp, sizeof (ch_t));
 		gld_mac_free(macinfo);
@@ -1210,153 +1200,6 @@ ch_unbind_dma_handle(ch_t *chp, free_dh_t *dhe)
 	mutex_exit(&chp->ch_dh_lck);
 }
 
-#if defined(__sparc)
-/*
- * DVMA stuff. Solaris only.
- */
-
-/*
- * create a dvma handle and return a dma handle entry.
- * DVMA is on sparc only!
- */
-
-free_dh_t *
-ch_get_dvma_handle(ch_t *chp)
-{
-	ddi_dma_handle_t ch_dh;
-	ddi_dma_lim_t ch_dvma_attr;
-	free_dh_t *dhe;
-	int rv;
-
-	dhe = (free_dh_t *)kmem_zalloc(sizeof (*dhe), KM_SLEEP);
-
-	ch_dvma_attr.dlim_addr_lo = 0;
-	ch_dvma_attr.dlim_addr_hi = 0xffffffff;
-	ch_dvma_attr.dlim_cntr_max = 0xffffffff;
-	ch_dvma_attr.dlim_burstsizes = 0xfff;
-	ch_dvma_attr.dlim_minxfer = 1;
-	ch_dvma_attr.dlim_dmaspeed = 0;
-
-	rv = dvma_reserve(
-	    chp->ch_dip,		/* device dev_info */
-	    &ch_dvma_attr,		/* DVMA attributes */
-	    3,			/* number of pages */
-	    &ch_dh);		/* DVMA handle */
-
-	if (rv != DDI_SUCCESS) {
-
-		cmn_err(CE_WARN,
-		    "%s: ch_get_dvma_handle: dvma_reserve() error %d\n",
-		    chp->ch_name, rv);
-
-		kmem_free(dhe, sizeof (*dhe));
-
-		return ((free_dh_t *)0);
-	}
-
-	dhe->dhe_dh = (ulong_t)ch_dh;
-
-	return (dhe);
-}
-
-/*
- * free the linked list of dvma descriptor entries.
- * DVMA is only on sparc!
- */
-
-static void
-ch_free_dvma_handles(ch_t *chp)
-{
-	free_dh_t *dhe, *the;
-
-	dhe = chp->ch_vdh;
-	while (dhe) {
-		dvma_release((ddi_dma_handle_t)dhe->dhe_dh);
-		the = dhe;
-		dhe = dhe->dhe_next;
-		kmem_free(the, sizeof (*the));
-	}
-	chp->ch_vdh = NULL;
-}
-
-/*
- * ch_bind_dvma_handle()
- *
- * returns # of entries used off of cmdQ_ce_t array to hold physical addrs.
- * DVMA in sparc only
- *
- * chp - per-board descriptor
- * size - # bytes mapped
- * vaddr - virtual address
- * cmp - array of cmdQ_ce_t entries
- * cnt - # free entries in cmp array
- */
-
-uint32_t
-ch_bind_dvma_handle(ch_t *chp, int size, caddr_t vaddr, cmdQ_ce_t *cmp,
-    uint32_t cnt)
-{
-	ddi_dma_cookie_t cookie;
-	ddi_dma_handle_t ch_dh;
-	uint32_t n = 1;
-	free_dh_t *dhe;
-
-	mutex_enter(&chp->ch_dh_lck);
-	if ((dhe = chp->ch_vdh) != NULL) {
-		chp->ch_vdh = dhe->dhe_next;
-	}
-	mutex_exit(&chp->ch_dh_lck);
-
-	if (dhe == NULL) {
-		return (0);
-	}
-
-	ch_dh = (ddi_dma_handle_t)dhe->dhe_dh;
-	n = cnt;
-
-	dvma_kaddr_load(
-	    ch_dh,		/* dvma handle */
-	    vaddr,		/* virtual address */
-	    size,		/* length of object */
-	    0,		/* start at index 0 */
-	    &cookie);
-
-	dvma_sync(ch_dh, 0, DDI_DMA_SYNC_FORDEV);
-
-	cookie.dmac_notused = 0;
-	n = 1;
-
-	cmp->ce_pa = cookie.dmac_laddress;
-	cmp->ce_dh = dhe;
-	cmp->ce_len = cookie.dmac_size;
-	cmp->ce_mp = NULL;
-	cmp->ce_flg = DH_DVMA;	/* indicate a dvma descriptor */
-
-	return (n);
-}
-
-/*
- * ch_unbind_dvma_handle()
- *
- * frees resources alloacted by ch_bind_dvma_handle().
- *
- * frees DMA handle
- */
-
-void
-ch_unbind_dvma_handle(ch_t *chp, free_dh_t *dhe)
-{
-	ddi_dma_handle_t ch_dh = (ddi_dma_handle_t)dhe->dhe_dh;
-
-	dvma_unload(ch_dh, 0, -1);
-
-	mutex_enter(&chp->ch_dh_lck);
-	dhe->dhe_next = chp->ch_vdh;
-	chp->ch_vdh = dhe;
-	mutex_exit(&chp->ch_dh_lck);
-}
-
-#endif	/* defined(__sparc) */
 
 /*
  * send received packet up stream.

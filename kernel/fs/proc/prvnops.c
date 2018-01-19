@@ -70,9 +70,6 @@
 #include <vm/seg_vn.h>
 #include <vm/hat.h>
 #include <sys/proc/prdata.h>
-#if defined(__sparc)
-#include <sys/regset.h>
-#endif
 #if defined(__x86)
 #include <sys/sysi86.h>
 #endif
@@ -189,12 +186,6 @@ static prdirent_t lwpiddir[] = {
 		"templates" },
 	{ PR_SPYMASTER,	 9 * sizeof (prdirent_t), sizeof (prdirent_t),
 		"spymaster" },
-#if defined(__sparc)
-	{ PR_GWINDOWS,	10 * sizeof (prdirent_t), sizeof (prdirent_t),
-		"gwindows" },
-	{ PR_ASRS,	11 * sizeof (prdirent_t), sizeof (prdirent_t),
-		"asrs" },
-#endif
 };
 
 #define	NLWPIDDIRFILES	(sizeof (lwpiddir) / sizeof (lwpiddir[0]) - 2)
@@ -583,9 +574,6 @@ static int pr_read_inval(), pr_read_as(), pr_read_status(),
 	pr_read_watch(), pr_read_lwpstatus(), pr_read_lwpsinfo(),
 	pr_read_lwpusage(), pr_read_xregs(), pr_read_priv(),
 	pr_read_spymaster(), pr_read_secflags(),
-#if defined(__sparc)
-	pr_read_gwindows(), pr_read_asrs(),
-#endif
 	pr_read_piddir(), pr_read_pidfile(), pr_read_opagedata();
 
 static int (*pr_read_function[PR_NFILES])() = {
@@ -627,10 +615,6 @@ static int (*pr_read_function[PR_NFILES])() = {
 	pr_read_inval,		/* /proc/<pid>/lwp/<lwpid>/templates	*/
 	pr_read_inval,		/* /proc/<pid>/lwp/<lwpid>/templates/<id> */
 	pr_read_spymaster,	/* /proc/<pid>/lwp/<lwpid>/spymaster	*/
-#if defined(__sparc)
-	pr_read_gwindows,	/* /proc/<pid>/lwp/<lwpid>/gwindows	*/
-	pr_read_asrs,		/* /proc/<pid>/lwp/<lwpid>/asrs		*/
-#endif
 	pr_read_priv,		/* /proc/<pid>/priv			*/
 	pr_read_inval,		/* /proc/<pid>/path			*/
 	pr_read_inval,		/* /proc/<pid>/path/xxx			*/
@@ -1536,42 +1520,7 @@ out:
 static int
 pr_read_xregs(prnode_t *pnp, uio_t *uiop)
 {
-#if defined(__sparc)
-	proc_t *p;
-	kthread_t *t;
-	int error;
-	char *xreg;
-	size_t size;
-
-	ASSERT(pnp->pr_type == PR_XREGS);
-
-	xreg = kmem_zalloc(sizeof (prxregset_t), KM_SLEEP);
-
-	if ((error = prlock(pnp, ZNO)) != 0)
-		goto out;
-
-	p = pnp->pr_common->prc_proc;
-	t = pnp->pr_common->prc_thread;
-
-	size = prhasx(p)? prgetprxregsize(p) : 0;
-	if (uiop->uio_offset >= size) {
-		prunlock(pnp);
-		goto out;
-	}
-
-	/* drop p->p_lock while (possibly) touching the stack */
-	mutex_exit(&p->p_lock);
-	prgetprxregs(ttolwp(t), xreg);
-	mutex_enter(&p->p_lock);
-	prunlock(pnp);
-
-	error = pr_uioread(xreg, size, uiop);
-out:
-	kmem_free(xreg, sizeof (prxregset_t));
-	return (error);
-#else
 	return (0);
-#endif
 }
 
 static int
@@ -1618,88 +1567,6 @@ pr_read_secflags(prnode_t *pnp, uio_t *uiop)
 	return (pr_uioread(&ret, sizeof (ret), uiop));
 }
 
-#if defined(__sparc)
-
-static int
-pr_read_gwindows(prnode_t *pnp, uio_t *uiop)
-{
-	proc_t *p;
-	kthread_t *t;
-	gwindows_t *gwp;
-	int error;
-	size_t size;
-
-	ASSERT(pnp->pr_type == PR_GWINDOWS);
-
-	gwp = kmem_zalloc(sizeof (gwindows_t), KM_SLEEP);
-
-	if ((error = prlock(pnp, ZNO)) != 0)
-		goto out;
-
-	p = pnp->pr_common->prc_proc;
-	t = pnp->pr_common->prc_thread;
-
-	/*
-	 * Drop p->p_lock while touching the stack.
-	 * The P_PR_LOCK flag prevents the lwp from
-	 * disappearing while we do this.
-	 */
-	mutex_exit(&p->p_lock);
-	if ((size = prnwindows(ttolwp(t))) != 0)
-		size = sizeof (gwindows_t) -
-		    (SPARC_MAXREGWINDOW - size) * sizeof (struct rwindow);
-	if (uiop->uio_offset >= size) {
-		mutex_enter(&p->p_lock);
-		prunlock(pnp);
-		goto out;
-	}
-	prgetwindows(ttolwp(t), gwp);
-	mutex_enter(&p->p_lock);
-	prunlock(pnp);
-
-	error = pr_uioread(gwp, size, uiop);
-out:
-	kmem_free(gwp, sizeof (gwindows_t));
-	return (error);
-}
-
-/* ARGSUSED */
-static int
-pr_read_asrs(prnode_t *pnp, uio_t *uiop)
-{
-	int error;
-
-	ASSERT(pnp->pr_type == PR_ASRS);
-
-	/* the asrs file exists only for sparc v9 _LP64 processes */
-	if ((error = prlock(pnp, ZNO)) == 0) {
-		proc_t *p = pnp->pr_common->prc_proc;
-		kthread_t *t = pnp->pr_common->prc_thread;
-		asrset_t asrset;
-
-		if (p->p_model != DATAMODEL_LP64 ||
-		    uiop->uio_offset >= sizeof (asrset_t)) {
-			prunlock(pnp);
-			return (0);
-		}
-
-		/*
-		 * Drop p->p_lock while touching the stack.
-		 * The P_PR_LOCK flag prevents the lwp from
-		 * disappearing while we do this.
-		 */
-		mutex_exit(&p->p_lock);
-		prgetasregs(ttolwp(t), asrset);
-		mutex_enter(&p->p_lock);
-		prunlock(pnp);
-
-		error = pr_uioread(&asrset[0], sizeof (asrset_t), uiop);
-	}
-
-	return (error);
-}
-
-#endif	/* __sparc */
 
 static int
 pr_read_piddir(prnode_t *pnp, uio_t *uiop)
@@ -3147,46 +3014,6 @@ prgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 			vap->va_size = 0;
 		}
 		break;
-#if defined(__sparc)
-	case PR_GWINDOWS:
-	{
-		kthread_t *t;
-		int n;
-
-		/*
-		 * If there is no lwp then just make the size zero.
-		 * This can happen if the lwp exits between the fop_lookup()
-		 * of the /proc/<pid>/lwp/<lwpid>/gwindows file and the
-		 * fop_getattr() of the resulting vnode.
-		 */
-		if ((t = pcp->prc_thread) == NULL) {
-			vap->va_size = 0;
-			break;
-		}
-		/*
-		 * Drop p->p_lock while touching the stack.
-		 * The P_PR_LOCK flag prevents the lwp from
-		 * disappearing while we do this.
-		 */
-		mutex_exit(&p->p_lock);
-		if ((n = prnwindows(ttolwp(t))) == 0)
-			vap->va_size = 0;
-		else
-			vap->va_size = PR_OBJSIZE(gwindows32_t, gwindows_t) -
-			    (SPARC_MAXREGWINDOW - n) *
-			    PR_OBJSIZE(struct rwindow32, struct rwindow);
-		mutex_enter(&p->p_lock);
-		break;
-	}
-	case PR_ASRS:
-#ifdef _LP64
-		if (p->p_model == DATAMODEL_LP64)
-			vap->va_size = sizeof (asrset_t);
-		else
-#endif
-			vap->va_size = 0;
-		break;
-#endif
 	case PR_CTL:
 	case PR_LWPCTL:
 	default:
@@ -3348,10 +3175,6 @@ static vnode_t *(*pr_lookup_function[PR_NFILES])() = {
 	pr_lookup_tmpldir,	/* /proc/<pid>/lwp/<lwpid>/templates	*/
 	pr_lookup_notdir,	/* /proc/<pid>/lwp/<lwpid>/templates/<id> */
 	pr_lookup_notdir,	/* /proc/<pid>/lwp/<lwpid>/spymaster	*/
-#if defined(__sparc)
-	pr_lookup_notdir,	/* /proc/<pid>/lwp/<lwpid>/gwindows	*/
-	pr_lookup_notdir,	/* /proc/<pid>/lwp/<lwpid>/asrs		*/
-#endif
 	pr_lookup_notdir,	/* /proc/<pid>/priv			*/
 	pr_lookup_pathdir,	/* /proc/<pid>/path			*/
 	pr_lookup_notdir,	/* /proc/<pid>/path/xxx			*/
@@ -3958,14 +3781,6 @@ pr_lookup_lwpiddir(vnode_t *dp, char *comp)
 		}
 	}
 
-#if defined(__sparc)
-	/* the asrs file exists only for sparc v9 _LP64 processes */
-	if (type == PR_ASRS && p->p_model != DATAMODEL_LP64) {
-		prunlock(dpnp);
-		prfreenode(pnp);
-		return (NULL);
-	}
-#endif
 
 	mutex_enter(&dpnp->pr_mutex);
 
@@ -4712,10 +4527,6 @@ static int (*pr_readdir_function[PR_NFILES])() = {
 	pr_readdir_tmpldir,	/* /proc/<pid>/lwp/<lwpid>/templates	*/
 	pr_readdir_notdir,	/* /proc/<pid>/lwp/<lwpid>/templates/<id> */
 	pr_readdir_notdir,	/* /proc/<pid>/lwp/<lwpid>/spymaster	*/
-#if defined(__sparc)
-	pr_readdir_notdir,	/* /proc/<pid>/lwp/<lwpid>/gwindows	*/
-	pr_readdir_notdir,	/* /proc/<pid>/lwp/<lwpid>/asrs		*/
-#endif
 	pr_readdir_notdir,	/* /proc/<pid>/priv			*/
 	pr_readdir_pathdir,	/* /proc/<pid>/path			*/
 	pr_readdir_notdir,	/* /proc/<pid>/path/xxx			*/
@@ -5210,12 +5021,6 @@ pr_readdir_lwpiddir(prnode_t *pnp, uio_t *uiop, int *eofp)
 				continue;
 			}
 		}
-#if defined(__sparc)
-		/* the asrs file exists only for sparc v9 _LP64 processes */
-		if (dirp->d_ino == PR_ASRS &&
-		    pcp->prc_datamodel != DATAMODEL_LP64)
-			continue;
-#endif
 		bcopy(dirp, &dirent, sizeof (prdirent_t));
 		if (dirent.d_ino == PR_LWPDIR)
 			dirent.d_ino = pmkino(0, pslot, dirp->d_ino);

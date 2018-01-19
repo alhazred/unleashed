@@ -33,9 +33,6 @@
 #include <sys/modctl.h>
 #include <sys/aio_impl.h>
 
-#ifdef __sparc
-#include <sys/privregs.h>
-#endif
 
 void (*dtrace_cpu_init)(processorid_t);
 void (*dtrace_modload)(struct modctl *);

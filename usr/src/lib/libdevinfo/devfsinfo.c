@@ -764,7 +764,6 @@ get_boot_dev_var(struct openpromio *opp)
 	return (0);
 }
 
-#ifndef __sparc
 /*
  * Just return error from it, at least for now.
  * This is part of private interface, no consumers on gate.
@@ -774,7 +773,6 @@ find_x86_boot_device(struct openpromio *opp)
 {
 	return (DEVFS_ERR);
 }
-#endif /* ndef __sparc */
 
 /*
  * retrieve the list of entries in the boot-device configuration

@@ -235,138 +235,6 @@ cpr_main(int sleeptype)
 }
 
 
-#if defined(__sparc)
-
-/*
- * check/disable or re-enable UFS logging
- */
-static void
-cpr_log_status(int enable, int *svstat, vnode_t *vp)
-{
-	int cmd, status, error;
-	char *str, *able;
-	fiolog_t fl;
-	refstr_t *mntpt;
-
-	str = "cpr_log_status";
-	bzero(&fl, sizeof (fl));
-	fl.error = FIOLOG_ENONE;
-
-	/*
-	 * when disabling, first get and save logging status (0 or 1)
-	 */
-	if (enable == 0) {
-		if (error = fop_ioctl(vp, _FIOISLOG,
-		    (uintptr_t)&status, FKIOCTL, CRED(), NULL, NULL)) {
-			mntpt = vfs_getmntpoint(vp->v_vfsp);
-			prom_printf("%s: \"%s\", cant get logging "
-			    "status, error %d\n", str, refstr_value(mntpt),
-			    error);
-			refstr_rele(mntpt);
-			return;
-		}
-		*svstat = status;
-		if (cpr_debug & CPR_DEBUG5) {
-			mntpt = vfs_getmntpoint(vp->v_vfsp);
-			errp("%s: \"%s\", logging status = %d\n",
-			    str, refstr_value(mntpt), status);
-			refstr_rele(mntpt);
-		};
-
-		able = "disable";
-		cmd = _FIOLOGDISABLE;
-	} else {
-		able = "enable";
-		cmd = _FIOLOGENABLE;
-	}
-
-	/*
-	 * disable or re-enable logging when the saved status is 1
-	 */
-	if (*svstat == 1) {
-		error = fop_ioctl(vp, cmd, (uintptr_t)&fl,
-		    FKIOCTL, CRED(), NULL, NULL);
-		if (error) {
-			mntpt = vfs_getmntpoint(vp->v_vfsp);
-			prom_printf("%s: \"%s\", cant %s logging, error %d\n",
-			    str, refstr_value(mntpt), able, error);
-			refstr_rele(mntpt);
-		} else {
-			if (cpr_debug & CPR_DEBUG5) {
-				mntpt = vfs_getmntpoint(vp->v_vfsp);
-				errp("%s: \"%s\", logging is now %sd\n",
-				    str, refstr_value(mntpt), able);
-				refstr_rele(mntpt);
-			};
-		}
-	}
-
-	/*
-	 * when enabling logging, reset the saved status
-	 * to unknown for next time
-	 */
-	if (enable)
-		*svstat = -1;
-}
-
-/*
- * enable/disable UFS logging on filesystems containing cpr_default_path
- * and cpr statefile.  since the statefile can be on any fs, that fs
- * needs to be handled separately.  this routine and cprboot expect that
- * CPR_CONFIG and CPR_DEFAULT both reside on the same fs, rootfs.  cprboot
- * is loaded from the device with rootfs and uses the same device to open
- * both CPR_CONFIG and CPR_DEFAULT (see common/support.c).  moving either
- * file outside of rootfs would cause errors during cprboot, plus cpr and
- * fsck problems with the new fs if logging were enabled.
- */
-
-static int
-cpr_ufs_logging(int enable)
-{
-	static int def_status = -1, sf_status = -1;
-	struct vfs *vfsp;
-	char *fname;
-	vnode_t *vp;
-	int error;
-
-	if (cpr_reusable_mode)
-		return (0);
-
-	if (error = cpr_open_deffile(FREAD, &vp))
-		return (error);
-	vfsp = vp->v_vfsp;
-	if (!cpr_is_ufs(vfsp)) {
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
-		VN_RELE(vp);
-		return (0);
-	}
-
-	cpr_log_status(enable, &def_status, vp);
-	(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
-	VN_RELE(vp);
-
-	fname = cpr_build_statefile_path();
-	if (fname == NULL)
-		return (ENOENT);
-	if (error = vn_open(fname, UIO_SYSSPACE, FCREAT|FWRITE,
-	    0600, &vp, CRCREAT, 0)) {
-		prom_printf("cpr_ufs_logging: cant open/create \"%s\", "
-		    "error %d\n", fname, error);
-		return (error);
-	}
-
-	/*
-	 * check logging status for the statefile if it resides
-	 * on a different fs and the type is a regular file
-	 */
-	if (vp->v_vfsp != vfsp && vp->v_type == VREG)
-		cpr_log_status(enable, &sf_status, vp);
-	(void) fop_close(vp, FWRITE, 1, (offset_t)0, CRED(), NULL);
-	VN_RELE(vp);
-
-	return (0);
-}
-#endif
 
 
 /*
@@ -440,9 +308,6 @@ cpr_suspend_cpus(void)
 static int
 cpr_suspend(int sleeptype)
 {
-#if defined(__sparc)
-	int sf_realloc, nverr;
-#endif
 	int	rc = 0;
 	int	skt_rc = 0;
 
@@ -458,18 +323,6 @@ cpr_suspend(int sleeptype)
 
 	i_cpr_alloc_cpus();
 
-#if defined(__sparc)
-	ASSERT(sleeptype == CPR_TODISK);
-	if (!cpr_reusable_mode) {
-		/*
-		 * We need to validate default file before fs
-		 * functionality is disabled.
-		 */
-		if (rc = cpr_validate_definfo(0))
-			return (rc);
-	}
-	i_cpr_save_machdep_info();
-#endif
 
 	PMD(PMD_SX, ("cpr_suspend: stop scans\n"))
 	/* Stop PM scans ASAP */
@@ -478,12 +331,6 @@ cpr_suspend(int sleeptype)
 	pm_dispatch_to_dep_thread(PM_DEP_WK_CPR_SUSPEND,
 	    NULL, NULL, PM_DEP_WAIT, NULL, 0);
 
-#if defined(__sparc)
-	ASSERT(sleeptype == CPR_TODISK);
-	cpr_set_substate(C_ST_MP_OFFLINE);
-	if (rc = cpr_mp_offline())
-		return (rc);
-#endif
 	/*
 	 * Ask Xorg to suspend the frame buffer, and wait for it to happen
 	 */
@@ -545,63 +392,6 @@ cpr_suspend(int sleeptype)
 	if (!pm_reattach_noinvol())
 		return (ENXIO);
 
-#if defined(__sparc)
-	ASSERT(sleeptype == CPR_TODISK);
-	/*
-	 * if ufs logging is enabled, we need to disable before
-	 * stopping kernel threads so that ufs delete and roll
-	 * threads can do the work.
-	 */
-	cpr_set_substate(C_ST_DISABLE_UFS_LOGGING);
-	if (rc = cpr_ufs_logging(0))
-		return (rc);
-
-	/*
-	 * Use sync_all to swap out all user pages and find out how much
-	 * extra space needed for user pages that don't have back store
-	 * space left.
-	 */
-	CPR_STAT_EVENT_START("  swapout upages");
-	vfs_sync(SYNC_ALL);
-	CPR_STAT_EVENT_END("  swapout upages");
-
-	cpr_set_bitmap_size();
-
-alloc_statefile:
-	/*
-	 * If our last state was C_ST_DUMP_NOSPC, we're trying to
-	 * realloc the statefile, otherwise this is the first attempt.
-	 */
-	sf_realloc = (CPR->c_substate == C_ST_DUMP_NOSPC) ? 1 : 0;
-
-	CPR_STAT_EVENT_START("  alloc statefile");
-	cpr_set_substate(C_ST_STATEF_ALLOC);
-	if (rc = cpr_alloc_statefile(sf_realloc)) {
-		if (sf_realloc)
-			errp("realloc failed\n");
-		return (rc);
-	}
-	CPR_STAT_EVENT_END("  alloc statefile");
-
-	/*
-	 * Sync the filesystem to preserve its integrity.
-	 *
-	 * This sync is also used to flush out all B_DELWRI buffers
-	 * (fs cache) which are mapped and neither dirty nor referenced
-	 * before cpr_invalidate_pages destroys them.
-	 * fsflush does similar thing.
-	 */
-	sync();
-
-	/*
-	 * destroy all clean file mapped kernel pages
-	 */
-	CPR_STAT_EVENT_START("  clean pages");
-	CPR_DEBUG(CPR_DEBUG1, ("cleaning up mapped pages..."));
-	(void) callb_execute_class(CB_CL_CPR_VM, CB_CODE_CPR_CHKPT);
-	CPR_DEBUG(CPR_DEBUG1, ("done\n"));
-	CPR_STAT_EVENT_END("  clean pages");
-#endif
 
 
 	/*
@@ -697,14 +487,6 @@ alloc_statefile:
 	PMD(PMD_SX, ("cpr_suspend: prom suspend prepost\n"))
 	prom_suspend_prepost();
 
-#if defined(__sparc)
-	/*
-	 * getting ready to write ourself out, flush the register
-	 * windows to make sure that our stack is good when we
-	 * come back on the resume side.
-	 */
-	flush_windows();
-#endif
 
 	/*
 	 * For S3, we're done
@@ -714,49 +496,6 @@ alloc_statefile:
 		cpr_set_substate(C_ST_NODUMP);
 		return (rc);
 	}
-#if defined(__sparc)
-	/*
-	 * FATAL: NO MORE MEMORY ALLOCATION ALLOWED AFTER THIS POINT!!!
-	 *
-	 * The system is quiesced at this point, we are ready to either dump
-	 * to the state file for a extended sleep or a simple shutdown for
-	 * systems with non-volatile memory.
-	 */
-
-	/*
-	 * special handling for reusable:
-	 */
-	if (cpr_reusable_mode) {
-		cpr_set_substate(C_ST_SETPROPS_1);
-		if (nverr = cpr_set_properties(1))
-			return (nverr);
-	}
-
-	cpr_set_substate(C_ST_DUMP);
-	rc = cpr_dump(C_VP);
-
-	/*
-	 * if any error occurred during dump, more
-	 * special handling for reusable:
-	 */
-	if (rc && cpr_reusable_mode) {
-		cpr_set_substate(C_ST_SETPROPS_0);
-		if (nverr = cpr_set_properties(0))
-			return (nverr);
-	}
-
-	if (rc == ENOSPC) {
-		cpr_set_substate(C_ST_DUMP_NOSPC);
-		(void) cpr_resume(sleeptype);
-		goto alloc_statefile;
-	} else if (rc == 0) {
-		if (cpr_reusable_mode) {
-			cpr_set_substate(C_ST_REUSABLE);
-			longjmp(&ttolwp(curthread)->lwp_qsav);
-		} else
-			rc = cpr_set_properties(1);
-	}
-#endif
 	PMD(PMD_SX, ("cpr_suspend: return %d\n", rc))
 	return (rc);
 }
@@ -867,32 +606,6 @@ cpr_resume(int sleeptype)
 	 * and the one that caused the failure, if necessary."
 	 */
 	switch (CPR->c_substate) {
-#if defined(__sparc)
-	case C_ST_DUMP:
-		/*
-		 * This is most likely a full-fledged cpr_resume after
-		 * a complete and successful cpr suspend. Just roll back
-		 * everything.
-		 */
-		ASSERT(sleeptype == CPR_TODISK);
-		break;
-
-	case C_ST_REUSABLE:
-	case C_ST_DUMP_NOSPC:
-	case C_ST_SETPROPS_0:
-	case C_ST_SETPROPS_1:
-		/*
-		 * C_ST_REUSABLE and C_ST_DUMP_NOSPC are the only two
-		 * special switch cases here. The other two do not have
-		 * any state change during cpr_suspend() that needs to
-		 * be rolled back. But these are exit points from
-		 * cpr_suspend, so theoretically (or in the future), it
-		 * is possible that a need for roll back of a state
-		 * change arises between these exit points.
-		 */
-		ASSERT(sleeptype == CPR_TODISK);
-		goto rb_dump;
-#endif
 
 	case C_ST_NODUMP:
 		PMD(PMD_SX, ("cpr_resume: NODUMP\n"))
@@ -906,15 +619,6 @@ cpr_resume(int sleeptype)
 		PMD(PMD_SX, ("cpr_resume: SUSPEND_DEVICES\n"))
 		goto rb_suspend_devices;
 
-#if defined(__sparc)
-	case C_ST_STATEF_ALLOC:
-		ASSERT(sleeptype == CPR_TODISK);
-		goto rb_statef_alloc;
-
-	case C_ST_DISABLE_UFS_LOGGING:
-		ASSERT(sleeptype == CPR_TODISK);
-		goto rb_disable_ufs_logging;
-#endif
 
 	case C_ST_PM_REATTACH_NOINVOL:
 		PMD(PMD_SX, ("cpr_resume: REATTACH_NOINVOL\n"))
@@ -924,11 +628,6 @@ cpr_resume(int sleeptype)
 		PMD(PMD_SX, ("cpr_resume: STOP_USER_THREADS\n"))
 		goto rb_stop_user_threads;
 
-#if defined(__sparc)
-	case C_ST_MP_OFFLINE:
-		PMD(PMD_SX, ("cpr_resume: MP_OFFLINE\n"))
-		goto rb_mp_offline;
-#endif
 
 #if defined(__x86)
 	case C_ST_MP_PAUSED:
@@ -970,7 +669,6 @@ rb_nodump:
 	}
 
 	prom_resume_prepost();
-#if !defined(__sparc)
 	/*
 	 * Need to sync the software clock with the hardware clock.
 	 * On Sparc, this occurs in the sparc-specific cbe.  However
@@ -980,12 +678,7 @@ rb_nodump:
 	if (tsc_resume_in_cyclic == 0)
 		tsc_resume();
 
-#endif
 
-#if defined(__sparc)
-	if (cpr_suspend_succeeded && (boothowto & RB_DEBUG))
-		kdi_dvec_cpr_restart();
-#endif
 
 
 #if defined(__x86)
@@ -1147,27 +840,6 @@ rb_suspend_devices:
 	PMD(PMD_SX, ("cpr_resume: lock mgr\n"))
 	cpr_lock_mgr(lm_cprresume);
 
-#if defined(__sparc)
-	/*
-	 * This is a partial (half) resume during cpr suspend, we
-	 * haven't yet given up on the suspend. On return from here,
-	 * cpr_suspend() will try to reallocate and retry the suspend.
-	 */
-	if (CPR->c_substate == C_ST_DUMP_NOSPC) {
-		return (0);
-	}
-
-	if (sleeptype == CPR_TODISK) {
-rb_statef_alloc:
-		cpr_statef_close();
-
-rb_disable_ufs_logging:
-		/*
-		 * if ufs logging was disabled, re-enable
-		 */
-		(void) cpr_ufs_logging(1);
-	}
-#endif
 
 rb_pm_reattach_noinvol:
 	/*
@@ -1213,11 +885,6 @@ rb_stop_user_threads:
 	}
 	mutex_exit(&srn_clone_lock);
 
-#if defined(__sparc)
-rb_mp_offline:
-	if (cpr_mp_online())
-		cpr_err(CE_WARN, "Failed to online all the processors.");
-#endif
 
 rb_others:
 	PMD(PMD_SX, ("cpr_resume: dep thread\n"))
@@ -1231,10 +898,6 @@ rb_others:
 		cpr_stat_record_events();
 	}
 
-#if defined(__sparc)
-	if (sleeptype == CPR_TODISK && !cpr_reusable_mode)
-		cpr_clear_definfo();
-#endif
 
 	i_cpr_free_cpus();
 	CPR_DEBUG(CPR_DEBUG1, "Sending SIGTHAW...");
@@ -1310,11 +973,6 @@ cpr_all_online(void)
 {
 	int	rc = 0;
 
-#ifdef	__sparc
-	/*
-	 * do nothing
-	 */
-#else
 
 	cpu_t	*cp;
 
@@ -1338,7 +996,6 @@ cpr_all_online(void)
 		 */
 		cpr_restore_offline();
 	}
-#endif
 	return (rc);
 }
 
@@ -1349,11 +1006,6 @@ static void
 cpr_restore_offline(void)
 {
 
-#ifdef	__sparc
-	/*
-	 * do nothing
-	 */
-#else
 
 	cpu_t	*cp;
 	int	rc = 0;
@@ -1374,6 +1026,5 @@ cpr_restore_offline(void)
 		}
 	} while ((cp = cp->cpu_next) != cpu_list);
 
-#endif
 
 }

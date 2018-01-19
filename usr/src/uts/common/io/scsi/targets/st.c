@@ -787,10 +787,8 @@ st_probe(dev_info_t *devi)
 	struct scsi_device *devp;
 	int rval;
 
-#if !defined(__sparc)
 	char    *tape_prop;
 	int	tape_prop_len;
-#endif
 
 	ST_ENTR(devi, st_probe);
 
@@ -799,7 +797,6 @@ st_probe(dev_info_t *devi)
 		return (DDI_PROBE_DONTCARE);
 	}
 
-#if !defined(__sparc)
 	/*
 	 * Since some x86 HBAs have devnodes that look like SCSI as
 	 * far as we can tell but aren't really SCSI (DADK, like mlx)
@@ -815,7 +812,6 @@ st_probe(dev_info_t *devi)
 		return (DDI_PROBE_FAILURE);
 	}
 	kmem_free(tape_prop, tape_prop_len);
-#endif
 
 	devp = ddi_get_driver_private(devi);
 	instance = ddi_get_instance(devi);

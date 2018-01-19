@@ -1670,10 +1670,6 @@ kmt_brkpt_ctor(mdb_tgt_t *t, mdb_sespec_t *sep, void *args)
 		ka->ka_addr = (uintptr_t)s.st_value;
 	}
 
-#ifdef __sparc
-	if (ka->ka_addr & 3)
-		return (set_errno(EMDB_BPALIGN));
-#endif
 
 	if (mdb_vread(&instr, sizeof (instr), ka->ka_addr) != sizeof (instr))
 		return (-1); /* errno is set for us */

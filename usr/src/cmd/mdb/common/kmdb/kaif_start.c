@@ -42,9 +42,6 @@
 #define	KAIF_SLAVE_CMD_RESUME	2
 #define	KAIF_SLAVE_CMD_FLUSH	3
 #define	KAIF_SLAVE_CMD_REBOOT	4
-#if defined(__sparc)
-#define	KAIF_SLAVE_CMD_ACK	5
-#endif
 
 
 /*
@@ -92,9 +89,6 @@ kaif_master_loop(kaif_cpusave_t *cpusave)
 {
 	int notflushed, i;
 
-#if defined(__sparc)
-	kaif_prom_rearm();
-#endif
 	kaif_trap_set_debugger();
 
 	/*
@@ -207,15 +201,6 @@ kaif_slave_loop(kaif_cpusave_t *cpusave)
 {
 	int slavecmd, rv;
 
-#if defined(__sparc)
-	/*
-	 * If the user elects to drop to OBP from the debugger, some OBP
-	 * implementations will cross-call the slaves.  We have to turn
-	 * IE back on so we can receive the cross-calls.  If we don't,
-	 * some OBP implementations will wait forever.
-	 */
-	interrupts_on();
-#endif
 
 	/* Wait for duty to call */
 	for (;;) {
@@ -244,21 +229,11 @@ kaif_slave_loop(kaif_cpusave_t *cpusave)
 		} else if (slavecmd == KAIF_SLAVE_CMD_RESUME) {
 			rv = KAIF_CPU_CMD_RESUME;
 			break;
-#if defined(__sparc)
-		} else if (slavecmd == KAIF_SLAVE_CMD_ACK) {
-			cpusave->krs_cpu_acked = 1;
-		} else if (cpusave->krs_cpu_acked &&
-			slavecmd == KAIF_SLAVE_CMD_SPIN) {
-			cpusave->krs_cpu_acked = 0;
-#endif
 		}
 
 		kmdb_kdi_slave_wait();
 	}
 
-#if defined(__sparc)
-	interrupts_off();
-#endif
 
 	return (rv);
 }
@@ -305,16 +280,6 @@ kaif_main_loop(kaif_cpusave_t *cpusave)
 
 		kaif_select_master(cpusave);
 
-#ifdef __sparc
-		if (kaif_master_cpuid == cpusave->krs_cpu_id) {
-			/*
-			 * Everyone has arrived, so we can disarm the post-PROM
-			 * entry point.
-			 */
-			*kaif_promexitarmp = 0;
-			membar_producer();
-		}
-#endif
 	} else if (kaif_master_cpuid == cpusave->krs_cpu_id) {
 		cpusave->krs_cpu_state = KAIF_CPU_STATE_MASTER;
 	} else {
@@ -392,72 +357,3 @@ kaif_main_loop(kaif_cpusave_t *cpusave)
 }
 
 
-#if defined(__sparc)
-
-static int slave_loop_barrier_failures = 0;	/* for debug */
-
-/*
- * There exist a race condition observed by some
- * platforms where the kmdb master cpu exits to OBP via
- * prom_enter_mon (e.g. "$q" command) and then later re-enter
- * kmdb (typing "go") while the slaves are still proceeding
- * from the OBP idle-loop back to the kmdb slave loop. The
- * problem arises when the master cpu now back in kmdb proceed
- * to re-enter OBP (e.g. doing a prom_read() from the kmdb main
- * loop) while the slaves are still trying to get out of (the
- * previous trip in) OBP into the safety of the kmdb slave loop.
- * This routine forces the slaves to explicitly acknowledge
- * that they are back in the slave loop. The master cpu can
- * call this routine to ensure that all slave cpus are back
- * in the slave loop before proceeding.
- */
-void
-kaif_slave_loop_barrier(void)
-{
-	extern void kdi_usecwait(clock_t);
-	int i;
-	int not_acked;
-	int timeout_count = 0;
-
-	kaif_start_slaves(KAIF_SLAVE_CMD_ACK);
-
-	/*
-	 * Wait for slave cpus to explicitly acknowledge
-	 * that they are spinning in the slave loop.
-	 */
-	do {
-		not_acked = 0;
-		for (i = 0; i < kaif_ncpusave; i++) {
-			kaif_cpusave_t *save = &kaif_cpusave[i];
-
-			if (save->krs_cpu_state ==
-			    KAIF_CPU_STATE_SLAVE &&
-			    !save->krs_cpu_acked) {
-				not_acked++;
-				break;
-			}
-		}
-
-		if (not_acked == 0)
-			break;
-
-		/*
-		 * Play it safe and do a timeout delay.
-		 * We will do at most kaif_ncpusave delays before
-		 * bailing out of this barrier.
-		 */
-		kdi_usecwait(200);
-
-	} while (++timeout_count < kaif_ncpusave);
-
-	if (not_acked > 0)
-		/*
-		 * we cannot establish a barrier with all
-		 * the slave cpus coming back from OBP
-		 * Record this fact for future debugging
-		 */
-		slave_loop_barrier_failures++;
-
-	kaif_slave_cmd = KAIF_SLAVE_CMD_SPIN;
-}
-#endif

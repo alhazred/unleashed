@@ -29,9 +29,7 @@
 
 #pragma weak __expm1l = expm1l
 
-#if !defined(__sparc)
 #error Unsupported architecture
-#endif
 
 /*
  * expm1l(x)

@@ -71,11 +71,7 @@
 #define	STACK_BIAS	0
 #endif
 
-#if defined(__sparc)
-#define	STACK_REGISTER	SP
-#else
 #define	STACK_REGISTER	REG_FP
-#endif
 
 #ifdef _LP64
 #define	MDB_DEF_IPATH	\

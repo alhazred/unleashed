@@ -154,11 +154,6 @@ proc_str2sys(const char *buf, int *ptr)
 void
 exit(int status)
 {
-#ifdef __sparc
-	extern void kmdb_prom_exit_to_mon(void) __NORETURN;
-
-	kmdb_prom_exit_to_mon();
-#else
 	extern void kmdb_dpi_reboot(void) __NORETURN;
 	static int recurse = 0;
 
@@ -174,5 +169,4 @@ exit(int status)
 	}
 
 	kmdb_dpi_reboot();
-#endif
 }

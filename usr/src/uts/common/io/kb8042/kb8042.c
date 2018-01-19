@@ -104,15 +104,6 @@ static kbtrans_key_t keytab_pc2usb[KBTRANS_KEYNUMS_MAX] = {
 /* 248 */	0,	0,	0,	0
 };
 
-#ifdef __sparc
-#define	USECS_PER_WAIT 100
-#define	MAX_WAIT_USECS 100000 /* in usecs = 100 ms */
-#define	MIN_DELAY_USECS USECS_PER_WAIT
-
-boolean_t kb8042_warn_unknown_scanset = B_TRUE;
-int kb8042_default_scanset = 2;
-
-#endif
 
 #define	MAX_KB8042_WAIT_MAX_MS	500		/* 500ms total */
 #define	MAX_KB8042_RETRIES	5
@@ -260,141 +251,6 @@ _info(struct modinfo *modinfop)
 	return (mod_info(&modlinkage, modinfop));
 }
 
-#ifdef __sparc
-static boolean_t
-kb8042_is_input_avail(struct kb8042 *kb8042, int timeout_usec, boolean_t polled)
-{
-	int i;
-	int port = (polled == B_TRUE) ? I8042_POLL_INPUT_AVAIL :
-	    I8042_INT_INPUT_AVAIL;
-	int reps = timeout_usec / USECS_PER_WAIT;
-
-	for (i = 0; i < reps; i++) {
-		if (ddi_get8(kb8042->handle, kb8042->addr + port) != 0)
-			return (B_TRUE);
-
-		if (i < (reps - 1))
-			drv_usecwait(USECS_PER_WAIT);
-	}
-	return (B_FALSE);
-}
-
-static void
-kb8042_clear_input_buffer(struct kb8042 *kb8042, boolean_t polled)
-{
-	int port = (polled == B_TRUE) ? I8042_POLL_INPUT_DATA :
-	    I8042_INT_INPUT_DATA;
-
-	while (kb8042_is_input_avail(kb8042, MIN_DELAY_USECS, polled)) {
-		(void) ddi_get8(kb8042->handle, kb8042->addr + port);
-	}
-}
-
-/*
- * kb8042_send_and_expect does all its I/O via polling interfaces
- */
-static boolean_t
-kb8042_send_and_expect(struct kb8042 *kb8042, uint8_t send, uint8_t expect,
-    int timeout, int *error, uint8_t *got)
-{
-	uint8_t datab;
-	int err;
-	boolean_t rval;
-
-	ddi_put8(kb8042->handle,
-	    kb8042->addr + I8042_POLL_OUTPUT_DATA, send);
-
-	if (kb8042_is_input_avail(kb8042, timeout, B_TRUE)) {
-		err = 0;
-		datab = ddi_get8(kb8042->handle,
-		    kb8042->addr + I8042_POLL_INPUT_DATA);
-		rval = ((datab == expect) ? B_TRUE : B_FALSE);
-	} else {
-		err = EAGAIN;
-		rval = B_FALSE;
-	}
-
-	if (error != NULL)
-		*error = err;
-	if (got != NULL)
-		*got = datab;
-	return (rval);
-}
-
-static const char *
-kb8042_error_string(int errcode)
-{
-	switch (errcode) {
-	case EAGAIN:
-		return ("Timed out");
-	default:
-		return ("Unknown error");
-	}
-}
-
-/*
- * kb8042_read_scanset works properly because it is called before ddi_add_intr
- * (if it is called after ddi_add_intr, i8042_intr would call kb8042_intr
- * instead of just storing the data that comes in from the keyboard, which
- * would prevent the code here from getting it.)
- */
-static int
-kb8042_read_scanset(struct kb8042 *kb8042)
-{
-	int scanset = -1;
-	int err;
-	uint8_t got;
-
-	kb8042_clear_input_buffer(kb8042, B_TRUE);
-
-	/*
-	 * Send a "change scan code set" command to the keyboard.
-	 * It should respond with an ACK.
-	 */
-	if (kb8042_send_and_expect(kb8042, KB_SET_SCAN, KB_ACK, MAX_WAIT_USECS,
-	    &err, &got) != B_TRUE) {
-		goto fail_read_scanset;
-	}
-
-	/*
-	 * Send a 0.  The keyboard should ACK the 0, then it should send the
-	 * scan code set in use.
-	 */
-	if (kb8042_send_and_expect(kb8042, 0, KB_ACK, MAX_WAIT_USECS, &err,
-	    &got) != B_TRUE) {
-		goto fail_read_scanset;
-	}
-
-	/*
-	 * The next input byte from the keyboard should be the scan code
-	 * set in use, though some keyboards like to send a few more acks
-	 * just for fun, so blow past those to get the keyboard scan code.
-	 */
-	while (kb8042_is_input_avail(kb8042, MAX_WAIT_USECS, B_TRUE) &&
-	    (scanset = ddi_get8(kb8042->handle,
-	    kb8042->addr + I8042_POLL_INPUT_DATA)) == KB_ACK)
-		;
-
-#ifdef DEBUG
-	cmn_err(CE_NOTE, "!Scan code set from keyboard is `%d'.",
-	    scanset);
-#endif
-
-	return (scanset);
-
-fail_read_scanset:
-#ifdef DEBUG
-	if (err == 0)
-		cmn_err(CE_NOTE, "Could not read current scan set from "
-		    "keyboard: %s. (Expected 0x%x, but got 0x%x).",
-		    kb8042_error_string(err), KB_ACK, got);
-	else
-		cmn_err(CE_NOTE, "Could not read current scan set from "
-		    "keyboard: %s.", kb8042_error_string(err));
-#endif
-	return (-1);
-}
-#endif
 
 static int
 kb8042_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
@@ -480,33 +336,8 @@ kb8042_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 
 	kb8042_init(kb8042, B_FALSE);
 
-#ifdef __sparc
-	/* Detect the scan code set currently in use */
-	scanset = kb8042_read_scanset(kb8042);
-
-	if (scanset < 0 && kb8042_warn_unknown_scanset) {
-
-		cmn_err(CE_WARN, "Cannot determine keyboard scan code set ");
-		cmn_err(CE_CONT, "(is the keyboard plugged in?). ");
-		cmn_err(CE_CONT, "Defaulting to scan code set %d.  If the "
-		    "keyboard does not ", kb8042_default_scanset);
-		cmn_err(CE_CONT, "work properly, add "
-		    "`set kb8042:kb8042_default_scanset=%d' to /etc/system ",
-		    (kb8042_default_scanset == 1) ? 2 : 1);
-		cmn_err(CE_CONT, "(via network or with a USB keyboard) and "
-		    "restart the system.  If you ");
-		cmn_err(CE_CONT, "do not want to see this message in the "
-		    "future, add ");
-		cmn_err(CE_CONT, "`set kb8042:kb8042_warn_unknown_scanset=0' "
-		    "to /etc/system.\n");
-
-		/* Use the default scan code set. */
-		scanset = kb8042_default_scanset;
-	}
-#else
 	/* x86 systems use scan code set 1 -- no detection required */
 	scanset = 1;
-#endif
 	if (KeyboardConvertScan_init(kb8042, scanset) != DDI_SUCCESS) {
 		cmn_err(CE_WARN, "Cannot initialize keyboard scan converter: "
 		    "Unknown scan code set `%d'.", scanset);

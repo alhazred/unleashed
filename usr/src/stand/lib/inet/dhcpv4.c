@@ -1057,10 +1057,6 @@ create_bootpresponse_bprop(PKT_LIST *pl)
 		bootp_response = NULL;
 	}
 
-#if defined(__sparc)
-	prom_create_encoded_prop("bootp-response", pl->pkt, pl->len,
-	    ENCODE_BYTES);
-#endif	/* __sparc */
 }
 
 /*

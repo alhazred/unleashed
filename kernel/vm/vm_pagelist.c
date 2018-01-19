@@ -130,12 +130,8 @@ struct vmm_vmstats_str  vmm_vmstats;
 
 #endif /* VM_STATS */
 
-#if defined(__sparc)
-#define	LPGCREATE	0
-#else
 /* enable page_get_contig_pages */
 #define	LPGCREATE	1
-#endif
 
 int pg_contig_disable;
 int pg_lpgcreate_nocage = LPGCREATE;
@@ -293,9 +289,6 @@ typedef struct hw_page_map {
 	int		hpm_shift;
 	pfn_t		hpm_base;
 	size_t		*hpm_color_current[MAX_MNODE_MRANGES];
-#if defined(__sparc)
-	uint_t		pad[4];
-#endif
 } hw_page_map_t;
 
 /*
@@ -1457,11 +1450,6 @@ page_list_add(page_t *pp, int flags)
 	}
 
 
-#if defined(__sparc)
-	if (PP_ISNORELOC(pp)) {
-		kcage_freemem_add(1);
-	}
-#endif
 	/*
 	 * It is up to the caller to unlock the page!
 	 */
@@ -1469,105 +1457,6 @@ page_list_add(page_t *pp, int flags)
 }
 
 
-#ifdef __sparc
-/*
- * This routine is only used by kcage_init during system startup.
- * It performs the function of page_list_sub/PP_SETNORELOC/page_list_add
- * without the overhead of taking locks and updating counters.
- */
-void
-page_list_noreloc_startup(page_t *pp)
-{
-	page_t		**ppp;
-	uint_t		bin;
-	int		mnode;
-	int		mtype;
-	int		flags = 0;
-
-	/*
-	 * If this is a large page on the freelist then
-	 * break it up into smaller pages.
-	 */
-	if (pp->p_szc != 0)
-		page_boot_demote(pp);
-
-	/*
-	 * Get list page is currently on.
-	 */
-	bin = PP_2_BIN(pp);
-	mnode = PP_2_MEM_NODE(pp);
-	mtype = PP_2_MTYPE(pp);
-	ASSERT(mtype == MTYPE_RELOC);
-	ASSERT(pp->p_szc == 0);
-
-	if (PP_ISAGED(pp)) {
-		ppp = &PAGE_FREELISTS(mnode, 0, bin, mtype);
-		flags |= PG_FREE_LIST;
-	} else {
-		ppp = &PAGE_CACHELISTS(mnode, bin, mtype);
-		flags |= PG_CACHE_LIST;
-	}
-
-	ASSERT(*ppp != NULL);
-
-	/*
-	 * Delete page from current list.
-	 */
-	if (*ppp == pp)
-		*ppp = pp->p_next;		/* go to next page */
-	if (*ppp == pp) {
-		*ppp = NULL;			/* page list is gone */
-	} else {
-		pp->p_prev->p_next = pp->p_next;
-		pp->p_next->p_prev = pp->p_prev;
-	}
-
-	/*
-	 * Decrement page counters
-	 */
-	page_ctr_sub_internal(mnode, mtype, pp, flags);
-
-	/*
-	 * Set no reloc for cage initted pages.
-	 */
-	PP_SETNORELOC(pp);
-
-	mtype = PP_2_MTYPE(pp);
-	ASSERT(mtype == MTYPE_NORELOC);
-
-	/*
-	 * Get new list for page.
-	 */
-	if (PP_ISAGED(pp)) {
-		ppp = &PAGE_FREELISTS(mnode, 0, bin, mtype);
-	} else {
-		ppp = &PAGE_CACHELISTS(mnode, bin, mtype);
-	}
-
-	/*
-	 * Insert page on new list.
-	 */
-	if (*ppp == NULL) {
-		*ppp = pp;
-		pp->p_next = pp->p_prev = pp;
-	} else {
-		pp->p_next = *ppp;
-		pp->p_prev = (*ppp)->p_prev;
-		(*ppp)->p_prev = pp;
-		pp->p_prev->p_next = pp;
-	}
-
-	/*
-	 * Increment page counters
-	 */
-	page_ctr_add_internal(mnode, mtype, pp, flags);
-
-	/*
-	 * Update cage freemem counter
-	 */
-	atomic_inc_ulong(&kcage_freemem);
-}
-#else	/* __sparc */
 
 /* ARGSUSED */
 void
@@ -1575,7 +1464,6 @@ page_list_noreloc_startup(page_t *pp)
 {
 	panic("page_list_noreloc_startup: should be here only for sparc");
 }
-#endif
 
 void
 page_list_add_pages(page_t *pp, int flags)
@@ -1612,10 +1500,6 @@ page_list_add_pages(page_t *pp, int flags)
 		mutex_exit(pcm);
 
 		pgcnt = page_get_pagecnt(pp->p_szc);
-#if defined(__sparc)
-		if (PP_ISNORELOC(pp))
-			kcage_freemem_add(pgcnt);
-#endif
 		for (i = 0; i < pgcnt; i++, pp++)
 			page_unlock_nocapture(pp);
 	}
@@ -1707,11 +1591,6 @@ try_again:
 		page_ctr_sub(mnode, mtype, pp, flags);
 		mutex_exit(pcm);
 
-#if defined(__sparc)
-		if (PP_ISNORELOC(pp)) {
-			kcage_freemem_sub(1);
-		}
-#endif
 		return;
 	}
 
@@ -1758,11 +1637,6 @@ try_again:
 	page_ctr_sub(mnode, mtype, pp, flags);
 	page_freelist_unlock(mnode);
 
-#if defined(__sparc)
-	if (PP_ISNORELOC(pp)) {
-		kcage_freemem_sub(1);
-	}
-#endif
 }
 
 void
@@ -1830,14 +1704,6 @@ try_again:
 		page_freelist_unlock(mnode);
 	}
 
-#if defined(__sparc)
-	if (PP_ISNORELOC(pp)) {
-		pgcnt_t	pgcnt;
-
-		pgcnt = page_get_pagecnt(pp->p_szc);
-		kcage_freemem_sub(pgcnt);
-	}
-#endif
 }
 
 /*
@@ -2282,9 +2148,6 @@ page_freelist_coalesce(int mnode, uchar_t szc, uint_t color, uint_t ceq_mask,
 	pgcnt_t	cands = 0, szcpgcnt = page_get_pagecnt(szc);
 	page_t	*ret_pp;
 	MEM_NODE_ITERATOR_DECL(it);
-#if defined(__sparc)
-	pfn_t pfnum0, nlo, nhi;
-#endif
 
 	if (mpss_coalesce_disable) {
 		ASSERT(szc < MMU_PAGE_SIZES);
@@ -2384,39 +2247,9 @@ page_freelist_coalesce(int mnode, uchar_t szc, uint_t color, uint_t ceq_mask,
 	idx0 = PNUM_TO_IDX(mnode, r, pfnum);
 	ASSERT(idx0 < len);
 
-#if defined(__sparc)
-	pfnum0 = pfnum;		/* page corresponding to idx0 */
-	nhi = 0;		/* search kcage ranges */
-#endif
 
 	for (idx = idx0; wrap == 0 || (idx < idx0 && wrap < 2); ) {
 
-#if defined(__sparc)
-		/*
-		 * Find lowest intersection of kcage ranges and mnode.
-		 * MTYPE_NORELOC means look in the cage, otherwise outside.
-		 */
-		if (nhi <= pfnum) {
-			if (kcage_next_range(mtype == MTYPE_NORELOC, pfnum,
-			    (wrap == 0 ? hi : pfnum0), &nlo, &nhi))
-				goto wrapit;
-
-			/* jump to the next page in the range */
-			if (pfnum < nlo) {
-				pfnum = P2ROUNDUP(nlo, szcpgcnt);
-				MEM_NODE_ITERATOR_INIT(pfnum, mnode, szc, &it);
-				idx = PNUM_TO_IDX(mnode, r, pfnum);
-				if (idx >= len || pfnum >= hi)
-					goto wrapit;
-				if ((PFN_2_COLOR(pfnum, szc, &it) ^ color) &
-				    ceq_mask)
-					goto next;
-				if (interleaved_mnodes &&
-				    PFN_2_MEM_NODE(pfnum) != mnode)
-					goto next;
-			}
-		}
-#endif
 
 		if (PAGE_COUNTERS(mnode, r, idx) != full)
 			goto next;
@@ -2436,14 +2269,6 @@ page_freelist_coalesce(int mnode, uchar_t szc, uint_t color, uint_t ceq_mask,
 				    PFN_2_COLOR(pfnum, szc, &it), mrange) = idx;
 				page_freelist_unlock(mnode);
 				rw_exit(&page_ctrs_rwlock[mnode]);
-#if defined(__sparc)
-				if (PP_ISNORELOC(ret_pp)) {
-					pgcnt_t npgs;
-
-					npgs = page_get_pagecnt(ret_pp->p_szc);
-					kcage_freemem_sub(npgs);
-				}
-#endif
 				return (ret_pp);
 			}
 		} else {
@@ -2476,9 +2301,6 @@ wrapit:
 			MEM_NODE_ITERATOR_INIT(pfnum, mnode, szc, &it);
 			idx = PNUM_TO_IDX(mnode, r, pfnum);
 			wrap++;
-#if defined(__sparc)
-			nhi = 0;	/* search kcage ranges */
-#endif
 		}
 	}
 
@@ -2651,15 +2473,6 @@ page_freelist_split(uchar_t szc, uint_t color, int mnode, int mtype,
 				    pfnhi, pp->p_szc, szc, ccolor, PC_ALLOC);
 				if (ret_pp) {
 					page_freelist_unlock(mnode);
-#if defined(__sparc)
-					if (PP_ISNORELOC(ret_pp)) {
-						pgcnt_t npgs;
-
-						npgs = page_get_pagecnt(
-						    ret_pp->p_szc);
-						kcage_freemem_sub(npgs);
-					}
-#endif
 					return (ret_pp);
 				}
 			}
@@ -3019,13 +2832,6 @@ try_again:
 				panic("free page is not. pp %p", (void *)pp);
 			mutex_exit(pcm);
 
-#if defined(__sparc)
-			ASSERT(!kcage_on || PP_ISNORELOC(pp) ||
-			    (flags & PG_NORELOC) == 0);
-
-			if (PP_ISNORELOC(pp))
-				kcage_freemem_sub(page_get_pagecnt(szc));
-#endif
 			VM_STAT_ADD(vmm_vmstats.pgmf_allocok[szc]);
 			return (pp);
 
@@ -4061,14 +3867,6 @@ try_again:
 				VERIFY(pp->p_object);
 				ASSERT(pp->p_vnode);
 				ASSERT(PP_ISAGED(pp) == 0);
-#if defined(__sparc)
-				ASSERT(!kcage_on ||
-				    (flags & PG_NORELOC) == 0 ||
-				    PP_ISNORELOC(pp));
-				if (PP_ISNORELOC(pp)) {
-					kcage_freemem_sub(1);
-				}
-#endif
 				VM_STAT_ADD(vmm_vmstats. pgmc_allocok);
 				return (pp);
 			}

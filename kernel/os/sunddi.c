@@ -616,7 +616,6 @@ ddi_peekpokeio(dev_info_t *devi, struct uio *uio, enum uio_rw rw,
  * On sparc, they're implemented in assembler to avoid spilling
  * register windows in the common (copyin) case ..
  */
-#if !defined(__sparc)
 int
 ddi_copyin(const void *buf, void *kernbuf, size_t size, int flags)
 {
@@ -632,7 +631,6 @@ ddi_copyout(const void *buf, void *kernbuf, size_t size, int flags)
 		return (kcopy(buf, kernbuf, size) ? -1 : 0);
 	return (copyout(buf, kernbuf, size));
 }
-#endif	/* !__sparc */
 
 /*
  * Conversions in nexus pagesize units.  We don't duplicate the
@@ -682,7 +680,6 @@ ddi_exit_critical(unsigned int spl)
  * Nexus ctlops punter
  */
 
-#if !defined(__sparc)
 /*
  * Request bus_ctl parent to handle a bus_ctl request
  *
@@ -703,13 +700,11 @@ ddi_ctlops(dev_info_t *d, dev_info_t *r, ddi_ctl_enum_t op, void *a, void *v)
 	return ((*fp)(d, r, op, a, v));
 }
 
-#endif
 
 /*
  * DMA/DVMA setup
  */
 
-#if !defined(__sparc)
 /*
  * Request bus_dma_ctl parent to fiddle with a dma request.
  *
@@ -727,7 +722,6 @@ ddi_dma_mctl(dev_info_t *dip, dev_info_t *rdip,
 	fp = DEVI(dip)->devi_ops->devo_bus_ops->bus_dma_ctl;
 	return ((*fp) (dip, rdip, handle, request, offp, lenp, objp, flags));
 }
-#endif
 
 /*
  * For all DMA control functions, call the DMA control
@@ -755,7 +749,6 @@ ddi_dma_map(dev_info_t *dip, dev_info_t *rdip,
 	return (DDI_FAILURE);
 }
 
-#if !defined(__sparc)
 
 /*
  * The SPARC versions of these routines are done in assembler to
@@ -886,7 +879,6 @@ ddi_dma_unbind_handle(ddi_dma_handle_t h)
 	return ((*funcp)(dip, rdip, h));
 }
 
-#endif	/* !__sparc */
 
 /*
  * DMA burst sizes, and transfer minimums

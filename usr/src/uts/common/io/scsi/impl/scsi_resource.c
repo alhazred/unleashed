@@ -430,18 +430,6 @@ scsi_init_cache_pkt(struct scsi_address *ap, struct scsi_pkt *in_pktp,
 			if (flags & PKT_DMA_PARTIAL)
 				dma_flags |= DDI_DMA_PARTIAL;
 
-#if defined(__sparc)
-			/*
-			 * workaround for byte hole issue on psycho and
-			 * schizo pre 2.1
-			 */
-			if ((bp->b_flags & B_READ) && ((bp->b_flags &
-			    (B_PAGEIO|B_REMAPPED)) != B_PAGEIO) &&
-			    (((uintptr_t)bp->b_un.b_addr & 0x7) ||
-			    ((uintptr_t)bp->b_bcount & 0x7))) {
-				dma_flags |= DDI_DMA_CONSISTENT;
-			}
-#endif
 			if (!scsi_dma_buf_bind_attr(pktw, bp,
 			    dma_flags, callback, callback_arg)) {
 				return (NULL);

@@ -92,11 +92,6 @@ e1000g_free_tx_swpkt(register p_tx_sw_packet_t packet)
 	case USE_BCOPY:
 		packet->tx_buf->len = 0;
 		break;
-#ifdef __sparc
-	case USE_DVMA:
-		dvma_unload(packet->tx_dma_handle, 0, -1);
-		break;
-#endif
 	case USE_DMA:
 		(void) ddi_dma_unbind_handle(packet->tx_dma_handle);
 		break;
@@ -1313,16 +1308,8 @@ e1000g_tx_copy(e1000g_tx_ring_t *tx_ring, p_tx_sw_packet_t packet,
 			tx_buf->len = ETHERMIN;
 		}
 
-#ifdef __sparc
-		if (packet->dma_type == USE_DVMA)
-			dvma_sync(tx_buf->dma_handle, 0, DDI_DMA_SYNC_FORDEV);
-		else
-			(void) ddi_dma_sync(tx_buf->dma_handle, 0,
-			    tx_buf->len, DDI_DMA_SYNC_FORDEV);
-#else
 		(void) ddi_dma_sync(tx_buf->dma_handle, 0,
 		    tx_buf->len, DDI_DMA_SYNC_FORDEV);
-#endif
 
 		packet->data_transfer_type = USE_BCOPY;
 
@@ -1367,18 +1354,6 @@ e1000g_tx_bind(e1000g_tx_ring_t *tx_ring, p_tx_sw_packet_t packet, mblk_t *mp)
 	 * times specified by *countp - 1.
 	 */
 	switch (packet->dma_type) {
-#ifdef __sparc
-	case USE_DVMA:
-		dvma_kaddr_load(packet->tx_dma_handle,
-		    (caddr_t)mp->b_rptr, len, 0, &dma_cookie);
-
-		dvma_sync(packet->tx_dma_handle, 0,
-		    DDI_DMA_SYNC_FORDEV);
-
-		ncookies = 1;
-		packet->data_transfer_type = USE_DVMA;
-		break;
-#endif
 	case USE_DMA:
 		if ((mystat = ddi_dma_addr_bind_handle(
 		    packet->tx_dma_handle, NULL,

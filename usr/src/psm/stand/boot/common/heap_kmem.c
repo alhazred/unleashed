@@ -128,9 +128,6 @@ void		freehdr(Freehdr p);
 void		delete(Freehdr *p);
 static void	check_need_to_free(void);
 extern caddr_t	resalloc(enum RESOURCES, size_t, caddr_t, int);
-#ifdef	__sparc
-extern void	resalloc_init(void);
-#endif
 extern int	splnet(void);
 extern int	splimp(void);
 extern void	splx(int);
@@ -172,9 +169,6 @@ kmem_init(void)
 printf("kmem_init entered\n");
 #endif
 
-#ifdef __sparc
-	resalloc_init();
-#endif
 
 	kmem_info.free_root = NIL;
 	kmem_info.free_hdr_list = NULL;
@@ -775,11 +769,7 @@ again:
 static bool
 morecore(size_t nbytes)
 {
-#ifdef	__sparc
-	enum RESOURCES type = RES_BOOTSCRATCH_NOFAIL;
-#else
 	enum RESOURCES type = RES_BOOTSCRATCH;
-#endif
 	Dblk p;
 #ifdef	DEBUG
 	printf("morecore(nbytes 0x%lx)\n", nbytes);

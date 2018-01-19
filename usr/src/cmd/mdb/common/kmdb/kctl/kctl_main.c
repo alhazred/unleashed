@@ -60,13 +60,8 @@ kctl_t kctl;
  * else was calling the kernel's copy of another prom routine, so we
  * grab the PROM lock ourselves before we start initialization.
  */
-#ifdef __sparc
-#define	KCTL_PROM_LOCK		promif_preprom()
-#define	KCTL_PROM_UNLOCK	promif_postprom()
-#else
 #define	KCTL_PROM_LOCK
 #define	KCTL_PROM_UNLOCK
-#endif
 
 static int
 kctl_init(void)

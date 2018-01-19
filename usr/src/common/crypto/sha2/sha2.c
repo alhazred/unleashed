@@ -627,23 +627,12 @@ Encode(uint8_t *_RESTRICT_KYWD output, uint32_t *_RESTRICT_KYWD input,
 {
 	size_t		i, j;
 
-#if	defined(__sparc)
-	if (IS_P2ALIGNED(output, sizeof (uint32_t))) {
-		for (i = 0, j = 0; j < len; i++, j += 4) {
-			/* LINTED E_BAD_PTR_CAST_ALIGN */
-			*((uint32_t *)(output + j)) = input[i];
-		}
-	} else {
-#endif	/* little endian -- will work on big endian, but slowly */
 		for (i = 0, j = 0; j < len; i++, j += 4) {
 			output[j]	= (input[i] >> 24) & 0xff;
 			output[j + 1]	= (input[i] >> 16) & 0xff;
 			output[j + 2]	= (input[i] >>  8) & 0xff;
 			output[j + 3]	= input[i] & 0xff;
 		}
-#if	defined(__sparc)
-	}
-#endif
 }
 
 static void
@@ -652,14 +641,6 @@ Encode64(uint8_t *_RESTRICT_KYWD output, uint64_t *_RESTRICT_KYWD input,
 {
 	size_t		i, j;
 
-#if	defined(__sparc)
-	if (IS_P2ALIGNED(output, sizeof (uint64_t))) {
-		for (i = 0, j = 0; j < len; i++, j += 8) {
-			/* LINTED E_BAD_PTR_CAST_ALIGN */
-			*((uint64_t *)(output + j)) = input[i];
-		}
-	} else {
-#endif	/* little endian -- will work on big endian, but slowly */
 		for (i = 0, j = 0; j < len; i++, j += 8) {
 
 			output[j]	= (input[i] >> 56) & 0xff;
@@ -671,9 +652,6 @@ Encode64(uint8_t *_RESTRICT_KYWD output, uint64_t *_RESTRICT_KYWD input,
 			output[j + 6]	= (input[i] >>  8) & 0xff;
 			output[j + 7]	= input[i] & 0xff;
 		}
-#if	defined(__sparc)
-	}
-#endif
 }
 
 

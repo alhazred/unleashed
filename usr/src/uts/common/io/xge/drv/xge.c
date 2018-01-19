@@ -282,9 +282,6 @@ xge_ring_config(dev_info_t *dev_info, xge_hal_device_config_t *device_config,
 	if (!device_config->ring.queue[index].configured)
 		return;
 
-#if defined(__sparc)
-	device_config->ring.queue[index].no_snoop_bits = 1;
-#endif
 
 	(void) xge_os_snprintf(msg, MSG_SIZE, "ring%d_max", index);
 	device_config->ring.queue[index].max =
@@ -429,9 +426,6 @@ xge_fifo_config(dev_info_t *dev_info, xge_hal_device_config_t *device_config,
 	if (!device_config->fifo.queue[index].configured)
 		return;
 
-#if defined(__sparc)
-	device_config->fifo.queue[index].no_snoop_bits = 1;
-#endif
 
 	(void) xge_os_snprintf(msg, MSG_SIZE, "fifo%d_max", index);
 	device_config->fifo.queue[index].max = ddi_prop_get_int(DDI_DEV_T_ANY,

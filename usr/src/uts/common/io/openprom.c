@@ -319,29 +319,6 @@ opromclose(dev_t dev, int flag, int otype, cred_t *cred_p)
 	return (0);
 }
 
-#ifdef __sparc
-static int
-get_bootpath_prop(char *bootpath)
-{
-	if (root_is_ramdisk) {
-		if (BOP_GETPROP(bootops, "bootarchive", bootpath) == -1)
-			return (-1);
-		(void) strlcat(bootpath, ":a", BO_MAXOBJNAME);
-	} else {
-		if ((BOP_GETPROP(bootops, "bootpath", bootpath) == -1) ||
-		    strlen(bootpath) == 0) {
-			if (BOP_GETPROP(bootops,
-			    "boot-path", bootpath) == -1)
-				return (-1);
-		}
-		if (memcmp(bootpath, BP_ISCSI_DISK,
-		    strlen(BP_ISCSI_DISK)) == 0) {
-			get_iscsi_bootpath_vhci(bootpath);
-		}
-	}
-	return (0);
-}
-#endif
 
 struct opromioctl_args {
 	struct oprom_state *st;

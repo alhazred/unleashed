@@ -75,36 +75,6 @@
 #endif
 #include <mdb/mdb.h>
 
-#ifdef __sparc
-#define	SETHI_MASK	0xc1c00000
-#define	SETHI_VALUE	0x01000000
-
-#define	IS_SETHI(machcode)	(((machcode) & SETHI_MASK) == SETHI_VALUE)
-
-#define	OP(machcode)	((machcode) >> 30)
-#define	OP3(machcode)	(((machcode) >> 19) & 0x3f)
-#define	RD(machcode)	(((machcode) >> 25) & 0x1f)
-#define	RS1(machcode)	(((machcode) >> 14) & 0x1f)
-#define	I(machcode)	(((machcode) >> 13) & 0x01)
-
-#define	IMM13(machcode)	((machcode) & 0x1fff)
-#define	IMM22(machcode)	((machcode) & 0x3fffff)
-
-#define	OP_ARITH_MEM_MASK	0x2
-#define	OP_ARITH		0x2
-#define	OP_MEM			0x3
-
-#define	OP3_CC_MASK		0x10
-#define	OP3_COMPLEX_MASK	0x20
-
-#define	OP3_ADD			0x00
-#define	OP3_OR			0x02
-#define	OP3_XOR			0x03
-
-#ifndef	R_O7
-#define	R_O7	0xf
-#endif
-#endif /* __sparc */
 
 static mdb_tgt_addr_t
 write_uint8(mdb_tgt_as_t as, mdb_tgt_addr_t addr, uint64_t ull, uint_t rdback)
@@ -1688,205 +1658,6 @@ cmd_showrev(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		return (showrev_sysinfo());
 }
 
-#ifdef __sparc
-static void
-findsym_output(uintptr_t *symlist, uintptr_t value, uintptr_t location)
-{
-	uintptr_t	*symbolp;
-
-	for (symbolp = symlist; *symbolp; symbolp++)
-		if (value == *symbolp)
-			mdb_printf("found %a at %a\n", value, location);
-}
-
-/*ARGSUSED*/
-static int
-findsym_cb(void *data, const GElf_Sym *sym, const char *name,
-    const mdb_syminfo_t *sip, const char *obj)
-{
-	uint32_t	*text;
-	int		len;
-	int		i;
-	int		j;
-	uint8_t		rd;
-	uintptr_t	value;
-	int32_t		imm13;
-	uint8_t		op;
-	uint8_t		op3;
-	uintptr_t	*symlist = data;
-	size_t		size = sym->st_size;
-
-	/*
-	 * if the size of the symbol is 0, then this symbol must be for an
-	 * alternate entry point or just some global label. We will,
-	 * therefore, get back to the text that follows this symbol in
-	 * some other symbol
-	 */
-	if (size == 0)
-		return (0);
-
-	if (sym->st_shndx == SHN_UNDEF)
-		return (0);
-
-	text = alloca(size);
-
-	if (mdb_vread(text, size, sym->st_value) == -1) {
-		mdb_warn("failed to read text for %s", name);
-		return (0);
-	}
-
-	len = size / 4;
-	for (i = 0; i < len; i++) {
-		if (!IS_SETHI(text[i]))
-			continue;
-
-		rd = RD(text[i]);
-		value = IMM22(text[i]) << 10;
-
-		/*
-		 * see if we already have a match with just the sethi
-		 */
-		findsym_output(symlist, value, sym->st_value + i * 4);
-
-		/*
-		 * search from the sethi on until we hit a relevant instr
-		 */
-		for (j = i + 1; j < len; j++) {
-			if ((op = OP(text[j])) & OP_ARITH_MEM_MASK) {
-				op3 = OP3(text[j]);
-
-				if (RS1(text[j]) != rd)
-					goto instr_end;
-
-				/*
-				 * This is a simple tool; we only deal
-				 * with operations which take immediates
-				 */
-				if (I(text[j]) == 0)
-					goto instr_end;
-
-				/*
-				 * sign extend the immediate value
-				 */
-				imm13 = IMM13(text[j]);
-				imm13 <<= 19;
-				imm13 >>= 19;
-
-				if (op == OP_ARITH) {
-					/* arithmetic operations */
-					if (op3 & OP3_COMPLEX_MASK)
-						goto instr_end;
-
-					switch (op3 & ~OP3_CC_MASK) {
-					case OP3_OR:
-						value |= imm13;
-						break;
-					case OP3_ADD:
-						value += imm13;
-						break;
-					case OP3_XOR:
-						value ^= imm13;
-						break;
-					default:
-						goto instr_end;
-					}
-				} else {
-					/* loads and stores */
-					/* op3 == OP_MEM */
-
-					value += imm13;
-				}
-
-				findsym_output(symlist, value,
-				    sym->st_value + j * 4);
-instr_end:
-				/*
-				 * if we're clobbering rd, break
-				 */
-				if (RD(text[j]) == rd)
-					break;
-			} else if (IS_SETHI(text[j])) {
-				if (RD(text[j]) == rd)
-					break;
-			} else if (OP(text[j]) == 1) {
-				/*
-				 * see if a call clobbers an %o or %g
-				 */
-				if (rd <= R_O7)
-					break;
-			}
-		}
-	}
-
-	return (0);
-}
-
-static int
-cmd_findsym(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
-{
-	uintptr_t *symlist;
-	uint_t optg = FALSE;
-	uint_t type;
-	int len, i;
-
-	i = mdb_getopts(argc, argv, 'g', MDB_OPT_SETBITS, TRUE, &optg, NULL);
-
-	argc -= i;
-	argv += i;
-
-	len = argc + ((flags & DCMD_ADDRSPEC) ? 1 : 0) + 1;
-
-	if (len <= 1)
-		return (DCMD_USAGE);
-
-	/*
-	 * Set up a NULL-terminated symbol list, and then iterate over the
-	 * symbol table, scanning each function for references to these symbols.
-	 */
-	symlist = mdb_alloc(len * sizeof (uintptr_t), UM_SLEEP | UM_GC);
-	len = 0;
-
-	for (i = 0; i < argc; i++, argv++) {
-		const char *str = argv->a_un.a_str;
-		uintptr_t value;
-		GElf_Sym sym;
-
-		if (argv->a_type == MDB_TYPE_STRING) {
-			if (strchr("+-", str[0]) != NULL)
-				return (DCMD_USAGE);
-			else if (str[0] >= '0' && str[0] <= '9')
-				value = mdb_strtoull(str);
-			else if (mdb_lookup_by_name(str, &sym) != 0) {
-				mdb_warn("symbol '%s' not found", str);
-				return (DCMD_USAGE);
-			} else
-				value = sym.st_value;
-		} else
-			value = argv[i].a_un.a_val;
-
-		if (value != NULL)
-			symlist[len++] = value;
-	}
-
-	if (flags & DCMD_ADDRSPEC)
-		symlist[len++] = addr;
-
-	symlist[len] = NULL;
-
-	if (optg)
-		type = MDB_TGT_BIND_GLOBAL | MDB_TGT_TYPE_FUNC;
-	else
-		type = MDB_TGT_BIND_ANY | MDB_TGT_TYPE_FUNC;
-
-	if (mdb_tgt_symbol_iter(mdb.m_target, MDB_TGT_OBJ_EVERY,
-	    MDB_TGT_SYMTAB, type, findsym_cb, symlist) == -1) {
-		mdb_warn("failed to iterate over symbol table");
-		return (DCMD_ERR);
-	}
-
-	return (DCMD_OK);
-}
-#endif /* __sparc */
 
 static int
 dis_str2addr(const char *s, uintptr_t *addr)
@@ -2018,12 +1789,6 @@ cmd_dis(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		}
 
 	} else {
-#ifdef __sparc
-		if (addr & 0x3) {
-			mdb_warn("address is not properly aligned\n");
-			return (DCMD_ERR);
-		}
-#endif
 
 		for (oaddr = mdb_dis_previns(dis, tgt, as, addr, n);
 		    oaddr < addr; oaddr = naddr) {
@@ -2942,10 +2707,6 @@ const mdb_dcmd_t mdb_dcmd_builtins[] = {
 	{ "evset", "?[+/-dDestT] [-c cmd] [-n count] id ...",
 	    "set software event specifier attributes", cmd_evset, evset_help },
 	{ "files", "[object]", "print listing of source files", cmd_files },
-#ifdef __sparc
-	{ "findsym", "?[-g] [symbol|addr ...]", "search for symbol references "
-	    "in all known functions", cmd_findsym, NULL },
-#endif
 	{ "formats", NULL, "list format specifiers", cmd_formats },
 	{ "grep", "?expr", "print dot if expression is true", cmd_grep },
 	{ "head", "-num|-n num", "limit number of elements in pipe", cmd_head,

@@ -42,14 +42,7 @@ static const int
 static const long double zero = 0.0L, one = 1.0L;
 /* INDENT ON */
 
-#if defined(__sparc)
-#define	__H0(x)	((int *) &x)[0]
-#define	__H1(x)	((int *) &x)[1]
-#define	__H2(x)	((int *) &x)[2]
-#define	__H3(x)	((int *) &x)[3]
-#else
 #error Unsupported architecture
-#endif
 
 /*
  * On entrance: *quo is initialized to 0, x finite and y non-zero & ordered

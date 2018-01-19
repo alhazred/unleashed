@@ -116,9 +116,6 @@ struct rd_ops {
  * Flag to disable the use of real ramdisks (in the OBP - on Sparc) when
  * the associated memory is no longer available - set in the bootops section.
  */
-#ifdef __sparc
-extern int bootops_obp_ramdisk_disabled;
-#endif /* __sparc */
 
 /*
  * An opaque handle where information about our set of ramdisk devices lives.
@@ -947,10 +944,6 @@ rd_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		} else {
 			const struct rd_ops *ops;
 
-#ifdef __sparc
-			if (bootops_obp_ramdisk_disabled)
-				goto attach_failed;
-#endif /* __sparc */
 
 			RD_STRIP_PREFIX(name, ddi_node_name(dip));
 
@@ -1228,13 +1221,7 @@ rd_strategy(struct buf *bp)
 	rsp = ddi_get_soft_state(rd_statep, getminor(bp->b_edev));
 	offset = bp->b_blkno * DEV_BSIZE;
 
-#ifdef __sparc
-	if (rsp == NULL ||
-	    (bootops_obp_ramdisk_disabled &&
-	    (rsp->rd_dip != rd_dip || rd_dip == NULL))) { /* OBP ramdisk */
-#else /* __sparc */
 	if (rsp == NULL) {
-#endif /* __sparc */
 		bp->b_error = ENXIO;
 		bp->b_flags |= B_ERROR;
 	} else if (offset >= rsp->rd_size) {

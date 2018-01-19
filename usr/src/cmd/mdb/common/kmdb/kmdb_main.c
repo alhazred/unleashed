@@ -64,11 +64,7 @@
 #include <mdb/mdb_set.h>
 #include <mdb/mdb.h>
 
-#ifdef __sparc
-#define	KMDB_STACK_SIZE	(384 * 1024)
-#else
 #define	KMDB_STACK_SIZE (192 * 1024)
-#endif
 
 caddr_t kmdb_main_stack;
 size_t kmdb_main_stack_size;

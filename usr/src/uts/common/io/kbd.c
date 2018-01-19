@@ -1553,69 +1553,10 @@ kbdinput(register struct kbddata *kbdd, register unsigned key)
 
 	switch (k->k_state) {
 
-#if defined(__sparc)
-	normalstate:
-		k->k_state = NORMAL;
-		/* FALLTHRU */
-#endif
 	case NORMAL:
-#if defined(__sparc)
-		if (k->k_curkeyboard) {
-			if (key == k->k_curkeyboard->k_abort1) {
-				k->k_state = ABORT1;
-				break;
-			}
-			if ((key == k->k_curkeyboard->k_newabort1) ||
-			    (key == k->k_curkeyboard->k_newabort1a)) {
-				k->k_state = NEWABORT1;
-				kbdd->shiftkey = key;
-			}
-		}
-#endif
 		kbduse(kbdd, key);
 		break;
 
-#if defined(__sparc)
-	case ABORT1:
-		if (k->k_curkeyboard) {
-			/*
-			 * Only recognize this as an abort sequence if
-			 * the "hardware" console is set to be this device.
-			 */
-			if (key == k->k_curkeyboard->k_abort2 &&
-			    rconsvp == wsconsvp) {
-				DELAY(100000);
-				abort_sequence_enter(NULL);
-				k->k_state = NORMAL;
-				kbduse(kbdd, IDLEKEY);	/* fake */
-				return;
-			} else {
-				kbduse(kbdd, k->k_curkeyboard->k_abort1);
-				goto normalstate;
-			}
-		}
-		break;
-	case NEWABORT1:
-		if (k->k_curkeyboard) {
-			/*
-			 * Only recognize this as an abort sequence if
-			 * the "hardware" console is set to be this device.
-			 */
-			if (key == k->k_curkeyboard->k_newabort2 &&
-			    rconsvp == wsconsvp) {
-				DELAY(100000);
-				abort_sequence_enter(NULL);
-				k->k_state = NORMAL;
-				kbdd->shiftkey |= RELEASED;
-				kbduse(kbdd, kbdd->shiftkey);
-				kbduse(kbdd, IDLEKEY);	/* fake */
-				return;
-			} else {
-				goto normalstate;
-			}
-		}
-		break;
-#endif
 
 	case COMPOSE1:
 	case COMPOSE2:

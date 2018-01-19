@@ -52,9 +52,6 @@
 #include <sys/utsname.h>
 #include <sys/zone.h>
 
-#ifdef __sparc
-#include <sys/membar.h>
-#endif
 
 /*
  * Routine which sets a user error; placed in
@@ -397,9 +394,6 @@ void
 no_trap(void)
 {
 	if (curthread->t_ontrap != NULL) {
-#ifdef __sparc
-		membar_sync(); /* deferred error barrier (see sparcv9_subr.s) */
-#endif
 		curthread->t_ontrap = curthread->t_ontrap->ot_prev;
 	}
 }

@@ -217,11 +217,6 @@ Pfini_core(struct ps_prochandle *P, void *data)
 
 		for (i = 0; i < core->core_nlwp; i++, lwp = nlwp) {
 			nlwp = list_next(lwp);
-#ifdef __sparc
-			free(lwp->lwp_gwins);
-			free(lwp->lwp_xregs);
-			free(lwp->lwp_asrs);
-#endif
 			free(lwp);
 		}
 
@@ -1040,93 +1035,6 @@ note_auxv(struct ps_prochandle *P, size_t nbytes)
 	return (0);
 }
 
-#ifdef __sparc
-static int
-note_xreg(struct ps_prochandle *P, size_t nbytes)
-{
-	core_info_t *core = P->data;
-	lwp_info_t *lwp = core->core_lwp;
-	size_t xbytes = sizeof (prxregset_t);
-	prxregset_t *xregs;
-
-	if (lwp == NULL || lwp->lwp_xregs != NULL || nbytes < xbytes)
-		return (0);	/* No lwp yet, already seen, or bad size */
-
-	if ((xregs = malloc(xbytes)) == NULL)
-		return (-1);
-
-	if (read(P->asfd, xregs, xbytes) != xbytes) {
-		dprintf("Pgrab_core: failed to read NT_PRXREG\n");
-		free(xregs);
-		return (-1);
-	}
-
-	lwp->lwp_xregs = xregs;
-	return (0);
-}
-
-static int
-note_gwindows(struct ps_prochandle *P, size_t nbytes)
-{
-	core_info_t *core = P->data;
-	lwp_info_t *lwp = core->core_lwp;
-
-	if (lwp == NULL || lwp->lwp_gwins != NULL || nbytes == 0)
-		return (0);	/* No lwp yet or already seen or no data */
-
-	if ((lwp->lwp_gwins = malloc(sizeof (gwindows_t))) == NULL)
-		return (-1);
-
-	/*
-	 * Since the amount of gwindows data varies with how many windows were
-	 * actually saved, we just read up to the minimum of the note size
-	 * and the size of the gwindows_t type.  It doesn't matter if the read
-	 * fails since we have to zero out gwindows first anyway.
-	 */
-#ifdef _LP64
-	if (core->core_dmodel == PR_MODEL_ILP32) {
-		gwindows32_t g32;
-
-		(void) memset(&g32, 0, sizeof (g32));
-		(void) read(P->asfd, &g32, MIN(nbytes, sizeof (g32)));
-		gwindows_32_to_n(&g32, lwp->lwp_gwins);
-
-	} else {
-#endif
-		(void) memset(lwp->lwp_gwins, 0, sizeof (gwindows_t));
-		(void) read(P->asfd, lwp->lwp_gwins,
-		    MIN(nbytes, sizeof (gwindows_t)));
-#ifdef _LP64
-	}
-#endif
-	return (0);
-}
-
-#ifdef __sparcv9
-static int
-note_asrs(struct ps_prochandle *P, size_t nbytes)
-{
-	core_info_t *core = P->data;
-	lwp_info_t *lwp = core->core_lwp;
-	int64_t *asrs;
-
-	if (lwp == NULL || lwp->lwp_asrs != NULL || nbytes < sizeof (asrset_t))
-		return (0);	/* No lwp yet, already seen, or bad size */
-
-	if ((asrs = malloc(sizeof (asrset_t))) == NULL)
-		return (-1);
-
-	if (read(P->asfd, asrs, sizeof (asrset_t)) != sizeof (asrset_t)) {
-		dprintf("Pgrab_core: failed to read NT_ASRS\n");
-		free(asrs);
-		return (-1);
-	}
-
-	lwp->lwp_asrs = asrs;
-	return (0);
-}
-#endif	/* __sparcv9 */
-#endif	/* __sparc */
 
 static int
 note_spymaster(struct ps_prochandle *P, size_t nbytes)
@@ -1185,24 +1093,11 @@ static int (*nhdlrs[])(struct ps_prochandle *, size_t) = {
 #else
 	note_notsup,		/*  3	NT_PRPSINFO (old)	*/
 #endif
-#ifdef __sparc
-	note_xreg,		/*  4	NT_PRXREG		*/
-#else
 	note_notsup,		/*  4	NT_PRXREG		*/
-#endif
 	note_platform,		/*  5	NT_PLATFORM		*/
 	note_auxv,		/*  6	NT_AUXV			*/
-#ifdef __sparc
-	note_gwindows,		/*  7	NT_GWINDOWS		*/
-#ifdef __sparcv9
-	note_asrs,		/*  8	NT_ASRS			*/
-#else
-	note_notsup,		/*  8	NT_ASRS			*/
-#endif
-#else
 	note_notsup,		/*  7	NT_GWINDOWS		*/
 	note_notsup,		/*  8	NT_ASRS			*/
-#endif
 #ifdef __x86
 	note_ldt,		/*  9	NT_LDT			*/
 #else

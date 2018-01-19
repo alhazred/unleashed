@@ -57,20 +57,8 @@ sigaction(int sig, struct sigaction *actp, struct sigaction *oactp)
 	 * act and oact might be the same address, so copyin act first.
 	 */
 	if (actp) {
-#if defined(__sparc)
-		void (*handler)();
-#endif
 		if (copyin(actp, &act, sizeof (act)))
 			return (set_errno(EFAULT));
-#if defined(__sparc)
-		/*
-		 * Check alignment of handler
-		 */
-		handler = act.sa_handler;
-		if (handler != SIG_IGN && handler != SIG_DFL &&
-		    ((uintptr_t)handler & 0x3) != 0)
-			return (set_errno(EINVAL));
-#endif
 	}
 
 	p = curproc;

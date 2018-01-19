@@ -1599,10 +1599,6 @@ kcage_invalidate_page(page_t *pp, pgcnt_t *nfreedp)
 {
 	int result;
 
-#if defined(__sparc)
-	VERIFY(pp->p_object != &promvp.v_object);
-	ASSERT(pp->p_vnode != &promvp);
-#endif /* __sparc */
 	ASSERT(!PP_ISFREE(pp));
 	ASSERT(PAGE_EXCL(pp));
 

@@ -3969,7 +3969,6 @@ outofbufs:
 }
 
 
-#if !defined(__sparc)
 int
 movtuc(size_t size, unsigned char *from, unsigned char *origto,
     unsigned char *table)
@@ -3983,7 +3982,6 @@ movtuc(size_t size, unsigned char *from, unsigned char *origto,
 	}
 	return (to - origto);
 }
-#endif
 
 static void
 ldterm_flush_output(uchar_t c, queue_t *q, ldtermstd_state_t *tp)

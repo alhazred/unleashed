@@ -634,18 +634,6 @@ _thrp_create(void *stk, size_t stksize, void *(*func)(void *), void *arg,
 	/* debugger support */
 	ulwp->ul_usropts = flags;
 
-#ifdef __sparc
-	/*
-	 * We cache several instructions in the thread structure for use
-	 * by the fasttrap DTrace provider. When changing this, read the
-	 * comment in fasttrap.h for the all the other places that must
-	 * be changed.
-	 */
-	ulwp->ul_dsave = 0x9de04000;	/* save %g1, %g0, %sp */
-	ulwp->ul_drestore = 0x81e80000;	/* restore %g0, %g0, %g0 */
-	ulwp->ul_dftret = 0x91d0203a;	/* ta 0x3a */
-	ulwp->ul_dreturn = 0x81ca0000;	/* return %o0 */
-#endif
 
 	ulwp->ul_startpc = func;
 	ulwp->ul_startarg = arg;
@@ -1325,18 +1313,6 @@ libc_init(void)
 	    (self->ul_sigmask.__sigbits[2] ^ uc.uc_sigmask.__sigbits[2]) |
 	    (self->ul_sigmask.__sigbits[3] ^ uc.uc_sigmask.__sigbits[3]));
 
-#ifdef __sparc
-	/*
-	 * We cache several instructions in the thread structure for use
-	 * by the fasttrap DTrace provider. When changing this, read the
-	 * comment in fasttrap.h for the all the other places that must
-	 * be changed.
-	 */
-	self->ul_dsave = 0x9de04000;	/* save %g1, %g0, %sp */
-	self->ul_drestore = 0x81e80000;	/* restore %g0, %g0, %g0 */
-	self->ul_dftret = 0x91d0203a;	/* ta 0x3a */
-	self->ul_dreturn = 0x81ca0000;	/* return %o0 */
-#endif
 
 	self->ul_stktop = (uintptr_t)uc.uc_stack.ss_sp + uc.uc_stack.ss_size;
 	(void) getrlimit(RLIMIT_STACK, &rl);

@@ -422,11 +422,7 @@ static struct keyboard kbtrans_usb_keyindex = {
 	0x0000,		/* Shift bits which stay on with idle keyboard */
 	0x0000,		/* Bucky bits which stay on with idle keyboard */
 	120,
-#if defined(__sparc)
-	0,		/* no alternate abort key F1 on sparc */
-#else
 	58,		/* alternate abort key F1 */
-#endif
 	4,
 	CAPSMASK|NUMLOCKMASK,	/* Shift bits which toggle on down event */
 	NULL,		/* Exception table */

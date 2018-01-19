@@ -60,24 +60,6 @@ kdi_dvec_handle_fault(greg_t trapno, greg_t pc, greg_t sp, int cpuid)
 }
 #endif
 
-#if defined(__sparc)
-/*
- * Called on the CPU being initialized
- */
-void
-kdi_dvec_cpu_init(struct cpu *cp)
-{
-	kdi_dvec->dv_kctl_cpu_init();
-	kdi_dvec->dv_cpu_init(cp);
-}
-
-void
-kdi_dvec_cpr_restart(void)
-{
-	kdi_dvec->dv_kctl_cpu_init();
-	kdi_dvec->dv_cpr_restart();
-}
-#endif	/* __sparc */
 
 void
 kdi_dvec_modavail(void)

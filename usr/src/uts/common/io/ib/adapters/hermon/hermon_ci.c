@@ -2087,13 +2087,6 @@ hermon_map_mem_area_fmr(ibc_hca_hdl_t hca, ibt_va_attr_t *va_attrs,
 	if (ma_hdl == NULL) {
 		return (IBT_INSUFF_RESOURCE);
 	}
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-
-	if (hermon_kernel_data_ro == HERMON_RO_ENABLED)
-		dma_attr.dma_attr_flags |= DDI_DMA_RELAXED_ORDERING;
-#endif
 
 	_NOTE(NOW_INVISIBLE_TO_OTHER_THREADS(*ma_hdl))
 	status = ddi_dma_alloc_handle(state->hs_dip, &dma_attr,
@@ -2218,13 +2211,6 @@ hermon_ci_map_mem_area(ibc_hca_hdl_t hca, ibt_va_attr_t *va_attrs,
 	if (!(state->hs_ibtfinfo.hca_attr->hca_flags2 & IBT_HCA2_MEM_MGT_EXT))
 		return (IBT_NOT_SUPPORTED);
 	hermon_dma_attr_init(state, &dma_attr);
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-
-	if (hermon_kernel_data_ro == HERMON_RO_ENABLED)
-		dma_attr.dma_attr_flags |= DDI_DMA_RELAXED_ORDERING;
-#endif
 	if (va_attrs->va_flags & IBT_VA_NOSLEEP) {
 		kmflag = KM_NOSLEEP;
 		callback = DDI_DMA_DONTWAIT;
@@ -2448,13 +2434,6 @@ hermon_ci_map_mem_iov(ibc_hca_hdl_t hca, ibt_iov_attr_t *iov_attr,
 
 	state = (hermon_state_t *)hca;
 	hermon_dma_attr_init(state, &dma_attr);
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-
-	if (hermon_kernel_data_ro == HERMON_RO_ENABLED)
-		dma_attr.dma_attr_flags |= DDI_DMA_RELAXED_ORDERING;
-#endif
 
 	nds = 0;
 	max_nds = iov_attr->iov_wr_nds;

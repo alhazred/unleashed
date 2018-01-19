@@ -207,13 +207,6 @@ cfork(int isvfork, int isfork1, int flags)
 		goto forkerr;
 	}
 
-#if defined(__sparc)
-	/*
-	 * Ensure that the user stack is fully constructed
-	 * before creating the child process structure.
-	 */
-	(void) flush_user_windows_to_stack(NULL);
-#endif
 
 	mutex_enter(&p->p_lock);
 	/*
@@ -476,9 +469,6 @@ cfork(int isvfork, int isfork1, int flags)
 	if (p->p_pctx)
 		forkpctx(p, cp);
 
-#ifdef __sparc
-	utrap_dup(p, cp);
-#endif
 	/*
 	 * If the child process has been marked to stop on exit
 	 * from this fork, arrange for all other lwps to stop in

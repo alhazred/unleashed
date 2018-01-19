@@ -511,11 +511,6 @@ sfxge_intr_init(sfxge_t *sp)
 
 	ASSERT3U(sip->si_state, ==, SFXGE_INTR_UNINITIALIZED);
 
-#ifdef __sparc
-	/* PSARC 2007/453 */
-	(void) ddi_prop_create(DDI_DEV_T_NONE, dip, DDI_PROP_CANSLEEP,
-	    "#msix-request", NULL, 0);
-#endif
 
 	/* Get the map of supported interrupt types */
 	err = ddi_intr_get_supported_types(dip, &types);

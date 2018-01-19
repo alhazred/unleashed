@@ -106,13 +106,8 @@ __stack_chk_fail(void)
 
 static void salsa_hash(unsigned int *);
 
-#ifdef __sparc
-extern uint64_t ultra_gettick(void);
-#define	SSP_GET_TICK ultra_gettick
-#else
 extern hrtime_t tsc_read(void);
 #define	SSP_GET_TICK tsc_read
-#endif /* __sparc */
 
 /* called from os/startup.c */
 void

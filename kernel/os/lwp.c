@@ -869,12 +869,6 @@ lwp_exit(void)
 
 	mutex_exit(&p->p_lock);
 
-#if defined(__sparc)
-	/*
-	 * Ensure that the user stack is fully abandoned..
-	 */
-	trash_user_windows();
-#endif
 
 	tsd_exit();			/* free thread specific data */
 
@@ -1810,10 +1804,6 @@ forklwp(klwp_t *lwp, proc_t *cp, id_t lwpid)
 	ASSERT(p == curproc);
 	ASSERT(t == curthread || (SUSPENDED(t) && lwp->lwp_asleep == 0));
 
-#if defined(__sparc)
-	if (t == curthread)
-		(void) flush_user_windows_to_stack(NULL);
-#endif
 
 	if (t == curthread)
 		/* copy args out of registers first */
@@ -1850,9 +1840,6 @@ forklwp(klwp_t *lwp, proc_t *cp, id_t lwpid)
 	/* fix up child's lwp */
 
 	clwp->lwp_pcb.pcb_flags = 0;
-#if defined(__sparc)
-	clwp->lwp_pcb.pcb_step = STEP_NONE;
-#endif
 	clwp->lwp_cursig = 0;
 	clwp->lwp_extsig = 0;
 	clwp->lwp_curinfo = NULL;

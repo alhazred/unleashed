@@ -191,10 +191,6 @@ uint32_t hermon_qp_ackreq_freq		= HERMON_QP_ACKREQ_FREQ;
 
 static void hermon_cfg_wqe_sizes(hermon_state_t *state,
     hermon_cfg_profile_t *cp);
-#ifdef __sparc
-static void hermon_check_iommu_bypass(hermon_state_t *state,
-    hermon_cfg_profile_t *cp);
-#endif
 
 /*
  * hermon_cfg_profile_init_phase1()
@@ -246,15 +242,7 @@ hermon_cfg_profile_init_phase1(hermon_state_t *state)
 	 * Set IOMMU bypass or not.  Ensure consistency of flags with
 	 * architecture type.
 	 */
-#ifdef __sparc
-	if (hermon_iommu_bypass == 1) {
-		hermon_check_iommu_bypass(state, cp);
-	} else {
-		cp->cp_iommu_bypass = HERMON_BINDMEM_NORMAL;
-	}
-#else
 	cp->cp_iommu_bypass = HERMON_BINDMEM_NORMAL;
-#endif
 
 	/* Attach the configuration profile to Hermon softstate */
 	state->hs_cfg_profile = cp;
@@ -460,75 +448,3 @@ hermon_cfg_wqe_sizes(hermon_state_t *state, hermon_cfg_profile_t *cp)
 	cp->cp_srq_max_sgl		= hermon_srq_max_sgl;
 }
 
-#ifdef __sparc
-/*
- * hermon_check_iommu_bypass()
- *    Context: Only called from attach() path context
- *    XXX This is a DMA allocation routine outside the normal
- *	  path. FMA hardening will not like this.
- */
-static void
-hermon_check_iommu_bypass(hermon_state_t *state, hermon_cfg_profile_t *cp)
-{
-	ddi_dma_handle_t	dmahdl;
-	ddi_dma_attr_t		dma_attr;
-	int			status;
-	ddi_acc_handle_t	acc_hdl;
-	caddr_t			kaddr;
-	size_t			actual_len;
-	ddi_dma_cookie_t	cookie;
-	uint_t			cookiecnt;
-
-	hermon_dma_attr_init(state, &dma_attr);
-
-	/* Try mapping for IOMMU bypass (Force Physical) */
-	dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL |
-	    DDI_DMA_RELAXED_ORDERING;
-
-	/*
-	 * Call ddi_dma_alloc_handle().  If this returns DDI_DMA_BADATTR then
-	 * it is not possible to use IOMMU bypass with our PCI bridge parent.
-	 * Since the function we are in can only be called if iommu bypass was
-	 * requested in the config profile, we configure for bypass if the
-	 * ddi_dma_alloc_handle() was successful.  Otherwise, we configure
-	 * for non-bypass (ie: normal) mapping.
-	 */
-	status = ddi_dma_alloc_handle(state->hs_dip, &dma_attr,
-	    DDI_DMA_SLEEP, NULL, &dmahdl);
-	if (status == DDI_DMA_BADATTR) {
-		cp->cp_iommu_bypass = HERMON_BINDMEM_NORMAL;
-		return;
-	} else if (status != DDI_SUCCESS) {	/* failed somehow */
-		hermon_kernel_data_ro = HERMON_RO_DISABLED;
-		hermon_user_data_ro = HERMON_RO_DISABLED;
-		cp->cp_iommu_bypass = HERMON_BINDMEM_BYPASS;
-		return;
-	} else {
-		cp->cp_iommu_bypass = HERMON_BINDMEM_BYPASS;
-	}
-
-	status = ddi_dma_mem_alloc(dmahdl, 256,
-	    &state->hs_reg_accattr, DDI_DMA_CONSISTENT,
-	    DDI_DMA_SLEEP, NULL, (caddr_t *)&kaddr, &actual_len, &acc_hdl);
-
-	if (status != DDI_SUCCESS) {		/* failed somehow */
-		hermon_kernel_data_ro = HERMON_RO_DISABLED;
-		hermon_user_data_ro = HERMON_RO_DISABLED;
-		ddi_dma_free_handle(&dmahdl);
-		return;
-	}
-
-	status = ddi_dma_addr_bind_handle(dmahdl, NULL, kaddr, actual_len,
-	    DDI_DMA_RDWR, DDI_DMA_SLEEP, NULL, &cookie, &cookiecnt);
-
-	if (status == DDI_DMA_MAPPED) {
-		(void) ddi_dma_unbind_handle(dmahdl);
-	} else {
-		hermon_kernel_data_ro = HERMON_RO_DISABLED;
-		hermon_user_data_ro = HERMON_RO_DISABLED;
-	}
-
-	ddi_dma_mem_free(&acc_hdl);
-	ddi_dma_free_handle(&dmahdl);
-}
-#endif

@@ -4187,31 +4187,6 @@ vfs_rele(vfs_t *vfsp)
 	}
 }
 
-#ifdef __sparc
-
-/*
- * Part of the implementation of booting off a mirrored root
- * involves a change of dev_t for the root device.  To
- * accomplish this, first remove the existing hash table
- * entry for the root device, convert to the new dev_t,
- * then re-insert in the hash table at the head of the list.
- */
-void
-vfs_root_redev(vfs_t *vfsp, dev_t ndev, int fstype)
-{
-	vfs_list_lock();
-
-	vfs_hash_remove(vfsp);
-
-	vfsp->vfs_dev = ndev;
-	vfs_make_fsid(&vfsp->vfs_fsid, ndev, fstype);
-
-	vfs_hash_add(vfsp, 1);
-
-	vfs_list_unlock();
-}
-
-#else /* x86 NEWBOOT */
 
 #if defined(__x86)
 extern int hvmboot_rootconf();
@@ -4395,7 +4370,6 @@ getrootfs(char **fstypp, char **fsmodp)
 	*fstypp = rootfs.bo_fstype;
 	*fsmodp = "nfs";
 }
-#endif
 
 /*
  * VFS feature routines

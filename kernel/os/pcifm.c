@@ -56,9 +56,6 @@ pci_fm_err_t pci_bdg_err_tbl[] = {
 	PCI_DET_PERR,	PCI_STAT_PERROR,	NULL,		DDI_FM_UNKNOWN,
 	PCI_MDPE,	PCI_STAT_S_PERROR,	PCI_TARG_MDPE,	DDI_FM_UNKNOWN,
 	PCI_REC_SERR,	PCI_STAT_S_SYSERR,	NULL,		DDI_FM_UNKNOWN,
-#if defined(__sparc)
-	PCI_MA,		PCI_STAT_R_MAST_AB,	PCI_TARG_MA,	DDI_FM_UNKNOWN,
-#endif
 	PCI_REC_TA,	PCI_STAT_R_TARG_AB,	PCI_TARG_REC_TA, DDI_FM_UNKNOWN,
 	PCI_SIG_TA,	PCI_STAT_S_TARG_AB,	NULL,		DDI_FM_UNKNOWN,
 	NULL, 0, NULL, 0,
@@ -1306,20 +1303,6 @@ pci_check_regs(dev_info_t *dip, void *arg)
 static void
 pci_fix_ranges(dev_info_t *dip, pci_ranges_t *pci_ranges, int nrange)
 {
-#if defined(__sparc)
-	char *name = ddi_binding_name(dip);
-
-	if ((strcmp(name, "pci108e,8000") == 0) ||
-	    (strcmp(name, "pci108e,a000") == 0) ||
-	    (strcmp(name, "pci108e,a001") == 0)) {
-		int i;
-		for (i = 0; i < nrange; i++, pci_ranges++)
-			if ((pci_ranges->child_high & PCI_REG_ADDR_M) ==
-			    PCI_ADDR_CONFIG)
-				pci_ranges->parent_low |=
-				    pci_ranges->child_high;
-	}
-#endif
 }
 
 static int

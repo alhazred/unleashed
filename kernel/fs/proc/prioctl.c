@@ -256,11 +256,7 @@ prioctl(
 		break;
 	case PIOCSXREG:		/* set extra registers */
 	case PIOCGXREG:		/* get extra registers */
-#if defined(__sparc)
-		thingsize = sizeof (prxregset_t);
-#else
 		thingsize = 0;
-#endif
 		break;
 	case PIOCACTION:
 		thingsize = (nsig-1) * sizeof (struct sigaction);
@@ -292,11 +288,6 @@ prioctl(
 		break;
 #endif	/* __i386 || __amd64 */
 
-#if defined(__sparc)
-	case PIOCGWIN:
-		thingsize = sizeof (gwindows_t);
-		break;
-#endif	/* __sparc */
 
 	case PIOCOPENM:		/* open mapped object for reading */
 		if (cmaddr == NULL)
@@ -1304,24 +1295,6 @@ startover:
 	}
 #endif	/* __i386 || __amd64 */
 
-#if defined(__sparc)
-	case PIOCGWIN:		/* get gwindows_t (see sys/reg.h) */
-	{
-		gwindows_t *gwp = thing;
-
-		/* drop p->p_lock while touching the stack */
-		mutex_exit(&p->p_lock);
-		bzero(gwp, sizeof (*gwp));
-		prgetwindows(lwp, gwp);
-		mutex_enter(&p->p_lock);
-		prunlock(pnp);
-		if (copyout(gwp, cmaddr, sizeof (*gwp)))
-			error = EFAULT;
-		kmem_free(gwp, sizeof (gwindows_t));
-		thing = NULL;
-		break;
-	}
-#endif	/* __sparc */
 
 	default:
 		prunlock(pnp);

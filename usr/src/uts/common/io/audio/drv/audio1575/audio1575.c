@@ -1076,10 +1076,6 @@ audio1575_chip_init(audio1575_state_t *statep)
 	uint32_t		intrsr;
 	int 			i;
 	int			j;
-#ifdef	__sparc
-	uint8_t			clk_detect;
-	ddi_acc_handle_t	pcih;
-#endif
 	clock_t			ticks;
 
 	/*
@@ -1173,22 +1169,6 @@ audio1575_chip_init(audio1575_state_t *statep)
 		return (DDI_FAILURE);
 	}
 
-#ifdef	__sparc
-	/* Magic code from ULi to Turn on the AC_LINK clock */
-	pcih = statep->pcih;
-	pci_config_put8(pcih, M1575_PCIACD_REG, 0);
-	pci_config_put8(pcih, M1575_PCIACD_REG, 4);
-	pci_config_put8(pcih, M1575_PCIACD_REG, 0);
-	(void) pci_config_get8(pcih, M1575_PCIACD_REG);
-	pci_config_put8(pcih, M1575_PCIACD_REG, 2);
-	pci_config_put8(pcih, M1575_PCIACD_REG, 0);
-	clk_detect = pci_config_get8(pcih, M1575_PCIACD_REG);
-
-	if (clk_detect != 1) {
-		audio_dev_warn(statep->adev, "No AC97 Clock Detected");
-		return (DDI_FAILURE);
-	}
-#endif
 
 	/* Magic code from Uli to Init FIFO1 and FIFO2 */
 	PUT32(M1575_FIFOCR1_REG, 0x81818181);

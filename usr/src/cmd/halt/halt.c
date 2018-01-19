@@ -1409,11 +1409,6 @@ main(int argc, char *argv[])
 		return (EINVAL);
 	}
 
-#if defined(__sparc)
-	if (fast_reboot) {
-		fast_reboot = 2;	/* need to distinguish each case */
-	}
-#endif
 
 	/*
 	 * If fast reboot, do some sanity check on the argument

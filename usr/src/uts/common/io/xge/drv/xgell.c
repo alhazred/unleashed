@@ -54,11 +54,7 @@ static struct ddi_dma_attr tx_dma_attr = {
 	0x0ULL,				/* dma_attr_addr_lo */
 	0xFFFFFFFFFFFFFFFFULL,		/* dma_attr_addr_hi */
 	0xFFFFFFFFFFFFFFFFULL,		/* dma_attr_count_max */
-#if defined(__sparc)
-	0x2000,				/* dma_attr_align */
-#else
 	0x1000,				/* dma_attr_align */
-#endif
 	0xFC00FC,			/* dma_attr_burstsizes */
 	0x1,				/* dma_attr_minxfer */
 	0xFFFFFFFFFFFFFFFFULL,		/* dma_attr_maxxfer */
@@ -77,11 +73,7 @@ static struct ddi_dma_attr hal_dma_attr = {
 	0x0ULL,				/* dma_attr_addr_lo */
 	0xFFFFFFFFFFFFFFFFULL,		/* dma_attr_addr_hi */
 	0xFFFFFFFFFFFFFFFFULL,		/* dma_attr_count_max */
-#if defined(__sparc)
-	0x2000,				/* dma_attr_align */
-#else
 	0x1000,				/* dma_attr_align */
-#endif
 	0xFC00FC,			/* dma_attr_burstsizes */
 	0x1,				/* dma_attr_minxfer */
 	0xFFFFFFFFFFFFFFFFULL,		/* dma_attr_maxxfer */

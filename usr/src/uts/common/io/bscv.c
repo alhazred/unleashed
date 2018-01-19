@@ -192,19 +192,6 @@ static void bscv_setup_events(bscv_soft_state_t *);
 static void bscv_trace(bscv_soft_state_t *, char, const char *,
     const char *, ...) __GNU_UNUSED;
 
-#ifdef __sparc
-static void bscv_idi_init();
-static void bscv_idi_fini();
-static void bscv_idi_new_instance(dev_info_t *dip);
-static void bscv_idi_clear_err();
-void bscv_idi_set(struct bscv_idi_info info);
-static boolean_t bscv_idi_err();
-static boolean_t bscv_nodename_set(struct bscv_idi_info info);
-static boolean_t bscv_sig_set(struct bscv_idi_info info);
-static boolean_t bscv_wdog_pat(struct bscv_idi_info info);
-static boolean_t bscv_wdog_cfg(struct bscv_idi_info info);
-static void bscv_write_sig(bscv_soft_state_t *ssp, bscv_sig_t s);
-#endif /* __sparc */
 
 static void bscv_setup_watchdog(bscv_soft_state_t *ssp);
 static void bscv_write_wdog_cfg(bscv_soft_state_t *,
@@ -234,17 +221,6 @@ static int	watchdog_activated;
 static uint_t	bscv_watchdog_timeout_seconds;
 #endif /* __i386 || __amd64 */
 
-#ifdef __sparc
-struct bscv_idi_callout bscv_idi_callout_table[] = {
-	{BSCV_IDI_NODENAME,	&bscv_nodename_set	},
-	{BSCV_IDI_SIG,		&bscv_sig_set		},
-	{BSCV_IDI_WDOG_PAT,	&bscv_wdog_pat		},
-	{BSCV_IDI_WDOG_CFG,	&bscv_wdog_cfg		},
-	{BSCV_IDI_NULL,		NULL			}
-};
-
-static struct bscv_idi_callout_mgr bscv_idi_mgr;
-#endif /* __sparc */
 
 /*
  * Local Definitions
@@ -434,9 +410,6 @@ _init(void)
 		ddi_soft_state_fini(&bscv_statep);
 	}
 
-#ifdef __sparc
-	if (e == 0) bscv_idi_init();
-#endif /* __sparc */
 	return (e);
 }
 
@@ -470,9 +443,6 @@ _fini(void)
 		return (e);
 	}
 
-#ifdef __sparc
-	bscv_idi_fini();
-#endif /* __sparc */
 	ddi_soft_state_fini(&bscv_statep);
 
 	return (e);
@@ -519,72 +489,6 @@ bscv_getinfo(dev_info_t *dip, ddi_info_cmd_t cmd, void *arg, void **result)
 	return (error);
 }
 
-#ifdef __sparc
-void
-bscv_idi_init()
-{
-	bscv_idi_mgr.valid_inst = (uint32_t)~0;    /* No valid instances */
-	bscv_idi_mgr.tbl = bscv_idi_callout_table;
-	bscv_idi_mgr.errs = 0;
-
-	/*
-	 * Now that all fields are initialized, set the magic flag.  This is
-	 * a kind of integrity check for the data structure.
-	 */
-	bscv_idi_mgr.magic = BSCV_IDI_CALLOUT_MAGIC;
-}
-
-static void
-bscv_idi_clear_err()
-{
-	ASSERT(bscv_idi_mgr.magic == BSCV_IDI_CALLOUT_MAGIC);
-
-	bscv_idi_mgr.errs = 0;
-}
-
-/*
- * function	- bscv_idi_err
- * description	- error messaging service which throttles the number of error
- *		  messages to avoid overflowing storage
- * inputs	- none
- * returns	- boolean to indicate whether a message should be reported
- * side-effects	- updates the error number counter
- */
-static boolean_t
-bscv_idi_err()
-{
-	ASSERT(bscv_idi_mgr.magic == BSCV_IDI_CALLOUT_MAGIC);
-
-	bscv_idi_mgr.errs++;
-
-	if (bscv_idi_mgr.errs++ < BSCV_IDI_ERR_MSG_THRESHOLD)
-		return (B_TRUE);
-
-	return (B_FALSE);
-}
-
-void
-bscv_idi_new_instance(dev_info_t *dip)
-{
-	ASSERT(bscv_idi_mgr.magic == BSCV_IDI_CALLOUT_MAGIC);
-
-	/*
-	 * We don't care how many instances we have, or their value, so long
-	 * as we have at least one valid value.  This is so service routines
-	 * can get any required locks via a soft state pointer.
-	 */
-	if (bscv_idi_mgr.valid_inst == (uint32_t)~0) {
-		bscv_idi_mgr.valid_inst = ddi_get_instance(dip);
-	}
-}
-
-void
-bscv_idi_fini()
-{
-	bscv_idi_mgr.valid_inst = (uint32_t)~0;    /* No valid instances */
-	bscv_idi_mgr.tbl = NULL;
-}
-#endif /* __sparc */
 
 /*
  * function	- bscv_attach
@@ -674,14 +578,6 @@ bscv_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			return (DDI_FAILURE);
 		}
 
-#ifdef __sparc
-		/*
-		 * At this point the inter-driver-interface is made available.
-		 * The IDI uses the event thread service which
-		 * bscv_attach_common() sets up.
-		 */
-		bscv_idi_new_instance(dip);
-#endif /* __sparc */
 
 		bscv_exit(ssp);
 
@@ -5050,10 +4946,6 @@ bscv_attach_common(bscv_soft_state_t *ssp)
 	if (ssp->progress & BSCV_WDOG_CFG)
 		bscv_setup_watchdog(ssp);
 
-#ifdef __sparc
-	if (ssp->progress & BSCV_SIG_SENT)
-		bscv_write_sig(ssp, ssp->last_sig);
-#endif /* __sparc */
 
 	return (DDI_SUCCESS);
 }
@@ -5331,130 +5223,6 @@ static int bscv_probe_check(bscv_soft_state_t *ssp)
 	return ((ssp->prog_mode_only == B_FALSE) ? DDI_SUCCESS : DDI_FAILURE);
 }
 
-#ifdef __sparc
-/*
- * function	- bscv_idi_set
- * description	- bscv inter driver interface set function
- * inputs	- structure which defines type of service required and data
- * ouputs	- none
- *
- * This is the Entry Point function for the platmod driver. It works out which
- * X Bus channel ought to deliver the service requested.
- */
-void
-bscv_idi_set(struct bscv_idi_info info)
-{
-	struct bscv_idi_callout *tbl;
-	boolean_t retval;
-
-	ASSERT(bscv_idi_mgr.magic == BSCV_IDI_CALLOUT_MAGIC);
-
-	if (bscv_idi_mgr.tbl == NULL) {
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!bscv_idi_set : cannot find "
-			    "bscv_callout_table");
-		return;
-	} else if (bscv_idi_mgr.valid_inst == (uint32_t)~0) {
-		if (bscv_idi_err())
-			/*
-			 * This error message can appear in the context of
-			 * another driver, say platmod or todblade.  We want
-			 * to clearly indicate the culprit driver so put in
-			 * the driver name.
-			 */
-			cmn_err(CE_WARN, "!bscv_idi_set : no valid "
-			    "driver instance of "
-			    MYNAME);
-		return;
-	}
-
-	tbl = bscv_idi_mgr.tbl;
-
-	while (tbl->type != BSCV_IDI_NULL) {
-		if (tbl->type == info.type) {
-			/*
-			 * We service the request with a valid instance number
-			 * for the driver.
-			 */
-			retval = ((tbl->fn) (info));
-
-			/*
-			 * If the request was serviced, clear any accumulated
-			 * error counters so future warnings will be reported if
-			 * seen.
-			 */
-			if (retval == B_TRUE)
-				bscv_idi_clear_err();
-			return;
-		} else {
-			tbl++;
-		}
-	}
-
-	if (bscv_idi_err())
-		cmn_err(CE_WARN, "!bscv_idi_set : cannot match info.type %d",
-		    info.type);
-}
-
-/*
- * function     - bscv_nodename_set
- * description  - notify the event thread that a nodename change has occurred.
- * inputs       - data from client driver
- * outputs	- none.
- * side-effects - the event thread will schedule an update to the lom firmware.
- */
-/*ARGSUSED*/
-static boolean_t
-bscv_nodename_set(struct bscv_idi_info info)
-{
-	bscv_soft_state_t *ssp;
-
-	ssp = ddi_get_soft_state(bscv_statep, bscv_idi_mgr.valid_inst);
-
-	if (ssp == NULL) {
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!blade_nodename_set: cannot get ssp");
-		return (B_FALSE);
-	}
-
-	/* Get a lock on the SSP, notify our change, then exit */
-	mutex_enter(&ssp->task_mu);
-	ssp->nodename_change = B_TRUE;
-	cv_signal(&ssp->task_cv);
-	mutex_exit(&ssp->task_mu);
-
-	return (B_TRUE);
-}
-
-/*
- * function	- bscv_sig_set
- * description	- write a signature
- * inputs	- data from client driver
- * outputs	- none.
- */
-static boolean_t
-bscv_sig_set(struct bscv_idi_info info)
-{
-	bscv_soft_state_t *ssp;
-	bscv_sig_t sig;
-
-	ssp = ddi_get_soft_state(bscv_statep, bscv_idi_mgr.valid_inst);
-
-	if (ssp == NULL) {
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!blade_nodename_set: cannot get ssp");
-		return (B_FALSE);
-	}
-
-	/* Service the request */
-	bcopy(info.data, &sig, sizeof (sig));
-	bscv_enter(ssp);
-	bscv_write_sig(ssp, sig);
-	bscv_exit(ssp);
-
-	return (B_TRUE);
-}
-#endif /* __sparc */
 
 static void
 bscv_wdog_do_pat(bscv_soft_state_t *ssp)
@@ -5487,83 +5255,6 @@ bscv_wdog_do_pat(bscv_soft_state_t *ssp)
 	    pat);
 }
 
-#ifdef __sparc
-/*
- * function	- bscv_wdog_pat
- * description	- pat the watchdog
- * inputs	- data from client driver
- * outputs	- none.
- */
-/*ARGSUSED*/
-static boolean_t
-bscv_wdog_pat(struct bscv_idi_info info)
-{
-	/*
-	 * This function remembers if it has ever been called with the
-	 * configure option set.
-	 */
-	bscv_soft_state_t *ssp;
-
-	ssp = ddi_get_soft_state(bscv_statep, bscv_idi_mgr.valid_inst);
-
-	if (ssp == NULL) {
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!bscv_wdog_pat: cannot get ssp");
-		return (B_FALSE);
-	} else if (ssp->nchannels == 0) {
-		/* Didn't manage to map handles so ddi_{get,put}* broken */
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!bscv_wdog_pat: handle not mapped");
-		return (B_FALSE);
-	}
-
-	bscv_wdog_do_pat(ssp);
-	return (B_TRUE);
-}
-
-/*
- * function	- bscv_wdog_cfg
- * description	- configure the watchdog
- * inputs	- data from client driver
- * outputs	- none.
- */
-static boolean_t
-bscv_wdog_cfg(struct bscv_idi_info info)
-{
-	bscv_soft_state_t *ssp;
-
-	ssp = ddi_get_soft_state(bscv_statep, bscv_idi_mgr.valid_inst);
-
-	if (ssp == NULL) {
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!bscv_wdog_cfg: cannot get ssp");
-		return (B_FALSE);
-	} else if (ssp->nchannels == 0) {
-		/* Didn't manage to map handles so ddi_{get,put}* broken */
-		if (bscv_idi_err())
-			cmn_err(CE_WARN, "!bscv_wdog_cfg: handle not mapped");
-		return (B_FALSE);
-	}
-
-	if (sizeof (bscv_wdog_t) != info.size) {
-		BSCV_TRACE(ssp, 'W', "bscv_wdog_set", "data passed in is size"
-		    " %d instead of %d", info.size,
-		    sizeof (bscv_wdog_t));
-		return (B_FALSE);
-	}
-
-	BSCV_TRACE(ssp, 'W', "bscv_wdog_cfg", "enable_wdog %s, "
-	    "wdog_timeout_s %d, reset_system_on_timeout %s",
-	    ((bscv_wdog_t *)info.data)->enable_wdog ? "enabled" : "disabled",
-	    ((bscv_wdog_t *)info.data)->wdog_timeout_s,
-	    ((bscv_wdog_t *)info.data)->reset_system_on_timeout ? "yes" : "no");
-	bscv_write_wdog_cfg(ssp,
-	    ((bscv_wdog_t *)info.data)->wdog_timeout_s,
-	    ((bscv_wdog_t *)info.data)->enable_wdog,
-	    ((bscv_wdog_t *)info.data)->reset_system_on_timeout);
-	return (B_TRUE);
-}
-#endif /* __sparc */
 
 static void
 bscv_write_wdog_cfg(bscv_soft_state_t *ssp,
@@ -5620,9 +5311,6 @@ static void bscv_setup_watchdog(bscv_soft_state_t *ssp)
 {
 	uint8_t set = 0;
 	uint8_t clear = 0;
-#ifdef __sparc
-	extern int watchdog_activated;
-#endif /* __sparc */
 
 	ASSERT(bscv_held(ssp));
 
@@ -6157,55 +5845,6 @@ bscv_setup_events(bscv_soft_state_t *ssp)
 	    bits2set, bits2clear);
 }
 
-#ifdef __sparc
-/*
- * function	- bscv_write_sig
- * description	- write out a signature, taking care to deal with any strange
- *		    values for CPU ID
- * inputs	- soft state ptr, signature
- * outputs	- none
- */
-static void
-bscv_write_sig(bscv_soft_state_t *ssp, bscv_sig_t s)
-{
-	ASSERT(bscv_held(ssp));
-
-	/* Upload the signature */
-	bscv_put32(ssp, chan_cpusig,
-	    BSCVA(EBUS_CMD_SPACE_CPUSIG, EBUS_IDX11_CPU_SIG_MSB),
-	    s.sig_info.signature);
-
-	/*
-	 * We always write the CPU ID last because this tells the firmware
-	 * that the signature is fully uploaded and therefore to consume the
-	 * data.  This is required since the signature is > 1 byte in size
-	 * and we transmit data in single bytes.
-	 */
-	if (s.cpu == ~0) {
-		/* ~0 means the signature applies to any CPU. */
-		bscv_put8(ssp, chan_cpusig,
-		    BSCVA(EBUS_CMD_SPACE_CPUSIG, EBUS_IDX11_CPU_ID),
-		    EBUS_ANY_CPU_ID);
-	} else {
-		if (s.cpu > 255) {
-			/*
-			 * The CPU ID supplied is unexpectedly large.  Lets
-			 * just use the bottom bits, in case other high order
-			 * bits are being used for special meaning.
-			 */
-			cmn_err(CE_WARN, "CPU Signature ID 0x%x > 255", s.cpu);
-			s.cpu %= 256;
-			cmn_err(CE_CONT, "using ID 0x%x instead ", s.cpu);
-		}
-		bscv_put8(ssp, chan_cpusig,
-		    BSCVA(EBUS_CMD_SPACE_CPUSIG, EBUS_IDX11_CPU_ID),
-		    (uint8_t)s.cpu);
-	}
-
-	ssp->last_sig = s;
-	ssp->progress |= BSCV_SIG_SENT;
-}
-#endif /* __sparc */
 
 #if defined(__i386) || defined(__amd64)
 

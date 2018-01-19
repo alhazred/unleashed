@@ -1323,15 +1323,6 @@ calc_loadable(Ehdr *ehdrp, caddr_t phdrbase, int nphdrs, size_t *len,
 	size_t max_align = 0;
 	size_t min_align = PAGESIZE;	/* needed for vmem_xalloc */
 	STRUCT_HANDLE(myphdr, mph);
-#if defined(__sparc)
-	extern int vac_size;
-
-	/*
-	 * Want to prevent aliasing by making the start address at least be
-	 * aligned to vac_size.
-	 */
-	min_align = MAX(PAGESIZE, vac_size);
-#endif
 
 	model = get_udatamodel();
 	STRUCT_SET_HANDLE(mph, model, (struct myphdr *)phdrbase);

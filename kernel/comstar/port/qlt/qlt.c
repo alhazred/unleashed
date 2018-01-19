@@ -933,9 +933,7 @@ qlt_setup_interrupts(qlt_state_t *qlt)
 /*
  * x86 has a bug in the ddi_intr_block_enable/disable area (6562198).
  */
-#ifndef __sparc
 	if (qlt_enable_msi != 0) {
-#endif
 	if (ddi_intr_get_supported_types(qlt->dip, &itypes) != DDI_SUCCESS) {
 		itypes = DDI_INTR_TYPE_FIXED;
 	}
@@ -949,9 +947,7 @@ qlt_setup_interrupts(qlt_state_t *qlt)
 		if (qlt_setup_msi(qlt) == DDI_SUCCESS)
 			return (DDI_SUCCESS);
 	}
-#ifndef __sparc
 	}
-#endif
 	return (qlt_setup_fixed(qlt));
 }
 
@@ -988,13 +984,8 @@ qlt_populate_hba_fru_details(struct fct_local_port *port,
 		kmem_free(bufp, (uint_t)len);
 		bufp = NULL;
 	} else {
-#ifdef __sparc
-		(void) snprintf(port_attrs->option_rom_version,
-		    FCHBA_OPTION_ROM_VERSION_LEN, "No Fcode found");
-#else
 		(void) snprintf(port_attrs->option_rom_version,
 		    FCHBA_OPTION_ROM_VERSION_LEN, "N/A");
-#endif
 	}
 	port_attrs->vendor_specific_id = qlt->nvram->subsystem_vendor_id[0] |
 	    qlt->nvram->subsystem_vendor_id[1] << 8;

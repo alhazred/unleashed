@@ -30,9 +30,7 @@
 #include <sys/usb/hcd/uhci/uhcid.h>
 #include <sys/usb/hcd/uhci/uhcipolled.h>
 
-#ifndef __sparc
 extern void invalidate_cache();
-#endif
 /*
  * Internal Function Prototypes
  */
@@ -223,9 +221,7 @@ uhci_hcdi_polled_read(usb_console_info_impl_t *info, uint_t *num_characters)
 	}
 
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#ifndef __sparc
 	invalidate_cache();
-#endif
 
 	td = uhci_polledp->uhci_polled_td;
 
@@ -441,11 +437,7 @@ uhci_hcdi_polled_write(usb_console_info_impl_t *info, uchar_t *buf,
 
 	/* wait for xfer to finish */
 	while (GetTD_status(uhcip, td) & UHCI_TD_ACTIVE)
-#ifndef __sparc
 		invalidate_cache();
-#else
-		;
-#endif
 	*num_characters_written = GetTD_alen(uhcip, td) + 1;
 
 	/* Now, remove the endpoint from the lattice */

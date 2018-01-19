@@ -423,17 +423,6 @@ ehci_detach(dev_info_t		*dip,
 static int
 ehci_reset(dev_info_t *dip, ddi_reset_cmd_t cmd)
 {
-#if defined(__sparc)
-	/*
-	 * Don't reset the host controller on SPARC, for OBP needs Solaris
-	 * to continue to provide keyboard support after shutdown of SPARC,
-	 * or the keyboard connected to a USB 2.0 port will not work after
-	 * that. The incomplete reset problem on Toshiba Tecra laptop is
-	 * specific to Tecra laptop or BIOS, not present on SPARC. The SPARC
-	 * OBP guarantees good reset behavior during startup.
-	 */
-	return (DDI_SUCCESS);
-#else
 	ehci_state_t		*ehcip = ehci_obtain_state(dip);
 
 	mutex_enter(&ehcip->ehci_int_mutex);
@@ -469,7 +458,6 @@ ehci_reset(dev_info_t *dip, ddi_reset_cmd_t cmd)
 	mutex_exit(&ehcip->ehci_int_mutex);
 
 	return (DDI_SUCCESS);
-#endif
 }
 
 /*

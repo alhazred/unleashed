@@ -882,10 +882,6 @@ hermon_dma_alloc(hermon_state_t *state, hermon_dma_info_t *dma_info,
 	int			status;
 
 	hermon_dma_attr_init(state, &dma_attr);
-#ifdef	__sparc
-	if (state->hs_cfg_profile->cp_iommu_bypass == HERMON_BINDMEM_BYPASS)
-		dma_attr.dma_attr_flags = DDI_DMA_FORCE_PHYSICAL;
-#endif
 
 	/* Allocate a DMA handle */
 	status = ddi_dma_alloc_handle(state->hs_dip, &dma_attr, DDI_DMA_SLEEP,

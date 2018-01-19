@@ -3602,33 +3602,7 @@ hme_setup_mac_address(struct hme *hmep, dev_info_t *dip)
 		kmem_free(prop, prop_len);
 	}
 
-#ifdef	__sparc
-	/*
-	 * On sparc, we might be able to use the mac address from the
-	 * system.  However, on all other systems, we need to use the
-	 * address from the PROM.
-	 */
-	if (ddi_getlongprop(DDI_DEV_T_ANY, dip, 0, "local-mac-address?",
-	    (caddr_t)&prop, &prop_len) == DDI_PROP_SUCCESS) {
-		if ((strncmp("true", prop, prop_len) == 0) &&
-		    (hmep->hme_addrflags & HME_FACTADDR_PRESENT)) {
-			hmep->hme_addrflags |= HME_FACTADDR_USE;
-			ether_bcopy(&hmep->hme_factaddr, &hmep->hme_ouraddr);
-			kmem_free(prop, prop_len);
-			HME_FAULT_MSG1(hmep, SEVERITY_NONE, DISPLAY_MSG,
-			    "Using local MAC address");
-			return;
-		}
-		kmem_free(prop, prop_len);
-	}
-
-	/*
-	 * Get the system ethernet address.
-	 */
-	(void) localetheraddr(NULL, &hmep->hme_ouraddr);
-#else
 	ether_bcopy(&hmep->hme_factaddr, &hmep->hme_ouraddr);
-#endif
 }
 
 /* ARGSUSED */

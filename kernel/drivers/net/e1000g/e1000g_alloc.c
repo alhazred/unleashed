@@ -63,10 +63,6 @@ static int e1000g_dma_mem_alloc_82546(dma_buffer_t *buf,
 static boolean_t e1000g_cross_64k_bound(void *, uintptr_t);
 
 static void e1000g_free_dma_buffer(dma_buffer_t *);
-#ifdef __sparc
-static int e1000g_alloc_dvma_buffer(struct e1000g *, dma_buffer_t *, size_t);
-static void e1000g_free_dvma_buffer(dma_buffer_t *);
-#endif
 static int e1000g_alloc_descriptors(struct e1000g *Adapter);
 static void e1000g_free_descriptors(struct e1000g *Adapter);
 static int e1000g_alloc_packets(struct e1000g *Adapter);
@@ -82,19 +78,11 @@ static ddi_device_acc_attr_t e1000g_desc_acc_attr = {
 };
 
 /* DMA access attributes for DMA buffers */
-#ifdef __sparc
-static ddi_device_acc_attr_t e1000g_buf_acc_attr = {
-	DDI_DEVICE_ATTR_V0,
-	DDI_STRUCTURE_BE_ACC,
-	DDI_STRICTORDER_ACC,
-};
-#else
 static ddi_device_acc_attr_t e1000g_buf_acc_attr = {
 	DDI_DEVICE_ATTR_V0,
 	DDI_STRUCTURE_LE_ACC,
 	DDI_STRICTORDER_ACC,
 };
-#endif
 
 /* DMA attributes for tx mblk buffers */
 static ddi_dma_attr_t e1000g_tx_dma_attr = {
@@ -144,22 +132,8 @@ static ddi_dma_attr_t e1000g_desc_dma_attr = {
 	DDI_DMA_FLAGERR,	/* dma_attr_flags */
 };
 
-#ifdef __sparc
-static ddi_dma_lim_t e1000g_dma_limits = {
-	(uint_t)0,		/* dlim_addr_lo */
-	(uint_t)0xffffffff,	/* dlim_addr_hi */
-	(uint_t)0xffffffff,	/* dlim_cntr_max */
-	(uint_t)0xfc00fc,	/* dlim_burstsizes for 32 and 64 bit xfers */
-	0x1,			/* dlim_minxfer */
-	1024			/* dlim_speed */
-};
-#endif
 
-#ifdef __sparc
-static dma_type_t e1000g_dma_type = USE_DVMA;
-#else
 static dma_type_t e1000g_dma_type = USE_DMA;
-#endif
 
 extern krwlock_t e1000g_dma_type_lock;
 
@@ -773,79 +747,6 @@ e1000g_free_packets(struct e1000g *Adapter)
 	e1000g_free_rx_packets(rx_data, B_FALSE);
 }
 
-#ifdef __sparc
-static int
-e1000g_alloc_dvma_buffer(struct e1000g *Adapter,
-    dma_buffer_t *buf, size_t size)
-{
-	int mystat;
-	dev_info_t *devinfo;
-	ddi_dma_cookie_t cookie;
-
-	if (e1000g_force_detach)
-		devinfo = Adapter->priv_dip;
-	else
-		devinfo = Adapter->dip;
-
-	mystat = dvma_reserve(devinfo,
-	    &e1000g_dma_limits,
-	    Adapter->dvma_page_num,
-	    &buf->dma_handle);
-
-	if (mystat != DDI_SUCCESS) {
-		buf->dma_handle = NULL;
-		E1000G_DEBUGLOG_1(Adapter, E1000G_WARN_LEVEL,
-		    "Could not allocate dvma buffer handle: %d\n", mystat);
-		return (DDI_FAILURE);
-	}
-
-	buf->address = kmem_alloc(size, KM_NOSLEEP);
-
-	if (buf->address == NULL) {
-		if (buf->dma_handle != NULL) {
-			dvma_release(buf->dma_handle);
-			buf->dma_handle = NULL;
-		}
-		E1000G_DEBUGLOG_0(Adapter, E1000G_WARN_LEVEL,
-		    "Could not allocate dvma buffer memory\n");
-		return (DDI_FAILURE);
-	}
-
-	dvma_kaddr_load(buf->dma_handle,
-	    buf->address, size, 0, &cookie);
-
-	buf->dma_address = cookie.dmac_laddress;
-	buf->size = size;
-	buf->len = 0;
-
-	return (DDI_SUCCESS);
-}
-
-static void
-e1000g_free_dvma_buffer(dma_buffer_t *buf)
-{
-	if (buf->dma_handle != NULL) {
-		dvma_unload(buf->dma_handle, 0, -1);
-	} else {
-		return;
-	}
-
-	buf->dma_address = NULL;
-
-	if (buf->address != NULL) {
-		kmem_free(buf->address, buf->size);
-		buf->address = NULL;
-	}
-
-	if (buf->dma_handle != NULL) {
-		dvma_release(buf->dma_handle);
-		buf->dma_handle = NULL;
-	}
-
-	buf->size = 0;
-	buf->len = 0;
-}
-#endif
 
 static int
 e1000g_alloc_dma_buffer(struct e1000g *Adapter,
@@ -1154,14 +1055,6 @@ e1000g_alloc_tx_packets(e1000g_tx_ring_t *tx_ring)
 		 * than the tx_bcopy_thresh.
 		 */
 		switch (e1000g_dma_type) {
-#ifdef __sparc
-		case USE_DVMA:
-			mystat = dvma_reserve(devinfo,
-			    &e1000g_dma_limits,
-			    Adapter->dvma_page_num,
-			    &packet->tx_dma_handle);
-			break;
-#endif
 		case USE_DMA:
 			mystat = ddi_dma_alloc_handle(devinfo,
 			    &e1000g_tx_dma_attr,
@@ -1189,12 +1082,6 @@ e1000g_alloc_tx_packets(e1000g_tx_ring_t *tx_ring)
 		tx_buf = packet->tx_buf;
 
 		switch (e1000g_dma_type) {
-#ifdef __sparc
-		case USE_DVMA:
-			mystat = e1000g_alloc_dvma_buffer(Adapter,
-			    tx_buf, Adapter->tx_buffer_size);
-			break;
-#endif
 		case USE_DMA:
 			mystat = e1000g_alloc_dma_buffer(Adapter,
 			    tx_buf, Adapter->tx_buffer_size, &dma_attr);
@@ -1206,11 +1093,6 @@ e1000g_alloc_tx_packets(e1000g_tx_ring_t *tx_ring)
 		if (mystat != DDI_SUCCESS) {
 			ASSERT(packet->tx_dma_handle != NULL);
 			switch (e1000g_dma_type) {
-#ifdef __sparc
-			case USE_DVMA:
-				dvma_release(packet->tx_dma_handle);
-				break;
-#endif
 			case USE_DMA:
 				ddi_dma_free_handle(&packet->tx_dma_handle);
 				break;
@@ -1335,12 +1217,6 @@ e1000g_alloc_rx_sw_packet(e1000g_rx_data_t *rx_data, ddi_dma_attr_t *p_dma_attr)
 	rx_buf = packet->rx_buf;
 
 	switch (e1000g_dma_type) {
-#ifdef __sparc
-	case USE_DVMA:
-		mystat = e1000g_alloc_dvma_buffer(Adapter,
-		    rx_buf, Adapter->rx_buffer_size);
-		break;
-#endif
 	case USE_DMA:
 		if (Adapter->mem_workaround_82546 &&
 		    ((Adapter->shared.mac.type == e1000_82545) ||
@@ -1403,15 +1279,6 @@ e1000g_free_rx_sw_packet(p_rx_sw_packet_t packet, boolean_t full_release)
 	rx_buf = packet->rx_buf;
 
 	switch (packet->dma_type) {
-#ifdef __sparc
-	case USE_DVMA:
-		if (rx_buf->address != NULL) {
-			rx_buf->size += E1000G_IPALIGNROOM;
-			rx_buf->address -= E1000G_IPALIGNROOM;
-		}
-		e1000g_free_dvma_buffer(rx_buf);
-		break;
-#endif
 	case USE_DMA:
 		e1000g_free_dma_buffer(rx_buf);
 		break;
@@ -1476,11 +1343,6 @@ e1000g_free_tx_packets(e1000g_tx_ring_t *tx_ring)
 		/* Free the Tx DMA handle for dynamical binding */
 		if (packet->tx_dma_handle != NULL) {
 			switch (packet->dma_type) {
-#ifdef __sparc
-			case USE_DVMA:
-				dvma_release(packet->tx_dma_handle);
-				break;
-#endif
 			case USE_DMA:
 				ddi_dma_free_handle(&packet->tx_dma_handle);
 				break;
@@ -1501,11 +1363,6 @@ e1000g_free_tx_packets(e1000g_tx_ring_t *tx_ring)
 		tx_buf = packet->tx_buf;
 
 		switch (packet->dma_type) {
-#ifdef __sparc
-		case USE_DVMA:
-			e1000g_free_dvma_buffer(tx_buf);
-			break;
-#endif
 		case USE_DMA:
 			e1000g_free_dma_buffer(tx_buf);
 			break;

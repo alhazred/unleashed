@@ -525,19 +525,9 @@ e1000g_receive(e1000g_rx_ring_t *rx_ring, mblk_t **tail, uint_t sz)
 
 		length = current_desc->length;
 
-#ifdef __sparc
-		if (packet->dma_type == USE_DVMA)
-			dvma_sync(rx_buf->dma_handle, 0,
-			    DDI_DMA_SYNC_FORKERNEL);
-		else
-			(void) ddi_dma_sync(rx_buf->dma_handle,
-			    E1000G_IPALIGNROOM, length,
-			    DDI_DMA_SYNC_FORKERNEL);
-#else
 		(void) ddi_dma_sync(rx_buf->dma_handle,
 		    E1000G_IPALIGNROOM, length,
 		    DDI_DMA_SYNC_FORKERNEL);
-#endif
 
 		if (e1000g_check_dma_handle(
 		    rx_buf->dma_handle) != DDI_FM_OK) {

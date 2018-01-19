@@ -193,9 +193,6 @@ walkcontext(const ucontext_t *uptr, int (*operate_func)(uintptr_t, int, void *),
 
 	int	fd;
 	int 	sig;
-#if defined(__sparc)
-	int 	signo = 0;
-#endif
 
 	struct frame *savefp;
 	uintptr_t savepc;
@@ -225,15 +222,6 @@ walkcontext(const ucontext_t *uptr, int (*operate_func)(uintptr_t, int, void *),
 	 * perturb its registers, we can then read sig out of arg0
 	 * when the saved pc is inside this function.
 	 */
-#if defined(__sparc)
-
-	uintptr_t special_pc = NULL;
-	int special_size = 0;
-
-	extern void thr_sighndlrinfo(void (**func)(), int *funcsize);
-
-	thr_sighndlrinfo((void (**)())&special_pc, &special_size);
-#endif /* sparc */
 
 
 	if ((fd = open("/proc/self/as", O_RDONLY)) < 0)
@@ -272,17 +260,6 @@ walkcontext(const ucontext_t *uptr, int (*operate_func)(uintptr_t, int, void *),
 			sig = *((int *)(savefp + 1));
 #endif
 
-#if defined(__sparc)
-			/*
-			 * In the case of threads, since there are multiple
-			 * complex routines between kernel and user handler,
-			 * we need to figure out where we can read signal from
-			 * using thr_sighndlrinfo - which we've already done
-			 * for this signal, since it appeared on the stack
-			 * before the signal frame.... sigh.
-			 */
-			sig = signo; /* already read - see below */
-#endif
 			/*
 			 * this is the special signal frame, so cons up
 			 * the saved fp & pc to pass to user's function
@@ -296,16 +273,6 @@ walkcontext(const ucontext_t *uptr, int (*operate_func)(uintptr_t, int, void *),
 
 			oldctx = oldctx->uc_link; /* handle nested signals */
 		}
-#if defined(__sparc)
-
-		/*
-		 * lookahead code to find right spot to read signo from...
-		 */
-
-		if (savepc >= special_pc && savepc <
-		    (special_pc + special_size))
-			signo = fp->fr_arg[0];
-#endif
 
 		/*
 		 * call user-supplied function and quit if non-zero return.

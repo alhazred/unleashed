@@ -56,9 +56,6 @@ extern void cpr_done(void);
 extern void i_cpr_stop_other_cpus(void);
 extern int i_cpr_power_down(int);
 
-#if defined(__sparc)
-extern void cpr_forget_cprconfig(void);
-#endif
 
 static struct modlmisc modlmisc = {
 	&mod_miscops, "checkpoint resume"
@@ -127,17 +124,6 @@ int
 cpr(int fcn, void *mdep)
 {
 
-#if defined(__sparc)
-	static const char noswapstr[] = "reusable statefile requires "
-	    "that no swap area be configured.\n";
-	static const char blockstr[] = "reusable statefile must be "
-	    "a block device.  See power.conf(4) and pmconfig(1M).\n";
-	static const char normalfmt[] = "cannot run normal "
-	    "checkpoint/resume when in reusable statefile mode. "
-	    "use uadmin A_FREEZE AD_REUSEFINI (uadmin %d %d) "
-	    "to exit reusable statefile mode.\n";
-	static const char modefmt[] = "%s in reusable mode.\n";
-#endif
 	register int rc = 0;
 	int cpr_sleeptype;
 
@@ -148,24 +134,6 @@ cpr(int fcn, void *mdep)
 	 */
 
 	switch (fcn) {
-#if defined(__sparc)
-	case AD_CHECK_SUSPEND_TO_RAM:
-	case AD_SUSPEND_TO_RAM:
-		return (ENOTSUP);
-	case AD_CHECK_SUSPEND_TO_DISK:
-	case AD_SUSPEND_TO_DISK:
-	case AD_CPR_REUSEINIT:
-	case AD_CPR_NOCOMPRESS:
-	case AD_CPR_FORCE:
-	case AD_CPR_REUSABLE:
-	case AD_CPR_REUSEFINI:
-	case AD_CPR_TESTZ:
-	case AD_CPR_TESTNOZ:
-	case AD_CPR_TESTHALT:
-	case AD_CPR_SUSP_DEVICES:
-		cpr_sleeptype = CPR_TODISK;
-		break;
-#endif
 #if defined(__x86)
 	case AD_CHECK_SUSPEND_TO_DISK:
 	case AD_SUSPEND_TO_DISK:
@@ -193,91 +161,9 @@ cpr(int fcn, void *mdep)
 		break;
 #endif
 	}
-#if defined(__sparc)
-	/*
-	 * Need to know if we're in reusable mode, but we will likely have
-	 * rebooted since REUSEINIT, so we have to get the info from the
-	 * file system
-	 */
-	if (!cpr_reusable_mode)
-		cpr_reusable_mode = cpr_get_reusable_mode();
-
-	cpr_forget_cprconfig();
-#endif
 
 	switch (fcn) {
 
-#if defined(__sparc)
-	case AD_CPR_REUSEINIT:
-		if (!i_cpr_reusable_supported())
-			return (ENOTSUP);
-		if (!cpr_statefile_is_spec()) {
-			cpr_err(CE_CONT, blockstr);
-			return (EINVAL);
-		}
-		if ((rc = cpr_check_spec_statefile()) != 0)
-			return (rc);
-		if (swapinfo) {
-			cpr_err(CE_CONT, noswapstr);
-			return (EINVAL);
-		}
-		cpr_test_mode = 0;
-		break;
-
-	case AD_CPR_NOCOMPRESS:
-	case AD_CPR_COMPRESS:
-	case AD_CPR_FORCE:
-		if (cpr_reusable_mode) {
-			cpr_err(CE_CONT, normalfmt, A_FREEZE, AD_REUSEFINI);
-			return (ENOTSUP);
-		}
-		cpr_test_mode = 0;
-		break;
-
-	case AD_CPR_REUSABLE:
-		if (!i_cpr_reusable_supported())
-			return (ENOTSUP);
-		if (!cpr_statefile_is_spec()) {
-			cpr_err(CE_CONT, blockstr);
-			return (EINVAL);
-		}
-		if ((rc = cpr_check_spec_statefile()) != 0)
-			return (rc);
-		if (swapinfo) {
-			cpr_err(CE_CONT, noswapstr);
-			return (EINVAL);
-		}
-		if ((rc = cpr_reusable_mount_check()) != 0)
-			return (rc);
-		cpr_test_mode = 0;
-		break;
-
-	case AD_CPR_REUSEFINI:
-		if (!i_cpr_reusable_supported())
-			return (ENOTSUP);
-		cpr_test_mode = 0;
-		break;
-
-	case AD_CPR_TESTZ:
-	case AD_CPR_TESTNOZ:
-	case AD_CPR_TESTHALT:
-		if (cpr_reusable_mode) {
-			cpr_err(CE_CONT, normalfmt, A_FREEZE, AD_REUSEFINI);
-			return (ENOTSUP);
-		}
-		cpr_test_mode = 1;
-		break;
-
-	case AD_CPR_CHECK:
-		if (!i_cpr_is_supported(cpr_sleeptype) || cpr_reusable_mode)
-			return (ENOTSUP);
-		return (0);
-
-	case AD_CPR_PRINT:
-		CPR_STAT_EVENT_END("POST CPR DELAY");
-		cpr_stat_event_print();
-		return (0);
-#endif
 
 	case AD_CPR_DEBUG0:
 		cpr_debug = 0;
@@ -342,11 +228,6 @@ cpr(int fcn, void *mdep)
 	if (!i_cpr_is_supported(cpr_sleeptype))
 		return (ENOTSUP);
 
-#if defined(__sparc)
-	if ((cpr_sleeptype == CPR_TODISK &&
-	    !cpr_is_ufs(rootvfs) && !cpr_is_zfs(rootvfs)))
-		return (ENOTSUP);
-#endif
 
 	if (fcn == AD_CHECK_SUSPEND_TO_RAM ||
 	    fcn == DEV_CHECK_SUSPEND_TO_RAM) {
@@ -354,33 +235,6 @@ cpr(int fcn, void *mdep)
 		return (0);
 	}
 
-#if defined(__sparc)
-	if (fcn == AD_CPR_REUSEINIT) {
-		if (mutex_tryenter(&cpr_slock) == 0)
-			return (EBUSY);
-		if (cpr_reusable_mode) {
-			cpr_err(CE_CONT, modefmt, "already");
-			mutex_exit(&cpr_slock);
-			return (EBUSY);
-		}
-		rc = i_cpr_reuseinit();
-		mutex_exit(&cpr_slock);
-		return (rc);
-	}
-
-	if (fcn == AD_CPR_REUSEFINI) {
-		if (mutex_tryenter(&cpr_slock) == 0)
-			return (EBUSY);
-		if (!cpr_reusable_mode) {
-			cpr_err(CE_CONT, modefmt, "not");
-			mutex_exit(&cpr_slock);
-			return (EINVAL);
-		}
-		rc = i_cpr_reusefini();
-		mutex_exit(&cpr_slock);
-		return (rc);
-	}
-#endif
 
 	/*
 	 * acquire cpr serial lock and init cpr state structure.
@@ -388,14 +242,6 @@ cpr(int fcn, void *mdep)
 	if (rc = cpr_init(fcn))
 		return (rc);
 
-#if defined(__sparc)
-	if (fcn == AD_CPR_REUSABLE) {
-		if ((rc = i_cpr_check_cprinfo()) != 0)  {
-			mutex_exit(&cpr_slock);
-			return (rc);
-		}
-	}
-#endif
 
 	/*
 	 * Call the main cpr routine. If we are successful, we will be coming
@@ -418,56 +264,6 @@ cpr(int fcn, void *mdep)
 			return (rc);
 		}
 
-#if defined(__sparc)
-
-		PMD(PMD_SX, ("cpr: Suspend operation succeeded.\n"))
-		/*
-		 * Back from a successful checkpoint
-		 */
-		if (fcn == AD_CPR_TESTZ || fcn == AD_CPR_TESTNOZ) {
-			mdboot(0, AD_BOOT, "", B_FALSE);
-			/* NOTREACHED */
-		}
-
-		/* make sure there are no more changes to the device tree */
-		PMD(PMD_SX, ("cpr: dev tree freeze\n"))
-		devtree_freeze();
-
-		/*
-		 * stop other cpus and raise our priority.  since there is only
-		 * one active cpu after this, and our priority will be too high
-		 * for us to be preempted, we're essentially single threaded
-		 * from here on out.
-		 */
-		PMD(PMD_SX, ("cpr: stop other cpus\n"))
-		i_cpr_stop_other_cpus();
-		PMD(PMD_SX, ("cpr: spl6\n"))
-		(void) spl6();
-
-		/*
-		 * try and reset leaf devices.  reset_leaves() should only
-		 * be called when there are no other threads that could be
-		 * accessing devices
-		 */
-		PMD(PMD_SX, ("cpr: reset leaves\n"))
-		reset_leaves();
-
-		/*
-		 * If i_cpr_power_down() succeeds, it'll not return
-		 *
-		 * Drives with write-cache enabled need to flush
-		 * their cache.
-		 */
-		if (fcn != AD_CPR_TESTHALT) {
-			PMD(PMD_SX, ("cpr: power down\n"))
-			(void) i_cpr_power_down(cpr_sleeptype);
-		}
-		ASSERT(cpr_sleeptype == CPR_TODISK);
-		/* currently CPR_TODISK comes back via a boot path */
-		CPR_DEBUG(CPR_DEBUG1, "(Done. Please Switch Off)\n");
-		halt(NULL);
-		/* NOTREACHED */
-#endif
 	}
 	PMD(PMD_SX, ("cpr: cpr done\n"))
 	cpr_done();

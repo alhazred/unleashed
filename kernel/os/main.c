@@ -401,10 +401,6 @@ main(void)
 
 	vmobject_init(&kvps[KV_KVP].v_object, &kvps[KV_KVP]);
 	vmobject_init(&kvps[KV_ZVP].v_object, &kvps[KV_ZVP]);
-#if defined(__sparc)
-	vmobject_init(&kvps[KV_MPVP].v_object, &kvps[KV_MPVP]);
-	vmobject_init(&kvps[KV_PROMVP].v_object, &kvps[KV_PROMVP]);
-#endif
 
 	/*
 	 * Once 'startup()' completes, the thread_reaper() daemon would be
@@ -509,9 +505,7 @@ main(void)
 	 * and swap have been set up.
 	 */
 	consconfig();
-#ifndef	__sparc
 	release_bootstrap();
-#endif
 
 	/*
 	 * attach drivers with ddi-forceattach prop
@@ -560,13 +554,6 @@ main(void)
 	 */
 	start_other_cpus(0);
 
-#ifdef	__sparc
-	/*
-	 * Release bootstrap here since PROM interfaces are
-	 * used to start other CPUs above.
-	 */
-	release_bootstrap();
-#endif
 
 	/*
 	 * Finish lgrp initialization after all CPUS are brought online.

@@ -13985,14 +13985,6 @@ sd_shadow_buf_free(struct buf *bp)
 	xp = SD_GET_XBUF(bp);
 	ASSERT(xp != NULL);
 
-#if defined(__sparc)
-	/*
-	 * Call bp_mapout() before freeing the buf,  in case a lower
-	 * layer or HBA  had done a bp_mapin().  we must do this here
-	 * as we are the "originator" of the shadow buf.
-	 */
-	bp_mapout(bp);
-#endif
 
 	/*
 	 * Null out b_iodone before freeing the bp, to ensure that the driver

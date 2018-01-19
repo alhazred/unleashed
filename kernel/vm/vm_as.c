@@ -473,19 +473,6 @@ again:
 		 */
 		if (base + seg->s_size > addr) {
 			if (addr >= base || eaddr > base) {
-#ifdef __sparc
-				extern const struct seg_ops segnf_ops;
-
-				/*
-				 * no-fault segs must disappear if overlaid.
-				 * XXX need new segment type so
-				 * we don't have to check s_ops
-				 */
-				if (seg->s_ops == &segnf_ops) {
-					seg_unmap(seg);
-					goto again;
-				}
-#endif
 				return (-1);	/* overlapping segment */
 			}
 		}

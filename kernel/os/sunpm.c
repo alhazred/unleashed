@@ -363,7 +363,6 @@ pm_cpupm_t	cpupm_default_mode = PM_CPUPM_EVENT;
  */
 int		autoS3_enabled;
 
-#if !defined(__sparc)
 /*
  * on sparc these live in fillsysinfo.c
  *
@@ -380,7 +379,6 @@ int cpr_supported_override;
  */
 int cpr_platform_enable = 0;
 
-#endif
 
 /*
  * pm_S3_enabled indicates that we believe the platform can support S3,

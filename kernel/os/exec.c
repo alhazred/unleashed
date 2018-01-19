@@ -422,10 +422,6 @@ exec_common(const char *fname, const char **argp, const char **envp,
 
 	ASSERT(curthread->t_schedctl == NULL);
 
-#if defined(__sparc)
-	if (p->p_utraps != NULL)
-		utrap_free(p);
-#endif	/* __sparc */
 
 	/*
 	 * Close all close-on-exec files.
@@ -1926,13 +1922,6 @@ exec_args(execa_t *uap, uarg_t *args, intpdata_t *intp, void **auxvpp)
 
 	ASSERT(P2PHASE((uintptr_t)usrstack, args->stk_align) == 0);
 
-#if defined(__sparc)
-	/*
-	 * Make sure user register windows are empty before
-	 * attempting to make a new stack.
-	 */
-	(void) flush_user_windows_to_stack(NULL);
-#endif
 
 	for (size = PAGESIZE; ; size *= 2) {
 		args->stk_size = size;

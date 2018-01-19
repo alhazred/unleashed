@@ -208,41 +208,9 @@ libdisasm_lookup(void *data, uint64_t addr, char *buf, size_t buflen,
 	GElf_Sym sym;
 
 	if (buf != NULL) {
-#ifdef __sparc
-		uint32_t instr[3];
-		uint32_t dtrace_id;
-
-		/*
-		 * On SPARC, DTrace FBT trampoline entries have a sethi/or pair
-		 * that indicates the dtrace probe id; this may appear as the
-		 * first two instructions or one instruction into the
-		 * trampoline.
-		 */
-		if (mdb_vread(instr, sizeof (instr), (uintptr_t)addr) ==
-		    sizeof (instr)) {
-			if ((instr[0] & 0xfffc0000) == 0x11000000 &&
-			    (instr[1] & 0xffffe000) == 0x90122000) {
-				dtrace_id = (instr[0] << 10) |
-				    (instr[1] & 0x1fff);
-				(void) mdb_snprintf(buf, sizeof (buf), "dt=%#x",
-				    dtrace_id);
-				goto out;
-			} else if ((instr[1] & 0xfffc0000) == 0x11000000 &&
-			    (instr[2] & 0xffffe000) == 0x90122000) {
-				dtrace_id = (instr[1] << 10) |
-				    (instr[2] & 0x1fff);
-				(void) mdb_snprintf(buf, sizeof (buf), "dt=%#x",
-				    dtrace_id);
-				goto out;
-			}
-		}
-#endif
 		(void) mdb_snprintf(buf, buflen, "%a", (uintptr_t)addr);
 	}
 
-#ifdef __sparc
-out:
-#endif
 	if (mdb_lookup_by_addr(addr, MDB_SYM_FUZZY, &c, 1, &sym) < 0)
 		return (-1);
 	if (start != NULL)
@@ -450,61 +418,6 @@ amd64_create(mdb_disasm_t *dp)
 }
 #endif
 
-#if defined(__sparc)
-static int
-sparc1_create(mdb_disasm_t *dp)
-{
-	return (libdisasm_create(dp,
-	    "1",
-	    "SPARC-v8 disassembler",
-	    DIS_SPARC_V8));
-}
-
-static int
-sparc2_create(mdb_disasm_t *dp)
-{
-	return (libdisasm_create(dp,
-	    "2",
-	    "SPARC-v9 disassembler",
-	    DIS_SPARC_V9));
-}
-
-static int
-sparc4_create(mdb_disasm_t *dp)
-{
-	return (libdisasm_create(dp,
-	    "4",
-	    "UltraSPARC1-v9 disassembler",
-	    DIS_SPARC_V9 | DIS_SPARC_V9_SGI));
-}
-
-static int
-sparcv8_create(mdb_disasm_t *dp)
-{
-	return (libdisasm_create(dp,
-	    "v8",
-	    "SPARC-v8 disassembler",
-	    DIS_SPARC_V8));
-}
-
-static int
-sparcv9_create(mdb_disasm_t *dp)
-{
-	return (libdisasm_create(dp,
-	    "v9",
-	    "SPARC-v9 disassembler",
-	    DIS_SPARC_V9));
-}
-
-static int
-sparcv9plus_create(mdb_disasm_t *dp)
-{
-	return (libdisasm_create(dp,
-	    "v9plus",
-	    "UltraSPARC1-v9 disassembler",
-	    DIS_SPARC_V9 | DIS_SPARC_V9_SGI));
-}
-#endif
 
 /*ARGSUSED*/
 static void
