@@ -184,15 +184,6 @@ extern int is_zfs(char *);
 #define	ARCHIVE_PREFIX		"/platform/"
 #define	ARCHIVE_SUFFIX		"/boot_archive"
 #define	CACHEDIR_SUFFIX		"/archive_cache"
-#define	UPDATEDIR_SUFFIX	"/updates"
-#define	DIRECT_BOOT_ARCHIVE	"/platform/i86pc/$ISADIR/boot_archive"
-#define	DIRECT_BOOT_ARCHIVE_32	"/platform/i86pc/boot_archive"
-#define	DIRECT_BOOT_ARCHIVE_64	"/platform/i86pc/amd64/boot_archive"
-#define	MULTIBOOT_ARCHIVE	DIRECT_BOOT_ARCHIVE_32
-#define	CACHEDIR_32		"/platform/i86pc/archive_cache"
-#define	CACHEDIR_64		"/platform/i86pc/amd64/archive_cache"
-#define	UPDATEDIR_32		"/platform/i86pc/updates"
-#define	UPDATEDIR_64		"/platform/i86pc/amd64/updates"
 
 /* A first guess at the number of entries in a menu */
 #define	BAM_ENTRY_NUM		10

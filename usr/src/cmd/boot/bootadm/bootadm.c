@@ -190,7 +190,6 @@ static error_t read_list(char *, filelist_t *);
 
 static long s_strtol(char *);
 
-static int is_amd64(void);
 static char *get_machine(void);
 static void append_to_flist(filelist_t *, char *);
 
@@ -1649,10 +1648,6 @@ cmpstat(
 	 * there are a number of things we should not worry about
 	 */
 	if (bam_smf_check) {
-		/* ignore amd64 modules unless we are booted amd64. */
-		if (!is_amd64() && strstr(file, "/amd64/") != 0)
-			return (0);
-
 		/* read in list of safe files */
 		if (safefiles == NULL) {
 			fp = fopen("/boot/solaris/filelist.safe", "r");
@@ -1810,8 +1805,7 @@ set_cache_dir(char *root, int what)
 	int		ret = 0;
 
 	ret = snprintf(get_cachedir(what), sizeof (get_cachedir(what)),
-	    "%s%s%s%s%s", root, ARCHIVE_PREFIX, get_machine(), what == FILE_BA ?
-	    "/amd64" : "", CACHEDIR_SUFFIX);
+	    "%s%s%s%s", root, ARCHIVE_PREFIX, get_machine(), CACHEDIR_SUFFIX);
 
 	if (ret >= sizeof (get_cachedir(what))) {
 		bam_error(_("unable to create path on mountpoint %s, "
@@ -1850,13 +1844,8 @@ is_valid_archive(char *root, int what)
 	struct stat 	sb, timestamp;
 	int 		ret;
 
-	if (what == FILE_BA)
-		ret = snprintf(archive_path, sizeof (archive_path),
-		    "%s%s%s/amd64%s", root, ARCHIVE_PREFIX, get_machine(),
-		    ARCHIVE_SUFFIX);
-	else
-		ret = snprintf(archive_path, sizeof (archive_path), "%s%s%s%s",
-		    root, ARCHIVE_PREFIX, get_machine(), ARCHIVE_SUFFIX);
+	ret = snprintf(archive_path, sizeof (archive_path), "%s%s%s%s",
+	    root, ARCHIVE_PREFIX, get_machine(), ARCHIVE_SUFFIX);
 
 	if (ret >= sizeof (archive_path)) {
 		bam_error(_("unable to create path on mountpoint %s, "
@@ -3479,37 +3468,6 @@ s_strdup(char *str)
 		bam_exit(1);
 	}
 	return (ptr);
-}
-
-/*
- * Returns 1 if amd64
- * Returns 0 otherwise
- */
-static int
-is_amd64(void)
-{
-	static int amd64 = -1;
-	char isabuf[257];	/* from sysinfo(2) manpage */
-
-	if (amd64 != -1)
-		return (amd64);
-
-	if (bam_alt_platform) {
-		if (strcmp(bam_platform, "i86pc") == 0) {
-			amd64 = 1;		/* diskless server */
-		}
-	} else {
-		if (sysinfo(SI_ISALIST, isabuf, sizeof (isabuf)) > 0 &&
-		    strncmp(isabuf, "amd64 ", strlen("amd64 ")) == 0) {
-			amd64 = 1;
-		} else if (strstr(isabuf, "i386") == NULL) {
-			amd64 = 1;		/* diskless server */
-		}
-	}
-	if (amd64 == -1)
-		amd64 = 0;
-
-	return (amd64);
 }
 
 static char *
