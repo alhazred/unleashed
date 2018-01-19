@@ -41,10 +41,8 @@ all: $(PROG) kmdb_modlinktest.o
 	$(CTFCONVERT_O)
 
 ROOT_MISC_DIR		= $(ROOT)/kernel/misc
-ROOT_MISC_DIR_64	= $(ROOT_MISC_DIR)/$(SUBDIR64)
 
 ROOTMISC		= $(ROOT_MISC_DIR)/$(PROG)
-ROOTMISC64		= $(ROOT_MISC_DIR_64)/$(PROG)
 
 include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64
@@ -60,7 +58,7 @@ INCDIRS += $(SRC)/common/dis/i386
 
 CPPFLAGS += -DDIS_TEXT
 
-install: all $(ROOTMISC64)
+install: all $(ROOTMISC)
 
 kmdb_context_off.h: ../../kmdb/kmdb_context_off.in
 	$(OFFSETS_CREATE) <../../kmdb/kmdb_context_off.in >$@
@@ -69,11 +67,8 @@ kmdb_context_off.h: ../../kmdb/kmdb_context_off.in
 # Installation targets
 #
 
-$(ROOT_MISC_DIR) $(ROOT_MISC_DIR_64):
+$(ROOT_MISC_DIR):
 	-$(INS.dir)
 
 $(ROOT_MISC_DIR)/%: 	% $(ROOT_MISC_DIR)
-	$(INS.file)
-
-$(ROOT_MISC_DIR_64)/%:	% $(ROOT_MISC_DIR_64)
 	$(INS.file)

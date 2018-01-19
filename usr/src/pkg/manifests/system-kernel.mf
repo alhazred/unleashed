@@ -466,7 +466,6 @@ file path=kernel/mac/mac_ib group=sys mode=0755
 file path=kernel/mac/mac_ipv4 group=sys mode=0755
 file path=kernel/mac/mac_ipv6 group=sys mode=0755
 file path=kernel/mac/mac_wifi group=sys mode=0755
-$(i386_ONLY)file path=kernel/misc/$(ARCH64)/kmdbmod group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/acpica group=sys mode=0755
 file path=kernel/misc/bignum group=sys mode=0755
 $(i386_ONLY)file path=kernel/misc/bootdev group=sys mode=0755
@@ -484,6 +483,7 @@ $(i386_ONLY)file path=kernel/misc/iommulib group=sys mode=0755
 file path=kernel/misc/ipc group=sys mode=0755
 file path=kernel/misc/kbtrans group=sys mode=0755
 file path=kernel/misc/kcf group=sys mode=0755
+$(i386_ONLY)file path=kernel/misc/kmdbmod group=sys mode=0755
 file path=kernel/misc/ksocket group=sys mode=0755
 file path=kernel/misc/mac group=sys mode=0755
 file path=kernel/misc/mii group=sys mode=0755

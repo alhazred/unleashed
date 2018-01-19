@@ -26,7 +26,7 @@
 #ident	"%Z%%M%	%I%	%E% SMI"
 
 ROOTMOD = $(ROOT)/usr/platform/i86pc/lib/mdb/$(MDBTGT)$(MACHMODDIR)
-ROOTKMOD = $(ROOT)/platform/i86pc/kernel/kmdb$(MACHMODDIR)
+ROOTKMOD = $(ROOT)/platform/i86pc/kernel/kmdb
 
 $(ROOT)/usr/platform/i86pc/lib/mdb:
 	$(INS.dir)

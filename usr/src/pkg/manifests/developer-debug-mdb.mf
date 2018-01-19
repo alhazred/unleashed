@@ -31,13 +31,11 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/kmdb group=sys
-dir path=kernel/kmdb/$(ARCH64) group=sys
 dir path=platform group=sys variant.opensolaris.zone=global
 dir path=platform/$(CONFIG_PLATFORM) group=sys variant.opensolaris.zone=global
 dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys \
     variant.opensolaris.zone=global
 dir path=platform/$(CONFIG_PLATFORM)/kernel/kmdb group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64) group=sys
 dir path=usr group=sys
 dir path=usr/bin
 dir path=usr/bin/$(ARCH32)
@@ -59,49 +57,47 @@ dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb/kvm group=sys
 dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb/kvm/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1
-file path=kernel/kmdb/$(ARCH64)/arp group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/cpc group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/cpu.generic group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/cpu_ms.AuthenticAMD.15 group=sys \
+file path=kernel/kmdb/arp group=sys mode=0555
+file path=kernel/kmdb/cpc group=sys mode=0555
+$(i386_ONLY)file path=kernel/kmdb/cpu.generic group=sys mode=0555
+$(i386_ONLY)file path=kernel/kmdb/cpu_ms.AuthenticAMD.15 group=sys mode=0555
+file path=kernel/kmdb/crypto group=sys mode=0555
+file path=kernel/kmdb/genunix group=sys mode=0555
+file path=kernel/kmdb/hook group=sys mode=0555
+$(i386_ONLY)file path=kernel/kmdb/i40e group=sys mode=0555
+file path=kernel/kmdb/ip group=sys mode=0555
+file path=kernel/kmdb/ipc group=sys mode=0555
+file path=kernel/kmdb/ipp group=sys mode=0555
+file path=kernel/kmdb/krtld group=sys mode=0555
+file path=kernel/kmdb/lofs group=sys mode=0555
+file path=kernel/kmdb/logindmux group=sys mode=0555
+file path=kernel/kmdb/mac group=sys mode=0555
+file path=kernel/kmdb/mdb_ds group=sys mode=0555
+file path=kernel/kmdb/mm group=sys mode=0555
+file path=kernel/kmdb/mpt_sas group=sys mode=0555
+file path=kernel/kmdb/mr_sas group=sys mode=0555
+file path=kernel/kmdb/neti group=sys mode=0555
+file path=kernel/kmdb/ptm group=sys mode=0555
+file path=kernel/kmdb/random group=sys mode=0555
+file path=kernel/kmdb/s1394 group=sys mode=0555
+$(i386_ONLY)file path=kernel/kmdb/sata group=sys mode=0555
+file path=kernel/kmdb/scsi_vhci group=sys mode=0555
+file path=kernel/kmdb/sctp group=sys mode=0555
+file path=kernel/kmdb/sd group=sys mode=0555
+file path=kernel/kmdb/sockfs group=sys mode=0555
+file path=kernel/kmdb/specfs group=sys mode=0555
+file path=kernel/kmdb/sppp group=sys mode=0555
+file path=kernel/kmdb/ufs group=sys mode=0555
+$(i386_ONLY)file path=kernel/kmdb/uhci group=sys mode=0555
+file path=kernel/kmdb/usba group=sys mode=0555
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/apix group=sys \
     mode=0555
-file path=kernel/kmdb/$(ARCH64)/crypto group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/genunix group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/hook group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/i40e group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/ip group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/ipc group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/ipp group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/krtld group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/lofs group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/logindmux group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/mac group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/mdb_ds group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/mm group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/mpt_sas group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/mr_sas group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/neti group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/ptm group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/random group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/s1394 group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/sata group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/scsi_vhci group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/sctp group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/sd group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/sockfs group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/specfs group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/sppp group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/ufs group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/uhci group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/usba group=sys mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/apix \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/pcplusmp \
     group=sys mode=0555
-$(i386_ONLY)file \
-    path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/pcplusmp group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/unix group=sys \
     mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/unix \
-    group=sys mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/$(ARCH64)/uppc \
-    group=sys mode=0555
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/uppc group=sys \
+    mode=0555
 file path=usr/bin/$(ARCH32)/mdb mode=0555
 file path=usr/bin/$(ARCH64)/mdb mode=0555
 file path=usr/include/sys/mdb_modapi.h mode=0644

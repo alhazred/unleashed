@@ -30,7 +30,7 @@ MACHDIR=amd64
 MACHMODDIR=/$(MACHDIR)
 
 ROOTMOD = $(ROOT)/usr/lib/mdb/$(MDBTGT)$(MACHMODDIR)
-ROOTKMOD = $(ROOT)/kernel/kmdb$(MACHMODDIR)
+ROOTKMOD = $(ROOT)/kernel/kmdb
 
 CFLAGS += $(CTF_FLAGS)
 CFLAGS64 += $(CTF_FLAGS)
@@ -56,7 +56,4 @@ $$(ROOTKMOD)/%: kmod/%
 	$(INS.file)
 
 $(ROOTMOD): $(ROOT)/usr/lib/mdb/$(MDBTGT)
-	$(INS.dir)
-
-$(ROOTKMOD): $(ROOT)/kernel/kmdb
 	$(INS.dir)

@@ -33,7 +33,7 @@ include ../../../../Makefile.cmd.64
 include ../../Makefile.amd64
 
 # This kmod goes in /usr/kernel/kmdb
-ROOTKMOD = $(ROOT)/usr/kernel/kmdb$(MACHMODDIR)
+ROOTKMOD = $(ROOT)/usr/kernel/kmdb
 
 include ../../../Makefile.module
 

@@ -78,7 +78,7 @@ file \
     group=sys
 file path=kernel/drv/zfs group=sys
 file path=kernel/drv/zfs.conf group=sys
-file path=kernel/kmdb/$(ARCH64)/zfs group=sys mode=0555
+file path=kernel/kmdb/zfs group=sys mode=0555
 file path=lib/$(ARCH64)/libzfs.so.1
 file path=lib/$(ARCH64)/libzfs_core.so.1
 file path=lib/libzfs.so.1

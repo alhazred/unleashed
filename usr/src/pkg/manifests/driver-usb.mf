@@ -95,7 +95,7 @@ file path=kernel/drv/usb_mid group=sys
 file path=kernel/drv/usbprn group=sys
 $(i386_ONLY)file path=kernel/drv/xhci group=sys
 $(i386_ONLY)file path=kernel/drv/xhci.conf group=sys
-$(i386_ONLY)file path=kernel/kmdb/$(ARCH64)/xhci group=sys mode=0555
+$(i386_ONLY)file path=kernel/kmdb/xhci group=sys mode=0555
 file path=kernel/misc/hidparser group=sys mode=0755
 file path=kernel/misc/usba group=sys mode=0755
 file path=kernel/misc/usba10 group=sys mode=0755

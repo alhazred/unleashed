@@ -70,8 +70,8 @@ file path=kernel/drv/stmf group=sys
 file path=kernel/drv/stmf.conf group=sys
 file path=kernel/drv/stmf_sbd group=sys
 file path=kernel/drv/stmf_sbd.conf group=sys
-file path=kernel/kmdb/$(ARCH64)/stmf group=sys mode=0555
-file path=kernel/kmdb/$(ARCH64)/stmf_sbd group=sys mode=0555
+file path=kernel/kmdb/stmf group=sys mode=0555
+file path=kernel/kmdb/stmf_sbd group=sys mode=0555
 file path=lib/svc/manifest/system/stmf.xml group=sys mode=0444 \
     variant.opensolaris.zone=global
 file path=lib/svc/method/svc-stmf mode=0555 variant.opensolaris.zone=global

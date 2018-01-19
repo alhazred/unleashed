@@ -101,11 +101,7 @@ const char *volatile _mdb_abort_str;	/* reason for failure */
 static char *
 kmdb_modpath2lpath(const char *modpath)
 {
-#ifdef	_LP64
-	static const char suffix[] = "/kmdb/%i:";
-#else
 	static const char suffix[] = "/kmdb:";
-#endif
 	const char *c;
 	char *lpath, *lpend, *nlpath;
 	size_t lpsz, lpres;

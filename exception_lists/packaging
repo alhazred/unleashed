@@ -459,10 +459,10 @@ usr/lib/fs/smbfs/lsacl
 opt/smbcl-tests
 #
 # FC related files
-kernel/kmdb/amd64/fcip		i386
-kernel/kmdb/amd64/fcp		i386
-kernel/kmdb/amd64/fctl		i386
-kernel/kmdb/amd64/qlc		i386
+kernel/kmdb/fcip		i386
+kernel/kmdb/fcp			i386
+kernel/kmdb/fctl		i386
+kernel/kmdb/qlc			i386
 #
 # sbd ioctl hdr
 #

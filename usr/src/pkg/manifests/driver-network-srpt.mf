@@ -32,7 +32,6 @@ set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=kernel/kmdb group=sys
-dir path=kernel/kmdb/$(ARCH64) group=sys
 dir path=lib variant.opensolaris.zone=global
 dir path=lib/svc variant.opensolaris.zone=global
 dir path=lib/svc/manifest group=sys variant.opensolaris.zone=global
@@ -53,7 +52,7 @@ dir path=usr/share/man/man7d
 driver name=srpt perms="* 0644 root sys"
 file path=kernel/drv/srpt group=sys
 file path=kernel/drv/srpt.conf group=sys
-file path=kernel/kmdb/$(ARCH64)/srpt group=sys mode=0555
+file path=kernel/kmdb/srpt group=sys mode=0555
 file path=lib/svc/manifest/system/ibsrp/target.xml group=sys mode=0444 \
     variant.opensolaris.zone=global
 file path=lib/svc/method/svc-srpt mode=0555 variant.opensolaris.zone=global

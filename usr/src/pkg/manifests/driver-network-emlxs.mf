@@ -70,7 +70,7 @@ driver name=oce perms="* 0666 root sys" \
 file path=kernel/drv/emlxs group=sys
 file path=kernel/drv/emlxs.conf group=sys preserve=true
 file path=kernel/drv/oce group=sys
-file path=kernel/kmdb/$(ARCH64)/emlxs group=sys mode=0555
+file path=kernel/kmdb/emlxs group=sys mode=0555
 file path=kernel/misc/emlxs/emlxs_fw group=sys mode=0755
 file path=usr/lib/mdb/kvm/$(ARCH64)/emlxs.so group=sys mode=0555
 license lic_CDDL license=lic_CDDL
