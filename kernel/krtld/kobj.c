@@ -168,12 +168,6 @@ int kobj_debug = 0;
 
 #define	MODPATH_PROPNAME	"module-path"
 
-#ifdef MODDIR_SUFFIX
-static char slash_moddir_suffix_slash[] = MODDIR_SUFFIX "/";
-#else
-#define	slash_moddir_suffix_slash	""
-#endif
-
 #define	_moddebug	get_weakish_int(&moddebug)
 #define	_modrootloaded	get_weakish_int(&modrootloaded)
 #define	_swaploaded	get_weakish_int(&swaploaded)
@@ -1834,9 +1828,6 @@ kobj_load_module(struct modctl *modp, int use_path)
 	int n;
 	struct _buf *file;
 	struct module *mp = NULL;
-#ifdef MODDIR_SUFFIX
-	int no_suffixdir_drv = 0;
-#endif
 
 	mp = kobj_zalloc(sizeof (struct module), KM_WAIT);
 
@@ -1851,22 +1842,10 @@ kobj_load_module(struct modctl *modp, int use_path)
 
 	file = kobj_open_path(filename, use_path, 1);
 	if (file == (struct _buf *)-1) {
-#ifdef MODDIR_SUFFIX
-		file = kobj_open_path(filename, use_path, 0);
-#endif
 		if (file == (struct _buf *)-1) {
 			kobj_free(mp, sizeof (*mp));
 			goto bad;
 		}
-#ifdef MODDIR_SUFFIX
-		/*
-		 * There is no driver module in the ISA specific (suffix)
-		 * subdirectory but there is a module in the parent directory.
-		 */
-		if (strncmp(filename, "drv/", 4) == 0) {
-			no_suffixdir_drv = 1;
-		}
-#endif
 	}
 
 	mp->filename = kobj_alloc(strlen(file->_name) + 1, KM_WAIT);
@@ -1901,17 +1880,6 @@ kobj_load_module(struct modctl *modp, int use_path)
 			    modname);
 		kobj_free(mp->filename, strlen(file->_name) + 1);
 		kobj_free(mp, sizeof (*mp));
-#ifdef MODDIR_SUFFIX
-		/*
-		 * The driver mod is not in the ISA specific subdirectory
-		 * and the module in the parent directory is not our ISA.
-		 * If it is our ISA, for now we will silently succeed.
-		 */
-		if (no_suffixdir_drv == 1) {
-			cmn_err(CE_CONT, "?NOTICE: %s: 64-bit driver module"
-			    " not found\n", modname);
-		}
-#endif
 		goto bad;
 	}
 
@@ -3380,10 +3348,6 @@ kobj_path_exists(char *name, int use_path)
 	struct _buf *file;
 
 	file = kobj_open_path(name, use_path, 1);
-#ifdef	MODDIR_SUFFIX
-	if (file == (struct _buf *)-1)
-		file = kobj_open_path(name, use_path, 0);
-#endif	/* MODDIR_SUFFIX */
 	if (file == (struct _buf *)-1)
 		return (0);
 	kobj_close_file(file);
@@ -3405,10 +3369,6 @@ kobj_open_path(char *name, int use_path, int use_moddir_suffix)
 	int maxpathlen;
 	struct _buf *file;
 
-#if !defined(MODDIR_SUFFIX)
-	use_moddir_suffix = B_FALSE;
-#endif
-
 	if (!use_path)
 		pathp = "";		/* use name as specified */
 	else
@@ -3427,8 +3387,6 @@ kobj_open_path(char *name, int use_path, int use_moddir_suffix)
 	 * the '/' between path and name.)
 	 */
 	maxpathlen = strlen(pathp) + strlen(name) + 3;
-	/* sizeof includes null */
-	maxpathlen += sizeof (slash_moddir_suffix_slash) - 1;
 	fullname = kobj_zalloc(maxpathlen, KM_WAIT);
 
 	for (;;) {
@@ -3439,25 +3397,9 @@ kobj_open_path(char *name, int use_path, int use_moddir_suffix)
 			*p++ = *pathp++;
 		if (p != fullname && p[-1] != '/')
 			*p++ = '/';
-		if (use_moddir_suffix) {
-			char *b = basename(name);
-			char *s;
-
-			/* copy everything up to the base name */
-			q = name;
-			while (q != b && *q)
-				*p++ = *q++;
-			s = slash_moddir_suffix_slash;
-			while (*s)
-				*p++ = *s++;
-			/* copy the rest */
-			while (*b)
-				*p++ = *b++;
-		} else {
-			q = name;
-			while (*q)
-				*p++ = *q++;
-		}
+		q = name;
+		while (*q)
+			*p++ = *q++;
 		*p = 0;
 		if ((file = kobj_open_file(fullname)) != (struct _buf *)-1) {
 			kobj_free(fullname, maxpathlen);
