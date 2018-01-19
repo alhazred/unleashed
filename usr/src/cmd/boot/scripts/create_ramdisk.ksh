@@ -31,10 +31,8 @@
 
 ALT_ROOT=
 EXTRACT_ARGS=
-SPLIT=unknown
 ERROR=0
-dirsize32=0
-dirsize64=0
+dirsize=0
 
 usage() {
 	echo "This utility is a component of the bootadm(1M) implementation"
@@ -100,8 +98,6 @@ esac
 BOOT_ARCHIVE=platform/$PLATFORM/boot_archive
 BOOT_ARCHIVE_64=platform/$PLATFORM/$ARCH64/boot_archive
 
-SPLIT=yes
-
 function cleanup
 {
 	[ -n "$rddir" ] && rm -fr "$rddir" 2> /dev/null
@@ -121,40 +117,15 @@ function getsize
 	# next multiple of 1024.  This mimics the behavior of ufs especially
 	# with directories.  This results in a total size that's slightly
 	# bigger than if du was called on a ufs directory.
-	size32=$(cat "$list32" | xargs -I {} ls -lLd "{}" 2> /dev/null |
+	size=$(cat "$list" | xargs -I {} ls -lLd "{}" 2> /dev/null |
 		nawk '{t += ($5 % 1024) ? (int($5 / 1024) + 1) * 1024 : $5}
 		END {print int(t * 1.10 / 1024)}')
-	(( size32 += dirsize32 ))
-	size64=$(cat "$list64" | xargs -I {} ls -lLd "{}" 2> /dev/null |
-		nawk '{t += ($5 % 1024) ? (int($5 / 1024) + 1) * 1024 : $5}
-		END {print int(t * 1.10 / 1024)}')
-	(( size64 += dirsize64 ))
-	(( total_size = size32 + size64 ))
+	(( total_size = size + dirsize ))
 }
 
-#
-# The first argument can be:
-#
-# "both" - create an archive with both 32-bit and 64-bit binaries
-# "32-bit" - create an archive with only 32-bit binaries
-# "64-bit" - create an archive with only 64-bit binaries
-#
 function create_cpio
 {
-	which=$1
-	archive=$2
-
-	# should we exclude amd64 binaries?
-	if [ "$which" = "32-bit" ]; then
-		cpiofile="$cpiofile32"
-		list="$list32"
-	elif [ "$which" = "64-bit" ]; then
-		cpiofile="$cpiofile64"
-		list="$list64"
-	else
-		cpionfile="$cpiofile32"
-		list="$list32"
-	fi
+	archive=$1
 
 	cpio -o -H odc < "$list" > "$cpiofile"
 
@@ -177,12 +148,11 @@ function create_cpio
 
 function create_archive
 {
-	which=$1
-	archive=$2
+	archive=$1
 
 	echo "updating $archive"
 
-	create_cpio "$which" "$archive"
+	create_cpio "$archive"
 
 	if [ ! -e "${archive}-new" ] ; then
 		#
@@ -196,6 +166,22 @@ function create_archive
 		mv "${archive}-new" "$archive"
 		rm -f "$archive.hash"
 		mv "$archive.hash-new" "$archive.hash" 2> /dev/null
+	fi
+}
+
+function duplicate_archive
+{
+	src="$1"
+	dst="$2"
+
+	if ! cp "$src" "$dst-new" ; then
+		ERROR=1
+	elif ! cp "$src.hash" "$dst.hash-new" ; then
+		ERROR=1
+		rm "$dst-new"
+	else
+		mv "$dst-new" "$dst"
+		mv "$dst.hash-new" "$dst.hash"
 	fi
 }
 
@@ -231,43 +217,25 @@ mkdir "$rddir" || fatal_error "Could not create temporary directory $rddir"
 # Clean up upon exit.
 trap 'cleanup' EXIT
 
-list32="$rddir/filelist.32"
-list64="$rddir/filelist.64"
+list="$rddir/filelist"
 
-touch $list32 $list64
+touch $list
 
 #
-# This loop creates the 32-bit and 64-bit lists of files.  The 32-bit list
-# is written to stdout, which is redirected at the end of the loop.  The
-# 64-bit list is appended with each write.
+# This loop creates the lists of files.  The list is written to stdout,
+# which is redirected at the end of the loop.
 #
 cd "/$ALT_ROOT"
 find $filelist -print 2>/dev/null | while read path
 do
-	if [ $SPLIT = no ]; then
-		print "$path"
-	elif [ -d "$path" ]; then
+	if [ -d "$path" ]; then
 		size=`ls -lLd "$path" | nawk '
 		    {print ($5 % 1024) ? (int($5 / 1024) + 1) * 1024 : $5}'`
-		if [ `basename "$path"` != "amd64" ]; then
-			(( dirsize32 += size ))
-		fi
-		(( dirsize64 += size ))
+		(( dirsize += size ))
 	else
-		case `LC_MESSAGES=C /usr/bin/file "$path" 2>/dev/null` in
-		*ELF\ 64-bit*)
-			print "$path" >> "$list64"
-			;;
-		*ELF\ 32-bit*)
-			print "$path"
-			;;
-		*)
-			# put in both lists
-			print "$path"
-			print "$path" >> "$list64"
-		esac
+		print "$path"
 	fi
-done >"$list32"
+done >"$list"
 
 # calculate image size
 getsize
@@ -276,9 +244,6 @@ getsize
 #
 tmp_free=`df -b /tmp | tail -1 | awk '{ printf ($2) }'`
 (( tmp_free = tmp_free / 3 ))
-if [ $SPLIT = yes ]; then
-	(( tmp_free = tmp_free / 2 ))
-fi
 
 if [ $total_size -gt $tmp_free  ] ; then
 	# assumes we have enough scratch space on $ALT_ROOT
@@ -287,11 +252,9 @@ if [ $total_size -gt $tmp_free  ] ; then
 	mkdir "$new_rddir" || fatal_error \
 	    "Could not create temporary directory $new_rddir"
 
-	# Save the file lists
-	mv "$list32" "$new_rddir"/
-	mv "$list64" "$new_rddir"/
-	list32="/$new_rddir/filelist.32"
-	list64="/$new_rddir/filelist.64"
+	# Save the file list
+	mv "$list" "$new_rddir"/
+	list="/$new_rddir/filelist"
 
 	# Remove the old $rddir and set the new value of rddir
 	rm -rf "$rddir"
@@ -299,19 +262,18 @@ if [ $total_size -gt $tmp_free  ] ; then
 	new_rddir=
 fi
 
-cpiofile32="$rddir/cpio.file.32"
-cpiofile64="$rddir/cpio.file.64"
+cpiofile="$rddir/cpio.file"
 
-if [ $SPLIT = yes ]; then
-	create_archive "32-bit" "$ALT_ROOT/$BOOT_ARCHIVE" &
-	create_archive "64-bit" "$ALT_ROOT/$BOOT_ARCHIVE_64"
-	wait
-else
-	create_archive "both" "$ALT_ROOT/$BOOT_ARCHIVE"
-fi
+create_archive "$ALT_ROOT/$BOOT_ARCHIVE"
+
 if [ $ERROR = 1 ]; then
 	cleanup
 	exit 1
 fi
+
+#
+# For now, use the same archive for both bare and $ARCH64 files.
+#
+duplicate_archive "$ALT_ROOT/$BOOT_ARCHIVE" "$ALT_ROOT/$BOOT_ARCHIVE_64"
 
 [ -n "$rddir" ] && rm -rf "$rddir"
