@@ -86,7 +86,7 @@ firmware_open(const char *drvname, const char *imgname, firmware_handle_t *fhp)
 	path = kmem_asprintf("firmware/%s/%s", drvname, imgname);
 	fh = firmware_handle_alloc();
 
-	fh->fh_buf = kobj_open_path(path, 1, 0);
+	fh->fh_buf = kobj_open_path(path, 1);
 	strfree(path);
 
 	if (fh->fh_buf == (struct _buf *)-1) {

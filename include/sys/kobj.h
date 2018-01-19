@@ -175,7 +175,7 @@ extern char *kobj_searchsym(struct module *, uintptr_t, ulong_t *);
 extern int kobj_fstat(intptr_t, struct bootstat *);
 extern intptr_t kobj_open(char *);
 extern int kobj_path_exists(char *, int);
-extern struct _buf *kobj_open_path(char *, int, int);
+extern struct _buf *kobj_open_path(char *, int);
 extern int kobj_read(intptr_t, char *, unsigned int, unsigned int);
 extern void kobj_close(intptr_t);
 extern void *kobj_alloc(size_t, int);

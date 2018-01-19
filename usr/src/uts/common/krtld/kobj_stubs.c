@@ -62,7 +62,7 @@ kobj_path_exists(char *name, int use_path)
 
 /*ARGSUSED*/
 struct _buf *
-kobj_open_path(char *name, int use_path, int use_moddir_suffix)
+kobj_open_path(char *name, int use_path)
 {
 	return (NULL);
 }

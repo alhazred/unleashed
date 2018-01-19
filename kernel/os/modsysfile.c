@@ -2060,12 +2060,7 @@ hwc_parse_now(char *fname, struct par_list **pl, ddi_prop_t **props)
 	char *tokval;
 	token_t token;
 
-	/*
-	 * Don't use kobj_open_path's use_moddir_suffix option, we only
-	 * expect to find conf files in the base module directory, not
-	 * an ISA-specific subdirectory.
-	 */
-	if ((file = kobj_open_path(fname, 1, 0)) == (struct _buf *)-1) {
+	if ((file = kobj_open_path(fname, 1)) == (struct _buf *)-1) {
 		if (moddebug & MODDEBUG_ERRMSG)
 			cmn_err(CE_WARN, "Cannot open %s", fname);
 		return (-1);

@@ -1224,12 +1224,7 @@ bind_primary(val_t *bootaux, int lmid)
 		} else if (mp->flags & KOBJ_INTERP) {
 			struct _buf *file;
 
-			/*
-			 * The interpreter path fragment in mp->filename
-			 * will already have the module directory suffix
-			 * in it (if appropriate).
-			 */
-			file = kobj_open_path(mp->filename, 1, 0);
+			file = kobj_open_path(mp->filename, 1);
 			if (file == (struct _buf *)-1)
 				return (-1);
 			if (get_ctf(mp, file) < 0)
@@ -1840,7 +1835,7 @@ kobj_load_module(struct modctl *modp, int use_path)
 	if (strcmp(modp->mod_modname, "kmdbmod") == 0)
 		mp->flags |= KOBJ_NOKSYMS;
 
-	file = kobj_open_path(filename, use_path, 1);
+	file = kobj_open_path(filename, use_path);
 	if (file == (struct _buf *)-1) {
 		if (file == (struct _buf *)-1) {
 			kobj_free(mp, sizeof (*mp));
@@ -3347,7 +3342,7 @@ kobj_path_exists(char *name, int use_path)
 {
 	struct _buf *file;
 
-	file = kobj_open_path(name, use_path, 1);
+	file = kobj_open_path(name, use_path);
 	if (file == (struct _buf *)-1)
 		return (0);
 	kobj_close_file(file);
@@ -3360,7 +3355,7 @@ kobj_path_exists(char *name, int use_path)
  * path is exactly like the shell PATH variable.
  */
 struct _buf *
-kobj_open_path(char *name, int use_path, int use_moddir_suffix)
+kobj_open_path(char *name, int use_path)
 {
 	char *p, *q;
 	char *pathp;
@@ -4281,7 +4276,7 @@ expand_libmacro(char *tail, char *path, char *pathend)
 		 */
 		if (p2 == NULL || strchr(p2, '$') == NULL) {
 			(void) strcpy(pathend, tail);
-			if ((file = kobj_open_path(path, 1, 1)) !=
+			if ((file = kobj_open_path(path, 1)) !=
 			    (struct _buf *)-1) {
 				kobj_close_file(file);
 				return (path);
@@ -4331,7 +4326,7 @@ expand_libmacro(char *tail, char *path, char *pathend)
 		/* copy endp only if there isn't any more macro to expand */
 		if (!more_macro && (endp != NULL))
 			(void) strcat(path2, endp);
-		file = kobj_open_path(path, 1, 1);
+		file = kobj_open_path(path, 1);
 		if (file != (struct _buf *)-1) {
 			kobj_close_file(file);
 			/*
