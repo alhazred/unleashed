@@ -229,8 +229,7 @@ static subcmd_defn_t inst_subcmds[] = {
 };
 
 enum dircache_copy_opt {
-	FILE32 = 0,
-	FILE64,
+	FILE_BA = 0,
 	CACHEDIR_NUM
 };
 
@@ -1590,47 +1589,11 @@ update_dircache(const char *path, int flags)
 		}
 		(void) close(fd);
 
-		/*
-		 * If the file is not an executable and is not inside an amd64
-		 * directory, we copy it in both the cache directories,
-		 * otherwise, we only copy it inside the 64-bit one.
-		 */
-		if (memcmp(elf.e_ident, ELFMAG, 4) != 0) {
-			if (strstr(path, "/amd64")) {
-				rc = dircache_updatefile(path, FILE64);
-			} else {
-				rc = dircache_updatefile(path, FILE32);
-				if (rc == BAM_SUCCESS)
-					rc = dircache_updatefile(path, FILE64);
-			}
-		} else {
-			/*
-			 * Based on the ELF class we copy the file in the 32-bit
-			 * or the 64-bit cache directory.
-			 */
-			if (elf.e_ident[EI_CLASS] == ELFCLASS32) {
-				rc = dircache_updatefile(path, FILE32);
-			} else if (elf.e_ident[EI_CLASS] == ELFCLASS64) {
-				rc = dircache_updatefile(path, FILE64);
-			} else {
-				bam_print(_("WARNING: file %s is neither a "
-				    "32-bit nor a 64-bit ELF\n"), path);
-				/* paranoid */
-				rc  = dircache_updatefile(path, FILE32);
-				if (rc == BAM_SUCCESS)
-					rc = dircache_updatefile(path, FILE64);
-			}
-		}
+		rc = dircache_updatefile(path, FILE_BA);
 		break;
 		}
 	case FTW_D:
-		if (strstr(path, "/amd64") == NULL) {
-			rc = dircache_updatedir(path, FILE32);
-		} else {
-			if (has_cachedir(FILE64)) {
-				rc = dircache_updatedir(path, FILE64);
-			}
-		}
+		rc = dircache_updatedir(path, FILE_BA);
 		break;
 	default:
 		rc = BAM_ERROR;
@@ -1847,7 +1810,7 @@ set_cache_dir(char *root, int what)
 	int		ret = 0;
 
 	ret = snprintf(get_cachedir(what), sizeof (get_cachedir(what)),
-	    "%s%s%s%s%s", root, ARCHIVE_PREFIX, get_machine(), what == FILE64 ?
+	    "%s%s%s%s%s", root, ARCHIVE_PREFIX, get_machine(), what == FILE_BA ?
 	    "/amd64" : "", CACHEDIR_SUFFIX);
 
 	if (ret >= sizeof (get_cachedir(what))) {
@@ -1887,7 +1850,7 @@ is_valid_archive(char *root, int what)
 	struct stat 	sb, timestamp;
 	int 		ret;
 
-	if (what == FILE64)
+	if (what == FILE_BA)
 		ret = snprintf(archive_path, sizeof (archive_path),
 		    "%s%s%s/amd64%s", root, ARCHIVE_PREFIX, get_machine(),
 		    ARCHIVE_SUFFIX);
@@ -1968,7 +1931,7 @@ check_flags_and_files(char *root)
 	/*
 	 * If archive is missing, create archive
 	 */
-	what = FILE32;
+	what = FILE_BA;
 	do {
 		ret = is_valid_archive(root, what);
 		if (ret == BAM_ERROR)
@@ -1983,7 +1946,7 @@ check_flags_and_files(char *root)
 	/*
 	 * check if cache directories exist.
 	 */
-	what = FILE32;
+	what = FILE_BA;
 
 	do {
 		if (set_cache_dir(root, what) != 0)
@@ -1998,8 +1961,7 @@ check_flags_and_files(char *root)
 	 * if force, create archive unconditionally
 	 */
 	if (bam_force) {
-		set_dir_flag(FILE32, NEED_UPDATE);
-		set_dir_flag(FILE64, NEED_UPDATE);
+		set_dir_flag(FILE_BA, NEED_UPDATE);
 		if (bam_verbose)
 			bam_print(_("forced update of archive requested\n"));
 	}
@@ -2170,8 +2132,7 @@ getoldstat(char *root)
 out_err:
 	if (fd != -1)
 		(void) close(fd);
-	set_dir_flag(FILE32, NEED_UPDATE);
-	set_dir_flag(FILE64, NEED_UPDATE);
+	set_dir_flag(FILE_BA, NEED_UPDATE);
 }
 
 /* Best effort stale entry removal */
@@ -2234,7 +2195,7 @@ check4stale(char *root)
 			if (bam_verbose)
 				bam_print(_("    stale %s\n"), path);
 
-			for (what = FILE32; what < CACHEDIR_NUM; what++)
+			for (what = FILE_BA; what < CACHEDIR_NUM; what++)
 				if (has_cachedir(what))
 					delete_stale(file, what);
 		}
@@ -2464,8 +2425,7 @@ update_required(char *root)
 
 	/* If nothing was updated, discard newstat. */
 
-	if (!is_dir_flag_on(FILE32, NEED_UPDATE) &&
-	    !is_dir_flag_on(FILE64, NEED_UPDATE)) {
+	if (!is_dir_flag_on(FILE_BA, NEED_UPDATE)) {
 		clear_walk_args();
 		return (0);
 	}
