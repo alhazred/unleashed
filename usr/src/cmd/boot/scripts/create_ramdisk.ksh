@@ -163,8 +163,10 @@ function create_archive
 		echo "update of $archive failed"
 		ERROR=1
 	else
-		mv "${archive}-new" "$archive"
+		# remove the hash first, it's better to have a boot archive
+		# without a hash, than one with a hash for its predecessor
 		rm -f "$archive.hash"
+		mv "${archive}-new" "$archive"
 		mv "$archive.hash-new" "$archive.hash" 2> /dev/null
 	fi
 }
@@ -180,6 +182,9 @@ function duplicate_archive
 		ERROR=1
 		rm "$dst-new"
 	else
+		# remove the hash first, it's better to have a boot archive
+		# without a hash, than one with a hash for its predecessor
+		rm -f "$dst.hash"
 		mv "$dst-new" "$dst"
 		mv "$dst.hash-new" "$dst.hash"
 	fi
