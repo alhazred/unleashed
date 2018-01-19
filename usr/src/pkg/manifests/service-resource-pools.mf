@@ -39,7 +39,6 @@ dir path=usr/bin
 dir path=usr/include
 dir path=usr/kernel group=sys
 dir path=usr/kernel/drv group=sys
-dir path=usr/kernel/drv/$(ARCH64) group=sys
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/rcm
@@ -62,7 +61,7 @@ file path=lib/svc/manifest/system/pools.xml group=sys mode=0444 \
 file path=lib/svc/method/svc-pools mode=0555 variant.opensolaris.zone=global
 file path=usr/bin/poolstat mode=0555
 file path=usr/include/pool.h
-file path=usr/kernel/drv/$(ARCH64)/pool group=sys
+file path=usr/kernel/drv/pool group=sys
 file path=usr/kernel/drv/pool.conf group=sys
 file path=usr/lib/$(ARCH64)/libpool.so.1
 file path=usr/lib/libpool.so.1

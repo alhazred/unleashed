@@ -39,9 +39,7 @@ set name=org.opensolaris.noincorp value=true
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/misc group=sys
-dir path=kernel/misc/$(ARCH64) group=sys
 dir path=usr/lib
 dir path=usr/lib/devfsadm group=sys
 dir path=usr/lib/devfsadm/linkmod group=sys
@@ -72,9 +70,9 @@ driver name=i915 perms="* 0644 root sys" \
     alias=pci8086,2e42 \
     alias=pci8086,42 \
     alias=pci8086,46
-file path=kernel/drv/$(ARCH64)/i915 group=sys
-file path=kernel/drv/$(ARCH64)/radeon group=sys
-file path=kernel/misc/$(ARCH64)/drm group=sys mode=0755
+file path=kernel/drv/i915 group=sys
+file path=kernel/drv/radeon group=sys
+file path=kernel/misc/drm group=sys mode=0755
 file path=usr/lib/devfsadm/linkmod/SUNW_drm_link_i386.so group=sys
 file path=usr/share/man/man7d/i915.7d
 file path=usr/share/man/man7d/radeon.7d

@@ -31,7 +31,6 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=lib
 dir path=lib/svc
 dir path=lib/svc/manifest group=sys
@@ -45,7 +44,7 @@ dir path=usr/lib/vscan
 dir path=usr/sbin
 dir path=usr/share/man/man1m
 driver name=vscan perms="* 0640 root sys"
-file path=kernel/drv/$(ARCH64)/vscan group=sys
+file path=kernel/drv/vscan group=sys
 file path=kernel/drv/vscan.conf group=sys
 file path=lib/svc/manifest/system/filesystem/vscan.xml group=sys mode=0444
 file path=usr/lib/devfsadm/linkmod/SUNW_vscan_link.so group=sys

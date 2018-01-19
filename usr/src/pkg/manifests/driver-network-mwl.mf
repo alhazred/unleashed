@@ -39,14 +39,12 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/misc group=sys
-dir path=kernel/misc/$(ARCH64) group=sys
 driver name=mwl clone_perms="mwl 0666 root sys" perms="* 0666 root sys" \
     alias=pci11ab,2a0a \
     alias=pci11ab,2a24
-file path=kernel/drv/$(ARCH64)/mwl group=sys
-file path=kernel/misc/$(ARCH64)/mwlfw group=sys mode=0755
+file path=kernel/drv/mwl group=sys
+file path=kernel/misc/mwlfw group=sys mode=0755
 license kernel/drivers/net/wifi/mwl/THIRDPARTYLICENSE \
     license=kernel/drivers/net/wifi/mwl/THIRDPARTYLICENSE
 license kernel/drivers/net/wifi/mwl/mwl_fw/LICENSE \

@@ -34,7 +34,6 @@ dir path=etc/iscsi group=sys variant.opensolaris.zone=global
 dir path=etc/security group=sys variant.opensolaris.zone=global
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=lib variant.opensolaris.zone=global
 dir path=lib/svc variant.opensolaris.zone=global
 dir path=lib/svc/manifest group=sys variant.opensolaris.zone=global
@@ -48,7 +47,7 @@ dir path=usr/share/man
 dir path=usr/share/man/man1m
 dir path=usr/share/man/man7d
 driver name=iscsi class=scsi-self-identify perms="* 0600 root sys"
-file path=kernel/drv/$(ARCH64)/iscsi group=sys
+file path=kernel/drv/iscsi group=sys
 file path=kernel/drv/iscsi.conf group=sys preserve=true
 file path=lib/svc/manifest/network/iscsi/iscsi-initiator.xml group=sys \
     mode=0444 variant.opensolaris.zone=global

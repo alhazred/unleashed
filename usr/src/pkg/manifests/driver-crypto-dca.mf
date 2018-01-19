@@ -31,7 +31,6 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=usr group=sys
 dir path=usr/lib
 dir path=usr/lib/fm
@@ -51,7 +50,7 @@ driver name=dca \
     alias=pci14e4,5821 \
     alias=pci14e4,5822 \
     alias=pci14e4,5825
-file path=kernel/drv/$(ARCH64)/dca group=sys
+file path=kernel/drv/dca group=sys
 file path=kernel/drv/dca.conf group=sys preserve=true
 file path=usr/lib/fm/dict/SCA1000.dict mode=0444
 file path=usr/lib/fm/dict/SCA500.dict mode=0444

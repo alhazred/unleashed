@@ -33,9 +33,7 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/kmdb group=sys
-dir path=kernel/kmdb/$(ARCH64) group=sys
 dir path=lib variant.opensolaris.zone=global
 dir path=lib/svc variant.opensolaris.zone=global
 dir path=lib/svc/manifest group=sys variant.opensolaris.zone=global
@@ -62,15 +60,15 @@ driver name=pppt perms="* 0666 root sys"
 driver name=qlt perms="* 0666 root sys"
 driver name=stmf perms="* 0666 root sys"
 driver name=stmf_sbd perms="* 0666 root sys"
-file path=kernel/drv/$(ARCH64)/fct group=sys
-file path=kernel/drv/$(ARCH64)/pppt group=sys
-file path=kernel/drv/$(ARCH64)/qlt group=sys
-file path=kernel/drv/$(ARCH64)/stmf group=sys
-file path=kernel/drv/$(ARCH64)/stmf_sbd group=sys
+file path=kernel/drv/fct group=sys
 file path=kernel/drv/fct.conf group=sys
+file path=kernel/drv/pppt group=sys
 file path=kernel/drv/pppt.conf group=sys
+file path=kernel/drv/qlt group=sys
 file path=kernel/drv/qlt.conf group=sys
+file path=kernel/drv/stmf group=sys
 file path=kernel/drv/stmf.conf group=sys
+file path=kernel/drv/stmf_sbd group=sys
 file path=kernel/drv/stmf_sbd.conf group=sys
 file path=kernel/kmdb/$(ARCH64)/stmf group=sys mode=0555
 file path=kernel/kmdb/$(ARCH64)/stmf_sbd group=sys mode=0555

@@ -86,10 +86,10 @@ $(OBJS_DIR)/vers.o: $(OBJECTS)
 $(ROOT_MOD_DIR) $(USR_MOD_DIR):
 	-$(INS.dir)
 
-$(ROOT_MOD_DIRS_32):	$(ROOT_MOD_DIR)
+$(ROOT_MOD_DIRS):	$(ROOT_MOD_DIR)
 	-$(INS.dir)
 
-$(USR_MOD_DIRS_32):	$(USR_MOD_DIR)
+$(USR_MOD_DIRS):	$(USR_MOD_DIR)
 	-$(INS.dir)
 
 $(ROOT_MOD_DIR)/%:	$(OBJS_DIR)/% $(ROOT_MOD_DIR) FRC

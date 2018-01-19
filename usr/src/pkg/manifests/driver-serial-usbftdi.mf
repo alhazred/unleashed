@@ -36,7 +36,6 @@ set name=info.classification value=org.opensolaris.category.2008:Drivers/Ports
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=usbftdi perms="* 0666 root sys" \
@@ -66,7 +65,7 @@ driver name=usbftdi perms="* 0666 root sys" \
     alias=usb93c,0701 \
     alias=usbif403,6010.config1.1 \
     alias=usbif9e88,9e8f.config1.1
-file path=kernel/drv/$(ARCH64)/usbftdi group=sys
+file path=kernel/drv/usbftdi group=sys
 file path=kernel/drv/usbftdi.conf group=sys preserve=true
 file path=usr/share/man/man7d/usbftdi.7d
 license cr_Sun license=cr_Sun

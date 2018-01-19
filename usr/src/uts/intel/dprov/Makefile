@@ -44,9 +44,7 @@ MODULE		= dprov
 OBJECTS		= $(DPROV_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 ROOTLINK	= $(ROOT_CRYPTO_DIR)/$(MODULE)
-TARGET_32	= ../../kernel/drv/$(MODULE)
-TARGET_64	= ../../../kernel/drv/$(SUBDIR64)/$(MODULE)
-LINK_TARGET	= $(TARGET_$(CLASS))
+LINK_TARGET	= ../../kernel/drv/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/crypto/io
 
 #

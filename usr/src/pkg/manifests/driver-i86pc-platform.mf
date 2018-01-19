@@ -38,11 +38,8 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/misc group=sys
-dir path=kernel/misc/$(ARCH64) group=sys
 dir path=kernel/strmod group=sys
-dir path=kernel/strmod/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=asy alias=pci11c1,480 perms="* 0666 root sys" \
@@ -51,24 +48,24 @@ driver name=cmdk perms="* 0640 root sys"
 driver name=ecpp alias=lp perms="* 0666 root sys"
 driver name=fd perms="* 0666 root sys"
 driver name=fdc
-file path=kernel/drv/$(ARCH64)/asy group=sys
-file path=kernel/drv/$(ARCH64)/cmdk group=sys
-file path=kernel/drv/$(ARCH64)/ecpp group=sys
-file path=kernel/drv/$(ARCH64)/fd group=sys
-file path=kernel/drv/$(ARCH64)/fdc group=sys
+file path=kernel/drv/asy group=sys
 file path=kernel/drv/asy.conf group=sys
+file path=kernel/drv/cmdk group=sys
 file path=kernel/drv/cmdk.conf group=sys
+file path=kernel/drv/ecpp group=sys
 file path=kernel/drv/ecpp.conf group=sys
+file path=kernel/drv/fd group=sys
 file path=kernel/drv/fd.conf group=sys
+file path=kernel/drv/fdc group=sys
 file path=kernel/drv/fdc.conf group=sys
-file path=kernel/misc/$(ARCH64)/dadk group=sys mode=0755
-file path=kernel/misc/$(ARCH64)/gda group=sys mode=0755
-file path=kernel/misc/$(ARCH64)/strategy group=sys mode=0755
-file path=kernel/strmod/$(ARCH64)/vuid2ps2 group=sys mode=0755
-file path=kernel/strmod/$(ARCH64)/vuid3ps2 group=sys mode=0755
-file path=kernel/strmod/$(ARCH64)/vuidm3p group=sys mode=0755
-file path=kernel/strmod/$(ARCH64)/vuidm4p group=sys mode=0755
-file path=kernel/strmod/$(ARCH64)/vuidm5p group=sys mode=0755
+file path=kernel/misc/dadk group=sys mode=0755
+file path=kernel/misc/gda group=sys mode=0755
+file path=kernel/misc/strategy group=sys mode=0755
+file path=kernel/strmod/vuid2ps2 group=sys mode=0755
+file path=kernel/strmod/vuid3ps2 group=sys mode=0755
+file path=kernel/strmod/vuidm3p group=sys mode=0755
+file path=kernel/strmod/vuidm4p group=sys mode=0755
+file path=kernel/strmod/vuidm5p group=sys mode=0755
 file path=usr/share/man/man7d/asy.7d
 file path=usr/share/man/man7d/cmdk.7d
 file path=usr/share/man/man7d/ecpp.7d

@@ -46,9 +46,7 @@ MODULE		= des
 OBJECTS		= $(DES_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_CRYPTO_DIR)/$(MODULE)
 ROOTLINK	= $(ROOT_MISC_DIR)/$(MODULE)
-TARGET_32	= ../../kernel/crypto/$(MODULE)
-TARGET_64	= ../../../kernel/crypto/$(SUBDIR64)/$(MODULE)
-LINK_TARGET	= $(TARGET_$(CLASS))
+LINK_TARGET	= ../../kernel/crypto/$(MODULE)
 
 #
 #	Include common rules.

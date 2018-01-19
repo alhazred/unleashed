@@ -40,7 +40,6 @@ dir path=etc/init.d group=sys
 dir path=etc/rc2.d group=sys
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=usr group=sys
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
@@ -48,7 +47,7 @@ dir path=usr/share
 dir path=usr/share/dat group=sys
 driver name=daplt perms="* 0644 root sys"
 file path=etc/init.d/dodatadm.udaplt group=sys mode=0744 preserve=true
-file path=kernel/drv/$(ARCH64)/daplt group=sys
+file path=kernel/drv/daplt group=sys
 file path=kernel/drv/daplt.conf group=sys
 file path=usr/lib/$(ARCH64)/udapl_tavor.so.1
 file path=usr/lib/udapl_tavor.so.1

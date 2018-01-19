@@ -40,10 +40,8 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/misc group=sys
 dir path=kernel/misc/qlc group=sys
-dir path=kernel/misc/qlc/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=qlc class=fibre-channel perms="* 0666 root sys" \
@@ -58,15 +56,15 @@ driver name=qlc class=fibre-channel perms="* 0666 root sys" \
     alias=pciex1077,8001 \
     alias=pciex1077,8021
 driver name=qlge alias=pciex1077,8000 perms="* 0666 root sys"
-file path=kernel/drv/$(ARCH64)/qlc group=sys
-file path=kernel/drv/$(ARCH64)/qlge group=sys
+file path=kernel/drv/qlc group=sys
 file path=kernel/drv/qlc.conf group=sys preserve=true
-file path=kernel/misc/qlc/$(ARCH64)/qlc_fw_2200 group=sys mode=0755
-file path=kernel/misc/qlc/$(ARCH64)/qlc_fw_2300 group=sys mode=0755
-file path=kernel/misc/qlc/$(ARCH64)/qlc_fw_2400 group=sys mode=0755
-file path=kernel/misc/qlc/$(ARCH64)/qlc_fw_2500 group=sys mode=0755
-file path=kernel/misc/qlc/$(ARCH64)/qlc_fw_6322 group=sys mode=0755
-file path=kernel/misc/qlc/$(ARCH64)/qlc_fw_8100 group=sys mode=0755
+file path=kernel/drv/qlge group=sys
+file path=kernel/misc/qlc/qlc_fw_2200 group=sys mode=0755
+file path=kernel/misc/qlc/qlc_fw_2300 group=sys mode=0755
+file path=kernel/misc/qlc/qlc_fw_2400 group=sys mode=0755
+file path=kernel/misc/qlc/qlc_fw_2500 group=sys mode=0755
+file path=kernel/misc/qlc/qlc_fw_6322 group=sys mode=0755
+file path=kernel/misc/qlc/qlc_fw_8100 group=sys mode=0755
 file path=usr/share/man/man7d/qlc.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

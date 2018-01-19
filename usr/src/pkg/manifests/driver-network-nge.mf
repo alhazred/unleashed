@@ -37,7 +37,6 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 driver name=nge clone_perms="nge 0666 root sys" perms="* 0666 root sys" \
     alias=pci10de,268 \
     alias=pci10de,269 \
@@ -53,7 +52,7 @@ driver name=nge clone_perms="nge 0666 root sys" perms="* 0666 root sys" \
     alias=pci10de,ab0 \
     alias=pci10de,df \
     alias=pci10de,e6
-file path=kernel/drv/$(ARCH64)/nge group=sys
+file path=kernel/drv/nge group=sys
 file path=kernel/drv/nge.conf group=sys
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

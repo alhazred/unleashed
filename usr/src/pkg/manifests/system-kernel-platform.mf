@@ -39,24 +39,13 @@ set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=platform group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM) group=sys
-$(i86pc_ONLY)dir path=platform/$(CONFIG_PLATFORM)/$(ARCH64) group=sys
+$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/$(ARCH64) group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/$(ARCH64) group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/cpu group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/cpu/$(ARCH64) \
-    group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/dacf group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/dacf/$(ARCH64) \
-    group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/drv/$(ARCH64) \
-    group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/mach group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/mach/$(ARCH64) \
-    group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/misc group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/misc/$(ARCH64) \
-    group=sys
 $(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/ucode group=sys
 dir path=usr/share/man/man4
 $(i386_ONLY)driver name=acpinex alias=acpivirtnex
@@ -85,44 +74,39 @@ $(i386_ONLY)driver name=xnbo \
     alias=xnb,SUNW_mac
 $(i386_ONLY)driver name=xnbu alias=xnb,netfront
 $(i386_ONLY)driver name=xnf
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/$(ARCH64)/unix \
-    group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu.generic \
-    group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu_ms.AuthenticAMD \
-    group=sys mode=0755
-$(i386_ONLY)file \
-    path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu_ms.AuthenticAMD.15 group=sys \
+$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/unix group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/$(ARCH64)/cpu_ms.GenuineIntel \
+$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu.generic group=sys \
+    mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
+    mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD.15 \
     group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/dacf/$(ARCH64)/consconfig_dacf \
-    group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/acpinex group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/acpippm group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/amd_iommu group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/cpudrv group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/isa group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/npe group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/pci group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/pit_beep group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/ppm group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/$(ARCH64)/rootnex group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel group=sys \
+    mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/dacf/consconfig_dacf group=sys \
+    mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/acpinex group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/acpippm group=sys
 $(i386_ONLY)file path=platform/i86pc/kernel/drv/acpippm.conf group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/amd_iommu group=sys
 $(i386_ONLY)file path=platform/i86pc/kernel/drv/amd_iommu.conf group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/cpudrv group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/isa group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/npe group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/pci group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/pit_beep group=sys
 $(i386_ONLY)file path=platform/i86pc/kernel/drv/pit_beep.conf group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/ppm group=sys
 $(i386_ONLY)file path=platform/i86pc/kernel/drv/ppm.conf group=sys
+$(i386_ONLY)file path=platform/i86pc/kernel/drv/rootnex group=sys
 $(i386_ONLY)file path=platform/i86pc/kernel/drv/rootnex.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/mach/$(ARCH64)/apix group=sys \
+$(i386_ONLY)file path=platform/i86pc/kernel/mach/apix group=sys mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/mach/pcplusmp group=sys mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/mach/uppc group=sys mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/misc/acpidev group=sys mode=0755
+$(i386_ONLY)file path=platform/i86pc/kernel/misc/gfx_private group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/mach/$(ARCH64)/pcplusmp group=sys \
-    mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/mach/$(ARCH64)/uppc group=sys \
-    mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/misc/$(ARCH64)/acpidev group=sys \
-    mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/misc/$(ARCH64)/gfx_private \
-    group=sys mode=0755
 $(i386_ONLY)file path=platform/i86pc/ucode/amd-ucode.bin group=sys mode=0444 \
     preserve=true reboot-needed=true
 $(i386_ONLY)file path=platform/i86pc/ucode/intel-ucode.txt group=sys mode=0444 \

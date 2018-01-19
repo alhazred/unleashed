@@ -37,7 +37,6 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=mega_sas class=scsi \
@@ -144,7 +143,7 @@ driver name=mega_sas class=scsi \
     alias=pci1028,15.1028.1f01 \
     alias=pci1028,15.1028.1f02 \
     alias=pci1028,15.1028.1f03
-file path=kernel/drv/$(ARCH64)/mega_sas group=sys
+file path=kernel/drv/mega_sas group=sys
 file path=kernel/drv/mega_sas.conf group=sys
 file path=usr/share/man/man7d/mega_sas.7d
 license usr/src/uts/common/io/mega_sas/THIRDPARTYLICENSE \

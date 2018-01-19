@@ -37,9 +37,7 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=kernel/dtrace group=sys
-dir path=kernel/dtrace/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=dcpc
@@ -50,21 +48,21 @@ driver name=lockstat perms="* 0644 root sys"
 driver name=profile perms="profile 0644 root sys"
 driver name=sdt perms="sdt 0644 root sys"
 driver name=systrace perms="systrace 0644 root sys"
-file path=kernel/drv/$(ARCH64)/dcpc group=sys
-file path=kernel/drv/$(ARCH64)/dtrace group=sys
-file path=kernel/drv/$(ARCH64)/fasttrap group=sys
-file path=kernel/drv/$(ARCH64)/fbt group=sys
-file path=kernel/drv/$(ARCH64)/lockstat group=sys
-file path=kernel/drv/$(ARCH64)/profile group=sys
-file path=kernel/drv/$(ARCH64)/sdt group=sys
-file path=kernel/drv/$(ARCH64)/systrace group=sys
+file path=kernel/drv/dcpc group=sys
 file path=kernel/drv/dcpc.conf group=sys
+file path=kernel/drv/dtrace group=sys
 file path=kernel/drv/dtrace.conf group=sys
+file path=kernel/drv/fasttrap group=sys
 file path=kernel/drv/fasttrap.conf group=sys
+file path=kernel/drv/fbt group=sys
 file path=kernel/drv/fbt.conf group=sys
+file path=kernel/drv/lockstat group=sys
 file path=kernel/drv/lockstat.conf group=sys
+file path=kernel/drv/profile group=sys
 file path=kernel/drv/profile.conf group=sys
+file path=kernel/drv/sdt group=sys
 file path=kernel/drv/sdt.conf group=sys
+file path=kernel/drv/systrace group=sys
 file path=kernel/drv/systrace.conf group=sys
 file path=usr/share/man/man7d/dtrace.7d
 file path=usr/share/man/man7d/fasttrap.7d
@@ -73,19 +71,12 @@ file path=usr/share/man/man7d/lockstat.7d
 file path=usr/share/man/man7d/profile.7d
 file path=usr/share/man/man7d/sdt.7d
 file path=usr/share/man/man7d/systrace.7d
-hardlink path=kernel/dtrace/$(ARCH64)/dcpc \
-    target=../../../kernel/drv/$(ARCH64)/dcpc
-hardlink path=kernel/dtrace/$(ARCH64)/fasttrap \
-    target=../../../kernel/drv/$(ARCH64)/fasttrap
-hardlink path=kernel/dtrace/$(ARCH64)/fbt \
-    target=../../../kernel/drv/$(ARCH64)/fbt
-hardlink path=kernel/dtrace/$(ARCH64)/lockstat \
-    target=../../../kernel/drv/$(ARCH64)/lockstat
-hardlink path=kernel/dtrace/$(ARCH64)/profile \
-    target=../../../kernel/drv/$(ARCH64)/profile
-hardlink path=kernel/dtrace/$(ARCH64)/sdt \
-    target=../../../kernel/drv/$(ARCH64)/sdt
-hardlink path=kernel/dtrace/$(ARCH64)/systrace \
-    target=../../../kernel/drv/$(ARCH64)/systrace
+hardlink path=kernel/dtrace/dcpc target=../../kernel/drv/dcpc
+hardlink path=kernel/dtrace/fasttrap target=../../kernel/drv/fasttrap
+hardlink path=kernel/dtrace/fbt target=../../kernel/drv/fbt
+hardlink path=kernel/dtrace/lockstat target=../../kernel/drv/lockstat
+hardlink path=kernel/dtrace/profile target=../../kernel/drv/profile
+hardlink path=kernel/dtrace/sdt target=../../kernel/drv/sdt
+hardlink path=kernel/dtrace/systrace target=../../kernel/drv/systrace
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

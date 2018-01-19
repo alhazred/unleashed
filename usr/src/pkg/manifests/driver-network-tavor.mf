@@ -37,7 +37,6 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 driver name=tavor perms="* 0666 root sys" \
     alias=pci15b3,5a44 \
     alias=pci15b3,5a45 \
@@ -45,7 +44,7 @@ driver name=tavor perms="* 0666 root sys" \
     alias=pci15b3,6279 \
     alias=pciex15b3,6278 \
     alias=pciex15b3,6279
-file path=kernel/drv/$(ARCH64)/tavor group=sys
+file path=kernel/drv/tavor group=sys
 file path=kernel/drv/tavor.conf group=sys
 license cr_Sun license=cr_Sun
 license lic_OSBL license=lic_OSBL

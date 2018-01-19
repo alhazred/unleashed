@@ -50,13 +50,8 @@ LDFLAGS += -dy ${MODULE_DEPS:%=-N %}
 LINKS=
 .if !empty(MODULE_TYPE_LINKS)
 .for type in ${MODULE_TYPE_LINKS}
-.if !empty(BITS) && ${BITS} == 32
 LINKS += "/kernel/${MODULE_TYPE}/${MODULE}" \
 	 "/kernel/${type}/${MODULE}"
-.else
-LINKS += "/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}" \
-	 "/kernel/${type}/${CONFIG_MACH64}/${MODULE}"
-.endif
 .endfor
 .endif
 
@@ -72,13 +67,8 @@ clean cleandir:
 .include <links.mk>
 
 install:
-.if !empty(BITS) && ${BITS} == 32
 	${INSTALL} -d -m 755 "${DESTDIR}/kernel/${MODULE_TYPE}"
 	${INSTALL} -m 755 ${MODULE} "${DESTDIR}/kernel/${MODULE_TYPE}/${MODULE}"
-.else
-	${INSTALL} -d -m 755 "${DESTDIR}/kernel/${MODULE_TYPE}/${CONFIG_MACH64}"
-	${INSTALL} -m 755 ${MODULE} "${DESTDIR}/kernel/${MODULE_TYPE}/${CONFIG_MACH64}/${MODULE}"
-.endif
 .if !empty(LINKS)
 	@set ${LINKS}; ${_LINKS_SCRIPT}
 .endif

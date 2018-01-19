@@ -55,7 +55,6 @@ dir path=etc/net-snmp/snmp/mibs variant.opensolaris.zone=__NODEFAULT
 #
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 #
 # lib dirs:
 #
@@ -147,7 +146,7 @@ file path=etc/net-snmp/snmp/mibs/SUN-IREPORT-MIB.mib \
 #
 # driver is global-zone only
 #
-file path=kernel/drv/$(ARCH64)/fm group=sys
+file path=kernel/drv/fm group=sys
 file path=kernel/drv/fm.conf group=sys
 
 #

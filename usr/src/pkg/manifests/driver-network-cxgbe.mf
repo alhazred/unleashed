@@ -23,7 +23,6 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 driver name=cxgbe alias=cxgbe clone_perms="cxgbe 0666 root sys" \
     perms="* 0666 root sys"
 driver name=t4nex clone_perms="t4nex 0666 root sys" \
@@ -87,7 +86,7 @@ driver name=t4nex clone_perms="t4nex 0666 root sys" \
     alias=pciex1425,549a \
     alias=pciex1425,549b \
     alias=pciex1425,549c
-file path=kernel/drv/$(ARCH64)/cxgbe group=sys
-file path=kernel/drv/$(ARCH64)/t4nex group=sys
+file path=kernel/drv/cxgbe group=sys
+file path=kernel/drv/t4nex group=sys
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

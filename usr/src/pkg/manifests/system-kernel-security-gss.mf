@@ -38,10 +38,8 @@ set name=info.classification \
 set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/misc group=sys
-dir path=kernel/misc/$(ARCH64) group=sys
 dir path=kernel/misc/kgss group=sys
-dir path=kernel/misc/kgss/$(ARCH64) group=sys
-file path=kernel/misc/$(ARCH64)/kgssapi group=sys mode=0755
-file path=kernel/misc/kgss/$(ARCH64)/kmech_krb5 group=sys mode=0755
+file path=kernel/misc/kgss/kmech_krb5 group=sys mode=0755
+file path=kernel/misc/kgssapi group=sys mode=0755
 license usr/src/uts/common/gssapi/mechs/krb5/THIRDPARTYLICENSE \
     license=usr/src/uts/common/gssapi/mechs/krb5/THIRDPARTYLICENSE

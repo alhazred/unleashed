@@ -310,7 +310,7 @@ usr/include/aclutils.h
 #
 # USB skeleton driver stays in sync with the rest of USB but doesn't ship.
 #
-kernel/drv/amd64/usbskel	i386
+kernel/drv/usbskel	i386
 kernel/drv/usbskel.conf
 #
 # Consolidation and Sun private libdevid interfaces

@@ -39,13 +39,12 @@ dir path=etc group=sys
 dir path=etc/sock2path.d group=sys
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 driver name=rds perms="* 0644 root sys"
 driver name=rdsib perms="* 0644 root sys"
 file path=etc/sock2path.d/driver%2Fnetwork%2Frds group=sys
-file path=kernel/drv/$(ARCH64)/rds group=sys
-file path=kernel/drv/$(ARCH64)/rdsib group=sys
+file path=kernel/drv/rds group=sys
 file path=kernel/drv/rds.conf group=sys
+file path=kernel/drv/rdsib group=sys
 file path=kernel/drv/rdsib.conf group=sys
 license usr/src/uts/common/io/ib/clients/rds/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/ib/clients/rds/THIRDPARTYLICENSE

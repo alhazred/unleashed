@@ -38,17 +38,16 @@ dir path=etc group=sys
 dir path=etc/inet group=sys
 dir path=kernel group=sys
 dir path=kernel/ipp group=sys
-dir path=kernel/ipp/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7ipp
 file path=etc/inet/ipqosconf.1.sample group=sys mode=0444
 file path=etc/inet/ipqosconf.2.sample group=sys mode=0444
 file path=etc/inet/ipqosconf.3.sample group=sys mode=0444
-file path=kernel/ipp/$(ARCH64)/dlcosmk group=sys mode=0755
-file path=kernel/ipp/$(ARCH64)/dscpmk group=sys mode=0755
-file path=kernel/ipp/$(ARCH64)/flowacct group=sys mode=0755
-file path=kernel/ipp/$(ARCH64)/tokenmt group=sys mode=0755
-file path=kernel/ipp/$(ARCH64)/tswtclmt group=sys mode=0755
+file path=kernel/ipp/dlcosmk group=sys mode=0755
+file path=kernel/ipp/dscpmk group=sys mode=0755
+file path=kernel/ipp/flowacct group=sys mode=0755
+file path=kernel/ipp/tokenmt group=sys mode=0755
+file path=kernel/ipp/tswtclmt group=sys mode=0755
 file path=usr/share/man/man7ipp/dlcosmk.7ipp
 file path=usr/share/man/man7ipp/dscpmk.7ipp
 file path=usr/share/man/man7ipp/flowacct.7ipp

@@ -34,7 +34,6 @@ dir path=usr/include
 dir path=usr/include/sys
 dir path=usr/kernel group=sys
 dir path=usr/kernel/drv group=sys
-dir path=usr/kernel/drv/$(ARCH64) group=sys
 dir path=usr/lib
 dir path=usr/lib/scsi
 dir path=usr/sbin
@@ -42,14 +41,14 @@ file path=usr/include/sys/emul64.h
 file path=usr/include/sys/emul64cmd.h
 file path=usr/include/sys/emul64var.h
 file path=usr/include/sys/pshot.h
-file path=usr/kernel/drv/$(ARCH64)/emul64 group=sys
-file path=usr/kernel/drv/$(ARCH64)/gen_drv group=sys
-file path=usr/kernel/drv/$(ARCH64)/pshot group=sys
-file path=usr/kernel/drv/$(ARCH64)/tclient group=sys
-file path=usr/kernel/drv/$(ARCH64)/tphci group=sys
-file path=usr/kernel/drv/$(ARCH64)/tvhci group=sys
+file path=usr/kernel/drv/emul64 group=sys
 file path=usr/kernel/drv/emul64.conf group=sys
+file path=usr/kernel/drv/gen_drv group=sys
+file path=usr/kernel/drv/pshot group=sys
 file path=usr/kernel/drv/pshot.conf group=sys
+file path=usr/kernel/drv/tclient group=sys
+file path=usr/kernel/drv/tphci group=sys
+file path=usr/kernel/drv/tvhci group=sys
 file path=usr/lib/scsi/sestopo mode=0555
 file path=usr/lib/scsi/smp mode=0555
 file path=usr/sbin/devctl mode=0555

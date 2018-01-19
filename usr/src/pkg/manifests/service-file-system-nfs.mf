@@ -35,7 +35,6 @@ dir path=etc/default group=sys
 dir path=etc/nfs group=sys
 dir path=kernel group=sys
 dir path=kernel/misc group=sys
-dir path=kernel/misc/$(ARCH64) group=sys
 dir path=lib
 dir path=lib/svc
 dir path=lib/svc/manifest group=sys
@@ -56,7 +55,7 @@ dir path=usr/share/man/man1m
 dir path=usr/share/man/man5
 file path=etc/default/nfslogd group=sys preserve=true
 file path=etc/nfs/nfslog.conf group=sys preserve=true
-file path=kernel/misc/$(ARCH64)/nfssrv group=sys mode=0755
+file path=kernel/misc/nfssrv group=sys mode=0755
 file path=lib/svc/manifest/network/nfs/nfslogd.xml group=sys mode=0444
 file path=lib/svc/manifest/network/nfs/rquota.xml group=sys mode=0444
 file path=lib/svc/manifest/network/nfs/server.xml group=sys mode=0444

@@ -38,7 +38,6 @@ set name=info.keyword value=audioi810
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=audio810 \
@@ -64,7 +63,7 @@ driver name=audio810 \
     alias=pci8086,2698 \
     alias=pci8086,27de \
     alias=pci8086,7195
-file path=kernel/drv/$(ARCH64)/audio810 group=sys
+file path=kernel/drv/audio810 group=sys
 file path=kernel/drv/audio810.conf group=sys preserve=true
 file path=usr/share/man/man7d/audio810.7d
 license cr_Sun license=cr_Sun

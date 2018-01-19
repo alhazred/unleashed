@@ -22,7 +22,6 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-dir path=kernel/drv/$(ARCH64) group=sys
 driver name=urf clone_perms="urf 0666 root sys" perms="* 0666 root sys" \
     alias=usb1557,8150 \
     alias=usb3980,3 \
@@ -30,7 +29,7 @@ driver name=urf clone_perms="urf 0666 root sys" perms="* 0666 root sys" \
     alias=usb586,401a \
     alias=usb7b8,401a \
     alias=usbbda,8150
-file path=kernel/drv/$(ARCH64)/urf group=sys
+file path=kernel/drv/urf group=sys
 license usr/src/uts/common/io/urf/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/urf/THIRDPARTYLICENSE
 depend fmri=driver/usb/usbgem type=require
