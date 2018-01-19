@@ -42,7 +42,7 @@ usage() {
 	echo "Please use bootadm(1M) instead."
 	echo ""
 	echo "Usage: ${0##*/}: [-R \<root\>] [-p \<platform\>]"
-	echo "where \<platform\> is one of i86pc, sun4u or sun4v"
+	echo "where \<platform\> is one of: i86pc"
 	exit
 }
 
@@ -93,12 +93,6 @@ i386)	PLATFORM=i86pc
 i86pc)	ISA=i386
 	ARCH64=amd64
 	;;
-sun4u)	ISA=sparc
-	ARCH64=sparcv9
-	;;
-sun4v)	ISA=sparc
-	ARCH64=sparcv9
-	;;
 *)	usage
 	;;
 esac
@@ -106,11 +100,7 @@ esac
 BOOT_ARCHIVE=platform/$PLATFORM/boot_archive
 BOOT_ARCHIVE_64=platform/$PLATFORM/$ARCH64/boot_archive
 
-if [ $PLATFORM = i86pc ] ; then
-	SPLIT=yes
-else			# must be sparc
-	SPLIT=no	# there's only 64-bit (sparcv9), so don't split
-fi
+SPLIT=yes
 
 function cleanup
 {
