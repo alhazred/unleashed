@@ -26,7 +26,6 @@
 #
 
 include $(SRC)/Makefile.master
-include $(SRC)/Makefile.buildnum
 
 #
 # Make sure we're getting a consistent execution environment for the
