@@ -32,7 +32,6 @@
 ALT_ROOT=
 EXTRACT_ARGS=
 ERROR=0
-dirsize=0
 
 usage() {
 	echo "This utility is a component of the bootadm(1M) implementation"
@@ -96,26 +95,6 @@ BOOT_ARCHIVE=platform/$PLATFORM/boot_archive
 function cleanup
 {
 	[ -n "$rddir" ] && rm -fr "$rddir" 2> /dev/null
-	[ -n "$new_rddir" ] && rm -fr "$new_rddir" 2>/dev/null
-}
-
-function getsize
-{
-	# Estimate image size and add 10% overhead for ufs stuff.
-	# Note, we can't use du here in case we're on a filesystem, e.g. zfs,
-	# in which the disk usage is less than the sum of the file sizes.
-	# The nawk code 
-	#
-	#	{t += ($5 % 1024) ? (int($5 / 1024) + 1) * 1024 : $5}
-	#
-	# below rounds up the size of a file/directory, in bytes, to the
-	# next multiple of 1024.  This mimics the behavior of ufs especially
-	# with directories.  This results in a total size that's slightly
-	# bigger than if du was called on a ufs directory.
-	size=$(cat "$list" | xargs -I {} ls -lLd "{}" 2> /dev/null |
-		nawk '{t += ($5 % 1024) ? (int($5 / 1024) + 1) * 1024 : $5}
-		END {print int(t * 1.10 / 1024)}')
-	(( total_size = size + dirsize ))
 }
 
 function create_cpio
@@ -133,7 +112,7 @@ function create_cpio
 	if [ -x $GZIP_CMD ] ; then
 		gzip -c "$cpiofile" > "${archive}-new"
 	else
-		cat "$cpiofile" > "${archive}-new"
+		mv "$cpiofile" "${archive}-new"
 	fi
 	
 	if [ $? -ne 0 ] ; then
@@ -187,11 +166,12 @@ filelist=$($EXTRACT_FILELIST $EXTRACT_ARGS \
 		2>/dev/null | sort -u)
 
 #
-# We use /tmp/ for scratch space now.  This may be changed later if there
-# is insufficient space in /tmp/.
+# We assume there is enough space on $ALT_ROOT.  We create the temporary
+# file in /platform because then it is just a local filesystem move (instead
+# of a cross-mountpoint move).  So, if we successufully create the boot
+# archive temp file, we will likely succeed in moving it into place.
 #
-rddir="/tmp/create_ramdisk.$$.tmp"
-new_rddir=
+rddir="/$ALT_ROOT/platform/create_ramdisk.$$.tmp"
 rm -rf "$rddir"
 mkdir "$rddir" || fatal_error "Could not create temporary directory $rddir"
 
@@ -207,41 +187,7 @@ touch $list
 # which is redirected at the end of the loop.
 #
 cd "/$ALT_ROOT"
-find $filelist -print 2>/dev/null | while read path
-do
-	if [ -d "$path" ]; then
-		size=`ls -lLd "$path" | nawk '
-		    {print ($5 % 1024) ? (int($5 / 1024) + 1) * 1024 : $5}'`
-		(( dirsize += size ))
-	else
-		print "$path"
-	fi
-done >"$list"
-
-# calculate image size
-getsize
-
-# check to see if there is sufficient space in tmpfs 
-#
-tmp_free=`df -b /tmp | tail -1 | awk '{ printf ($2) }'`
-(( tmp_free = tmp_free / 3 ))
-
-if [ $total_size -gt $tmp_free  ] ; then
-	# assumes we have enough scratch space on $ALT_ROOT
-	new_rddir="/$ALT_ROOT/var/tmp/create_ramdisk.$$.tmp"
-	rm -rf "$new_rddir"
-	mkdir "$new_rddir" || fatal_error \
-	    "Could not create temporary directory $new_rddir"
-
-	# Save the file list
-	mv "$list" "$new_rddir"/
-	list="/$new_rddir/filelist"
-
-	# Remove the old $rddir and set the new value of rddir
-	rm -rf "$rddir"
-	rddir="$new_rddir"
-	new_rddir=
-fi
+find $filelist -print 2>/dev/null > "$list"
 
 cpiofile="$rddir/cpio.file"
 
