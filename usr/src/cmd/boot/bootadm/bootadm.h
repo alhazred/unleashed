@@ -146,7 +146,6 @@ extern char *get_special(char *);
 extern char *os_to_grubdisk(char *, int);
 extern int is_grub(const char *);
 extern char *s_strdup(char *);
-extern int is_sparc(void);
 extern int is_zfs(char *);
 
 #define	BAM_MAXLINE	8192

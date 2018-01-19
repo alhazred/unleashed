@@ -266,13 +266,11 @@ typedef struct _dirinfo {
 /*
  * Update flags:
  * NEED_CACHE_DIR : cache directory is missing and needs to be created
- * IS_SPARC_TARGET : the target mountpoint is a SPARC environment
  * UPDATE_ERROR : an error occourred while traversing the list of files
  * RDONLY_FSCHK : the target filesystem is read-only
  * RAMDSK_FSCHK : the target filesystem is on a ramdisk
  */
 #define	NEED_CACHE_DIR		0x00000001
-#define	IS_SPARC_TARGET		0x00000002
 #define	UPDATE_ERROR		0x00000004
 #define	RDONLY_FSCHK		0x00000008
 #define	INVALIDATE_CACHE	0x00000010
@@ -285,13 +283,11 @@ typedef struct _dirinfo {
  * struct walk_arg :
  * update_flags: flags related to the current updating process
  * new_nvlp/old_nvlp: new and old list of archive-files / attributes pairs
- * sparcfile: list of file paths for mkisofs -path-list (SPARC only)
  */
 static struct {
 	int 		update_flags;
 	nvlist_t 	*new_nvlp;
 	nvlist_t 	*old_nvlp;
-	FILE 		*sparcfile;
 	dirinfo_t	dirinfo[CACHEDIR_NUM];
 } walk_arg;
 
@@ -1662,11 +1658,7 @@ cmpstat(
 	struct stat	sb;
 	regex_t re;
 
-	/*
-	 * On SPARC we create/update links too.
-	 */
-	if (flags != FTW_F && flags != FTW_D && (flags == FTW_SL &&
-	    !is_flag_on(IS_SPARC_TARGET)))
+	if (flags != FTW_F && flags != FTW_D && flags == FTW_SL)
 		return (0);
 
 	/*
@@ -1723,30 +1715,12 @@ cmpstat(
 	}
 
 	/*
-	 * On SPARC we create a -path-list file for mkisofs
-	 */
-	if (is_flag_on(IS_SPARC_TARGET) && !bam_nowrite()) {
-		if (flags != FTW_D) {
-			char	*strip;
-
-			strip = (char *)file + strlen(rootbuf);
-			(void) fprintf(walk_arg.sparcfile, "/%s=%s\n", strip,
-			    file);
-		}
-	}
-
-	/*
 	 * We are transitioning from the old model to the dircache or the cache
 	 * directory was removed: create the entry without further checkings.
 	 */
 	if (is_flag_on(NEED_CACHE_DIR)) {
 		if (bam_verbose)
 			bam_print(_("    new     %s\n"), file);
-
-		if (is_flag_on(IS_SPARC_TARGET)) {
-			set_dir_flag(FILE64, NEED_UPDATE);
-			return (0);
-		}
 
 		ret = update_dircache(file, flags);
 		if (ret == BAM_ERROR) {
@@ -1767,15 +1741,11 @@ cmpstat(
 		if (bam_smf_check)	/* ignore new during smf check */
 			return (0);
 
-		if (is_flag_on(IS_SPARC_TARGET)) {
-			set_dir_flag(FILE64, NEED_UPDATE);
-		} else {
-			ret = update_dircache(file, flags);
-			if (ret == BAM_ERROR) {
-				bam_error(_("directory cache update "
-				    "failed for %s\n"), file);
-				return (-1);
-			}
+		ret = update_dircache(file, flags);
+		if (ret == BAM_ERROR) {
+			bam_error(_("directory cache update "
+			    "failed for %s\n"), file);
+			return (-1);
 		}
 
 		if (bam_verbose)
@@ -1787,9 +1757,7 @@ cmpstat(
 	 * If we got there, the file is already listed as to be included in the
 	 * iso image. We just need to know if we are going to rebuild it or not
 	 */
-	if (is_flag_on(IS_SPARC_TARGET) &&
-	    is_dir_flag_on(FILE64, NEED_UPDATE) && !bam_nowrite())
-		return (0);
+
 	/*
 	 * File exists in old archive. Check if file has changed
 	 */
@@ -1818,15 +1786,11 @@ cmpstat(
 			}
 		}
 
-		if (is_flag_on(IS_SPARC_TARGET)) {
-			set_dir_flag(FILE64, NEED_UPDATE);
-		} else {
-			ret = update_dircache(file, flags);
-			if (ret == BAM_ERROR) {
-				bam_error(_("directory cache update failed "
-				    "for %s\n"), file);
-				return (-1);
-			}
+		ret = update_dircache(file, flags);
+		if (ret == BAM_ERROR) {
+			bam_error(_("directory cache update failed "
+			    "for %s\n"), file);
+			return (-1);
 		}
 
 		if (bam_verbose) {
@@ -1923,7 +1887,7 @@ is_valid_archive(char *root, int what)
 	struct stat 	sb, timestamp;
 	int 		ret;
 
-	if (what == FILE64 && !is_flag_on(IS_SPARC_TARGET))
+	if (what == FILE64)
 		ret = snprintf(archive_path, sizeof (archive_path),
 		    "%s%s%s/amd64%s", root, ARCHIVE_PREFIX, get_machine(),
 		    ARCHIVE_SUFFIX);
@@ -1998,77 +1962,43 @@ static int
 check_flags_and_files(char *root)
 {
 
-	struct stat 	sb;
 	int 		ret;
+	int		what;
 
 	/*
 	 * If archive is missing, create archive
 	 */
-	if (is_flag_on(IS_SPARC_TARGET)) {
-		ret = is_valid_archive(root, FILE64);
+	what = FILE32;
+	do {
+		ret = is_valid_archive(root, what);
 		if (ret == BAM_ERROR)
 			return (BAM_ERROR);
-	} else {
-		int	what = FILE32;
-		do {
-			ret = is_valid_archive(root, what);
-			if (ret == BAM_ERROR)
-				return (BAM_ERROR);
-			what++;
-		} while (bam_direct == BAM_DIRECT_DBOOT && what < CACHEDIR_NUM);
-	}
+		what++;
+	} while (bam_direct == BAM_DIRECT_DBOOT && what < CACHEDIR_NUM);
 
 	if (bam_nowrite())
 		return (BAM_SUCCESS);
 
 
 	/*
-	 * check if cache directories exist on x86.
-	 * check (and always open) the cache file on SPARC.
+	 * check if cache directories exist.
 	 */
-	if (is_sparc()) {
-		ret = snprintf(get_cachedir(FILE64),
-		    sizeof (get_cachedir(FILE64)), "%s%s%s/%s", root,
-		    ARCHIVE_PREFIX, get_machine(), CACHEDIR_SUFFIX);
+	what = FILE32;
 
-		if (ret >= sizeof (get_cachedir(FILE64))) {
-			bam_error(_("unable to create path on mountpoint %s, "
-			    "path too long\n"), rootbuf);
+	do {
+		if (set_cache_dir(root, what) != 0)
 			return (BAM_ERROR);
-		}
 
-		if (stat(get_cachedir(FILE64), &sb) != 0) {
-			set_flag(NEED_CACHE_DIR);
-			set_dir_flag(FILE64, NEED_UPDATE);
-		}
+		set_dir_present(what);
 
-		walk_arg.sparcfile = fopen(get_cachedir(FILE64), "w");
-		if (walk_arg.sparcfile == NULL) {
-			bam_error(_("failed to open file: %s: %s\n"),
-			    get_cachedir(FILE64), strerror(errno));
-			return (BAM_ERROR);
-		}
-
-		set_dir_present(FILE64);
-	} else {
-		int	what = FILE32;
-
-		do {
-			if (set_cache_dir(root, what) != 0)
-				return (BAM_ERROR);
-
-			set_dir_present(what);
-
-			what++;
-		} while (bam_direct == BAM_DIRECT_DBOOT && what < CACHEDIR_NUM);
-	}
+		what++;
+	} while (bam_direct == BAM_DIRECT_DBOOT && what < CACHEDIR_NUM);
 
 	/*
 	 * if force, create archive unconditionally
 	 */
 	if (bam_force) {
-		if (!is_sparc())
-			set_dir_flag(FILE32, NEED_UPDATE);
+		set_dir_flag(FILE32, NEED_UPDATE);
 		set_dir_flag(FILE64, NEED_UPDATE);
 		if (bam_verbose)
 			bam_print(_("forced update of archive requested\n"));
@@ -2240,8 +2170,7 @@ getoldstat(char *root)
 out_err:
 	if (fd != -1)
 		(void) close(fd);
-	if (!is_flag_on(IS_SPARC_TARGET))
-		set_dir_flag(FILE32, NEED_UPDATE);
+	set_dir_flag(FILE32, NEED_UPDATE);
 	set_dir_flag(FILE64, NEED_UPDATE);
 }
 
@@ -2305,13 +2234,9 @@ check4stale(char *root)
 			if (bam_verbose)
 				bam_print(_("    stale %s\n"), path);
 
-			if (is_flag_on(IS_SPARC_TARGET)) {
-				set_dir_flag(FILE64, NEED_UPDATE);
-			} else {
-				for (what = FILE32; what < CACHEDIR_NUM; what++)
-					if (has_cachedir(what))
-						delete_stale(file, what);
-			}
+			for (what = FILE32; what < CACHEDIR_NUM; what++)
+				if (has_cachedir(what))
+					delete_stale(file, what);
 		}
 	}
 }
@@ -2441,11 +2366,8 @@ clear_walk_args(void)
 {
 	nvlist_free(walk_arg.old_nvlp);
 	nvlist_free(walk_arg.new_nvlp);
-	if (walk_arg.sparcfile)
-		(void) fclose(walk_arg.sparcfile);
 	walk_arg.old_nvlp = NULL;
 	walk_arg.new_nvlp = NULL;
-	walk_arg.sparcfile = NULL;
 }
 
 /*
@@ -2472,9 +2394,6 @@ update_required(char *root)
 	int 		ret;
 
 	flistp->head = flistp->tail = NULL;
-
-	if (is_sparc())
-		set_flag(IS_SPARC_TARGET);
 
 	/*
 	 * Check if cache directories and archives are present
@@ -2540,8 +2459,6 @@ update_required(char *root)
 	}
 
 	if (walk_arg.new_nvlp == NULL) {
-		if (walk_arg.sparcfile != NULL)
-			(void) fclose(walk_arg.sparcfile);
 		bam_error(_("cannot create new stat data\n"));
 	}
 
@@ -2552,9 +2469,6 @@ update_required(char *root)
 		clear_walk_args();
 		return (0);
 	}
-
-	if (walk_arg.sparcfile != NULL)
-		(void) fclose(walk_arg.sparcfile);
 
 	return (1);
 }
@@ -3608,7 +3522,7 @@ s_strdup(char *str)
 }
 
 /*
- * Returns 1 if amd64 (or sparc, for syncing x86 diskless clients)
+ * Returns 1 if amd64
  * Returns 0 otherwise
  */
 static int
@@ -3660,31 +3574,6 @@ get_machine(void)
 	}
 
 	return (mbuf);
-}
-
-int
-is_sparc(void)
-{
-	static int issparc = -1;
-	char mbuf[257];	/* from sysinfo(2) manpage */
-
-	if (issparc != -1)
-		return (issparc);
-
-	if (bam_alt_platform) {
-		if (strncmp(bam_platform, "sun4", 4) == 0) {
-			issparc = 1;
-		}
-	} else {
-		if (sysinfo(SI_ARCHITECTURE, mbuf, sizeof (mbuf)) > 0 &&
-		    strcmp(mbuf, "sparc") == 0) {
-			issparc = 1;
-		}
-	}
-	if (issparc == -1)
-		issparc = 0;
-
-	return (issparc);
 }
 
 static void

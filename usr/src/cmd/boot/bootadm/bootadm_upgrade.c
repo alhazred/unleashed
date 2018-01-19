@@ -59,13 +59,6 @@ get_boot_cap(const char *osroot)
 	int		error;
 	const char	*fcn = "get_boot_cap()";
 
-	if (is_sparc()) {
-		/* there is no non dboot sparc new-boot */
-		bam_direct = BAM_DIRECT_DBOOT;
-		BAM_DPRINTF(("%s: is sparc - always DBOOT\n", fcn));
-		return (BAM_SUCCESS);
-	}
-
 	/*
 	 * The install media can support both 64 and 32 bit boot
 	 * by using boot archive as ramdisk image. However, to save

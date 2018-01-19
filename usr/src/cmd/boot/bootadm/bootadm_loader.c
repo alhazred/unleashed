@@ -474,59 +474,47 @@ bam_loader_menu(char *subcmd, char *opt, int largc, char *largv[])
 		ret = f(&menu, ((largc > 0) ? largv[0] : ""),
 		    ((largc > 1) ? largv[1] : ""));
 	} else if (strcmp(subcmd, "disable_hypervisor") == 0) {
-		if (is_sparc()) {
-			bam_error(_("%s operation unsupported on SPARC "
-			    "machines\n"), subcmd);
-			ret = BAM_ERROR;
-		} else {
-			ret = f(&menu, bam_root, NULL);
-		}
+		ret = f(&menu, bam_root, NULL);
 	} else if (strcmp(subcmd, "enable_hypervisor") == 0) {
-		if (is_sparc()) {
-			bam_error(_("%s operation unsupported on SPARC "
-			    "machines\n"), subcmd);
-			ret = BAM_ERROR;
-		} else {
-			char *extra_args = NULL;
+		char *extra_args = NULL;
+
+		/*
+		 * Compress all arguments passed in the largv[] array
+		 * into one string that can then be appended to the
+		 * end of the kernel$ string the routine to enable the
+		 * hypervisor will build.
+		 *
+		 * This allows the caller to supply arbitrary unparsed
+		 * arguments, such as dom0 memory settings or APIC
+		 * options.
+		 *
+		 * This concatenation will be done without ANY syntax
+		 * checking whatsoever, so it's the responsibility of
+		 * the caller to make sure the arguments are valid and
+		 * do not duplicate arguments the conversion routines
+		 * may create.
+		 */
+		if (largc > 0) {
+			int extra_len, i;
+
+			for (extra_len = 0, i = 0; i < largc; i++)
+				extra_len += strlen(largv[i]);
 
 			/*
-			 * Compress all arguments passed in the largv[] array
-			 * into one string that can then be appended to the
-			 * end of the kernel$ string the routine to enable the
-			 * hypervisor will build.
-			 *
-			 * This allows the caller to supply arbitrary unparsed
-			 * arguments, such as dom0 memory settings or APIC
-			 * options.
-			 *
-			 * This concatenation will be done without ANY syntax
-			 * checking whatsoever, so it's the responsibility of
-			 * the caller to make sure the arguments are valid and
-			 * do not duplicate arguments the conversion routines
-			 * may create.
+			 * Allocate space for argument strings,
+			 * intervening spaces and terminating NULL.
 			 */
-			if (largc > 0) {
-				int extra_len, i;
+			extra_args = alloca(extra_len + largc);
 
-				for (extra_len = 0, i = 0; i < largc; i++)
-					extra_len += strlen(largv[i]);
+			(void) strcpy(extra_args, largv[0]);
 
-				/*
-				 * Allocate space for argument strings,
-				 * intervening spaces and terminating NULL.
-				 */
-				extra_args = alloca(extra_len + largc);
-
-				(void) strcpy(extra_args, largv[0]);
-
-				for (i = 1; i < largc; i++) {
-					(void) strcat(extra_args, " ");
-					(void) strcat(extra_args, largv[i]);
-				}
+			for (i = 1; i < largc; i++) {
+				(void) strcat(extra_args, " ");
+				(void) strcat(extra_args, largv[i]);
 			}
-
-			ret = f(&menu, bam_root, extra_args);
 		}
+
+		ret = f(&menu, bam_root, extra_args);
 	} else
 		ret = f(&menu, NULL, opt);
 
