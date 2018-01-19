@@ -28,10 +28,8 @@ include $(SRC)/Makefile.master
 
 .KEEP_STATE:
 
-sparc_MACHDIR = sparc
 i386_MACHDIR = intel
 
-sparc_SUBDIRS = sparc $(CONFIG_PLATFORM)
 i386_SUBDIRS = intel $(CONFIG_PLATFORM)
 
 MACHDIR = $($(MACH)_MACHDIR)
