@@ -39,10 +39,6 @@ common_SUBDIRS = \
 	libfmnotify \
 	topo
 
-sparc_SUBDIRS = \
-	libmdesc \
-	libldom
-
 i386_SUBDIRS =
 
 SUBDIRS = $(common_SUBDIRS) $($(MACH)_SUBDIRS)
