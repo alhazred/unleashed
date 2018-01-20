@@ -48,8 +48,8 @@ high-level interrupt) the function can be called.
 .Lp
 A driver function has
 .Em user context
-if it was directly invoked because of
-a user thread. The
+if it was directly invoked because of a user thread.
+The
 .Xr read 9E
 entry point of the driver, invoked by a
 .Xr read 2
@@ -57,34 +57,37 @@ system call, has user context.
 .Lp
 A driver function has
 .Em kernel context
-if was invoked by some other part of
-the kernel. In a block device driver, the
+if was invoked by some other part of the kernel.
+In a block device driver, the
 .Xr strategy 9E
 entry point may be
-called by the page daemon to write pages to the device. The page daemon has no
-relation to the current user thread, so in this case
+called by the page daemon to write pages to the device.
+The page daemon has no relation to the current user thread, so in this case
 .Xr strategy 9E
 has kernel context.
 .Lp
 .Em Interrupt context
 is kernel context, but also has an interrupt level
-associated with it. Driver interrupt routines have interrupt context.
+associated with it.
+Driver interrupt routines have interrupt context.
 .Lp
 Note that a mutex acquired in user or kernel context that can also be acquired
 in interrupt context means that the user or kernel context thread holding that
 mutex is subject to all the restrictions imposed by interrupt context, for the
-duration of the ownership of that mutex. Please see the
+duration of the ownership of that mutex.
+Please see the
 .Xr mutex 9F
 man page for a more complete discussion of proper mutex handling for drivers.
 .Lp
 .Em High-level interrupt context
-is a more restricted form of interrupt
-context. If a driver interrupt priority returned from
+is a more restricted form of interrupt context.
+If a driver interrupt priority returned from
 .Xr ddi_intr_get_pri 9F
 is greater than the priority returned from
 .Xr ddi_intr_get_hilevel_pri 9F
-this indicates the interrupt handler will
-run in high-level interrupt context. These interrupt routines are only allowed
+this indicates the interrupt handler will run in high-level interrupt
+context.
+These interrupt routines are only allowed
 to call
 .Xr ddi_intr_trigger_softint 9F ,
 .Xr mutex_enter 9F ,

@@ -1090,8 +1090,8 @@ command(char *filename, register FILE *f)
                         done++;
                         goto endsw;
                     }
-                    Currline++;
-                    nlines--;
+                Currline++;
+                nlines--;
             }
             ret (dlines);
         case '\n':
@@ -1466,8 +1466,8 @@ skiplns(register off_t n, register FILE *f)
         while ((c = Getc (f)) != '\n')
             if (c == EOF)
                 return;
-            n--;
-            Currline++;
+        n--;
+        Currline++;
     }
 }
 
