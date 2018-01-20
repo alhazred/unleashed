@@ -135,7 +135,6 @@ DIRS= \
 	/etc/svc/profile \
 	/etc/svc/profile/site \
 	/etc/svc/volatile \
-	/etc/tm  \
 	/etc/usb   \
 	/etc/user_attr.d \
 	/etc/zfs  \
