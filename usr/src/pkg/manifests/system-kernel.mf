@@ -91,7 +91,6 @@ dir path=kernel/ipp group=sys
 dir path=kernel/kiconv group=sys
 dir path=kernel/mac group=sys
 dir path=kernel/misc group=sys
-dir path=kernel/misc/$(ARCH64) group=sys
 dir path=kernel/misc/scsi_vhci group=sys
 dir path=kernel/sched group=sys
 dir path=kernel/socketmod group=sys

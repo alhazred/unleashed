@@ -74,6 +74,7 @@ MAN = Intro.4 \
       ldapfilter.conf.4 \
       ldapsearchprefs.conf.4 \
       ldaptemplates.conf.4 \
+      loader.conf.4 \
       logadm.conf.4 \
       logindevperm.4 \
       loginlog.4 \
