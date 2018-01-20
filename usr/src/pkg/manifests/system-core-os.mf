@@ -89,7 +89,6 @@ dir path=etc/svc/profile/site group=sys
 dir path=etc/svc/volatile group=sys
 dir path=etc/sysevent group=sys
 dir path=etc/sysevent/config group=sys
-dir path=etc/tm group=sys
 dir path=etc/user_attr.d group=sys
 dir path=export group=sys
 dir path=home group=root mode=0555

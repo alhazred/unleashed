@@ -36,10 +36,6 @@ fi
 # Uncomment this line to print the complete system configuration on startup
 #[ -x /usr/sbin/prtconf ] && /usr/sbin/prtconf
 
-# If there are trademark files, print them.
-
-[ -d /etc/tm ] && /usr/bin/cat /etc/tm/* 2>/dev/null
-
 #
 # Run rctladm to configure system resource controls based on the settings
 # previously saved by rctladm.  See rctladm(1m) for instructions on how to
