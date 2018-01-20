@@ -1153,6 +1153,7 @@ SMBFS_OBJS +=	smbfs_vfsops.o	smbfs_vnops.o	smbfs_node.o	\
 		$(SMBFS_COMMON_OBJS)
 
 ZFS_COMMON_OBJS +=		\
+	abd.o			\
 	arc.o			\
 	blkptr.o		\
 	bplist.o		\
