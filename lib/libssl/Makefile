@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.32 2017/03/05 14:39:53 jsing Exp $
+# $OpenBSD: Makefile,v 1.38 2017/08/13 19:42:33 doug Exp $
 
 .include <bsd.own.mk>
 .ifndef NOMAN
@@ -12,10 +12,11 @@ CLEANFILES=${PC_FILES} ${VERSION_SCRIPT}
 LIB=	ssl
 
 CFLAGS+= -Wall -Wundef
-.if ${COMPILER_VERSION:L} != "gcc3"
+.if ${COMPILER_VERSION:L} == "clang"
 CFLAGS+= -Werror
 .endif
 CFLAGS+= -DLIBRESSL_INTERNAL
+
 CFLAGS+= -I${.CURDIR}
 
 LDADD+= -L${BSDOBJDIR}/lib/libcrypto -lcrypto
@@ -31,8 +32,8 @@ SRCS= \
 	ssl_lib.c ssl_cert.c ssl_sess.c \
 	ssl_ciph.c ssl_stat.c ssl_rsa.c \
 	ssl_asn1.c ssl_txt.c ssl_algs.c \
-	bio_ssl.c ssl_err.c t1_reneg.c \
-	ssl_packet.c ssl_versions.c pqueue.c
+	bio_ssl.c ssl_err.c \
+	ssl_packet.c ssl_tlsext.c ssl_versions.c pqueue.c
 SRCS+=	s3_cbc.c
 SRCS+=	bs_ber.c bs_cbb.c bs_cbs.c
 

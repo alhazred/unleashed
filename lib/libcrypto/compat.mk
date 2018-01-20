@@ -4,6 +4,8 @@ CPPFLAGS+=	-D__BEGIN_HIDDEN_DECLS= -D__END_HIDDEN_DECLS=
 CPPFLAGS+=	-I${LCRYPTO_SRC}/compat/include
 # see libressl-portable/portable:m4/disable-compiler-warnings.m4 
 CFLAGS+=	-Wno-pointer-sign
+# sizeof(time_t) == 4 (2038 problem)
+CFLAGS+=	-DSMALL_TIME_T
 
 SRCS+=		compat/timingsafe_bcmp.c compat/timingsafe_memcmp.c
 INSTALL_COPY?=	${COPY}

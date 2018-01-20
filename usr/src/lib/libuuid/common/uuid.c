@@ -73,7 +73,6 @@ shared_buffer_t		*data;
 
 static	uuid_node_t	node_id_cache;
 static	int		node_init;
-static	int		file_type;
 static	int		fd;
 
 /*
@@ -120,8 +119,6 @@ uuid_create(struct uuid *uuid)
 
 	/*
 	 * Access the state file, mmap it and initialize the shared lock.
-	 * file_type tells us whether we had access to the state file or
-	 * created a temporary one.
 	 */
 	if (map_state() == -1)
 		return (-1);
@@ -249,18 +246,14 @@ map_state()
 	FILE	*tmp;
 
 	/* If file's mapped, return */
-	if (file_type != 0)
+	if (data)
 		return (1);
 
 	if ((fd = open(STATE_LOCATION, O_RDWR)) < 0) {
-		file_type = TEMP_FILE;
-
 		if ((tmp = tmpfile()) == NULL)
 			return (-1);
 		else
 			fd = fileno(tmp);
-	} else {
-		file_type = STATE_FILE;
 	}
 
 	(void) ftruncate(fd, (off_t)sizeof (shared_buffer_t));
@@ -269,8 +262,10 @@ map_state()
 	data = mmap(NULL, sizeof (shared_buffer_t),
 	    PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 
-	if (data == MAP_FAILED)
+	if (data == MAP_FAILED) {
+		data = NULL;
 		return (-1);
+	}
 
 	(void) mutex_init(&data->lock, USYNC_PROCESS|LOCK_ROBUST, 0);
 

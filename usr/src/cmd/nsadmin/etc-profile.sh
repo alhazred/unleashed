@@ -49,8 +49,7 @@ export PAGER
 case "$0" in
 -bash)
 	# set prompt for bash
-	PS1="\u@\h:\w\\$ "
-	export PS1
+	typeset +x PS1="\u@\h:\w\\$ "
 	;;
 esac
 

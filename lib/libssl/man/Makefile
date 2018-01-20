@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.52 2016/12/10 14:56:56 schwarze Exp $
+# $OpenBSD: Makefile,v 1.59 2017/08/21 10:10:25 schwarze Exp $
 
 .include <bsd.own.mk>
 
@@ -30,6 +30,7 @@ MAN =	BIO_f_ssl.3 \
 	SSL_CTX_set_generate_session_id.3 \
 	SSL_CTX_set_info_callback.3 \
 	SSL_CTX_set_max_cert_list.3 \
+	SSL_CTX_set_min_proto_version.3 \
 	SSL_CTX_set_mode.3 \
 	SSL_CTX_set_msg_callback.3 \
 	SSL_CTX_set_options.3 \
@@ -39,17 +40,23 @@ MAN =	BIO_f_ssl.3 \
 	SSL_CTX_set_session_id_context.3 \
 	SSL_CTX_set_ssl_version.3 \
 	SSL_CTX_set_timeout.3 \
+	SSL_CTX_set_tlsext_servername_callback.3 \
 	SSL_CTX_set_tlsext_status_cb.3 \
 	SSL_CTX_set_tlsext_ticket_key_cb.3 \
 	SSL_CTX_set_tmp_dh_callback.3 \
 	SSL_CTX_set_tmp_rsa_callback.3 \
 	SSL_CTX_set_verify.3 \
+	SSL_CTX_set1_groups.3 \
 	SSL_CTX_use_certificate.3 \
 	SSL_SESSION_free.3 \
+	SSL_SESSION_get_compress_id.3 \
 	SSL_SESSION_get_ex_new_index.3 \
+	SSL_SESSION_get_id.3 \
 	SSL_SESSION_get_time.3 \
+	SSL_SESSION_get0_peer.3 \
 	SSL_SESSION_new.3 \
 	SSL_SESSION_print.3 \
+	SSL_SESSION_set1_id_context.3 \
 	SSL_accept.3 \
 	SSL_alert_type_string.3 \
 	SSL_clear.3 \
@@ -58,6 +65,7 @@ MAN =	BIO_f_ssl.3 \
 	SSL_do_handshake.3 \
 	SSL_dup.3 \
 	SSL_dup_CA_list.3 \
+	SSL_export_keying_material.3 \
 	SSL_free.3 \
 	SSL_get_SSL_CTX.3 \
 	SSL_get_certificate.3 \
@@ -72,6 +80,7 @@ MAN =	BIO_f_ssl.3 \
 	SSL_get_peer_cert_chain.3 \
 	SSL_get_peer_certificate.3 \
 	SSL_get_rbio.3 \
+	SSL_get_server_tmp_key.3 \
 	SSL_get_session.3 \
 	SSL_get_shared_ciphers.3 \
 	SSL_get_state.3 \
@@ -93,6 +102,7 @@ MAN =	BIO_f_ssl.3 \
 	SSL_set_max_send_fragment.3 \
 	SSL_set_session.3 \
 	SSL_set_shutdown.3 \
+	SSL_set_tmp_ecdh.3 \
 	SSL_set_verify_result.3 \
 	SSL_shutdown.3 \
 	SSL_state_string.3 \
