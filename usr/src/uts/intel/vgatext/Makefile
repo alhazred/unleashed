@@ -43,7 +43,8 @@ MODULE		= vgatext
 OBJECTS		= $(VGATEXT_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 
-LDFLAGS +=	-dy -Nmisc/agpmaster
+LDFLAGS +=	-dy
+
 #
 #	Include common rules.
 #
