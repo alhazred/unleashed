@@ -41,7 +41,7 @@ POFILE= bootadm_cmd.po
 .KEEP_STATE:
 
 LDLIBS += -lficl-sys -lnvpair -lgen
-LDLIBS += -lz -lbe -lzfs $(LDLIBS_$(MACH))
+LDLIBS += -lz -lbe -lzfs -lofmt $(LDLIBS_$(MACH))
 
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS +=	-I$(SRCTOP)/include -I$(SRC)/common -I$(SRC)/common/ficl
