@@ -12,13 +12,13 @@ Get the source
 
 Clone this repository from either:
 
-* git://repo.or.cz/illumos-gate/unleashed.git
-* http://repo.or.cz/illumos-gate/unleashed.git
+* git://repo.or.cz/unleashed.git
+* http://repo.or.cz/unleashed.git
 
 For example:
 
 ```
-$ git clone git://repo.or.cz/illumos-gate/unleashed.git
+$ git clone git://repo.or.cz/unleashed.git
 $ cd unleashed
 ```
 
