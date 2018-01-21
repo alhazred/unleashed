@@ -160,6 +160,7 @@ SUBDIRS +=				\
 	libnisdb	\
 	libnls		\
 	libnwam		\
+	libofmt		\
 	libpam		\
 	libpcidb	\
 	libpctx		\
@@ -290,12 +291,12 @@ MSGSUBDIRS=		\
 	libgss		\
 	libidmap	\
 	libilb		\
-	libinetutil	\
 	libipadm	\
 	libipmp		\
 	libipsecutil	\
 	libldap5	\
 	libnwam		\
+	libofmt		\
 	libpam		\
 	libpicl		\
 	libpool		\
@@ -385,6 +386,7 @@ HDRSUBDIRS=				\
 	libndmp		\
 	libnvpair	\
 	libnwam		\
+	libofmt		\
 	libpam		\
 	libpcidb	\
 	libpctx		\

@@ -235,11 +235,12 @@ t1_espi_workaround(ch_t *adapter)
 		seop = t1_espi_get_mon(adapter, 0x930, 0);
 		if ((seop & 0xfff0fff) == 0xfff) {
 			/* after first arp */
-			if (sge->pskb)
+			if (sge->pskb) {
 				rv = pe_start(adapter, (mblk_t *)sge->pskb,
 				    CH_ARP);
 				if (!rv)
 					sge->intr_cnt.arp_sent++;
+			}
 		}
 	}
 #ifdef HOST_PAUSE
@@ -913,15 +914,12 @@ t1_sge_rx(pesge *sge, struct freelQ *Q, unsigned int len, unsigned int offload)
 		if (likely(toe_running(adapter))) {
 			/* sends pkt upstream to toe layer */
 			if (useit) {
-				if (sz == SGE_SM_BUF_SZ(adapter)) {
-					atomic_add(1,
-					    &buffers_in_use
-					    [adapter->ch_sm_index]);
-				} else {
-					atomic_add(1,
-					    &buffers_in_use
-					    [adapter->ch_big_index]);
-				}
+				uint_t index;
+				if (sz == SGE_SM_BUF_SZ(adapter))
+					index = adapter->ch_sm_index;
+				else
+					index = adapter->ch_big_index;
+				atomic_add(1, &buffers_in_use[index]);
 			}
 			if (adapter->toe_rcv)
 				adapter->toe_rcv(adapter->ch_toeinst, skb);

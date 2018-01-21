@@ -22,6 +22,7 @@ SUBDIRS = \
 	nl_langinfo \
 	priv_gettext \
 	random \
+	regex \
 	select \
 	strerror \
 	strxfrm \
@@ -38,6 +39,7 @@ PROGS = \
 	call_once \
 	endian \
 	env-7076 \
+	psignal-5097 \
 	quick_exit_order \
 	quick_exit_status \
 	strcoll-strxfrm-6907 \
@@ -47,11 +49,14 @@ PROGS = \
 	wcsncasecmp-7350
 
 SCRIPTS = \
-	quick_exit
+	quick_exit \
+	psignal
 
 
 PROGS32 = $(PROGS:%=%.32)
-PROGS64 = $(PROGS:%=%.64)
+PROGS64 = \
+	$(PROGS:%=%.64) \
+	printf-6961.64
 
 aligned_alloc.32 :=	LDLIBS += -lproc
 aligned_alloc.64 :=	LDLIBS64 += -lproc

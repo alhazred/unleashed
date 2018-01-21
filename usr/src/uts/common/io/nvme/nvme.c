@@ -18,9 +18,9 @@
 /*
  * blkdev driver for NVMe compliant storage devices
  *
- * This driver was written to conform to version 1.1b of the NVMe specification.
- * It may work with newer versions, but that is completely untested and disabled
- * by default.
+ * This driver was written to conform to version 1.2.1 of the NVMe
+ * specification.  It may work with newer versions, but that is completely
+ * untested and disabled by default.
  *
  * The driver has only been tested on x86 systems and will not work on big-
  * endian systems without changes to the code accessing registers and data
@@ -207,7 +207,7 @@
 
 /* NVMe spec version supported */
 static const int nvme_version_major = 1;
-static const int nvme_version_minor = 1;
+static const int nvme_version_minor = 2;
 
 /* tunable for admin command timeout in seconds, default is 1s */
 static volatile int nvme_admin_cmd_timeout = 1;
@@ -2198,14 +2198,6 @@ nvme_init(nvme_t *nvme)
 		/*LINTED: E_BAD_PTR_CAST_ALIGN*/
 		if (*(uint64_t *)nvme->n_ns[i].ns_eui64 == 0) {
 			nvme_prepare_devid(nvme, nvme->n_ns[i].ns_id);
-		} else {
-			/*
-			 * Until EUI64 support is tested on real hardware we
-			 * will ignore namespaces with an EUI64. This can
-			 * be overriden by setting strict-version=0 in nvme.conf
-			 */
-			if (nvme->n_strict_version)
-				nvme->n_ns[i].ns_ignore = B_TRUE;
 		}
 
 		/*

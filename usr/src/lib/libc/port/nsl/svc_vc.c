@@ -166,11 +166,15 @@ svc_vc_xprtfree(SVCXPRT *xprt)
 	if (!xprt)
 		return;
 
-	free(xprt->xp_tp);
-	free(xprt->xp_netid);
+	if (xprt->xp_tp)
+		free(xprt->xp_tp);
+	if (xprt->xp_netid)
+		free(xprt->xp_netid);
 	if (xt && (xt->parent == NULL)) {
-		free(xprt->xp_ltaddr.buf);
-		free(xprt->xp_rtaddr.buf);
+		if (xprt->xp_ltaddr.buf)
+			free(xprt->xp_ltaddr.buf);
+		if (xprt->xp_rtaddr.buf)
+			free(xprt->xp_rtaddr.buf);
 	}
 	if (r) {
 		if (r->t_call)
@@ -321,7 +325,8 @@ svc_vc_xprtcopy(SVCXPRT *parent)
 		xprt->xp_netid = (char *)strdup(parent->xp_netid);
 		if (xprt->xp_netid == NULL) {
 			syslog(LOG_ERR, "svc_vc_xprtcopy: strdup failed");
-			free(xprt->xp_tp);
+			if (xprt->xp_tp)
+				free(xprt->xp_tp);
 			svc_vc_xprtfree(xprt);
 			return (NULL);
 		}
@@ -449,11 +454,15 @@ svc_fd_xprtfree(SVCXPRT *xprt)
 	if (!xprt)
 		return;
 
-	free(xprt->xp_tp);
-	free(xprt->xp_netid);
+	if (xprt->xp_tp)
+		free(xprt->xp_tp);
+	if (xprt->xp_netid)
+		free(xprt->xp_netid);
 	if (xt && (xt->parent == NULL)) {
-		free(xprt->xp_ltaddr.buf);
-		free(xprt->xp_rtaddr.buf);
+		if (xprt->xp_ltaddr.buf)
+			free(xprt->xp_ltaddr.buf);
+		if (xprt->xp_rtaddr.buf)
+			free(xprt->xp_rtaddr.buf);
 	}
 	if (cd) {
 		XDR_DESTROY(&(cd->xdrs));
@@ -600,7 +609,8 @@ svc_fd_xprtcopy(SVCXPRT *parent)
 		xprt->xp_netid = (char *)strdup(parent->xp_netid);
 		if (xprt->xp_netid == NULL) {
 			syslog(LOG_ERR, "svc_fd_xprtcopy: strdup failed");
-			free(xprt->xp_tp);
+			if (xprt->xp_tp)
+				free(xprt->xp_tp);
 			svc_fd_xprtfree(xprt);
 			return (NULL);
 		}
@@ -1721,13 +1731,9 @@ svc_vc_reply(SVCXPRT *xprt, struct rpc_msg *msg)
 	caddr_t xdr_location;
 	bool_t has_args;
 
-#ifdef __lock_lint
-	(void) mutex_lock(&svc_send_mutex(SVCEXT(xprt)->parent));
-#else
 	if (svc_mt_mode != RPC_SVC_MT_NONE)
 /* LINTED pointer alignment */
 		(void) mutex_lock(&svc_send_mutex(SVCEXT(xprt)->parent));
-#endif
 
 	if (msg->rm_reply.rp_stat == MSG_ACCEPTED &&
 	    msg->rm_reply.rp_acpt.ar_stat == SUCCESS) {
@@ -1748,13 +1754,9 @@ svc_vc_reply(SVCXPRT *xprt, struct rpc_msg *msg)
 	}
 	(void) xdrrec_endofrecord(xdrs, TRUE);
 
-#ifdef __lock_lint
-	(void) mutex_unlock(&svc_send_mutex(SVCEXT(xprt)->parent));
-#else
 	if (svc_mt_mode != RPC_SVC_MT_NONE)
 /* LINTED pointer alignment */
 		(void) mutex_unlock(&svc_send_mutex(SVCEXT(xprt)->parent));
-#endif
 
 	return (stat);
 }

@@ -25,6 +25,7 @@
  * Copyright 2017 Nexenta Systems, Inc.
  * Copyright (c) 2014 Integros [integros.com]
  * Copyright 2016 Toomas Soome <tsoome@me.com>
+ * Copyright 2017 Joyent, Inc.
  */
 
 #include <sys/zfs_context.h>
@@ -45,6 +46,7 @@
 #include <sys/arc.h>
 #include <sys/zil.h>
 #include <sys/dsl_scan.h>
+#include <sys/abd.h>
 
 /*
  * Virtual device management.
@@ -961,16 +963,16 @@ vdev_probe_done(zio_t *zio)
 			vps->vps_readable = 1;
 		if (zio->io_error == 0 && spa_writeable(spa)) {
 			zio_nowait(zio_write_phys(vd->vdev_probe_zio, vd,
-			    zio->io_offset, zio->io_size, zio->io_data,
+			    zio->io_offset, zio->io_size, zio->io_abd,
 			    ZIO_CHECKSUM_OFF, vdev_probe_done, vps,
 			    ZIO_PRIORITY_SYNC_WRITE, vps->vps_flags, B_TRUE));
 		} else {
-			zio_buf_free(zio->io_data, zio->io_size);
+			abd_free(zio->io_abd);
 		}
 	} else if (zio->io_type == ZIO_TYPE_WRITE) {
 		if (zio->io_error == 0)
 			vps->vps_writeable = 1;
-		zio_buf_free(zio->io_data, zio->io_size);
+		abd_free(zio->io_abd);
 	} else if (zio->io_type == ZIO_TYPE_NULL) {
 		zio_t *pio;
 
@@ -1086,8 +1088,8 @@ vdev_probe(vdev_t *vd, zio_t *zio)
 	for (int l = 1; l < VDEV_LABELS; l++) {
 		zio_nowait(zio_read_phys(pio, vd,
 		    vdev_label_offset(vd->vdev_psize, l,
-		    offsetof(vdev_label_t, vl_pad2)),
-		    VDEV_PAD_SIZE, zio_buf_alloc(VDEV_PAD_SIZE),
+		    offsetof(vdev_label_t, vl_pad2)), VDEV_PAD_SIZE,
+		    abd_alloc_for_io(VDEV_PAD_SIZE, B_TRUE),
 		    ZIO_CHECKSUM_OFF, vdev_probe_done, vps,
 		    ZIO_PRIORITY_SYNC_READ, vps->vps_flags, B_TRUE));
 	}
@@ -1143,7 +1145,7 @@ vdev_open_children(vdev_t *vd)
 
 	for (int c = 0; c < children; c++)
 		VERIFY(taskq_dispatch(tq, vdev_open_child, vd->vdev_child[c],
-		    TQ_SLEEP) != (uintptr_t)NULL);
+		    TQ_SLEEP) != 0);
 
 	taskq_destroy(tq);
 }
@@ -1787,6 +1789,9 @@ vdev_dtl_should_excise(vdev_t *vd)
 
 	ASSERT0(scn->scn_phys.scn_errors);
 	ASSERT0(vd->vdev_children);
+
+	if (vd->vdev_state < VDEV_STATE_DEGRADED)
+		return (B_FALSE);
 
 	if (vd->vdev_resilver_txg == 0 ||
 	    range_tree_space(vd->vdev_dtl[DTL_MISSING]) == 0)
@@ -2502,7 +2507,7 @@ vdev_online(spa_t *spa, uint64_t guid, uint64_t flags, vdev_state_t *newstate)
 	if (wasoffline ||
 	    (oldstate < VDEV_STATE_DEGRADED &&
 	    vd->vdev_state >= VDEV_STATE_DEGRADED))
-		spa_event_notify(spa, vd, ESC_ZFS_VDEV_ONLINE);
+		spa_event_notify(spa, vd, NULL, ESC_ZFS_VDEV_ONLINE);
 
 	return (spa_vdev_state_exit(spa, vd, 0));
 }
@@ -2665,7 +2670,7 @@ vdev_clear(spa_t *spa, vdev_t *vd)
 		if (vd->vdev_aux == NULL && !vdev_is_dead(vd))
 			spa_async_request(spa, SPA_ASYNC_RESILVER);
 
-		spa_event_notify(spa, vd, ESC_ZFS_VDEV_CLEAR);
+		spa_event_notify(spa, vd, NULL, ESC_ZFS_VDEV_CLEAR);
 	}
 
 	/*

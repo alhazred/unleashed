@@ -40,7 +40,7 @@ CPPFLAGS += -I$(SRCTOP)/include
 XGETFLAGS +=	-a -x $(PROG).xcl
 
 LDLIBS +=	-L$(ROOT)/lib
-LDLIBS +=	-ldladm -ldlpi -lkstat -lsecdb -lbsm -linetutil -ldevinfo
+LDLIBS +=	-ldladm -ldlpi -lkstat -lsecdb -lbsm -lofmt -linetutil -ldevinfo
 LDLIBS +=	$(ZLAZYLOAD) -lrstp $(ZNOLAZYLOAD)
 
 CERRWARN +=	-Wno-switch

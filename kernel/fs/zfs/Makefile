@@ -9,7 +9,8 @@ MODULE_DEPS=	fs/specfs \
 		misc/edonr \
 		sched/SDC
 MODULE_CONF=	zfs.conf
-SRCS=		arc.c \
+SRCS=		abd.c \
+		arc.c \
 		blkptr.c \
 		bplist.c \
 		bpobj.c \

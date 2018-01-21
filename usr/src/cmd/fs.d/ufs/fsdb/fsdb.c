@@ -29,8 +29,6 @@ char copyright[] =
 "@(#) Copyright(c) 1988 Regents of the University of California.\n\
 All rights reserved.\n";
 
-static char sccsid[] = "@(#)fsdb.c	5.8 (Berkeley) 6/1/90";
-
 /*
  *  fsdb - file system debugger
  *
@@ -2563,8 +2561,8 @@ follow_path(long level, long inum)
 					top = NULL;
 				    else
 					top--;
-					nfiles--;
-					goto duplicate;
+				    nfiles--;
+				    goto duplicate;
 				}
 			    }
 			}

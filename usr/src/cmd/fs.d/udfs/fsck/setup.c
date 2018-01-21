@@ -208,7 +208,7 @@ restat:
 		fswritefd = -1;
 		if (preen && !debug)
 			pfatal(gettext("(NO WRITE ACCESS)\n"));
-			(void) printf(gettext(" (NO WRITE)"));
+		(void) printf(gettext(" (NO WRITE)"));
 	}
 	if (preen == 0)
 		(void) printf("\n");

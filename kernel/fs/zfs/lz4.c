@@ -31,6 +31,9 @@
  * - LZ4 homepage : http://fastcompression.blogspot.com/p/lz4.html
  * - LZ4 source repository : http://code.google.com/p/lz4/
  */
+/*
+ * Copyright (c) 2016 by Delphix. All rights reserved.
+ */
 
 #include <sys/zfs_context.h>
 
@@ -237,6 +240,9 @@ lz4_decompress(void *s_start, void *d_start, size_t s_len, size_t d_len, int n)
 #define	LZ4_FORCE_UNALIGNED_ACCESS 1
 #endif
 
+#ifdef __sparc
+#define	LZ4_FORCE_SW_BITCOUNT
+#endif
 
 /*
  * Compiler Options

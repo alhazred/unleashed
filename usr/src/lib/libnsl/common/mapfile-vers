@@ -662,16 +662,6 @@ $endif
 	__nss2herrno	{ TYPE = FUNCTION };
 	nss_ioctl	{ TYPE = FUNCTION };
 	order_haddrlist_af	{ TYPE = FUNCTION };
-	_rawcombuf	{
-                TYPE = DATA;
-$if _ELF32
-                SIZE = 0x4;
-$elif _ELF64
-                SIZE = 0x8;
-$else
-$error unknown ELFCLASS
-$endif
-        };
 	__rpcbind_is_up	{ TYPE = FUNCTION };
 	__rpc_bindresvport	{ TYPE = FUNCTION };
 	rpcb_taddr2uaddr	{ TYPE = FUNCTION };

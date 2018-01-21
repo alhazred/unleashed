@@ -104,16 +104,16 @@ main(int argc, char *argv[])
 	char *value;
 	int longjmp_return;
 
-	char *mountpoint = NULL;
-	int mountfd = -1;
-	char *backpath = NULL;
+	char *volatile mountpoint = NULL;
+	int volatile mountfd = -1;
+	char *volatile backpath = NULL;
 
-	int delete = 0;
-	int stats = 0;
-	uoff_t maxsize = 0;
-	uint_t chunksize = 0;
-	int rawfile = 0;
-	int dounlink = 0;
+	int volatile delete = 0;
+	int volatile stats = 0;
+	uoff_t volatile maxsize = 0;
+	uint_t volatile chunksize = 0;
+	int volatile rawfile = 0;
+	int volatile dounlink = 0;
 
 	if ((progname = strrchr(argv[0], '/')) != NULL)
 		++progname;

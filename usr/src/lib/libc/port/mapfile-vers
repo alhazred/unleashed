@@ -2813,7 +2813,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 $if _ELF32
 	_new_svc_fdset;
 $endif
-        _rawcombuf;
         _svc_getreqset_proc;
         rpc_createerr;
         t_errlist;

@@ -2057,7 +2057,7 @@ rib_disconnect_channel(CONN *conn, rib_conn_list_t *conn_list)
 		mutex_enter(&qp->send_rbufs_lock);
 		while (qp->n_send_rbufs)
 			cv_wait(&qp->send_rbufs_cv, &qp->send_rbufs_lock);
-			mutex_exit(&qp->send_rbufs_lock);
+		mutex_exit(&qp->send_rbufs_lock);
 
 		(void) ibt_free_channel(qp->qp_hdl);
 			qp->qp_hdl = NULL;

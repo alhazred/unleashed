@@ -1007,7 +1007,7 @@ hci1394_ixl_update_prep_recv_buf(hci1394_ixl_update_vars_t *uvp)
 	if ((new_xfer_buf_ixlp->size ==	old_xfer_buf_ixlp->size) &&
 	    (new_xfer_buf_ixlp->ixl_buf.ixldmac_addr ==
 	    old_xfer_buf_ixlp->ixl_buf.ixldmac_addr) &&
-	    (new_xfer_buf_ixlp->mem_bufp == new_xfer_buf_ixlp->mem_bufp)) {
+	    (new_xfer_buf_ixlp->mem_bufp == old_xfer_buf_ixlp->mem_bufp)) {
 
 		if (((uvp->ctxtp->ctxt_flags & HCI1394_ISO_CTXT_BFFILL) != 0) ||
 		    (new_xfer_buf_ixlp->pkt_size ==

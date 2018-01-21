@@ -38,6 +38,7 @@ SUBDIR = man1 \
 	 man3mvec \
 	 man3nsl \
 	 man3nvpair \
+	 man3ofmt \
 	 man3pam \
 	 man3perl \
 	 man3picl \
