@@ -37,7 +37,14 @@ a vague idea where files ended up.
 Contribution Process
 --------------------
 
-TODO
+It's pretty simple:
+
+1. make a patch
+2. send the patch to the mailing list for review (there's no webrev, just
+   send a diff) and apply any feedback you get
+3. one of the committers will take your patch and commit it for you
+
+Note, there is no special illumos like RTI step.
 
 See Also
 --------
