@@ -31,7 +31,7 @@ For a complete build, use 'tools/nightly.sh':
 $ ./tools/nightly.sh tools/env.sh
 ```
 
-On success, this results in installable packages in the packages directory.
+On success, this results in installable packages in the `packages` directory.
 
 Incremental build
 -----------------
