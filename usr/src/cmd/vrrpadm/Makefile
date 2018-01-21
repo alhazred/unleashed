@@ -28,13 +28,13 @@ PROG=	vrrpadm
 include ../Makefile.cmd
 
 XGETFLAGS += -a -x $(PROG).xcl
-LDLIBS += -lvrrpadm -linetutil
+LDLIBS += -lvrrpadm -lofmt
 
 CERRWARN += -Wno-unused-label
 
 .KEEP_STATE:
 
-all: $(PROG) 
+all: $(PROG)
 
 install: all $(ROOTUSRSBINPROG)
 
