@@ -376,6 +376,7 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	nexusdefs.h		\
 	note.h			\
 	null.h			\
+	nvme.h			\
 	nvpair.h		\
 	nvpair_impl.h		\
 	objfs.h			\

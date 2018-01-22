@@ -283,6 +283,7 @@ MAN = 6to4relay.1m \
       nfsstat.1m \
       nlsadmin.1m \
       nscd.1m \
+      nvmeadm.1m \
       nwamd.1m \
       passmgmt.1m \
       pbind.1m \

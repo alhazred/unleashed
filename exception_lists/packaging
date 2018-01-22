@@ -540,6 +540,11 @@ usr/lib/amd64/libpcidb.so		i386
 usr/lib/libpcidb.so
 
 #
+# private nvme header file
+#
+usr/include/sys/nvme.h
+
+#
 # debugging program for libadutils
 #
 usr/bin/test-getdc
