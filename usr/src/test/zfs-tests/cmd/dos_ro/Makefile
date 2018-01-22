@@ -10,23 +10,13 @@
 #
 
 #
-# Copyright (c) 2012 by Delphix. All rights reserved.
+# Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
 #
 
-all     :=      TARGET = all
-install :=      TARGET = install
-clean   :=      TARGET = clean
-clobber :=      TARGET = clobber
+PROG = dos_ro
 
-.KEEP_STATE:
+include $(SRC)/cmd/Makefile.cmd
 
-all clean clobber install: $(SUBDIRS)
+LDLIBS += -lnvpair
 
-$(SUBDIRS): FRC
-	@if [ -f $@/Makefile  ]; then \
-		cd $@; pwd; $(MAKE) $(TARGET); \
-	else \
-		true; \
-	fi
-
-FRC:
+include ../Makefile.subdirs
