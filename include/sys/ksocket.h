@@ -34,6 +34,7 @@ extern "C" {
 /* Opaque kernel socket type */
 typedef struct __ksocket *ksocket_t;
 struct msghdr;
+struct msgb;	/* avoiding sys/stream.h here */
 
 /* flag bit for each Callback Event */
 #define	KSOCKET_CB_CONNECTED		0x00000001
@@ -97,8 +98,8 @@ extern int	ksocket_sendto(ksocket_t, void *, size_t, int,
 		    struct sockaddr *, socklen_t, size_t *, struct cred *);
 extern int 	ksocket_sendmsg(ksocket_t, struct msghdr *, int, size_t *,
 		    struct cred *);
-extern int	ksocket_sendmblk(ksocket_t, struct msghdr *, int, mblk_t **,
-		    struct cred *);
+extern int	ksocket_sendmblk(ksocket_t, struct msghdr *, int,
+		    struct msgb **, struct cred *);
 extern int 	ksocket_recv(ksocket_t, void *, size_t, int, size_t *,
 		    struct cred *);
 extern int	ksocket_recvfrom(ksocket_t, void *, size_t, int,
