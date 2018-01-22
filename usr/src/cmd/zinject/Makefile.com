@@ -33,6 +33,7 @@ include ../../Makefile.cmd
 
 INCS +=	-I../../../lib/libzpool/common
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs
+INCS +=	-I$(SRCTOP)/kernel/fs/zfs/lua
 
 LDLIBS += -lzpool -lzfs -lnvpair
 

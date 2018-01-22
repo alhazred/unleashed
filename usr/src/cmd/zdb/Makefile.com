@@ -32,7 +32,7 @@ OBJS= $(PROG).o zdb_il.o
 include ../../Makefile.cmd
 include ../../Makefile.ctf
 
-INCS += -I../../../lib/libzpool/common 
+INCS += -I../../../lib/libzpool/common
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs/common
 

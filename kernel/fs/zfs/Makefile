@@ -52,6 +52,33 @@ SRCS=		abd.c \
 		gzip.c \
 		lz4.c \
 		lzjb.c \
+		lua/lapi.c \
+		lua/lauxlib.c \
+		lua/lbaselib.c \
+		lua/lbitlib.c \
+		lua/lcode.c \
+		lua/lcompat.c \
+		lua/lcorolib.c \
+		lua/lctype.c \
+		lua/ldebug.c \
+		lua/ldo.c \
+		lua/ldump.c \
+		lua/lfunc.c \
+		lua/lgc.c \
+		lua/llex.c \
+		lua/lmem.c \
+		lua/lobject.c \
+		lua/lopcodes.c \
+		lua/lparser.c \
+		lua/lstate.c \
+		lua/lstring.c \
+		lua/lstrlib.c \
+		lua/ltable.c \
+		lua/ltablib.c \
+		lua/ltm.c \
+		lua/lundump.c \
+		lua/lvm.c \
+		lua/lzio.c \
 		metaslab.c \
 		multilist.c \
 		range_tree.c \
@@ -84,6 +111,11 @@ SRCS=		abd.c \
 		zap.c \
 		zap_leaf.c \
 		zap_micro.c \
+		zcp.c \
+		zcp_get.c \
+		zcp_global.c \
+		zcp_iter.c \
+		zcp_synctask.c \
 		zfeature.c \
 		zfs_acl.c \
 		zfs_byteswap.c \
@@ -111,6 +143,7 @@ SRCS=		abd.c \
 		zvol.c
 INCS=		${.CURDIR} \
 		${.CURDIR}/common \
+		${.CURDIR}/lua \
 		${SRCTOP}/usr/src/common
 
 CERRWARN	+= -Wno-type-limits

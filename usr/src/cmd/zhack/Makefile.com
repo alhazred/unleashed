@@ -37,6 +37,7 @@ include ../../Makefile.ctf
 
 INCS += -I../../../lib/libzpool/common
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs
+INCS +=	-I$(SRCTOP)/kernel/fs/zfs/lua
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs/common
 
 LDLIBS += -lzpool -lumem -lnvpair -lzfs

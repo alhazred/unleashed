@@ -457,6 +457,7 @@ MAN = 6to4relay.1m \
       zdb.1m \
       zdump.1m \
       zfs.1m \
+      zfs-program.1m \
       zoneadm.1m \
       zoneadmd.1m \
       zonecfg.1m \
