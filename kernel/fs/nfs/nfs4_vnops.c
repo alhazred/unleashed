@@ -1212,7 +1212,7 @@ recov_retry:
 			nfs4args_setattr_free(&argop[9]);
 		}
 		if (!e.error)
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		if (ncr != NULL) {
 			crfree(ncr);
 			ncr = NULL;
@@ -1254,7 +1254,7 @@ recov_retry:
 			nfs4args_verify_free(&argop[8]);
 			nfs4args_setattr_free(&argop[9]);
 		}
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_op(VTOMI4(dvp), dvp, vpi, &recov_state, needrecov);
 		/*
 		 * If the reply is NFS4ERR_ACCESS, it may be because
@@ -1357,7 +1357,7 @@ recov_retry:
 				nfs4args_verify_free(&argop[8]);
 				nfs4args_setattr_free(&argop[9]);
 			}
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_op(VTOMI4(dvp), dvp, vpi, &recov_state,
 			    needrecov);
 			open_owner_rele(oop);
@@ -1397,7 +1397,7 @@ recov_retry:
 				nfs4args_verify_free(&argop[8]);
 				nfs4args_setattr_free(&argop[9]);
 			}
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_op(VTOMI4(dvp), dvp, vpi, &recov_state,
 			    needrecov);
 			open_owner_rele(oop);
@@ -1466,7 +1466,7 @@ recov_retry:
 			nfs4args_verify_free(&argop[8]);
 			nfs4args_setattr_free(&argop[9]);
 		}
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_op(VTOMI4(dvp), dvp, vpi, &recov_state, needrecov);
 		if (create_flag || fh_differs)
 			VN_RELE(vp);
@@ -1632,7 +1632,7 @@ skip_update_dircaches:
 		nfs4args_verify_free(&argop[8]);
 		nfs4args_setattr_free(&argop[9]);
 	}
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	if (ncr)
 		crfree(ncr);
@@ -1949,7 +1949,7 @@ top:
 		    NULL, OP_OPEN, bsep, NULL, NULL);
 
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_open_seqid_sync(oop);
 		open_owner_rele(oop);
 		oop = NULL;
@@ -1958,7 +1958,7 @@ top:
 		goto kill_file;
 	case NFS4ERR_NO_GRACE:
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_open_seqid_sync(oop);
 		open_owner_rele(oop);
 		oop = NULL;
@@ -1982,7 +1982,7 @@ top:
 	case NFS4ERR_GRACE:
 		nfs4_set_grace_wait(mi);
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_open_seqid_sync(oop);
 		open_owner_rele(oop);
 		oop = NULL;
@@ -1993,7 +1993,7 @@ top:
 	case NFS4ERR_DELAY:
 		nfs4_set_delay_wait(vp);
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_open_seqid_sync(oop);
 		open_owner_rele(oop);
 		oop = NULL;
@@ -2007,7 +2007,7 @@ top:
 		abort = nfs4_start_recovery(ep,
 		    mi, vp, NULL, NULL, NULL, OP_OPEN, NULL, NULL, NULL);
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_open_seqid_sync(oop);
 		open_owner_rele(oop);
 		oop = NULL;
@@ -2024,7 +2024,7 @@ top:
 		 * function initiate recovery.
 		 */
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_open_seqid_sync(oop);
 		open_owner_rele(oop);
 		oop = NULL;
@@ -2035,7 +2035,7 @@ top:
 			cred_otw = cr;
 			crhold(cred_otw);
 			nfs4args_copen_free(open_args);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_open_seqid_sync(oop);
 			open_owner_rele(oop);
 			oop = NULL;
@@ -2049,7 +2049,7 @@ top:
 		    rnode4info(VTOR4(vp))));
 		failed_msg = "Couldn't reopen: NFSv4 error";
 		nfs4args_copen_free(open_args);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		goto kill_file;
 	}
 
@@ -2079,7 +2079,7 @@ top:
 				    "(no expire on open) file handle changed";
 
 			nfs4args_copen_free(open_args);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs_rw_exit(&mi->mi_fh_lock);
 			goto kill_file;
 
@@ -2105,7 +2105,7 @@ top:
 				    "Couldn't reopen: file handle changed"
 				    " due to mismatched fids";
 				nfs4args_copen_free(open_args);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
+				xdr_free(xdr_COMPOUND4res_clnt,
 				    (caddr_t)&res);
 				nfs_rw_exit(&mi->mi_fh_lock);
 				goto kill_file;
@@ -2146,7 +2146,7 @@ top:
 		    oop, FALSE, ep, NULL);
 		if (ep->error || ep->stat) {
 			nfs4args_copen_free(open_args);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_open_seqid_sync(oop);
 			open_owner_rele(oop);
 			oop = NULL;
@@ -2178,7 +2178,7 @@ top:
 
 	nfs4_attr_cache(vp, garp, t, cr, TRUE, NULL);
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	ASSERT(nfs4_consistent_type(vp));
 
@@ -2546,12 +2546,12 @@ nfs4close_otw(rnode4_t *rp, cred_t *cred_otw, nfs4_open_owner_t *oop,
 			*recov = 0;
 
 		if (!ep->error)
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		return;
 	}
 
 	if (res.status) {
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		return;
 	}
 
@@ -2593,7 +2593,7 @@ nfs4close_otw(rnode4_t *rp, cred_t *cred_otw, nfs4_open_owner_t *oop,
 	NFS4_DEBUG(nfs4_client_state_debug, (CE_NOTE, "nfs4close_otw:"
 	    " returning %d", ep->error));
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 }
 
 /* ARGSUSED */
@@ -3265,7 +3265,7 @@ recov_retry:
 			if (!recov)
 				nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_WRITE,
 				    &recov_state, needrecov);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		} else if (e.error == 0 && res.status == NFS4ERR_BAD_STATEID &&
 		    sid_types.cur_sid_type == DEL_SID) {
@@ -3277,8 +3277,7 @@ recov_retry:
 				if (!recov)
 					nfs4_end_fop(mi, vp, NULL, OH_WRITE,
 					    &recov_state, needrecov);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 				return (EIO);
 			}
 			if (!recov)
@@ -3288,7 +3287,7 @@ recov_retry:
 			VN_HOLD(vp);
 			nfs4delegreturn_async(rp, (NFS4_DR_PUSH|NFS4_DR_REOPEN|
 			    NFS4_DR_DISCARD), FALSE);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 
@@ -3304,8 +3303,7 @@ recov_retry:
 			    NULL, OP_WRITE, NULL, NULL, NULL);
 			if (!e.error) {
 				e.error = geterrno4(res.status);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			}
 			nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_WRITE,
 			    &recov_state, needrecov);
@@ -3316,7 +3314,7 @@ recov_retry:
 
 		if (res.status) {
 			e.error = geterrno4(res.status);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			if (!recov)
 				nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_WRITE,
 				    &recov_state, needrecov);
@@ -3327,7 +3325,7 @@ recov_retry:
 		wres = &resop->nfs_resop4_u.opwrite;
 
 		if ((int)wres->count > tsize) {
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 			zcmn_err(getzoneid(), CE_WARN,
 			    "nfs4write: server wrote %u, requested was %u",
@@ -3341,8 +3339,7 @@ recov_retry:
 			*stab_comm = UNSTABLE4;
 			if (wargs->stable == DATA_SYNC4 ||
 			    wargs->stable == FILE_SYNC4) {
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 				zcmn_err(getzoneid(), CE_WARN,
 				    "nfs4write: server %s did not commit "
 				    "to stable storage",
@@ -3381,7 +3378,7 @@ recov_retry:
 		gethrestime(&rp->r_attr.va_mtime);
 		rp->r_attr.va_ctime = rp->r_attr.va_mtime;
 		mutex_exit(&rp->r_statelock);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 	} while (count);
 
 	if (!recov)
@@ -3518,19 +3515,18 @@ recov_retry:
 			nfs4_end_fop(mi, vp, NULL, OH_READ,
 			    &recov_state, needrecov);
 			if (sid_types.cur_sid_type == SPEC_SID) {
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 				return (EIO);
 			}
 			nfs4_save_stateid(&rargs->stateid, &sid_types);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		} else if (e.error == 0 && res.status == NFS4ERR_OLD_STATEID &&
 		    !async && sid_types.cur_sid_type != SPEC_SID) {
 			nfs4_save_stateid(&rargs->stateid, &sid_types);
 			nfs4_end_fop(mi, vp, NULL, OH_READ,
 			    &recov_state, needrecov);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		} else if (e.error == 0 && res.status == NFS4ERR_BAD_STATEID &&
 		    sid_types.cur_sid_type == DEL_SID) {
@@ -3541,8 +3537,7 @@ recov_retry:
 			if (nfs4rdwr_check_osid(vp, &e, cr)) {
 				nfs4_end_fop(mi, vp, NULL, OH_READ,
 				    &recov_state, needrecov);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 				return (EIO);
 			}
 			nfs4_end_fop(mi, vp, NULL, OH_READ,
@@ -3551,7 +3546,7 @@ recov_retry:
 			VN_HOLD(vp);
 			nfs4delegreturn_async(rp, (NFS4_DR_PUSH|NFS4_DR_REOPEN|
 			    NFS4_DR_DISCARD), FALSE);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 		if (needrecov) {
@@ -3580,15 +3575,13 @@ recov_retry:
 				 * stale (server reboot).
 				 */
 				nfs4_init_stateid_types(&sid_types);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 				goto recov_retry;
 			}
 
 			if (!e.error) {
 				e.error = geterrno4(res.status);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			}
 			return (e.error);
 		}
@@ -3597,7 +3590,7 @@ recov_retry:
 			e.error = geterrno4(res.status);
 			nfs4_end_fop(mi, vp, NULL, OH_READ,
 			    &recov_state, needrecov);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			return (e.error);
 		}
 
@@ -3614,7 +3607,7 @@ recov_retry:
 		}
 		lwp_stat_update(LWP_STAT_INBLK, 1);
 		is_eof = res.array[1].nfs_resop4_u.opread.eof;
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	} while (count && !is_eof);
 
@@ -4004,7 +3997,7 @@ recov_retry:
 				nfs4args_verify_free(&argop[verify_argop]);
 				verify_argop = -1;
 			}
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 
@@ -4031,8 +4024,7 @@ recov_retry:
 					    OP_SETATTR);
 
 				e.error = geterrno4(res.status);
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			}
 			nfs4_fattr4_free(&argop[setattr_argop].nfs_argop4_u.
 			    opsetattr.obj_attributes);
@@ -4102,7 +4094,7 @@ recov_retry:
 			 * retry with a new verify value
 			 */
 			ctime = garp->n4g_va.va_ctime;
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			resp = NULL;
 		}
 		if (!e.error) {
@@ -4112,7 +4104,7 @@ recov_retry:
 				nfs4args_verify_free(&argop[verify_argop]);
 				verify_argop = -1;
 			}
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto do_again;
 		}
 	} while (!e.error);
@@ -4128,7 +4120,7 @@ recov_retry:
 			verify_argop = -1;
 		}
 		if (resp)
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 		return (e.error);
 	}
 
@@ -4217,7 +4209,7 @@ recov_retry:
 		nfs4args_verify_free(&argop[verify_argop]);
 		verify_argop = -1;
 	}
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	/*
 	 * Some servers will change the mode to clear the setuid
@@ -4409,8 +4401,7 @@ recov_retry:
 			nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_ACCESS,
 			    &recov_state, needrecov);
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 	}
@@ -4460,8 +4451,7 @@ recov_retry:
 			 */
 			/* XXX-LP */
 			if (ncr != NULL) {
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 				cred = ncr;
 				ncr = NULL;
 				goto tryagain;
@@ -4472,7 +4462,7 @@ recov_retry:
 
 out:
 	if (!rpc_error)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	if (ncrfree != NULL)
 		crfree(ncrfree);
@@ -4564,8 +4554,7 @@ recov_retry:
 		if (nfs4_start_recovery(&e, VTOMI4(vp), vp, NULL, NULL,
 		    NULL, OP_READLINK, NULL, NULL, NULL) == FALSE) {
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 			nfs4_end_op(VTOMI4(vp), vp, NULL, &recov_state,
 			    needrecov);
@@ -4591,7 +4580,7 @@ recov_retry:
 		 */
 		e.error = geterrno4(res.status);
 		nfs4_purge_stale_fh(e.error, vp, cr);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		return (e.error);
 	}
 
@@ -4627,7 +4616,7 @@ recov_retry:
 	}
 	e.error = nfs4_update_attrcache(res.status, garp, t, vp, cr);
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	/*
 	 * The over the wire error for attempting to readlink something
@@ -4925,8 +4914,7 @@ recov_retry_remove:
 		if (nfs4_start_recovery(&e, VTOMI4(unldvp), unldvp, NULL,
 		    NULL, NULL, OP_REMOVE, NULL, NULL, NULL) == FALSE) {
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_op(VTOMI4(unldvp), unldvp, NULL,
 			    &recov_state, TRUE);
 			goto recov_retry_remove;
@@ -4939,7 +4927,7 @@ recov_retry_remove:
 	 */
 	VN_RELE(unldvp);
 	if (!e.error && resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 
 	kmem_free(unlname, MAXNAMELEN);
 	crfree(unlcred);
@@ -5348,7 +5336,7 @@ recov_retry:
 			VN_RELE(*vpp);
 		nfs4_end_fop(mi, dvp, NULL, OH_LOOKUP,
 		    &recov_state, FALSE);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		kmem_free(argop, argoplist_size);
 		return (e.error);
 	}
@@ -5369,7 +5357,7 @@ recov_retry:
 			else
 				nfs4_end_fop(mi, dvp, NULL, OH_LOOKUP,
 				    &recov_state, TRUE);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			kmem_free(argop, argoplist_size);
 			if (!e.error)
 				goto recov_retry;
@@ -5384,7 +5372,7 @@ recov_retry:
 			nfs4_end_fop(mi, dvp, NULL, OH_LOOKUP,
 			    &recov_state, TRUE);
 
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			kmem_free(argop, argoplist_size);
 			goto recov_retry;
 		}
@@ -5640,7 +5628,7 @@ recov_retry:
 	}
 
 exit:
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 	kmem_free(argop, argoplist_size);
 	(void) check_mnt_secinfo(mi->mi_curr_serv, nvp);
 	return (e.error);
@@ -5786,7 +5774,7 @@ recov_retry:
 			VN_RELE(*vpp);
 		nfs4_end_fop(mi, dvp, NULL, OH_LOOKUP,
 		    &recov_state, FALSE);
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		kmem_free(argop, argoplist_size);
 		return (e.error);
 	}
@@ -5807,7 +5795,7 @@ recov_retry:
 			else
 				nfs4_end_fop(mi, dvp, NULL, OH_LOOKUP,
 				    &recov_state, TRUE);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			kmem_free(argop, argoplist_size);
 			if (!e.error)
 				goto recov_retry;
@@ -5820,7 +5808,7 @@ recov_retry:
 			nfs4_end_fop(mi, dvp, NULL, OH_LOOKUP,
 			    &recov_state, TRUE);
 
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			kmem_free(argop, argoplist_size);
 			goto recov_retry;
 		}
@@ -6045,7 +6033,7 @@ recov_retry:
 	*vpp = nvp;
 
 exit:
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 	kmem_free(argop, argoplist_size);
 	(void) check_mnt_secinfo(mi->mi_curr_serv, nvp);
 	return (e.error);
@@ -6426,7 +6414,7 @@ recov_retry:
 		nfs4_end_op(VTOMI4(dvp), dvp, NULL, &recov_state, needrecov);
 		if (!e.error) {
 			e.error = geterrno4(res.status);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		}
 		if (abort == FALSE)
 			goto recov_retry;
@@ -6460,7 +6448,7 @@ recov_retry:
 		}
 
 		if (e.error) {
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_op(VTOMI4(dvp), dvp, NULL, &recov_state,
 			    needrecov);
 			return (e.error);
@@ -6477,7 +6465,7 @@ recov_retry:
 	gf_res = &resop->nfs_resop4_u.opgetfh;
 	if (gf_res->object.nfs_fh4_len == 0) {
 		*avp = NULL;
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		nfs4_end_op(VTOMI4(dvp), dvp, NULL, &recov_state, needrecov);
 		return (ENOENT);
 	}
@@ -6515,7 +6503,7 @@ recov_retry:
 
 	nfs4_end_op(VTOMI4(dvp), dvp, NULL, &recov_state, needrecov);
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 	return (0);
 }
@@ -7047,7 +7035,7 @@ recov_retry:
 				nfs4args_verify_free(&argop[8]);
 				nfs4args_setattr_free(&argop[9]);
 			}
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 	}
@@ -7149,7 +7137,7 @@ out:
 		nfs4args_setattr_free(&argop[9]);
 	}
 	if (resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 	if (need_end_op)
 		nfs4_end_op(mi, dvp, NULL, &recov_state, needrecov);
 
@@ -7399,8 +7387,7 @@ recov_retry:
 		if (nfs4_start_recovery(&e, VTOMI4(dvp), dvp,
 		    NULL, NULL, NULL, OP_REMOVE, NULL, NULL, NULL) == FALSE) {
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_op(VTOMI4(dvp), dvp, NULL, &recov_state,
 			    needrecov);
 			goto recov_retry;
@@ -7438,7 +7425,7 @@ recov_retry:
 	}
 	nfs_rw_exit(&drp->r_rwlock);
 	if (resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 
 	if (e.error == 0) {
 		vnode_t *tvp;
@@ -7577,8 +7564,7 @@ recov_retry:
 			    needrecov);
 			kmem_free(argop, argoplist_size);
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		} else {
 			if (e.error != 0) {
@@ -7674,7 +7660,7 @@ recov_retry:
 out:
 	kmem_free(argop, argoplist_size);
 	if (resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 
 	nfs_rw_exit(&tdrp->r_rwlock);
 
@@ -8241,8 +8227,7 @@ recov_retry:
 		    OP_RENAME, NULL, NULL, NULL) == FALSE) {
 			nfs4_end_op(mi, odvp, ndvp, &recov_state, needrecov);
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 	}
@@ -8306,7 +8291,7 @@ recov_retry:
 	}
 
 	if (resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 	nfs4_end_op(mi, odvp, ndvp, &recov_state, needrecov);
 	kmem_free(argop, argoplist_size);
 
@@ -8501,8 +8486,7 @@ recov_retry:
 			    &recov_state, needrecov);
 			kmem_free(argop, argoplist_size);
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			mutex_enter(&orp->r_statelock);
 			orp->r_flags &= ~R4RECEXPFH;
 			cv_broadcast(&orp->r_cv);
@@ -8600,7 +8584,7 @@ recov_retry:
 out:
 	kmem_free(argop, argoplist_size);
 	if (resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 	mutex_enter(&orp->r_statelock);
 	orp->r_flags &= ~R4RECEXPFH;
 	cv_broadcast(&orp->r_cv);
@@ -8775,8 +8759,7 @@ recov_retry:
 		if (nfs4_start_recovery(&e, VTOMI4(dvp), dvp, NULL, NULL,
 		    NULL, OP_REMOVE, NULL, NULL, NULL) == FALSE) {
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 			nfs4_end_op(VTOMI4(dvp), dvp, NULL, &recov_state,
 			    needrecov);
@@ -8836,7 +8819,7 @@ recov_retry:
 	nfs_rw_exit(&drp->r_rwlock);
 
 	if (resp)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 
 	if (e.error == 0) {
 		vnode_t *tvp;
@@ -9375,8 +9358,7 @@ recov_retry:
 			nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_READDIR,
 			    &recov_state, needrecov);
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			if (rdc->entries != NULL) {
 				kmem_free(rdc->entries, rdc->entlen);
 				rdc->entries = NULL;
@@ -9421,7 +9403,7 @@ recov_retry:
 			    &recov_state, needrecov);
 			nfs4_purge_stale_fh(e.error, vp, cr);
 			rdc->error = e.error;
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			if (rdc->entries != NULL) {
 				kmem_free(rdc->entries, rdc->entlen);
 				rdc->entries = NULL;
@@ -9509,7 +9491,7 @@ recov_retry:
 		mutex_exit(&mi->mi_lock);
 	}
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 out:
 	/*
@@ -11806,8 +11788,7 @@ recov_retry:
 			nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_COMMIT,
 			    &recov_state, needrecov);
 			if (!e.error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto recov_retry;
 		}
 		if (e.error) {
@@ -11827,7 +11808,7 @@ recov_retry:
 			crfree(cred_otw);
 			nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_COMMIT,
 			    &recov_state, needrecov);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			goto get_commit_cred;
 		}
 		/*
@@ -11857,7 +11838,7 @@ recov_retry:
 		mutex_enter(&rp->r_statelock);
 		if (cm_res->writeverf == rp->r_writeverf) {
 			mutex_exit(&rp->r_statelock);
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 			nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_COMMIT,
 			    &recov_state, needrecov);
 			crfree(cred_otw);
@@ -11871,7 +11852,7 @@ recov_retry:
 		e.error = NFS_VERF_MISMATCH;
 	}
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 	nfs4_end_fop(VTOMI4(vp), vp, NULL, OH_COMMIT, &recov_state, needrecov);
 	crfree(cred_otw);
 	if (osp != NULL)
@@ -12783,8 +12764,7 @@ recov_retry_confirm:
 		    res.status == NFS4ERR_RESOURCE) &&
 		    abort == FALSE && resend == FALSE) {
 			if (!ep->error)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
-				    (caddr_t)&res);
+				xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 
 			ddi_sleep(confirm_retry_sec);
 			goto recov_retry_confirm;
@@ -12795,12 +12775,12 @@ recov_retry_confirm:
 		else
 			*retry_open = FALSE;
 		if (!ep->error)
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		return;
 	}
 
 	if (res.status) {
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 		return;
 	}
 
@@ -12808,7 +12788,7 @@ recov_retry_confirm:
 	bcopy(&resop->nfs_resop4_u.opopen_confirm.open_stateid,
 	    stateid, sizeof (*stateid));
 
-	(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
+	xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)&res);
 }
 
 /*
@@ -13605,7 +13585,7 @@ nfs4frlock_check_access(vnode_t *vp, nfs4_op_hint_t op_hint,
 		nfs4args_lockt_free(&argop[1]);
 	kmem_free(argop, 2 * sizeof (nfs_argop4));
 	if (!error)
-		(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)*respp);
+		xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)*respp);
 	*argspp = NULL;
 	*respp = NULL;
 
@@ -13733,7 +13713,7 @@ nfs4frlock_recovery(int needrecov, nfs4_error_t *ep,
 			nfs4args_lockt_free(&argop[1]);
 		kmem_free(argop, 2 * sizeof (nfs_argop4));
 		if (!ep->error)
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)*respp);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)*respp);
 		*respp = NULL;
 		*argspp = NULL;
 	}
@@ -13836,7 +13816,7 @@ nfs4frlock_results_denied(nfs4_lock_call_type_t ctype, LOCK4args *lock_args,
 				nfs4args_lockt_free(&argop[1]);
 			kmem_free(argop, 2 * sizeof (nfs_argop4));
 			if (*respp)
-				(void) xdr_free(xdr_COMPOUND4res_clnt,
+				xdr_free(xdr_COMPOUND4res_clnt,
 				    (caddr_t)*respp);
 			*argspp = NULL;
 			*respp = NULL;
@@ -14060,7 +14040,7 @@ nfs4frlock_final_cleanup(nfs4_lock_call_type_t ctype, COMPOUND4args_clnt *argsp,
 			nfs4args_lockt_free(&argop[1]);
 		kmem_free(argop, 2 * sizeof (nfs_argop4));
 		if (resp)
-			(void) xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
+			xdr_free(xdr_COMPOUND4res_clnt, (caddr_t)resp);
 	}
 
 	/* free the reference on the lock owner */

@@ -24,7 +24,7 @@
 # Use is subject to license terms.
 #
 #
-#	This makefile drives the production of the wc driver 
+#	This makefile drives the production of the wc driver
 #	kernel module.
 #
 #	intel implementation architecture independent

@@ -22,6 +22,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2017 RackTop Systems.
+#
 
 PROG = ucodeadm
 
@@ -47,7 +49,7 @@ ROOTAMDUCODE = $(AMD_UCODE_FILE:%=$(ROOTUCODEPATH)/%)
 CPPFLAGS = -I../../common -I../../uts/common
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-type-limits
-LDLIBS = -lgen
+LDLIBS += -lgen
 
 DIRMODE = 0755
 FILEMODE = 0555

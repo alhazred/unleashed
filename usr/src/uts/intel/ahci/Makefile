@@ -25,7 +25,7 @@
 #
 
 #
-#	This makefile drives the production of the 
+#	This makefile drives the production of the
 #	"/kernel/drv/ahci" kernel module.
 #
 #	intel architecture dependent
@@ -38,8 +38,8 @@ UTSBASE	= ../..
 
 #
 #	Define the module and object file sets.
-#
-MODULE		= ahci 
+
+MODULE		= ahci
 OBJECTS		= $(AHCI_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR     = $(UTSBASE)/common/io/sata/adapters/ahci

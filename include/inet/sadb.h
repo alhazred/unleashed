@@ -21,6 +21,7 @@
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ * Copyright (c) 2012 Nexenta Systems, Inc. All rights reserved.
  */
 
 #ifndef	_INET_SADB_H
@@ -907,9 +908,9 @@ extern void sadb_alg_update(ipsec_algtype_t, uint8_t, boolean_t, netstack_t *);
 			ipsec_stack_t *ipss;				\
 									\
 			ipss = assoc->ipsa_netstack->netstack_ipsec;	\
-			mutex_enter(&ipss->ipsec_alg_lock);		\
+			rw_enter(&ipss->ipsec_alg_lock, RW_READER);	\
 			(void) ipsec_create_ctx_tmpl(_sa, _type);	\
-			mutex_exit(&ipss->ipsec_alg_lock);		\
+			rw_exit(&ipss->ipsec_alg_lock);			\
 		}							\
 		mutex_exit(&assoc->ipsa_lock);				\
 		if ((_tmpl = (_sa)->_which) == IPSEC_CTX_TMPL_ALLOC)	\
