@@ -14,8 +14,3 @@
 #
 
 file path=usr/share/man/man3ofmt/ofmt.3ofmt
-link path=usr/share/man/man3ofmt/ofmt_close.3ofmt target=ofmt.3ofmt
-link path=usr/share/man/man3ofmt/ofmt_open.3ofmt target=ofmt.3ofmt
-link path=usr/share/man/man3ofmt/ofmt_print.3ofmt target=ofmt.3ofmt
-link path=usr/share/man/man3ofmt/ofmt_strerror.3ofmt target=ofmt.3ofmt
-link path=usr/share/man/man3ofmt/ofmt_update_winsize.3ofmt target=ofmt.3ofmt
