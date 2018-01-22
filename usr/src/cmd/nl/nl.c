@@ -88,9 +88,7 @@ extern char *optarg;	/* getopt support */
 extern int optind;
 
 int
-main(argc, argv)
-int argc;
-char *argv[];
+main(int argc, char *argv[])
 {
 	register int j;
 	register int i = 0;
@@ -137,7 +135,7 @@ char *argv[];
 
 	while (argc > 0) {
 		while ((c = getopt(argc, argv,
-			"pb:d:f:h:i:l:n:s:v:w:")) != EOF) {
+		    "pb:d:f:h:i:l:n:s:v:w:")) != EOF) {
 
 			switch (c) {
 			case 'h':
@@ -155,7 +153,7 @@ char *argv[];
 					(void) strcpy(pat, optarg+1);
 					header = 'h';
 					hexpbuf =
-					    compile(pat, (char *)0, (char *)0);
+					    compile(pat, NULL,  NULL);
 					if (regerrno)
 						regerr(regerrno);
 					break;
@@ -181,7 +179,7 @@ char *argv[];
 					(void) strcpy(pat, optarg+1);
 					body = 'b';
 					bexpbuf =
-					compile(pat, (char *)0, (char *)0);
+					    compile(pat, NULL, NULL);
 					if (regerrno)
 						regerr(regerrno);
 					break;
@@ -207,7 +205,7 @@ char *argv[];
 					(void) strcpy(pat, optarg+1);
 					footer = 'f';
 					fexpbuf =
-					    compile(pat, (char *)0, (char *)0);
+					    compile(pat, NULL, NULL);
 					if (regerrno)
 						regerr(regerrno);
 					break;
@@ -335,10 +333,10 @@ for (j = 1; j < argc; j++) {
 						}
 						pat[r] = '\0';
 						header = 'h';
-					hexpbuf =
-					    compile(pat, (char *)0, (char *)0);
-					if (regerrno)
-						regerr(regerrno);
+						hexpbuf =
+						    compile(pat, NULL, NULL);
+						if (regerrno)
+							regerr(regerrno);
 						break;
 					case '\0':
 						header = 'n';
@@ -369,10 +367,10 @@ for (j = 1; j < argc; j++) {
 						}
 						pat[r] = '\0';
 						body = 'b';
-					bexpbuf =
-					    compile(pat, (char *)0, (char *)0);
-					if (regerrno)
-						regerr(regerrno);
+						bexpbuf =
+						    compile(pat, NULL, NULL);
+						if (regerrno)
+							regerr(regerrno);
 						break;
 					case '\0':
 						body = 't';
@@ -403,10 +401,10 @@ for (j = 1; j < argc; j++) {
 						}
 						pat[r] = '\0';
 						footer = 'f';
-					fexpbuf =
-					    compile(pat, (char *)0, (char *)0);
-					if (regerrno)
-						regerr(regerrno);
+						fexpbuf =
+						    compile(pat, NULL, NULL);
+						if (regerrno)
+							regerr(regerrno);
 						break;
 					case '\0':
 						footer = 'n';
@@ -651,20 +649,17 @@ for (j = 1; j < argc; j++) {
 /*		REGEXP ERR ROUTINE		*/
 
 static void
-regerr(c)
-int c;
+regerr(int c)
 {
 	(void) fprintf(stderr, gettext(
-		"nl: invalid regular expression: error code %d\n"), c);
+	    "nl: invalid regular expression: error code %d\n"), c);
 	exit(1);
 }
 
 /*		CALCULATE NUMBER ROUTINE	*/
 
 static void
-pnum(n, sep)
-int	n;
-char *sep;
+pnum(int n, char *sep)
 {
 	register int	i;
 
@@ -687,8 +682,7 @@ char *sep;
 /*		IF NUM > 10, THEN USE THIS CALCULATE ROUTINE		*/
 
 static void
-num(v, p)
-int v, p;
+num(int v, int p)
 {
 	if (v < 10)
 		nbuf[p] = v + '0';
@@ -703,9 +697,7 @@ int v, p;
 
 #ifdef XPG4
 static int
-convert(c, option_arg)
-int c;
-char *option_arg;
+convert(int c, char *option_arg)
 {
 	s = option_arg;
 	q = r = 0;
@@ -724,23 +716,19 @@ char *option_arg;
 #else
 /* Solaris version */
 static int
-convert(argv)
-char *argv;
+convert(char *argv)
 {
 	s = (char *)argv;
 	q = 2;
 	r = 0;
 	while (s[q] != '\0') {
-		if (s[q] >= '0' && s[q] <= '9')
-		{
-		s1[r] = s[q];
-		r++;
-		q++;
+		if (s[q] >= '0' && s[q] <= '9') {
+			s1[r] = s[q];
+			r++;
+			q++;
+		} else {
+			optmsg(argv);
 		}
-		else
-				{
-				optmsg(argv);
-				}
 	}
 	s1[r] = '\0';
 	k = atoi(s1);
@@ -751,9 +739,7 @@ char *argv;
 /*		CALCULATE NUM/TEXT SEPRATOR		*/
 
 static void
-npad(width, sep)
-	int	width;
-	char *sep;
+npad(int width, char *sep)
 {
 	register int i;
 
@@ -768,13 +754,11 @@ npad(width, sep)
 
 #ifdef XPG4
 static void
-optmsg(option, option_arg)
-int option;
-char *option_arg;
+optmsg(int option, char *option_arg)
 {
 	if (option_arg != NULL) {
 		(void) fprintf(stderr, gettext(
-			"nl: invalid option (-%c %s)\n"), option, option_arg);
+		    "nl: invalid option (-%c %s)\n"), option, option_arg);
 	}
 	/* else getopt() will print illegal option message */
 	usage();
@@ -782,11 +766,9 @@ char *option_arg;
 #else
 /* Solaris version */
 static void
-optmsg(option)
-char *option;
+optmsg(char *option)
 {
-	(void) fprintf(stderr, gettext(
-		"nl: invalid option (%s)\n"), option);
+	(void) fprintf(stderr, gettext("nl: invalid option (%s)\n"), option);
 	usage();
 }
 #endif
