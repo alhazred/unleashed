@@ -91,8 +91,7 @@ Root of the overall file system name space.
 .ad
 .sp .6
 .RS 4n
-Primary location for special files. Typically, device files are built to match
-the kernel and hardware configuration of the machine.
+The device name file system. See \fBdev\fR(7FS).
 .RE
 
 .sp
@@ -273,7 +272,7 @@ Terminal devices.
 .ad
 .sp .6
 .RS 4n
-Physical device files.
+The devices file system. See \fBdevfs\fR(7FS).
 .RE
 
 .sp
@@ -305,7 +304,7 @@ Xorg Xserver (X11) configuration files.
 .ad
 .sp .6
 .RS 4n
-Accounting system configuration information.
+Process accounting system configuration information.
 .RE
 
 .sp
@@ -447,7 +446,8 @@ Configuration files for Internet services.
 .ad
 .sp .6
 .RS 4n
-Shell scripts for transitioning between run levels.
+Shell scripts for transitioning between init states. The service management
+facility, \fBsmf\fR(5) is the preferred mechanism for managing services.
 .RE
 
 .sp
@@ -665,6 +665,16 @@ among systems.
 .sp
 .ne 2
 .na
+\fB\fB/etc/zfs\fR\fR
+.ad
+.sp .6
+.RS 4n
+Contains the zfs state file, \fBzpool.cache\fR.
+.RE
+
+.sp
+.ne 2
+.na
 \fB\fB/etc/zones\fR\fR
 .ad
 .sp .6
@@ -689,7 +699,8 @@ Default root of the shared file system tree.
 .ad
 .sp .6
 .RS 4n
-Default root of a subtree for user directories.
+Default root of a subtree for user directories. Often managed by the
+automounter, see \fBautomount\fR(1M) for more details.
 .RE
 
 .sp
@@ -817,7 +828,7 @@ Platform-dependent kernel.
 .ad
 .sp .6
 .RS 4n
-Root of a subtree for the process file system.
+Root of a subtree for the process file system. See \fBproc\fR(4).
 .RE
 
 .sp
@@ -839,7 +850,8 @@ is mounted.
 .ad
 .sp .6
 .RS 4n
-Mount point for the contract (CTFS) and object (OBJFS) file systems.
+Mount point for the contract (CTFS) and object (OBJFS) file systems. See
+\fBctfs\fR(7FS) and \fBobjfs\fR(7FS).
 .RE
 
 .sp
@@ -849,7 +861,8 @@ Mount point for the contract (CTFS) and object (OBJFS) file systems.
 .ad
 .sp .6
 .RS 4n
-Temporary files; cleared during the boot operation.
+Temporary files. Usually mounted as a memory based file system. See
+\fBtmpfs\fR(7FS).
 .RE
 
 .sp
@@ -902,7 +915,7 @@ Default location for Audit log files.
 .ad
 .sp .6
 .RS 4n
-Directory provided for global core files storage.
+Directory provided for global core files storage. See \fBcoreadm\fR(1M).
 .RE
 
 .sp
@@ -912,7 +925,7 @@ Directory provided for global core files storage.
 .ad
 .sp .6
 .RS 4n
-Default depository for kernel crash dumps.
+Default depository for kernel crash dumps. See \fBdumpadm\fR(1M).
 .RE
 
 .sp
@@ -962,7 +975,7 @@ Database and log files for Kerberos.
 .ad
 .sp .6
 .RS 4n
-Configuration files for runtime linker.
+Configuration files for runtime linker. See \fBcrle\fR(1).
 .RE
 
 .sp
@@ -1064,16 +1077,6 @@ Backup files for \fBvi\fR(1) and \fBex\fR(1).
 .RS 4n
 Temporary files which are not needed across reboots. Only root may modify the
 contents of this directory.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/var/sadm\fR\fR
-.ad
-.sp .6
-.RS 4n
-Databases maintained by the software package management utilities.
 .RE
 
 .sp
@@ -1313,7 +1316,9 @@ the executable in this directory. See \fBisaexec\fR(3C).
 .ad
 .sp .6
 .RS 4n
-C compilation system.
+Former location of files for the C compilation system, now containing
+compatibility symbolic links to their new locations in \fB/usr/bin\fR
+and \fB/usr/lib\fR.
 .RE
 
 .sp
@@ -1978,7 +1983,8 @@ Symbolic link to the \fB/var/preserve\fR directory.
 .ad
 .sp .6
 .RS 4n
-Directory for the \fBproc\fR tools.
+Former location of the \fBproc\fR(1) tools, now containing compatibility
+symbolic links to their new locations in \fB/usr/bin\fR.
 .RE
 
 .sp
@@ -2098,7 +2104,7 @@ Symbolic link to the \fB/var/tmp\fR directory.
 
 .SH SEE ALSO
 .LP
-\fBat\fR(1), \fBex\fR(1), \fBfmli\fR(1), \fBiconv\fR(1),
+\fBat\fR(1), \fBex\fR(1), \fBiconv\fR(1),
 \fBisainfo\fR(1), \fBmail\fR(1), \fBmailx\fR(1), \fBnroff\fR(1),
 \fBpriocntl\fR(1), \fBrefer\fR(1), \fBsar\fR(1), \fBsh\fR(1), \fBspell\fR(1),
 \fBsvcs\fR(1), \fBtroff\fR(1), \fBuname\fR(1), \fBuucp\fR(1C),
@@ -2106,4 +2112,6 @@ Symbolic link to the \fB/var/tmp\fR directory.
 \fBfmd\fR(1M), \fBfsck\fR(1M), \fBinit\fR(1M), \fBkernel\fR(1M),
 \fBmknod\fR(1M), \fBmount\fR(1M), \fBsvcadm\fR(1M), \fBsvccfg\fR(1M),
 \fBuseradd\fR(1M), \fBypbind\fR(1M), \fBmount\fR(2), \fBIntro\fR(4),
-\fBterminfo\fR(4)
+\fBproc\fR(4), \fBterminfo\fR(4), \fBsmf\fR(5), \fBctfs\fR(7FS),
+\fBdev\fR(7FS), \fBdevfs\fR(7FS), \fBctfs\fR(7FS), \fBobjfs\fR(7FS),
+\fBtmpfs\fR(7FS)
