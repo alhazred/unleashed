@@ -697,9 +697,9 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
     char *my_fmri, parse_cmdln_fn parseit, CplMatchFn *match_fn)
 {
 	char		ibuf[IBUF_SIZE], holder[IBUF_SIZE];
-	char		*hptr, **thisargv, *ebuf;
+	char		*volatile hptr, **thisargv, *ebuf;
 	int		thisargc;
-	boolean_t	continue_in_progress = B_FALSE;
+	volatile boolean_t	continue_in_progress = B_FALSE;
 	char		*s;
 
 	(void) setjmp(env);

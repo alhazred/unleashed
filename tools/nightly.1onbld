@@ -19,7 +19,7 @@
 .\" "Copyright (c) 1999, 2010, Oracle and/or its affiliates. All rights reserved.
 .\" "Copyright 2012 Joshua M. Clulow <josh@sysmgr.org>
 .\" "
-.TH NIGHTLY 1ONBLD "Jul 16, 2016"
+.TH NIGHTLY 1ONBLD "Jul 2, 2017"
 .SH NAME
 .I nightly
 \- build an OS-Net consolidation overnight
@@ -208,12 +208,6 @@ Root of the proto area for the build.  The makefiles direct
 installation of build products to this area and
 direct references to these files by builds of commands and other
 targets.  It should be expressed in terms of $SRCTOP.
-.RE
-.LP
-.B TOOLS_ROOT
-.RS 5
-Root of the tools proto area for the build.  The makefiles direct
-installation of tools build products to this area.
 .RE
 .LP
 .B MACH

@@ -57,7 +57,6 @@ INC_PATH	+= -I$(UTSBASE)/common/io/bpf
 
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-uninitialized
-CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-unused-variable

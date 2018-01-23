@@ -25,6 +25,7 @@
 
 #
 # Copyright (c) 2012 by Delphix. All rights reserved.
+# Copyright 2017 Joyent, Inc.
 #
 
 PROG = isns
@@ -85,6 +86,8 @@ $(PROG): $(OBJS)
 clean:
 	$(RM) $(OBJS)
 
+
+$(POFILES): $(DTRACE_HEADER)
 
 $(POFILE): $(POFILES)
 	$(RM) $@
