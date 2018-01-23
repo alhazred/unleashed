@@ -17,10 +17,13 @@
 include $(SRC)/cmd/Makefile.cmd
 include $(SRC)/test/Makefile.com
 
-PROG = conn dgram drop_priv sockpair
+PROG = conn dgram drop_priv nosignal sockpair
 
 C99MODE = $(C99_ENABLE)
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
+
+nosignal := LDLIBS += -lnsl
+nosignal.ln := LDLIBS += -lnsl
 
 ROOTOPTPKG = $(ROOT)/opt/os-tests
 TESTDIR = $(ROOTOPTPKG)/tests/sockfs

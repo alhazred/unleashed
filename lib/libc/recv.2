@@ -123,6 +123,8 @@ peek at incoming message
 wait for full request or error
 .It Dv MSG_DONTWAIT
 don't block
+.It Dv MSG_NOSIGNAL
+don't generate SIGPIPE
 .El
 .Pp
 The
@@ -151,6 +153,10 @@ If no data is available,
 .Va errno
 is set to
 .Er EAGAIN .
+The
+.Dv MSG_NOSIGNAL
+flag requests that disconnected stream-oriented sockets don't generate
+a signal.
 .Pp
 The
 .Fn recvmsg
