@@ -1168,8 +1168,7 @@ in_host_array(char *host)
  * nothing and leaves host_name the way it was previous to the call.
  */
 static void
-add_to_host_array(char *host)
-{
+add_to_host_array(char *host) {
 
 	void *new_block = NULL;
 
@@ -1332,9 +1331,6 @@ merge_ips(void)
 			addr = &sin6->sin6_addr;
 			break;
 		}
-
-		case AF_LINK:
-			continue;
 
 		default:
 			syslog(LOG_WARNING, "Unknown address family %d for "
