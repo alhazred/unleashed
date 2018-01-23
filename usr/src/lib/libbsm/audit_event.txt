@@ -555,3 +555,8 @@
 #
 6500:AUE_hotplug_state:change hotplug connection state:ss
 6501:AUE_hotplug_set:set hotplug bus private options:ss
+
+#
+# sudo event
+#
+6650:AUE_sudo:sudo(1m):lo,ua,as
