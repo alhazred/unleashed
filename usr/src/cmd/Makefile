@@ -70,7 +70,6 @@ COMMON_SUBDIRS=		\
 	boot		\
 	busstat		\
 	cal		\
-	calendar	\
 	cdrw		\
 	cfgadm		\
 	checkeq		\
