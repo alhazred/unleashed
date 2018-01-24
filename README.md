@@ -16,9 +16,9 @@ of the basic goals which we always strive for.
 2. We aim to have periodic releases (roughly one every 6 months).  Security
    patches will be provided between releases.
 3. Unleashed aims to be a modern operating system base.
-  1. Modern compiler support.  Currently, we support only gcc 4.4.4, however
-     we hope to allow a wider range of gcc versions.  Eventually, we would
-     like to be able to use clang as well.
+  1. Modern compiler support.  Currently, the base system can only be built
+     with gcc 4.4.4, however we hope to allow a wider range of gcc versions.
+     Eventually, we would like to be able to use clang as well.
   2. The UNIX environment has changed drastically over the past 20 years.
      As a result, we hope to ship an environment that provides the comforts
      of modern UNIX, yet maintain the unique features we inherited that set
