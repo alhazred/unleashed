@@ -328,7 +328,11 @@ yylex(void)
 						lgate();
 						if(!ratfor)(void) fprintf(fout,"# ");
 						(void) fprintf(fout,"define YYNEWLINE %d\n",ctable['\n']);
-						if(!ratfor)(void) fprintf(fout,"int yylex(){\nint nstr; extern int yyprevious;\n");
+						if(!ratfor) {
+							(void) fprintf(fout,"int yylex(){\nint nstr; extern int yyprevious;\n");
+							(void) fprintf(fout,"if (yyin == NULL) yyin = stdin;\n");
+							(void) fprintf(fout,"if (yyout == NULL) yyout = stdout;\n");
+						}
 						sectbegin = TRUE;
 						i = treesize*(sizeof(*name)+sizeof(*left)+
 							sizeof(*right)+sizeof(*nullstr)+sizeof(*parent))+ALITTLEEXTRA;
