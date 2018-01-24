@@ -53,12 +53,15 @@
 /*
  * lex hardcodes yyin and yyout to stdin and stdout, respectively, before we get
  * control.  We've redirected printf and fprintf (see mdb_lex.h) to yyprintf and
- * yyfprintf, which ignore the FILE * provided by yyout.  __iob-based stdin and
- * stdout are useless in kmdb, since we don't have stdio.  We define __iob here
- * to shut the linker up.
+ * yyfprintf, which ignore the FILE * provided by yyout.  FILE *-based stdin and
+ * stdout are useless in kmdb, since we don't have stdio.  We define
+ * __std{in,out,err}p here to shut the linker up.
  */
 #ifdef _KMDB
 FILE __iob[_NFILE];
+FILE *__stdinp;
+FILE *__stdoutp;
+FILE *__stderrp;
 #endif
 
 /*

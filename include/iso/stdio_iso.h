@@ -153,10 +153,15 @@ typedef	__longlong_t	fpos_t;
 
 #define	L_tmpnam	25	/* (sizeof(P_tmpdir) + 15) */
 
+/* __iob[] is here for bootstrapping reasons */
 extern __FILE	__iob[_NFILE];
-#define	stdin	(&__iob[0])
-#define	stdout	(&__iob[1])
-#define	stderr	(&__iob[2])
+extern __FILE	*__stdinp;
+extern __FILE	*__stdoutp;
+extern __FILE	*__stderrp;
+
+#define	stdin  (&__iob[0])
+#define	stdout (&__iob[1])
+#define	stderr (&__iob[2])
 
 #if __cplusplus >= 199711L
 namespace std {
