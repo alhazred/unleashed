@@ -43,6 +43,7 @@ privileges due to inactivity.
 
 The current committers are:
 
+* alhazred
 * jeffpc
 * lotheac
 * tsoome
