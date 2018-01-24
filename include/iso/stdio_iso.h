@@ -159,9 +159,9 @@ extern __FILE	*__stdinp;
 extern __FILE	*__stdoutp;
 extern __FILE	*__stderrp;
 
-#define	stdin  (&__iob[0])
-#define	stdout (&__iob[1])
-#define	stderr (&__iob[2])
+#define	stdin  __stdinp
+#define	stdout __stdoutp
+#define	stderr __stderrp
 
 #if __cplusplus >= 199711L
 namespace std {
