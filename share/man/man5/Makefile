@@ -25,7 +25,6 @@ MAN = Intro.5 \
       dhcp.5 \
       environ.5 \
       epoll.5 \
-      eqnchar.5 \
       eventfd.5 \
       extendedFILE.5 \
       filesystem.5 \
@@ -51,13 +50,9 @@ MAN = Intro.5 \
       loader.4th.5 \
       loader.5 \
       locale.5 \
-      mansun.5 \
-      me.5 \
       mech_spnego.5 \
       menu.4th.5 \
       menusets.4th.5 \
-      mm.5 \
-      ms.5 \
       mutex.5 \
       nfssec.5 \
       pam_allow.5 \
@@ -104,7 +99,6 @@ MAN = Intro.5 \
       threads.5 \
       timerfd.5 \
       version.4th.5 \
-      vgrindefs.5 \
       zfsloader.5 \
       zones.5 \
       zpool-features.5

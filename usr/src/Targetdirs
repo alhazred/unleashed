@@ -229,7 +229,6 @@ DIRS= \
 	/usr/lib/crypto \
 	/usr/lib/elfedit \
 	/usr/lib/fm \
-	/usr/lib/font \
 	/usr/lib/fs \
 	/usr/lib/fs/nfs \
 	/usr/lib/fs/proc \
@@ -283,7 +282,6 @@ DIRS= \
 	/usr/share/hwdata \
 	/usr/share/lib \
 	/usr/share/lib/ccs \
-	/usr/share/lib/tmac  \
 	/usr/share/lib/ldif  \
 	/usr/share/lib/xml \
 	/usr/share/lib/xml/dtd \
