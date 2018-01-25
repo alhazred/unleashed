@@ -887,10 +887,6 @@ parse_susp(char *bufp, uint_t *ce_len, struct hs_direct *hsdep)
 					if (CHECK_BYTES_OK(susp)) {
 						sua_offset =
 						    SP_SUA_OFFSET(susp);
-#ifdef	lint
-						/* this may not be needed */
-						i = (int)sua_offset;
-#endif	/* lint */
 					}
 					break;
 

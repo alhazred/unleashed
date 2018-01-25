@@ -72,9 +72,6 @@ runcmdshell()
 	char name[MAXCOMPLEXLEN];
 	char cmd[BUFSIZ];
 
-#ifdef	lint
-	curdir[0] = '\0';
-#endif	/* lint */
 
 	canon("/", curdir, sizeof (curdir));
 loop:

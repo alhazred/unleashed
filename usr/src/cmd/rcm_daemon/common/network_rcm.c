@@ -45,11 +45,7 @@
 /*
  * Definitions
  */
-#ifndef	lint
 #define	_(x)	gettext(x)
-#else
-#define	_(x)	x
-#endif
 
 #define	CACHE_STALE	1	/* flags */
 #define	CACHE_NEW	2	/* flags */

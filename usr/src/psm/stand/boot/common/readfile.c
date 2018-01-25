@@ -159,17 +159,7 @@ extern int amd64_elf64;
 extern int is_amd64;
 #endif	/* BOOTAMD64 */
 
-#ifdef	lint
-/*
- * This function is currently inlined
- */
-/*ARGSUSED*/
-void
-sync_instruction_memory(caddr_t v, size_t len)
-{}
-#else	/* lint */
 extern void sync_instruction_memory(caddr_t v, size_t len);
-#endif	/* lint */
 
 extern int 	verbosemode;
 extern int	boothowto;

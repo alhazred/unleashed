@@ -418,9 +418,6 @@ i_psvc_count_tables_associations(FILE *fp, uint32_t *countp, char *end)
 		if (strncmp(end, buf, strlen(end)) == 0)
 			++count;
 	}
-#ifdef	lint
-	ret = ret;
-#endif
 
 	fseek(fp, first_record, SEEK_SET);
 	*countp = count;

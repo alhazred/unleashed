@@ -65,12 +65,7 @@
  * or implied warranty.
  */
 
-#ifdef	lint
-static char *encrypt_names[] = {0};
-static char *enctype_names[] = {0};
-#else	/* lint */
 #define	ENCRYPT_NAMES
-#endif	/* lint */
 #include <arpa/telnet.h>
 
 #include "externs.h"

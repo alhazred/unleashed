@@ -27,17 +27,6 @@
  */
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if	defined(lint)
-
-#include	<sys/types.h>
-
-caddr_t
-caller()
-{
-	return (0);
-}
-
-#else
 
 #include	<sys/asm_linkage.h>
 
@@ -47,4 +36,3 @@ caller()
 	movl	4(%ebp),%eax
 	ret
 	SET_SIZE(caller)
-#endif

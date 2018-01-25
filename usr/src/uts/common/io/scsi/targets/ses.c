@@ -574,17 +574,13 @@ ses_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 			return (DDI_FAILURE);
 		}
 
-#if		!defined(lint)
 		/* LINTED */
 		_NOTE(COMPETING_THREADS_NOW);
-#endif		/* !defined(lint) */
 
 		if (ssc->ses_vec.softc_init)
 			(void) (*ssc->ses_vec.softc_init)(ssc, 0);
 
-#if		!defined(lint)
 		_NOTE(NO_COMPETING_THREADS_NOW);
-#endif 		/* !defined(lint) */
 
 		(void) scsi_ifsetcap(SES_ROUTE(ssc), "auto-rqsense", 1, 0);
 		scsi_destroy_pkt(ssc->ses_rqpkt);
@@ -1036,15 +1032,11 @@ ses_start(struct buf *bp)
 	bp->b_resid = 0;
 	SET_BP_ERROR(bp, 0);
 
-#if	!defined(lint)
 	_NOTE(NO_COMPETING_THREADS_NOW);
-#endif 	/* !defined(lint) */
 	ssc->ses_retries = ses_retry_count;
 
-#if	!defined(lint)
 	/* LINTED */
 	_NOTE(COMPETING_THREADS_NOW);
-#endif	/* !defined(lint) */
 
 	SES_LOG(ssc, SES_CE_DEBUG9, "ses_start -> scsi_transport");
 	switch (scsi_transport(BP_PKT(bp))) {

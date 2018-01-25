@@ -97,10 +97,8 @@ gld_init_ether(gld_mac_info_t *macinfo)
 	ASSERT(macinfo->gldm_type == DL_ETHER);
 	ASSERT(macinfo->gldm_addrlen == 6);
 	ASSERT(macinfo->gldm_saplen == -2);
-#ifndef	lint
 	ASSERT(sizeof (struct ether_header) == 14);
 	ASSERT(sizeof (mac_addr_t) == 6);
-#endif
 
 	kstat_named_init(&sp->glds_frame, "align_errors", KSTAT_DATA_ULONG);
 	kstat_named_init(&sp->glds_crc, "fcs_errors", KSTAT_DATA_ULONG);
@@ -990,10 +988,8 @@ gld_init_fddi(gld_mac_info_t *macinfo)
 	ASSERT(macinfo->gldm_type == DL_FDDI);
 	ASSERT(macinfo->gldm_addrlen == 6);
 	ASSERT(macinfo->gldm_saplen == -2);
-#ifndef	lint
 	ASSERT(sizeof (struct fddi_mac_frm) == 13);
 	ASSERT(sizeof (mac_addr_t) == 6);
-#endif
 
 	/* Wire address format is bit reversed from canonical format */
 	macinfo->gldm_options |= GLDOPT_CANONICAL_ADDR;
@@ -1314,10 +1310,8 @@ gld_init_tr(gld_mac_info_t *macinfo)
 	ASSERT(macinfo->gldm_type == DL_TPR);
 	ASSERT(macinfo->gldm_addrlen == 6);
 	ASSERT(macinfo->gldm_saplen == -2);
-#ifndef	lint
 	ASSERT(sizeof (struct tr_mac_frm_nori) == 14);
 	ASSERT(sizeof (mac_addr_t) == 6);
-#endif
 
 	mutex_init(GLD_SR_MUTEX(macinfo), NULL, MUTEX_DRIVER, NULL);
 

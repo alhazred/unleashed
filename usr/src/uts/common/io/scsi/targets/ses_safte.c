@@ -82,7 +82,6 @@ struct scfg {
 #define	FLG2_LOCKDOOR	0x4
 #define	SAFTE_PRIVATE	sizeof (struct scfg)
 
-#if	!defined(lint)
 _NOTE(MUTEX_PROTECTS_DATA(scsi_device::sd_mutex, scfg))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(scfg::Nfans))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(scfg::Npwr))
@@ -95,7 +94,6 @@ _NOTE(DATA_READABLE_WITHOUT_LOCK(scfg::flag1))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(scfg::flag2))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(scfg::pwroff))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(scfg::slotoff))
-#endif
 
 static int
 safte_getconfig(ses_softc_t *ssc)

@@ -91,13 +91,6 @@ veprintf(Lm_list *lml, Error error, const char *format, va_list args)
 {
 	static const char	*strings[ERR_NUM];
 
-#if	defined(lint)
-	/*
-	 * The lml argument is only meaningful for diagnostics sent to ld.so.1.
-	 * Supress the lint error by making a dummy assignment.
-	 */
-	lml = 0;
-#endif
 	/*
 	 * For error types we issue a prefix for, make sure the necessary
 	 * string has been internationalized and is ready.

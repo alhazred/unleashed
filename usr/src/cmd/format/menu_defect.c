@@ -364,9 +364,6 @@ loop:
 	 */
 	goto loop;
 	/*NOTREACHED*/
-#ifdef	lint
-	return (0);
-#endif
 }
 
 /*

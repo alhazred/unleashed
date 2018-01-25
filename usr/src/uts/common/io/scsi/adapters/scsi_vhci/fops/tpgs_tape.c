@@ -44,9 +44,6 @@ static int tpgs_tape_device_probe(struct scsi_device *sd,
     struct scsi_inquiry *inq, void **ctpriv);
 
 /* Failover module plumbing. */
-#ifdef	lint
-#define	scsi_vhci_failover_ops	scsi_vhci_failover_ops_f_tpgs_tape
-#endif	/* lint */
 struct scsi_failover_ops scsi_vhci_failover_ops = {
 	SFO_REV,
 	"f_tpgs_tape",

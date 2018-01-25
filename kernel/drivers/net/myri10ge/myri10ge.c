@@ -34,10 +34,8 @@
  * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
-#ifndef	lint
 static const char __idstring[] =
 	"@(#)$Id: myri10ge.c,v 1.186 2009-06-29 13:47:22 gallatin Exp $";
-#endif
 
 #define	MXGEFW_NDIS
 #include "myri10ge_var.h"

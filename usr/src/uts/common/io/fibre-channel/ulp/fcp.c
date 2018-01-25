@@ -1052,7 +1052,6 @@ static uchar_t fcp_alpa_to_switch[] = {
 
 static caddr_t pid = "SESS01	      ";
 
-#if	!defined(lint)
 
 _NOTE(MUTEX_PROTECTS_DATA(fcp_global_mutex,
     fcp_port::fcp_next fcp_watchdog_id))
@@ -1069,7 +1068,6 @@ _NOTE(SCHEME_PROTECTS_DATA("Unshared",
     fcp_ops
     callb_cpr))
 
-#endif /* lint */
 
 /*
  * This table is used to determine whether or not it's safe to copy in

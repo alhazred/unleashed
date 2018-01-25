@@ -60,9 +60,6 @@ static void	hds_sym_init();
 static int	hds_sym_get_opinfo(struct scsi_device *sd,
 			struct scsi_path_opinfo *opinfo, void *ctpriv);
 
-#ifdef	lint
-#define	scsi_vhci_failover_ops	scsi_vhci_failover_ops_f_sym_hds
-#endif	/* lint */
 /*
  * Use the following for the Asymmetric-Active-Active fops.
  * A different fops may get used for the Symmetric-Active-Active.

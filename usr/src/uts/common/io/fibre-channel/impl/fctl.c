@@ -142,7 +142,6 @@ static fctl_nwwn_list_t		*fctl_nwwn_hash_table;
 static kmutex_t			fctl_nwwn_hash_mutex;
 int fctl_nwwn_table_size = NWWN_HASH_TABLE_SIZE;
 
-#if	!defined(lint)
 _NOTE(MUTEX_PROTECTS_DATA(fctl_nwwn_hash_mutex, fctl_nwwn_hash_table))
 _NOTE(MUTEX_PROTECTS_DATA(fctl_ulp_list_mutex, fctl_ulp_list))
 _NOTE(RWLOCK_PROTECTS_DATA(fctl_ulp_lock, ulp_module::mod_next))
@@ -151,7 +150,6 @@ _NOTE(RWLOCK_PROTECTS_DATA(fctl_mod_ports_lock, ulp_module::mod_ports
 _NOTE(DATA_READABLE_WITHOUT_LOCK(ulp_module::mod_info))
 _NOTE(MUTEX_PROTECTS_DATA(ulp_ports::port_mutex, ulp_ports::port_statec
     ulp_ports::port_dstate))
-#endif /* lint */
 
 #define	FCTL_VERSION		"20090729-1.70"
 #define	FCTL_NAME_VERSION	"SunFC Transport v" FCTL_VERSION
