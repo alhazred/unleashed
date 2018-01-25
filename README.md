@@ -21,7 +21,7 @@ of the basic goals which we always strive for.
      Eventually, we would like to be able to use clang as well.
   2. The UNIX environment has changed drastically over the past 20 years.
      As a result, we hope to ship an environment that provides the comforts
-     of modern UNIX, yet maintain the unique features we inherited that set
+     of modern UNIX, yet maintains the unique features we inherited that set
      us apart from other UNIX systems out there.
   3. POSIX has won.  Therefore, when it does not hinder usability (see item
      3.2), we want a system that is POSIX compliant without having to jump
@@ -36,7 +36,6 @@ of the basic goals which we always strive for.
    even if it delays the commit a little bit.  In other words, we care about
    more than just that the code works - we want code we can (for the most
    part) be proud of.
-5. XXX: describe the amount of self-contained-ness
 
 Rules
 =====
@@ -55,7 +54,8 @@ Commits are cheap.  Modern revision control systems (e.g., git) handle large
 numbers of commits very well.  Therefore small changes are encouraged
 (instead of "mega commits" that seem to touch half the code base).  Smaller
 commits make it easier to search through commit history to see what other
-parts of the repository were changed as part of the change.
+parts of the repository were changed as part of the change.  Additionally,
+small changes are easier to review.
 
 Each commit should build and boot.  Obviously, running nightly and a full
 set of tests for each commit is not necessarily practical, however one
