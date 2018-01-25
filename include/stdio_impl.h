@@ -47,13 +47,8 @@ struct __FILE_TAG {
 
 struct __FILE_TAG	/* needs to be binary-compatible with old versions */
 {
-#ifdef _STDIO_REVERSE
-	unsigned char	*_ptr;	/* next character from/to here in buffer */
-	int		_cnt;	/* number of available characters in buffer */
-#else
 	int		_cnt;	/* number of available characters in buffer */
 	unsigned char	*_ptr;	/* next character from/to here in buffer */
-#endif
 	unsigned char	*_base;	/* the buffer */
 	unsigned char	_flag;	/* the state of the stream */
 	unsigned char	_magic; /* Old home of the file descriptor */
