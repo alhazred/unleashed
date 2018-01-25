@@ -36,6 +36,10 @@ main(int argc, char *argv[])	/* process command-line arguments */
 	char line[BUFSIZ], *s;
 	int nodeflt = 0;
 
+	in = stdin;
+	fo = stdout;
+	ftemp = stdout;
+
 	(void) setlocale(LC_ALL, "");
 #if !defined(TEXT_DOMAIN)
 #define	TEXT_DOMAIN "SYS_TEST"

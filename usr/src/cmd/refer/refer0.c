@@ -17,9 +17,9 @@
 
 #include "refer..c"
 
-FILE *in = stdin;
-FILE *fo = stdout;
-FILE *ftemp = stdout;
+FILE *in;
+FILE *fo;
+FILE *ftemp;
 int endpush = 0;
 int sort = 0;
 int labels = 0;

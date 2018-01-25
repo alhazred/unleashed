@@ -71,6 +71,9 @@ main(int argc, char **argv)
 	int i, opt_end = 0;
 	int sigs[] = {SIGHUP, SIGINT, SIGPIPE, 0};
 
+	ifile[0] = stdin;
+	ofile[0] = stdout;
+	cf = stdout;
 
 	for (i = 0; sigs[i]; ++i) {
 		if (signal(sigs[i], SIG_IGN) != SIG_IGN)

@@ -145,7 +145,7 @@ static int	pflag = 0;		/* flag for profiling to stdout */
 static int	sflag = 1;		/* flag for silent mode */
 static int	aflag = 1;		/* flag for read input as archive */
 extern int	errno;			/* file opening error return code */
-static FILE	*OUTPUT_FD = stdout;	/* output fd: default as stdout */
+static FILE	*OUTPUT_FD;		/* output fd: default as stdout */
 static char	*outputfile;		/* full pathname of output file */
 
 #define	SUCCEED		0

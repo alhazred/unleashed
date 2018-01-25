@@ -61,7 +61,7 @@
  */
 int lfd;
 char *my_fmri;
-FILE *debugfile = stderr;
+FILE *debugfile;
 
 #define	USAGE() if (!smf_managed) usage()
 /*
@@ -1339,6 +1339,8 @@ main(int argc, char *argv[])
 	boolean_t smf_managed;
 	boolean_t just_check = B_FALSE;
 	boolean_t replace_policy = B_FALSE;
+
+	debugfile = stderr;
 
 	char *smf_warning = gettext(
 	    "\n\tIPsec policy should be managed using smf(5). Modifying\n"

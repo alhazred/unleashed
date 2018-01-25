@@ -81,7 +81,7 @@ static Liblist	*intlib_listend;
  * These globals are sought and used by interceptlib.c
  * which goes into all interceptor objects.
  */
-FILE		*ABISTREAM = stderr;
+FILE		*ABISTREAM;
 sigset_t	abisigset;
 
 /*
@@ -207,6 +207,8 @@ la_version(uint_t version)
 {
 	char		*str;
 	FILE		*fp;
+
+	ABISTREAM = stderr;
 
 	if (version > LAV_CURRENT)
 		(void) fprintf(stderr,

@@ -55,6 +55,8 @@ main(int argc, char **argv)
 	char *ypath;
 	Boolean eoption = 0, woption = 0;
 
+	errorf = stderr;
+
 	sargv = argv;
 	sargc = argc;
 	(void) setlocale(LC_ALL, "");

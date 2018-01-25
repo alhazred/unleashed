@@ -66,7 +66,7 @@ static boolean_t vflag = B_FALSE;	/* Verbose? */
 static boolean_t cflag = B_FALSE;	/* Check Only */
 
 char *my_fmri = NULL;
-FILE *debugfile = stdout;
+FILE *debugfile;
 
 #define	MAX_GET_SIZE	1024
 /*
@@ -3455,6 +3455,8 @@ main(int argc, char *argv[])
 	char *configfile = NULL;
 	struct stat sbuf;
 	int bootflags;
+
+	debugfile = stdout;
 
 	(void) setlocale(LC_ALL, "");
 #if !defined(TEXT_DOMAIN)

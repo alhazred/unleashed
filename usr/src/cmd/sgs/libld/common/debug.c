@@ -57,10 +57,7 @@ static int		Phase = 0;
 static struct {
 	FILE	*fptr;	/* File to send debug output */
 	int	close_needed;	/* True if explicitly opened stream */
-} dbg_ofile = {
-	stderr,
-	0
-};
+} dbg_ofile;
 
 
 /*
@@ -139,6 +136,9 @@ dbg_print(Lm_list *lml, const char *format, ...)
 {
 	static char	*prestr = NULL;
 	va_list		args;
+
+	if (dbg_ofile.fptr == NULL)
+		dbg_ofile.fptr = stderr;
 
 #if	defined(lint)
 	/*

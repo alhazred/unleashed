@@ -30,7 +30,7 @@
 
 static Elist	*bindto_list = NULL;
 static Elist	*bindfrom_list = NULL;
-static FILE	*output = stdout;
+static FILE	*output;
 
 
 uint_t
@@ -41,6 +41,8 @@ la_version(uint_t version)
 		    "symbindrep.so: unexpected version: %d\n", version);
 		return (0);
 	}
+
+	output = stdout;
 
 	build_env_list(&bindto_list, (const char *)"SYMBINDREP_BINDTO");
 	build_env_list(&bindfrom_list, (const char *)"SYMBINDREP_BINDFROM");

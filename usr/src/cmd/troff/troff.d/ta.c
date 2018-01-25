@@ -123,11 +123,11 @@ char	*codetab[NFONT];	/* device codes */
 int	dbg	= 0;
 int	res	= 972;		/* input assumed computed according to this resolution */
 				/* initial value to avoid 0 divide */
-FILE	*tf	= stdout;	/* output file */
+FILE	*tf;			/* output file */
 char	*fontdir	= "/usr/lib/font";
 extern char devname[];
 
-FILE *fp = stdin;	/* input file pointer */
+FILE *fp;		/* input file pointer */
 
 int	nowait = 0;	/* 0 => wait at bottom of each page */
 
@@ -135,6 +135,9 @@ int
 main(int argc, char **argv)
 {
 	char buf[BUFSIZ];
+
+	fp = stdin;
+	tf = stdout;
 
 	setbuf(stdout, buf);
 	while (argc > 1 && argv[1][0] == '-') {
