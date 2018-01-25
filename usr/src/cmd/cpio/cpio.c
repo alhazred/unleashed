@@ -304,7 +304,7 @@ static
 int	issymlink = 0;
 
 static
-FILE	*In_p = stdin;		/* Where the input comes from */
+FILE	*In_p;		/* Where the input comes from */
 
 typedef struct sl_info
 {
@@ -501,8 +501,8 @@ static ulong_t	Savedev;
 
 static
 FILE	*Ef_p,			/* File pointer of pattern input file */
-	*Err_p = stderr,	/* File pointer for error reporting */
-	*Out_p = stdout,	/* File pointer for non-archive output */
+	*Err_p,			/* File pointer for error reporting */
+	*Out_p,			/* File pointer for non-archive output */
 	*Rtty_p,		/* Input file pointer for interactive rename */
 	*Wtty_p;		/* Output file ptr for interactive rename */
 
@@ -700,6 +700,10 @@ main(int argc, char **argv)
 {
 	int i;
 	int passret;
+
+	In_p = stdin;
+	Out_p = stdout;
+	Err_p = stderr;
 
 	(void) setlocale(LC_ALL, "");
 #if !defined(TEXT_DOMAIN)	/* Should be defined by cc -D */

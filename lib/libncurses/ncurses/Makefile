@@ -41,18 +41,18 @@ curses.h: Caps \
 		curses.tail \
 		MKkey_defs.sh
 	cat ${NCURSES_INC}/curses.head >$@
-	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKkey_defs.sh ${TERMINFO_CAPS} >> $@
-	${SHELL} -c 'if test "cchar_t" = "cchar_t" ; then cat ${NCURSES_INC}/curses.wide >> $@ ; fi'
+	AWK=${AWK} ${SH} ${NCURSES_INC}/MKkey_defs.sh ${TERMINFO_CAPS} >> $@
+	${SH} -c 'if test "cchar_t" = "cchar_t" ; then cat ${NCURSES_INC}/curses.wide >> $@ ; fi'
 	cat ${NCURSES_INC}/curses.tail >> $@
 
 hashsize.h: MKhashsize.sh Caps
-	${SHELL} ${NCURSES_INC}/MKhashsize.sh ${TERMINFO_CAPS} > $@
+	${SH} ${NCURSES_INC}/MKhashsize.sh ${TERMINFO_CAPS} > $@
 
 ncurses_def.h: ncurses_defs MKncurses_def.sh
-	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKncurses_def.sh ${NCURSES_INC}/ncurses_defs > $@
+	AWK=${AWK} ${SH} ${NCURSES_INC}/MKncurses_def.sh ${NCURSES_INC}/ncurses_defs > $@
 
 parametrized.h: MKparametrized.sh Caps
-	AWK=${AWK} ${SHELL} ${NCURSES_INC}/MKparametrized.sh ${TERMINFO_CAPS} > $@
+	AWK=${AWK} ${SH} ${NCURSES_INC}/MKparametrized.sh ${TERMINFO_CAPS} > $@
 
 names.c: MKnames.awk Caps 
 	${AWK} -f ${NCURSES_TINFO}/MKnames.awk bigstrings=${USE_BIG_STRINGS} ${TERMINFO_CAPS} >$@
@@ -61,19 +61,19 @@ codes.c: MKcodes.awk Caps
 	${AWK} -f ${NCURSES_TINFO}/MKcodes.awk bigstrings=${USE_BIG_STRINGS} ${TERMINFO_CAPS} >$@
 
 fallback.c : MKfallback.sh Caps
-	${SHELL} -e ${NCURSES_TINFO}/MKfallback.sh ${TERMINFO} ${TERMINFO_SRC} ${TIC_PATH} >$@
+	${SH} -e ${NCURSES_TINFO}/MKfallback.sh ${TERMINFO} ${TERMINFO_SRC} ${TIC_PATH} >$@
 
 lib_gen.c : MKlib_gen.sh curses.h 
-	${SHELL} -e ${NCURSES_BASE}/MKlib_gen.sh "${CPP} ${CFLAGS}" ${AWK} generated < curses.h >$@
+	${SH} -e ${NCURSES_BASE}/MKlib_gen.sh "${CPP} ${CFLAGS}" ${AWK} generated < curses.h >$@
 
 init_keytry.h: make_keys keys.list
 	./make_keys keys.list >$@
 
 keys.list: MKkeys_list.sh Caps
-	AWK=${AWK} ${SHELL} ${NCURSES_TINFO}/MKkeys_list.sh ${TERMINFO_CAPS} | LC_ALL=C sort >$@
+	AWK=${AWK} ${SH} ${NCURSES_TINFO}/MKkeys_list.sh ${TERMINFO_CAPS} | LC_ALL=C sort >$@
 
 expanded.c: curses.priv.h MKexpanded.sh
-	${SHELL} -e ${NCURSES_SERIAL}/MKexpanded.sh "${CPP} ${CFLAGS}" >$@
+	${SH} -e ${NCURSES_SERIAL}/MKexpanded.sh "${CPP} ${CFLAGS}" >$@
 
 # includes <names.c> so add -I.
 make_keys: ${GENHDRS} make_keys.c names.c
@@ -91,7 +91,7 @@ comp_captab.c: ${GENHDRS} \
 		MKcaptab.sh \
 		MKcaptab.awk \
 		make_hash
-	PATH=.:${PATH} ${SHELL} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
+	PATH=.:${PATH} ${SH} -e ${NCURSES_TINFO}/MKcaptab.sh ${AWK} ${USE_BIG_STRINGS} ${NCURSES_TINFO}/MKcaptab.awk ${TERMINFO_CAPS} >$@
 
 lib_keyname.c: keys.list MKkeyname.awk
 	${AWK} -f ${NCURSES_BASE}/MKkeyname.awk bigstrings=${USE_BIG_STRINGS} keys.list >$@

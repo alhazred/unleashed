@@ -141,3 +141,12 @@ FILE _iob[_NFILE] = {
 FILE *_lastbuf = &_iob[_NFILE];
 
 #endif	/*	_LP64	*/
+
+/*
+ * Standard in/out/err
+ *
+ * For now, they are pointers into _iob[] for backwards compatibility.
+ */
+FILE *__stdinp = &_iob[0];
+FILE *__stdoutp = &_iob[1];
+FILE *__stderrp = &_iob[2];

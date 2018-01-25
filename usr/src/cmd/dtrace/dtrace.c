@@ -94,7 +94,7 @@ static int g_mode = DMODE_EXEC;
 static int g_status = E_SUCCESS;
 static int g_grabanon = 0;
 static const char *g_ofile = NULL;
-static FILE *g_ofp = stdout;
+static FILE *g_ofp;
 static dtrace_hdl_t *g_dtp;
 static char *g_etcfile = "/etc/system";
 static const char *g_etcbegin = "* vvvv Added by DTrace";
@@ -1171,6 +1171,8 @@ main(int argc, char *argv[])
 	char c, *p, **v;
 	struct ps_prochandle *P;
 	pid_t pid;
+
+	g_ofp = stdout;
 
 	g_pname = basename(argv[0]);
 

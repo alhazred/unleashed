@@ -1989,7 +1989,6 @@ $endif
 
     global:
 	errno			{ FLAGS = NODIRECT };
-	_iob;
 
     protected:
 	addseverity;
@@ -2084,7 +2083,9 @@ $endif
 	_getdate_err;
 	getenv;
 	__huge_val;
-	__iob;
+	__stdinp;
+	__stdoutp;
+	__stderrp;
 	isnan			{ TYPE = FUNCTION; FILTER = libm.so.2 };
 	_isnan			{ TYPE = FUNCTION; FILTER = libm.so.2 };
 	isnand			{ TYPE = FUNCTION; FILTER = libm.so.2 };

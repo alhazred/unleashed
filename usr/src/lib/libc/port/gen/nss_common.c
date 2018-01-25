@@ -55,6 +55,12 @@
 #include <getxby_door.h>
 
 /*
+ * This is a gross hack because including stdiom.h here causes redefinition
+ * of __FILE conflicts.
+ */
+extern __FILE __iob[_NFILE];
+
+/*
  * configurable values for default buffer sizes
  */
 
@@ -189,12 +195,12 @@ void				_nss_db_state_destr(struct nss_db_state *);
 static int checked_env = 0;		/* protected by "rootlock" */
 
 	/* allowing __nss_debug_file to be set could be a security hole. */
-FILE *__nss_debug_file = stdout;
+FILE *__nss_debug_file = &__iob[1];
 int __nss_debug_eng_loop;
 
 /* NIS_OPTIONS infrastructure (from linbsl/nis/cache/cache_api.cc) */
 	/* allowing __nis_debug_file to be set could be a security hole. */
-FILE *__nis_debug_file = stdout;
+FILE *__nis_debug_file = &__iob[1];
 int __nis_debug_bind;
 int __nis_debug_rpc;
 int __nis_debug_calls;

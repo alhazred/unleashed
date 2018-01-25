@@ -51,7 +51,7 @@
 #include <stdlib.h>
 
 int	nfile;			/* index of last used in fl */
-FILE	*fl[NFILE]	= {stdin};
+FILE	*fl[NFILE];
 
 struct	tacct tb[NFILE];	/* current record from each file */
 struct	tacct	tt = {
@@ -78,6 +78,8 @@ main(int argc, char **argv)
 {
 	int i;
 	struct tacct *tp;
+
+	fl[0] = stdin;
 
 	while (--argc > 0) {
 		if (**++argv == '-')

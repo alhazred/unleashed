@@ -66,13 +66,13 @@ int	fline[10];			/* current line nbr stack */
 
 
 /* input file stuff for "include"s */
-FILE	*ifile[10] 	= {stdin};	/* stack */
+FILE	*ifile[10];			/* stack */
 int	ifx;				/* stack index */
 ibuf_t	ibuffer[11];			/* input buffer */
 
 /* stuff for output diversions */
-FILE	*cf 	= stdout;		/* current output file */
-FILE	*ofile[11] 	= {stdout};	/* output file stack */
+FILE	*cf;				/* current output file */
+FILE	*ofile[11];			/* output file stack */
 int	ofx;				/* stack index */
 
 

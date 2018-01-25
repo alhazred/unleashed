@@ -582,7 +582,7 @@ static	off_t	low;
 static	off_t	high;
 
 static	FILE	*tfile;
-static	FILE	*vfile = stdout;
+static	FILE	*vfile;
 static	char	*tmpdir;
 static	char	*tmp_suffix = "/tarXXXXXX";
 static	char	*tname;
@@ -696,6 +696,8 @@ main(int argc, char *argv[])
 	char		*cp;
 	char		*tmpdirp;
 	pid_t		thispid;
+
+	vfile = stdout;
 
 	(void) setlocale(LC_ALL, "");
 #if !defined(TEXT_DOMAIN)	/* Should be defined by cc -D */

@@ -276,7 +276,7 @@ chd1(void)
 	else
 		(void) fprintf(fout, "extern char *yysptr, yysbuf[];\n");
 	(void) fprintf(fout, "int yytchar;\n");
-	(void) fprintf(fout, "FILE *yyin = {stdin}, *yyout = {stdout};\n");
+	(void) fprintf(fout, "FILE *yyin, *yyout;\n");
 	(void) fprintf(fout, "extern int yylineno;\n");
 	(void) fprintf(fout, "struct yysvf { \n");
 	(void) fprintf(fout, "\tstruct yywork *yystoff;\n");

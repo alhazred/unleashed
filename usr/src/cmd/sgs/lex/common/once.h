@@ -65,7 +65,7 @@ int	ctable[2*NCH] = {
 };
 
 int	ZCH = NCH;
-FILE	*fout = NULL, *errorf = {stderr};
+FILE	*fout = NULL, *errorf;
 int	sect = DEFSECTION;
 int	prev = '\n';	/* previous input character */
 int	pres = '\n';	/* present input character */

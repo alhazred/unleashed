@@ -22,7 +22,7 @@ SHLIB_MINOR=	0
 AWK		= awk
 CC		= gcc
 CPP		= gcc -E
-SHELL		= /bin/sh
+SH		= /bin/sh
 
 USE_BIG_STRINGS = 1
 ENABLE_WIDEC=   1

@@ -122,7 +122,7 @@ static	char	*Ttyout;
 static	char	obuf[BUFSIZ];
 static	char	time_buf[50];	/* array to hold the time and date */
 static	long	Lnumb = 0;
-static	FILE	*Ttyin = stdin;
+static	FILE	*Ttyin;
 static	int	Dblspace = 1;
 static	int	Fpage = 1;
 static	int	Formfeed = 0;
@@ -196,6 +196,7 @@ main(int argc, char **argv)
 	FILS	fstr[NFILES];
 	int	nfdone = 0;
 
+	Ttyin = stdin;
 
 	/* Get locale variables for environment */
 	(void) setlocale(LC_ALL, "");

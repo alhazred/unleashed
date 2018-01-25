@@ -77,7 +77,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	nflag;
 	bytecnt2out;
 	bytecnt2str;
-	debugfile;
 	my_fmri;
 	opensavefile;
 	parsedbgopts;

@@ -72,7 +72,6 @@ uint_t	lines_added = 0;
 uint_t	lines_parsed = 0;
 jmp_buf	env;		/* for error recovery in interactive/readfile modes */
 char *my_fmri = NULL;
-FILE *debugfile = stderr;
 static GetLine *gl = NULL;	/* for interactive mode */
 
 /*
@@ -728,7 +727,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 				continue;
 			} else {
 				ipsecutil_exit(SERVICE_FATAL, my_fmri,
-				    debugfile, dgettext(TEXT_DOMAIN,
+				    stderr, dgettext(TEXT_DOMAIN,
 				    "Line %d too big."), lineno);
 			}
 		}
@@ -756,7 +755,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 			    (size_t)(&(holder[IBUF_SIZE]) - hptr));
 			if (holder[IBUF_SIZE - 1] != '\0') {
 				ipsecutil_exit(SERVICE_FATAL, my_fmri,
-				    debugfile, dgettext(TEXT_DOMAIN,
+				    stderr, dgettext(TEXT_DOMAIN,
 				    "Command buffer overrun."));
 			}
 			/* Use - 2 because of \n from fgets. */
@@ -790,7 +789,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 			ebuf = calloc((IBUF_SIZE * 2), sizeof (char));
 			if (ebuf == NULL) {
 				ipsecutil_exit(SERVICE_FATAL, my_fmri,
-				    debugfile, dgettext(TEXT_DOMAIN,
+				    stderr, dgettext(TEXT_DOMAIN,
 				    "Memory allocation error."));
 			} else {
 				(void) snprintf(ebuf, (IBUF_SIZE * 2),
@@ -803,11 +802,11 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 
 		switch (create_argv(ibuf, &thisargc, &thisargv)) {
 		case TOO_MANY_TOKENS:
-			ipsecutil_exit(SERVICE_BADCONF, my_fmri, debugfile,
+			ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr,
 			    dgettext(TEXT_DOMAIN, "Too many input tokens."));
 			break;
 		case MEMORY_ALLOCATION:
-			ipsecutil_exit(SERVICE_BADCONF, my_fmri, debugfile,
+			ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr,
 			    dgettext(TEXT_DOMAIN, "Memory allocation error."));
 			break;
 		case COMMENT_LINE:
@@ -840,7 +839,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 	 */
 	if (readfile) {
 		if (lines_parsed != 0 && lines_added == 0) {
-			ipsecutil_exit(SERVICE_BADCONF, my_fmri, debugfile,
+			ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr,
 			    dgettext(TEXT_DOMAIN, "Configuration file did not "
 			    "contain any valid SAs"));
 		}
@@ -859,7 +858,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 		if ((lines_added < lines_parsed) && (configfile != NULL)) {
 			if (my_fmri != NULL) {
 				ipsecutil_exit(SERVICE_BADCONF, my_fmri,
-				    debugfile, dgettext(TEXT_DOMAIN,
+				    stderr, dgettext(TEXT_DOMAIN,
 				    "The configuration file contained %d "
 				    "errors.\n"
 				    "Manually check the configuration with:\n"
@@ -873,7 +872,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 		} else {
 			if (my_fmri != NULL)
 				ipsecutil_exit(SERVICE_EXIT_OK, my_fmri,
-				    debugfile, dgettext(TEXT_DOMAIN,
+				    stderr, dgettext(TEXT_DOMAIN,
 				    "%d actions successfully processed."),
 				    lines_added);
 		}

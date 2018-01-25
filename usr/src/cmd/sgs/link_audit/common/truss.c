@@ -39,7 +39,7 @@ static Elist		*bindfrom_list = NULL;
 
 static uint_t		pidout = 0;
 static pid_t		pid;
-static FILE		*outfile = stderr;
+static FILE		*outfile;
 static uint_t		indent = 1;
 static uint_t		indent_level = 1;
 static uint_t		trussall = 0;
@@ -87,6 +87,8 @@ la_version(uint_t version)
 	if (version > LAV_CURRENT)
 		(void) fprintf(stderr, "truss.so: unexpected version: %d\n",
 		    version);
+
+	outfile = stderr;
 
 	build_env_list(&bindto_list, (const char *)"TRUSS_BINDTO");
 	build_env_list(&bindfrom_list, (const char *)"TRUSS_BINDFROM");

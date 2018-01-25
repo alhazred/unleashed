@@ -36,8 +36,8 @@ int			mb_cur_max = MB_LEN_MAX;
 int			lineno = 1;
 int			warnings = 0;
 static int		nextline;
-static FILE		*input = stdin;
-static const char	*filename = "<stdin>";
+static FILE		*input;
+static const char	*filename;
 static int		instring = 0;
 static int		escaped = 0;
 
@@ -490,6 +490,11 @@ int
 yylex(void)
 {
 	int		c;
+
+	if (input == NULL) {
+		input = stdin;
+		filename = "<stdin>";
+	}
 
 	while ((c = scanc()) != EOF) {
 

@@ -48,7 +48,7 @@
 #define	NRECORDS	50		/* size of circular trace buffer */
 
 int	tracelevel, new_tracelevel;
-FILE	*ftrace = stdout;		/* output trace file */
+FILE	*ftrace;			/* output trace file */
 static const char *sigtrace_pat = "%s";
 static char savetracename[MAXPATHLEN+1];
 static char *ripcmds[RIPCMD_MAX] =
