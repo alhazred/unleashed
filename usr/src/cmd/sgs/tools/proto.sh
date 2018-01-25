@@ -60,7 +60,6 @@ dirs="	$SRCTOP/proto \
 	$SRCTOP/proto/root_$MACH \
 	$SRCTOP/proto/root_$MACH/lib \
 	$SRCTOP/proto/root_$MACH/usr \
-	$SRCTOP/proto/root_$MACH/usr/demo \
 	$SRCTOP/proto/root_$MACH/usr/lib \
 	$SRCTOP/proto/root_$MACH/usr/lib/abi \
 	$SRCTOP/proto/root_$MACH/usr/lib/link_audit \

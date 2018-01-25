@@ -139,7 +139,6 @@ dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
 dir path=usr/ccs
 dir path=usr/ccs/bin
-dir path=usr/demo
 dir path=usr/games
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)

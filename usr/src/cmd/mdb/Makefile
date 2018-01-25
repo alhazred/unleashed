@@ -33,7 +33,7 @@ i386_MACHDIR = intel
 i386_SUBDIRS = intel $(CONFIG_PLATFORM)
 
 MACHDIR = $($(MACH)_MACHDIR)
-SUBDIRS = tools $($(MACH)_SUBDIRS) demo
+SUBDIRS = tools $($(MACH)_SUBDIRS)
 TARGET =
 
 all := TARGET = all

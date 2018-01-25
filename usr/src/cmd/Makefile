@@ -344,7 +344,6 @@ COMMON_SUBDIRS=		\
 	srptsvc		\
 	stat		\
 	stmfadm		\
-	stmfproxy	\
 	stmfsvc		\
 	stmsboot	\
 	streams		\

@@ -62,7 +62,6 @@ $(SUBDIRS):	FRC
 
 FRC:
 
-include Makefile.demo
 include Makefile.doc
 
 include ../Makefile.targ

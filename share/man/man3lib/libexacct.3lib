@@ -87,9 +87,3 @@ MT-Level	MT-Safe
 \fBacctadm\fR(1M), \fBIntro\fR(3), \fBea_error\fR(3EXACCT),
 \fBea_open\fR(3EXACCT), \fBea_pack_object\fR(3EXACCT),
 \fBea_set_item\fR(3EXACCT), \fBattributes\fR(5)
-.SH NOTES
-.LP
-Distributions may provide source code for the \fBexdump\fR utility that
-uses the \fBlibexacct\fR APIs to dump the contents of extended accounting
-files. The source code can be compiled in the directory
-\fB/usr/demo/libexacct\fR.

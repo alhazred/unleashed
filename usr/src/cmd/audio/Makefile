@@ -33,8 +33,7 @@ SUBDIRS =			\
 		utilities .WAIT \
 		audioplay	\
 		audiorecord	\
-		audioconvert	\
-		samples
+		audioconvert
 
 AUDIODIR= $(ROOT)/usr/share/audio
 
