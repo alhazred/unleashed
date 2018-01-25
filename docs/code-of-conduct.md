@@ -74,8 +74,8 @@ We will not tolerate any member of the community, either publicly or
 privately, giving aid or encouragement to any third party to behave in such
 a way towards any members of the community.
 
-The core team will remove any and all access to resources or privileges for
-whatever period it deems fit, up to and including a permanent ban where it
+The lead will remove any and all access to resources or privileges for
+whatever period he deems fit, up to and including a permanent ban where he
 rules that a transgression has happened.
 
 In Case of Conflict
@@ -85,7 +85,7 @@ In Case of Conflict
 * Ask for review.
 * Seek approval from maintainers (i.e., area experts).
 * When no mutually satisfactory resolution can be achieved, defer to the
-  core team
+  lead
 
 If there is a sustained set of objections to a change you have made, be
 graceful and revert what you have done. Objections are hardly likely to be
@@ -103,8 +103,8 @@ keep up-to-date with such standards and practices, and abide by them.
 Getting maintainer approval for any change, even if not strictly required,
 is never a bad thing, and certainly courteous.
 
-If you cannot agree, you should turn to the core team for arbitration.
-A decision by the core team will be final.
+If you cannot agree, you should turn to the lead for arbitration.  A
+decision by the lead will be final.
 
 Sources
 -------

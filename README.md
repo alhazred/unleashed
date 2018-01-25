@@ -40,12 +40,11 @@ of the basic goals which we always strive for.
 Rules
 =====
 
-The community organization is based on the FreeBSD community.  (See
-docs/organization.md for a more thorough description.)  This style of
-community reflects our belief that our community members can behave
-responsibly both when communicating with others as well as when committing
-code to the repository.  To help guide newcomers, we have created a Code of
-Conduct (see docs/code-of-conduct.md) that we expect everyone to abide by.
+We believe that our community members can behave responsibly both when
+communicating with others as well as when committing code to the repository.
+To help guide newcomers, we have created a Code of Conduct (see
+docs/code-of-conduct.md) that we expect everyone to abide by.  The community
+organization is described in docs/organization.md.
 
 Commits
 -------
