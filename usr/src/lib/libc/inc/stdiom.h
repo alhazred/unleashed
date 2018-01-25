@@ -44,6 +44,7 @@
 #include <wchar.h>
 #include "mse.h"
 
+extern __FILE __iob[_NFILE];
 
 /*
  * The following flags, and the macros that manipulate them, operate upon

@@ -1989,7 +1989,6 @@ $endif
 
     global:
 	errno			{ FLAGS = NODIRECT };
-	_iob;
 
     protected:
 	addseverity;
@@ -2084,7 +2083,6 @@ $endif
 	_getdate_err;
 	getenv;
 	__huge_val;
-	__iob;
 	__stdinp;
 	__stdoutp;
 	__stderrp;

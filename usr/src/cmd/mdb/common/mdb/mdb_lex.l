@@ -58,7 +58,6 @@
  * __std{in,out,err}p here to shut the linker up.
  */
 #ifdef _KMDB
-FILE __iob[_NFILE];
 FILE *__stdinp;
 FILE *__stdoutp;
 FILE *__stderrp;

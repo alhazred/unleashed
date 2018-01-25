@@ -55,6 +55,12 @@
 #include <getxby_door.h>
 
 /*
+ * This is a gross hack because including stdiom.h here causes redefinition
+ * of __FILE conflicts.
+ */
+extern __FILE __iob[_NFILE];
+
+/*
  * configurable values for default buffer sizes
  */
 

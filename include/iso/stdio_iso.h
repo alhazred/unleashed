@@ -153,8 +153,6 @@ typedef	__longlong_t	fpos_t;
 
 #define	L_tmpnam	25	/* (sizeof(P_tmpdir) + 15) */
 
-/* __iob[] is here for bootstrapping reasons */
-extern __FILE	__iob[_NFILE];
 extern __FILE	*__stdinp;
 extern __FILE	*__stdoutp;
 extern __FILE	*__stderrp;
