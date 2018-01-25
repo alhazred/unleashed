@@ -383,7 +383,7 @@ descend(char *curname, int curfd, int *retcode, dev_t device)
 			}
 		}
 	}
-	blocks = Aflg ? stb.st_size : stb.st_blocks;
+	blocks = Aflg ? (stb.st_size/DEV_BSIZE) : stb.st_blocks;
 
 	/*
 	 * If there are extended attributes on the current file, add their
@@ -600,15 +600,11 @@ number_to_scaled_string(
 static void
 printsize(blkcnt_t blocks, char *path)
 {
-	u_longlong_t bsize;
-
-	bsize = Aflg ? 1 : DEV_BSIZE;
-
 	if (hflg) {
 		numbuf_t numbuf;
 		unsigned long long scale = 1024L;
 		(void) printf(FORMAT1,
-		    number_to_scaled_string(numbuf, blocks, bsize, scale),
+		    number_to_scaled_string(numbuf, blocks, DEV_BSIZE, scale),
 		    path);
 	} else if (kflg) {
 		(void) printf(FORMAT2, (long long)kb(blocks), path);
