@@ -1,6 +1,5 @@
 MAN = acctcom.1 \
       adb.1 \
-      addbib.1 \
       alias.1 \
       allocate.1 \
       amt.1 \
@@ -25,7 +24,6 @@ MAN = acctcom.1 \
       cal.1 \
       cd.1 \
       cdrw.1 \
-      checknr.1 \
       chgrp.1 \
       chkey.1 \
       chmod.1 \
@@ -65,11 +63,9 @@ MAN = acctcom.1 \
       date.1 \
       dc.1 \
       deallocate.1 \
-      deroff.1 \
       dhcpinfo.1 \
       diff.1 \
       diff3.1 \
-      diffmk.1 \
       digest.1 \
       dircmp.1 \
       disown.1 \
@@ -88,7 +84,6 @@ MAN = acctcom.1 \
       elfwrap.1 \
       encrypt.1 \
       enhance.1 \
-      eqn.1 \
       exec.1 \
       exit.1 \
       expand.1 \
@@ -122,7 +117,6 @@ MAN = acctcom.1 \
       hostid.1 \
       hostname.1 \
       iconv.1 \
-      indxbib.1 \
       Intro.1 \
       ipcrm.1 \
       ipcs.1 \
@@ -171,7 +165,6 @@ MAN = acctcom.1 \
       logname.1 \
       logout.1 \
       look.1 \
-      lookbib.1 \
       lorder.1 \
       ls.1 \
       m4.1 \
@@ -204,7 +197,6 @@ MAN = acctcom.1 \
       nl.1 \
       nm.1 \
       nohup.1 \
-      nroff.1 \
       od.1 \
       optisa.1 \
       pack.1 \
@@ -242,14 +234,12 @@ MAN = acctcom.1 \
       rcapstat.1 \
       read.1 \
       readonly.1 \
-      refer.1 \
       regcmp.1 \
       renice.1 \
       rev.1 \
       rm.1 \
       rmformat.1 \
       rmmount.1 \
-      roffbib.1 \
       roles.1 \
       rpcgen.1 \
       runat.1 \
@@ -269,9 +259,7 @@ MAN = acctcom.1 \
       size.1 \
       sleep.1 \
       smbutil.1 \
-      soelim.1 \
       sort.1 \
-      sortbib.1 \
       sotruss.1 \
       spell.1 \
       split.1 \
@@ -291,7 +279,6 @@ MAN = acctcom.1 \
       tail.1 \
       talk.1 \
       tar.1 \
-      tbl.1 \
       tee.1 \
       telnet.1 \
       test.1 \
@@ -304,12 +291,10 @@ MAN = acctcom.1 \
       tput.1 \
       tr.1 \
       trap.1 \
-      troff.1 \
       truss.1 \
       tty.1 \
       type.1 \
       typeset.1 \
-      ul.1 \
       umask.1 \
       unifdef.1 \
       uniq.1 \
@@ -318,7 +303,6 @@ MAN = acctcom.1 \
       uptime.1 \
       users.1 \
       uuidgen.1 \
-      vgrind.1 \
       volcheck.1 \
       volrmmount.1 \
       w.1 \

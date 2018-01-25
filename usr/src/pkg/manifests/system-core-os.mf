@@ -208,7 +208,6 @@ dir path=usr/sbin/$(ARCH64)
 dir path=usr/share
 dir path=usr/share/lib
 dir path=usr/share/lib/mailx
-dir path=usr/share/lib/pub
 dir path=usr/share/lib/xml group=sys
 dir path=usr/share/lib/xml/dtd group=sys
 dir path=usr/share/lib/xml/style group=sys
@@ -705,7 +704,6 @@ file path=usr/bin/ls mode=0555
 file path=usr/bin/m4 mode=0555
 file path=usr/bin/mail group=mail mode=2511
 file path=usr/bin/mailx group=mail mode=2511
-file path=usr/bin/makedev mode=0555
 file path=usr/bin/mesg mode=0555
 file path=usr/bin/mkdir mode=0555
 file path=usr/bin/mkpwdict mode=0555
@@ -1489,7 +1487,6 @@ link path=usr/net/nls/listen target=../../lib/saf/listen
 link path=usr/net/nls/nlps_server target=../../lib/saf/nlps_server
 link path=usr/news target=../var/news
 link path=usr/preserve target=../var/preserve
-link path=usr/pub target=./share/lib/pub
 link path=usr/sbin/autopush target=../../sbin/autopush
 link path=usr/sbin/bootadm target=../../sbin/bootadm
 link path=usr/sbin/cryptoadm target=../../sbin/cryptoadm

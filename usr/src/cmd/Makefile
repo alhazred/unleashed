@@ -72,8 +72,6 @@ COMMON_SUBDIRS=		\
 	cal		\
 	cdrw		\
 	cfgadm		\
-	checkeq		\
-	checknr		\
 	chgrp		\
 	chmod		\
 	chown		\
@@ -101,7 +99,6 @@ COMMON_SUBDIRS=		\
 	date		\
 	dc		\
 	dd		\
-	deroff		\
 	devfsadm	\
 	syseventd	\
 	devctl		\
@@ -111,7 +108,6 @@ COMMON_SUBDIRS=		\
 	dfs.cmds	\
 	diff		\
 	diff3		\
-	diffmk		\
 	dircmp		\
 	dirname		\
 	diskinfo	\
@@ -130,7 +126,6 @@ COMMON_SUBDIRS=		\
 	eject		\
 	emul64ioctl	\
 	enhance		\
-	eqn		\
 	expand		\
 	expr		\
 	exstr		\
@@ -340,7 +335,6 @@ COMMON_SUBDIRS=		\
 	smbios		\
 	smbsrv		\
 	smserverd	\
-	soelim		\
 	sort		\
 	spell		\
 	split		\
@@ -366,7 +360,6 @@ COMMON_SUBDIRS=		\
 	syslogd		\
 	tail		\
 	tar		\
-	tbl		\
 	tcpd		\
 	th_tools	\
 	tip		\
@@ -374,13 +367,11 @@ COMMON_SUBDIRS=		\
 	touch		\
 	tr		\
 	trapstat	\
-	troff		\
 	truss		\
 	tty		\
 	ttymon		\
 	tzreload	\
 	uadmin		\
-	ul		\
 	units		\
 	unlink		\
 	unpack		\
@@ -389,7 +380,6 @@ COMMON_SUBDIRS=		\
 	utmpd		\
 	uuidgen		\
 	valtools	\
-	vgrind		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
@@ -474,8 +464,6 @@ MSGSUBDIRS=		\
 	cal		\
 	cdrw		\
 	cfgadm		\
-	checkeq		\
-	checknr		\
 	chgrp		\
 	chmod		\
 	chown		\
@@ -498,18 +486,15 @@ MSGSUBDIRS=		\
 	dc		\
 	dcs		\
 	dd		\
-	deroff		\
 	devfsadm	\
 	dfs.cmds	\
 	diff		\
-	diffmk		\
 	dladm		\
 	dlstat		\
 	du		\
 	dumpcs		\
 	ed		\
 	eject		\
-	eqn		\
 	expand		\
 	expr		\
 	fcinfo		\
@@ -626,19 +611,15 @@ MSGSUBDIRS=		\
 	syseventadm	\
 	syseventd	\
 	tar		\
-	tbl		\
 	touch		\
-	troff		\
 	tty		\
 	ttymon		\
 	tzreload	\
-	ul		\
 	units		\
 	unlink		\
 	unpack		\
 	userattr	\
 	valtools	\
-	vgrind		\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
