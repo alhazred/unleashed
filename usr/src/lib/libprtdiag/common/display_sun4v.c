@@ -1027,11 +1027,6 @@ done:
 void
 sun4v_display_diaginfo(int flag, Prom_node *root, picl_nodehdl_t plafh)
 {
-#ifdef	lint
-	flag = flag;
-	root = root;
-	plafh = plafh;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */

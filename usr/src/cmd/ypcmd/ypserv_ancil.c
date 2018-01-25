@@ -34,9 +34,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#ifndef	lint
 static	char sccsid[] = "@(#)ypserv_ancil.c 1.13 88/02/08 Copyr 1984 Sun Micro";
-#endif
 
 #include <dirent.h>
 #include <syslog.h>

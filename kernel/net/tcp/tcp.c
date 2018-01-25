@@ -2045,13 +2045,8 @@ tcp_reinit_values(tcp)
 	tcp_stack_t	*tcps = tcp->tcp_tcps;
 	conn_t		*connp = tcp->tcp_connp;
 
-#ifndef	lint
 #define	DONTCARE(x)
 #define	PRESERVE(x)
-#else
-#define	DONTCARE(x)	((x) = (x))
-#define	PRESERVE(x)	((x) = (x))
-#endif	/* lint */
 
 	PRESERVE(tcp->tcp_bind_hash_port);
 	PRESERVE(tcp->tcp_bind_hash);

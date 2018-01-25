@@ -276,9 +276,6 @@ sun4v_get_node_by_name(picl_nodehdl_t rooth, char *name,
 int
 get_id(Prom_node *node)
 {
-#ifdef	lint
-	node = node;
-#endif
 
 	/*
 	 * This function is intentionally empty

@@ -30,7 +30,6 @@
  * specified through dummy_mech.conf located in /etc.
  *
  */
-#ifndef	lint
 #define	dummy_gss_accept_sec_context \
 		dummy_867227349
 #define	dummy_gss_acquire_cred \
@@ -85,7 +84,6 @@
 		dummy_882983731
 #define	dummy_pname_to_uid \
 		dummy_345475423
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>

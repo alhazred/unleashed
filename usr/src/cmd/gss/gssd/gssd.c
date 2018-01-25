@@ -221,9 +221,6 @@ char **argv;
 	svc_run();
 	abort();
 	/*NOTREACHED*/
-#ifdef	lint
-	return (1);
-#endif
 }
 
 static void

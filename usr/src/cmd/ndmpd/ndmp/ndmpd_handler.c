@@ -116,7 +116,6 @@
  * XDR functions from ndmp_xdr.c which is not included
  * for LINT.
  */
-#ifndef	lint
 ndmp_handler_t ndmp_msghdl_tab[] = {
 	{
 		/* NONE - 0x000 */
@@ -806,8 +805,3 @@ ndmp_handler_t ndmp_msghdl_tab[] = {
 		}
 	}
 };
-#else	/* !lint */
-ndmp_handler_t ndmp_msghdl_tab[] = {
-	0
-};
-#endif	/* !lint */

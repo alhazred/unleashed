@@ -140,13 +140,6 @@ dbg_print(Lm_list *lml, const char *format, ...)
 	static char	*prestr = NULL;
 	va_list		args;
 
-#if	defined(lint)
-	/*
-	 * The lml argument is only meaningful for diagnostics sent to ld.so.1.
-	 * Supress the lint error by making a dummy assignment.
-	 */
-	lml = NULL;
-#endif
 	/*
 	 * Knock off any newline indicator to signify that a diagnostic has
 	 * been processed.

@@ -606,10 +606,6 @@ printf("kmem_free (ptr %p nbytes %lx)\n", ptr, nbytes);
 prtree(kmem_info.free_root, "kmem_free");
 #endif
 
-#ifdef	lint
-	neigh_block = bkmem_zalloc(nbytes);
-	neigh_block = neigh_block;
-#endif
 	if (nbytes == 0) {
 		return;
 	}

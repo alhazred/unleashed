@@ -804,9 +804,6 @@ init_daemon(void)
 		if (status != 0)
 			break;
 
-#ifdef	lint
-		prev = NULL;
-#endif
 		if (first_interval == 0)
 			first_interval = ip;
 		else

@@ -2755,9 +2755,6 @@ fct_lookup_irp_by_portwwn(fct_i_local_port_t *iport, uint8_t *portwwn)
 	return (NULL);
 }
 
-#ifdef	lint
-#define	FCT_VERIFY_RSCN()	_NOTE(EMPTY)
-#else
 #define	FCT_VERIFY_RSCN()						\
 do {									\
 	ct_cmd = fct_create_solct(port, irp->irp_rp, NS_GID_PN,		\
@@ -2771,7 +2768,6 @@ do {									\
 		fct_post_to_solcmd_queue(port, ct_cmd);			\
 	}								\
 } while (0)
-#endif
 
 /* ARGSUSED */
 static void
@@ -2783,18 +2779,14 @@ fct_rscn_verify(fct_i_local_port_t *iport, uint8_t *rscn_req_payload,
 	uint32_t		page_portid	= 0;
 	uint8_t			*page_buf	= NULL;
 	uint8_t			*last_page_buf	= NULL;
-#ifndef	lint
 	fct_cmd_t		*ct_cmd		= NULL;
 	fct_local_port_t	*port		= NULL;
-#endif
 	fct_i_remote_port_t	*irp		= NULL;
 
 	page_buf = rscn_req_payload + 4;
 	last_page_buf = rscn_req_payload +
 	    fct_netbuf_to_value(rscn_req_payload + 2, 2) - 4;
-#ifndef	lint
 	port = iport->iport_port;
-#endif
 	for (; page_buf <= last_page_buf; page_buf += 4) {
 		page_format = 0x03 & page_buf[0];
 		page_portid = fct_netbuf_to_value(page_buf + 1, 3);
@@ -2833,12 +2825,10 @@ fct_rscn_verify(fct_i_local_port_t *iport, uint8_t *rscn_req_payload,
 					if (irp->irp_flags & IRP_RSCN_QUEUED) {
 						continue; /* try next irp */
 					}
-#ifndef	lint
 					if (!((0xFFFFFF << (page_format * 8)) &
 					    (page_portid ^ irp->irp_portid))) {
 						FCT_VERIFY_RSCN();
 					}
-#endif
 				}
 			}
 		}

@@ -67,9 +67,6 @@ struct	buf	bfreelist;	/* Head of the free list of buffers */
 sysinfo_t	sysinfo;
 vminfo_t	vminfo;		/* VM stats protected by sysinfolock mutex */
 
-#ifdef	lint
-int	__lintzero;		/* Alway zero for shutting up lint */
-#endif
 
 /*
  * The following describe the physical memory configuration.

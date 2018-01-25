@@ -17,11 +17,7 @@
 #include <setjmp.h>
 #include <sys/wait.h>
 
-#ifdef lint     /* "lint returns a value which is sometimes ignored" */
-#define DONT_USE(x)     x=x;
-#else /* !lint */
 #define DONT_USE(x)     ;
-#endif /* lint */
 
 extern int ss_pager_create();
 

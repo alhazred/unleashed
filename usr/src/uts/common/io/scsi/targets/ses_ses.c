@@ -110,17 +110,13 @@ typedef struct {
 	uchar_t	comstatus;
 	uchar_t	comstat[3];
 } SesComStat;
-#if	!defined(lint)
 _NOTE(SCHEME_PROTECTS_DATA("because I said so", SesComStat))
-#endif
 
 struct typidx {
 	int ses_tidx;
 	int ses_oidx;
 };
-#if	!defined(lint)
 _NOTE(SCHEME_PROTECTS_DATA("because I said so", typidx))
-#endif
 
 struct sscfg {
 	uchar_t ses_ntypes;	/* total number of types supported */
@@ -138,10 +134,8 @@ struct sscfg {
 	 */
 	uchar_t *ses_eltmap;
 };
-#if	!defined(lint)
 _NOTE(MUTEX_PROTECTS_DATA(scsi_device::sd_mutex, sscfg))
 _NOTE(DATA_READABLE_WITHOUT_LOCK(sscfg))
-#endif
 
 
 /*

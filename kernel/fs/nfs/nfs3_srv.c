@@ -3906,13 +3906,11 @@ rfs3_srvrinit(void)
 	 * different servers will have the same verifier.
 	 */
 
-#ifndef	lint
 	/*
 	 * We ASSERT that this constant logic expression is
 	 * always true because in the past, it wasn't.
 	 */
 	ASSERT(sizeof (*verfp) <= sizeof (write3verf));
-#endif
 
 	gethrestime(&now);
 	verfp = (struct rfs3_verf_overlay *)&write3verf;

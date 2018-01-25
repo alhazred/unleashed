@@ -105,15 +105,6 @@ static boolean_t ndmp_check_auth_required(ndmp_message message);
 static ndmp_handler_t *ndmp_get_interface(ndmp_message message);
 void *ndmpd_worker(void *ptarg);
 
-#ifdef	lint
-bool_t
-xdr_ndmp_header(XDR *xdrs, ndmp_header *objp)
-{
-	xdrs = xdrs;
-	objp = objp;
-	return (0);
-}
-#endif	/* lint */
 
 /*
  * ndmp_create_connection

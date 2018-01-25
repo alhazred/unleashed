@@ -319,9 +319,6 @@ blocks than valid maximum.\n"));
 	if (dadded || *filesize == 0)
 		return;
 
-#ifdef	lint
-	idblk[0] = '\0';
-#endif	/* lint */
 
 	/* xxx sanity check sblock contents before trusting them */
 	bread(fsbtodb(sblock, d), (uchar_t *)idblk, (size_t)sblock->fs_bsize);
@@ -674,9 +671,6 @@ dsrch(d, size, filesize)
 		/*NOTREACHED*/
 	}
 
-#ifdef	lint
-	dblk[0] = '\0';
-#endif	/* lint */
 
 	/* LINTED ufs disk addresses always fit into 32 bits */
 	bread(fsbtodb(sblock, d), (uchar_t *)dblk,

@@ -128,10 +128,6 @@ display(Sys_tree *tree,
 int
 error_check(Sys_tree *tree, struct system_kstat_data *kstats)
 {
-#ifdef	lint
-	tree = tree;
-	kstats = kstats;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */
@@ -141,9 +137,6 @@ error_check(Sys_tree *tree, struct system_kstat_data *kstats)
 int
 disp_fail_parts(Sys_tree *tree)
 {
-#ifdef	lint
-	tree = tree;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */
@@ -154,10 +147,6 @@ disp_fail_parts(Sys_tree *tree)
 void
 display_hp_fail_fault(Sys_tree *tree, struct system_kstat_data *kstats)
 {
-#ifdef	lint
-	tree = tree;
-	kstats = kstats;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */
@@ -167,12 +156,6 @@ void
 display_diaginfo(int flag, Prom_node *root, Sys_tree *tree,
 			struct system_kstat_data *kstats)
 {
-#ifdef	lint
-	flag = flag;
-	root = root;
-	tree = tree;
-	kstats = kstats;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */
@@ -182,9 +165,6 @@ display_diaginfo(int flag, Prom_node *root, Sys_tree *tree,
 void
 resolve_board_types(Sys_tree *tree)
 {
-#ifdef	lint
-	tree = tree;
-#endif
 	/*
 	 * This function is intentionally empty
 	 */

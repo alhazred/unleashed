@@ -198,7 +198,6 @@ normspcl(struct byteorder_ctx *ctx, struct s_spcl *sp, int *cs,
 
 		/* byteswap the inodes if necessary. */
 
-#ifndef	lint	/* lint won't shut up about sprintf below */
 		if (sp->c_flags & DR_INODEINFO) {
 			char buffy[BUFSIZ];
 			/* Can't overflow, max len is %d format (20)+`l'+\0 */
@@ -206,7 +205,6 @@ normspcl(struct byteorder_ctx *ctx, struct s_spcl *sp, int *cs,
 			(void) sprintf(buffy, "%dl", TP_NINOS);
 			swabst(buffy, (uchar_t *)sp->c_data.s_inos);
 		}
-#endif	/* lint */
 
 		/* if no metadata, byteswap the level */
 

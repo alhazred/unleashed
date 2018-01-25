@@ -678,9 +678,6 @@ smbfs_zonelist_remove(smbmntinfo_t *smi)
 	mutex_exit(&smg->smg_lock);
 }
 
-#ifdef	lint
-#define	NEED_SMBFS_CALLBACKS	1
-#endif
 
 #ifdef NEED_SMBFS_CALLBACKS
 /*

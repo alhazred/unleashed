@@ -71,18 +71,6 @@
  * point for the a.out.
  */
 
-#if	defined(lint)
-
-extern	unsigned long	_setup();
-extern	void		atexit_fini();
-void
-main()
-{
-	(void) _setup();
-	atexit_fini();
-}
-
-#else
 
 #include	<link.h>
 
@@ -135,4 +123,3 @@ _rt_boot:
 	jmp	*%eax 			/ transfer control to a.out
 	.size	_rt_boot,.-_rt_boot
 
-#endif

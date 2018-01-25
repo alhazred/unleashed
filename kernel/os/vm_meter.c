@@ -54,11 +54,7 @@
  * only one page transferred per operation, we assume that it's useful.
  */
 
-#ifdef	lint
-#define	UsefulPagesPerIO	1
-#else	/* lint */
 #define	UsefulPagesPerIO	nz((MAXBSIZE/PAGESIZE)/2)
-#endif	/* lint */
 
 extern int dopageout;
 
