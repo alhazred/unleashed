@@ -28,18 +28,7 @@ MAN = acctcom.1 \
       chkey.1 \
       chmod.1 \
       chown.1 \
-      ckdate.1 \
-      ckgid.1 \
-      ckint.1 \
-      ckitem.1 \
-      ckkeywd.1 \
-      ckpath.1 \
-      ckrange.1 \
-      ckstr.1 \
       cksum.1 \
-      cktime.1 \
-      ckuid.1 \
-      ckyorn.1 \
       clear.1 \
       cmp.1 \
       col.1 \

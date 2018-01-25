@@ -270,9 +270,6 @@ DIRS= \
 	/usr/platform  \
 	/usr/proc \
 	/usr/proc/bin \
-	/usr/sadm \
-	/usr/sadm/install \
-	/usr/sadm/install/scripts \
 	/usr/sbin \
 	/usr/sbin/$(MACH32) \
 	/usr/share  \

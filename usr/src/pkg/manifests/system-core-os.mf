@@ -198,10 +198,6 @@ dir path=usr/net/nls group=sys
 dir path=usr/net/servers group=sys
 dir path=usr/old
 dir path=usr/platform group=sys
-dir path=usr/sadm
-dir path=usr/sadm/bin
-dir path=usr/sadm/install
-dir path=usr/sadm/install/scripts
 dir path=usr/sbin
 $(i386_ONLY)dir path=usr/sbin/$(ARCH32)
 dir path=usr/sbin/$(ARCH64)
@@ -485,7 +481,6 @@ file path=lib/svc/manifest/system/manifest-import.xml group=sys mode=0444
 file path=lib/svc/manifest/system/name-service-cache.xml group=sys mode=0444
 file path=lib/svc/manifest/system/pfexecd.xml group=sys mode=0444
 file path=lib/svc/manifest/system/process-security.xml group=sys mode=0444
-file path=lib/svc/manifest/system/rbac.xml group=sys mode=0444
 file path=lib/svc/manifest/system/rmtmpfiles.xml group=sys mode=0444
 file path=lib/svc/manifest/system/sac.xml group=sys mode=0444
 file path=lib/svc/manifest/system/svc/global.xml group=sys mode=0444
@@ -535,7 +530,6 @@ file path=lib/svc/method/svc-dlmgmtd mode=0555
 $(i386_ONLY)file path=lib/svc/method/svc-hostid mode=0555
 file path=lib/svc/method/svc-hotplug mode=0555
 file path=lib/svc/method/svc-nscd mode=0555
-file path=lib/svc/method/svc-rbac mode=0555
 file path=lib/svc/method/svc-sockfilter mode=0555
 file path=lib/svc/method/svc-utmpd mode=0555
 file path=lib/svc/method/system-log mode=0555
@@ -624,17 +618,6 @@ file path=usr/bin/cat mode=0555
 file path=usr/bin/chgrp mode=0555
 file path=usr/bin/chmod mode=0555
 file path=usr/bin/chown mode=0555
-file path=usr/bin/ckdate mode=0555
-file path=usr/bin/ckgid mode=0555
-file path=usr/bin/ckint mode=0555
-file path=usr/bin/ckitem mode=0555
-file path=usr/bin/ckkeywd mode=0555
-file path=usr/bin/ckpath mode=0555
-file path=usr/bin/ckrange mode=0555
-file path=usr/bin/ckstr mode=0555
-file path=usr/bin/cktime mode=0555
-file path=usr/bin/ckuid mode=0555
-file path=usr/bin/ckyorn mode=0555
 file path=usr/bin/coreadm mode=0555
 file path=usr/bin/cp mode=0555
 file path=usr/bin/cpio mode=0555
@@ -1074,19 +1057,6 @@ file path=usr/lib/utmpd mode=0555
 file path=usr/lib/vtdaemon mode=0555
 file path=usr/lib/vtinfo mode=0555
 file path=usr/lib/vtxlock mode=0555
-file path=usr/sadm/bin/puttext mode=0555
-file path=usr/sadm/install/miniroot.db group=sys mode=0444
-file path=usr/sadm/install/scripts/i.kcfconf group=sys mode=0555
-file path=usr/sadm/install/scripts/i.kmfconf group=sys mode=0555
-file path=usr/sadm/install/scripts/i.manifest group=sys mode=0555
-file path=usr/sadm/install/scripts/i.pkcs11conf group=sys mode=0555
-file path=usr/sadm/install/scripts/i.rbac group=sys mode=0555
-file path=usr/sadm/install/scripts/r.kcfconf group=sys mode=0555
-file path=usr/sadm/install/scripts/r.kmfconf group=sys mode=0555
-file path=usr/sadm/install/scripts/r.manifest group=sys mode=0555
-file path=usr/sadm/install/scripts/r.pkcs11conf group=sys mode=0555
-file path=usr/sadm/install/scripts/r.rbac group=sys mode=0555
-file path=usr/sadm/ugdates mode=0444
 $(i386_ONLY)file path=usr/sbin/$(ARCH32)/add_drv group=sys mode=0555
 $(i386_ONLY)file path=usr/sbin/$(ARCH32)/modinfo group=sys mode=0555
 $(i386_ONLY)file path=usr/sbin/$(ARCH32)/modload group=sys mode=0555
@@ -1256,8 +1226,6 @@ hardlink path=usr/bin/bzfgrep target=../../usr/bin/grep
 hardlink path=usr/bin/bzgrep target=../../usr/bin/grep
 hardlink path=usr/bin/decrypt target=../../usr/lib/isaexec
 hardlink path=usr/bin/digest target=../../usr/lib/isaexec
-hardlink path=usr/bin/dispgid target=../../usr/bin/ckgid
-hardlink path=usr/bin/dispuid target=../../usr/bin/ckuid
 hardlink path=usr/bin/egrep target=../../usr/bin/grep
 hardlink path=usr/bin/encrypt target=../../usr/lib/isaexec
 hardlink path=usr/bin/fgrep target=../../usr/bin/grep
@@ -1296,37 +1264,6 @@ hardlink path=usr/lib/fs/ufs/dcopy target=../../../../usr/lib/fs/ufs/clri
 hardlink path=usr/lib/fs/ufs/fstyp target=../../../sbin/fstyp
 hardlink path=usr/lib/fs/ufs/quotaon \
     target=../../../../usr/lib/fs/ufs/quotaoff
-hardlink path=usr/sadm/bin/dispgid target=../../../usr/bin/ckgid
-hardlink path=usr/sadm/bin/dispuid target=../../../usr/bin/ckuid
-hardlink path=usr/sadm/bin/errange target=../../../usr/bin/ckrange
-hardlink path=usr/sadm/bin/errdate target=../../../usr/bin/ckdate
-hardlink path=usr/sadm/bin/errgid target=../../../usr/bin/ckgid
-hardlink path=usr/sadm/bin/errint target=../../../usr/bin/ckint
-hardlink path=usr/sadm/bin/erritem target=../../../usr/bin/ckitem
-hardlink path=usr/sadm/bin/errpath target=../../../usr/bin/ckpath
-hardlink path=usr/sadm/bin/errstr target=../../../usr/bin/ckstr
-hardlink path=usr/sadm/bin/errtime target=../../../usr/bin/cktime
-hardlink path=usr/sadm/bin/erruid target=../../../usr/bin/ckuid
-hardlink path=usr/sadm/bin/erryorn target=../../../usr/bin/ckyorn
-hardlink path=usr/sadm/bin/helpdate target=../../../usr/bin/ckdate
-hardlink path=usr/sadm/bin/helpgid target=../../../usr/bin/ckgid
-hardlink path=usr/sadm/bin/helpint target=../../../usr/bin/ckint
-hardlink path=usr/sadm/bin/helpitem target=../../../usr/bin/ckitem
-hardlink path=usr/sadm/bin/helppath target=../../../usr/bin/ckpath
-hardlink path=usr/sadm/bin/helprange target=../../../usr/bin/ckrange
-hardlink path=usr/sadm/bin/helpstr target=../../../usr/bin/ckstr
-hardlink path=usr/sadm/bin/helptime target=../../../usr/bin/cktime
-hardlink path=usr/sadm/bin/helpuid target=../../../usr/bin/ckuid
-hardlink path=usr/sadm/bin/helpyorn target=../../../usr/bin/ckyorn
-hardlink path=usr/sadm/bin/valdate target=../../../usr/bin/ckdate
-hardlink path=usr/sadm/bin/valgid target=../../../usr/bin/ckgid
-hardlink path=usr/sadm/bin/valint target=../../../usr/bin/ckint
-hardlink path=usr/sadm/bin/valpath target=../../../usr/bin/ckpath
-hardlink path=usr/sadm/bin/valrange target=../../../usr/bin/ckrange
-hardlink path=usr/sadm/bin/valstr target=../../../usr/bin/ckstr
-hardlink path=usr/sadm/bin/valtime target=../../../usr/bin/cktime
-hardlink path=usr/sadm/bin/valuid target=../../../usr/bin/ckuid
-hardlink path=usr/sadm/bin/valyorn target=../../../usr/bin/ckyorn
 hardlink path=usr/sbin/add_drv target=../../usr/lib/isaexec
 hardlink path=usr/sbin/audlinks target=./devfsadm
 hardlink path=usr/sbin/consadmd target=../../usr/sbin/consadm

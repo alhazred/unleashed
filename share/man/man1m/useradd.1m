@@ -21,10 +21,7 @@ useradd \- administer a new user login on the system
 
 .LP
 .nf
-\fBuseradd\fR \fB-D\fR [\fB-A\fR \fIauthorization\fR [,\fIauthorization...\fR]]
-     [\fB-b\fR \fIbase_dir\fR] [\fB-s\fR \fIshell\fR [\fB-k\fR \fIskel_dir\fR]] [\fB-e\fR \fIexpire\fR]
-     [\fB-f\fR \fIinactive\fR] [\fB-g\fR \fIgroup\fR] [\fB-K\fR \fIkey=value\fR] [\fB-p\fR \fIprojname\fR]
-     [\fB-P\fR \fIprofile\fR [,\fIprofile...\fR]] [\fB-R\fR \fIrole\fR [,\fIrole...\fR]]
+\fBuseradd\fR \fB-D\fR
 .fi
 
 .SH DESCRIPTION
@@ -42,13 +39,6 @@ options.
 (\fB-G\fR option) and creates the home directory (\fB-m\fR option) for the user
 if requested. The new login remains locked until the \fBpasswd\fR(1) command is
 executed.
-.sp
-.LP
-Specifying \fBuseradd\fR \fB-D\fR with the \fB-s\fR, \fB-k\fR,\fB-g\fR,
-\fB-b\fR, \fB-f\fR, \fB-e\fR, \fB-A\fR, \fB-P\fR, \fB-p\fR, \fB-R\fR, or
-\fB-K\fR option (or any combination of these options) sets the default values
-for the respective fields. See the \fB-D\fR option, below. Subsequent
-\fBuseradd\fR commands without the \fB-D\fR option use these arguments.
 .sp
 .LP
 The system file entries created with this command have a limit of 2048
@@ -124,10 +114,7 @@ for new login home directories and \fIaccount_name\fR is the new login name.
 .RS 4n
 Display the default values for \fBgroup\fR, \fBbase_dir\fR, \fBskel_dir\fR,
 \fBshell\fR, \fBinactive\fR, \fBexpire\fR, \fBproj\fR, \fBprojname\fR and
-\fBkey=value\fR pairs. When used with the \fB-g\fR, \fB-b\fR, \fB-f\fR,
-\fB-e\fR, \fB-A\fR, \fB-P\fR, \fB-p\fR, \fB-R\fR, or \fB-K\fR options, the
-\fB-D\fR option sets the default values for the specified fields. The default
-values are:
+\fBkey=value\fR pairs. The default values are:
 .sp
 .ne 2
 .na
@@ -287,11 +274,8 @@ The maximum number of days allowed between uses of a login ID before that
 .ad
 .sp .6
 .RS 4n
-An existing group's integer \fBID\fR or character-string name. Without the
-\fB-D\fR option, it defines the new user's primary group membership and
-defaults to the default group. You can reset this default value by invoking
-\fBuseradd\fR \fB-D\fR \fB-g\fR \fIgroup\fR. GIDs 0-99 are reserved for
-allocation by the Solaris Operating System.
+An existing group's integer \fBID\fR or character-string name.  It defines the
+new user's primary group membership and defaults to the default group.
 .RE
 
 .sp

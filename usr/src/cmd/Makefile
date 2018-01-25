@@ -379,7 +379,6 @@ COMMON_SUBDIRS=		\
 	users		\
 	utmpd		\
 	uuidgen		\
-	valtools	\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\
@@ -619,7 +618,6 @@ MSGSUBDIRS=		\
 	unlink		\
 	unpack		\
 	userattr	\
-	valtools	\
 	volcheck	\
 	volrmmount	\
 	vrrpadm		\

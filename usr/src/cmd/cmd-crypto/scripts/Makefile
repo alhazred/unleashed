@@ -25,30 +25,15 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-CLASS_ACTION_SCRIPTS = \
-	i.kcfconf \
-	r.kcfconf \
-	i.pkcs11conf \
-	r.pkcs11conf \
-	i.kmfconf \
-	r.kmfconf
-
 MANIFEST =		cryptosvc.xml
 
 include ../../Makefile.cmd
 
 .KEEP_STATE:
 
-INSTALL_DIR =		$(ROOT)/usr/sadm/install
-CLASS_SCR_DIR =		$(INSTALL_DIR)/scripts
-CLASS_SCR_FILES =	$(CLASS_ACTION_SCRIPTS:%=$(CLASS_SCR_DIR)/%)
-
 ROOTMANIFESTDIR =	$(ROOTSVCSYSTEM)
 
-$(CLASS_SCR_DIR)/%: %
-	$(INS.file)
-
-install: $(CLASS_SCR_FILES) $(ROOTMANIFEST)
+install: $(ROOTMANIFEST)
 
 check: $(CHKMANIFEST)
 

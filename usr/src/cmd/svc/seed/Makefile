@@ -29,7 +29,6 @@ include ../../Makefile.cmd
 
 ETCSVC = $(ROOTETC)/svc
 LIBSVCSEED = $(ROOT)/lib/svc/seed
-INSTALLSEED = $(ROOT)/usr/sadm/install
 
 #
 # Because seed repository construction requires a functioning repository, a
@@ -41,7 +40,6 @@ INSTALLSEED = $(ROOT)/usr/sadm/install
 # We build and deliver 3 seed repositories:
 #	global.db	-- for a standalone Solaris (global zone)
 #	nonglobal.db	-- for a Solaris Zone
-#	miniroot.db	-- for the install miniroot
 # COMMON_DESCRIPTIONS contains manifests needed by all 3 repositories.
 # GLOBAL_ZONE_DESCRIPTIONS/NONGLOBAL_ZONE_DESCRIPTIONS/MINIROOT_DESCRIPTIONS
 # contain additional manifests needed.
@@ -116,7 +114,7 @@ SVCCFG = ../svccfg/svccfg-native
 
 .KEEP_STATE:
 
-all: global.db nonglobal.db miniroot.db
+all: global.db nonglobal.db
 
 $(CONFIGD): FRC
 	@cd ../configd; pwd; $(MAKE) $(MFLAGS) native
@@ -159,34 +157,7 @@ nonglobal.db: common.db $(NONGLOBAL_ZONE_DESCRIPTIONS) $(CONFIGD) $(SVCCFG)
 		$(SVCCFG) import $$m; \
 	done
 
-miniroot.db: common.db $(MINIROOT_DESCRIPTIONS) $(CONFIGD) $(SVCCFG)
-	$(RM) -f miniroot.db miniroot.db-journal
-	$(CP) common.db miniroot.db
-	for m in $(MINIROOT_DESCRIPTIONS); do \
-		echo $$m; \
-		SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
-		SVCCFG_REPOSITORY=$(SRC)/cmd/svc/seed/miniroot.db \
-		SVCCFG_CONFIGD_PATH=$(CONFIGD) \
-		$(SVCCFG) import $$m; \
-	done
-	#
-	# Make sure the miniroot's syslogd and rpcbind do not respond
-	# to packets from outside the machine. Since we cannot set property
-	# values by applying a profile yet, we need to set them explicitly
-	# with svccfg commands.
-	#
-	SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
-	SVCCFG_REPOSITORY=$(SRC)/cmd/svc/seed/miniroot.db \
-	SVCCFG_CONFIGD_PATH=$(CONFIGD) \
-	$(SVCCFG) -s svc:/system/system-log \
-	    setprop config/log_from_remote = false
-	#
-	SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
-	SVCCFG_REPOSITORY=$(SRC)/cmd/svc/seed/miniroot.db \
-	SVCCFG_CONFIGD_PATH=$(CONFIGD) \
-	$(SVCCFG) -s svc:/network/rpc/bind setprop config/local_only = true
-
-install: install_global install_nonglobal install_miniroot
+install: install_global install_nonglobal
 
 install_global: global.db
 	$(INS) -m $(SEEDFILEMODE) global.db $(LIBSVCSEED)/
@@ -194,16 +165,10 @@ install_global: global.db
 install_nonglobal: nonglobal.db
 	$(INS) -m $(SEEDFILEMODE) nonglobal.db $(LIBSVCSEED)/
 
-install_miniroot: $(INSTALLSEED) miniroot.db
-	$(INS) -m $(SEEDFILEMODE) miniroot.db $(INSTALLSEED)/
-
-$(INSTALLSEED):
-	$(INS.dir)
-
 clean:
 	$(RM) common.db
 
 clobber:
-	$(RM) common.db global.db nonglobal.db miniroot.db
+	$(RM) common.db global.db nonglobal.db
 
 FRC:

@@ -108,8 +108,6 @@ static const parsent_t tab[] = {
 
 #define	NDEF	(sizeof (tab) / sizeof (parsent_t))
 
-FILE *defptr;		/* default file - fptr */
-
 static const parsent_t *
 scan(char **start_p)
 {
@@ -139,73 +137,12 @@ scan(char **start_p)
 }
 
 /*
- * getusrdef - access the user defaults file.  If it doesn't exist,
- *		then returns default values of (values in userdefs.h):
- *		defrid = 100
- *		defgroup = 1
- *		defgname = other
- *		defparent = /home
- *		defskel	= /usr/sadm/skel
- *		defshell = /bin/sh
- *		definact = 0
- *		defexpire = 0
- *		defauth = 0
- *		defprof = 0
- *		defrole = 0
- *
- *	If getusrdef() is unable to access the defaults file, it
- *	returns a NULL pointer.
- *
- * 	If user defaults file exists, then getusrdef uses values
- *  in it to override the above values.
+ * getusrdef - returns default values of values in userdefs.h.
  */
 
 struct userdefs *
 getusrdef(char *usertype)
 {
-	char instr[512], *ptr;
-	const parsent_t *pe;
-
-	if (is_role(usertype)) {
-		if ((defptr = fopen(DEFROLEFILE, "r")) == NULL) {
-			defaults.defshell = DEFROLESHL;
-			defaults.defprof = DEFROLEPROF;
-			return (&defaults);
-		}
-	} else {
-		if ((defptr = fopen(DEFFILE, "r")) == NULL)
-			return (&defaults);
-	}
-
-	while (fgets(instr, sizeof (instr), defptr) != NULL) {
-		ptr = instr;
-
-		SKIPWS(ptr);
-
-		if (*ptr == '#')
-			continue;
-
-		pe = scan(&ptr);
-
-		if (pe != NULL) {
-			switch (pe->type) {
-			case INT:
-				FIELD(&defaults, pe, int) =
-					(int)strtol(ptr, NULL, 10);
-				break;
-			case PROJID:
-				FIELD(&defaults, pe, projid_t) =
-					(projid_t)strtol(ptr, NULL, 10);
-				break;
-			case STR:
-				FIELD(&defaults, pe, char *) = dup_to_nl(ptr);
-				break;
-			}
-		}
-	}
-
-	(void) fclose(defptr);
-
 	return (&defaults);
 }
 
@@ -306,114 +243,6 @@ dispusrdef(FILE *fptr, unsigned flags, char *usertype)
 
 	if (outcount > 0)
 		(void) fprintf(fptr, "\n");
-}
-
-/*
- * putusrdef -
- * 	changes default values in defadduser file
- */
-int
-putusrdef(struct userdefs *defs, char *usertype)
-{
-	time_t timeval;		/* time value from time */
-	int i;
-	ptrdiff_t skip;
-	char *hdr;
-
-	/*
-	 * file format is:
-	 * #<tab>Default values for adduser.  Changed mm/dd/yy hh:mm:ss.
-	 * defgroup=m	(m=default group id)
-	 * defgname=str1	(str1=default group name)
-	 * defparent=str2	(str2=default base directory)
-	 * definactive=x	(x=default inactive)
-	 * defexpire=y		(y=default expire)
-	 * defproj=z		(z=numeric project id)
-	 * defprojname=str3	(str3=default project name)
-	 * ... etc ...
-	 */
-
-	if (is_role(usertype)) {
-		if ((defptr = fopen(DEFROLEFILE, "w")) == NULL) {
-			errmsg(M_FAILED);
-			return (EX_UPDATE);
-		}
-	} else {
-		if ((defptr = fopen(DEFFILE, "w")) == NULL) {
-			errmsg(M_FAILED);
-			return (EX_UPDATE);
-		}
-	}
-
-	if (lockf(fileno(defptr), F_LOCK, 0) != 0) {
-		/* print error if can't lock whole of DEFFILE */
-		errmsg(M_UPDATE, "created");
-		return (EX_UPDATE);
-	}
-
-	if (is_role(usertype)) {
-		/* If it's a role, we must skip the defrole field */
-		skip = offsetof(struct userdefs, defrole);
-		hdr = FHEADER_ROLE;
-	} else {
-		skip = -1;
-		hdr = FHEADER;
-	}
-
-	/* get time */
-	timeval = time(NULL);
-
-	/* write it to file */
-	if (fprintf(defptr, "%s%s\n", hdr, ctime(&timeval)) <= 0) {
-		errmsg(M_UPDATE, "created");
-		return (EX_UPDATE);
-	}
-
-	for (i = 0; i < NDEF; i++) {
-		int res = 0;
-
-		if (tab[i].off == skip)
-			continue;
-
-		switch (tab[i].type) {
-		case INT:
-			res = fprintf(defptr, "%s%d\n", tab[i].name,
-					FIELD(defs, &tab[i], int));
-			break;
-		case STR:
-			res = fprintf(defptr, "%s%s\n", tab[i].name,
-					FIELD(defs, &tab[i], char *));
-			break;
-		case PROJID:
-			res = fprintf(defptr, "%s%d\n", tab[i].name,
-					(int)FIELD(defs, &tab[i], projid_t));
-			break;
-		}
-
-		if (res <= 0) {
-			errmsg(M_UPDATE, "created");
-			return (EX_UPDATE);
-		}
-	}
-
-	(void) lockf(fileno(defptr), F_ULOCK, 0);
-	(void) fclose(defptr);
-
-	return (EX_SUCCESS);
-}
-
-/* Export command line keys to defaults for useradd -D */
-void
-update_def(struct userdefs *ud)
-{
-	int i;
-
-	for (i = 0; i < NDEF; i++) {
-		char *val;
-		if (tab[i].uakey != NULL &&
-		    (val = getsetdefval(tab[i].uakey, NULL)) != NULL)
-			FIELD(ud, &tab[i], char *) = val;
-	}
 }
 
 /* Import default keys for ordinary useradd */

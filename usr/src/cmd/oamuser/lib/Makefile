@@ -65,9 +65,6 @@ CERRWARN +=	-Wno-unused-variable
 ARFLAGS=	cr
 AROBJS=		`$(LORDER) $(OBJS) | $(TSORT)`
 
-ROOTUSRSADM=	$(ROOT)/usr/sadm
-ROOTUSRSADMFILE=$(DATEFILE:%=$(ROOTUSRSADM)/%)
-
 CLOBBERFILES += $(LIBRARY)
 
 .KEEP_STATE:
@@ -77,9 +74,6 @@ all:		$(PRODUCT) $(TXT)
 $(DATEFILE):	$(DATEFILESRC)
 	$(GREP) -v "^#ident" $(DATEFILESRC) > $(DATEFILE)
 
-install:	all $(DATEFILE) $(ROOTUSRSADMFILE)
-
-$(ROOTUSRSADM)/%: %
-	$(INS.file)
+install:	all $(DATEFILE)
 
 include ../../../lib/Makefile.targ
