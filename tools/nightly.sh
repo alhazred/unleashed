@@ -124,7 +124,6 @@ function myheaders {
 function build {
 	LABEL=$1
 	INSTALLOG=install-${MACH}
-	NOISE=noise-${MACH}
 
 	export ROOT
 
@@ -1006,15 +1005,7 @@ fi
 #
 if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 	# Directory ELF-data.$MACH holds the files produced by these tests.
-	elf_ddir=$SRC/ELF-data.$MACH
-
-	# If there is a previous ELF-data backup directory, remove it. Then,
-	# rotate current ELF-data directory into its place and create a new
-	# empty directory
-	rm -rf $elf_ddir.ref
-	if [[ -d $elf_ddir ]]; then
-		mv $elf_ddir $elf_ddir.ref
-	fi
+	elf_ddir=$TMPDIR/ELF-data.$MACH
 	mkdir -p $elf_ddir
 
 	# Call find_elf to produce a list of the ELF objects in the proto area.
@@ -1076,29 +1067,10 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 			build_extras_ok=n
 		fi
 
-		# check_rtime -I output needs to be sorted in order to 
-		# compare it to that from previous builds.
-		sort $elf_ddir/runtime.attr.raw > $elf_ddir/runtime.attr
-		rm $elf_ddir/runtime.attr.raw
-
 		# Report errors
 		if [[ -s $elf_ddir/runtime.err ]]; then
 			cat $elf_ddir/runtime.err >&2
 			build_extras_ok=n
-		fi
-
-		# If there is an ELF-data directory from a previous build,
-		# then diff the attr files. These files contain information
-		# about dependencies, versioning, and runpaths. There is some
-		# overlap with the ABI checking done above, but this also
-		# flushes out non-ABI interface differences along with the
-		# other information.
-		echo "\n==== Diff ELF runtime attributes" \
-		    "(since last build) ====\n" >&2
-
-		if [[ -f $elf_ddir.ref/runtime.attr ]]; then
-			diff $elf_ddir.ref/runtime.attr \
-				$elf_ddir/runtime.attr >&2
 		fi
 	fi
 fi
