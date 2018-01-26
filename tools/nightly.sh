@@ -1103,9 +1103,9 @@ if [ "$CHECK_PATHS" = y -a "$N_FLAG" != y ]; then
 	echo "\n==== Check lists of files ====\n" >&2
 	arg=-b
 	[ "$build_ok" = y ] && arg=
-	checkpaths $arg $ROOT > $SRC/check-paths.out 2>&1
-	if [[ -s $SRC/check-paths.out ]]; then
-		cat $SRC/check-paths.out >&2
+	checkpaths $arg $ROOT > $TMPDIR/check-paths.out 2>&1
+	if [[ -s $TMPDIR/check-paths.out ]]; then
+		cat $TMPDIR/check-paths.out >&2
 		build_extras_ok=n
 	fi
 fi
