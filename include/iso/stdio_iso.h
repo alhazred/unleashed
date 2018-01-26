@@ -53,7 +53,7 @@
 #include <sys/null.h>
 #include <sys/va_list.h>
 #include <stdio_tag.h>
-#include <sys/isa_defs.h>
+#include <stdio_impl.h>
 
 /*
  * If feature test macros are set that enable interfaces that use types

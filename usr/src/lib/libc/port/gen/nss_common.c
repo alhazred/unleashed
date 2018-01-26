@@ -49,7 +49,6 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <errno.h>
-#include <stdio_impl.h>
 #include "libc.h"
 #include "tsd.h"
 
