@@ -136,8 +136,11 @@ function build {
 	#	Before we build anything via dmake, we need to install
 	#	bmake-ified headers to the proto area
 	#
-	bmake_build_step_user_dir $SRCTOP/include all
-	bmake_build_step_user_dir $SRCTOP/include install
+	if ! make -C $SRCTOP/include all install DESTDIR=$ROOT; then
+		build_ok=n
+		this_build_ok=n
+		fatal_error "cannot install headers"
+	fi
 
 	#
 	#	Build the legacy part of the source
@@ -154,7 +157,13 @@ function build {
 	#
 	#	Build the new part of the source
 	#
-	bmake_build_step_user build
+	echo "\n==== bmake build ====\n" >&2
+	if ! /bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+		SRCTOP=$SRCTOP \
+		make -C $SRCTOP -j $DMAKE_MAX_JOBS VERBOSE=yes build DESTDIR=$ROOT; then
+	    build_ok=n
+	    this_build_ok=n
+	fi
 
 	echo "\n==== Ended OS-Net source build at `date` ($LABEL) ====\n"
 
@@ -170,7 +179,7 @@ function build {
 
 			rm -f $SRC/pkg/${INSTALLOG}.out
 			cd $SRC/pkg
-			echo "\n==== package build errors ($LABEL) ====\n" >&2
+			echo "\n==== dmake -C $SRC/pkg install ====\n" >&2
 			if ! /bin/time $MAKE -e install; then
 				build_extras_ok=n
 				this_build_ok=n
@@ -203,8 +212,7 @@ function build_tools {
 
 	rm -f ${TOOLS}/${INSTALLOG}.out
 	cd ${TOOLS}
-	echo "\n==== Tools build errors ====\n" >&2
-	if ! /bin/time $MAKE TOOLS_PROTO=${DESTROOT} -e install; then
+	if ! $MAKE TOOLS_PROTO=${DESTROOT} -e install; then
 		return 1
 	fi
 	return 0
@@ -777,38 +785,20 @@ SECONDS=0
 echo "\n==== Nightly $maketype build started:   $START_DATE ====" | \
     tee -a $build_time_file
 
-echo "\nBuild project:  $build_project\nBuild taskid:   $build_taskid" >&2
-
 run_hook SYS_PRE_NIGHTLY
 run_hook PRE_NIGHTLY
 
 echo "\n==== list of environment variables ====\n"
 env
 
-echo "\n==== Nightly argument issues ====\n" >&2
+echo "Building $VERSION
+on $(uname -srv)" >&2
 
-if [ "$N_FLAG" = "y" ]; then
-	if [ "$p_FLAG" = "y" ]; then
-		cat <<EOF >&2
-WARNING: the p option (create packages) is set, but so is the N option (do
-         not run protocmp); this is dangerous; you should unset the N option
-EOF
-	else
-		cat <<EOF >&2
-Warning: the N option (do not run protocmp) is set; it probably shouldn't be
-EOF
-	fi
-	echo "" >&2
+if [[ ! -f $SRC/Makefile ]]; then
+	build_ok=n
+	echo "\nUnable to find \"Makefile\" in $SRC." >&2
+	exit 1
 fi
-
-if [ "$w_FLAG" = "y" -a ! -d $ROOT ]; then
-	echo "WARNING: -w specified, but $ROOT does not exist;" \
-	    "ignoring -w\n" >&2
-	w_FLAG=n
-fi
-
-echo "\n==== Build version ====\n" >&2
-echo $VERSION >&2
 
 # Save the current proto area if we're comparing against the last build
 if [ "$w_FLAG" = "y" -a -d "$ROOT" ]; then
@@ -817,43 +807,6 @@ if [ "$w_FLAG" = "y" -a -d "$ROOT" ]; then
     fi
     mv $ROOT $ROOT.prev
 fi
-
-function run_bmake {
-	echo "\n==== bmake $@ ====\n" >&2
-	/bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
-		SRCTOP=$SRCTOP \
-		bmake -j $DMAKE_MAX_JOBS \
-			VERBOSE=yes \
-			"$@"
-}
-
-# usage: bmake_build_step_args <dir> <target> <args...>
-function bmake_build_step_args {
-	D=$1
-	shift
-
-	echo "\n==== \`bmake -C $D $@\` at `date` ($LABEL) ====\n"
-
-	if ! run_bmake -C $D "$@"; then
-		build_ok=n
-		this_build_ok=n
-		return 1
-	fi
-
-	return 0
-}
-
-# usage: bmake_build_step_user <target>
-function bmake_build_step_user {
-	bmake_build_step_args $SRCTOP $1 \
-		DESTDIR=$ROOT
-}
-
-# usage: bmake_build_step_user_dir <dir> <target>
-function bmake_build_step_user_dir {
-	bmake_build_step_args $1 $2 \
-		DESTDIR=$ROOT
-}
 
 # Safeguards
 [[ -v SRCTOP ]] || fatal_error "Error: Variable SRCTOP not set."
@@ -865,13 +818,14 @@ function bmake_build_step_user_dir {
 #
 # We have to do this before running *any* make commands.
 #
-bmake_build_step_args $SRCTOP gen-config || build_extras_ok=n
+make gen-config || fatal_error "gen-config failed"
 
 #
 #	Decide whether to clobber
 #
 if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	echo "\n==== Make clobber at `date` ====\n"
+	echo "\n==== clobber / cleandir ===="
 
 	cd $SRC
 	# remove old clobber file
@@ -883,8 +837,6 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	find . \( -name SCCS -o -name .hg -o -name .svn -o -name .git \
 		-o -name 'interfaces.*' \) -prune \
 		-o -name '.make.*' -print | xargs rm -f
-
-	echo "\n==== Make clobber ERRORS ====\n" >&2
 	if ! $MAKE -ek clobber; then
 		build_extras_ok=n
 	fi
@@ -893,7 +845,6 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	cd ${TOOLS}
 	rm -f ${TOOLS}/clobber-${MACH}.out
 
-	echo "\n==== Make tools clobber ERRORS ====\n" >&2
 	if ! $MAKE TOOLS_PROTO=$TOOLS_PROTO -ek clobber; then
 		build_extras_ok=n
 	fi
@@ -916,37 +867,11 @@ if [ "$i_FLAG" = "n" -a -d "$SRC" ]; then
 	    \( -name '.make.*' -o -name 'lib*.a' -o -name 'lib*.so*' -o \
 	       -name '*.o' \) -print | \
 	    grep -v 'tools/ctf/dwarf/.*/libdwarf' | xargs rm -f
-	echo "\n==== bmake cleandir ====\n"
-	run_bmake -C $SRCTOP cleandir
+	make -C $SRCTOP cleandir
 else
 	echo "\n==== No clobber at `date` ====\n"
 fi
 
-echo "\n==== Build environment ====\n" >&2
-
-# System
-whence uname >&2
-uname -a >&2
-echo >&2
-
-# make
-whence $MAKE >&2
-$MAKE -v >&2
-echo "number of concurrent jobs = $DMAKE_MAX_JOBS" >&2
-
-#
-# Report the compiler versions.
-#
-
-if [[ ! -f $SRC/Makefile ]]; then
-	build_ok=n
-	echo "\nUnable to find \"Makefile\" in $SRC." >&2
-	exit 1
-fi
-
-whence ld >&2
-LDVER=`ld -V 2>&1`
-echo $LDVER >&2
 #
 # Build and use the workspace's tools if requested
 #
@@ -993,8 +918,8 @@ if [ "$build_ok" = "y" ]; then
 	fi
 
 	if [ "$N_FLAG" != "y" -a -d $SRC/pkg ]; then
-		echo "\n==== Validating manifests against proto area ====\n" >&2
-		if ! ( cd $SRC/pkg ; $MAKE -e protocmp ROOT="$ROOT" ) >&2; then
+		echo "\n==== Validating manifests against proto area (protocmp) ====\n" >&2
+		if ! ( cd $SRC/pkg ; /bin/time $MAKE -e protocmp ROOT="$ROOT" ) >&2; then
 			build_extras_ok=n
 		fi
 	fi
@@ -1014,44 +939,20 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 	find_elf -fr $ROOT > $elf_ddir/object_list
 
 	if [[ $A_FLAG = y ]]; then
-	       	echo "\n==== Check versioning and ABI information ====\n" >&2
+		echo "\n==== Check versioning and ABI information (interface_check) ====\n" >&2
 
 		# Produce interface description for the proto. Report errors.
-		interface_check -o -w $elf_ddir -f object_list \
+		/bin/time interface_check -o -w $elf_ddir -f object_list \
 			-i interface -E interface.err
 		if [[ -s $elf_ddir/interface.err ]]; then
 			cat $elf_ddir/interface.err >&2
 			build_extras_ok=n
 		fi
 
-		# If ELF_DATA_BASELINE_DIR is defined, compare the new interface
-		# description file to that from the baseline gate. Issue a
-		# warning if the baseline is not present, and keep going.
-		if [[ "$ELF_DATA_BASELINE_DIR" != '' ]]; then
-			base_ifile="$ELF_DATA_BASELINE_DIR/interface"
-
-		       	echo "\n==== Compare versioning and ABI information" \
-			    "to baseline ====\n" >&2
-		       	echo "Baseline:  $base_ifile\n"
-
-			if [[ -f $base_ifile ]]; then
-				interface_cmp -d -o $base_ifile \
-				    $elf_ddir/interface > $elf_ddir/interface.cmp
-				if [[ -s $elf_ddir/interface.cmp ]]; then
-					echo >&2
-					cat $elf_ddir/interface.cmp >&2
-					build_extras_ok=n
-				fi
-			else
-			       	echo "baseline not available. comparison" \
-                                    "skipped" >&2
-			fi
-
-		fi
 	fi
 
 	if [[ $r_FLAG = y ]]; then
-		echo "\n==== Check ELF runtime attributes ====\n" >&2
+		echo "\n==== Check ELF runtime attributes (check_rtime) ====\n" >&2
 
 		# If we're doing a DEBUG build the proto area will be left
 		# with debuggable objects, thus don't assert -s.
@@ -1060,7 +961,7 @@ if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
 		else
 			rtime_sflag="-s"
 		fi
-		check_rtime -i -v $rtime_sflag -o -w $elf_ddir \
+		/bin/time check_rtime -i -v $rtime_sflag -o -w $elf_ddir \
 			-D object_list  -f object_list -E runtime.err \
 			-I runtime.attr.raw
 		if (( $? != 0 )); then
@@ -1083,8 +984,8 @@ if [ "$i_CMD_LINE_FLAG" = "n" -a "$C_FLAG" = "y" ]; then
 
 	rm -f $SRC/check-${MACH}.out
 	cd $SRC
-	echo "\n==== cstyle/hdrchk errors ====\n" >&2
-	if ! $MAKE -ek check ROOT="$ROOT"; then
+	echo "\n==== dmake check ====\n" >&2
+	if ! /bin/time $MAKE -ek check ROOT="$ROOT"; then
 		build_extras_ok=n
 	fi
 else
@@ -1148,9 +1049,7 @@ elapsed_time=$SECONDS
 ((minutes = elapsed_time / 60  % 60))
 ((seconds = elapsed_time % 60))
 
-echo "\n==== Total build time ====" | \
-    tee -a $build_time_file
-echo "\nreal    ${hours}:${minutes}:${seconds}" | \
+echo "Total build time ${hours}:${minutes}:${seconds}" |
     tee -a $build_time_file
 
 #
