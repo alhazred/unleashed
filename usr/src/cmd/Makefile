@@ -64,7 +64,6 @@ COMMON_SUBDIRS=		\
 	bart		\
 	basename	\
 	bc		\
-	bdiff		\
 	beadm		\
 	bnu		\
 	boot		\
