@@ -249,7 +249,6 @@ MAN = acctcom.1 \
       sleep.1 \
       smbutil.1 \
       sort.1 \
-      sotruss.1 \
       spell.1 \
       split.1 \
       srchtxt.1 \
@@ -299,7 +298,6 @@ MAN = acctcom.1 \
       wc.1 \
       which.1 \
       who.1 \
-      whocalls.1 \
       whois.1 \
       write.1 \
       xargs.1 \

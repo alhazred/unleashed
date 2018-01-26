@@ -199,7 +199,6 @@ SUBDIRS +=				\
 	libsqlite	\
 	libsrpt		\
 	libstmf		\
-	libstmfproxy	\
 	libsum		\
 	libsun_ima	\
 	libsys		\
@@ -415,7 +414,6 @@ HDRSUBDIRS=				\
 	libsqlite	\
 	libsrpt		\
 	libstmf		\
-	libstmfproxy	\
 	libsum		\
 	libsun_ima	\
 	libsysevent	\
@@ -590,7 +588,6 @@ libsmbfs:	libkrb5 libsec libidmap pkcs11
 libsmbios:	libdevinfo
 libsrpt:	libstmf
 libstmf:	libscf
-libstmfproxy: 	libstmf libpthread
 libsum: 	libast
 libsun_ima:	libdevinfo libsysevent
 libsysevent:	libsecdb

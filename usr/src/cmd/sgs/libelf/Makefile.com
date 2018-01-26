@@ -52,12 +52,6 @@ include $(SRC)/lib/Makefile.lib
 
 # Use the value of M4 set in Makefile.master via Makefile.lib
 
-DEMOFILES=	Makefile	00README	acom.c		dcom.c \
-		pcom.c		tpcom.c		dispsyms.c
-DEMOFILESRCDIR=	../demo
-ROOTDEMODIRBASE=$(ROOT)/usr/demo/ELF
-ROOTDEMODIRS=   $(ROOTDEMODIRBASE)
-
 include $(SRC)/cmd/sgs/Makefile.com
 
 MAPFILES =	../common/mapfile-vers

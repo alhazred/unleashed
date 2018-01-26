@@ -49,7 +49,6 @@ SUBDIRS=	libconv		\
 		ldd		\
 		lddstub		\
 		rtld		\
-		link_audit	\
 		.WAIT		\
 		librtld_db	\
 		ldprof		\
