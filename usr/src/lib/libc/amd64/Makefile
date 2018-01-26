@@ -360,6 +360,7 @@ PORTGEN=			\
 	attropen.o		\
 	atexit.o		\
 	atfork.o		\
+	base64.o		\
 	basename.o		\
 	calloc.o		\
 	catgets.o		\
@@ -524,6 +525,7 @@ PORTGEN=			\
 	seekdir.o		\
 	select.o		\
 	setlabel.o		\
+	setmode.o		\
 	setpriority.o		\
 	settimeofday.o		\
 	sh_locks.o		\

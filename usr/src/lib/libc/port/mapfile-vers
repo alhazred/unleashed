@@ -4072,6 +4072,10 @@ $endif
 	unvis;
 	strunvis;
 	strnunvis;
+	setmode;
+	getmode;
+	b64_ntop;
+	b64_pton;
 
     global:
 # FIXME: new symbols for our OS, but here pending a name.

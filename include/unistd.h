@@ -677,6 +677,11 @@ extern char *ttyname_r(int, char *, int);
 extern int getentropy(void *, size_t);
 #endif	/* !_STRICT_SYMBOLS */
 
+#ifdef __UNLEASHED_VISIBLE
+extern mode_t getmode(const void *, mode_t);
+extern void *setmode(const char *);
+#endif
+
 #ifdef	__cplusplus
 }
 #endif
