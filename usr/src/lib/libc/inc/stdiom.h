@@ -43,6 +43,7 @@
 #include "file64.h"
 #include <wchar.h>
 #include "mse.h"
+#include <stdio_impl.h>
 
 extern __FILE __iob[_NFILE];
 
