@@ -775,15 +775,6 @@ First audio device in the system
 Audio control device for \fB/dev/sound/0\fR
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fB/usr/share/audio/samples\fR\fR
-.ad
-.RS 28n
-Audio files
-.RE
-
 .SH ATTRIBUTES
 .sp
 .LP

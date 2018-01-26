@@ -521,7 +521,6 @@ static int tone[] = {
 
 /*
  * Make a sound on /dev/audio according to the length of the packet.  The
- * tone data was ripped from /usr/share/audio/samples/au/bark.au.  The
  * amount of waveform used is a function of packet length e.g.  a series
  * of small packets is heard as clicks, whereas a series of NFS packets in
  * an 8k read sounds like a "WHAAAARP".

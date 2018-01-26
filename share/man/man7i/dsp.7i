@@ -617,15 +617,6 @@ Symbolic link to the pseudo mixer device for the system
 Symbolic link to the pseudo mixer device for the system
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fB/usr/share/audio/samples\fR\fR
-.ad
-.RS 28n
-Audio files
-.RE
-
 .SH ATTRIBUTES
 .sp
 .LP

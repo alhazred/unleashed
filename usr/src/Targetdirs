@@ -399,7 +399,6 @@ SYM.DIRS= \
 	/lib/secure/32 \
 	/usr/adm \
 	/usr/spool \
-	/usr/lib/tmac \
 	/usr/news \
 	/usr/preserve \
 	/usr/lib/32 \
@@ -408,7 +407,6 @@ SYM.DIRS= \
 	/usr/lib/lwp/32 \
 	/usr/lib/secure/32 \
 	/usr/mail \
-	/usr/pub \
 	/usr/tmp \
 	/var/ld/32
 
@@ -492,7 +490,6 @@ $(ROOT)/lib/secure/32:=			LINKDEST=.
 $(ROOT)/dev/stdin:=			LINKDEST=fd/0
 $(ROOT)/dev/stdout:=			LINKDEST=fd/1
 $(ROOT)/dev/stderr:=			LINKDEST=fd/2
-$(ROOT)/usr/pub:=			LINKDEST=share/lib/pub
 $(ROOT)/usr/adm:=			LINKDEST=../var/adm
 $(ROOT)/etc/lib/ld.so.1:=		LINKDEST=../../lib/ld.so.1
 $(ROOT)/etc/lib/libdl.so.1:=		LINKDEST=../../lib/libdl.so.1
@@ -503,7 +500,6 @@ $(ROOT)/usr/news:=			LINKDEST=../var/news
 $(ROOT)/usr/preserve:=			LINKDEST=../var/preserve
 $(ROOT)/usr/spool:=			LINKDEST=../var/spool
 $(ROOT)/usr/tmp:=			LINKDEST=../var/tmp
-$(ROOT)/usr/lib/tmac:=			LINKDEST=../share/lib/tmac
 $(ROOT)/usr/lib/32:=			LINKDEST=.
 $(ROOT)/usr/lib/elfedit/32:=		LINKDEST=.
 $(ROOT)/usr/lib/lwp/32:=		LINKDEST=.

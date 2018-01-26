@@ -35,8 +35,6 @@ SUBDIRS =			\
 		audiorecord	\
 		audioconvert
 
-AUDIODIR= $(ROOT)/usr/share/audio
-
 all :=		TARGET= all
 install :=	TARGET= install
 clean :=	TARGET= clean
@@ -47,10 +45,7 @@ _msg :=		TARGET= _msg
 
 all clean clobber _msg:	$(SUBDIRS)
 
-install:	$(AUDIODIR) $(SUBDIRS)
-
-$(AUDIODIR):
-	$(INS.dir)
+install:	$(SUBDIRS)
 
 $(SUBDIRS):	FRC
 		@cd $@; pwd; $(MAKE) $(TARGET)

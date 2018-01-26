@@ -92,10 +92,6 @@ ROOTVARSMB=	$(ROOT)/var/smb
 #
 ROOTCMDDIR=	$(ROOT)/__nonexistent_directory__
 
-ROOTSHAUDIO=	$(ROOT)/usr/share/audio
-ROOTAUDIOSAMP=	$(ROOTSHAUDIO)/samples
-ROOTAUDIOSAMPAU=$(ROOTAUDIOSAMP)/au
-
 ISAEXEC=	$(ROOT)/usr/lib/isaexec
 PLATEXEC=	$(ROOT)/usr/lib/platexec
 
