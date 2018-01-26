@@ -109,7 +109,7 @@ If the \fB/dev/term\fR line is opened successfully (usually only when carrier
 is recognized on the modem, though see \fBSoft Carrier Capabilities\fR section
 of this manual page), the corresponding \fB/dev/cua\fR line can not be opened.
 This allows a modem and port to be used for dial-in (enabling the line for
-login in \fB/etc/inittab\fR) or dial-out (using \fBtip\fR(1) or \fBuucp\fR(1C))
+login in \fB/etc/inittab\fR) or dial-out (using \fBtip\fR(1))
 when no-one is logged in on the line.
 .SH ERRORS
 .sp
@@ -234,7 +234,7 @@ Architecture	SPARC, x86, PCI-based systems
 .SH SEE ALSO
 .sp
 .LP
-\fBstrconf\fR(1), \fBtip\fR(1), \fBuucp\fR(1C), \fBautopush\fR(1M),
+\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(1M),
 \fBeeprom\fR(1M), \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C),
 \fBusba\fR(7D), \fBtermio\fR(7I), \fBldterm\fR(7M), \fBttcompat\fR(7M),
 \fBeeprom\fR(1M), \fBattributes\fR(5),

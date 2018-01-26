@@ -313,8 +313,6 @@ DIRS= \
 	/var/spool/cron \
 	/var/spool/cron/atjobs \
 	/var/spool/cron/crontabs \
-	/var/spool/uucp \
-	/var/spool/uucppublic \
 	/var/svc \
 	/var/svc/log \
 	/var/svc/manifest \
@@ -343,7 +341,6 @@ DIRS= \
 	/var/svc/manifest/platform \
 	/var/svc/manifest/site \
 	/var/svc/profile \
-	/var/uucp \
 	/var/tmp
 
 amd64_DIRS64= \
@@ -448,7 +445,6 @@ $(ROOT)/tmp \
 $(ROOT)/var/krb5/rcache \
 $(ROOT)/var/preserve \
 $(ROOT)/var/spool/pkg \
-$(ROOT)/var/spool/uucppublic \
 $(ROOT)/var/tmp:=	DIRMODE= 1777
 
 $(ROOT)/root:=		DIRMODE= 700

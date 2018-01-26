@@ -61,8 +61,7 @@ remote system. The default value for this message can be found in the
 When \fBtip\fR attempts to connect to a remote system, it opens the associated
 device with an exclusive-open \fBioctl\fR(2) call. Thus, only one user at a
 time may access a device. This is to prevent multiple processes from sampling
-the terminal line. In addition, \fBtip\fR honors the locking protocol used by
-\fBuucp\fR(1C).
+the terminal line.
 .sp
 .LP
 When \fBtip\fR starts up, it reads commands from the file \fB\&.tiprc\fR in
@@ -931,8 +930,7 @@ initialization file
 .SH SEE ALSO
 .sp
 .LP
-\fBcu\fR(1C), \fBmail\fR(1), \fBuucp\fR(1C), \fBvi\fR(1), \fBioctl\fR(2),
-\fBattributes\fR(5)
+\fBmail\fR(1), \fBvi\fR(1), \fBioctl\fR(2), \fBattributes\fR(5)
 .SH BUGS
 .sp
 .LP

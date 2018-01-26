@@ -241,7 +241,6 @@ dir path=var/spool
 dir path=var/spool/cron group=sys
 dir path=var/spool/cron/atjobs group=sys
 dir path=var/spool/cron/crontabs group=sys
-dir path=var/spool/locks group=uucp owner=uucp
 dir path=var/svc group=sys
 dir path=var/svc/log group=sys
 dir path=var/svc/manifest group=sys

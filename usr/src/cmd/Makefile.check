@@ -34,7 +34,6 @@ include ../Makefile.master
 MANIFEST_TOPDIRS=			\
 	acctadm				\
 	auditd				\
-	bnu				\
 	consadm				\
 	coreadm				\
 	cron				\

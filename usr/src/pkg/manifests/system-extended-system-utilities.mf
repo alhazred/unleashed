@@ -51,6 +51,7 @@ dir path=usr/share/lib
 dir path=usr/share/lib/dict
 dir path=usr/share/man/man1
 dir path=usr/share/man/man1m
+dir path=usr/share/man/man5
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/pargs mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/pcred mode=0555
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/pfiles mode=0555
@@ -203,6 +204,7 @@ file path=usr/share/man/man1/split.1
 file path=usr/share/man/man1/stat.1
 file path=usr/share/man/man1/units.1
 file path=usr/share/man/man1/unix2dos.1
+file path=usr/share/man/man1/uuencode.1
 file path=usr/share/man/man1/yes.1
 file path=usr/share/man/man1m/adbgen.1m
 file path=usr/share/man/man1m/dmesg.1m
@@ -214,6 +216,9 @@ file path=usr/share/man/man1m/mount_pcfs.1m
 file path=usr/share/man/man1m/projadd.1m
 file path=usr/share/man/man1m/projdel.1m
 file path=usr/share/man/man1m/projmod.1m
+file path=usr/share/man/man5/uuencode.format.5
+hardlink path=usr/bin/b64encode target=uuencode
+hardlink path=usr/bin/b64decode target=uudecode
 hardlink path=usr/bin/nawk target=../../usr/bin/awk
 hardlink path=usr/bin/pargs target=../../usr/lib/isaexec
 hardlink path=usr/bin/pcred target=../../usr/lib/isaexec

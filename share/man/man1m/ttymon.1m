@@ -63,10 +63,8 @@ baud rates that can be determined by \fIautobaud\fR are \fB110\fR, \fB1200\fR,
 .sp
 .LP
 If a port is configured as a bidirectional port, \fBttymon\fR will allow users
-to connect to a service, and, if the port is free, will allow \fBuucico\fR(1M),
-\fBcu\fR(1C), or \fBct\fR(1C) to use it for dialing out. If a port is
-bidirectional, \fBttymon\fR will wait to read a character before it prints a
-prompt.
+to connect to a service.  If a port is bidirectional, \fBttymon\fR will wait
+to read a character before it prints a prompt.
 .sp
 .LP
 If the \fIconnect-on-carrier\fR flag is set for a port, \fBttymon\fR will
@@ -302,8 +300,8 @@ The command-line syntax is Stable. The SMF properties are Evolving.
 .SH SEE ALSO
 .sp
 .LP
-\fBct\fR(1C), \fBcu\fR(1C), \fBautopush\fR(1M), \fBpmadm\fR(1M), \fBsac\fR(1M),
-\fBsacadm\fR(1M), \fBsttydefs\fR(1M), \fBttyadm\fR(1M), \fBuucico\fR(1M),
+\fBautopush\fR(1M), \fBpmadm\fR(1M), \fBsac\fR(1M),
+\fBsacadm\fR(1M), \fBsttydefs\fR(1M), \fBttyadm\fR(1M),
 \fBpam\fR(3PAM), \fBlogindevperm\fR(4), \fBpam.conf\fR(4), \fButmpx\fR(4),
 \fBattributes\fR(5), \fBenviron\fR(5), \fBpam_authtok_check\fR(5),
 \fBpam_authtok_get\fR(5), \fBpam_authtok_store\fR(5), \fBpam_dhkeys\fR(5),

@@ -72,7 +72,7 @@ successfully (usually only when carrier is recognized on the modem), the
 corresponding \fB/dev/cua\fR\fI_n_\fR line cannot be opened. This allows a
 modem to be attached to a device, (for example, \fB/dev/ttyd0\fR, which is
 renamed from \fB/dev/tty00\fR) and used for dial-in (by enabling the line for
-login in \fB/etc/inittab\fR) or dial-out (by \fBtip\fR(1) or \fBuucp\fR(1C)) as
+login in \fB/etc/inittab\fR) or dial-out (by \fBtip\fR(1)) as
 \fB/dev/cua0\fR when no one is logged in on the line.
 .SH IOCTLS
 .LP
@@ -195,7 +195,7 @@ Architecture	 SPARC
 
 .SH SEE ALSO
 .LP
-\fBstrconf\fR(1), \fBkbd\fR(1), \fBtip\fR(1),\fBuucp\fR(1C),
+\fBstrconf\fR(1), \fBkbd\fR(1), \fBtip\fR(1),
 \fBautopush\fR(1M), \fBkstat\fR(1M), \fBpppd\fR(1M), \fBioctl\fR(2),
 \fBopen\fR(2), \fBtermios\fR(3C), \fBdacf.conf\fR(4), \fBattributes\fR(5),
 \fBkb\fR(7M), \fBldterm\fR(7M), \fBttcompat\fR(7M), \fBtermio\fR(7I)

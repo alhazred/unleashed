@@ -27,8 +27,7 @@
 #
 
 COMMON_STARTLST="\
-20sysetup \
-70uucp"
+20sysetup"
 
 INSDIR=${ROOT}/etc/rc2.d
 

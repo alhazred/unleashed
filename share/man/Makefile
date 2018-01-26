@@ -1,5 +1,4 @@
 SUBDIR = man1 \
-	 man1c \
 	 man1m \
 	 man2 \
 	 man3 \

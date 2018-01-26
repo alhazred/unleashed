@@ -72,8 +72,8 @@ error if the /dev/cua is open.
 If the /dev/term line is opened successfully  (usually  only when  carrier is
 recognized on the modem), the corresponding      /dev/cua line cannot be
 opened. This allows a modem and port to  be  used  for dial-in (by enabling the
-line for login in \fB/etc/inittab\fR) or dial-out (by \fBtip\fR(1) or
-\fBuucp\fR(1C)) as \fB/dev/cua0\fR when no one is logged in on the line.
+line for login in \fB/etc/inittab\fR) or dial-out (by \fBtip\fR(1)) as
+\fB/dev/cua0\fR when no one is logged in on the line.
 .sp
 .LP
 Device hot-removal  is functionally equivalent to a modem disconnect event, as
@@ -202,7 +202,7 @@ Architecture	 SPARC, x86 PCI-based systems
 .SH SEE ALSO
 .sp
 .LP
-\fBstrconf\fR(1), \fBtip\fR(1),\fBuucp\fR(1C), \fBautopush\fR(1M),
+\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(1M),
 \fBpppd\fR(1M), \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C),
 \fBattributes\fR(5), \fBusba\fR(7D), \fBtermio\fR(7I), \fBldterm\fR(7M),
 \fBttcompat\fR(7M)

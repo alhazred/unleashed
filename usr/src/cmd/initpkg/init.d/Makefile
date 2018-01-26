@@ -33,7 +33,6 @@ i386_PROG=
 PROG=		\
 	README		\
 	sysetup		\
-	uucp		\
 	$($(MACH)_PROG)
 
 

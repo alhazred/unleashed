@@ -26,6 +26,7 @@ changed.
  - tcopy(1)
  - /usr/ucb and libbc ("SunOS/BSD Compatibility Package")
  - rdist(1), rcp(1), rlogin(1), rlogind(1m), rsh(1), rshd(1m)
+ - uucp services (uuencode and uudecode are still present)
  - libslp, slpd ("Service Location Protocol daemon")
  - Java bits: poold(1M), libzfs_jni, libadt_jni, libdtrace_jni,  DTrace Java
    support, parts of libdns_sd

@@ -18,7 +18,6 @@ MAN_sparc = cvcd.1m \
 
 MAN = 6to4relay.1m \
       Intro.1m \
-      Uutry.1m \
       acct.1m \
       acctadm.1m \
       acctcms.1m \
@@ -172,7 +171,6 @@ MAN = 6to4relay.1m \
       in.telnetd.1m \
       in.tftpd.1m \
       in.timed.1m \
-      in.uucpd.1m \
       inetadm.1m \
       inetconv.1m \
       inetd.1m \
@@ -429,11 +427,6 @@ MAN = 6to4relay.1m \
       userdel.1m \
       usermod.1m \
       utmpd.1m \
-      uucheck.1m \
-      uucico.1m \
-      uucleanup.1m \
-      uusched.1m \
-      uuxqt.1m \
       vmstat.1m \
       volcopy.1m \
       volcopy_ufs.1m \
