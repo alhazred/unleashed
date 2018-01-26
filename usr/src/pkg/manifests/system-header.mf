@@ -586,7 +586,6 @@ file path=usr/include/stddef.h
 file path=usr/include/stdint.h
 file path=usr/include/stdio.h
 file path=usr/include/stdio_ext.h
-file path=usr/include/stdio_impl.h
 file path=usr/include/stdio_tag.h
 file path=usr/include/stdlib.h
 file path=usr/include/stdnoreturn.h
