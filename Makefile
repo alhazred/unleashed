@@ -8,11 +8,11 @@ SUBDIR = bin \
 
 .ifdef CONFIG_MACH64
 build:
-	${.MAKE} -C lib obj
-	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} obj
+	${.MAKE} obj
 	${.MAKE}
-	${.MAKE} -C lib MACHINE=${CONFIG_MACH64}
 	${.MAKE} install
+	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} obj
+	${.MAKE} -C lib MACHINE=${CONFIG_MACH64}
 	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} install
 
 .include <unleashed.mk>

@@ -1,4 +1,4 @@
-FILES=	README auto.dep.mk auto.obj.mk autoconf.mk autodep.mk config.mk \
+FILES=	README auto.dep.mk autoconf.mk autodep.mk config.mk \
 	cython.mk dep.mk dirdeps.mk doc.mk dpadd.mk final.mk gendirdeps.mk \
 	host-target.mk host.libnames.mk inc.mk init.mk install-new.mk \
 	java.mk kmod.mk lib.mk libnames.mk libs.mk links.mk man.mk \

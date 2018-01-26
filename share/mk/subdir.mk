@@ -86,18 +86,16 @@ SUBDIR_TARGETS += \
 	depend \
 	lint \
 	obj \
-	objlink \
 	tags \
 	etags
 
 .for t in ${SUBDIR_TARGETS:O:u}
+.if !target($t)
 $t: _SUBDIRUSE
+.endif
 .endfor
 
 .include <own.mk>
-.if make(destroy*)
-.include <obj.mk>
-.endif
 .endif
 # make sure this exists
 all:

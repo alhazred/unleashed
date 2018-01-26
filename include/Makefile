@@ -203,6 +203,8 @@ SUBDIR=	../arch/${CONFIG_MACH}/include \
 	vm \
 	sys
 
+NOOBJ=
+
 .include <prog.mk>
 .include <inc.mk>
 

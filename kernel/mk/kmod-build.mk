@@ -35,6 +35,7 @@ _KMOD_BUILD=yes
 
 .include <${SRCTOP}/kernel/mk/defines.mk>
 
+
 CFLAGS = \
 	${KERNEL_CFLAGS} \
 	${CERRWARN} \

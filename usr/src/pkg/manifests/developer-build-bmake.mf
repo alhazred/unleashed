@@ -25,7 +25,6 @@ file path=usr/bin/make mode=0555
 file path=usr/share/man/man1/make.1
 file path=usr/share/mk/README
 file path=usr/share/mk/auto.dep.mk
-file path=usr/share/mk/auto.obj.mk
 file path=usr/share/mk/autoconf.mk
 file path=usr/share/mk/autodep.mk
 file path=usr/share/mk/config.mk
