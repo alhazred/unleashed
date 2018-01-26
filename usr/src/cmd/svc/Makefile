@@ -48,14 +48,7 @@ ROOTDTDS =	$(DTDS:%=$(XMLDIR)/%)
 
 $(ROOTDTDS) :=	FILEMODE = 444
 
-#
-# Definitions for class action scripts
-#
-
-CLASSACTIONS = i.manifest r.manifest
-ROOTCLASSACTIONS = $(CLASSACTIONS:%=$(ROOT)/usr/sadm/install/scripts/%)
-
-install: $(ROOTDTDS) $(ROOTCLASSACTIONS)
+install: $(ROOTDTDS)
 
 all install clean clobber: $(SUBDIRS)
 
@@ -67,9 +60,6 @@ $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)
 
 $(XMLDIR)/%: %
-	$(INS.file)
-
-$(ROOT)/usr/sadm/install/scripts/%: common/%
 	$(INS.file)
 
 FRC:

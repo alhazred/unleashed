@@ -83,9 +83,6 @@ extern "C" {
 #define	FHEADER_ROLE	"#	Default values for roleadd.  Changed "
 #define	LOCK_AFTER_RETRIESSTR	"deflock_after_retries="
 
-/* Defaults file */
-#define	DEFFILE		"/usr/sadm/defadduser"
-#define	DEFROLEFILE	"/usr/sadm/defaddrole"
 #define	GROUP		"/etc/group"
 
 /* various limits */

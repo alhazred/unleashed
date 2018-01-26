@@ -90,12 +90,11 @@ extern void dispusrdef();
 static void cleanup();
 
 extern int check_perm(), valid_expire();
-extern int putusrdef(), valid_uid();
+extern int valid_uid();
 extern int call_passmgmt(), edit_group(), create_home();
 extern int edit_project();
 extern int **valid_lgroup();
 extern projid_t **valid_lproject();
-extern void update_def(struct userdefs *);
 extern void import_def(struct userdefs *);
 extern int get_default_zfs_flags();
 
@@ -287,109 +286,16 @@ char *argv[];
 		}
 
 		if (uidstr != NULL || oflag || grps != NULL ||
-		    dir != NULL || mflag || comment != NULL) {
+		    dir != NULL || mflag || comment != NULL ||
+		    group != NULL || projects != NULL ||
+		    base_dir != NULL || inactstr != NULL ||
+		    expirestr != NULL || shell != NULL ||
+		    skel_dir != NULL) {
 			if (is_role(usertype))
 				errmsg(M_ARUSAGE);
 			else
 				errmsg(M_AUSAGE);
 			exit(EX_SYNTAX);
-		}
-
-		/* Group must be an existing group */
-		if (group != NULL) {
-			switch (valid_group(group, &g_ptr, &warning)) {
-			case INVALID:
-				errmsg(M_INVALID, group, "group id");
-				exit(EX_BADARG);
-				/*NOTREACHED*/
-			case TOOBIG:
-				errmsg(M_TOOBIG, "gid", group);
-				exit(EX_BADARG);
-				/*NOTREACHED*/
-			case RESERVED:
-			case UNIQUE:
-				errmsg(M_GRP_NOTUSED, group);
-				exit(EX_NAME_NOT_EXIST);
-			}
-			if (warning)
-				warningmsg(warning, group);
-
-			usrdefs->defgroup = g_ptr->gr_gid;
-			usrdefs->defgname = g_ptr->gr_name;
-
-		}
-
-		/* project must be an existing project */
-		if (projects != NULL) {
-			switch (valid_project(projects, &p_ptr, mybuf,
-			    sizeof (mybuf), &warning)) {
-			case INVALID:
-				errmsg(M_INVALID, projects, "project id");
-				exit(EX_BADARG);
-				/*NOTREACHED*/
-			case TOOBIG:
-				errmsg(M_TOOBIG, "projid", projects);
-				exit(EX_BADARG);
-				/*NOTREACHED*/
-			case UNIQUE:
-				errmsg(M_PROJ_NOTUSED, projects);
-				exit(EX_NAME_NOT_EXIST);
-			}
-			if (warning)
-				warningmsg(warning, projects);
-
-			usrdefs->defproj = p_ptr.pj_projid;
-			usrdefs->defprojname = p_ptr.pj_name;
-		}
-
-		/* base_dir must be an existing directory */
-		if (base_dir != NULL) {
-			valid_input(BASEDIR, base_dir);
-			usrdefs->defparent = base_dir;
-		}
-
-		/* inactivity period is an integer */
-		if (inactstr != NULL) {
-			/* convert inactstr to integer */
-			inact = strtol(inactstr, &ptr, 10);
-			if (*ptr || inact < 0) {
-				errmsg(M_INVALID, inactstr,
-				    "inactivity period");
-				exit(EX_BADARG);
-			}
-
-			usrdefs->definact = inact;
-		}
-
-		/* expiration string is a date, newer than today */
-		if (expirestr != NULL) {
-			if (*expirestr) {
-				if (valid_expire(expirestr, (time_t *)0)
-				    == INVALID) {
-					errmsg(M_INVALID, expirestr,
-					    "expiration date");
-					exit(EX_BADARG);
-				}
-				usrdefs->defexpire = expirestr;
-			} else
-				/* Unset the expiration date */
-				usrdefs->defexpire = "";
-		}
-
-		if (shell != NULL) {
-			valid_input(SHELL, shell);
-			usrdefs->defshell = shell;
-		}
-		if (skel_dir != NULL) {
-			valid_input(SKELDIR, skel_dir);
-			usrdefs->defskel = skel_dir;
-		}
-		update_def(usrdefs);
-
-		/* change defaults for useradd */
-		if (putusrdef(usrdefs, usertype) < 0) {
-			errmsg(M_UPDATE, "created");
-			exit(EX_UPDATE);
 		}
 
 		/* Now, display */

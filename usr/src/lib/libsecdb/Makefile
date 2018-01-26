@@ -51,39 +51,18 @@ ESSRC =			$(ESFILES:%=%)
 ETCSECURITYFILES =	$(ESFILES:%=$(ROOTETCSECURITY)/%)
 ETCSECURITYDFILES =	$(ESDFILES:%=$(ROOTETCSECURITY)/%.d/core-os)
 
-
-MFSTFILES =	rbac.xml
-MANIFESTDIR =	$(ROOT)/lib/svc/manifest/system
-MANIFEST =	$(MFSTFILES:%=$(MANIFESTDIR)/%)
-$(MANIFEST) :=	FILEMODE = 0444
-
-METHODFILES =	svc-rbac
-METHODDIR =	$(ROOT)/lib/svc/method
-METHOD =	$(METHODFILES:%=$(METHODDIR)/%)
-$(METHOD) :=	FILEMODE = 0555
-
-SCRIPTS =		i.rbac r.rbac
-CLASS_SCR_SRC_DIR =	common
-INSTALL_DIR =		$(ROOT)/usr/sadm/install
-
-CLASS_SCR_DIR =		$(INSTALL_DIR)/scripts
-
-CLASS_SCR_FILES =	$(SCRIPTS:%=$(CLASS_SCR_DIR)/%)
-$(CLASS_SCR_FILES) :=	FILEMODE = 0555
-
 all clean clobber delete install package: $(SUBDIRS)
 _msg: $(MSGSUBDIRS)
 
 install:	install_data
 
 install_data:	$(ETCSECURITYFILES) $(ETCSECURITYDFILES) $(ETCFILES) \
-		$(ETCDFILES) $(CLASS_SCR_FILES) $(MANIFESTDIR) $(MANIFEST) \
-		$(METHODDIR) $(METHOD)
+		$(ETCDFILES)
+		
 
 ATTR_FILES =	auth_attr exec_attr prof_attr user_attr
-${ATTR_FILES}:	$$@.txt ${CLASS_SCR_SRC_DIR}/i.rbac
-	> $@
-	$(ECHO) $@.txt $@ | $(SHELL) ${CLASS_SCR_SRC_DIR}/i.rbac
+${ATTR_FILES}:	$$@.txt
+	cp $@.txt $@
 
 $(ETCSECURITYDFILES) $(ETCDFILES): $$(@D)
 
@@ -107,28 +86,8 @@ $(ROOTETC)/% : %
 $(ROOTETC)/%.d/core-os: %
 	$(INS.rename)
 
-$(MANIFESTDIR):
-	$(INS.dir)
-
-$(MANIFESTDIR)/% : %
-	$(INS.file)
-
-$(METHODDIR):
-	$(INS.dir)
-
-$(METHODDIR)/% : %
-	$(INS.file)
-
-$(CLASS_SCR_FILES): $(INSTALL_DIR) $(CLASS_SCR_DIR)
-
 $(INSTALL_DIR):
 	$(INS.dir)
-
-$(CLASS_SCR_DIR):
-	$(INS.dir)
-
-$(CLASS_SCR_DIR)/%: $(CLASS_SCR_SRC_DIR)/%
-	$(INS.file)
 
 clobber clean:
 	$(RM) $(ATTR_FILES)
