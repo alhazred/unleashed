@@ -142,6 +142,7 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	stdio.h		\
 	stdio_ext.h	\
 	stdio_tag.h	\
+	stdio_impl.h	\
 	stdlib.h	\
 	stdnoreturn.h	\
 	storclass.h	\
