@@ -315,6 +315,8 @@ print ""
 #
 /usr/bin/newtask -c $$ ${BUILD_PROJECT:+-p$BUILD_PROJECT}
 
+SHELL=/bin/sh
+
 if [[ "${flags.c}" == "false" && -x "$SHELL" && \
     "$(basename -- "${SHELL}")" != "csh" ]]; then
 	# $SHELL is set, and it's not csh.
