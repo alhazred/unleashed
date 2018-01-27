@@ -5,7 +5,7 @@ SRCS=	ar_io.c ar_subs.c buf_subs.c cache.c cpio.c file_subs.c ftree.c\
 	gen_subs.c getoldopt.c options.c pat_rep.c pax.c sel_subs.c tables.c\
 	tar.c tty_subs.c
 # compat
-SRCS+=	pwcache.c strtonum.c strmode.c dprintf.c
+SRCS+=	pwcache.c strmode.c dprintf.c
 
 # XXX for the time being, we need this to get the standard versions of
 # reentrant functions

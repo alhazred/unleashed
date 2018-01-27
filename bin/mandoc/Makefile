@@ -15,7 +15,7 @@ SRCS+=	mdoc_markdown.c
 SRCS+=	dbm_map.c dbm.c dba_write.c dba_array.c dba.c dba_read.c
 SRCS+=	manpath.c mandocdb.c mansearch.c
 
-SRCS+=	lib.c compat_ohash.c compat_strtonum.c
+SRCS+=	lib.c compat_ohash.c
 
 LDADD+=	-lz
 CFLAGS+=	-std=gnu99

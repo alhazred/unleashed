@@ -40,7 +40,7 @@
 #define HAVE_STRLCPY 1
 #define HAVE_STRPTIME 1
 #define HAVE_STRSEP 1
-#define HAVE_STRTONUM 0
+#define HAVE_STRTONUM 1
 #define HAVE_SYS_ENDIAN 0
 #define HAVE_VASPRINTF 1
 #define HAVE_WCHAR 1
@@ -51,5 +51,3 @@
 #define BINM_MAN "man"
 #define BINM_SOELIM "soelim"
 #define BINM_WHATIS "whatis"
-
-extern	long long strtonum(const char *, long long, long long, const char **);
