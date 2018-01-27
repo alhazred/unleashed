@@ -73,6 +73,15 @@ use IO::Dir;
 sub GetObjectInfo {
 	my $path = $_[0];
 
+        # running elfedit 3 times can be slow; avoid doing that for non-ELF
+	open(my $fh, $path);
+	my $head;
+	sysread($fh, $head, 4);
+	close($fh);
+
+	# If not an elf object, return NONE
+	return (0, 'NONE', 'NOVERDEF') if ($head ne "\x7fELF");
+
 	# We use elfedit to obtain the desired information:
 	#
 	#	Command			Meaning
@@ -107,9 +116,6 @@ sub GetObjectInfo {
 	    `$elfedit -e ehdr:ei_class -e ehdr:e_type $path 2>/dev/null`);
 	my $verdef = `$elfedit -e 'dyn:tag verdef' $path 2>/dev/null`;
 	my $interp = `$elfedit -e phdr:interp $path 2>/dev/null`;
-
-	# If not an elf object, return NONE
-	return (0, 'NONE', 'NOVERDEF') if (not defined $class);
 
 	# Otherwise, convert the result to standard form
 	$class =~ s/^ELFCLASS//;
