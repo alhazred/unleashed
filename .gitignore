@@ -23,9 +23,7 @@ cscope.po.out
 #
 # bmake generated files
 #
-.depend
-*.o
-*.dep
+obj
 
 #
 # generate config files

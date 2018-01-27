@@ -25,14 +25,12 @@ file path=usr/bin/make mode=0555
 file path=usr/share/man/man1/make.1
 file path=usr/share/mk/README
 file path=usr/share/mk/auto.dep.mk
-file path=usr/share/mk/auto.obj.mk
 file path=usr/share/mk/autoconf.mk
 file path=usr/share/mk/autodep.mk
 file path=usr/share/mk/config.mk
 file path=usr/share/mk/cython.mk
 file path=usr/share/mk/dep.mk
 file path=usr/share/mk/dirdeps.mk
-file path=usr/share/mk/doc.mk
 file path=usr/share/mk/dpadd.mk
 file path=usr/share/mk/files.mk
 file path=usr/share/mk/final.mk
@@ -72,7 +70,6 @@ file path=usr/share/mk/whats.mk
 file path=usr/share/mk/yacc.mk
 hardlink path=usr/bin/bmake target=make
 link path=usr/share/mk/bsd.dep.mk target=dep.mk
-link path=usr/share/mk/bsd.doc.mk target=doc.mk
 link path=usr/share/mk/bsd.init.mk target=init.mk
 link path=usr/share/mk/bsd.lib.mk target=lib.mk
 link path=usr/share/mk/bsd.links.mk target=links.mk

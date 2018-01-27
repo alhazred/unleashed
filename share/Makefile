@@ -4,4 +4,8 @@ SUBDIR=	hwdata \
 	mk \
 	terminfo \
 	zoneinfo
+
+NOOBJ=
+
+.include <obj.mk>
 .include <subdir.mk>

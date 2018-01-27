@@ -1,5 +1,5 @@
-FILES=	README auto.dep.mk auto.obj.mk autoconf.mk autodep.mk config.mk \
-	cython.mk dep.mk dirdeps.mk doc.mk dpadd.mk final.mk gendirdeps.mk \
+FILES=	README auto.dep.mk autoconf.mk autodep.mk config.mk \
+	cython.mk dep.mk dirdeps.mk dpadd.mk final.mk gendirdeps.mk \
 	host-target.mk host.libnames.mk inc.mk init.mk install-new.mk \
 	java.mk kmod.mk lib.mk libnames.mk libs.mk links.mk man.mk \
 	manifest.mk nls.mk obj.mk options.mk own.mk prlist.mk prog.mk \
@@ -9,7 +9,6 @@ FILES=	README auto.dep.mk auto.obj.mk autoconf.mk autodep.mk config.mk \
 NOOBJ=
 
 SYMLINKS=	dep.mk ${SHAREDIR}/mk/bsd.dep.mk \
-		doc.mk ${SHAREDIR}/mk/bsd.doc.mk \
 		init.mk ${SHAREDIR}/mk/bsd.init.mk \
 		lib.mk ${SHAREDIR}/mk/bsd.lib.mk \
 		links.mk ${SHAREDIR}/mk/bsd.links.mk \
