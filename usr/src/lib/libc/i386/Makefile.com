@@ -596,6 +596,7 @@ PORTGEN=			\
 	strtoimax.o		\
 	strtok.o		\
 	strtok_r.o		\
+	strtonum.o		\
 	strtoumax.o		\
 	swab.o			\
 	swapctl.o		\

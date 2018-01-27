@@ -4076,6 +4076,7 @@ $endif
 	getmode;
 	b64_ntop;
 	b64_pton;
+	strtonum;
 
     global:
 # FIXME: new symbols for our OS, but here pending a name.

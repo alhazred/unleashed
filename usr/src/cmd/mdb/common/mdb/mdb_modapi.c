@@ -246,7 +246,7 @@ mdb_strtoull(const char *s)
 		}
 	}
 
-	return (strtonum(s, radix));
+	return (mdb_strtonum(s, radix));
 }
 
 size_t

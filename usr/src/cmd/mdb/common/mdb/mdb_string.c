@@ -110,7 +110,7 @@ numtostr(uintmax_t uvalue, int base, uint_t flags)
  * error message and longjmp back to the main loop using yyerror().
  */
 uintmax_t
-strtonum(const char *s, int base)
+mdb_strtonum(const char *s, int base)
 {
 	uintmax_t multmax = (uintmax_t)ULLONG_MAX / (uintmax_t)(uint_t)base;
 	uintmax_t val = 0;

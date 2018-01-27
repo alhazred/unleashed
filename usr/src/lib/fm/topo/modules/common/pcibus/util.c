@@ -50,7 +50,7 @@ child_range_add(topo_mod_t *mp, tnode_t *tn, const char *cnm,
 }
 
 ulong_t
-strtonum(topo_mod_t *mp, char *str, int *err)
+topo_strtonum(topo_mod_t *mp, char *str, int *err)
 {
 	ulong_t r;
 	char *e;
