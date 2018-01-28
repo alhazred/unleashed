@@ -590,6 +590,8 @@ fi
 
 DMAKE_MODE=parallel;
 export DMAKE_MODE
+DMAKE_OUTPUT_MODE=TXT2;
+export DMAKE_OUTPUT_MODE
 
 if [ -z "${ROOT}" ]; then
 	echo "ROOT must be set."
