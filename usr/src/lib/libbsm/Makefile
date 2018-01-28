@@ -126,8 +126,7 @@ install: install_dirs install_data
 
 install_h: $(ROOTHDRDIR) $(ROOTHDRS) $(ROOTCHDRS)
 
-check:	$(CHECKHDRS) $(CHECKCHDRS)
-	xmllint --schema $(ADTXSDFILE) --noout $(ADTXMLFILE)
+check:
 
 install_data: $(ESSRC) $(RESSRC) $(ROOTETCSECURITY) $(ETCSECURITYFILES) \
 	$(ROOTXMLFILES)
