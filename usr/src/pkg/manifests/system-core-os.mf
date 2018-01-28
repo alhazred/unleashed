@@ -214,6 +214,7 @@ dir path=usr/share/man/man5
 dir path=usr/share/man/man7d
 dir path=usr/share/man/man7fs
 dir path=usr/share/man/man8
+dir path=usr/share/misc
 dir path=var group=sys
 dir path=var/adm group=sys mode=0775
 dir path=var/adm/exacct group=adm owner=adm
@@ -675,6 +676,8 @@ file path=usr/bin/keylogin mode=0555
 file path=usr/bin/keylogout mode=0555
 file path=usr/bin/kmfcfg mode=0555
 file path=usr/bin/kvmstat mode=0555
+file path=usr/bin/less mode=0555
+file path=usr/bin/lesskey mode=0555
 file path=usr/bin/line mode=0555
 file path=usr/bin/listdgrp mode=0555
 file path=usr/bin/loadkeys mode=0555
@@ -690,7 +693,6 @@ file path=usr/bin/mkdir mode=0555
 file path=usr/bin/mkpwdict mode=0555
 file path=usr/bin/mktemp mode=0555
 file path=usr/bin/moe mode=0555
-file path=usr/bin/more mode=0555
 file path=usr/bin/mpstat mode=0555
 file path=usr/bin/mt mode=0555
 file path=usr/bin/netstat mode=0555
@@ -1020,7 +1022,6 @@ file path=usr/lib/inet/inetd mode=0555
 file path=usr/lib/intrd mode=0555
 file path=usr/lib/isaexec mode=0555
 file path=usr/lib/libshare.so.1
-file path=usr/lib/more.help
 file path=usr/lib/newsyslog group=sys mode=0555
 file path=usr/lib/passmgmt group=sys mode=0555
 file path=usr/lib/pci/pcidr mode=0555
@@ -1201,6 +1202,8 @@ file path=usr/share/lib/xml/dtd/adt_record.dtd.1
 file path=usr/share/lib/xml/dtd/kmfpolicy.dtd
 file path=usr/share/lib/xml/dtd/service_bundle.dtd.1 group=sys
 file path=usr/share/lib/xml/style/adt_record.xsl.1
+file path=usr/share/misc/less.help
+file path=usr/share/misc/more.help
 file path=var/adm/aculog mode=0600 owner=uucp preserve=true
 file path=var/adm/spellhist mode=0666 preserve=true
 file path=var/adm/utmpx preserve=true
@@ -1232,10 +1235,10 @@ hardlink path=usr/bin/lzegrep target=../../usr/bin/grep
 hardlink path=usr/bin/lzfgrep target=../../usr/bin/grep
 hardlink path=usr/bin/lzgrep target=../../usr/bin/grep
 hardlink path=usr/bin/mac target=../../usr/lib/isaexec
+hardlink path=usr/bin/more target=less
 hardlink path=usr/bin/mv target=../../usr/bin/cp
 hardlink path=usr/bin/newtask target=../../usr/lib/isaexec
 hardlink path=usr/bin/nohup target=../../usr/lib/isaexec
-hardlink path=usr/bin/page target=../../usr/bin/more
 hardlink path=usr/bin/pfbash target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfcsh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfsh target=../../usr/bin/pfexec

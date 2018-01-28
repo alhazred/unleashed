@@ -286,7 +286,6 @@ file path=usr/lib/locale/C/LC_MESSAGES/libdll group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/libshell group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/libsum group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/mailx.help group=sys mode=0644
-file path=usr/lib/locale/C/LC_MESSAGES/more.help group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/priv_names group=sys mode=0644
 file path=usr/lib/locale/C/LC_MESSAGES/uxlibc.src group=sys mode=0644
 file path=usr/lib/locale/C/LC_TIME/SUNW_OST_OSCMD.po group=sys mode=0644

@@ -232,7 +232,6 @@ COMMON_SUBDIRS=		\
 	mkpwdict	\
 	mktemp		\
 	modload		\
-	more		\
 	mpathadm	\
 	msgfmt		\
 	msgid		\
@@ -540,7 +539,6 @@ MSGSUBDIRS=		\
 	mkdir		\
 	mkpwdict	\
 	mktemp		\
-	more		\
 	mpathadm	\
 	msgfmt		\
 	mv		\
