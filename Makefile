@@ -37,9 +37,10 @@ CFGARCH=sparc
 CFGFILE=arch/${CFGARCH}/Sconfig
 
 gen-config:
+	${.MAKE} -C tools obj
 	${.MAKE} -C tools
-	${.CURDIR}/tools/mkconfig/mkconfig -I _SYS_CFGPARAM_H -H -o include/sys/cfgparam.h ${CFGFILE}
-	${.CURDIR}/tools/mkconfig/mkconfig -m -o usr/src/Makefile.cfgparam ${CFGFILE}
-	${.CURDIR}/tools/mkconfig/mkconfig -M -o Makefile.cfgparam ${CFGFILE}
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -I _SYS_CFGPARAM_H -H -o include/sys/cfgparam.h ${CFGFILE}
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -m -o usr/src/Makefile.cfgparam ${CFGFILE}
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -M -o Makefile.cfgparam ${CFGFILE}
 
 .PHONY: gen-config build
