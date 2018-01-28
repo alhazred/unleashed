@@ -122,10 +122,6 @@ export PKGARCHIVE="${SRCTOP}/packages/${MACH}/nightly"
 # Package manifest format version.
 export PKGFMT_OUTPUT='v1'
 
-# we want make to do as much as it can, just in case there's more than
-# one problem.
-export MAKEFLAGS='k'
-
 # Set this flag to 'n' to disable the use of 'checkpaths'.  The default,
 # if the 'N' option is not specified, is to run this test.
 #CHECK_PATHS='y'
