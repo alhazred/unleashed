@@ -28,15 +28,13 @@ Build
 For a complete build, use 'tools/nightly.sh':
 
 ```
-$ ./tools/nightly.sh tools/env.sh
+$ ./tools/nightly.sh
 ```
 
 On success, this results in installable packages in the `packages` directory.
 
 Incremental build
 -----------------
-
-Rebuilding a component is the easiest after a full nightly build.
 
 To build a component that is using the new build system (e.g., cat(1)), change
 into the source directory and run make. For example:
@@ -53,7 +51,8 @@ against libraries and headers in the "proto area" or in object directories is
 not currently supported.
 
 To build a component under the legacy (dmake) build system, ie. things under
-'usr/src':
+'usr/src', first complete a full nightly build so that prerequisite objects for
+the component are made, and then:
 
 ```
 $ ./tools/bldenv.sh <env file>

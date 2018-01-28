@@ -309,7 +309,7 @@ if [ "$OPTHOME" = "" ]; then
 	export OPTHOME
 fi
 
-USAGE='Usage: nightly [-in] [-V VERS ] <env_file>
+USAGE='Usage: nightly [-in] [-V VERS ] [env_file]
 
 Where:
 	-i	Fast incremental options (no clobber, check)
@@ -388,8 +388,9 @@ shift `expr $OPTIND - 1`
 
 # test that the path to the environment-setting file was given
 if [ $# -ne 1 ]; then
-	echo "$USAGE"
-	exit 1
+	envfile=$(dirname $0)/env.sh
+else
+	envfile=$1
 fi
 
 #
@@ -445,14 +446,10 @@ unset ONBLD_TOOLS
 #
 #	Setup environmental variables
 #
-if [ -f $1 ]; then
-	if [[ $1 = */* ]]; then
-		. $1
-	else
-		. ./$1
-	fi
+if [ -f $envfile ]; then
+	. $envfile
 else
-	echo "Cannot find env file as either $1"
+	echo "Cannot find env file $envfile"
 	exit 1
 fi
 
