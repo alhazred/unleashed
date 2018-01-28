@@ -92,9 +92,6 @@ CERRWARN	+= -Wno-switch
 
 CTFCONVERT_O=
 
-README_REVISION=../../packages/common/readme_revision
-ONLDREADME=	../../packages/common/SUNWonld-README
-
 PICS=		$(OBJECTS:%=pics/%) pics/demangle.o
 
 CPPFLAGS +=	-I$(SRCBASE)/lib/libc/inc -I$(ELFCAP) \
