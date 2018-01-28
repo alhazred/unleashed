@@ -39,6 +39,8 @@
 #include <mdb/mdb_nv.h>
 #include <mdb/mdb.h>
 
+extern int yylex(void);
+
 /*
  * Utility routines to fetch values from the target's virtual address space
  * and object file, respectively.  These are called from the handlers for

@@ -27,6 +27,7 @@
 #include <aclutils.h>
 
 extern int yyinteractive;
+extern int yylex(void);
 extern acl_t *yyacl;
 %}
 

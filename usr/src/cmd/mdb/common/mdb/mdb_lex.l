@@ -733,17 +733,11 @@ string_unquote(char *s)
 extern struct yysvf *yylstate[], **yylsp, **yyolsp; extern int yyprevious;
 extern int *yyfnd;
 
-extern YYSTYPE *yypv;
-extern int *yyps;
-extern int yytmp;
-extern int yystate;
 extern int yynerrs;
 extern int yyerrflag;
 extern int yychar;
 extern YYSTYPE yylval;
 extern YYSTYPE yyval;
-extern int *yys;
-extern YYSTYPE *yyv;
 
 typedef struct mdb_lex_state {
 	/* Variables needed by yylex */
@@ -759,17 +753,11 @@ typedef struct mdb_lex_state {
 	int	yyprevious;
 	void	*yybgin;
 	/* Variables needed by yyparse */
-	void 	*yypv;
-	int	*yyps;
-	int	yytmp;
-	int	yystate;
 	int	yynerrs;
 	int	yyerrflag;
 	int	yychar;
 	YYSTYPE	yylval;
 	YYSTYPE	yyval;
-	int	yys[YYMAXDEPTH];
-	YYSTYPE	yyv[YYMAXDEPTH];
 } mdb_lex_state_t;
 
 void 
@@ -788,10 +776,6 @@ mdb_lex_state_save(mdb_lex_state_t *s)
 	s->yyprevious = yyprevious;
 	s->yybgin = yybgin;
 
-	s->yypv = yypv;
-	s->yyps = yyps;
-	s->yystate = yystate;
-	s->yytmp = yytmp;
 	s->yynerrs = yynerrs;
 	s->yyerrflag = yyerrflag;
 	s->yychar = yychar;
@@ -816,17 +800,11 @@ mdb_lex_state_restore(mdb_lex_state_t *s)
 	yyprevious = s->yyprevious;
 	yybgin = s->yybgin;
 
-	yypv = s->yypv;
-	yyps = s->yyps;
-	yystate = s->yystate;
-	yytmp = s->yytmp;
 	yynerrs = s->yynerrs;
 	yyerrflag = s->yyerrflag;
 	yychar = s->yychar;
 	yylval = s->yylval;
 	yyval = s->yyval;
-	yys = s->yys;
-	yyv = s->yyv;
 }
 
 /*
@@ -850,8 +828,6 @@ mdb_lex_state_create(mdb_frame_t *f)
 	yyolsp = NULL;
 	yyfnd = 0;
 	yyprevious = YYNEWLINE;
-	yys = f->f_lstate->yys;
-	yyv = f->f_lstate->yyv;
 	mdb_argvec_create(&f->f_argvec);
 	f->f_oldstate = 0;
 	mdb_lex_reset(); /* Responsible for setting yybgin */

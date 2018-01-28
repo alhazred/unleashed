@@ -71,12 +71,11 @@ SUBDIRS=	libconv		\
 		prof		\
 		ranlib		\
 		symorder	\
-		unifdef		\
-		yacc
+		unifdef
 
 # Messaging support
 #
-POSUBDIRS=	m4		nm	yacc
+POSUBDIRS=	m4		nm
 POFILE=		sgs.po
 POFILES=	$(POSUBDIRS:%=%/%.po)
 
@@ -134,7 +133,6 @@ check:		chkmsg
 # built from lib/Makefile
 install_lib:	FRC
 		@ cd lex; pwd; $(MAKE) $@
-		@ cd yacc; pwd; $(MAKE) $@
 
 delete \
 clean clobber:	native-clobber .WAIT $(SUBDIRS) $(MSGDIR)

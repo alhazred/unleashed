@@ -171,14 +171,6 @@ GETTEXT(const char *msgid)
 extern struct tm	*gmtime();
 extern struct tm	*localtime();
 
-#define yyparse getdate_yyparse
-#define yylex getdate_yylex
-#define yyerror getdate_yyerror
-
-static int getdate_yylex (void);
-static int getdate_yyerror (char *);
-
-
 #define EPOCH		1970
 #define EPOCH_END	2099  /* Solaris 64 bit can support this at this point */
 #define HOUR(x)		((time_t)(x) * 60)

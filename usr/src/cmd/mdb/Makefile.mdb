@@ -105,6 +105,7 @@ CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-implicit-function-declaration
+mdb_grammar.o := CERRWARN += -Wno-type-limits
 
 PROG = mdb
 OBJS = $(SRCS:%.c=%.o) mdb_demangle.o mdb_lex.o mdb_grammar.o

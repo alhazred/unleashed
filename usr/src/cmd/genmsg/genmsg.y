@@ -40,6 +40,7 @@ extern void set_msgid(int, int);
 extern int get_msgid(char *, int, int, char *);
 extern void warning(char *);
 extern void yyerror(char *);
+extern int yylex(void);
 
 static void do_catgets(int, int, char *);
 static char *add_qstring(char *, char *);

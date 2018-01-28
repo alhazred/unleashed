@@ -161,6 +161,6 @@ peek(int c, int r1, int r2)
 
 /*ARGSUSED*/
 static void
-yyerror(YYCONST char *msg)
+yyerror(const char *msg)
 {
 }

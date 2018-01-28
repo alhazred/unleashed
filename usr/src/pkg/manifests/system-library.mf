@@ -355,7 +355,6 @@ file path=usr/lib/$(ARCH64)/libsmbios.so.1
 file path=usr/lib/$(ARCH64)/libsoftcrypto.so.1
 file path=usr/lib/$(ARCH64)/libvolmgt.so.1
 file path=usr/lib/$(ARCH64)/libwrap.so.1.0
-file path=usr/lib/$(ARCH64)/liby.so.1
 file path=usr/lib/$(ARCH64)/nss_ad.so.1
 file path=usr/lib/$(ARCH64)/nss_ldap.so.1
 file path=usr/lib/$(ARCH64)/passwdutil.so.1
@@ -418,7 +417,6 @@ file path=usr/lib/libsoftcrypto.so.1
 file path=usr/lib/libsys.so.1
 file path=usr/lib/libvolmgt.so.1
 file path=usr/lib/libwrap.so.1.0
-file path=usr/lib/liby.so.1
 file path=usr/lib/nss_ad.so.1
 file path=usr/lib/nss_ldap.so.1
 file path=usr/lib/passwdutil.so.1
@@ -664,12 +662,9 @@ link path=usr/ccs/lib/$(ARCH64)/libl.so \
     target=../../../lib/$(ARCH64)/libl.so.1
 link path=usr/ccs/lib/$(ARCH64)/libmalloc.so \
     target=../../../lib/$(ARCH64)/libmalloc.so.1
-link path=usr/ccs/lib/$(ARCH64)/liby.so \
-    target=../../../lib/$(ARCH64)/liby.so.1
 link path=usr/ccs/lib/libgen.so target=../../../lib/libgen.so.1
 link path=usr/ccs/lib/libl.so target=../../lib/libl.so.1
 link path=usr/ccs/lib/libmalloc.so target=../../lib/libmalloc.so.1
-link path=usr/ccs/lib/liby.so target=../../lib/liby.so.1
 link path=usr/lib/$(ARCH64)/libadm.so \
     target=../../../lib/$(ARCH64)/libadm.so.1
 link path=usr/lib/$(ARCH64)/libadm.so.1 \
@@ -905,7 +900,6 @@ link path=usr/lib/$(ARCH64)/libxnet.so \
     target=../../../lib/$(ARCH64)/libxnet.so.1
 link path=usr/lib/$(ARCH64)/libxnet.so.1 \
     target=../../../lib/$(ARCH64)/libxnet.so.1
-link path=usr/lib/$(ARCH64)/liby.so target=liby.so.1
 link path=usr/lib/$(ARCH64)/nss_compat.so.1 \
     target=../../../lib/$(ARCH64)/nss_compat.so.1
 link path=usr/lib/$(ARCH64)/nss_dns.so.1 \
@@ -1074,7 +1068,6 @@ link path=usr/lib/libwrap.so target=libwrap.so.1.0
 link path=usr/lib/libwrap.so.1 target=libwrap.so.1.0
 link path=usr/lib/libxnet.so target=../../lib/libxnet.so.1
 link path=usr/lib/libxnet.so.1 target=../../lib/libxnet.so.1
-link path=usr/lib/liby.so target=./liby.so.1
 link path=usr/lib/lwp/$(ARCH64)/libthread.so.1 \
     target=../../$(ARCH64)/libthread.so.1
 link path=usr/lib/lwp/$(ARCH64)/libthread_db.so.1 \

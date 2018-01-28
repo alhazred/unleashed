@@ -40,6 +40,8 @@
 #include <inj_hash.h>
 #include <inj_lex.h>
 
+extern int yylex(void);
+
 %}
 
 %union {
