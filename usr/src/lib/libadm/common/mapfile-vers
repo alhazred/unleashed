@@ -55,7 +55,6 @@ SYMBOL_VERSION SUNW_1.1 {
 
 SYMBOL_VERSION SUNW_0.7 {
     global:
-	pkgdir;
 	read_vtoc;
 	write_vtoc;
 };
@@ -117,18 +116,11 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	_devtabpath;
 	_dgrptabpath;
 	_enddevtab;
-	fpkginfo;
-	fpkginst;
-	fpkgparam;
-	get_ABI_namelngth;
 	getdev;
 	getdgrp;
 	getfullblkname;
 	getfullrawname;
 	getinput;
-	get_install_root;
-	get_PKGADM;
-	get_PKGLOC;
 	getvol;
 	_getvol;
 	listdev;
@@ -136,11 +128,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	_moddevtabrec;
 	_opendevtab;
 	_opendgrptab;
-	pkgfile;
-	pkginfo;
-	pkginfofind;
-	pkgnmchk;
-	pkgparam;
 	printmenu;
 	puterror;
 	puthelp;
@@ -152,13 +139,8 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	_rmdgrpmems;
 	_rmdgrptabrec;
 	_rsvtabpath;
-	set_ABI_namelngth;
-	set_install_root;
 	setinvis;
 	setitem;
-	set_PKGADM;
-	set_PKGLOC;
-	set_PKGpaths;
 	_validalias;
     local:
 	*;

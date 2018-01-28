@@ -29,8 +29,8 @@ OBJECTS= \
 ckdate.o     ckgid.o      ckint.o      ckitem.o     ckkeywd.o    ckpath.o  \
 ckrange.o    ckstr.o      cktime.o     ckuid.o      ckyorn.o     data.o  \
 devattr.o    devreserv.o  devtab.o     dgrpent.o    getdev.o     getdgrp.o  \
-getinput.o   getvol.o     listdev.o    listdgrp.o   pkginfo.o  \
-pkgnmchk.o   pkgparam.o   putdev.o     putdgrp.o    puterror.o   puthelp.o  \
+getinput.o   getvol.o     listdev.o    listdgrp.o   \
+putdev.o     putdgrp.o    puterror.o   puthelp.o  \
 putprmpt.o   puttext.o    rdwr_vtoc.o  regexp.o     space.o      fulldevnm.o
 
 include	../../Makefile.lib

@@ -100,11 +100,6 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	paths.h		\
 	pcsample.h	\
 	pfmt.h		\
-	pkgdev.h	\
-	pkginfo.h	\
-	pkglocs.h	\
-	pkgstrct.h	\
-	pkgtrans.h	\
 	poll.h		\
 	port.h		\
 	priv.h		\

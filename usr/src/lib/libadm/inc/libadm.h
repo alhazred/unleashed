@@ -34,7 +34,6 @@
 
 #include <valtools.h>
 #include <stdio.h>
-#include <pkginfo.h>
 
 #ifdef	__cplusplus
 extern "C" {
@@ -92,16 +91,9 @@ extern void ckyorn_err(char *);
 extern void ckyorn_hlp(char *);
 extern int ckyorn_val(char *);
 extern void doremovecmd(char *, int);
-extern int fpkginfo(struct pkginfo *, char *);
-extern char *fpkginst(char *, ...);
-extern char *fpkgparam(FILE *, char *);
-extern char *get_PKGADM(void);
-extern char *get_PKGLOC(void);
 extern int getinput(char *);
 extern char *getfullblkname(char *);
 extern char *getfullrawname(char *);
-extern int pkginfofind(char *, char *, char *);
-extern FILE *pkginfopen(char *, char *);
 extern void puterror(FILE *, char *, char *);
 extern void puthelp(FILE *, char *, char *);
 extern void putprmpt(FILE *, char *, char **, char *);
@@ -109,14 +101,6 @@ extern int puttext(FILE *, char *, int, int);
 extern void printmenu(CKMENU *);
 extern int setinvis(CKMENU *, char *);
 extern int setitem(CKMENU *, char *);
-extern void set_PKGADM(char *);
-extern void set_PKGLOC(char *);
-extern void set_PKGpaths(char *);
-extern void set_ABI_namelngth(void);
-extern int get_ABI_namelngth(void);
-extern void set_install_root(char *path);
-extern char *get_install_root(void);
-
 
 #ifdef	__cplusplus
 }
