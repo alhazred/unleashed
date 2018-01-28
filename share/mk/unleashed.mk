@@ -8,3 +8,4 @@ SRCTOP!=	cd ${.CURDIR} && git rev-parse --show-toplevel
 .  error cannot find top of source tree - set SRCTOP manually
 .  endif
 .endif
+UNLEAHED_OBJ?=	/usr/obj/${MACHINE}
