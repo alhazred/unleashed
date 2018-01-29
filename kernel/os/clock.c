@@ -395,7 +395,10 @@ extern clock_t clock_tick_proc_max;
 static int64_t deadman_counter = 0;
 
 static void recompute_load_averages(void);
+static void onesec_time_adjustments(void);
+
 cyclic_id_t recompute_load_averages_cyclic;
+cyclic_id_t onesec_time_adjustments_cyclic;
 
 static void
 clock(void)
@@ -403,10 +406,7 @@ clock(void)
 	extern	void	set_freemem();
 	void	(*funcp)();
 	int32_t ltemp;
-	int64_t lltemp;
 	int s;
-	int do_lgrp_load;
-	clock_t now = LBOLT_NO_ACCOUNT;	/* current tick */
 
 	if (panicstr)
 		return;
@@ -478,198 +478,7 @@ clock(void)
 		kcage_tick();
 
 	if (one_sec) {
-
-		int drift, absdrift;
-		timestruc_t tod;
-		int s;
-
-		/*
-		 * Beginning of precision-kernel code fragment executed
-		 * every second.
-		 *
-		 * On rollover of the second the phase adjustment to be
-		 * used for the next second is calculated.  Also, the
-		 * maximum error is increased by the tolerance.  If the
-		 * PPS frequency discipline code is present, the phase is
-		 * increased to compensate for the CPU clock oscillator
-		 * frequency error.
-		 *
-		 * On a 32-bit machine and given parameters in the timex.h
-		 * header file, the maximum phase adjustment is +-512 ms
-		 * and maximum frequency offset is (a tad less than)
-		 * +-512 ppm. On a 64-bit machine, you shouldn't need to ask.
-		 */
-		time_maxerror += time_tolerance / SCALE_USEC;
-
-		/*
-		 * Leap second processing. If in leap-insert state at
-		 * the end of the day, the system clock is set back one
-		 * second; if in leap-delete state, the system clock is
-		 * set ahead one second. The microtime() routine or
-		 * external clock driver will insure that reported time
-		 * is always monotonic. The ugly divides should be
-		 * replaced.
-		 */
-		switch (time_state) {
-
-		case TIME_OK:
-			if (time_status & STA_INS)
-				time_state = TIME_INS;
-			else if (time_status & STA_DEL)
-				time_state = TIME_DEL;
-			break;
-
-		case TIME_INS:
-			if (hrestime.tv_sec % 86400 == 0) {
-				s = hr_clock_lock();
-				hrestime.tv_sec--;
-				hr_clock_unlock(s);
-				time_state = TIME_OOP;
-			}
-			break;
-
-		case TIME_DEL:
-			if ((hrestime.tv_sec + 1) % 86400 == 0) {
-				s = hr_clock_lock();
-				hrestime.tv_sec++;
-				hr_clock_unlock(s);
-				time_state = TIME_WAIT;
-			}
-			break;
-
-		case TIME_OOP:
-			time_state = TIME_WAIT;
-			break;
-
-		case TIME_WAIT:
-			if (!(time_status & (STA_INS | STA_DEL)))
-				time_state = TIME_OK;
-		default:
-			break;
-		}
-
-		/*
-		 * Compute the phase adjustment for the next second. In
-		 * PLL mode, the offset is reduced by a fixed factor
-		 * times the time constant. In FLL mode the offset is
-		 * used directly. In either mode, the maximum phase
-		 * adjustment for each second is clamped so as to spread
-		 * the adjustment over not more than the number of
-		 * seconds between updates.
-		 */
-		if (time_offset == 0)
-			time_adj = 0;
-		else if (time_offset < 0) {
-			lltemp = -time_offset;
-			if (!(time_status & STA_FLL)) {
-				if ((1 << time_constant) >= SCALE_KG)
-					lltemp *= (1 << time_constant) /
-					    SCALE_KG;
-				else
-					lltemp = (lltemp / SCALE_KG) >>
-					    time_constant;
-			}
-			if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
-				lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
-			time_offset += lltemp;
-			time_adj = -(lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
-		} else {
-			lltemp = time_offset;
-			if (!(time_status & STA_FLL)) {
-				if ((1 << time_constant) >= SCALE_KG)
-					lltemp *= (1 << time_constant) /
-					    SCALE_KG;
-				else
-					lltemp = (lltemp / SCALE_KG) >>
-					    time_constant;
-			}
-			if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
-				lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
-			time_offset -= lltemp;
-			time_adj = (lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
-		}
-
-		/*
-		 * Compute the frequency estimate and additional phase
-		 * adjustment due to frequency error for the next
-		 * second. When the PPS signal is engaged, gnaw on the
-		 * watchdog counter and update the frequency computed by
-		 * the pll and the PPS signal.
-		 */
-		pps_valid++;
-		if (pps_valid == PPS_VALID) {
-			pps_jitter = MAXTIME;
-			pps_stabil = MAXFREQ;
-			time_status &= ~(STA_PPSSIGNAL | STA_PPSJITTER |
-			    STA_PPSWANDER | STA_PPSERROR);
-		}
-		lltemp = time_freq + pps_freq;
-
-		if (lltemp)
-			time_adj += (lltemp * SCALE_PHASE) / (SCALE_USEC * hz);
-
-		/*
-		 * End of precision kernel-code fragment
-		 *
-		 * The section below should be modified if we are planning
-		 * to use NTP for synchronization.
-		 *
-		 * Note: the clock synchronization code now assumes
-		 * the following:
-		 *   - if dosynctodr is 1, then compute the drift between
-		 *	the tod chip and software time and adjust one or
-		 *	the other depending on the circumstances
-		 *
-		 *   - if dosynctodr is 0, then the tod chip is independent
-		 *	of the software clock and should not be adjusted,
-		 *	but allowed to free run.  this allows NTP to sync.
-		 *	hrestime without any interference from the tod chip.
-		 */
-
-		tod_validate_deferred = B_FALSE;
-		mutex_enter(&tod_lock);
-		tod = tod_get();
-		drift = tod.tv_sec - hrestime.tv_sec;
-		absdrift = (drift >= 0) ? drift : -drift;
-		if (tod_needsync || absdrift > 1) {
-			int s;
-			if (absdrift > 2) {
-				if (!tod_broken && tod_faulted == TOD_NOFAULT) {
-					s = hr_clock_lock();
-					hrestime = tod;
-					membar_enter();	/* hrestime visible */
-					timedelta = 0;
-					timechanged++;
-					tod_needsync = 0;
-					hr_clock_unlock(s);
-					callout_hrestime();
-
-				}
-			} else {
-				if (tod_needsync || !dosynctodr) {
-					gethrestime(&tod);
-					tod_set(tod);
-					s = hr_clock_lock();
-					if (timedelta == 0)
-						tod_needsync = 0;
-					hr_clock_unlock(s);
-				} else {
-					/*
-					 * If the drift is 2 seconds on the
-					 * money, then the TOD is adjusting
-					 * the clock;  record that.
-					 */
-					clock_adj_hist[adj_hist_entry++ %
-					    CLOCK_ADJ_HIST_SIZE] = now;
-					s = hr_clock_lock();
-					timedelta = (int64_t)drift*NANOSEC;
-					hr_clock_unlock(s);
-				}
-			}
-		}
 		one_sec = 0;
-		time = gethrestime_sec();  /* for crusty old kmem readers */
-		mutex_exit(&tod_lock);
 
 		/*
 		 * Some drivers still depend on this... XXX
@@ -899,11 +708,210 @@ recompute_load_averages(void)
 	loadavg_update();
 }
 
+static void
+onesec_time_adjustments(void)
+{
+	int drift, absdrift;
+	timestruc_t tod;
+	int64_t lltemp;
+	clock_t now = LBOLT_NO_ACCOUNT;	/* current tick */
+	int s;
+
+	/*
+	 * Beginning of precision-kernel code fragment executed
+	 * every second.
+	 *
+	 * On rollover of the second the phase adjustment to be
+	 * used for the next second is calculated.  Also, the
+	 * maximum error is increased by the tolerance.  If the
+	 * PPS frequency discipline code is present, the phase is
+	 * increased to compensate for the CPU clock oscillator
+	 * frequency error.
+	 *
+	 * On a 32-bit machine and given parameters in the timex.h
+	 * header file, the maximum phase adjustment is +-512 ms
+	 * and maximum frequency offset is (a tad less than)
+	 * +-512 ppm. On a 64-bit machine, you shouldn't need to ask.
+	 */
+	time_maxerror += time_tolerance / SCALE_USEC;
+
+	/*
+	 * Leap second processing. If in leap-insert state at
+	 * the end of the day, the system clock is set back one
+	 * second; if in leap-delete state, the system clock is
+	 * set ahead one second. The microtime() routine or
+	 * external clock driver will insure that reported time
+	 * is always monotonic. The ugly divides should be
+	 * replaced.
+	 */
+	switch (time_state) {
+
+	case TIME_OK:
+		if (time_status & STA_INS)
+			time_state = TIME_INS;
+		else if (time_status & STA_DEL)
+			time_state = TIME_DEL;
+		break;
+
+	case TIME_INS:
+		if (hrestime.tv_sec % 86400 == 0) {
+			s = hr_clock_lock();
+			hrestime.tv_sec--;
+			hr_clock_unlock(s);
+			time_state = TIME_OOP;
+		}
+		break;
+
+	case TIME_DEL:
+		if ((hrestime.tv_sec + 1) % 86400 == 0) {
+			s = hr_clock_lock();
+			hrestime.tv_sec++;
+			hr_clock_unlock(s);
+			time_state = TIME_WAIT;
+		}
+		break;
+
+	case TIME_OOP:
+		time_state = TIME_WAIT;
+		break;
+
+	case TIME_WAIT:
+		if (!(time_status & (STA_INS | STA_DEL)))
+			time_state = TIME_OK;
+	default:
+		break;
+	}
+
+	/*
+	 * Compute the phase adjustment for the next second. In
+	 * PLL mode, the offset is reduced by a fixed factor
+	 * times the time constant. In FLL mode the offset is
+	 * used directly. In either mode, the maximum phase
+	 * adjustment for each second is clamped so as to spread
+	 * the adjustment over not more than the number of
+	 * seconds between updates.
+	 */
+	if (time_offset == 0)
+		time_adj = 0;
+	else if (time_offset < 0) {
+		lltemp = -time_offset;
+		if (!(time_status & STA_FLL)) {
+			if ((1 << time_constant) >= SCALE_KG)
+				lltemp *= (1 << time_constant) /
+				    SCALE_KG;
+			else
+				lltemp = (lltemp / SCALE_KG) >>
+				    time_constant;
+		}
+		if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
+		lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
+		time_offset += lltemp;
+		time_adj = -(lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
+	} else {
+		lltemp = time_offset;
+		if (!(time_status & STA_FLL)) {
+			if ((1 << time_constant) >= SCALE_KG)
+				lltemp *= (1 << time_constant) /
+				    SCALE_KG;
+			else
+				lltemp = (lltemp / SCALE_KG) >>
+				    time_constant;
+		}
+		if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
+			lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
+			time_offset -= lltemp;
+			time_adj = (lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
+	}
+
+	/*
+	 * Compute the frequency estimate and additional phase
+	 * adjustment due to frequency error for the next
+	 * second. When the PPS signal is engaged, gnaw on the
+	 * watchdog counter and update the frequency computed by
+	 * the pll and the PPS signal.
+	 */
+	pps_valid++;
+	if (pps_valid == PPS_VALID) {
+		pps_jitter = MAXTIME;
+		pps_stabil = MAXFREQ;
+		time_status &= ~(STA_PPSSIGNAL | STA_PPSJITTER |
+		    STA_PPSWANDER | STA_PPSERROR);
+	}
+	lltemp = time_freq + pps_freq;
+
+	if (lltemp)
+		time_adj += (lltemp * SCALE_PHASE) / (SCALE_USEC * hz);
+
+	/*
+	 * End of precision kernel-code fragment
+	 *
+	 * The section below should be modified if we are planning
+	 * to use NTP for synchronization.
+	 *
+	 * Note: the clock synchronization code now assumes
+	 * the following:
+	 *   - if dosynctodr is 1, then compute the drift between
+	 *	the tod chip and software time and adjust one or
+	 *	the other depending on the circumstances
+	 *
+	 *   - if dosynctodr is 0, then the tod chip is independent
+	 *	of the software clock and should not be adjusted,
+	 *	but allowed to free run.  this allows NTP to sync.
+	 *	hrestime without any interference from the tod chip.
+	 */
+
+	tod_validate_deferred = B_FALSE;
+	mutex_enter(&tod_lock);
+	tod = tod_get();
+	drift = tod.tv_sec - hrestime.tv_sec;
+	absdrift = (drift >= 0) ? drift : -drift;
+	if (tod_needsync || absdrift > 1) {
+		int s;
+		if (absdrift > 2) {
+			if (!tod_broken && tod_faulted == TOD_NOFAULT) {
+				s = hr_clock_lock();
+				hrestime = tod;
+				membar_enter();	/* hrestime visible */
+				timedelta = 0;
+				timechanged++;
+				tod_needsync = 0;
+				hr_clock_unlock(s);
+				callout_hrestime();
+
+			}
+		} else {
+			if (tod_needsync || !dosynctodr) {
+				gethrestime(&tod);
+				tod_set(tod);
+				s = hr_clock_lock();
+				if (timedelta == 0)
+					tod_needsync = 0;
+				hr_clock_unlock(s);
+			} else {
+				/*
+				 * If the drift is 2 seconds on the
+				 * money, then the TOD is adjusting
+				 * the clock;  record that.
+				 */
+				clock_adj_hist[adj_hist_entry++ %
+				    CLOCK_ADJ_HIST_SIZE] = now;
+				s = hr_clock_lock();
+				timedelta = (int64_t)drift*NANOSEC;
+				hr_clock_unlock(s);
+			}
+		}
+	}
+	time = gethrestime_sec();  /* for crusty old kmem readers */
+	mutex_exit(&tod_lock);
+}
+
 void
 clock_init(void)
 {
 	cyc_handler_t clk_hdlr, lbolt_hdlr,load_averages_hdlr;
 	cyc_time_t clk_when, lbolt_when, load_averages_when;
+	cyc_handler_t onesec_time_adjustments_hdlr;
+	cyc_time_t onesec_time_adjustments_when;
 	int i, sz;
 	intptr_t buf;
 
@@ -927,6 +935,17 @@ clock_init(void)
 
 	load_averages_when.cyt_when = 0;
 	load_averages_when.cyt_interval = SEC2NSEC(1);
+
+	/*
+	 * Setup handler and timer for onesec_time_adjustments cyclic.
+	 */
+
+	onesec_time_adjustments_hdlr.cyh_func = (cyc_func_t)onesec_time_adjustments;
+	onesec_time_adjustments_hdlr.cyh_level = CY_LOCK_LEVEL;
+	onesec_time_adjustments_hdlr.cyh_arg = NULL;
+
+	onesec_time_adjustments_when.cyt_when = 0;
+	onesec_time_adjustments_when.cyt_interval = SEC2NSEC(1);
 
 	/*
 	 * The lbolt cyclic will be reprogramed to fire at a nsec_per_tick
@@ -998,7 +1017,7 @@ clock_init(void)
 	}
 
 	/*
-	 * Grab cpu_lock and install all four cyclics.
+	 * Grab cpu_lock and install all five cyclics.
 	 */
 	mutex_enter(&cpu_lock);
 
@@ -1006,6 +1025,8 @@ clock_init(void)
 	lb_info->id.lbi_cyclic_id = cyclic_add(&lbolt_hdlr, &lbolt_when);
 	recompute_load_averages_cyclic =
 	    cyclic_add(&load_averages_hdlr, &load_averages_when);
+	onesec_time_adjustments_cyclic =
+	    cyclic_add(&onesec_time_adjustments_hdlr, &onesec_time_adjustments_when);
 
 	mutex_exit(&cpu_lock);
 }
