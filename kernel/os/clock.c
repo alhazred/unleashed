@@ -26,6 +26,7 @@
  * Copyright (c) 2013, Joyent, Inc.  All rights reserved.
  * Copyright (c) 2015, Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  * Copyright (c) 2016 by Delphix. All rights reserved.
+ * Copyright (c) 2018, Carlos Neira  <cneirabustos@gmail.com>
  */
 
 #include <sys/param.h>
@@ -393,21 +394,18 @@ extern clock_t clock_tick_proc_max;
 
 static int64_t deadman_counter = 0;
 
+static void recompute_load_averages(void);
+cyclic_id_t recompute_load_averages_cyclic;
+
 static void
 clock(void)
 {
-	kthread_t	*t;
-	uint_t	nrunnable;
-	uint_t	w_io;
-	cpu_t	*cp;
-	cpupart_t *cpupart;
 	extern	void	set_freemem();
 	void	(*funcp)();
 	int32_t ltemp;
 	int64_t lltemp;
 	int s;
 	int do_lgrp_load;
-	int i;
 	clock_t now = LBOLT_NO_ACCOUNT;	/* current tick */
 
 	if (panicstr)
@@ -455,163 +453,9 @@ clock(void)
 	 *
 	 * Continue with the interrupt processing as scheduled.
 	 */
-	/*
-	 * Count the number of runnable threads and the number waiting
-	 * for some form of I/O to complete -- gets added to
-	 * sysinfo.waiting.  To know the state of the system, must add
-	 * wait counts from all CPUs.  Also add up the per-partition
-	 * statistics.
-	 */
-	w_io = 0;
-	nrunnable = 0;
-
-	/*
-	 * keep track of when to update lgrp/part loads
-	 */
-
-	do_lgrp_load = 0;
-	if (lgrp_ticks++ >= hz / 10) {
-		lgrp_ticks = 0;
-		do_lgrp_load = 1;
-	}
-
 	if (one_sec) {
-		loadavg_update();
 		deadman_counter++;
 	}
-
-	/*
-	 * First count the threads waiting on kpreempt queues in each
-	 * CPU partition.
-	 */
-
-	cpupart = cp_list_head;
-	do {
-		uint_t cpupart_nrunnable = cpupart->cp_kp_queue.disp_nrunnable;
-
-		cpupart->cp_updates++;
-		nrunnable += cpupart_nrunnable;
-		cpupart->cp_nrunnable_cum += cpupart_nrunnable;
-		if (one_sec) {
-			cpupart->cp_nrunning = 0;
-			cpupart->cp_nrunnable = cpupart_nrunnable;
-		}
-	} while ((cpupart = cpupart->cp_next) != cp_list_head);
-
-
-	/* Now count the per-CPU statistics. */
-	cp = cpu_list;
-	do {
-		uint_t cpu_nrunnable = cp->cpu_disp->disp_nrunnable;
-
-		nrunnable += cpu_nrunnable;
-		cpupart = cp->cpu_part;
-		cpupart->cp_nrunnable_cum += cpu_nrunnable;
-		if (one_sec) {
-			cpupart->cp_nrunnable += cpu_nrunnable;
-			/*
-			 * Update user, system, and idle cpu times.
-			 */
-			cpupart->cp_nrunning++;
-			/*
-			 * w_io is used to update sysinfo.waiting during
-			 * one_second processing below.  Only gather w_io
-			 * information when we walk the list of cpus if we're
-			 * going to perform one_second processing.
-			 */
-			w_io += CPU_STATS(cp, sys.iowait);
-		}
-
-		if (one_sec && (cp->cpu_flags & CPU_EXISTS)) {
-			int i, load, change;
-			hrtime_t intracct, intrused;
-			const hrtime_t maxnsec = 1000000000;
-			const int precision = 100;
-
-			/*
-			 * Estimate interrupt load on this cpu each second.
-			 * Computes cpu_intrload as %utilization (0-99).
-			 */
-
-			/* add up interrupt time from all micro states */
-			for (intracct = 0, i = 0; i < NCMSTATES; i++)
-				intracct += cp->cpu_intracct[i];
-			scalehrtime(&intracct);
-
-			/* compute nsec used in the past second */
-			intrused = intracct - cp->cpu_intrlast;
-			cp->cpu_intrlast = intracct;
-
-			/* limit the value for safety (and the first pass) */
-			if (intrused >= maxnsec)
-				intrused = maxnsec - 1;
-
-			/* calculate %time in interrupt */
-			load = (precision * intrused) / maxnsec;
-			ASSERT(load >= 0 && load < precision);
-			change = cp->cpu_intrload - load;
-
-			/* jump to new max, or decay the old max */
-			if (change < 0)
-				cp->cpu_intrload = load;
-			else if (change > 0)
-				cp->cpu_intrload -= (change + 3) / 4;
-
-			DTRACE_PROBE3(cpu_intrload,
-			    cpu_t *, cp,
-			    hrtime_t, intracct,
-			    hrtime_t, intrused);
-		}
-
-		if (do_lgrp_load &&
-		    (cp->cpu_flags & CPU_EXISTS)) {
-			/*
-			 * When updating the lgroup's load average,
-			 * account for the thread running on the CPU.
-			 * If the CPU is the current one, then we need
-			 * to account for the underlying thread which
-			 * got the clock interrupt not the thread that is
-			 * handling the interrupt and caculating the load
-			 * average
-			 */
-			t = cp->cpu_thread;
-			if (CPU == cp)
-				t = t->t_intr;
-
-			/*
-			 * Account for the load average for this thread if
-			 * it isn't the idle thread or it is on the interrupt
-			 * stack and not the current CPU handling the clock
-			 * interrupt
-			 */
-			if ((t && t != cp->cpu_idle_thread) || (CPU != cp &&
-			    CPU_ON_INTR(cp))) {
-				if (t->t_lpl == cp->cpu_lpl) {
-					/* local thread */
-					cpu_nrunnable++;
-				} else {
-					/*
-					 * This is a remote thread, charge it
-					 * against its home lgroup.  Note that
-					 * we notice that a thread is remote
-					 * only if it's currently executing.
-					 * This is a reasonable approximation,
-					 * since queued remote threads are rare.
-					 * Note also that if we didn't charge
-					 * it to its home lgroup, remote
-					 * execution would often make a system
-					 * appear balanced even though it was
-					 * not, and thread placement/migration
-					 * would often not be done correctly.
-					 */
-					lgrp_loadavg(t->t_lpl,
-					    LGRP_LOADAVG_IN_THREAD_MAX, 0);
-				}
-			}
-			lgrp_loadavg(cp->cpu_lpl,
-			    cpu_nrunnable * LGRP_LOADAVG_IN_THREAD_MAX, 1);
-		}
-	} while ((cp = cp->cpu_next) != cpu_list);
 
 	clock_tick_schedule(one_sec);
 
@@ -831,87 +675,235 @@ clock(void)
 		 * Some drivers still depend on this... XXX
 		 */
 		cv_broadcast(&lbolt_cv);
-
-		vminfo.freemem += freemem;
-		{
-			pgcnt_t maxswap, resv, free;
-			pgcnt_t avail =
-			    MAX((spgcnt_t)(availrmem - swapfs_minfree), 0);
-
-			maxswap = k_anoninfo.ani_mem_resv +
-			    k_anoninfo.ani_max +avail;
-			/* Update ani_free */
-			set_anoninfo();
-			free = k_anoninfo.ani_free + avail;
-			resv = k_anoninfo.ani_phys_resv +
-			    k_anoninfo.ani_mem_resv;
-
-			vminfo.swap_resv += resv;
-			/* number of reserved and allocated pages */
-#ifdef	DEBUG
-			if (maxswap < free)
-				cmn_err(CE_WARN, "clock: maxswap < free");
-			if (maxswap < resv)
-				cmn_err(CE_WARN, "clock: maxswap < resv");
-#endif
-			vminfo.swap_alloc += maxswap - free;
-			vminfo.swap_avail += maxswap - resv;
-			vminfo.swap_free += free;
-		}
-		vminfo.updates++;
-		if (nrunnable) {
-			sysinfo.runque += nrunnable;
-			sysinfo.runocc++;
-		}
-		if (nswapped) {
-			sysinfo.swpque += nswapped;
-			sysinfo.swpocc++;
-		}
-		sysinfo.waiting += w_io;
-		sysinfo.updates++;
-
-		/*
-		 * Wake up fsflush to write out DELWRI
-		 * buffers, dirty pages and other cached
-		 * administrative data, e.g. inodes.
-		 */
-		if (--fsflushcnt <= 0) {
-			fsflushcnt = tune.t_fsflushr;
-			cv_signal(&fsflush_cv);
-		}
-
-		vmmeter();
-		calcloadavg(genloadavg(&loadavg), hp_avenrun);
-		for (i = 0; i < 3; i++)
-			/*
-			 * At the moment avenrun[] can only hold 31
-			 * bits of load average as it is a signed
-			 * int in the API. We need to ensure that
-			 * hp_avenrun[i] >> (16 - FSHIFT) will not be
-			 * too large. If it is, we put the largest value
-			 * that we can use into avenrun[i]. This is
-			 * kludgey, but about all we can do until we
-			 * avenrun[] is declared as an array of uint64[]
-			 */
-			if (hp_avenrun[i] < ((uint64_t)1<<(31+16-FSHIFT)))
-				avenrun[i] = (int32_t)(hp_avenrun[i] >>
-				    (16 - FSHIFT));
-			else
-				avenrun[i] = 0x7fffffff;
-
-		cpupart = cp_list_head;
-		do {
-			calcloadavg(genloadavg(&cpupart->cp_loadavg),
-			    cpupart->cp_hp_avenrun);
-		} while ((cpupart = cpupart->cp_next) != cp_list_head);
 	}
+}
+
+static void
+recompute_load_averages(void)
+{
+	kthread_t	*t;
+	uint_t	nrunnable;
+	uint_t	w_io;
+	cpu_t	*cp;
+	cpupart_t *cpupart;
+	int i;
+	pgcnt_t maxswap, resv, free, avail;
+
+	/*
+	 * Count the number of runnable threads and the number waiting
+	 * for some form of I/O to complete -- gets added to
+	 * sysinfo.waiting.  To know the state of the system, must add
+	 * wait counts from all CPUs.  Also add up the per-partition
+	 * statistics.
+	 */
+
+	w_io = 0;
+	nrunnable = 0;
+
+	/*
+	 * First count the threads waiting on kpreempt queues in each
+	 * CPU partition.
+	 */
+
+	cpupart = cp_list_head;
+	do {
+		uint_t cpupart_nrunnable = cpupart->cp_kp_queue.disp_nrunnable;
+
+		cpupart->cp_updates++;
+		nrunnable += cpupart_nrunnable;
+		cpupart->cp_nrunnable_cum += cpupart_nrunnable;
+		cpupart->cp_nrunning = 0;
+		cpupart->cp_nrunnable = cpupart_nrunnable;
+	} while ((cpupart = cpupart->cp_next) != cp_list_head);
+
+
+	/* Now count the per-CPU statistics. */
+	cp = cpu_list;
+	do {
+		uint_t cpu_nrunnable = cp->cpu_disp->disp_nrunnable;
+
+		nrunnable += cpu_nrunnable;
+		cpupart = cp->cpu_part;
+		cpupart->cp_nrunnable_cum += cpu_nrunnable;
+		cpupart->cp_nrunnable += cpu_nrunnable;
+		/*
+		 * Update user, system, and idle cpu times.
+		 */
+		cpupart->cp_nrunning++;
+		/*
+		 * w_io is used to update sysinfo.waiting during
+		 * one_second processing below.  Only gather w_io
+		 * information when we walk the list of cpus if we're
+		 * going to perform one_second processing.
+		 */
+		w_io += CPU_STATS(cp, sys.iowait);
+
+		if (cp->cpu_flags & CPU_EXISTS) {
+			int i, load, change;
+			hrtime_t intracct, intrused;
+			const hrtime_t maxnsec = 1000000000;
+			const int precision = 100;
+
+			/*
+			 * Estimate interrupt load on this cpu each second.
+			 * Computes cpu_intrload as %utilization (0-99).
+			 */
+
+			/* add up interrupt time from all micro states */
+			for (intracct = 0, i = 0; i < NCMSTATES; i++)
+				intracct += cp->cpu_intracct[i];
+			scalehrtime(&intracct);
+
+			/* compute nsec used in the past second */
+			intrused = intracct - cp->cpu_intrlast;
+			cp->cpu_intrlast = intracct;
+
+			/* limit the value for safety (and the first pass) */
+			if (intrused >= maxnsec)
+				intrused = maxnsec - 1;
+
+			/* calculate %time in interrupt */
+			load = (precision * intrused) / maxnsec;
+			ASSERT(load >= 0 && load < precision);
+			change = cp->cpu_intrload - load;
+
+			/* jump to new max, or decay the old max */
+			if (change < 0)
+				cp->cpu_intrload = load;
+			else if (change > 0)
+				cp->cpu_intrload -= (change + 3) / 4;
+
+			DTRACE_PROBE3(cpu_intrload,
+			    cpu_t *, cp,
+			    hrtime_t, intracct,
+			    hrtime_t, intrused);
+		}
+
+		if (cp->cpu_flags & CPU_EXISTS) {
+			/*
+			 * When updating the lgroup's load average,
+			 * account for the thread running on the CPU.
+			 * If the CPU is the current one, then we need
+			 * to account for the underlying thread which
+			 * got the clock interrupt not the thread that is
+			 * handling the interrupt and caculating the load
+			 * average
+			 */
+			t = cp->cpu_thread;
+			if (CPU == cp)
+				t = t->t_intr;
+
+			/*
+			 * Account for the load average for this thread if
+			 * it isn't the idle thread or it is on the interrupt
+			 * stack and not the current CPU handling the clock
+			 * interrupt
+			 */
+			if ((t && t != cp->cpu_idle_thread) || (CPU != cp &&
+			    CPU_ON_INTR(cp))) {
+				if (t->t_lpl == cp->cpu_lpl) {
+					/* local thread */
+					cpu_nrunnable++;
+				} else {
+					/*
+					 * This is a remote thread, charge it
+					 * against its home lgroup.  Note that
+					 * we notice that a thread is remote
+					 * only if it's currently executing.
+					 * This is a reasonable approximation,
+					 * since queued remote threads are rare.
+					 * Note also that if we didn't charge
+					 * it to its home lgroup, remote
+					 * execution would often make a system
+					 * appear balanced even though it was
+					 * not, and thread placement/migration
+					 * would often not be done correctly.
+					 */
+					lgrp_loadavg(t->t_lpl,
+					    LGRP_LOADAVG_IN_THREAD_MAX, 0);
+				}
+			}
+			lgrp_loadavg(cp->cpu_lpl,
+			    cpu_nrunnable * LGRP_LOADAVG_IN_THREAD_MAX, 1);
+		}
+	} while ((cp = cp->cpu_next) != cpu_list);
+
+	vminfo.freemem += freemem;
+	avail = MAX((spgcnt_t)(availrmem - swapfs_minfree), 0);
+
+	maxswap = k_anoninfo.ani_mem_resv + k_anoninfo.ani_max + avail;
+	/* Update ani_free */
+	set_anoninfo();
+	free = k_anoninfo.ani_free + avail;
+	resv = k_anoninfo.ani_phys_resv + k_anoninfo.ani_mem_resv;
+
+	vminfo.swap_resv += resv;
+	/* number of reserved and allocated pages */
+#ifdef	DEBUG
+	if (maxswap < free)
+		cmn_err(CE_WARN, "clock: maxswap < free");
+	if (maxswap < resv)
+		cmn_err(CE_WARN, "clock: maxswap < resv");
+#endif
+	vminfo.swap_alloc += maxswap - free;
+	vminfo.swap_avail += maxswap - resv;
+	vminfo.swap_free += free;
+	vminfo.updates++;
+
+	if (nrunnable) {
+		sysinfo.runque += nrunnable;
+		sysinfo.runocc++;
+	}
+	if (nswapped) {
+		sysinfo.swpque += nswapped;
+		sysinfo.swpocc++;
+	}
+	sysinfo.waiting += w_io;
+	sysinfo.updates++;
+
+	/*
+	 * Wake up fsflush to write out DELWRI
+	 * buffers, dirty pages and other cached
+	 * administrative data, e.g. inodes.
+	 */
+	if (--fsflushcnt <= 0) {
+		fsflushcnt = tune.t_fsflushr;
+		cv_signal(&fsflush_cv);
+	}
+
+	vmmeter();
+	calcloadavg(genloadavg(&loadavg), hp_avenrun);
+	for (i = 0; i < 3; i++)
+		/*
+		 * At the moment avenrun[] can only hold 31
+		 * bits of load average as it is a signed
+		 * int in the API. We need to ensure that
+		 * hp_avenrun[i] >> (16 - FSHIFT) will not be
+		 * too large. If it is, we put the largest value
+		 * that we can use into avenrun[i]. This is
+		 * kludgey, but about all we can do until we
+		 * avenrun[] is declared as an array of uint64[]
+		 */
+		if (hp_avenrun[i] < ((uint64_t)1<<(31+16-FSHIFT)))
+			avenrun[i] = (int32_t)(hp_avenrun[i] >>
+				    (16 - FSHIFT));
+		else
+			avenrun[i] = 0x7fffffff;
+
+	cpupart = cp_list_head;
+	do {
+		calcloadavg(genloadavg(&cpupart->cp_loadavg),
+		    cpupart->cp_hp_avenrun);
+	} while ((cpupart = cpupart->cp_next) != cp_list_head);
+
+	loadavg_update();
 }
 
 void
 clock_init(void)
 {
-	cyc_handler_t clk_hdlr, lbolt_hdlr;
-	cyc_time_t clk_when, lbolt_when;
+	cyc_handler_t clk_hdlr, lbolt_hdlr,load_averages_hdlr;
+	cyc_time_t clk_when, lbolt_when, load_averages_when;
 	int i, sz;
 	intptr_t buf;
 
@@ -924,6 +916,17 @@ clock_init(void)
 
 	clk_when.cyt_when = 0;
 	clk_when.cyt_interval = nsec_per_tick;
+
+	/*
+	 * Setup handler and timer for load_averages cyclic.
+	 */
+
+	load_averages_hdlr.cyh_func = (cyc_func_t)recompute_load_averages;
+	load_averages_hdlr.cyh_level = CY_LOCK_LEVEL;
+	load_averages_hdlr.cyh_arg = NULL;
+
+	load_averages_when.cyt_when = 0;
+	load_averages_when.cyt_interval = SEC2NSEC(1);
 
 	/*
 	 * The lbolt cyclic will be reprogramed to fire at a nsec_per_tick
@@ -995,12 +998,14 @@ clock_init(void)
 	}
 
 	/*
-	 * Grab cpu_lock and install all three cyclics.
+	 * Grab cpu_lock and install all four cyclics.
 	 */
 	mutex_enter(&cpu_lock);
 
 	clock_cyclic = cyclic_add(&clk_hdlr, &clk_when);
 	lb_info->id.lbi_cyclic_id = cyclic_add(&lbolt_hdlr, &lbolt_when);
+	recompute_load_averages_cyclic =
+	    cyclic_add(&load_averages_hdlr, &load_averages_when);
 
 	mutex_exit(&cpu_lock);
 }
