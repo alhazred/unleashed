@@ -40,7 +40,7 @@ POFILE=		sgs.po
 
 POFILES=	ld		ldd		libld		liblddbg \
 		librtld		rtld		libelf		ldprof \
-		libcrle		crle		moe		pvs \
+		libcrle		crle		pvs \
 		elfdump		elfedit		elfwrap		lari \
 	        ar
 

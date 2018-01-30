@@ -166,7 +166,6 @@ MAN = acctcom.1 \
       mkdir.1 \
       mkmsgs.1 \
       mktemp.1 \
-      moe.1 \
       mpss.so.1.1 \
       msgcc.1 \
       msgcpp.1 \

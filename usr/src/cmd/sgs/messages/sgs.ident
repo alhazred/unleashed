@@ -46,7 +46,6 @@ MSG_ID_LDD		21	SUNW_OST_SGS		/* sgs/ldd */
 MSG_ID_PVS		22	SUNW_OST_SGS		/* sgs/pvs */
 MSG_ID_CRLE		23	SUNW_OST_SGS		/* sgs/crle */
 MSG_ID_ELFDUMP		24	SUNW_OST_SGS		/* sgs/elfdump */
-MSG_ID_MOE		25	SUNW_OST_SGS		/* sgs/moe */
 MSG_ID_ELFEDIT		26	SUNW_OST_SGS		/* sgs/elfedit */
 MSG_ID_ELFEDIT_CAP	27	SUNW_OST_SGS		/* 	cap: */
 MSG_ID_ELFEDIT_DYN	27	SUNW_OST_SGS		/*	dyn: */

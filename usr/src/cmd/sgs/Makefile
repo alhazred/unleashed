@@ -66,7 +66,6 @@ SUBDIRS=	libconv		\
 		lorder		\
 		m4		\
 		mcs		\
-		moe		\
 		nm		\
 		prof		\
 		ranlib		\
@@ -82,7 +81,7 @@ POFILES=	$(POSUBDIRS:%=%/%.po)
 MSGSUBDIRS=	ld		ldd		libld		liblddbg \
 		libldstab	librtld		rtld		libelf \
 		ldprof		libcrle		pvs		elfdump	\
-		elfedit		crle		moe 		lari \
+		elfedit		crle		lari \
 		librtld_db	elfwrap		ar
 
 MSGDIR=		messages
