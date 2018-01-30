@@ -387,7 +387,6 @@ static void calcloadavg(int, uint64_t *);
 static int genloadavg(struct loadavg_s *);
 static void loadavg_update();
 
-void (*cmm_clock_callout)() = NULL;
 void (*cpucaps_clock_callout)() = NULL;
 
 extern clock_t clock_tick_proc_max;
@@ -464,9 +463,6 @@ clock(void)
 	 * system.  Copy the function pointer so that we can reset
 	 * this to NULL if needed.
 	 */
-	if ((funcp = cmm_clock_callout) != NULL)
-		(*funcp)();
-
 	if ((funcp = cpucaps_clock_callout) != NULL)
 		(*funcp)();
 }
