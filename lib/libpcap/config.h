@@ -5,7 +5,7 @@
 /* #undef BDEBUG */
 
 /* define if you have a cloning BPF device */
-/* #undef HAVE_CLONING_BPF */
+#define HAVE_CLONING_BPF 1
 
 /* define if you have the DAG API */
 /* #undef HAVE_DAG_API */
@@ -30,7 +30,7 @@
 /* #undef HAVE_DEV_DLPI */
 
 /* if passive_req_t primitive exists */
-#define HAVE_DLPI_PASSIVE 1
+/* #undef HAVE_DLPI_PASSIVE */
 
 /* Define to 1 if you have the `ether_hostton' function. */
 #define HAVE_ETHER_HOSTTON 1
@@ -51,7 +51,7 @@
 #define HAVE_INTTYPES_H 1
 
 /* if libdlpi exists */
-#define HAVE_LIBDLPI 1
+/* #undef HAVE_LIBDLPI */
 
 /* if libnl exists */
 /* #undef HAVE_LIBNL */
@@ -180,7 +180,7 @@
 /* #undef HAVE_SYS_BITYPES_H */
 
 /* Define to 1 if you have the <sys/bufmod.h> header file. */
-#define HAVE_SYS_BUFMOD_H 1
+/* #undef HAVE_SYS_BUFMOD_H */
 
 /* Define to 1 if you have the <sys/dlpi_ext.h> header file. */
 /* #undef HAVE_SYS_DLPI_EXT_H */

@@ -10,7 +10,7 @@ SRCS= ${GENSRCS}
 
 BUILDFIRST = ${GENSRCS} 
 
-SRCS+=	pcap-libdlpi.c fad-getad.c pcap.c inet.c fad-helpers.c \
+SRCS+=	pcap-bpf.c fad-getad.c pcap.c inet.c fad-helpers.c \
 	gencode.c optimize.c nametoaddr.c etherent.c savefile.c \
 	sf-pcap.c sf-pcap-ng.c pcap-common.c bpf_image.c bpf_dump.c bpf_filter.c \
 	dlpisubs.c ${GENSRCS} 
@@ -97,7 +97,7 @@ SHLIB_LDADD+=   -M${PCAP_DISTDIR}/mapfile
 .PATH:	${PCAP_DISTDIR}
 
 grammar.c:	
-	bison -y -p pcap_ -o grammar.c -d ${PCAP_DISTDIR}/grammar.y
+	bison -Wno-conflicts-sr -y -p pcap_ -o grammar.c -d ${PCAP_DISTDIR}/grammar.y
 
 scanner.c: grammar.c
 	flex -P pcap_ --header-file=scanner.h --nounput -o scanner.c ${PCAP_DISTDIR}/scanner.l

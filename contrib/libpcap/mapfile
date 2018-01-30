@@ -95,7 +95,6 @@ pcap_cleanup_live_common;
 pcap_close;
 pcap_compile;
 pcap_compile_nopcap;
-pcap_conf_bufmod;
 pcap_create;
 pcap_create_common;
 pcap_create_interface;
