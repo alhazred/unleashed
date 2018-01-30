@@ -396,9 +396,11 @@ static int64_t deadman_counter = 0;
 
 static void recompute_load_averages(void);
 static void onesec_time_adjustments(void);
+static void onesec_waiters(void);
 
 cyclic_id_t recompute_load_averages_cyclic;
 cyclic_id_t onesec_time_adjustments_cyclic;
+cyclic_id_t onesec_waiters_cyclic;
 
 static void
 clock(void)
@@ -453,9 +455,6 @@ clock(void)
 	 *
 	 * Continue with the interrupt processing as scheduled.
 	 */
-	if (one_sec) {
-		deadman_counter++;
-	}
 
 	clock_tick_schedule(one_sec);
 
@@ -470,21 +469,6 @@ clock(void)
 
 	if ((funcp = cpucaps_clock_callout) != NULL)
 		(*funcp)();
-
-	/*
-	 * Wakeup the cageout thread waiters once per second.
-	 */
-	if (one_sec)
-		kcage_tick();
-
-	if (one_sec) {
-		one_sec = 0;
-
-		/*
-		 * Some drivers still depend on this... XXX
-		 */
-		cv_broadcast(&lbolt_cv);
-	}
 }
 
 static void
@@ -905,13 +889,32 @@ onesec_time_adjustments(void)
 	mutex_exit(&tod_lock);
 }
 
+static void
+onesec_waiters(void)
+{
+	deadman_counter++;
+
+	/*
+	 * Wakeup the cageout thread waiters once per second.
+	 */
+
+	kcage_tick();
+
+	one_sec = 0;
+
+	/*
+	 * Some drivers still depend on this... XXX
+	 */
+	cv_broadcast(&lbolt_cv);
+}
+
 void
 clock_init(void)
 {
 	cyc_handler_t clk_hdlr, lbolt_hdlr,load_averages_hdlr;
 	cyc_time_t clk_when, lbolt_when, load_averages_when;
-	cyc_handler_t onesec_time_adjustments_hdlr;
-	cyc_time_t onesec_time_adjustments_when;
+	cyc_handler_t onesec_time_adjustments_hdlr, onesec_waiters_hdlr;
+	cyc_time_t onesec_time_adjustments_when, onesec_waiters_when;
 	int i, sz;
 	intptr_t buf;
 
@@ -946,6 +949,17 @@ clock_init(void)
 
 	onesec_time_adjustments_when.cyt_when = 0;
 	onesec_time_adjustments_when.cyt_interval = SEC2NSEC(1);
+
+	/*
+	 * Setup handler and timer for onesec_waiters cyclic.
+	 */
+
+	onesec_waiters_hdlr.cyh_func = (cyc_func_t)onesec_waiters;
+	onesec_waiters_hdlr.cyh_level = CY_LOCK_LEVEL;
+	onesec_waiters_hdlr.cyh_arg = NULL;
+
+	onesec_waiters_when.cyt_when = 0;
+	onesec_waiters_when.cyt_interval = SEC2NSEC(1);
 
 	/*
 	 * The lbolt cyclic will be reprogramed to fire at a nsec_per_tick
@@ -1017,7 +1031,7 @@ clock_init(void)
 	}
 
 	/*
-	 * Grab cpu_lock and install all five cyclics.
+	 * Grab cpu_lock and install all six cyclics.
 	 */
 	mutex_enter(&cpu_lock);
 
@@ -1027,6 +1041,7 @@ clock_init(void)
 	    cyclic_add(&load_averages_hdlr, &load_averages_when);
 	onesec_time_adjustments_cyclic =
 	    cyclic_add(&onesec_time_adjustments_hdlr, &onesec_time_adjustments_when);
+	onesec_waiters_cyclic = cyclic_add(&onesec_waiters_hdlr, &onesec_waiters_when);
 
 	mutex_exit(&cpu_lock);
 }
