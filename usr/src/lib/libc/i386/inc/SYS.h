@@ -67,44 +67,10 @@
 	movl	$SYS_##name, %eax;	\
 	int	$T_SYSCALLINT
 
-/*
- * __SYSENTER provides a faster variant that is only able to
- * return rval1.  Note that %ecx and %edx are ALWAYS smashed.
- */
-#define	__SYSENTER(name)		\
-	call	8f;			\
-8:	popl	%edx;			\
-	/* CSTYLED */			\
-	movl	$SYS_##name, %eax;	\
-	movl	%esp, %ecx;		\
-	add	$[9f - 8b], %edx;	\
-	sysenter;			\
-9:
-
-/*
- * __SYSCALL provides a faster variant on processors and kernels
- * that support it.  Note that %ecx is ALWAYS smashed.
- */
-#define	__SYSCALL(name)			\
-	/* CSTYLED */			\
-	movl	$SYS_##name, %eax;	\
-	.byte	0xf, 0x5	/* syscall */
-
-#if defined(_SYSC_INSN)
-#define	SYSTRAP_RVAL1(name)	__SYSCALL(name)
-#define	SYSTRAP_RVAL2(name)	__SYSCALL(name)
-#define	SYSTRAP_2RVALS(name)	__SYSCALL(name)
-#define	SYSTRAP_64RVAL(name)	__SYSCALL(name)
-#else	/* _SYSC_INSN */
-#if defined(_SEP_INSN)
-#define	SYSTRAP_RVAL1(name)	__SYSENTER(name)
-#else	/* _SEP_INSN */
 #define	SYSTRAP_RVAL1(name)	__SYSCALLINT(name)
-#endif	/* _SEP_INSN */
 #define	SYSTRAP_RVAL2(name)	__SYSCALLINT(name)
 #define	SYSTRAP_2RVALS(name)	__SYSCALLINT(name)
 #define	SYSTRAP_64RVAL(name)	__SYSCALLINT(name)
-#endif	/* _SYSC_INSN */
 
 /*
  * SYSFASTTRAP provides the fast system call trap sequence.  It assumes

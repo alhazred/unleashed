@@ -40,18 +40,7 @@
 	popl	%edx		/ return address
 	popl	%eax		/ system call number
 	pushl	%edx
-#if defined(_SYSC_INSN)
-	.byte	0xf, 0x5	/* syscall */
-#elif defined(_SEP_INSN)
-	call	8f
-8:	popl	%edx
-	movl	%esp, %ecx
-	addl	$[9f - 8b], %edx
-	sysenter
-9:
-#else
 	int	$T_SYSCALLINT
-#endif
 	movl	0(%esp), %edx
 	pushl	%edx		/ restore the return address
 	SYSCERROR
