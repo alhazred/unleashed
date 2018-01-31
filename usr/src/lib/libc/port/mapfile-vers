@@ -1203,6 +1203,7 @@ SYMBOL_VERSION SUNW_1.18 {	# SunOS 5.7 (Solaris 7)
     protected:
 	btowc;
 	__fbufsize;
+	__fseterr;
 	__freadahead;
 	__flbf;
 	_flushlbf;

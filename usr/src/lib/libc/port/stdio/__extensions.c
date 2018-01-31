@@ -126,6 +126,19 @@ __fbufsize(FILE *stream)
 	return (size);
 }
 
+/*
+ * Marks the given stream as error'd.
+ */
+void
+__fseterr(FILE *stream)
+{
+	rmutex_t *lk;
+
+	FLOCKFILE(lk, stream);
+	stream->_flag |= _IOERR;
+	FUNLOCKFILE(lk);
+}
+
 size_t __freadahead(FILE *stream)
 {
 	rmutex_t *lk;
