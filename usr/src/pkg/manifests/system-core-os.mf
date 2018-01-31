@@ -597,7 +597,6 @@ file path=usr/bin/$(ARCH64)/crle mode=0555
 file path=usr/bin/$(ARCH64)/decrypt mode=0555
 file path=usr/bin/$(ARCH64)/digest mode=0555
 file path=usr/bin/$(ARCH64)/ls mode=0555
-file path=usr/bin/$(ARCH64)/moe mode=0555
 file path=usr/bin/$(ARCH64)/newtask group=sys mode=4555
 file path=usr/bin/$(ARCH64)/nohup mode=0555
 file path=usr/bin/$(ARCH64)/prctl mode=0555
@@ -692,7 +691,6 @@ file path=usr/bin/mesg mode=0555
 file path=usr/bin/mkdir mode=0555
 file path=usr/bin/mkpwdict mode=0555
 file path=usr/bin/mktemp mode=0555
-file path=usr/bin/moe mode=0555
 file path=usr/bin/mpstat mode=0555
 file path=usr/bin/mt mode=0555
 file path=usr/bin/netstat mode=0555

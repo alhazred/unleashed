@@ -113,7 +113,6 @@ file path=usr/share/man/man1/mailx.1
 file path=usr/share/man/man1/mesg.1
 file path=usr/share/man/man1/mkdir.1
 file path=usr/share/man/man1/mktemp.1
-file path=usr/share/man/man1/moe.1
 file path=usr/share/man/man1/more.1
 file path=usr/share/man/man1/mt.1
 file path=usr/share/man/man1/mv.1

@@ -330,15 +330,6 @@ get_zonepath_ds() {
 #
 post_unpack()
 {
-	#
-	# Check if the image was created with a valid libc.so.1.
-	#
-	hwcap=`moe -v -32 $ZONEROOT/lib/libc.so.1 2>&1`
-	if (( $? != 0 )); then
-		vlog "$f_hwcap_info" "$hwcap"
-		fail_fatal "$f_sanity_hwcap"
-	fi
-
 	( cd "$ZONEROOT" && \
 	    find . \( -type b -o -type c \) -exec rm -f "{}" \; )
 }
@@ -1023,11 +1014,6 @@ e_root_full=$(gettext "Zonepath root %s exists and contains data; remove or move
 f_mkdir=$(gettext "Unable to create directory %s.")
 f_chmod=$(gettext "Unable to chmod directory %s.")
 f_chown=$(gettext "Unable to chown directory %s.")
-f_hwcap_info=$(gettext "HWCAP: %s\n")
-f_sanity_hwcap=$(gettext \
-"The image was created with an incompatible libc.so.1 hwcap lofs mount.\n"\
-"       The zone will not boot on this platform.  See the zone's\n"\
-"       documentation for the recommended way to create the archive.")
 
 m_analyse_archive=$(gettext "Analysing the archive")
 

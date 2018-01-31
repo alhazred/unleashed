@@ -98,7 +98,6 @@ dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/cfgadm
 dir path=usr/lib/cfgadm/$(ARCH64)
 dir path=usr/lib/iconv/$(ARCH64)
-$(i386_ONLY)dir path=usr/lib/libc
 dir path=usr/lib/lwp
 dir path=usr/lib/lwp/$(ARCH64)
 dir path=usr/lib/python$(PYTHON_VERSION)
@@ -378,8 +377,6 @@ file path=usr/lib/lib.b mode=0444
 file path=usr/lib/libads.so.1
 file path=usr/lib/libadutils.so.1
 file path=usr/lib/libbsdmalloc.so.1
-$(i386_ONLY)file path=usr/lib/libc/libc_hwcap1.so.1 reboot-needed=true
-$(i386_ONLY)file path=usr/lib/libc/libc_hwcap2.so.1 reboot-needed=true
 file path=usr/lib/libcfgadm.so.1
 file path=usr/lib/libcommputil.so.1
 file path=usr/lib/libcrle.so.1
