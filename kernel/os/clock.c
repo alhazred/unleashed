@@ -26,6 +26,7 @@
  * Copyright (c) 2013, Joyent, Inc.  All rights reserved.
  * Copyright (c) 2015, Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  * Copyright (c) 2016 by Delphix. All rights reserved.
+ * Copyright (c) 2018, Carlos Neira  <cneirabustos@gmail.com>
  */
 
 #include <sys/param.h>
@@ -386,29 +387,27 @@ static void calcloadavg(int, uint64_t *);
 static int genloadavg(struct loadavg_s *);
 static void loadavg_update();
 
-void (*cmm_clock_callout)() = NULL;
 void (*cpucaps_clock_callout)() = NULL;
 
 extern clock_t clock_tick_proc_max;
 
 static int64_t deadman_counter = 0;
 
+static void recompute_load_averages(void);
+static void onesec_time_adjustments(void);
+static void onesec_waiters(void);
+
+cyclic_id_t recompute_load_averages_cyclic;
+cyclic_id_t onesec_time_adjustments_cyclic;
+cyclic_id_t onesec_waiters_cyclic;
+
 static void
 clock(void)
 {
-	kthread_t	*t;
-	uint_t	nrunnable;
-	uint_t	w_io;
-	cpu_t	*cp;
-	cpupart_t *cpupart;
 	extern	void	set_freemem();
 	void	(*funcp)();
 	int32_t ltemp;
-	int64_t lltemp;
 	int s;
-	int do_lgrp_load;
-	int i;
-	clock_t now = LBOLT_NO_ACCOUNT;	/* current tick */
 
 	if (panicstr)
 		return;
@@ -455,6 +454,30 @@ clock(void)
 	 *
 	 * Continue with the interrupt processing as scheduled.
 	 */
+
+	clock_tick_schedule(one_sec);
+
+	/*
+	 * Check for a callout that needs be called from the clock
+	 * thread to support the membership protocol in a clustered
+	 * system.  Copy the function pointer so that we can reset
+	 * this to NULL if needed.
+	 */
+	if ((funcp = cpucaps_clock_callout) != NULL)
+		(*funcp)();
+}
+
+static void
+recompute_load_averages(void)
+{
+	kthread_t	*t;
+	uint_t	nrunnable;
+	uint_t	w_io;
+	cpu_t	*cp;
+	cpupart_t *cpupart;
+	int i;
+	pgcnt_t maxswap, resv, free, avail;
+
 	/*
 	 * Count the number of runnable threads and the number waiting
 	 * for some form of I/O to complete -- gets added to
@@ -462,23 +485,9 @@ clock(void)
 	 * wait counts from all CPUs.  Also add up the per-partition
 	 * statistics.
 	 */
+
 	w_io = 0;
 	nrunnable = 0;
-
-	/*
-	 * keep track of when to update lgrp/part loads
-	 */
-
-	do_lgrp_load = 0;
-	if (lgrp_ticks++ >= hz / 10) {
-		lgrp_ticks = 0;
-		do_lgrp_load = 1;
-	}
-
-	if (one_sec) {
-		loadavg_update();
-		deadman_counter++;
-	}
 
 	/*
 	 * First count the threads waiting on kpreempt queues in each
@@ -492,10 +501,8 @@ clock(void)
 		cpupart->cp_updates++;
 		nrunnable += cpupart_nrunnable;
 		cpupart->cp_nrunnable_cum += cpupart_nrunnable;
-		if (one_sec) {
-			cpupart->cp_nrunning = 0;
-			cpupart->cp_nrunnable = cpupart_nrunnable;
-		}
+		cpupart->cp_nrunning = 0;
+		cpupart->cp_nrunnable = cpupart_nrunnable;
 	} while ((cpupart = cpupart->cp_next) != cp_list_head);
 
 
@@ -507,22 +514,20 @@ clock(void)
 		nrunnable += cpu_nrunnable;
 		cpupart = cp->cpu_part;
 		cpupart->cp_nrunnable_cum += cpu_nrunnable;
-		if (one_sec) {
-			cpupart->cp_nrunnable += cpu_nrunnable;
-			/*
-			 * Update user, system, and idle cpu times.
-			 */
-			cpupart->cp_nrunning++;
-			/*
-			 * w_io is used to update sysinfo.waiting during
-			 * one_second processing below.  Only gather w_io
-			 * information when we walk the list of cpus if we're
-			 * going to perform one_second processing.
-			 */
-			w_io += CPU_STATS(cp, sys.iowait);
-		}
+		cpupart->cp_nrunnable += cpu_nrunnable;
+		/*
+		 * Update user, system, and idle cpu times.
+		 */
+		cpupart->cp_nrunning++;
+		/*
+		 * w_io is used to update sysinfo.waiting during
+		 * one_second processing below.  Only gather w_io
+		 * information when we walk the list of cpus if we're
+		 * going to perform one_second processing.
+		 */
+		w_io += CPU_STATS(cp, sys.iowait);
 
-		if (one_sec && (cp->cpu_flags & CPU_EXISTS)) {
+		if (cp->cpu_flags & CPU_EXISTS) {
 			int i, load, change;
 			hrtime_t intracct, intrused;
 			const hrtime_t maxnsec = 1000000000;
@@ -563,8 +568,7 @@ clock(void)
 			    hrtime_t, intrused);
 		}
 
-		if (do_lgrp_load &&
-		    (cp->cpu_flags & CPU_EXISTS)) {
+		if (cp->cpu_flags & CPU_EXISTS) {
 			/*
 			 * When updating the lgroup's load average,
 			 * account for the thread running on the CPU.
@@ -613,305 +617,300 @@ clock(void)
 		}
 	} while ((cp = cp->cpu_next) != cpu_list);
 
-	clock_tick_schedule(one_sec);
+	vminfo.freemem += freemem;
+	avail = MAX((spgcnt_t)(availrmem - swapfs_minfree), 0);
+
+	maxswap = k_anoninfo.ani_mem_resv + k_anoninfo.ani_max + avail;
+	/* Update ani_free */
+	set_anoninfo();
+	free = k_anoninfo.ani_free + avail;
+	resv = k_anoninfo.ani_phys_resv + k_anoninfo.ani_mem_resv;
+
+	vminfo.swap_resv += resv;
+	/* number of reserved and allocated pages */
+#ifdef	DEBUG
+	if (maxswap < free)
+		cmn_err(CE_WARN, "clock: maxswap < free");
+	if (maxswap < resv)
+		cmn_err(CE_WARN, "clock: maxswap < resv");
+#endif
+	vminfo.swap_alloc += maxswap - free;
+	vminfo.swap_avail += maxswap - resv;
+	vminfo.swap_free += free;
+	vminfo.updates++;
+
+	if (nrunnable) {
+		sysinfo.runque += nrunnable;
+		sysinfo.runocc++;
+	}
+	if (nswapped) {
+		sysinfo.swpque += nswapped;
+		sysinfo.swpocc++;
+	}
+	sysinfo.waiting += w_io;
+	sysinfo.updates++;
 
 	/*
-	 * Check for a callout that needs be called from the clock
-	 * thread to support the membership protocol in a clustered
-	 * system.  Copy the function pointer so that we can reset
-	 * this to NULL if needed.
+	 * Wake up fsflush to write out DELWRI
+	 * buffers, dirty pages and other cached
+	 * administrative data, e.g. inodes.
 	 */
-	if ((funcp = cmm_clock_callout) != NULL)
-		(*funcp)();
+	if (--fsflushcnt <= 0) {
+		fsflushcnt = tune.t_fsflushr;
+		cv_signal(&fsflush_cv);
+	}
 
-	if ((funcp = cpucaps_clock_callout) != NULL)
-		(*funcp)();
+	vmmeter();
+	calcloadavg(genloadavg(&loadavg), hp_avenrun);
+	for (i = 0; i < 3; i++)
+		/*
+		 * At the moment avenrun[] can only hold 31
+		 * bits of load average as it is a signed
+		 * int in the API. We need to ensure that
+		 * hp_avenrun[i] >> (16 - FSHIFT) will not be
+		 * too large. If it is, we put the largest value
+		 * that we can use into avenrun[i]. This is
+		 * kludgey, but about all we can do until we
+		 * avenrun[] is declared as an array of uint64[]
+		 */
+		if (hp_avenrun[i] < ((uint64_t)1<<(31+16-FSHIFT)))
+			avenrun[i] = (int32_t)(hp_avenrun[i] >>
+				    (16 - FSHIFT));
+		else
+			avenrun[i] = 0x7fffffff;
+
+	cpupart = cp_list_head;
+	do {
+		calcloadavg(genloadavg(&cpupart->cp_loadavg),
+		    cpupart->cp_hp_avenrun);
+	} while ((cpupart = cpupart->cp_next) != cp_list_head);
+
+	loadavg_update();
+}
+
+static void
+onesec_time_adjustments(void)
+{
+	int drift, absdrift;
+	timestruc_t tod;
+	int64_t lltemp;
+	clock_t now = LBOLT_NO_ACCOUNT;	/* current tick */
+	int s;
+
+	/*
+	 * Beginning of precision-kernel code fragment executed
+	 * every second.
+	 *
+	 * On rollover of the second the phase adjustment to be
+	 * used for the next second is calculated.  Also, the
+	 * maximum error is increased by the tolerance.  If the
+	 * PPS frequency discipline code is present, the phase is
+	 * increased to compensate for the CPU clock oscillator
+	 * frequency error.
+	 *
+	 * On a 32-bit machine and given parameters in the timex.h
+	 * header file, the maximum phase adjustment is +-512 ms
+	 * and maximum frequency offset is (a tad less than)
+	 * +-512 ppm. On a 64-bit machine, you shouldn't need to ask.
+	 */
+	time_maxerror += time_tolerance / SCALE_USEC;
+
+	/*
+	 * Leap second processing. If in leap-insert state at
+	 * the end of the day, the system clock is set back one
+	 * second; if in leap-delete state, the system clock is
+	 * set ahead one second. The microtime() routine or
+	 * external clock driver will insure that reported time
+	 * is always monotonic. The ugly divides should be
+	 * replaced.
+	 */
+	switch (time_state) {
+
+	case TIME_OK:
+		if (time_status & STA_INS)
+			time_state = TIME_INS;
+		else if (time_status & STA_DEL)
+			time_state = TIME_DEL;
+		break;
+
+	case TIME_INS:
+		if (hrestime.tv_sec % 86400 == 0) {
+			s = hr_clock_lock();
+			hrestime.tv_sec--;
+			hr_clock_unlock(s);
+			time_state = TIME_OOP;
+		}
+		break;
+
+	case TIME_DEL:
+		if ((hrestime.tv_sec + 1) % 86400 == 0) {
+			s = hr_clock_lock();
+			hrestime.tv_sec++;
+			hr_clock_unlock(s);
+			time_state = TIME_WAIT;
+		}
+		break;
+
+	case TIME_OOP:
+		time_state = TIME_WAIT;
+		break;
+
+	case TIME_WAIT:
+		if (!(time_status & (STA_INS | STA_DEL)))
+			time_state = TIME_OK;
+	default:
+		break;
+	}
+
+	/*
+	 * Compute the phase adjustment for the next second. In
+	 * PLL mode, the offset is reduced by a fixed factor
+	 * times the time constant. In FLL mode the offset is
+	 * used directly. In either mode, the maximum phase
+	 * adjustment for each second is clamped so as to spread
+	 * the adjustment over not more than the number of
+	 * seconds between updates.
+	 */
+	if (time_offset == 0)
+		time_adj = 0;
+	else if (time_offset < 0) {
+		lltemp = -time_offset;
+		if (!(time_status & STA_FLL)) {
+			if ((1 << time_constant) >= SCALE_KG)
+				lltemp *= (1 << time_constant) /
+				    SCALE_KG;
+			else
+				lltemp = (lltemp / SCALE_KG) >>
+				    time_constant;
+		}
+		if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
+		lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
+		time_offset += lltemp;
+		time_adj = -(lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
+	} else {
+		lltemp = time_offset;
+		if (!(time_status & STA_FLL)) {
+			if ((1 << time_constant) >= SCALE_KG)
+				lltemp *= (1 << time_constant) /
+				    SCALE_KG;
+			else
+				lltemp = (lltemp / SCALE_KG) >>
+				    time_constant;
+		}
+		if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
+			lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
+			time_offset -= lltemp;
+			time_adj = (lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
+	}
+
+	/*
+	 * Compute the frequency estimate and additional phase
+	 * adjustment due to frequency error for the next
+	 * second. When the PPS signal is engaged, gnaw on the
+	 * watchdog counter and update the frequency computed by
+	 * the pll and the PPS signal.
+	 */
+	pps_valid++;
+	if (pps_valid == PPS_VALID) {
+		pps_jitter = MAXTIME;
+		pps_stabil = MAXFREQ;
+		time_status &= ~(STA_PPSSIGNAL | STA_PPSJITTER |
+		    STA_PPSWANDER | STA_PPSERROR);
+	}
+	lltemp = time_freq + pps_freq;
+
+	if (lltemp)
+		time_adj += (lltemp * SCALE_PHASE) / (SCALE_USEC * hz);
+
+	/*
+	 * End of precision kernel-code fragment
+	 *
+	 * The section below should be modified if we are planning
+	 * to use NTP for synchronization.
+	 *
+	 * Note: the clock synchronization code now assumes
+	 * the following:
+	 *   - if dosynctodr is 1, then compute the drift between
+	 *	the tod chip and software time and adjust one or
+	 *	the other depending on the circumstances
+	 *
+	 *   - if dosynctodr is 0, then the tod chip is independent
+	 *	of the software clock and should not be adjusted,
+	 *	but allowed to free run.  this allows NTP to sync.
+	 *	hrestime without any interference from the tod chip.
+	 */
+
+	tod_validate_deferred = B_FALSE;
+	mutex_enter(&tod_lock);
+	tod = tod_get();
+	drift = tod.tv_sec - hrestime.tv_sec;
+	absdrift = (drift >= 0) ? drift : -drift;
+	if (tod_needsync || absdrift > 1) {
+		int s;
+		if (absdrift > 2) {
+			if (!tod_broken && tod_faulted == TOD_NOFAULT) {
+				s = hr_clock_lock();
+				hrestime = tod;
+				membar_enter();	/* hrestime visible */
+				timedelta = 0;
+				timechanged++;
+				tod_needsync = 0;
+				hr_clock_unlock(s);
+				callout_hrestime();
+
+			}
+		} else {
+			if (tod_needsync || !dosynctodr) {
+				gethrestime(&tod);
+				tod_set(tod);
+				s = hr_clock_lock();
+				if (timedelta == 0)
+					tod_needsync = 0;
+				hr_clock_unlock(s);
+			} else {
+				/*
+				 * If the drift is 2 seconds on the
+				 * money, then the TOD is adjusting
+				 * the clock;  record that.
+				 */
+				clock_adj_hist[adj_hist_entry++ %
+				    CLOCK_ADJ_HIST_SIZE] = now;
+				s = hr_clock_lock();
+				timedelta = (int64_t)drift*NANOSEC;
+				hr_clock_unlock(s);
+			}
+		}
+	}
+	time = gethrestime_sec();  /* for crusty old kmem readers */
+	mutex_exit(&tod_lock);
+}
+
+static void
+onesec_waiters(void)
+{
+	deadman_counter++;
 
 	/*
 	 * Wakeup the cageout thread waiters once per second.
 	 */
-	if (one_sec)
-		kcage_tick();
 
-	if (one_sec) {
+	kcage_tick();
 
-		int drift, absdrift;
-		timestruc_t tod;
-		int s;
+	one_sec = 0;
 
-		/*
-		 * Beginning of precision-kernel code fragment executed
-		 * every second.
-		 *
-		 * On rollover of the second the phase adjustment to be
-		 * used for the next second is calculated.  Also, the
-		 * maximum error is increased by the tolerance.  If the
-		 * PPS frequency discipline code is present, the phase is
-		 * increased to compensate for the CPU clock oscillator
-		 * frequency error.
-		 *
-		 * On a 32-bit machine and given parameters in the timex.h
-		 * header file, the maximum phase adjustment is +-512 ms
-		 * and maximum frequency offset is (a tad less than)
-		 * +-512 ppm. On a 64-bit machine, you shouldn't need to ask.
-		 */
-		time_maxerror += time_tolerance / SCALE_USEC;
-
-		/*
-		 * Leap second processing. If in leap-insert state at
-		 * the end of the day, the system clock is set back one
-		 * second; if in leap-delete state, the system clock is
-		 * set ahead one second. The microtime() routine or
-		 * external clock driver will insure that reported time
-		 * is always monotonic. The ugly divides should be
-		 * replaced.
-		 */
-		switch (time_state) {
-
-		case TIME_OK:
-			if (time_status & STA_INS)
-				time_state = TIME_INS;
-			else if (time_status & STA_DEL)
-				time_state = TIME_DEL;
-			break;
-
-		case TIME_INS:
-			if (hrestime.tv_sec % 86400 == 0) {
-				s = hr_clock_lock();
-				hrestime.tv_sec--;
-				hr_clock_unlock(s);
-				time_state = TIME_OOP;
-			}
-			break;
-
-		case TIME_DEL:
-			if ((hrestime.tv_sec + 1) % 86400 == 0) {
-				s = hr_clock_lock();
-				hrestime.tv_sec++;
-				hr_clock_unlock(s);
-				time_state = TIME_WAIT;
-			}
-			break;
-
-		case TIME_OOP:
-			time_state = TIME_WAIT;
-			break;
-
-		case TIME_WAIT:
-			if (!(time_status & (STA_INS | STA_DEL)))
-				time_state = TIME_OK;
-		default:
-			break;
-		}
-
-		/*
-		 * Compute the phase adjustment for the next second. In
-		 * PLL mode, the offset is reduced by a fixed factor
-		 * times the time constant. In FLL mode the offset is
-		 * used directly. In either mode, the maximum phase
-		 * adjustment for each second is clamped so as to spread
-		 * the adjustment over not more than the number of
-		 * seconds between updates.
-		 */
-		if (time_offset == 0)
-			time_adj = 0;
-		else if (time_offset < 0) {
-			lltemp = -time_offset;
-			if (!(time_status & STA_FLL)) {
-				if ((1 << time_constant) >= SCALE_KG)
-					lltemp *= (1 << time_constant) /
-					    SCALE_KG;
-				else
-					lltemp = (lltemp / SCALE_KG) >>
-					    time_constant;
-			}
-			if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
-				lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
-			time_offset += lltemp;
-			time_adj = -(lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
-		} else {
-			lltemp = time_offset;
-			if (!(time_status & STA_FLL)) {
-				if ((1 << time_constant) >= SCALE_KG)
-					lltemp *= (1 << time_constant) /
-					    SCALE_KG;
-				else
-					lltemp = (lltemp / SCALE_KG) >>
-					    time_constant;
-			}
-			if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
-				lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
-			time_offset -= lltemp;
-			time_adj = (lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
-		}
-
-		/*
-		 * Compute the frequency estimate and additional phase
-		 * adjustment due to frequency error for the next
-		 * second. When the PPS signal is engaged, gnaw on the
-		 * watchdog counter and update the frequency computed by
-		 * the pll and the PPS signal.
-		 */
-		pps_valid++;
-		if (pps_valid == PPS_VALID) {
-			pps_jitter = MAXTIME;
-			pps_stabil = MAXFREQ;
-			time_status &= ~(STA_PPSSIGNAL | STA_PPSJITTER |
-			    STA_PPSWANDER | STA_PPSERROR);
-		}
-		lltemp = time_freq + pps_freq;
-
-		if (lltemp)
-			time_adj += (lltemp * SCALE_PHASE) / (SCALE_USEC * hz);
-
-		/*
-		 * End of precision kernel-code fragment
-		 *
-		 * The section below should be modified if we are planning
-		 * to use NTP for synchronization.
-		 *
-		 * Note: the clock synchronization code now assumes
-		 * the following:
-		 *   - if dosynctodr is 1, then compute the drift between
-		 *	the tod chip and software time and adjust one or
-		 *	the other depending on the circumstances
-		 *
-		 *   - if dosynctodr is 0, then the tod chip is independent
-		 *	of the software clock and should not be adjusted,
-		 *	but allowed to free run.  this allows NTP to sync.
-		 *	hrestime without any interference from the tod chip.
-		 */
-
-		tod_validate_deferred = B_FALSE;
-		mutex_enter(&tod_lock);
-		tod = tod_get();
-		drift = tod.tv_sec - hrestime.tv_sec;
-		absdrift = (drift >= 0) ? drift : -drift;
-		if (tod_needsync || absdrift > 1) {
-			int s;
-			if (absdrift > 2) {
-				if (!tod_broken && tod_faulted == TOD_NOFAULT) {
-					s = hr_clock_lock();
-					hrestime = tod;
-					membar_enter();	/* hrestime visible */
-					timedelta = 0;
-					timechanged++;
-					tod_needsync = 0;
-					hr_clock_unlock(s);
-					callout_hrestime();
-
-				}
-			} else {
-				if (tod_needsync || !dosynctodr) {
-					gethrestime(&tod);
-					tod_set(tod);
-					s = hr_clock_lock();
-					if (timedelta == 0)
-						tod_needsync = 0;
-					hr_clock_unlock(s);
-				} else {
-					/*
-					 * If the drift is 2 seconds on the
-					 * money, then the TOD is adjusting
-					 * the clock;  record that.
-					 */
-					clock_adj_hist[adj_hist_entry++ %
-					    CLOCK_ADJ_HIST_SIZE] = now;
-					s = hr_clock_lock();
-					timedelta = (int64_t)drift*NANOSEC;
-					hr_clock_unlock(s);
-				}
-			}
-		}
-		one_sec = 0;
-		time = gethrestime_sec();  /* for crusty old kmem readers */
-		mutex_exit(&tod_lock);
-
-		/*
-		 * Some drivers still depend on this... XXX
-		 */
-		cv_broadcast(&lbolt_cv);
-
-		vminfo.freemem += freemem;
-		{
-			pgcnt_t maxswap, resv, free;
-			pgcnt_t avail =
-			    MAX((spgcnt_t)(availrmem - swapfs_minfree), 0);
-
-			maxswap = k_anoninfo.ani_mem_resv +
-			    k_anoninfo.ani_max +avail;
-			/* Update ani_free */
-			set_anoninfo();
-			free = k_anoninfo.ani_free + avail;
-			resv = k_anoninfo.ani_phys_resv +
-			    k_anoninfo.ani_mem_resv;
-
-			vminfo.swap_resv += resv;
-			/* number of reserved and allocated pages */
-#ifdef	DEBUG
-			if (maxswap < free)
-				cmn_err(CE_WARN, "clock: maxswap < free");
-			if (maxswap < resv)
-				cmn_err(CE_WARN, "clock: maxswap < resv");
-#endif
-			vminfo.swap_alloc += maxswap - free;
-			vminfo.swap_avail += maxswap - resv;
-			vminfo.swap_free += free;
-		}
-		vminfo.updates++;
-		if (nrunnable) {
-			sysinfo.runque += nrunnable;
-			sysinfo.runocc++;
-		}
-		if (nswapped) {
-			sysinfo.swpque += nswapped;
-			sysinfo.swpocc++;
-		}
-		sysinfo.waiting += w_io;
-		sysinfo.updates++;
-
-		/*
-		 * Wake up fsflush to write out DELWRI
-		 * buffers, dirty pages and other cached
-		 * administrative data, e.g. inodes.
-		 */
-		if (--fsflushcnt <= 0) {
-			fsflushcnt = tune.t_fsflushr;
-			cv_signal(&fsflush_cv);
-		}
-
-		vmmeter();
-		calcloadavg(genloadavg(&loadavg), hp_avenrun);
-		for (i = 0; i < 3; i++)
-			/*
-			 * At the moment avenrun[] can only hold 31
-			 * bits of load average as it is a signed
-			 * int in the API. We need to ensure that
-			 * hp_avenrun[i] >> (16 - FSHIFT) will not be
-			 * too large. If it is, we put the largest value
-			 * that we can use into avenrun[i]. This is
-			 * kludgey, but about all we can do until we
-			 * avenrun[] is declared as an array of uint64[]
-			 */
-			if (hp_avenrun[i] < ((uint64_t)1<<(31+16-FSHIFT)))
-				avenrun[i] = (int32_t)(hp_avenrun[i] >>
-				    (16 - FSHIFT));
-			else
-				avenrun[i] = 0x7fffffff;
-
-		cpupart = cp_list_head;
-		do {
-			calcloadavg(genloadavg(&cpupart->cp_loadavg),
-			    cpupart->cp_hp_avenrun);
-		} while ((cpupart = cpupart->cp_next) != cp_list_head);
-	}
+	/*
+	 * Some drivers still depend on this... XXX
+	 */
+	cv_broadcast(&lbolt_cv);
 }
 
 void
 clock_init(void)
 {
-	cyc_handler_t clk_hdlr, lbolt_hdlr;
-	cyc_time_t clk_when, lbolt_when;
+	cyc_handler_t clk_hdlr, lbolt_hdlr,load_averages_hdlr;
+	cyc_time_t clk_when, lbolt_when, load_averages_when;
+	cyc_handler_t onesec_time_adjustments_hdlr, onesec_waiters_hdlr;
+	cyc_time_t onesec_time_adjustments_when, onesec_waiters_when;
 	int i, sz;
 	intptr_t buf;
 
@@ -924,6 +923,39 @@ clock_init(void)
 
 	clk_when.cyt_when = 0;
 	clk_when.cyt_interval = nsec_per_tick;
+
+	/*
+	 * Setup handler and timer for load_averages cyclic.
+	 */
+
+	load_averages_hdlr.cyh_func = (cyc_func_t)recompute_load_averages;
+	load_averages_hdlr.cyh_level = CY_LOCK_LEVEL;
+	load_averages_hdlr.cyh_arg = NULL;
+
+	load_averages_when.cyt_when = 0;
+	load_averages_when.cyt_interval = SEC2NSEC(1);
+
+	/*
+	 * Setup handler and timer for onesec_time_adjustments cyclic.
+	 */
+
+	onesec_time_adjustments_hdlr.cyh_func = (cyc_func_t)onesec_time_adjustments;
+	onesec_time_adjustments_hdlr.cyh_level = CY_LOCK_LEVEL;
+	onesec_time_adjustments_hdlr.cyh_arg = NULL;
+
+	onesec_time_adjustments_when.cyt_when = 0;
+	onesec_time_adjustments_when.cyt_interval = SEC2NSEC(1);
+
+	/*
+	 * Setup handler and timer for onesec_waiters cyclic.
+	 */
+
+	onesec_waiters_hdlr.cyh_func = (cyc_func_t)onesec_waiters;
+	onesec_waiters_hdlr.cyh_level = CY_LOCK_LEVEL;
+	onesec_waiters_hdlr.cyh_arg = NULL;
+
+	onesec_waiters_when.cyt_when = 0;
+	onesec_waiters_when.cyt_interval = SEC2NSEC(1);
 
 	/*
 	 * The lbolt cyclic will be reprogramed to fire at a nsec_per_tick
@@ -995,12 +1027,17 @@ clock_init(void)
 	}
 
 	/*
-	 * Grab cpu_lock and install all three cyclics.
+	 * Grab cpu_lock and install all six cyclics.
 	 */
 	mutex_enter(&cpu_lock);
 
 	clock_cyclic = cyclic_add(&clk_hdlr, &clk_when);
 	lb_info->id.lbi_cyclic_id = cyclic_add(&lbolt_hdlr, &lbolt_when);
+	recompute_load_averages_cyclic =
+	    cyclic_add(&load_averages_hdlr, &load_averages_when);
+	onesec_time_adjustments_cyclic =
+	    cyclic_add(&onesec_time_adjustments_hdlr, &onesec_time_adjustments_when);
+	onesec_waiters_cyclic = cyclic_add(&onesec_waiters_hdlr, &onesec_waiters_when);
 
 	mutex_exit(&cpu_lock);
 }
