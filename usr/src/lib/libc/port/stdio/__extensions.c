@@ -125,3 +125,18 @@ __fbufsize(FILE *stream)
 	FUNLOCKFILE(lk);
 	return (size);
 }
+
+size_t __freadahead(FILE *stream)
+{
+	rmutex_t *lk;
+	size_t ret;
+
+	FLOCKFILE(lk, stream);
+	if ((stream->_flag & _IOWRT) != 0)
+		ret = 0;
+	else
+		ret = stream->_cnt;
+	FUNLOCKFILE(lk);
+
+	return (ret);
+}

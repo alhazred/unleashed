@@ -71,6 +71,7 @@ extern void __fpurge(FILE *stream);
 extern size_t __fpending(FILE *stream);
 extern void _flushlbf(void);
 extern int __fsetlocking(FILE *stream, int type);
+extern size_t __freadahead(FILE *stream);
 
 /*
  * Extended FILE enabling function.
