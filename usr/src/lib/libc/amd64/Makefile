@@ -502,6 +502,7 @@ PORTGEN=			\
 	priocntl.o		\
 	privlib.o		\
 	priv_str_xlate.o	\
+	progname.o		\
 	psecflags.o		\
 	psiginfo.o		\
 	psignal.o		\

@@ -37,49 +37,7 @@
 #include <dlfcn.h>
 #include "stdiom.h"
 
-/* Function exit/warning functions and global variables. */
-
-const char *__progname;		/* GNU/Linux/BSD compatibility */
-
-#define	PROGNAMESIZE	128	/* buffer size for __progname */
-
-const char *
-getprogname(void)
-{
-	return (__progname);
-}
-
-void
-setprogname(const char *argv0)
-{
-	uberdata_t *udp = curthread->ul_uberdata;
-	const char *progname;
-
-	if ((progname = strrchr(argv0, '/')) == NULL)
-		progname = argv0;
-	else
-		progname++;
-
-	if (udp->progname == NULL)
-		udp->progname = lmalloc(PROGNAMESIZE);
-	(void) strlcpy(udp->progname, progname, PROGNAMESIZE);
-	__progname = udp->progname;
-}
-
-/* called only from libc_init() */
-void
-init_progname(void)
-{
-	Dl_argsinfo_t args;
-	const char *argv0;
-
-	if (dlinfo(RTLD_SELF, RTLD_DI_ARGSINFO, &args) < 0 ||
-	    args.dla_argc <= 0 ||
-	    (argv0 = args.dla_argv[0]) == NULL)
-		argv0 = "UNKNOWN";
-
-	setprogname(argv0);
-}
+extern const char *__progname;		/* GNU/Linux/BSD compatibility */
 
 /*
  * warncore() is the workhorse of these functions.  Everything else has
