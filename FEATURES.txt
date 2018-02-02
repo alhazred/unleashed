@@ -33,6 +33,7 @@ changed.
  - Sun Studio and lint build support
  - getpwent_r(3c), fgetpwent_r(3c), which are non-standard and were different
    from other OSes
+ - getpw(3c)
  - POSIX.1c Draft versions of several reentrant functions were removed.
    Applications using the draft versions have to be modified; users of the
    standard versions are unaffected.

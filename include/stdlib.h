@@ -264,7 +264,6 @@ extern char *optarg;
 extern int optind, opterr, optopt;
 extern char *getpass(const char *);
 extern char *getpassphrase(const char *);
-extern int getpw(uid_t, char *);
 extern int isatty(int);
 extern void *memalign(size_t, size_t);
 extern char *ttyname(int);

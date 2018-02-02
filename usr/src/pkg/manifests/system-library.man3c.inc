@@ -175,7 +175,6 @@ file path=usr/share/man/man3c/getpass.3c
 file path=usr/share/man/man3c/getpeerucred.3c
 file path=usr/share/man/man3c/getpriority.3c
 file path=usr/share/man/man3c/getprogname.3c
-file path=usr/share/man/man3c/getpw.3c
 file path=usr/share/man/man3c/getpwnam.3c
 file path=usr/share/man/man3c/getrusage.3c
 file path=usr/share/man/man3c/gets.3c

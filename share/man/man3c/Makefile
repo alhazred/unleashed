@@ -157,7 +157,6 @@ MAN = __fbufsize.3c \
       getpeerucred.3c \
       getpriority.3c \
       getprogname.3c \
-      getpw.3c \
       getpwnam.3c \
       getrusage.3c \
       gets.3c \

@@ -1824,7 +1824,6 @@ $endif
 	getmntent;
 	getnetgrent;
 	getnetgrent_r;
-	getpw;
 	getspent;
 	getspent_r;
 	getspnam;

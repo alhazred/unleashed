@@ -424,7 +424,6 @@ PORTGEN=			\
 	getopt.o		\
 	getopt_long.o		\
 	getpagesize.o		\
-	getpw.o			\
 	getpwnam.o		\
 	getpwnam_r.o		\
 	getrusage.o		\

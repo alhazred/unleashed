@@ -368,7 +368,6 @@ getppid
 getppriv
 getprivimplinfo
 getprojid
-getpw
 getpwent
 getpwnam
 getpwnam_r
