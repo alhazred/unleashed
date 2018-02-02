@@ -1,0 +1,20 @@
+# Copyright 2018 Alexander Eremin <alexander.r.eremin@gmail.com>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+set name=pkg.fmri \
+    value=pkg:/diagnostic/tcpdump@4.9.2,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
+set name=pkg.summary value="A tool for network monitoring and data acquisition"
+set name=pkg.descr value="A tool for network monitoring and data acquisition"
+file path=usr/sbin/tcpdump mode=0555
+file path=usr/share/man/man1/tcpdump.1 mode=0444
