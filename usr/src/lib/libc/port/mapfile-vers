@@ -2919,8 +2919,6 @@ $endif
 	_dgettext;
 	_doprnt;
 	_doscan;
-	_errfp;
-	_errxfp;
 	execvpe;
 	exportfs;
 	_F_cplx_div;
@@ -3158,12 +3156,6 @@ $endif
 	__ungetwc_xpg5;
 	_unordered;
 	utssys;
-	_verrfp;
-	_verrxfp;
-	_vwarnfp;
-	_vwarnxfp;
-	_warnfp;
-	_warnxfp;
 	__wcsftime_xpg5;
 	__wcstok_xpg5;
 	wdbindf;

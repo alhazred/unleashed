@@ -1,254 +1,180 @@
-/*
- * CDDL HEADER START
+/*-
+ * SPDX-License-Identifier: BSD-3-Clause
  *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License (the "License").
- * You may not use this file except in compliance with the License.
+ * Copyright (c) 1993
+ *	The Regents of the University of California.  All rights reserved.
  *
- * You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
- * or http://www.opensolaris.org/os/licensing.
- * See the License for the specific language governing permissions
- * and limitations under the License.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
  *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at usr/src/OPENSOLARIS.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
- * CDDL HEADER END
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
-/*
- * Copyright (c) 2003, 2010, Oracle and/or its affiliates. All rights reserved.
- */
-
-#include "lint.h"
-#include "file64.h"
-#include "mtlib.h"
-#include "thr_uberdata.h"
-#include <sys/types.h>
 #include <err.h>
+#include <errno.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <string.h>
-#include <errno.h>
-#include <dlfcn.h>
-#include "stdiom.h"
 
-extern const char *__progname;		/* GNU/Linux/BSD compatibility */
+static FILE *err_file; /* file to use for error output */
+static void (*err_exit)(int);
 
 /*
- * warncore() is the workhorse of these functions.  Everything else has
- * a warncore() component in it.
+ * This is declared to take a `void *' so that the caller is not required
+ * to include <stdio.h> first.  However, it is really a `FILE *', and the
+ * manual page documents it as such.
  */
-static rmutex_t *
-warncore(FILE *fp, const char *fmt, va_list args)
+void
+err_set_file(void *fp)
 {
-	rmutex_t *lk;
+	if (fp)
+		err_file = fp;
+	else
+		err_file = stderr;
+}
 
-	FLOCKFILE(lk, fp);
+void
+err_set_exit(void (*ef)(int))
+{
+	err_exit = ef;
+}
 
-	if (__progname != NULL)
-		(void) fprintf(fp, "%s: ", __progname);
+void
+err(int eval, const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	verrc(eval, errno, fmt, ap);
+	va_end(ap);
+}
 
+void
+verr(int eval, const char *fmt, va_list ap)
+{
+	verrc(eval, errno, fmt, ap);
+}
+
+void
+errc(int eval, int code, const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	verrc(eval, code, fmt, ap);
+	va_end(ap);
+}
+
+void
+verrc(int eval, int code, const char *fmt, va_list ap)
+{
+	if (err_file == NULL)
+		err_set_file(NULL);
+	fprintf(err_file, "%s: ", getprogname());
 	if (fmt != NULL) {
-		(void) vfprintf(fp, fmt, args);
+		vfprintf(err_file, fmt, ap);
+		fprintf(err_file, ": ");
 	}
-
-	return (lk);
-}
-
-/* Finish a warning with a newline and a flush of stderr. */
-static void
-warnfinish(FILE *fp, rmutex_t *lk)
-{
-	(void) fputc('\n', fp);
-	(void) fflush(fp);
-	FUNLOCKFILE(lk);
+	fprintf(err_file, "%s\n", strerror(code));
+	if (err_exit)
+		err_exit(eval);
+	exit(eval);
 }
 
 void
-_vwarnxfp(FILE *fp, const char *fmt, va_list args)
+errx(int eval, const char *fmt, ...)
 {
-	rmutex_t *lk;
-
-	lk = warncore(fp, fmt, args);
-	warnfinish(fp, lk);
+	va_list ap;
+	va_start(ap, fmt);
+	verrx(eval, fmt, ap);
+	va_end(ap);
 }
 
 void
-vwarnx(const char *fmt, va_list args)
+verrx(int eval, const char *fmt, va_list ap)
 {
-	_vwarnxfp(stderr, fmt, args);
+	if (err_file == NULL)
+		err_set_file(NULL);
+	fprintf(err_file, "%s: ", getprogname());
+	if (fmt != NULL)
+		vfprintf(err_file, fmt, ap);
+	fprintf(err_file, "\n");
+	if (err_exit)
+		err_exit(eval);
+	exit(eval);
 }
 
-void
-_vwarnfp(FILE *fp, int code, const char *fmt, va_list args)
-{
-	rmutex_t *lk;
-
-	lk = warncore(fp, fmt, args);
-	if (fmt != NULL) {
-		(void) fputc(':', fp);
-		(void) fputc(' ', fp);
-	}
-	(void) fputs(strerror(code), fp);
-	warnfinish(fp, lk);
-}
-
-void
-vwarn(const char *fmt, va_list args)
-{
-	_vwarnfp(stderr, errno, fmt, args);
-}
-
-/* PRINTFLIKE1 */
-void
-warnx(const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	vwarnx(fmt, args);
-	va_end(args);
-}
-
-void
-_warnfp(FILE *fp, const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	_vwarnfp(fp, errno, fmt, args);
-	va_end(args);
-}
-
-void
-_warnxfp(FILE *fp, const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	_vwarnxfp(fp, fmt, args);
-	va_end(args);
-}
-
-/* PRINTFLIKE1 */
 void
 warn(const char *fmt, ...)
 {
-	va_list args;
+	va_list ap;
+	va_start(ap, fmt);
+	vwarnc(errno, fmt, ap);
+	va_end(ap);
+}
 
-	va_start(args, fmt);
-	vwarn(fmt, args);
-	va_end(args);
+void
+vwarn(const char *fmt, va_list ap)
+{
+	vwarnc(errno, fmt, ap);
 }
 
 void
 warnc(int code, const char *fmt, ...)
 {
-	va_list args;
-	va_start(args, fmt);
-	vwarnc(code, fmt, args);
-	va_end(args);
+	va_list ap;
+	va_start(ap, fmt);
+	vwarnc(code, fmt, ap);
+	va_end(ap);
 }
 
 void
-vwarnc(int code, const char *fmt, va_list args)
+vwarnc(int code, const char *fmt, va_list ap)
 {
-	_vwarnfp(stderr, code, fmt, args);
-}
-
-/* PRINTFLIKE2 */
-void
-err(int status, const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	vwarn(fmt, args);
-	va_end(args);
-	exit(status);
+	if (err_file == NULL)
+		err_set_file(NULL);
+	fprintf(err_file, "%s: ", getprogname());
+	if (fmt != NULL) {
+		vfprintf(err_file, fmt, ap);
+		fprintf(err_file, ": ");
+	}
+	fprintf(err_file, "%s\n", strerror(code));
 }
 
 void
-errc(int status, int code, const char *fmt, ...)
+warnx(const char *fmt, ...)
 {
-	va_list args;
-	va_start(args, fmt);
-	vwarnc(code, fmt, args);
-	va_end(args);
-	exit(status);
+	va_list ap;
+	va_start(ap, fmt);
+	vwarnx(fmt, ap);
+	va_end(ap);
 }
 
 void
-verrc(int status, int code, const char *fmt, va_list args)
+vwarnx(const char *fmt, va_list ap)
 {
-	vwarnc(code, fmt, args);
-	exit(status);
-}
-
-void
-_errfp(FILE *fp, int status, const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	_vwarnfp(fp, errno, fmt, args);
-	va_end(args);
-	exit(status);
-}
-
-void
-verr(int status, const char *fmt, va_list args)
-{
-	vwarn(fmt, args);
-	exit(status);
-}
-
-
-void
-_verrfp(FILE *fp, int status, const char *fmt, va_list args)
-{
-	_vwarnfp(fp, errno, fmt, args);
-	exit(status);
-}
-
-/* PRINTFLIKE2 */
-void
-errx(int status, const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	vwarnx(fmt, args);
-	va_end(args);
-	exit(status);
-}
-
-void
-_errxfp(FILE *fp, int status, const char *fmt, ...)
-{
-	va_list args;
-
-	va_start(args, fmt);
-	_vwarnxfp(fp, fmt, args);
-	va_end(args);
-	exit(status);
-}
-
-void
-verrx(int status, const char *fmt, va_list args)
-{
-	vwarnx(fmt, args);
-	exit(status);
-}
-
-void
-_verrxfp(FILE *fp, int status, const char *fmt, va_list args)
-{
-	_vwarnxfp(fp, fmt, args);
-	exit(status);
+	if (err_file == NULL)
+		err_set_file(NULL);
+	fprintf(err_file, "%s: ", getprogname());
+	if (fmt != NULL)
+		vfprintf(err_file, fmt, ap);
+	fprintf(err_file, "\n");
 }
