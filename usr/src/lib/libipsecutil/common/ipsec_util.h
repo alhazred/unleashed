@@ -43,7 +43,6 @@ extern "C" {
 #include <setjmp.h>
 #include <stdio.h>
 #include <err.h>
-#include <errfp.h>
 #include <net/pfpolicy.h>
 #include <libtecla.h>
 
@@ -149,7 +148,7 @@ typedef enum exit_type {
 /*
  * Print errno and if cmdline or readfile, exit; if interactive reset state
  */
-extern void ipsecutil_exit(exit_type_t, char *, FILE *, const char *fmt, ...);
+extern void ipsecutil_exit(exit_type_t, char *, const char *fmt, ...);
 extern void bail(char *);
 
 /*
@@ -410,49 +409,49 @@ extern const char *do_inet_ntop(const void *, char *, size_t);
  * for more details.
  */
 #define	EXIT_OK(x) \
-	ipsecutil_exit(SERVICE_EXIT_OK, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_EXIT_OK, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 #define	EXIT_OK2(x, y) \
-	ipsecutil_exit(SERVICE_EXIT_OK, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_EXIT_OK, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y)
 #define	EXIT_OK3(x, y, z) \
-	ipsecutil_exit(SERVICE_EXIT_OK, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_EXIT_OK, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y, z)
 #define	EXIT_BADCONFIG(x) \
-	ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_BADCONF, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 #define	EXIT_BADCONFIG2(x, y) \
-	ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_BADCONF, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y)
 #define	EXIT_BADCONFIG3(x, y, z) \
-	ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_BADCONF, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y, z)
 #define	EXIT_MAINTAIN(x) \
-	ipsecutil_exit(SERVICE_MAINTAIN, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_MAINTAIN, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 #define	EXIT_MAINTAIN2(x, y) \
-	ipsecutil_exit(SERVICE_MAINTAIN, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_MAINTAIN, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y)
 #define	EXIT_DEGRADE(x) \
-	ipsecutil_exit(SERVICE_DEGRADE, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_DEGRADE, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 #define	EXIT_BADPERM(x) \
-	ipsecutil_exit(SERVICE_BADPERM, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_BADPERM, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 #define	EXIT_BADPERM2(x, y) \
-	ipsecutil_exit(SERVICE_BADPERM, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_BADPERM, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y)
 #define	EXIT_FATAL(x) \
-	ipsecutil_exit(SERVICE_FATAL, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_FATAL, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 #define	EXIT_FATAL2(x, y) \
-	ipsecutil_exit(SERVICE_FATAL, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_FATAL, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y)
 #define	EXIT_FATAL3(x, y, z) \
-	ipsecutil_exit(SERVICE_FATAL, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_FATAL, my_fmri, \
 	dgettext(TEXT_DOMAIN, x), y, z)
 #define	EXIT_RESTART(x) \
-	ipsecutil_exit(SERVICE_RESTART, my_fmri, stderr, \
+	ipsecutil_exit(SERVICE_RESTART, my_fmri, \
 	dgettext(TEXT_DOMAIN, x))
 
 #ifdef __cplusplus

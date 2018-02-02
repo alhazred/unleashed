@@ -56,8 +56,6 @@
  */
 
 
-#define	EFD(file) (((file) == stdout) ? stderr : (file))
-
 /* Limits for interactive mode. */
 #define	MAX_LINE_LEN	IBUF_SIZE
 #define	MAX_CMD_HIST	64000	/* in bytes */
@@ -727,7 +725,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 				continue;
 			} else {
 				ipsecutil_exit(SERVICE_FATAL, my_fmri,
-				    stderr, dgettext(TEXT_DOMAIN,
+				    dgettext(TEXT_DOMAIN,
 				    "Line %d too big."), lineno);
 			}
 		}
@@ -755,7 +753,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 			    (size_t)(&(holder[IBUF_SIZE]) - hptr));
 			if (holder[IBUF_SIZE - 1] != '\0') {
 				ipsecutil_exit(SERVICE_FATAL, my_fmri,
-				    stderr, dgettext(TEXT_DOMAIN,
+				    dgettext(TEXT_DOMAIN,
 				    "Command buffer overrun."));
 			}
 			/* Use - 2 because of \n from fgets. */
@@ -789,7 +787,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 			ebuf = calloc((IBUF_SIZE * 2), sizeof (char));
 			if (ebuf == NULL) {
 				ipsecutil_exit(SERVICE_FATAL, my_fmri,
-				    stderr, dgettext(TEXT_DOMAIN,
+				    dgettext(TEXT_DOMAIN,
 				    "Memory allocation error."));
 			} else {
 				(void) snprintf(ebuf, (IBUF_SIZE * 2),
@@ -802,11 +800,11 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 
 		switch (create_argv(ibuf, &thisargc, &thisargv)) {
 		case TOO_MANY_TOKENS:
-			ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr,
+			ipsecutil_exit(SERVICE_BADCONF, my_fmri,
 			    dgettext(TEXT_DOMAIN, "Too many input tokens."));
 			break;
 		case MEMORY_ALLOCATION:
-			ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr,
+			ipsecutil_exit(SERVICE_BADCONF, my_fmri,
 			    dgettext(TEXT_DOMAIN, "Memory allocation error."));
 			break;
 		case COMMENT_LINE:
@@ -839,7 +837,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 	 */
 	if (readfile) {
 		if (lines_parsed != 0 && lines_added == 0) {
-			ipsecutil_exit(SERVICE_BADCONF, my_fmri, stderr,
+			ipsecutil_exit(SERVICE_BADCONF, my_fmri,
 			    dgettext(TEXT_DOMAIN, "Configuration file did not "
 			    "contain any valid SAs"));
 		}
@@ -858,7 +856,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 		if ((lines_added < lines_parsed) && (configfile != NULL)) {
 			if (my_fmri != NULL) {
 				ipsecutil_exit(SERVICE_BADCONF, my_fmri,
-				    stderr, dgettext(TEXT_DOMAIN,
+				    dgettext(TEXT_DOMAIN,
 				    "The configuration file contained %d "
 				    "errors.\n"
 				    "Manually check the configuration with:\n"
@@ -872,7 +870,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 		} else {
 			if (my_fmri != NULL)
 				ipsecutil_exit(SERVICE_EXIT_OK, my_fmri,
-				    stderr, dgettext(TEXT_DOMAIN,
+				    dgettext(TEXT_DOMAIN,
 				    "%d actions successfully processed."),
 				    lines_added);
 		}
@@ -1758,7 +1756,7 @@ void
 print_sa(FILE *file, char *prefix, struct sadb_sa *assoc)
 {
 	if (assoc->sadb_sa_len != SADB_8TO64(sizeof (*assoc))) {
-		warnxfp(EFD(file), dgettext(TEXT_DOMAIN,
+		warnx(dgettext(TEXT_DOMAIN,
 		    "WARNING: SA info extension length (%u) is bad."),
 		    SADB_64TO8(assoc->sadb_sa_len));
 	}
@@ -1885,28 +1883,28 @@ print_lifetimes(FILE *file, time_t wallclock, struct sadb_lifetime *current,
 
 	if (current != NULL &&
 	    current->sadb_lifetime_len != SADB_8TO64(sizeof (*current))) {
-		warnxfp(EFD(file), dgettext(TEXT_DOMAIN,
+		warnx(dgettext(TEXT_DOMAIN,
 		    "WARNING: CURRENT lifetime extension length (%u) is bad."),
 		    SADB_64TO8(current->sadb_lifetime_len));
 	}
 
 	if (hard != NULL &&
 	    hard->sadb_lifetime_len != SADB_8TO64(sizeof (*hard))) {
-		warnxfp(EFD(file), dgettext(TEXT_DOMAIN,
+		warnx(dgettext(TEXT_DOMAIN,
 		    "WARNING: HARD lifetime extension length (%u) is bad."),
 		    SADB_64TO8(hard->sadb_lifetime_len));
 	}
 
 	if (soft != NULL &&
 	    soft->sadb_lifetime_len != SADB_8TO64(sizeof (*soft))) {
-		warnxfp(EFD(file), dgettext(TEXT_DOMAIN,
+		warnx(dgettext(TEXT_DOMAIN,
 		    "WARNING: SOFT lifetime extension length (%u) is bad."),
 		    SADB_64TO8(soft->sadb_lifetime_len));
 	}
 
 	if (idle != NULL &&
 	    idle->sadb_lifetime_len != SADB_8TO64(sizeof (*idle))) {
-		warnxfp(EFD(file), dgettext(TEXT_DOMAIN,
+		warnx(dgettext(TEXT_DOMAIN,
 		    "WARNING: IDLE lifetime extension length (%u) is bad."),
 		    SADB_64TO8(idle->sadb_lifetime_len));
 	}
@@ -2649,7 +2647,7 @@ print_samsg(FILE *file, uint64_t *buffer, boolean_t want_timestamp,
 		    softlt, idlelt, vflag);
 
 	if (current - buffer != samsg->sadb_msg_len) {
-		warnxfp(EFD(file), dgettext(TEXT_DOMAIN,
+		warnx(dgettext(TEXT_DOMAIN,
 		    "WARNING: insufficient buffer space or corrupt message."));
 	}
 
@@ -3199,16 +3197,14 @@ rparseidtype(uint16_t type)
  * will be written to the error stream, typically a log file or stderr.
  */
 void
-ipsecutil_exit(exit_type_t type, char *fmri, FILE *fp, const char *fmt, ...)
+ipsecutil_exit(exit_type_t type, char *fmri, const char *fmt, ...)
 {
 	int exit_status;
 	va_list args;
 
-	if (fp == NULL)
-		fp = stderr;
 	if (fmt != NULL) {
 		va_start(args, fmt);
-		vwarnxfp(fp, fmt, args);
+		vwarnx(fmt, args);
 		va_end(args);
 	}
 
@@ -3227,7 +3223,7 @@ ipsecutil_exit(exit_type_t type, char *fmri, FILE *fp, const char *fmt, ...)
 		case SERVICE_FATAL:
 		case SERVICE_RESTART:
 		case DEBUG_FATAL:
-			warnxfp(fp, "Fatal error - exiting.");
+			warnx("Fatal error - exiting.");
 			exit_status = 1;
 			break;
 		}
@@ -3242,17 +3238,17 @@ ipsecutil_exit(exit_type_t type, char *fmri, FILE *fp, const char *fmt, ...)
 			/* Keep running, don't exit(). */
 			return;
 		case SERVICE_BADPERM:
-			warnxfp(fp, dgettext(TEXT_DOMAIN,
+			warnx(dgettext(TEXT_DOMAIN,
 			    "Permission error with %s."), fmri);
 			exit_status = SMF_EXIT_ERR_PERM;
 			break;
 		case SERVICE_BADCONF:
-			warnxfp(fp, dgettext(TEXT_DOMAIN,
+			warnx(dgettext(TEXT_DOMAIN,
 			    "Bad configuration of service %s."), fmri);
 			exit_status = SMF_EXIT_ERR_FATAL;
 			break;
 		case SERVICE_MAINTAIN:
-			warnxfp(fp, dgettext(TEXT_DOMAIN,
+			warnx(dgettext(TEXT_DOMAIN,
 			    "Service %s needs maintenance."), fmri);
 			exit_status = SMF_EXIT_ERR_FATAL;
 			break;
@@ -3260,7 +3256,7 @@ ipsecutil_exit(exit_type_t type, char *fmri, FILE *fp, const char *fmt, ...)
 			exit_status = SMF_EXIT_ERR_FATAL;
 			break;
 		case SERVICE_FATAL:
-			warnxfp(fp, dgettext(TEXT_DOMAIN,
+			warnx(dgettext(TEXT_DOMAIN,
 			    "Service %s fatal error."), fmri);
 			exit_status = SMF_EXIT_ERR_FATAL;
 			break;
@@ -3269,7 +3265,7 @@ ipsecutil_exit(exit_type_t type, char *fmri, FILE *fp, const char *fmt, ...)
 			break;
 		}
 	}
-	(void) fflush(fp);
-	(void) fclose(fp);
+	(void) fflush(stderr);
+	(void) fclose(stderr);
 	exit(exit_status);
 }

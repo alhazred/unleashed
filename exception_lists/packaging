@@ -126,7 +126,6 @@ usr/include/libsocket_priv.h
 # library contains exclusively private interfaces, as does
 # libipsecutil.  My apologies for the glut of header files here.
 #
-usr/include/errfp.h
 usr/include/ikedoor.h
 usr/include/ipsec_util.h
 usr/lib/libipsecutil.so
