@@ -40,23 +40,9 @@
 #include "print.h"
 #include "libc.h"
 
-/*
- * 32-bit shadow function _vsnprintf_c89() is included here.
- * When using the c89 compiler to build 32-bit applications, the size
- * of intmax_t is 32-bits, otherwise the size of intmax_t is 64-bits.
- * The shadow function uses 32-bit size of intmax_t for j conversion.
- * The #pragma redefine_extname in <stdio.h> selects the proper routine
- * at compile time for the user application.
- * NOTE: the shadow function only exists in the 32-bit library.
- */
-
 /*VARARGS2*/
 int
-#ifdef _C89_INTMAX32		/* _C89_INTMAX32 version in 32-bit libc only */
-_vsnprintf_c89(char *string, size_t n, const char *format, va_list ap)
-#else
 vsnprintf(char *string, size_t n, const char *format, va_list ap)
-#endif
 {
 	ssize_t count;
 	FILE siop;
@@ -92,11 +78,7 @@ vsnprintf(char *string, size_t n, const char *format, va_list ap)
 	}
 
 
-#ifdef _C89_INTMAX32
-	count = _ndoprnt(format, ap, &siop, _F_INTMAX32);
-#else
 	count = _ndoprnt(format, ap, &siop, 0);
-#endif  /* _C89_INTMAX32 */
 
 	*siop._ptr = '\0';	/* plant terminating null character */
 

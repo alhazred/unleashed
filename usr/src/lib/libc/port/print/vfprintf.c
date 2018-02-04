@@ -41,23 +41,9 @@
 #include "libc.h"
 #include "mse.h"
 
-/*
- * 32-bit shadow function of vfprintf() is included here.
- * When using the c89 compiler to build 32-bit applications, the size
- * of intmax_t is 32-bits, otherwise the size of intmax_t is 64-bits.
- * The shadow function uses 32-bit size of intmax_t for %j conversion.
- * The #pragma redefine_extname in <stdio.h> selects the proper routine
- * at compile time for the user application.
- * NOTE: this function is only available in the 32-bit library.
- */
-
 /*VARARGS2*/
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vfprintf_c89(FILE *iop, const char *format, va_list ap)
-#else
 vfprintf(FILE *iop, const char *format, va_list ap)
-#endif
 {
 	ssize_t count;
 	rmutex_t *lk;
@@ -79,12 +65,8 @@ vfprintf(FILE *iop, const char *format, va_list ap)
 			return (EOF);
 		}
 	}
-#ifdef _C89_INTMAX32
-	count = _ndoprnt(format, ap, iop, _F_INTMAX32);
-#else
-	count = _ndoprnt(format, ap, iop, 0);
-#endif
 
+	count = _ndoprnt(format, ap, iop, 0);
 	/* check for error or EOF */
 	if (FERROR(iop) || count == EOF) {
 		FUNLOCKFILE(lk);

@@ -318,14 +318,7 @@ charswitch:	/* target of a goto 8-( */
 		} else if ((size == 't') || (size == 'z')) {
 			size = 'l';
 		} else if (size == 'j') {
-#ifndef _LP64
-			/* check scflag for size of u/intmax_t (32-bit libc) */
-			if (!(scflag & _F_INTMAX32)) {
-#endif
-				size = 'm';
-#ifndef _LP64
-			}
-#endif
+			size = 'm';
 		}
 		if (ch == '\0') {
 			return (EOF);		/* unexpected end of format */

@@ -220,15 +220,6 @@ pics/%.o: $(LIBCBASE)/../port/stdio/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-# c89 print, stdio rules
-pics/%_c89.o: $(LIBCBASE)/../port/print/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-pics/%_c89.o: $(LIBCBASE)/../port/stdio/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
 # aio rules
 pics/%.o: $(LIBCBASE)/../port/aio/%.c
 	$(COMPILE.c) -o $@ $<

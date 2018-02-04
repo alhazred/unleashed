@@ -50,6 +50,12 @@ changed.
    vgrind(1), /usr/bin/makedev /usr/bin/ta removed -- made obsolete by mandoc
  - pre-XPG5 behavior: ungetwc(3c), putwchar(3c), putwc(3c), fputwc(3c),
    fputws(3c), fgetwc(3c), getwc(3c), getwchar(3c), fgetws(3c)
+ - C89 behavior: fprintf(3c), fscanf(3c), fwprintf(3c), fwscanf(3c),
+   printf(3c), scanf(3c), snprintf(3c), sprintf(3c), sscanf(3c),
+   swprintf(3c), swscanf(3c), vfprintf(3c), vfscanf(3c), vfwprintf(3c),
+   vfwscanf(3c), vprintf(3c), vscanf(3c), vsnprintf(3c), vsprintf(3c),
+   vsscanf(3c), vswprintf(3c), vswscanf(3c), vwprintf(3c), vwscanf(3c),
+   wprintf(3c), wscanf(3c)
  + awk(1) replaced with a version imported from FreeBSD
  + libcurses, libxcurses, libxcurses2, terminfo were replaced by ncurses
  + grep(1) replaced with a version imported from FreeBSD

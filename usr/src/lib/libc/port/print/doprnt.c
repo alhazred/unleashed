@@ -879,18 +879,7 @@ _ndoprnt(const char *format, va_list in_args, FILE *iop, int prflag)
 			}
 			goto charswitch;
 		case 'j':
-#ifndef _LP64
-			/*
-			 * *printf_c89() in 32-bit libc uses
-			 * 32-bit intmax_t; otherwise intmax_t
-			 * is 64-bits.
-			 */
-			if (!(prflag & _F_INTMAX32)) {
-#endif
-				flagword |= XLONG;	/* [u]intmax_t (64) */
-#ifndef _LP64
-			}
-#endif
+			flagword |= XLONG;	/* [u]intmax_t (64) */
 			goto charswitch;
 
 		case 't':
@@ -2309,18 +2298,7 @@ _mkarglst(char *fmt, stva_list args, stva_list arglst[], int prflag)
 			}
 			goto again;
 		case 'j':
-#ifndef _LP64
-			/*
-			 * *printf_c89() in 32-bit libc uses
-			 * 32-bit intmax_t; otherwise intmax_t
-			 * is 64-bits.
-			 */
-			if (!(prflag & _F_INTMAX32)) {
-#endif
-				flags |= FLAG_LONG_LONG;	/* 64-bit */
-#ifndef _LP64
-			}
-#endif
+			flags |= FLAG_LONG_LONG;	/* 64-bit */
 			goto again;
 		case 't':
 			flags |= FLAG_LONG;
@@ -2508,18 +2486,7 @@ _getarg(char *fmt, stva_list *pargs, long argno, int prflag)
 				}
 				goto again;
 			case 'j':
-#ifndef _LP64
-				/*
-				 * *printf_c89() in 32-bit libc uses
-				 * 32-bit intmax_t; otherwise intmax_t
-				 * is 64-bits.
-				 */
-				if (!(prflag & _F_INTMAX32)) {
-#endif
-					flags |= FLAG_LONG_LONG;  /* 64-bit */
-#ifndef _LP64
-				}
-#endif
+				flags |= FLAG_LONG_LONG;  /* 64-bit */
 				goto again;
 			case 't':
 				flags |= FLAG_LONG;

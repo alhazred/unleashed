@@ -3174,41 +3174,15 @@ $endif
 $if _ELF32
 	__divdi3;
 	_file_set;
-	_fprintf_c89;
-	_fscanf_c89;
-	_fwprintf_c89;
-	_fwscanf_c89;
 	_imaxabs_c89;
 	_imaxdiv_c89;
 	__moddi3;
-	_printf_c89;
-	_scanf_c89;
-	_snprintf_c89;
-	_sprintf_c89;
-	_sscanf_c89;
 	_strtoimax_c89;
 	_strtoumax_c89;
-	_swprintf_c89;
-	_swscanf_c89;
 	__udivdi3;
 	__umoddi3;
-	_vfprintf_c89;
-	_vfscanf_c89;
-	_vfwprintf_c89;
-	_vfwscanf_c89;
-	_vprintf_c89;
-	_vscanf_c89;
-	_vsnprintf_c89;
-	_vsprintf_c89;
-	_vsscanf_c89;
-	_vswprintf_c89;
-	_vswscanf_c89;
-	_vwprintf_c89;
-	_vwscanf_c89;
 	_wcstoimax_c89;
 	_wcstoumax_c89;
-	_wprintf_c89;
-	_wscanf_c89;
 $endif
 
 $if _sparc

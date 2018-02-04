@@ -49,23 +49,8 @@
 #include <stdio_ext.h>
 
 
-/*
- * 32-bit shadow functions _vscanf_c89(), _vfscanf_c89(), _vsscanf_c89()
- * are included here.
- * When using the c89 compiler to build 32-bit applications, the size
- * of intmax_t is 32-bits, otherwise the size of intmax_t is 64-bits.
- * The shadow function uses 32-bit size of intmax_t for %j conversion.
- * The #pragma redefine_extname in <stdio.h> selects the proper routine
- * at compile time for the user application.
- * NOTE: the shadow function only exists in the 32-bit library.
- */
-
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vscanf_c89(const char *fmt, va_list ap)
-#else
 vscanf(const char *fmt, va_list ap)
-#endif
 {
 	rmutex_t	*lk;
 	int	ret;
@@ -74,22 +59,14 @@ vscanf(const char *fmt, va_list ap)
 
 	_SET_ORIENTATION_BYTE(stdin);
 
-#ifdef _C89_INTMAX32
-	ret = __doscan_u(stdin, fmt, ap, _F_INTMAX32);
-#else
 	ret = __doscan_u(stdin, fmt, ap, 0);
-#endif
 
 	FUNLOCKFILE(lk);
 	return (ret);
 }
 
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vfscanf_c89(FILE *iop, const char *fmt, va_list ap)
-#else
 vfscanf(FILE *iop, const char *fmt, va_list ap)
-#endif
 {
 	rmutex_t	*lk;
 	int	ret;
@@ -98,21 +75,14 @@ vfscanf(FILE *iop, const char *fmt, va_list ap)
 
 	_SET_ORIENTATION_BYTE(iop);
 
-#ifdef _C89_INTMAX32
-	ret = __doscan_u(iop, fmt, ap, _F_INTMAX32);
-#else
 	ret = __doscan_u(iop, fmt, ap, 0);
-#endif
+
 	FUNLOCKFILE(lk);
 	return (ret);
 }
 
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vsscanf_c89(const char *str, const char *fmt, va_list ap)
-#else
 vsscanf(const char *str, const char *fmt, va_list ap)
-#endif
 {
 	FILE strbuf;
 
@@ -140,9 +110,5 @@ vsscanf(const char *str, const char *fmt, va_list ap)
 	}
 
 	/* as this stream is local to this function, no locking is be done */
-#ifdef _C89_INTMAX32
-	return (__doscan_u(&strbuf, fmt, ap, _F_INTMAX32));
-#else
 	return (__doscan_u(&strbuf, fmt, ap, 0));
-#endif
 }

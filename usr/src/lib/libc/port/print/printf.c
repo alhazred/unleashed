@@ -87,29 +87,3 @@ printf(const char *format, ...)
 		return ((int)count);
 	}
 }
-
-#ifndef _LP64
-
-/*
- * 32-bit shadow function of printf().
- * When using the c89 compiler to build 32-bit applications, the size
- * of intmax_t is 32-bits, otherwise the size of intmax_t is 64-bits.
- * The shadow function uses 32-bit size of intmax_t for %j conversion.
- * The #pragma redefine_extname in <stdio.h> selects the proper routine
- * at compile time for the user application.
- * NOTE: this function only exists in the 32-bit library.
- */
-
-int
-_printf_c89(const char *format, ...)
-{
-	ssize_t count;
-	va_list ap;
-
-	va_start(ap, format);
-	count = _vprintf_c89(format, ap);
-	va_end(ap);
-	return ((int)count);
-}
-
-#endif

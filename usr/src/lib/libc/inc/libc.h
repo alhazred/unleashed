@@ -250,37 +250,6 @@ extern int _doscan(FILE *, const char *, va_list);
 extern int __doscan_u(FILE *, const char *, va_list, int);
 extern int __wdoscan_u(FILE *, const wchar_t *, va_list, int);
 
-#ifndef _LP64
-/* Flag for _ndoprnt() and _doscan_u() */
-#define	_F_INTMAX32	0x1	/* if set read 4 bytes for u/intmax %j */
-extern int _fprintf_c89(FILE *, const char *, ...);
-extern int _printf_c89(const char *, ...);
-extern int _snprintf_c89(char *, size_t, const char *, ...);
-extern int _sprintf_c89(char *, const char *, ...);
-extern int _wprintf_c89(const wchar_t *, ...);
-extern int _fwprintf_c89(FILE *, const wchar_t *, ...);
-extern int _swprintf_c89(wchar_t *, size_t, const wchar_t *, ...);
-extern int _vfprintf_c89(FILE *, const char *, va_list);
-extern int _vprintf_c89(const char *, va_list);
-extern int _vsnprintf_c89(char *, size_t, const char *, va_list);
-extern int _vsprintf_c89(char *, const char *, va_list);
-extern int _vwprintf_c89(const wchar_t *, va_list);
-extern int _vfwprintf_c89(FILE *, const wchar_t *, va_list);
-extern int _vswprintf_c89(wchar_t *, size_t, const wchar_t *, va_list);
-extern int _scanf_c89(const char *, ...);
-extern int _fscanf_c89(FILE *, const char *, ...);
-extern int _sscanf_c89(const char *, const char *, ...);
-extern int _vscanf_c89(const char *, va_list);
-extern int _vfscanf_c89(FILE *, const char *, va_list);
-extern int _vsscanf_c89(const char *, const char *, va_list);
-extern int _vwscanf_c89(const wchar_t *, va_list);
-extern int _vfwscanf_c89(FILE *, const wchar_t *, va_list);
-extern int _vswscanf_c89(const wchar_t *, const wchar_t *, va_list);
-extern int _wscanf_c89(const wchar_t *, ...);
-extern int _fwscanf_c89(FILE *, const wchar_t *, ...);
-extern int _swscanf_c89(const wchar_t *, const wchar_t *, ...);
-#endif	/*	_LP64	*/
-
 /*
  * defined in port/stdio/popen.c
  */

@@ -174,11 +174,9 @@ SKIP_SYMBOL|_X_cplx_lr_div_ix
 #	Printing functions:
 SKIP_SYMBOL|_fprintf_c89
 SKIP_SYMBOL|_printf_c89
-SKIP_SYMBOL|_snprintf_c89
 SKIP_SYMBOL|_sprintf_c89
 SKIP_SYMBOL|_vfprintf_c89
 SKIP_SYMBOL|_vprintf_c89
-SKIP_SYMBOL|_vsnprintf_c89
 SKIP_SYMBOL|_vsprintf_c89
 SKIP_SYMBOL|_fwprintf_c89
 SKIP_SYMBOL|_swprintf_c89
@@ -191,9 +189,6 @@ SKIP_SYMBOL|_wsprintf_c89
 SKIP_SYMBOL|_fscanf_c89
 SKIP_SYMBOL|_scanf_c89
 SKIP_SYMBOL|_sscanf_c89
-SKIP_SYMBOL|_vfscanf_c89
-SKIP_SYMBOL|_vscanf_c89
-SKIP_SYMBOL|_vsscanf_c89
 SKIP_SYMBOL|_fwscanf_c89
 SKIP_SYMBOL|_swscanf_c89
 SKIP_SYMBOL|_wscanf_c89

@@ -652,18 +652,6 @@ PORTPRINT=			\
 	vwprintf.o		\
 	wprintf.o
 
-# c89 variants to support 32-bit size of c89 u/intmax_t (32-bit libc only)
-PORTPRINT_C89=			\
-	vfprintf_c89.o		\
-	vprintf_c89.o		\
-	vsnprintf_c89.o		\
-	vsprintf_c89.o		\
-	vwprintf_c89.o
-
-PORTSTDIO_C89=			\
-	vscanf_c89.o		\
-	vwscanf_c89.o		\
-
 # portable stdio objects that contain large file interfaces.
 # Note: fopen64 is a special case, as we build it small.
 PORTSTDIO64=			\
@@ -1050,14 +1038,12 @@ MOSTOBJS=			\
 	$(PORTLOCALE)		\
 	$(PORTNSL)		\
 	$(PORTPRINT)		\
-	$(PORTPRINT_C89)	\
 	$(PORTPRINT_W)		\
 	$(PORTREGEX)		\
 	$(PORTREGEX64)		\
 	$(PORTSOCKET)		\
 	$(PORTSTDIO)		\
 	$(PORTSTDIO64)		\
-	$(PORTSTDIO_C89)	\
 	$(PORTSTDIO_W)		\
 	$(PORTSYS)		\
 	$(PORTSYS64)		\
@@ -1252,12 +1238,6 @@ $(PORTSTDIO_W:%=pics/%) := \
 
 $(PORTPRINT_W:%=pics/%) := \
 	CPPFLAGS += -D_WIDE
-
-$(PORTPRINT_C89:%=pics/%) := \
-	CPPFLAGS += -D_C89_INTMAX32
-
-$(PORTSTDIO_C89:%=pics/%) := \
-	CPPFLAGS += -D_C89_INTMAX32
 
 $(PORTI18N_COND:%=pics/%) := \
 	CPPFLAGS += -D_WCS_LONGLONG

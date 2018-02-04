@@ -45,17 +45,6 @@
 #include "libc.h"
 #include "mse.h"
 
-/*
- * 32-bit shadow functions _wprintf_c89(), _fwprintf_c89(), _swprintf_c89()
- * are included here.
- * When using the c89 compiler to build 32-bit applications, the size
- * of intmax_t is 32-bits, otherwise the size of intmax_t is 64-bits.
- * The shadow function uses 32-bit size of intmax_t for j conversion.
- * The #pragma redefine_extname in <stdio.h> selects the proper routine
- * at compile time for the user application.
- * NOTE: the shadow functions only exist in the 32-bit library.
- */
-
 int
 wprintf(const wchar_t *format, ...)
 {
@@ -171,43 +160,3 @@ swprintf(wchar_t *string, size_t n, const wchar_t *format, ...)
 		return ((int)count);
 	}
 }
-
-#ifndef _LP64
-
-int
-_wprintf_c89(const wchar_t *format, ...)
-{
-	ssize_t	count;
-	va_list	ap;
-
-	va_start(ap, format);
-	count = _vwprintf_c89(format, ap);
-	va_end(ap);
-	return ((int)count);
-}
-
-int
-_fwprintf_c89(FILE *iop, const wchar_t *format, ...)
-{
-	ssize_t	count;
-	va_list	ap;
-
-	va_start(ap, format);
-	count = _vfwprintf_c89(iop, format, ap);
-	va_end(ap);
-	return ((int)count);
-}
-
-int
-_swprintf_c89(wchar_t *string, size_t n, const wchar_t *format, ...)
-{
-	ssize_t	count;
-	va_list	ap;
-
-	va_start(ap, format);
-	count = _vswprintf_c89(string, n, format, ap);
-	va_end(ap);
-	return ((int)count);
-}
-
-#endif	/* _LP64 */

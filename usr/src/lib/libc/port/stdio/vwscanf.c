@@ -43,11 +43,7 @@
 #include "libc.h"
 
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vwscanf_c89(const wchar_t *fmt, va_list ap)
-#else
 vwscanf(const wchar_t *fmt, va_list ap)
-#endif
 {
 	rmutex_t	*lk;
 	int	ret;
@@ -57,21 +53,13 @@ vwscanf(const wchar_t *fmt, va_list ap)
 	if (GET_NO_MODE(stdin))
 		_setorientation(stdin, _WC_MODE);
 
-#ifdef _C89_INTMAX32
-	ret = __wdoscan_u(stdin, fmt, ap, _F_INTMAX32);
-#else
 	ret = __wdoscan_u(stdin, fmt, ap, 0);
-#endif
 	FUNLOCKFILE(lk);
 	return (ret);
 }
 
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vfwscanf_c89(FILE *iop, const wchar_t *fmt, va_list ap)
-#else
 vfwscanf(FILE *iop, const wchar_t *fmt, va_list ap)
-#endif
 {
 	rmutex_t	*lk;
 	int	ret;
@@ -81,22 +69,13 @@ vfwscanf(FILE *iop, const wchar_t *fmt, va_list ap)
 	if (GET_NO_MODE(iop))
 		_setorientation(iop, _WC_MODE);
 
-
-#ifdef _C89_INTMAX32
-	ret = __wdoscan_u(iop, fmt, ap, _F_INTMAX32);
-#else
 	ret = __wdoscan_u(iop, fmt, ap, 0);
-#endif
 	FUNLOCKFILE(lk);
 	return (ret);
 }
 
 int
-#ifdef _C89_INTMAX32	/* _C89_INTMAX32 version in 32-bit libc only */
-_vswscanf_c89(const wchar_t *wstr, const wchar_t *fmt, va_list ap)
-#else
 vswscanf(const wchar_t *wstr, const wchar_t *fmt, va_list ap)
-#endif
 {
 	FILE	strbuf;
 	size_t	wlen, clen;
@@ -131,10 +110,6 @@ vswscanf(const wchar_t *wstr, const wchar_t *fmt, va_list ap)
 	/* Probably the following is not required. */
 	/* _setorientation(&strbuf, _WC_MODE); */
 
-#ifdef _C89_INTMAX32
-	ret = __wdoscan_u(&strbuf, fmt, ap, _F_INTMAX32);
-#else
 	ret = __wdoscan_u(&strbuf, fmt, ap, 0);
-#endif
 	return (ret);
 }

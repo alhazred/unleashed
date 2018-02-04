@@ -55,22 +55,6 @@ extern "C" {
 #if defined(__EXTENSIONS__) || defined(_STDC_C99) || \
 	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX))
 
-#if !defined(_LP64) && !defined(_LONGLONG_TYPE)
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname snprintf	_snprintf_c89
-#pragma	redefine_extname vsnprintf	_vsnprintf_c89
-#pragma	redefine_extname vfscanf	_vfscanf_c89
-#pragma	redefine_extname vscanf		_vscanf_c89
-#pragma	redefine_extname vsscanf	_vsscanf_c89
-#else
-#define	snprintf	_snprintf_c89
-#define	vsnprintf	_vsnprintf_c89
-#define	vfscanf		_vfscanf_c89
-#define	vscanf		_vscanf_c89
-#define	vsscanf		_vsscanf_c89
-#endif
-#endif /* !defined(_LP64) && !defined(_LONGLONG_TYPE) */
-
 extern int vfscanf(FILE *_RESTRICT_KYWD, const char *_RESTRICT_KYWD, __va_list);
 extern int vscanf(const char *_RESTRICT_KYWD, __va_list);
 extern int vsscanf(const char *_RESTRICT_KYWD, const char *_RESTRICT_KYWD,
