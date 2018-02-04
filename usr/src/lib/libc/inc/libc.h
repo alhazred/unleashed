@@ -303,13 +303,7 @@ extern wint_t _getwc(FILE *);
 /*
  * defined in fputwc.c
  */
-extern wint_t __putwc_xpg5(wint_t, FILE *);
 extern wint_t _putwc(wint_t, FILE *);
-
-/*
- * defined in ungetwc.c
- */
-extern wint_t	__ungetwc_xpg5(wint_t, FILE *);
 
 /*
  * Defined in setlocale.c.

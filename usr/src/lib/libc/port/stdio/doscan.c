@@ -1079,7 +1079,7 @@ _wd_ungetwc(int *chcount, wchar_t wc, FILE *iop)
 
 	if (!(iop->_flag & _IOWRT)) {
 		/* call from fwscanf, wscanf */
-		ret = __ungetwc_xpg5((wint_t)wc, iop);
+		ret = ungetwc((wint_t)wc, iop);
 		if (ret != (wint_t)wc)
 			return (WEOF);
 		(*chcount)--;

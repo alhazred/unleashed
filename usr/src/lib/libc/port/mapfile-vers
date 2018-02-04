@@ -2939,8 +2939,6 @@ $endif
 	_fpsetmask;
 	_fpsetround;
 	_fpsetsticky;
-	__fputwc_xpg5;
-	__fputws_xpg5;
 	_ftw;
 	_gcvt;
 	_getarg;
@@ -3032,8 +3030,6 @@ $endif
 	pthread_attr_getdaemonstate_np;
 	pthread_attr_setdaemonstate_np;
 	_pthread_setcleanupinit;
-	__putwchar_xpg5;
-	__putwc_xpg5;
 	rctlctl;
 	rctllist;
 	_realbufend;
@@ -3153,7 +3149,6 @@ $endif
 	_uncached_getgrnam_r;
 	_uncached_getpwnam_r;
 	_uncached_getpwuid_r;
-	__ungetwc_xpg5;
 	_unordered;
 	utssys;
 	__wcsftime_xpg5;

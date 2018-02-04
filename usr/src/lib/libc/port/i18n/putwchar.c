@@ -50,9 +50,3 @@ putwchar(wint_t c)
 {
 	return (_putwc(c, stdout));
 }
-
-wint_t
-__putwchar_xpg5(wint_t c)
-{
-	return (__putwc_xpg5(c, stdout));
-}

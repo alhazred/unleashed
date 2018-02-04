@@ -172,32 +172,17 @@ typedef __FILE FILE;
 #pragma redefine_extname fgetwc	__fgetwc_xpg5
 #pragma redefine_extname getwc	__getwc_xpg5
 #pragma redefine_extname getwchar	__getwchar_xpg5
-#pragma redefine_extname fputwc	__fputwc_xpg5
-#pragma redefine_extname putwc	__putwc_xpg5
-#pragma redefine_extname putwchar	__putwchar_xpg5
 #pragma redefine_extname fgetws	__fgetws_xpg5
-#pragma redefine_extname fputws	__fputws_xpg5
-#pragma redefine_extname ungetwc	__ungetwc_xpg5
 #else	/* __PRAGMA_REDEFINE_EXTNAME */
 extern wint_t __fgetwc_xpg5(__FILE *);
 extern wint_t __getwc_xpg5(__FILE *);
 extern wint_t __getwchar_xpg5(void);
-extern wint_t __fputwc_xpg5(wint_t, __FILE *);
-extern wint_t __putwc_xpg5(wint_t, __FILE *);
-extern wint_t __putwchar_xpg5(wint_t);
 extern wchar_t *__fgetws_xpg5(wchar_t *_RESTRICT_KYWD, int,
 			__FILE *_RESTRICT_KYWD);
-extern int __fputws_xpg5(const wchar_t *_RESTRICT_KYWD, __FILE *_RESTRICT_KYWD);
-extern wint_t __ungetwc_xpg5(wint_t, __FILE *);
 #define	fgetwc	__fgetwc_xpg5
 #define	getwc	__getwc_xpg5
 #define	getwchar	__getwchar_xpg5
-#define	fputwc	__fputwc_xpg5
-#define	putwc	__putwc_xpg5
-#define	putwchar	__putwchar_xpg5
 #define	fgetws	__fgetws_xpg5
-#define	fputws	__fputws_xpg5
-#define	ungetwc	__ungetwc_xpg5
 #endif	/* __PRAGMA_REDEFINE_EXTNAME */
 #endif /* not XPG4 and not XPG4v2 */
 #endif /* defined(_MSE_INT_H) */

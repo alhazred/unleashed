@@ -36,8 +36,7 @@
 #include "stdiom.h"
 
 static int
-_fputws_impl(const wchar_t *_RESTRICT_KYWD ws, FILE *_RESTRICT_KYWD fp,
-    int orient)
+_fputws_impl(const wchar_t *_RESTRICT_KYWD ws, FILE *_RESTRICT_KYWD fp)
 {
 	int nchars;
 	int nwritten;
@@ -55,7 +54,7 @@ _fputws_impl(const wchar_t *_RESTRICT_KYWD ws, FILE *_RESTRICT_KYWD fp,
 	nwritten = 0;
 
 	FLOCKFILE(lk, fp);
-	if (orient && GET_NO_MODE(fp))
+	if (GET_NO_MODE(fp))
 		_setorientation(fp, _WC_MODE);
 
 	while (nchars > 0) {
@@ -88,11 +87,5 @@ _fputws_impl(const wchar_t *_RESTRICT_KYWD ws, FILE *_RESTRICT_KYWD fp,
 int
 fputws(const wchar_t *_RESTRICT_KYWD ws, FILE *_RESTRICT_KYWD fp)
 {
-	return (_fputws_impl(ws, fp, 0));
-}
-
-int
-__fputws_xpg5(const wchar_t *ws, FILE *fp)
-{
-	return (_fputws_impl(ws, fp, 1));
+	return (_fputws_impl(ws, fp));
 }

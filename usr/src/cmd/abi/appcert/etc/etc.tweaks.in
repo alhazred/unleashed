@@ -135,13 +135,8 @@ MODEL_TWEAK=5.5.1|/usr/lib/libthread.so.1|*|kill|public
 # UNIX98 project
 SKIP_SYMBOL|__fgetwc_xpg5
 SKIP_SYMBOL|__fgetws_xpg5
-SKIP_SYMBOL|__fputwc_xpg5
-SKIP_SYMBOL|__fputws_xpg5
 SKIP_SYMBOL|__getwc_xpg5
 SKIP_SYMBOL|__getwchar_xpg5
-SKIP_SYMBOL|__putwc_xpg5
-SKIP_SYMBOL|__putwchar_xpg5
-SKIP_SYMBOL|__ungetwc_xpg5
 SKIP_SYMBOL|__wcsftime_xpg5
 SKIP_SYMBOL|__wcstok_xpg5
 #

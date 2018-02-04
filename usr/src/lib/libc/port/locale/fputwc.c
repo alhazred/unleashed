@@ -51,16 +51,9 @@
  * we don't need the non-MT safe version.  We do this because its faster,
  * since we don't have to lock the file while doing the potentially expensive
  * conversion from wide to mb.
- *
- * Solaris also has XPG5 and legacy semantics.  The new standard requires
- * that the stream orientation change, but legacy calls don't do that.
- *
- * Note that we had the source for the XPG5 version of this, but it relied
- * on closed implementation bits that we lack, so we supply replacements
- * here.
  */
 static wint_t
-__fputwc_impl(wchar_t wc, FILE *fp, int orient)
+__fputwc_impl(wchar_t wc, FILE *fp)
 {
 	char buf[MB_LEN_MAX];
 	size_t		i, len;
@@ -90,11 +83,7 @@ __fputwc_impl(wchar_t wc, FILE *fp, int orient)
 	}
 
 	FLOCKFILE(mx, fp);
-	/*
-	 * This is used for XPG 5 semantics, which requires the stream
-	 * orientation to be changed when the function is called.
-	 */
-	if (orient && GET_NO_MODE(fp)) {
+	if (GET_NO_MODE(fp)) {
 		_setorientation(fp, _WC_MODE);
 	}
 	for (i = 0; i < len; i++) {
@@ -110,28 +99,11 @@ __fputwc_impl(wchar_t wc, FILE *fp, int orient)
 wint_t
 fputwc(wchar_t wc, FILE *fp)
 {
-	return (__fputwc_impl(wc, fp, 0));
+	return (__fputwc_impl(wc, fp));
 }
 
-/*
- * Trivial functional form of the typical macro.
- */
-#undef __putwc
 wint_t
 putwc(wchar_t wc, FILE *fp)
 {
-	return (__fputwc_impl(wc, fp, 0));
-}
-
-wint_t
-__fputwc_xpg5(wint_t wc, FILE *fp)
-{
-	return (__fputwc_impl(wc, fp, 1));
-}
-
-#undef __putwc_xpg5
-wint_t
-__putwc_xpg5(wint_t wc, FILE *fp)
-{
-	return (__fputwc_impl(wc, fp, 1));
+	return (__fputwc_impl(wc, fp));
 }

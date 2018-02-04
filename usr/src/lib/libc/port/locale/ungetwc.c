@@ -52,7 +52,7 @@
 #include "mse.h"
 
 static wint_t
-__ungetwc_impl(wint_t wc, FILE *iop, int orient)
+__ungetwc_impl(wint_t wc, FILE *iop)
 {
 	char		mbs[MB_LEN_MAX];
 	unsigned char	*p;
@@ -61,7 +61,7 @@ __ungetwc_impl(wint_t wc, FILE *iop, int orient)
 
 	FLOCKFILE(lk, iop);
 
-	if (orient && GET_NO_MODE(iop)) {
+	if (GET_NO_MODE(iop)) {
 		_setorientation(iop, _WC_MODE);
 	}
 	if ((wc == WEOF) || ((iop->_flag & _IOREAD) == 0)) {
@@ -98,15 +98,8 @@ __ungetwc_impl(wint_t wc, FILE *iop, int orient)
 	return (wc);
 }
 
-
-wint_t
-__ungetwc_xpg5(wint_t wc, FILE *iop)
-{
-	return (__ungetwc_impl(wc, iop, 1));
-}
-
 wint_t
 ungetwc(wint_t wc, FILE *iop)
 {
-	return (__ungetwc_impl(wc, iop, 0));
+	return (__ungetwc_impl(wc, iop));
 }
