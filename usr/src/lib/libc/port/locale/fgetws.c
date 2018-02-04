@@ -40,20 +40,18 @@
 /*
  * FreeBSD implementation here included a full version that tried to be more
  * efficient with memory strings.  However, for simplicity's sake, we are
- * going to just use fgetwc().  We also do the stream orientation thing for
- * XPG5 if we need to.
+ * going to just use fgetwc().
  */
 
 wchar_t *
-_fgetws_impl(wchar_t *_RESTRICT_KYWD ws, int n, FILE *_RESTRICT_KYWD fp,
-    int orient)
+_fgetws_impl(wchar_t *_RESTRICT_KYWD ws, int n, FILE *_RESTRICT_KYWD fp)
 {
 	wint_t wc;
 	wchar_t *wsp;
 	rmutex_t *lk;
 
 	FLOCKFILE(lk, fp);
-	if (orient && GET_NO_MODE(fp))
+	if (GET_NO_MODE(fp))
 		_setorientation(fp, _WC_MODE);
 
 	if (n <= 0) {
@@ -91,13 +89,7 @@ _fgetws_impl(wchar_t *_RESTRICT_KYWD ws, int n, FILE *_RESTRICT_KYWD fp,
 wchar_t *
 fgetws(wchar_t *_RESTRICT_KYWD ws, int n, FILE *_RESTRICT_KYWD fp)
 {
-	return (_fgetws_impl(ws, n, fp, 0));
-}
-
-wchar_t *
-__fgetws_xpg5(wchar_t *ws, int n, FILE *fp)
-{
-	return (_fgetws_impl(ws, n, fp, 1));
+	return (_fgetws_impl(ws, n, fp));
 }
 
 wchar_t *

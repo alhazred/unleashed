@@ -2925,8 +2925,6 @@ $endif
 	_F_cplx_div_ix;
 	_F_cplx_div_rx;
 	_F_cplx_mul;
-	__fgetwc_xpg5;
-	__fgetws_xpg5;
 	_findbuf;
 	_findiop;
 	__fini_daemon_priv;
@@ -2952,8 +2950,6 @@ $endif
 	_getsp;
 	__gettsp;
 	getvmusage;
-	__getwchar_xpg5;
-	__getwc_xpg5;
 	gtty;
 	__idmap_flush_kcache;
 	__idmap_reg;

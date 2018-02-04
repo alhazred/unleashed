@@ -296,8 +296,6 @@ extern ssize_t	_wdoprnt(const wchar_t *, va_list, FILE *);
  * defined in fgetwc.c
  */
 extern wint_t _fgetwc_unlocked(FILE *);
-extern wint_t __getwc_xpg5(FILE *);
-extern wint_t __fgetwc_xpg5(FILE *);
 extern wint_t _getwc(FILE *);
 
 /*

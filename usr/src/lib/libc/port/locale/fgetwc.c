@@ -114,25 +114,6 @@ fgetwc(FILE *fp)
 	locale_t	loc = uselocale(NULL);
 
 	FLOCKFILE(l, fp);
-	r = _fgetwc_unlocked_l(fp, loc);
-	FUNLOCKFILE(l);
-
-	return (r);
-}
-
-/*
- * XPG5 version.
- */
-#undef	__getwc_xpg5
-#pragma weak __getwc_xpg5 = __fgetwc_xpg5
-wint_t
-__fgetwc_xpg5(FILE *fp)
-{
-	wint_t		r;
-	rmutex_t	*l;
-	locale_t	loc = uselocale(NULL);
-
-	FLOCKFILE(l, fp);
 	if (GET_NO_MODE(fp))
 		_setorientation(fp, _WC_MODE);
 	r = _fgetwc_unlocked_l(fp, loc);

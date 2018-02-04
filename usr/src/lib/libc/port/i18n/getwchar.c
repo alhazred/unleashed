@@ -52,9 +52,3 @@ getwchar(void)
 {
 	return (getwc(stdin));
 }
-
-wint_t
-__getwchar_xpg5(void)
-{
-	return (__getwc_xpg5(stdin));
-}

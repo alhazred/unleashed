@@ -165,28 +165,6 @@ typedef __FILE FILE;
 
 #endif /* !defined(_LP64) && !defined(_LONGLONG_TYPE) */
 
-#if (!defined(_MSE_INT_H))
-/* not XPG4 and not XPG4v2 */
-#if !defined(_XPG4) || defined(_XPG5)
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname fgetwc	__fgetwc_xpg5
-#pragma redefine_extname getwc	__getwc_xpg5
-#pragma redefine_extname getwchar	__getwchar_xpg5
-#pragma redefine_extname fgetws	__fgetws_xpg5
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern wint_t __fgetwc_xpg5(__FILE *);
-extern wint_t __getwc_xpg5(__FILE *);
-extern wint_t __getwchar_xpg5(void);
-extern wchar_t *__fgetws_xpg5(wchar_t *_RESTRICT_KYWD, int,
-			__FILE *_RESTRICT_KYWD);
-#define	fgetwc	__fgetwc_xpg5
-#define	getwc	__getwc_xpg5
-#define	getwchar	__getwchar_xpg5
-#define	fgetws	__fgetws_xpg5
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif /* not XPG4 and not XPG4v2 */
-#endif /* defined(_MSE_INT_H) */
-
 extern wint_t fgetwc(__FILE *);
 extern wchar_t *fgetws(wchar_t *_RESTRICT_KYWD, int, __FILE *_RESTRICT_KYWD);
 extern wint_t fputwc(wint_t, __FILE *);

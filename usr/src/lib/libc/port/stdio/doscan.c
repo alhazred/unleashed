@@ -1050,7 +1050,7 @@ _wd_getwc(int *chcount, FILE *iop)
 
 	if (!(iop->_flag & _IOWRT)) {
 		/* call from fwscanf, wscanf */
-		wc = __fgetwc_xpg5(iop);
+		wc = fgetwc(iop);
 		(*chcount)++;
 		return (wc);
 	} else {

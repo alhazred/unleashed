@@ -49,7 +49,7 @@ changed.
    indxbib(1), lookbib(1), refer(1), roffbib(1), soelim(1), tbl(1), ul(1),
    vgrind(1), /usr/bin/makedev /usr/bin/ta removed -- made obsolete by mandoc
  - pre-XPG5 behavior: ungetwc(3c), putwchar(3c), putwc(3c), fputwc(3c),
-   fputws(3c)
+   fputws(3c), fgetwc(3c), getwc(3c), getwchar(3c), fgetws(3c)
  + awk(1) replaced with a version imported from FreeBSD
  + libcurses, libxcurses, libxcurses2, terminfo were replaced by ncurses
  + grep(1) replaced with a version imported from FreeBSD
