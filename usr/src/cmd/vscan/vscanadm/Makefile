@@ -34,7 +34,7 @@ include ../../Makefile.cmd
 LDLIBS += -L$(ROOT)/usr/lib/vscan -lvscan
 LDFLAGS += -R/usr/lib/vscan
 
-C99MODE =       $(C99_ENABLE)
+CSTD =       $(CSTD_GNU99)
 
 .KEEP_STATE:
 

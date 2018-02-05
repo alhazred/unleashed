@@ -38,6 +38,6 @@ CPPFLAGS += -I$(SRCTOP)/include/sys/fibre-channel
 CPPFLAGS += -I$(SRCTOP)/include/sys/fibre-channel/fca/qlc
 CPPFLAGS += -I$(SRCTOP)/include/sys/fibre-channel/impl
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CERRWARN +=	-Wno-address

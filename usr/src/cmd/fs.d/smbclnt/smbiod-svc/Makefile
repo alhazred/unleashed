@@ -36,7 +36,7 @@ OBJS=	$(TYPEPROG).o
 SRCS=	$(TYPEPROG).c
 POFILE=	$(TYPEPROG).po
 
-C99MODE= $(C99_ENABLE)
+CSTD= $(CSTD_GNU99)
 
 CPPFLAGS += -I$(SRC)/lib/libsmbfs \
 	-I$(SRC)/uts/common/smbclnt -I$(SRC)/uts/common

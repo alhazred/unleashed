@@ -39,7 +39,7 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
-C99MODE =	$(C99_ENABLE)
+CSTD =	$(CSTD_GNU99)
 
 POFILES =	$(OBJS:%.o=%.po)
 POFILE =	$(PROG)_all.po

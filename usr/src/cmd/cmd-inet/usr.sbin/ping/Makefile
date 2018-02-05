@@ -41,7 +41,7 @@ LDLIBS +=	 -lm -linetutil
 # These #defines are required to use SUSv3 interfaces
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 .KEEP_STATE:
 .PARALLEL:

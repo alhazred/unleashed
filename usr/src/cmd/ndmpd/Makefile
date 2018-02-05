@@ -50,7 +50,7 @@ CPPFLAGS += $(LFLAGS64)
 CPPFLAGS += -D_FILE_OFFSET_BITS=64 -DDEBUG
 CPPFLAGS += -I. -Iinclude
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-switch

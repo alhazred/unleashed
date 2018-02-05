@@ -59,7 +59,7 @@ INCS += -I../../../common
 CLEANFILES += ../common/zfs.h
 CLEANFILES += $(EXTPICS)
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 $(LIBS): ../common/zfs.h
 

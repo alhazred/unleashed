@@ -27,7 +27,7 @@ $(BUILD64) PROG64= $(PROG).$(MACH64)
 
 $(OBJS_OVERRIDE)SRCS = $(PROG).c ../common/test_common.c
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 CPPFLAGS += -I$(ROOT)/usr/include -I../common
 
 ROOTOPTPKG = $(ROOT)/opt/libc-tests

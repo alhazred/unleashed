@@ -36,7 +36,7 @@ OBJS=	$(TYPEPROG).o
 SRCS=	$(TYPEPROG).c
 POFILE=	$(TYPEPROG).po
 
-C99MODE= $(C99_ENABLE)
+CSTD= $(CSTD_GNU99)
 
 # This is a multi-thread program but Nevada
 # no longer needs -lthread

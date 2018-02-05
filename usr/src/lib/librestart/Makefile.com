@@ -39,7 +39,7 @@ LDLIBS +=	-lpool -lproject -lsecdb -lnvpair -lsysevent -lscf -luutil -lc
 
 SRCDIR =	../common
 
-CFLAGS +=	$(C99_ENABLE)
+CFLAGS +=	$(CSTD_GNU99)
 
 CPPFLAGS +=
 

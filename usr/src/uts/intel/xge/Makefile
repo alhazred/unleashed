@@ -88,13 +88,13 @@ CFLAGS		+= -fno-strict-aliasing
 CFLAGS		+= -fno-unit-at-a-time
 CFLAGS		+= -fno-optimize-sibling-calls
 CFLAGS		+= -O2
-CFLAGS		+= $(C99_ENABLE)
+CFLAGS		+= $(CSTD_GNU99)
 CFLAGS64	+= $(XGE_CFLAGS)
 CFLAGS64	+= -fno-strict-aliasing
 CFLAGS64	+= -fno-unit-at-a-time
 CFLAGS64	+= -fno-optimize-sibling-calls
 CFLAGS64	+= -O2
-CFLAGS64	+= $(C99_ENABLE)
+CFLAGS64	+= $(CSTD_GNU99)
 
 #
 #	Driver depends on MAC & IP

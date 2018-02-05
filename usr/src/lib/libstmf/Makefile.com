@@ -36,7 +36,7 @@ SRCDIR =	../common
 
 INCS += -I$(SRCDIR)
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 LDLIBS +=	-lc -lnvpair -lscf -lm
 CPPFLAGS +=	$(INCS)
 

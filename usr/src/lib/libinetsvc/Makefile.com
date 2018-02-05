@@ -34,7 +34,7 @@ LDLIBS +=	-lscf -lc -lmd -luutil
 
 SRCDIR =	../common
 
-CFLAGS +=			$(C99_ENABLE)
+CFLAGS +=			$(CSTD_GNU99)
 CPPFLAGS +=			-I../common
 $(RELEASE_BUILD)CPPFLAGS +=     -DNDEBUG
 

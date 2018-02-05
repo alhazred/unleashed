@@ -26,7 +26,7 @@ include ../Makefile.ctf
 .KEEP_STATE:
 
 LDLIBS +=	-ldevinfo
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 all: $(PROG)
 

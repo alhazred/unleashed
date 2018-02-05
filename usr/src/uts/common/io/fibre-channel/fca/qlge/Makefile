@@ -59,7 +59,7 @@ INC_PATH	+= -I$(SRCTOP)/include/sys/fibre-channel/fca/qlge
 
 LDFLAGS		+= -dy -Nmisc/mac -Ndrv/ip
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-uninitialized

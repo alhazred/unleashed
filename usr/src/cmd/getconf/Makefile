@@ -29,7 +29,7 @@ OBJS= getconf.o
 
 include ../Makefile.cmd
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 CFLAGS += -D_XOPEN_SOURCE=600 -I$(SRC)/lib/libc/inc
 
 .KEEP_STATE:

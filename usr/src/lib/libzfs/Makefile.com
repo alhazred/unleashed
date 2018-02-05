@@ -68,7 +68,7 @@ INCS += -I$(SRCTOP)/kernel/fs/zfs
 INCS += -I$(SRCTOP)/kernel/fs/zfs/common
 INCS += -I../../libc/inc
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 LDLIBS +=	-lc -lm -ldevid -lgen -lnvpair -luutil -lavl -lefi \
 	-ladm -lidmap -lmd -lumem -lzfs_core -lz -lcmdutils
 CPPFLAGS +=	$(INCS) -D_LARGEFILE64_SOURCE=1

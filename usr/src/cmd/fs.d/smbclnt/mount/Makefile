@@ -42,7 +42,7 @@ $(ROOTLIBFSTYPE)/mount := FILEMODE= 04555
 
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-label
-C99MODE= $(C99_ENABLE)
+CSTD= $(CSTD_GNU99)
 
 LDLIBS += -lsmbfs
 

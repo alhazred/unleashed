@@ -37,7 +37,7 @@ SRCS=		$(OBJS:%.o=../common/%.c)
 INCLIST=	-I../common
 DEFLIST=	-DELF
 CPPFLAGS=	$(INCLIST) $(DEFLIST) $(CPPFLAGS.master)
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-parentheses

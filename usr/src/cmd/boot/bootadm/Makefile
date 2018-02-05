@@ -47,7 +47,7 @@ CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS +=	-I$(SRCTOP)/include -I$(SRC)/common -I$(SRC)/common/ficl
 CERRWARN +=	-Wall -Wno-unknown-pragmas
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 all: $(PROG)
 

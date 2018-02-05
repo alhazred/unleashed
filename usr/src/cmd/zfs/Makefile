@@ -44,7 +44,7 @@ LDLIBS += -lzfs_core -lzfs -luutil -lumem -lnvpair -lsec -lidmap
 
 INCS += -I$(SRCTOP)/kernel/fs/zfs/common
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG

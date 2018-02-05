@@ -37,7 +37,7 @@ LIBS = $(DYNLIB)
 
 SRCDIR =	../common
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 
 CPPFLAGS += -I../common -I.
 CFLAGS += $(C_BIGPICFLAGS)

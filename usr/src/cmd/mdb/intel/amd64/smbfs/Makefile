@@ -41,7 +41,7 @@ CPPFLAGS	+= -I$(SRC)/uts/common/fs/smbclnt
 CPPFLAGS	+= -I$(SRC)/uts/common
 CPPFLAGS	+= -I$(SRCTOP)/include
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 # maybe not the best place for this, but
 # we need to create this directory.

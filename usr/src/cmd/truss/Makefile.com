@@ -40,7 +40,7 @@ include ../../Makefile.cmd
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-switch
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 LDLIBS	+= -lproc -lrtld_db -lc_db -lnvpair
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1

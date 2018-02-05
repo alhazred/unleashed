@@ -65,7 +65,7 @@ CERRWARN +=	-Wno-uninitialized
 
 TEXT_DOMAIN =	SUNW_OST_OSLIB
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 POFILE =	$(PROG)_all.po
 
 RPC_MSGOUT_OPT = -DRPC_MSGOUT=idmap_rpc_msgout

@@ -38,7 +38,7 @@ INCS +=		-I$(SRCDIR)
 INCS +=		-I$(SRCTOP)/include/sys/fcoe
 
 LDLIBS +=	-lc -ldladm -lscf
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 CPPFLAGS +=	$(INCS)
 
 .KEEP_STATE:

@@ -40,6 +40,6 @@ include ../../../common/modules/zfs/Makefile.zfs
 CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs
 CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs/lua
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CERRWARN 	+= -Wno-type-limits

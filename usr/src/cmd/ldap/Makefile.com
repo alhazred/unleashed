@@ -109,9 +109,9 @@ ldaplist :=	LDLIBS += -lsldap
 ldapaddent :=	LDLIBS += -lsldap
 ldapclient :=	LDLIBS += -lsldap -lscf
 
-ldaplist :=	C99MODE = $(C99_ENABLE)
-ldapaddent :=	C99MODE = $(C99_ENABLE)
-ldapclient :=	C99MODE = $(C99_ENABLE)
+ldaplist :=	CSTD = $(CSTD_GNU99)
+ldapaddent :=	CSTD = $(CSTD_GNU99)
+ldapclient :=	CSTD = $(CSTD_GNU99)
 
 
 .KEEP_STATE:

@@ -64,7 +64,7 @@ $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 # Should not have to do this, but the Kerberos includes are a mess.
 CPPFLAGS += -I $(ROOT)/usr/include/kerberosv5
 
-C99MODE =       $(C99_ENABLE)
+CSTD =       $(CSTD_GNU99)
 
 LDFLAGS += -R/usr/lib/smbsrv
 LDLIBS += -L$(ROOT)/usr/lib/smbsrv

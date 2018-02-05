@@ -40,7 +40,7 @@ SRCDIR =	../common
 INCS += -I$(SRCDIR)
 INCS += -I$(SRCTOP)/include
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 LDLIBS +=	-lc -lnvpair -lstmf -luuid -lscf
 CPPFLAGS +=	$(INCS)
 CERRWARN +=	-Wno-parentheses

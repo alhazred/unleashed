@@ -19,7 +19,7 @@ include $(SRC)/test/Makefile.com
 
 PROG = conn dgram drop_priv nosignal sockpair
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
 
 nosignal := LDLIBS += -lnsl

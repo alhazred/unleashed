@@ -45,4 +45,4 @@ ROOTPERLEXT64 = $(ROOTPERLEXTDIR64)/$(MODULE).so
 XSUBPP = $(PERL) $(PERLDIR)/lib/ExtUtils/xsubpp \
 	-typemap $(PERLDIR)/lib/ExtUtils/typemap
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)

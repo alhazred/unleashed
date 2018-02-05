@@ -34,4 +34,4 @@ OBJS=	$(SRCS:%.c=%.o)
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
-C99MODE =       $(C99_ENABLE)
+CSTD =       $(CSTD_GNU99)

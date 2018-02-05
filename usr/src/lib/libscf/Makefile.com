@@ -51,7 +51,7 @@ SRCDIR =	../common
 
 COMDIR =	../../../common/svc
 
-CFLAGS +=	$(C99_ENABLE)
+CFLAGS +=	$(CSTD_GNU99)
 CPPFLAGS +=	-I../inc -I../../common/inc -I$(COMDIR) -I$(ROOTHDRDIR)
 $(NOT_RELEASE_BUILD) CPPFLAGS += -DFASTREBOOT_DEBUG
 

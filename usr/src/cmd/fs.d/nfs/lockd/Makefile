@@ -38,7 +38,7 @@ SRCS	  =	$(LOCAL:%.o=%.c) ../lib/daemon.c ../lib/nfs_tbind.c \
 		../lib/smfcfg.c ../lib/thrpool.c
 LDLIBS	 +=	 -lscf
 CPPFLAGS +=	-I../lib
-C99MODE	  =	$(C99_ENABLE)
+CSTD	  =	$(CSTD_GNU99)
 
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-switch

@@ -37,7 +37,7 @@ POFILE=		$(TYPEPROG).po
 CLOBBERFILES += $(TYPEPROG)
 
 CERRWARN +=	-Wno-unused-variable
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 LDLIBS +=	-lreparse
 

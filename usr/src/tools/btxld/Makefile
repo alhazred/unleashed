@@ -27,7 +27,7 @@ MAN1ONBLDFILES=	btxld.1
 SRCS=		btxld.c elfh.c version.c $(UTILS_SRC) $(EINFO_SRC) $(EXTRA_SRC)
 OBJS=		btxld.o elfh.o version.o bblk_einfo.o mboot_extra.o boot_utils.o
 LDLIBS +=	-lmd5
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 CPPFLAGS +=	-I$(COMMON_SRC) -idirafter $(SRCTOP)/include
 
 $(ROOTONBLDMAN1ONBLDFILES)	:= FILEMODE=	644

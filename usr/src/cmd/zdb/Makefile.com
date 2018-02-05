@@ -39,7 +39,7 @@ INCS +=	-I$(SRCTOP)/kernel/fs/zfs/common
 
 LDLIBS += -lzpool -lumem -lnvpair -lzfs -lavl -lcmdutils
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS) -DDEBUG
 

@@ -175,7 +175,7 @@ CERRWARN += -Wno-missing-field-initializers
 $(RELEASE_BUILD)CERRWARN += -Wno-unused
 $(RELEASE_BUILD)CERRWARN += -Wno-empty-body
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 
 CFLAGS_uts		=
 CFLAGS_uts		+= $(STAND_FLAGS_$(CLASS))

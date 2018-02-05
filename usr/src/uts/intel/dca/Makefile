@@ -57,7 +57,7 @@ ALL_TARGET	= $(BINARY) $(SRC_CONFFILE)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOTLINK) $(ROOT_CONFFILE)
 
 # C99 mode is needed for dca
-CFLAGS += $(C99_ENABLE) 
+CFLAGS += $(CSTD_GNU99) 
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

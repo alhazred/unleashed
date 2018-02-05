@@ -33,7 +33,7 @@ include $(SRC)/cmd/Makefile.cmd.64
 include $(SRC)/cmd/mdb/intel/Makefile.amd64
 include $(SRC)/cmd/mdb/Makefile.module
 
-C99MODE = $(C99_ENABLE)
+CSTD = $(CSTD_GNU99)
 
 CPPFLAGS += -I$(SRCTOP)/include
 

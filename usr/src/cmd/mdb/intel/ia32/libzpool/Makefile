@@ -43,7 +43,7 @@ CPPFLAGS += -I../../../../../lib/libzpool/common \
 	-I$(SRCTOP)/kernel/fs/zfs \
 	-I$(SRCTOP)/kernel/fs/zfs/lua
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CERRWARN 	+= -Wno-type-limits
 

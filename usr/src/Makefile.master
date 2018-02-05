@@ -306,10 +306,10 @@ $(RELEASE_BUILD)CERRWARN += -Wno-empty-body
 # turn warnings into errors (C++)
 CCERRWARN=		-Werror
 
-# C99 mode
-C99_ENABLE=	-std=gnu99
-C99_DISABLE=	-std=gnu89
-C99MODE=	$(C99_DISABLE)
+# C standard.
+CSTD_GNU89=	-std=gnu89
+CSTD_GNU99=	-std=gnu99
+CSTD=		$(CSTD_GNU89)
 
 # In most places, assignments to these macros should be appended with +=
 # (CPPFLAGS.first allows values to be prepended to CPPFLAGS).
@@ -350,8 +350,8 @@ CALLSYMS=	-fno-eliminate-unused-debug-symbols \
 # Flags used to build in debug mode for ctf generation.  Bugs in the Devpro
 # compilers currently prevent us from building with cc-emitted DWARF.
 #
-CTF_FLAGS_sparc	= -g -Wc,-Qiselect-T1 $(C99MODE) $(CDWARFSTR)
-CTF_FLAGS_i386	= -g $(C99MODE) $(CDWARFSTR)
+CTF_FLAGS_sparc	= -g -Wc,-Qiselect-T1 $(CSTD) $(CDWARFSTR)
+CTF_FLAGS_i386	= -g $(CSTD) $(CDWARFSTR)
 
 CTF_FLAGS_sparcv9	= $(CTF_FLAGS_sparc)
 CTF_FLAGS_amd64		= $(CTF_FLAGS_i386)
@@ -407,11 +407,11 @@ $(SRCDBGBLD)CSOURCEDEBUGFLAGS	= -g
 $(SRCDBGBLD)CCSOURCEDEBUGFLAGS	= -g
 
 CFLAGS=         $(COPTFLAG) $($(MACH)_CFLAGS) \
-		$(CERRWARN) $(C99MODE) \
+		$(CERRWARN) $(CSTD) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS)
 CFLAGS64=       $(COPTFLAG64) $($(MACH64)_CFLAGS) \
-		$(CERRWARN) $(C99MODE) \
+		$(CERRWARN) $(CSTD) \
 		$(CCNOAUTOINLINE) $(CSOURCEDEBUGFLAGS) \
 		$(CUSERFLAGS64)
 ARFLAGS=	rc
@@ -420,7 +420,7 @@ ARFLAGS=	rc
 # run on the build machine (also known as the NATIVE_BUILD).
 #
 NATIVE_CFLAGS=	$(COPTFLAG) $($(NATIVE_MACH)_CFLAGS) \
-		$(CERRWARN) $(C99MODE) \
+		$(CERRWARN) $(CSTD) \
 		$(CCNOAUTOINLINE) \
 		$(CSOURCEDEBUGFLAGS) $(CUSERFLAGS)
 

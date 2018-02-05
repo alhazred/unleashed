@@ -41,7 +41,7 @@ GENUNIX_DIR = ../../../common/modules/genunix
 CPPFLAGS += -I../../../../../lib/libzpool/common \
 	-I$(SRCTOP)/kernel/fs/zfs
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 CERRWARN 	+= -Wno-type-limits
 

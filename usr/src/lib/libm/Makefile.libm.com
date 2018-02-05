@@ -21,7 +21,7 @@ ASSUFFIX_sparc	= S
 ASSUFFIX_i386	= s
 ASSUFFIX	= $(ASSUFFIX_$(MACH))
 
-# With studio C99MODE of neither enabled nor disabled is "no_lib", whereby we
+# With studio CSTD of neither enabled nor disabled is "no_lib", whereby we
 # expect C99-the-language, but don't modify the behaviour of library routines.
 # This is VERY IMPORTANT, as -std=gnu99, for instance, would link us with
 # values-xpg6, which would introduce an __xpg6 to our object with the C99
@@ -31,7 +31,7 @@ ASSUFFIX	= $(ASSUFFIX_$(MACH))
 # We must then, unfortunately, defeat the GNU compiler _defaulting_ to C99, by
 # in that case setting it back to gnu89, which _also_ accepts C99 syntax as
 # far as is important.
-C99MODE		=
+CSTD		=
 CFLAGS		+= -std=gnu89
 CFLAGS64	+= -std=gnu89
 
@@ -51,7 +51,7 @@ CPPFLAGS	+= -I$(LIBMSRC)/C \
 # GCC needs __C99FEATURES__ such that the implementations of isunordered,
 # isgreaterequal, islessequal, etc, exist.  This gets us the C99 language
 # features, but not values-xpg6, the reason for which is outlined with
-# C99MODE.
+# CSTD.
 CFLAGS		+= -D__C99FEATURES__
 CFLAGS64	+= -D__C99FEATURES__
 

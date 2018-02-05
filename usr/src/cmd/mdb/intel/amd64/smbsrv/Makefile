@@ -38,7 +38,7 @@ ROOTKMOD = $(ROOT)/usr/kernel/kmdb
 
 include ../../../Makefile.module
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 $(ROOTKMOD):
 	$(INS.dir)

@@ -60,7 +60,7 @@ INC_PATH	+= -I$(UTSBASE)/common/fs/zut
 INC_PATH	+= -I$(SRC)/common
 INC_PATH	+= -I$(COMMONBASE)/zut
 
-C99MODE=	$(C99_ENABLE)
+CSTD=	$(CSTD_GNU99)
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to
