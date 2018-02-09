@@ -62,6 +62,7 @@ file path=usr/share/lib/zoneinfo/Africa/Maputo
 file path=usr/share/lib/zoneinfo/Africa/Monrovia
 file path=usr/share/lib/zoneinfo/Africa/Nairobi
 file path=usr/share/lib/zoneinfo/Africa/Ndjamena
+file path=usr/share/lib/zoneinfo/Africa/Sao_Tome
 file path=usr/share/lib/zoneinfo/Africa/Tripoli
 file path=usr/share/lib/zoneinfo/Africa/Tunis
 file path=usr/share/lib/zoneinfo/Africa/Windhoek
@@ -490,7 +491,6 @@ hardlink path=usr/share/lib/zoneinfo/Africa/Nouakchott \
 hardlink path=usr/share/lib/zoneinfo/Africa/Ouagadougou \
     target=../Africa/Abidjan
 hardlink path=usr/share/lib/zoneinfo/Africa/Porto-Novo target=../Africa/Lagos
-hardlink path=usr/share/lib/zoneinfo/Africa/Sao_Tome target=../Africa/Abidjan
 hardlink path=usr/share/lib/zoneinfo/Africa/Timbuktu target=../Africa/Abidjan
 hardlink path=usr/share/lib/zoneinfo/America/Antigua \
     target=../America/Port_of_Spain
@@ -595,8 +595,6 @@ hardlink path=usr/share/lib/zoneinfo/Brazil/East target=../America/Sao_Paulo
 hardlink path=usr/share/lib/zoneinfo/Brazil/West target=../America/Manaus
 hardlink path=usr/share/lib/zoneinfo/Canada/Atlantic target=../America/Halifax
 hardlink path=usr/share/lib/zoneinfo/Canada/Central target=../America/Winnipeg
-hardlink path=usr/share/lib/zoneinfo/Canada/East-Saskatchewan \
-    target=../America/Regina
 hardlink path=usr/share/lib/zoneinfo/Canada/Eastern target=../America/Toronto
 hardlink path=usr/share/lib/zoneinfo/Canada/Mountain \
     target=../America/Edmonton
