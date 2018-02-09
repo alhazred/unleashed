@@ -56,7 +56,6 @@
 #include <sys/debug.h>
 #include <sys/callb.h>
 #include <sys/tnf_probe.h>
-#include <sys/mem_cage.h>
 #include <sys/time.h>
 
 #include <vm/hat.h>
@@ -532,9 +531,6 @@ schedpaging(void *arg)
 	if (freemem < lotsfree + needfree)
 		seg_preap();
 
-	if (kcage_on && (kcage_freemem < kcage_desfree || kcage_needfree))
-		kcage_cageout_wakeup();
-
 	if (mutex_tryenter(&pageout_mutex)) {
 		/* pageout() not running */
 		nscan = 0;
@@ -692,14 +688,6 @@ pageout()
 	 * kick off pageout scheduler.
 	 */
 	schedpaging(NULL);
-
-	/*
-	 * Create kernel cage thread.
-	 * The kernel cage thread is started under the pageout process
-	 * to take advantage of the less restricted page allocation
-	 * in page_create_throttle().
-	 */
-	kcage_cageout_init();
 
 	/*
 	 * Limit pushes to avoid saturating pageout devices.

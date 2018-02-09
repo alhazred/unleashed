@@ -57,7 +57,6 @@
 #include <sys/panic.h>
 #include <sys/disp.h>
 #include <sys/msacct.h>
-#include <sys/mem_cage.h>
 
 #include <vm/page.h>
 #include <vm/anon.h>
@@ -893,8 +892,6 @@ onesec_waiters(void)
 	/*
 	 * Wakeup the cageout thread waiters once per second.
 	 */
-
-	kcage_tick();
 
 	one_sec = 0;
 

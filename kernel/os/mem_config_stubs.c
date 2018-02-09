@@ -29,18 +29,8 @@
 #include <sys/debug.h>
 #include <vm/page.h>
 #include <sys/mem_config.h>
-#include <sys/mem_cage.h>
 
 /* These should be in a platform stubs file. */
-
-int kcage_on;
-kthread_id_t kcage_cageout_thread;
-pgcnt_t kcage_freemem;
-pgcnt_t kcage_throttlefree;
-pgcnt_t kcage_minfree;
-pgcnt_t kcage_desfree;
-pgcnt_t kcage_needfree;
-pgcnt_t	kcage_lotsfree = 1;
 
 #if !defined(__x86) || defined(__xpv)
 /*ARGSUSED*/
@@ -56,32 +46,3 @@ kphysm_setup_func_unregister(kphysm_setup_vector_t *vec, void *arg)
 {
 }
 #endif
-
-/*ARGSUSED*/
-int
-kcage_create_throttle(pgcnt_t npages, int flags)
-{
-	return (0);
-}
-
-void
-kcage_cageout_init(void)
-{
-}
-
-void
-kcage_cageout_wakeup()
-{
-}
-
-void
-kcage_tick()
-{
-}
-
-/*ARGSUSED*/
-int
-kcage_current_pfn(pfn_t *pfn)
-{
-	return (0);
-}

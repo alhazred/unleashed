@@ -60,7 +60,6 @@
 #include <sys/tnf_probe.h>
 #include <sys/condvar_impl.h>
 #include <sys/mem_config.h>
-#include <sys/mem_cage.h>
 #include <sys/kmem.h>
 #include <sys/atomic.h>
 #include <sys/strlog.h>
@@ -195,7 +194,7 @@ static int pcf_decrement_bucket(pgcnt_t);
 static int pcf_decrement_multiple(pgcnt_t *, pgcnt_t, int);
 
 kmutex_t	pcgs_lock;		/* serializes page_create_get_ */
-kmutex_t	pcgs_cagelock;		/* serializes NOSLEEP cage allocs */
+kmutex_t	pcgs_throttle;		/* serializes NOSLEEP NORELOC allocs */
 kmutex_t	pcgs_wait_lock;		/* used for delay in pcgs */
 static kcondvar_t	pcgs_cv;	/* cv for delay in pcgs */
 
@@ -1394,12 +1393,8 @@ page_create_wait(pgcnt_t npages, uint_t flags)
 	 */
 	VM_STAT_ADD(page_create_not_enough);
 
-	ASSERT(!kcage_on ? !(flags & PG_NORELOC) : 1);
+	ASSERT(!(flags & PG_NORELOC));
 checkagain:
-	if ((flags & PG_NORELOC) &&
-	    kcage_freemem < kcage_throttlefree + npages)
-		(void) kcage_create_throttle(npages, flags);
-
 	if (freemem < npages + throttlefree)
 		if (!page_create_throttle(npages, flags))
 			return (0);
@@ -1590,8 +1585,27 @@ uint_t	pcgs_too_many;
 uint_t	pcgs_entered;
 uint_t	pcgs_entered_noreloc;
 uint_t	pcgs_locked;
-uint_t	pcgs_cagelocked;
+uint_t	pcgs_throttled;
 #endif	/* VM_STATS */
+
+static bool
+page_create_get_something_throttle(void)
+{
+	/*
+	 * We can't throttle the panic thread.
+	 */
+	if (panicstr)
+		return (false);
+
+	/*
+	 * Don't throttle threads which are critical for proper
+	 * vm management if freemem is very low.
+	 */
+	if (NOMEMWAIT() && (freemem < minfree))
+		return (false);
+
+	return (true);
+}
 
 static struct page *
 page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
@@ -1602,7 +1616,7 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 	uint_t		locked, i;
 	struct	pcf	*p;
 	lgrp_t		*lgrp;
-	int		cagelocked = 0;
+	int		throttled = 0;
 
 	VM_STAT_ADD(pcgs_entered);
 
@@ -1616,26 +1630,24 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 	if ((flags & PG_NORELOC) != 0) {
 		VM_STAT_ADD(pcgs_entered_noreloc);
 		/*
-		 * Requests for free pages from critical threads
-		 * such as pageout still won't throttle here, but
-		 * we must try again, to give the cageout thread
-		 * another chance to catch up. Since we already
-		 * accounted for the pages, we had better get them
-		 * this time.
+		 * Requests for free pages from critical threads such as
+		 * pageout still won't throttle here.  Since we already
+		 * accounted for the pages, we had better get them this
+		 * time.
 		 *
-		 * N.B. All non-critical threads acquire the pcgs_cagelock
+		 * N.B. All non-critical threads acquire the pcgs_throttle
 		 * to serialize access to the freelists. This implements a
 		 * turnstile-type synchornization to avoid starvation of
 		 * critical requests for PG_NORELOC memory by non-critical
 		 * threads: all non-critical threads must acquire a 'ticket'
 		 * before passing through, which entails making sure
-		 * kcage_freemem won't fall below minfree prior to grabbing
-		 * pages from the freelists.
+		 * freemem won't fall below minfree prior to grabbing pages
+		 * from the freelists.
 		 */
-		if (kcage_create_throttle(1, flags) == KCT_NONCRIT) {
-			mutex_enter(&pcgs_cagelock);
-			cagelocked = 1;
-			VM_STAT_ADD(pcgs_cagelocked);
+		if (page_create_get_something_throttle()) {
+			mutex_enter(&pcgs_throttle);
+			throttled = 1;
+			VM_STAT_ADD(pcgs_throttled);
 		}
 	}
 
@@ -1689,7 +1701,7 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 
 	lgrp = lgrp_mem_choose(seg, vaddr, PAGESIZE);
 
-	for (count = 0; kcage_on || count < MAX_PCGS; count++) {
+	for (count = 0; count < MAX_PCGS; count++) {
 		pp = page_get_freelist(obj, off, seg, vaddr, PAGESIZE, flags,
 				       lgrp);
 		if (pp == NULL) {
@@ -1700,7 +1712,7 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 			/*
 			 * Serialize.  Don't fight with other pcgs().
 			 */
-			if (!locked && (!kcage_on || !(flags & PG_NORELOC))) {
+			if (!locked) {
 				mutex_enter(&pcgs_lock);
 				VM_STAT_ADD(pcgs_locked);
 				locked = 1;
@@ -1753,8 +1765,8 @@ page_create_get_something(struct vmobject *obj, uoff_t off, struct seg *seg,
 				pcgs_unblock();
 				mutex_exit(&pcgs_lock);
 			}
-			if (cagelocked)
-				mutex_exit(&pcgs_cagelock);
+			if (throttled)
+				mutex_exit(&pcgs_throttle);
 			return (pp);
 		}
 	}
@@ -1938,13 +1950,7 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
 
 	npages = btop(bytes);
 
-	if (!kcage_on || panicstr) {
-		/*
-		 * Cage is OFF, or we are single threaded in
-		 * panic, so make everything a RELOC request.
-		 */
-		flags &= ~PG_NORELOC;
-	}
+	flags &= ~PG_NORELOC;
 
 	/*
 	 * Make sure there's adequate physical memory available.
@@ -1953,25 +1959,6 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
 	if (freemem <= throttlefree + npages) {
 		VM_STAT_ADD(page_create_large_cnt[1]);
 		return (NULL);
-	}
-
-	/*
-	 * If cage is on, dampen draw from cage when available
-	 * cage space is low.
-	 */
-	if ((flags & (PG_NORELOC | PG_WAIT)) ==  (PG_NORELOC | PG_WAIT) &&
-	    kcage_freemem < kcage_throttlefree + npages) {
-
-		/*
-		 * The cage is on, the caller wants PG_NORELOC
-		 * pages and available cage memory is very low.
-		 * Call kcage_create_throttle() to attempt to
-		 * control demand on the cage.
-		 */
-		if (kcage_create_throttle(npages, flags) == KCT_FAILURE) {
-			VM_STAT_ADD(page_create_large_cnt[2]);
-			return (NULL);
-		}
 	}
 
 	if (!pcf_decrement_bucket(npages) &&
@@ -1996,18 +1983,6 @@ page_create_va_large(struct vmobject *obj, uoff_t off, size_t bytes,
 	    bytes, flags & ~PG_MATCH_COLOR, lgrp)) == NULL) {
 		page_create_putback(npages);
 		VM_STAT_ADD(page_create_large_cnt[5]);
-		return (NULL);
-	}
-
-	/*
-	 * if we got the page with the wrong mtype give it back this is a
-	 * workaround for CR 6249718. When CR 6249718 is fixed we never get
-	 * inside "if" and the workaround becomes just a nop
-	 */
-	if (kcage_on && (flags & PG_NORELOC) && !PP_ISNORELOC(rootpp)) {
-		page_list_add_pages(rootpp, 0);
-		page_create_putback(npages);
-		VM_STAT_ADD(page_create_large_cnt[6]);
 		return (NULL);
 	}
 
@@ -2114,34 +2089,11 @@ page_create_va(struct vmobject *obj, uoff_t off, size_t bytes, uint_t flags,
 		}
 	}
 
-	if (!kcage_on || panicstr) {
-		/*
-		 * Cage is OFF, or we are single threaded in
-		 * panic, so make everything a RELOC request.
-		 */
-		flags &= ~PG_NORELOC;
-	}
+	flags &= ~PG_NORELOC;
 
 	if (freemem <= throttlefree + npages)
 		if (!page_create_throttle(npages, flags))
 			return (NULL);
-
-	/*
-	 * If cage is on, dampen draw from cage when available
-	 * cage space is low.
-	 */
-	if ((flags & PG_NORELOC) &&
-	    kcage_freemem < kcage_throttlefree + npages) {
-
-		/*
-		 * The cage is on, the caller wants PG_NORELOC
-		 * pages and available cage memory is very low.
-		 * Call kcage_create_throttle() to attempt to
-		 * control demand on the cage.
-		 */
-		if (kcage_create_throttle(npages, flags) == KCT_FAILURE)
-			return (NULL);
-	}
 
 	VM_STAT_ADD(page_create_cnt[0]);
 
@@ -2716,8 +2668,6 @@ page_reclaim(struct page *pp, struct vmobject *obj)
 	 * when acquiring more than one pcf lock, there won't be any
 	 * deadlock problems.
 	 */
-
-	/* TODO: Do we need to test kcage_freemem if PG_NORELOC(pp)? */
 
 	if (freemem <= throttlefree && !page_create_throttle(1l, 0)) {
 		pcf_acquire_all();
@@ -4686,45 +4636,6 @@ page_free_replacement_page(page_t *pplist)
 			VM_STAT_ADD(pagecnt.pc_free_replacement_page[1]);
 		}
 	}
-}
-
-/*
- * Relocate target to non-relocatable replacement page.
- */
-int
-page_relocate_cage(page_t **target, page_t **replacement)
-{
-	page_t *tpp, *rpp;
-	spgcnt_t pgcnt, npgs;
-	int result;
-
-	tpp = *target;
-
-	ASSERT(PAGE_EXCL(tpp));
-	ASSERT(tpp->p_szc == 0);
-
-	pgcnt = btop(page_get_pagesize(tpp->p_szc));
-
-	do {
-		(void) page_create_wait(pgcnt, PG_WAIT | PG_NORELOC);
-		rpp = page_get_replacement_page(tpp, NULL, PGR_NORELOC);
-		if (rpp == NULL) {
-			page_create_putback(pgcnt);
-			kcage_cageout_wakeup();
-		}
-	} while (rpp == NULL);
-
-	ASSERT(PP_ISNORELOC(rpp));
-
-	result = page_relocate(&tpp, &rpp, 0, 1, &npgs, NULL);
-
-	if (result == 0) {
-		*replacement = rpp;
-		if (pgcnt != npgs)
-			panic("page_relocate_cage: partial relocation");
-	}
-
-	return (result);
 }
 
 /*

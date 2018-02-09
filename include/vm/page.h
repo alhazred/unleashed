@@ -765,7 +765,6 @@ int page_relocate(page_t **, page_t **, int, int, spgcnt_t *, struct lgrp *);
 int do_page_relocate(page_t **, page_t **, int, spgcnt_t *, struct lgrp *);
 page_t *page_get_replacement_page(page_t *, struct lgrp *, uint_t);
 void page_free_replacement_page(page_t *);
-int page_relocate_cage(page_t **, page_t **);
 
 int page_try_demote_pages(page_t *);
 int page_try_demote_free_pages(page_t *);

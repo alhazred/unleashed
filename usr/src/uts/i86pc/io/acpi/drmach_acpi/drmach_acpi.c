@@ -45,7 +45,6 @@
 #include <sys/cpuvar.h>
 #include <sys/cpupart.h>
 #include <sys/mem_config.h>
-#include <sys/mem_cage.h>
 #include <sys/memnode.h>
 #include <sys/callb.h>
 #include <sys/ontrap.h>

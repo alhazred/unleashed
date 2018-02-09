@@ -150,7 +150,6 @@ swap_getapage(
 	uoff_t poff;
 	int flag_noreloc;
 	se_t lock;
-	extern int kcage_on;
 	int upgrade = 0;
 
 	SWAPFS_PRINT(SWAP_VOPS, "swap_getapage: vp %p, off %llx, len %lx\n",
@@ -172,33 +171,6 @@ swap_getapage(
 
 again:
 	if (pp = page_lookup(&vp->v_object, off, lock)) {
-		/*
-		 * In very rare instances, a segkp page may have been
-		 * relocated outside of the kernel by the kernel cage
-		 * due to the window between page_unlock() and
-		 * fop_putpage() in segkp_unlock().  Due to the
-		 * rareness of these occurances, the solution is to
-		 * relocate the page to a P_NORELOC page.
-		 */
-		if (flag_noreloc != 0) {
-			if (!PP_ISNORELOC(pp) && kcage_on) {
-				if (lock != SE_EXCL) {
-					upgrade = 1;
-					if (!page_tryupgrade(pp)) {
-						page_unlock(pp);
-						lock = SE_EXCL;
-						goto again;
-					}
-				}
-
-				if (page_relocate_cage(&pp, &rpp) != 0)
-					panic("swap_getapage: "
-					    "page_relocate_cage failed");
-
-				pp = rpp;
-			}
-		}
-
 		if (pl) {
 			if (upgrade)
 				page_downgrade(pp);

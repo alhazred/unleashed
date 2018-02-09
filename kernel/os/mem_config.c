@@ -52,7 +52,6 @@
 #define	SUNDDI_IMPL		/* so sunddi.h will not redefine splx() et al */
 #include <sys/sunddi.h>
 #include <sys/mem_config.h>
-#include <sys/mem_cage.h>
 #include <sys/lgrp.h>
 #include <sys/ddi.h>
 #include <sys/modctl.h>

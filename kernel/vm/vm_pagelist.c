@@ -60,7 +60,6 @@
 #include <sys/lgrp.h>
 #include <sys/mem_config.h>
 #include <sys/callb.h>
-#include <sys/mem_cage.h>
 #include <sys/sdt.h>
 #include <sys/dumphdr.h>
 #include <sys/swap.h>
@@ -3155,57 +3154,6 @@ page_claim_contig_pages(page_t *pp, uchar_t szc, int flags)
 }
 
 /*
- * Trim kernel cage from pfnlo-pfnhi and store result in lo-hi. Return code
- * of 0 means nothing left after trim.
- */
-int
-trimkcage(struct memseg *mseg, pfn_t *lo, pfn_t *hi, pfn_t pfnlo, pfn_t pfnhi)
-{
-	pfn_t	kcagepfn;
-	int	decr;
-	int	rc = 0;
-
-	if (PP_ISNORELOC(mseg->pages)) {
-		if (PP_ISNORELOC(mseg->epages - 1) == 0) {
-
-			/* lower part of this mseg inside kernel cage */
-			decr = kcage_current_pfn(&kcagepfn);
-
-			/* kernel cage may have transitioned past mseg */
-			if (kcagepfn >= mseg->pages_base &&
-			    kcagepfn < mseg->pages_end) {
-				ASSERT(decr == 0);
-				*lo = MAX(kcagepfn, pfnlo);
-				*hi = MIN(pfnhi, (mseg->pages_end - 1));
-				rc = 1;
-			}
-		}
-		/* else entire mseg in the cage */
-	} else {
-		if (PP_ISNORELOC(mseg->epages - 1)) {
-
-			/* upper part of this mseg inside kernel cage */
-			decr = kcage_current_pfn(&kcagepfn);
-
-			/* kernel cage may have transitioned past mseg */
-			if (kcagepfn >= mseg->pages_base &&
-			    kcagepfn < mseg->pages_end) {
-				ASSERT(decr);
-				*hi = MIN(kcagepfn, pfnhi);
-				*lo = MAX(pfnlo, mseg->pages_base);
-				rc = 1;
-			}
-		} else {
-			/* entire mseg outside of kernel cage */
-			*lo = MAX(pfnlo, mseg->pages_base);
-			*hi = MIN(pfnhi, (mseg->pages_end - 1));
-			rc = 1;
-		}
-	}
-	return (rc);
-}
-
-/*
  * called from page_get_contig_pages to search 'pfnlo' thru 'pfnhi' to claim a
  * page with size code 'szc'. Claiming such a page requires acquiring
  * exclusive locks on all constituent pages (page_trylock_contig_pages),
@@ -3316,19 +3264,8 @@ page_geti_contig_pages(int mnode, uint_t bin, uchar_t szc, int flags,
 			/* mseg too small */
 			continue;
 
-		/*
-		 * trim off kernel cage pages from pfn range and check for
-		 * a trimmed pfn range returned that does not span the
-		 * desired large page size.
-		 */
-		if (kcage_on) {
-			if (trimkcage(mseg, &lo, &hi, pfnlo, pfnhi) == 0 ||
-			    lo >= hi || ((hi - lo) + 1) < szcpgcnt)
-				continue;
-		} else {
-			lo = MAX(pfnlo, mseg->pages_base);
-			hi = MIN(pfnhi, (mseg->pages_end - 1));
-		}
+		lo = MAX(pfnlo, mseg->pages_base);
+		hi = MIN(pfnhi, (mseg->pages_end - 1));
 
 		/* round to szcpgcnt boundaries */
 		lo = P2ROUNDUP(lo, szcpgcnt);
@@ -3553,24 +3490,8 @@ page_get_freelist(struct vmobject *obj, uoff_t off, struct seg *seg,
 	if (!LGRP_EXISTS(lgrp))
 		lgrp = lgrp_home_lgrp();
 
-	if (kcage_on) {
-		if ((flags & (PG_NORELOC | PG_PANIC)) == PG_NORELOC &&
-		    kcage_freemem < kcage_throttlefree + btop(size) &&
-		    curthread != kcage_cageout_thread) {
-			/*
-			 * Set a "reserve" of kcage_throttlefree pages for
-			 * PG_PANIC and cageout thread allocations.
-			 *
-			 * Everybody else has to serialize in
-			 * page_create_get_something() to get a cage page, so
-			 * that we don't deadlock cageout!
-			 */
-			return (NULL);
-		}
-	} else {
-		flags &= ~PG_NORELOC;
-		flags |= PGI_NOCAGE;
-	}
+	flags &= ~PG_NORELOC;
+	flags |= PGI_NOCAGE;
 
 	MTYPE_INIT(mtype, obj->vnode, vaddr, flags, size);
 
@@ -3650,7 +3571,7 @@ pgretry:
 	 * for page_create_get_something().
 	 */
 	if (!(flags & PG_NORELOC) && (pg_contig_disable == 0) &&
-	    (kcage_on || pg_lpgcreate_nocage || szc == 0) &&
+	    (pg_lpgcreate_nocage || szc == 0) &&
 	    (page_get_func != page_get_contig_pages)) {
 
 		VM_STAT_ADD(vmm_vmstats.pgf_allocretry[szc]);
@@ -3698,22 +3619,11 @@ page_get_cachelist(struct vmobject *obj, uoff_t off, struct seg *seg,
 	if (!LGRP_EXISTS(lgrp))
 		lgrp = lgrp_home_lgrp();
 
-	if (!kcage_on) {
-		flags &= ~PG_NORELOC;
-		flags |= PGI_NOCAGE;
-	}
+	flags &= ~PG_NORELOC;
+	flags |= PGI_NOCAGE;
 
-	if ((flags & (PG_NORELOC | PG_PANIC | PG_PUSHPAGE)) == PG_NORELOC &&
-	    kcage_freemem <= kcage_throttlefree) {
-		/*
-		 * Reserve kcage_throttlefree pages for critical kernel
-		 * threads.
-		 *
-		 * Everybody else has to go to page_create_get_something()
-		 * to get a cage page, so we don't deadlock cageout.
-		 */
+	if ((flags & (PG_NORELOC | PG_PANIC | PG_PUSHPAGE)) == PG_NORELOC)
 		return (NULL);
-	}
 
 	AS_2_BIN(as, seg, obj->vnode, vaddr, bin, 0);
 
@@ -3953,15 +3863,8 @@ page_get_replacement_page(page_t *orig_like_pp, struct lgrp *lgrp_target,
 	like_pp = page_numtopp_nolock(pfnum);
 	ASSERT(like_pp->p_szc == szc);
 
-	if (PP_ISNORELOC(like_pp)) {
-		ASSERT(kcage_on);
-		REPL_STAT_INCR(ngets_noreloc);
-		flags = PGI_RELOCONLY;
-	} else if (pgrflags & PGR_NORELOC) {
-		ASSERT(kcage_on);
-		REPL_STAT_INCR(npgr_noreloc);
-		flags = PG_NORELOC;
-	}
+	VERIFY0(PP_ISNORELOC(like_pp));
+	VERIFY0(pgrflags & PGR_NORELOC);
 
 	/*
 	 * Kernel pages must always be replaced with the same size

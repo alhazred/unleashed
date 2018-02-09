@@ -60,9 +60,6 @@
 
 extern struct memlist	*phys_install;
 
-/* TODO: push this reference below drmach line */
-extern int		kcage_on;
-
 /* for the DR*INTERNAL_ERROR macros.  see sys/dr.h. */
 static char *dr_ie_fmt = "dr_mem_acpi.c %d";
 
@@ -328,7 +325,7 @@ dr_mem_status(dr_handle_t *hp, dr_devset_t devset, sbd_dev_stat_t *dsp)
 		msp->ms_totpages = mp->sbm_npages;
 		msp->ms_basepfn = mp->sbm_basepfn;
 		msp->ms_pageslost = mp->sbm_pageslost;
-		msp->ms_cage_enabled = kcage_on;
+		msp->ms_cage_enabled = 0;
 
 		if (mp->sbm_flags & DR_MFLAG_RESERVED)
 			p_mp = mp->sbm_peer;

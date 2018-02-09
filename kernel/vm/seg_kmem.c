@@ -46,7 +46,6 @@
 #include <sys/promif.h>
 #include <vm/seg_kp.h>
 #include <sys/bitmap.h>
-#include <sys/mem_cage.h>
 
 
 /*
@@ -342,15 +341,6 @@ boot_mapin(caddr_t addr, size_t size)
 		pp = page_numtopp(pfnum, SE_EXCL);
 		if (pp == NULL || PP_ISFREE(pp))
 			panic("boot_alloc: pp is NULL or free");
-
-		/*
-		 * If the cage is on but doesn't yet contain this page,
-		 * mark it as non-relocatable.
-		 */
-		if (kcage_on && !PP_ISNORELOC(pp)) {
-			PP_SETNORELOC(pp);
-			PLCNT_XFER_NORELOC(pp);
-		}
 
 		(void) page_hashin(pp, &kvp.v_object, (uoff_t)(uintptr_t)addr,
 				   false);
