@@ -20,7 +20,6 @@ file path=usr/share/man/man1m/6to4relay.1m
 file path=usr/share/man/man1m/Intro.1m
 file path=usr/share/man/man1m/acctadm.1m
 file path=usr/share/man/man1m/add_drv.1m
-file path=usr/share/man/man1m/addbadsec.1m
 file path=usr/share/man/man1m/arp.1m
 file path=usr/share/man/man1m/audit.1m
 file path=usr/share/man/man1m/audit_warn.1m

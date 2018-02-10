@@ -411,7 +411,6 @@ COMMON_SUBDIRS=		\
 i386_SUBDIRS=		\
 	acpi		\
 	acpihpd		\
-	addbadsec	\
 	biosdev		\
 	diskscan	\
 	nvmeadm		\

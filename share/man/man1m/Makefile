@@ -27,7 +27,6 @@ MAN = 6to4relay.1m \
       acctsh.1m \
       adbgen.1m \
       add_drv.1m \
-      addbadsec.1m \
       arcstat.1m \
       arp.1m \
       audit.1m \

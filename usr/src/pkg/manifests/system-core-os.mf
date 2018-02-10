@@ -604,7 +604,6 @@ file path=usr/bin/$(ARCH64)/prstat mode=0555
 file path=usr/bin/$(ARCH64)/ps mode=0555
 file path=usr/bin/$(ARCH64)/savecore mode=0555
 file path=usr/bin/$(ARCH64)/uptime mode=4555
-$(i386_ONLY)file path=usr/bin/addbadsec mode=0555
 file path=usr/bin/amt mode=0555
 file path=usr/bin/at group=sys mode=4755
 file path=usr/bin/atq group=sys mode=4755
