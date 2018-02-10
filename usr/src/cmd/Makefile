@@ -52,7 +52,6 @@ COMMON_SUBDIRS=		\
 	perl		\
 	Adm		\
 	abi		\
-	adbgen		\
 	acct		\
 	acctadm		\
 	ast		\

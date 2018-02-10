@@ -37,8 +37,6 @@ $(i386_ONLY)dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
-dir path=usr/lib/adb group=sys
-dir path=usr/lib/adb/$(ARCH64) group=sys
 dir path=usr/lib/fs group=sys
 dir path=usr/lib/fs/pcfs group=sys
 dir path=usr/lib/spell
@@ -135,12 +133,6 @@ file path=usr/bin/uuencode group=uucp mode=0555
 file path=usr/bin/yes mode=0555
 file path=usr/lib/$(ARCH64)/madv.so.1
 file path=usr/lib/$(ARCH64)/mpss.so.1
-file path=usr/lib/adb/$(ARCH64)/adbsub.o group=sys
-file path=usr/lib/adb/adbgen group=sys mode=0755
-file path=usr/lib/adb/adbgen1 group=sys mode=0755
-file path=usr/lib/adb/adbgen3 group=sys mode=0755
-file path=usr/lib/adb/adbgen4 group=sys mode=0755
-file path=usr/lib/adb/adbsub.o group=sys
 file path=usr/lib/diff3prog mode=0555
 file path=usr/lib/fs/pcfs/fsck mode=0555
 file path=usr/lib/fs/pcfs/fstyp.so.1 mode=0555
@@ -204,7 +196,6 @@ file path=usr/share/man/man1/units.1
 file path=usr/share/man/man1/unix2dos.1
 file path=usr/share/man/man1/uuencode.1
 file path=usr/share/man/man1/yes.1
-file path=usr/share/man/man1m/adbgen.1m
 file path=usr/share/man/man1m/dmesg.1m
 file path=usr/share/man/man1m/fsck_pcfs.1m
 file path=usr/share/man/man1m/kstat.1m

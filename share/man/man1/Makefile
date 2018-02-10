@@ -183,7 +183,6 @@ MAN = acctcom.1 \
       nm.1 \
       nohup.1 \
       od.1 \
-      optisa.1 \
       pack.1 \
       pagesize.1 \
       pargs.1 \

@@ -60,10 +60,6 @@ MAPFILE-ORDER =	../common/mapfile-order-gcc
 
 include		$(SRC)/cmd/sgs/rtld/Makefile.com
 
-# Add any machine specific flags.
-
-ADBGENFLAGS +=	-milp32
-ADBSUB=		$(ADBSUB32)
 SONAME=		/lib/ld.so.1
 
 SGSMSGTARG +=	$(SGSMSGINTEL) $(SGSMSGINTEL32) $(SGSMSG32)
@@ -73,9 +69,5 @@ SGSMSGTARG +=	$(SGSMSGINTEL) $(SGSMSGINTEL32) $(SGSMSG32)
 all:		$(RTLD)
 
 install:	all $(ROOTDYNLIB)
-
-adbmacros:	adb .WAIT $(ADBSCRIPTS)
-
-adbinstall:	adbmacros .WAIT $(ROOTADB)
 
 include		$(SRC)/cmd/sgs/rtld/Makefile.targ

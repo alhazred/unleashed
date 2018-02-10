@@ -63,8 +63,6 @@ MAPFILE-ORDER =	../common/mapfile-order-gcc
 
 CFLAGS +=	-mno-app-regs
 ASFLAGS +=	-D__amd64 -D_ELF64 $(amd64_ASFLAGS)
-ADBGENFLAGS +=	-mlp64
-ADBSUB=		$(ADBSUB64)
 CPPFLAGS +=	-D_ELF64
 SONAME=		/lib/amd64/ld.so.1
 
@@ -82,10 +80,6 @@ CONVLIBDIR =	$(CONVLIBDIR64)
 all:		$(RTLD)
 
 install:	all $(ROOTDYNLIB64)
-
-adbmacros:	adb .WAIT $(ADBSCRIPTS)
-
-adbinstall:	adbmacros .WAIT $(ROOTADB64)
 
 include		$(SRC)/cmd/sgs/rtld/Makefile.targ
 include		../../Makefile.sub.64

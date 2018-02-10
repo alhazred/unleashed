@@ -24,24 +24,17 @@
 #
 
 PROG= isalist
-SHFILES= optisa
 OBJS= isalist.o  
 
 include ../Makefile.cmd
-
-CLOBBERFILES += $(SHFILES)
 
 FILEMODE= 0555
 
 .KEEP_STATE:
 
-all: $(PROG) $(SHFILES)
+all: $(PROG)
 
-$(SHFILES): $(SHFILES).sh
-	-$(RM) $(SHFILES)
-	$(CP) $(SHFILES).sh $(SHFILES)
-
-install: all $(ROOTPROG) $(ROOTSHFILES)
+install: all $(ROOTPROG)
 
 $(PROG):	$(OBJS)
 	$(LINK.c) -o $(PROG) $(OBJS) $(LDLIBS)

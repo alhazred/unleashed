@@ -120,7 +120,6 @@ file path=usr/share/man/man1/newgrp.1
 file path=usr/share/man/man1/newtask.1
 file path=usr/share/man/man1/nice.1
 file path=usr/share/man/man1/nohup.1
-file path=usr/share/man/man1/optisa.1
 file path=usr/share/man/man1/pagesize.1
 file path=usr/share/man/man1/passwd.1
 file path=usr/share/man/man1/paste.1

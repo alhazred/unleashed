@@ -695,7 +695,6 @@ file path=usr/bin/mt mode=0555
 file path=usr/bin/netstat mode=0555
 file path=usr/bin/newgrp group=sys mode=4755
 file path=usr/bin/nice mode=0555
-file path=usr/bin/optisa mode=0555
 file path=usr/bin/pagesize mode=0555
 file path=usr/bin/passwd group=sys mode=6555
 file path=usr/bin/pathchk mode=0555
