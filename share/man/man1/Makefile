@@ -256,7 +256,6 @@ MAN = acctcom.1 \
       suspend.1 \
       svcprop.1 \
       svcs.1 \
-      symorder.1 \
       sysV-make.1 \
       sys-suspend.1 \
       tabs.1 \

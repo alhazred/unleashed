@@ -69,7 +69,6 @@ SUBDIRS=	libconv		\
 		nm		\
 		prof		\
 		ranlib		\
-		symorder	\
 		unifdef
 
 # Messaging support

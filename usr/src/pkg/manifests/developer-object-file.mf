@@ -66,7 +66,6 @@ file path=usr/bin/prof mode=0555
 file path=usr/bin/ranlib mode=0555
 file path=usr/bin/rpcgen mode=0555
 file path=usr/bin/size mode=0555
-file path=usr/bin/symorder mode=0555
 file path=usr/bin/tsort mode=0555
 file path=usr/bin/unifdef mode=0555
 file path=usr/bin/yacc mode=0555
@@ -108,7 +107,6 @@ file path=usr/share/man/man1/ranlib.1
 file path=usr/share/man/man1/rpcgen.1
 file path=usr/share/man/man1/size.1
 file path=usr/share/man/man1/strip.1
-file path=usr/share/man/man1/symorder.1
 file path=usr/share/man/man1/tsort.1
 file path=usr/share/man/man1/unifdef.1
 file path=usr/share/man/man1/yacc.1
@@ -138,7 +136,6 @@ link path=usr/ccs/bin/nm target=../../bin/nm
 link path=usr/ccs/bin/prof target=../../bin/prof
 link path=usr/ccs/bin/ranlib target=../../bin/ranlib
 link path=usr/ccs/bin/strip target=../../bin/strip
-link path=usr/ccs/bin/symorder target=../../bin/symorder
 link path=usr/ccs/bin/unifdef target=../../bin/unifdef
 link path=usr/lib/elfedit/32 target=.
 link path=usr/lib/elfedit/64 target=$(ARCH64)
