@@ -55,7 +55,6 @@ COMMON_SUBDIRS=		\
 	adbgen		\
 	acct		\
 	acctadm		\
-	asa		\
 	ast		\
 	audio		\
 	auths		\
@@ -440,7 +439,6 @@ MSGSUBDIRS=		\
 	abi		\
 	acctadm		\
 	allocate	\
-	asa		\
 	audio		\
 	audit		\
 	auditconfig	\

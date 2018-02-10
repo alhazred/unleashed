@@ -6,7 +6,6 @@ MAN = acctcom.1 \
       appcert.1 \
       apptrace.1 \
       ar.1 \
-      asa.1 \
       at.1 \
       atq.1 \
       atrm.1 \
