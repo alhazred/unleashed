@@ -60,7 +60,6 @@ extern "C" {
 #define	RB_FORTHDEBUG		0x00004000 /* load forthdebug module */
 #define	RB_FORTHDEBUGDBP 	0x00008000 /* load forthdebug, enable def bpt */
 #define	RB_KMDB			0x00020000 /* load kmdb during boot */
-#define	RB_NOBOOTCLUSTER 	0x00040000 /* don't boot as a cluster */
 #define	RB_DEBUGENTER		0x00080000 /* enter the debugger at boot */
 
 #ifndef _ASM
