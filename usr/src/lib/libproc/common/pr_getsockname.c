@@ -41,7 +41,7 @@ get_sock_peer_name(struct ps_prochandle *Pr,
 	int syscall, int sock, struct sockaddr *name, socklen_t *namelen)
 {
 	sysret_t rval;		/* return value from get{sock|peer}name() */
-	argdes_t argd[4];	/* arg descriptors for get{sock|peer}name() */
+	argdes_t argd[3];	/* arg descriptors for get{sock|peer}name() */
 	argdes_t *adp;
 	int error;
 
@@ -66,7 +66,7 @@ get_sock_peer_name(struct ps_prochandle *Pr,
 	adp->arg_inout = AI_INOUT;
 	adp->arg_size = sizeof (*namelen);
 
-	error = Psyscall(Pr, &rval, syscall, 4, &argd[0]);
+	error = Psyscall(Pr, &rval, syscall, 3, &argd[0]);
 
 	if (error) {
 		errno = (error > 0)? error : ENOSYS;
