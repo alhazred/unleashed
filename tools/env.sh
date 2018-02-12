@@ -107,7 +107,7 @@ export SRC="$SRCTOP/usr/src"
 # when the release slips (nah) or you move an environment file to a new
 # release
 #
-export VERSION="`git describe --long --all HEAD | cut -d/ -f2-`"
+export VERSION="`git describe HEAD`"
 
 # Package creation variables.  You probably shouldn't change these,
 # either.
