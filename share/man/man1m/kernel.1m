@@ -42,24 +42,9 @@ default is:
 .fi
 .in -2
 
-.sp
 .LP
-This default can be supplemented by a specific platform. It is common for many
-SPARC systems to override the default path with:
-.sp
-.in +2
-.nf
-/platform/\fIplatform-name\fR/kernel:/platform/\fIhardware-class-name\fR\e
-     /kernel:/kernel:/usr/kernel
-.fi
-.in -2
-.sp
+This default can be supplemented by a specific platform.
 
-.sp
-.LP
-where \fIplatform-name\fR can be found using the \fB-i\fR option of
-\fBuname\fR(1), and \fIhardware-class-name\fR can be found using the \fB-m\fR
-option of \fBuname\fR(1).
 .sp
 .LP
 The kernel configuration can be controlled using the \fB/etc/system\fR file
@@ -196,17 +181,6 @@ are still printed, but the output is directed to the system logfile. See
 \fBsyslogd\fR(1M).
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fB-x\fR\fR
-.ad
-.sp .6
-.RS 4n
-Does not boot in clustered mode. This option only has an effect when a version
-of Sun Cluster software that supports this option has been installed.
-.RE
-
 .SH EXAMPLES
 .sp
 .LP
@@ -328,31 +302,6 @@ System V STREAMS loadable modules
 Loadable system calls
 .RE
 
-.SS "SPARC"
-.sp
-.ne 2
-.na
-\fBcpu\fR
-.ad
-.sp .6
-.RS 4n
-Processor specific modules
-.RE
-
-.sp
-.ne 2
-.na
-\fBtod\fR
-.ad
-.sp .6
-.RS 4n
-Time-Of-Day hardware interface modules
-.RE
-
-.sp
-.LP
-As only 64-bit SPARC platforms are supported, all SPARC executable modules are
-contained within \fBsparcv9\fR directories in the directories listed above.
 .SS "x86"
 .sp
 .ne 2
@@ -364,11 +313,6 @@ contained within \fBsparcv9\fR directories in the directories listed above.
 x86 hardware support
 .RE
 
-.sp
-.LP
-Modules comprising the 32-bit x86 kernel are contained in the above
-directories, with the 64-bit x86 kernel components contained within \fBamd64\fR
-subdirectories.
 .SH SEE ALSO
 .sp
 .LP
@@ -376,10 +320,6 @@ subdirectories.
 \fBinit\fR(1M), \fBkadb\fR(1M), \fBrem_drv\fR(1M), \fBsavecore\fR(1M),
 \fBsvc.startd\fR(1M), \fBsvcadm\fR(1M), \fBsyslogd\fR(1M), \fBsystem\fR(4),
 \fBattributes\fR(5), \fBsmf\fR(5), \fBdevfs\fR(7FS)
-.SS "SPARC Only"
-.sp
-.LP
-\fBmonitor\fR(1M)
 .SH DIAGNOSTICS
 .sp
 .LP

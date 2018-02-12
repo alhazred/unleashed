@@ -208,9 +208,6 @@ bootflags(struct bootops *ops)
 		case 'w':
 			boothowto |= RB_WRITABLE;
 			break;
-		case 'x':
-			boothowto |= RB_NOBOOTCLUSTER;
-			break;
 		case '?':
 			switch (params.gos_last_opt) {
 			case 'i':
