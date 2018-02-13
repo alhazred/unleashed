@@ -25,9 +25,11 @@ $ cd unleashed
 Build
 -----
 
-For a complete build, use 'tools/nightly.sh':
+For a complete build, use 'tools/nightly.sh'. The user executing the build
+needs to be able to write to `/usr/obj`, so make sure you can do that first.
 
 ```
+# install -m 1777 -d /usr/obj
 $ ./tools/nightly.sh
 ```
 
