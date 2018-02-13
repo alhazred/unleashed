@@ -249,7 +249,6 @@ COMMON_SUBDIRS=		\
 	nl		\
 	nlsadmin	\
 	nohup		\
-	nsadmin		\
 	nscd		\
 	oamuser		\
 	od		\
