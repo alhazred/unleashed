@@ -29,7 +29,6 @@ PROG= prtvtoc
 include ../Makefile.cmd
 
 RELUSRSBIN=     ../usr/sbin
-ROOTSYMLINK=    $(ROOTETC)/$(PROG)
 LDLIBS +=	-ladm -lefi
 
 CERRWARN +=	-Wno-parentheses
@@ -39,10 +38,7 @@ CERRWARN +=	-Wno-uninitialized
 
 all: $(PROG) 
 
-install: all $(ROOTUSRSBINPROG) $(ROOTSYMLINK)
-
-$(ROOTSYMLINK):
-	-$(RM) $@; $(SYMLINK) $(RELUSRSBIN)/$(PROG) $@
+install: all $(ROOTUSRSBINPROG)
 
 clean:
 

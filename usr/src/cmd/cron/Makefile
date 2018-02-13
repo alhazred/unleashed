@@ -66,7 +66,7 @@ ROOTDIRS =	$(ROOTSPCRON) $(ROOTCROND) \
 ROOTPROG =	$(PROG1:%=$(ROOTUSRSBIN)/%) $(PROG2:%=$(ROOTBIN)/%)	\
 		$(SCRIPT:%=$(ROOTBIN)/%)
 
-ROOTSYMLINK =	$(ROOTLIBCRON) $(ROOTETC)/cron
+ROOTSYMLINK =	$(ROOTLIBCRON)
 
 GETRESPSRC=	$(SRC)/common/util/getresponse.c
 GETRESPOBJ=	getresponse.o
@@ -97,7 +97,6 @@ SRCS =		$(NOBJS:%.o=%.c) $(GETRESPSRC)
 CLOBBERFILES +=	$(SCRIPT)
 
 $(ROOTLIBCRON) :=		SYMLNKDEST = ../../etc/cron.d
-$(ROOTETC)/cron :=		SYMLNKDEST = ../usr/sbin/cron
 
 $(ROOTBIN)/at :=		FILEMODE = 04755
 $(ROOTBIN)/atrm :=		FILEMODE = 04755

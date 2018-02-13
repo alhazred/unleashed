@@ -37,8 +37,6 @@ CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 \
 all: $(PROG)
 
 install: all $(ROOTUSRSBINPROG)
-	-$(RM) $(ROOTETCPROG)
-	-$(SYMLINK) ../usr/sbin/$(PROG) $(ROOTETCPROG)
 
 clean:
 	$(RM) $(OBJS)

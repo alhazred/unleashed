@@ -41,18 +41,13 @@ install	:=	TARGET = install
 clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
 
-ROOTSYMLINK = 	$(ROOTETCPROG)
-
 .KEEP_STATE:
 
 all:	$(SUBDIRS)
 
-$(ROOTSYMLINK):
-	$(RM) $@; $(SYMLINK) ../usr/sbin/$(PROG) $@
-
 clean clobber:	$(SUBDIRS)
 
-install: $(SUBDIRS) $(ROOTSYMLINK)
+install: $(SUBDIRS)
 	-$(RM) $(ROOTUSRSBINPROG)
 	-$(LN) $(ISAEXEC) $(ROOTUSRSBINPROG)
 

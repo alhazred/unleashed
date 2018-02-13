@@ -116,8 +116,6 @@ sttydefs: $(STTYDEFSOBJ)
 	$(POST_PROCESS)
 
 install: all $(DIRS) $(ROOTLIBF) $(ROOTUSRSBINF) $(ROOTBINF)
-	-$(RM) $(ROOTETC)/getty
-	-$(SYMLINK) ../usr/lib/saf/ttymon $(ROOTETC)/getty
 
 $(POFILE):      $(POFILES)
 	$(RM) $@

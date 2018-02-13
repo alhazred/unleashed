@@ -37,7 +37,6 @@ i386_SUBDIRS = smf.i386
 SUBDIRS = $($(MACH)_SUBDIRS)
 
 ROOTLINKS = $(ROOTUSRSBIN)/poweroff $(ROOTUSRSBIN)/reboot
-ROOTSYMLINKS= $(ROOTETC)/halt $(ROOTETC)/reboot
 
 FILEMODE = 0755
 
@@ -53,7 +52,7 @@ LDLIBS += -lbsm -lscf -lzfs -lgen
 LDLIBS_i386 +=	-lbe
 LDLIBS +=	$(LDLIBS_$(MACH))
 
-CLOBBERFILES += $(ROOTLINKS) $(ROOTSYMLINKS)
+CLOBBERFILES += $(ROOTLINKS)
 
 all     :=	TARGET = all
 install :=	TARGET = install
@@ -63,15 +62,11 @@ clobber :=	TARGET = clobber
 
 all: $(PROG) 
 
-install: all $(ROOTUSRSBINPROG) $(ROOTLINKS) $(ROOTSYMLINKS) $(SUBDIRS)
+install: all $(ROOTUSRSBINPROG) $(ROOTLINKS) $(SUBDIRS)
 
 $(ROOTLINKS): $(ROOTUSRSBINPROG)
 	$(RM) $@
 	$(LN) $(ROOTUSRSBINPROG) $@
-
-$(ROOTSYMLINKS):
-	$(RM) $@
-	$(SYMLINK) ../usr/sbin/$(PROG) $@
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

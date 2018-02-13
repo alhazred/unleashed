@@ -48,8 +48,6 @@ XGETFLAGS += -a -x tar.xcl
 all: $(PROG)
 
 install: all $(ROOTUSRSBINPROG) $(ROOTETCDEFAULTFILES) $(ROOTSYMLINK)
-	-$(RM) -r $(ROOTETCPROG)
-	-$(SYMLINK) ../usr/sbin/$(PROG) $(ROOTETCPROG)
 
 $(ROOTSYMLINK):
 	$(RM) $@; $(SYMLINK) ../sbin/$(PROG) $@

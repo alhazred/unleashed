@@ -41,8 +41,7 @@ USRSBINF=	mountall shutdown umountall
 ETCTABS=	vfstab inittab nscd.conf security/crypt.conf
 
 DFSTAB=		dfstab
-SBINETC=	rcS mountall rc0 rc1 rc2 rc3 rc5 rc6 swapadd umountall
-USRSBINETC=	shutdown
+SBINETC=	rcS rc0 rc1 rc2 rc3 rc5 rc6
 
 FILEMODE=	0744
 
@@ -52,7 +51,6 @@ ROOTUSRSBINF=	$(USRSBINF:%=$(ROOTUSRSBIN)/%)
 ROOTETCTABS=	$(ETCTABS:%=$(ROOTETC)/%)
 ROOTDFSTAB=	$(DFSTAB:%=$(ETCDFSD)/%)
 SYMSBINF=	$(SBINETC:%=$(ROOTETC)/%)
-SYMUSRSBINF=	$(USRSBINETC:%=$(ROOTETC)/%)
 
 $(ROOTETC)/inittab		:= FILEMODE =	0644
 $(ROOTETC)/vfstab		:= FILEMODE =	0644
@@ -75,9 +73,6 @@ all: $(ALL) all_init.d $(TXTS)
 $(SYMSBINF):
 	$(RM) $@; $(SYMLINK) ../sbin/$(@F) $@
 
-$(SYMUSRSBINF):
-	$(RM) $@; $(SYMLINK) ../usr/sbin/$(@F) $@
-
 $(ROOTSBINL):	$(ROOTSBIN)/rc0
 	$(RM) $@; $(LN) $(ROOTSBIN)/rc0 $@
 
@@ -93,7 +88,7 @@ $(SHFILES):
 install: $(ALL) ins_all ins_init.d $(RCDIRS)
 
 ins_all : $(ROOTSBINF) $(ROOTSBINL) $(ROOTUSRSBINF) $(ROOTETCTABS) \
-	$(ROOTDFSTAB)  $(SYMSBINF) $(SYMUSRSBINF)
+	$(ROOTDFSTAB)  $(SYMSBINF)
 
 # Don't re-install directories already installed by Targetdirs
 #$(DIRS):

@@ -37,8 +37,6 @@ LDLIBS += $($(MACH)_LDLIBS)
 all: $(ROOTFS_PROG)
 
 install: all $(ROOTSBINPROG)
-	-$(RM) $(ROOTETCPROG)
-	-$(SYMLINK) ../sbin/$(PROG) $(ROOTETCPROG)
 	-$(RM) $(ROOTUSRSBINPROG)
 	-$(SYMLINK) ../../sbin/$(PROG) $(ROOTUSRSBINPROG)
 

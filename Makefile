@@ -1,4 +1,5 @@
 SUBDIR = bin \
+	 etc \
 	 include \
 	 kernel \
 	 lib \

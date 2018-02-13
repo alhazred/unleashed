@@ -35,7 +35,6 @@ clean	:=	TARGET = clean
 clobber	:=	TARGET = clobber
 
 RELUSRSBIN=     ../usr/sbin
-ROOTSYMLINK=    $(ROOTETC)/$(PROG)
 
 FILEMODE= 0555
 
@@ -43,12 +42,9 @@ FILEMODE= 0555
 
 all:	$(SUBDIRS)
 
-$(ROOTSYMLINK):
-	-$(RM) $@; $(SYMLINK) $(RELUSRSBIN)/$(PROG) $@
-
 clean clobber:	$(SUBDIRS)
 
-install:	$(SUBDIRS) $(ROOTSYMLINK)
+install:	$(SUBDIRS)
 	-$(RM) $(ROOTUSRSBINPROG)
 	-$(LN) $(ISAEXEC) $(ROOTUSRSBINPROG)
 
