@@ -86,7 +86,7 @@ There was no free space remaining on the device containing the file.
 .ad
 .RS 13n
 Remote connection timed out. This occurs when the file is on an  \fBNFS\fR file
-system mounted with the  \fIsoft\fR option. See  \fBmount_nfs\fR(1M).
+system mounted with the  \fIsoft\fR option. See  \fBmount_nfs\fR(8).
 .RE
 
 .sp
@@ -128,6 +128,6 @@ Standard	See \fBstandards\fR(5).
 .SH SEE ALSO
 .sp
 .LP
-\fBmount_nfs\fR(1M), \fBread\fR(2), \fBsync\fR(2), \fBwrite\fR(2),
+\fBmount_nfs\fR(8), \fBread\fR(2), \fBsync\fR(2), \fBwrite\fR(2),
 \fBfcntl.h\fR(3HEAD), \fBfdatasync\fR(3C), \fBattributes\fR(5),
 \fBstandards\fR(5)

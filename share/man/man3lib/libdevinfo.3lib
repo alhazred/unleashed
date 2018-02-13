@@ -293,7 +293,7 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBpvs\fR(1), \fBdevlinks\fR(1M), \fBprtconf\fR(1M), \fBIntro\fR(3),
+\fBpvs\fR(1), \fBdevlinks\fR(8), \fBprtconf\fR(8), \fBIntro\fR(3),
 \fBdi_binding_name\fR(3DEVINFO), \fBdi_child_node\fR(3DEVINFO),
 \fBdi_devfs_path\fR(3DEVINFO), \fBdi_init\fR(3DEVINFO),
 \fBdi_minor_devt\fR(3DEVINFO), \fBdi_minor_next\fR(3DEVINFO),

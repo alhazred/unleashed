@@ -67,7 +67,7 @@ an empty directory).
 
 .SH SEE ALSO
 .LP
-\fBlofiadm\fR(1M), \fBmount\fR(1M), \fBchroot\fR(2), \fBmount\fR(2),
+\fBlofiadm\fR(8), \fBmount\fR(8), \fBchroot\fR(2), \fBmount\fR(2),
 \fBsysfs\fR(2), \fBvfstab\fR(4), \fBlofi\fR(7D)
 .SH NOTES
 .LP
@@ -75,7 +75,7 @@ All access to entries in \fBlofs\fR mounted file systems map to their
 underlying file system. If a mount point is made available in multiple
 locations via \fBlofs\fR and is busy in any of those locations, an attempt to
 mount a file system at that mount point fails unless the overlay flag is
-specified. See \fBmount\fR(1M). Examples of a mount point being busy within a
+specified. See \fBmount\fR(8). Examples of a mount point being busy within a
 \fBlofs\fR mount include having a file system mounted on it or it being a
 processes' current working directory.
 .SH WARNINGS

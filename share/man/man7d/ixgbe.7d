@@ -60,9 +60,9 @@ The cloning character-special device, \fB/dev/ixgbe\fR, is used to access all
 Intel 10-Gigabit PCI Express Ethernet devices installed within the system.
 .sp
 .LP
-The \fBixgbe\fR driver is managed by the \fBdladm\fR(1M) command line utility,
+The \fBixgbe\fR driver is managed by the \fBdladm\fR(8) command line utility,
 which allows VLANs to be defined on top of \fBixgbe\fR instances and for
-\fBixgbe\fR instances to be aggregated. See \fBdladm\fR(1M) for more details.
+\fBixgbe\fR instances to be aggregated. See \fBdladm\fR(8) for more details.
 .sp
 .LP
 You must send an explicit DL_ATTACH_REQ message to associate the opened stream
@@ -192,7 +192,7 @@ Interface Stability	Committed
 
 .SH SEE ALSO
 .LP
-\fBdladm\fR(1M), \fBnetstat\fR(1M), \fBdriver.conf\fR(4), \fBattributes\fR(5),
+\fBdladm\fR(8), \fBnetstat\fR(8), \fBdriver.conf\fR(4), \fBattributes\fR(5),
 \fBstreamio\fR(7I), \fBdlpi\fR(7P)
 .sp
 .LP

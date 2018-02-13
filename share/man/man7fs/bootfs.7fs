@@ -85,4 +85,4 @@ lists the number of duplicate entries that were found and therefore not displaye
 This information is provided for informational purposes only, it is not to be construed as a stable interface.
 
 .SH SEE ALSO
-.BR kstat (1M)
+.BR kstat (8)

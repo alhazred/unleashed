@@ -48,7 +48,7 @@ dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/ndmp
 dir path=usr/sbin
 dir path=usr/share/man
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man4
 file path=lib/svc/manifest/system/ndmp.xml group=sys mode=0444
 file path=lib/svc/method/svc-ndmp mode=0555
@@ -58,9 +58,9 @@ file path=usr/lib/libndmp.so.1
 file path=usr/lib/ndmp/ndmpd mode=0555
 file path=usr/sbin/ndmpadm mode=0555
 file path=usr/sbin/ndmpstat mode=0555
-file path=usr/share/man/man1m/ndmpadm.1m
-file path=usr/share/man/man1m/ndmpd.1m
-file path=usr/share/man/man1m/ndmpstat.1m
+file path=usr/share/man/man8/ndmpadm.8
+file path=usr/share/man/man8/ndmpd.8
+file path=usr/share/man/man8/ndmpstat.8
 file path=usr/share/man/man4/ndmp.4
 license cr_Sun license=cr_Sun
 license lic_OSBL license=lic_OSBL

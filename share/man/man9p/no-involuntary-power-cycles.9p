@@ -28,7 +28,7 @@ taking place, unless the device driver returns \fBDDI_SUCCESS\fR when its
 .sp
 .LP
 The presence of \fBno-involuntary-power-cycles\fR does not prevent the system
-from being powered off due to a \fBhalt\fR(1M) or \fBuadmin\fR(1M) invocation,
+from being powered off due to a \fBhalt\fR(8) or \fBuadmin\fR(8) invocation,
 except for CPR suspend.
 .sp
 .LP

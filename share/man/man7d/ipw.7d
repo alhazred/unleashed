@@ -25,8 +25,8 @@ mode. Supported \fI802.11b\fR data rates are 1, 2, 5.5 and 11 Mbits/sec.
 The \fBipw\fR driver supports only BSS networks (also known as "ap" or
 "infrastructure" networks) and the "open" ("open-system") or "shared system"
 authentication. Only WEP encryption is currently supported. You perform
-configuration and administration tasks using the \fBdladm\fR(1M) and
-\fBwificonfig\fR(1M) utilities.
+configuration and administration tasks using the \fBdladm\fR(8) and
+\fBwificonfig\fR(8) utilities.
 .SH FILES
 .sp
 .ne 2
@@ -74,7 +74,7 @@ Architecture	x86
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBwificonfig\fR(1M), \fBattributes\fR(5), \fBgld\fR(7D),
+\fBdladm\fR(8), \fBwificonfig\fR(8), \fBattributes\fR(5), \fBgld\fR(7D),
 \fBdlpi\fR(7P)
 .sp
 .LP

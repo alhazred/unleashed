@@ -75,7 +75,7 @@ Architecture	SPARC
 .SH SEE ALSO
 .sp
 .LP
-\fBluxadm\fR(1M), \fBprtconf\fR(1M), \fBdriver.conf\fR(4), \fBsocal\fR(7D),
+\fBluxadm\fR(8), \fBprtconf\fR(8), \fBdriver.conf\fR(4), \fBsocal\fR(7D),
 \fBssd\fR(7D)
 .sp
 .LP

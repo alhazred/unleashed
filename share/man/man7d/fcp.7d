@@ -62,7 +62,7 @@ Interface stability	Unknown
 .SH SEE ALSO
 .sp
 .LP
-\fBprtconf\fR(1M), \fBdriver.conf\fR(4), \fBfctl\fR(7D), \fBfp\fR(7d),
+\fBprtconf\fR(8), \fBdriver.conf\fR(4), \fBfctl\fR(7D), \fBfp\fR(7d),
 \fBusoc\fR(7D)
 .sp
 .LP

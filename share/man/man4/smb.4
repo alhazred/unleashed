@@ -13,7 +13,7 @@ Behavior of the Solaris CIFS server is defined by property values that are
 stored in the Service Management Facility, \fBsmf\fR(5).
 .sp
 .LP
-An authorized user can use the \fBsharectl\fR(1M) command to set global values
+An authorized user can use the \fBsharectl\fR(8) command to set global values
 for these properties in SMF.
 .sp
 .LP
@@ -327,7 +327,7 @@ on the server, is derived from the \fBmax_workers\fR value. To ensure
 compatibility with older versions of Windows the lower 8-bits of \fBmax_mpx\fR
 must not be zero. If the lower byte of \fBmax_workers\fR is zero, \fB64\fR is
 added to the value. Thus the minimum value is \fB64\fR and the default value,
-which appears in \fBsharectl\fR(1M) as \fB1024\fR, is \fB1088\fR.
+which appears in \fBsharectl\fR(8) as \fB1024\fR, is \fB1088\fR.
 .RE
 
 .sp
@@ -487,5 +487,5 @@ Interface Stability	Uncommitted
 
 .SH SEE ALSO
 .LP
-\fBsharectl\fR(1M), \fBsmbadm\fR(1M), \fBsmbd\fR(1M), \fBsmbstat\fR(1M),
+\fBsharectl\fR(8), \fBsmbadm\fR(8), \fBsmbd\fR(8), \fBsmbstat\fR(8),
 \fBattributes\fR(5), \fBsmf\fR(5)

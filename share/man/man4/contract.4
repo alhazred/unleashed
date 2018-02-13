@@ -23,7 +23,7 @@ available contract type.
 \fB/system/contract\fR can be mounted on any mount point, in addition to the
 standard \fB/system/contract\fR mount point, and can be mounted several places
 at once. Such additional mounts are allowed in order to facilitate the
-confinement of processes to subtrees of the file system using \fBchroot\fR(1M)
+confinement of processes to subtrees of the file system using \fBchroot\fR(8)
 and yet allow such processes to continue to use contract commands and
 interfaces.
 .sp
@@ -611,7 +611,7 @@ Status info for contract ID
 .SH SEE ALSO
 .sp
 .LP
-\fBctrun\fR(1), \fBctstat\fR(1), \fBctwatch\fR(1), \fBchroot\fR(1M),
+\fBctrun\fR(1), \fBctstat\fR(1), \fBctwatch\fR(1), \fBchroot\fR(8),
 \fBclose\fR(2), \fBioctl\fR(2), \fBopen\fR(2), \fBpoll\fR(2),
 \fBct_ctl_abandon\fR(3CONTRACT), \fBct_event_read\fR(3CONTRACT),
 \fBct_event_get_evid\fR(3CONTRACT), \fBct_event_get_flags\fR(3CONTRACT),

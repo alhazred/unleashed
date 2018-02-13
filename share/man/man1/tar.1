@@ -206,7 +206,7 @@ If a named file matches a directory whose contents has been written to the
 tarfile, this directory is recursively extracted. The owner, modification time,
 and mode are restored (if possible); otherwise, to restore owner, you must be
 the super-user. Character-special and block-special devices (created by
-\fBmknod\fR(1M)) can only be extracted by the super-user. If no \fIfile\fR
+\fBmknod\fR(8)) can only be extracted by the super-user. If no \fIfile\fR
 argument is specified, the entire content of the tarfile is extracted. If the
 tarfile contains several files with the same name, each file is written to the
 appropriate directory, overwriting the previous one. Filename substitution
@@ -1110,7 +1110,7 @@ Interface Stability	Committed
 \fBar\fR(1), \fBbasename\fR(1), \fBbzip2\fR(1), \fBcd\fR(1), \fBchown\fR(1),
 \fBcompress\fR)(1), \fBcpio\fR(1), \fBcsh\fR(1), \fBdirname\fR(1),
 \fBfind\fR(1), \fBgzip\fR(1), \fBls\fR(1), \fBmt\fR(1), \fBpax\fR(1),
-\fBsetfacl\fR(1), \fBumask\fR(1), \fBxz\fR(1), \fBmknod\fR(1M),
+\fBsetfacl\fR(1), \fBumask\fR(1), \fBxz\fR(1), \fBmknod\fR(8),
 \fBarchives.h\fR(3HEAD), \fBattributes\fR(5), \fBenviron\fR(5),
 \fBfsattr\fR(5), \fBlargefile\fR(5), \fBmtio\fR(7I)
 .SH DIAGNOSTICS

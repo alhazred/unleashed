@@ -16,7 +16,7 @@ logindevperm, fbtab \- login-based device permissions
 .sp
 .LP
 The \fB/etc/logindevperm\fR file contains information that is used by
-\fBlogin\fR(1) and \fBttymon\fR(1M) to change the owner, group, and permissions
+\fBlogin\fR(1) and \fBttymon\fR(8) to change the owner, group, and permissions
 of devices upon logging into or out of a console device. By default, this file
 contains lines for the keyboard, mouse, audio, and frame buffer devices.
 .sp
@@ -30,7 +30,7 @@ specified in \fB/etc/logindevperm\fR.
 If the console is \fB/dev/vt/active\fR, the owner of the devices is the first
 user logged in on the consoles (\fB/dev/console\fR or \fB/dev/vt/#\fR). Upon
 this first user's logout the owner and group of these devices is reset by
-\fBttymon\fR(1M) to owner root and root's group as specified in
+\fBttymon\fR(8) to owner root and root's group as specified in
 \fB/etc/passwd\fR.
 .sp
 .LP
@@ -111,7 +111,7 @@ changed using \fBchmod\fR(1) and \fBchown\fR(1), as with any other user-owned
 file.
 .sp
 .LP
-Upon logout the owner and group of these devices are reset by \fBttymon\fR(1M)
+Upon logout the owner and group of these devices are reset by \fBttymon\fR(8)
 to owner \fBroot\fR and root's group as specified in \fB/etc/passwd\fR
 (typically \fBother\fR). The permissions are set as specified in the
 \fB/etc/logindevperm\fR file.
@@ -128,7 +128,7 @@ File that contains user group information.
 .SH SEE ALSO
 .sp
 .LP
-\fBchmod\fR(1), \fBchown\fR(1), \fBlogin\fR(1), \fBttymon\fR(1M),
+\fBchmod\fR(1), \fBchown\fR(1), \fBlogin\fR(1), \fBttymon\fR(8),
 \fBpasswd\fR(4), \fBregexp\fR(5), \fBugen\fR(7D)
 .SH NOTES
 .sp

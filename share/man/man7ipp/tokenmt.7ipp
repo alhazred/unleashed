@@ -154,7 +154,7 @@ module: tokenmt                          instance: <action id>
 
 .SH SEE ALSO
 .LP
-\fBipqosconf\fR(1M), \fBdlcosmk\fR(7ipp), \fBdscpmk\fR(7ipp),
+\fBipqosconf\fR(8), \fBdlcosmk\fR(7ipp), \fBdscpmk\fR(7ipp),
 \fBflowacct\fR(7ipp), \fBipqos\fR(7ipp), \fBipgpc\fR(7ipp),
 \fBtswtclmt\fR(7ipp)
 .sp

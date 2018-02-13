@@ -133,7 +133,7 @@ access or \fBDMA\fR handles.
 .LP
 For each error detected, the driver must formulate and post an error report via
 \fBddi_fm_ereport_post()\fR for problem analysis by the Solaris Fault Manager
-\fBfmd\fR(1M).
+\fBfmd\fR(8).
 .sp
 .LP
 For a \fBPCI\fR, \fBPCI/X\fR, or \fBPCI Express\fR leaf device, the
@@ -199,7 +199,7 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBfmd\fR(1M), \fBattributes\fR(5), \fBattach\fR(9E), \fBdetach\fR(9E),
+\fBfmd\fR(8), \fBattributes\fR(5), \fBattach\fR(9E), \fBdetach\fR(9E),
 \fBddi_fm_ereport_post\fR(9F), \fBddi_fm_init\fR(9F), \fBddi_get8\fR(9F),
 \fBddi_put8\fR(9F), \fBpci_ereport_post\fR(9F), \fBddi_fm_error\fR(9S)
 .sp

@@ -622,7 +622,7 @@ pair \fBrcm_failure_reason\fR and exit with status 1.
 .SS "Logging"
 .LP
 A script must log all error and debug messages by writing to stdout the
-name-value pairs listed below. The logged messages go to \fBsyslogd\fR(1M) with
+name-value pairs listed below. The logged messages go to \fBsyslogd\fR(8) with
 the \fBsyslog\fR facility of \fBLOG_DAEMON\fR. See \fBsyslog.conf\fR(4).
 .sp
 .ne 2
@@ -969,8 +969,8 @@ Interface Stability	Evolving
 
 .SH SEE ALSO
 .LP
-\fBgettext\fR(1), \fBcfgadm\fR(1M), \fBcfgadm_scsi\fR(1M),
-\fBcfgadm_pci\fR(1M), \fBsyslog\fR(3C), \fBsignal.h\fR(3HEAD),
+\fBgettext\fR(1), \fBcfgadm\fR(8), \fBcfgadm_scsi\fR(8),
+\fBcfgadm_pci\fR(8), \fBsyslog\fR(3C), \fBsignal.h\fR(3HEAD),
 \fBsyslog.conf\fR(4), \fBattributes\fR(5), \fBenviron\fR(5)
 .SH NOTES
 .LP

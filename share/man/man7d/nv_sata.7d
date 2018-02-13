@@ -64,7 +64,7 @@ Architecture	x86
 .SH SEE ALSO
 .sp
 .LP
-\fBcfgadm\fR(1M), \fBcfgadm_sata\fR(1M), \fBprtconf\fR(1M), \fBsata\fR(7D),
+\fBcfgadm\fR(8), \fBcfgadm_sata\fR(8), \fBprtconf\fR(8), \fBsata\fR(7D),
 \fBsd\fR(7D)
 .sp
 .LP

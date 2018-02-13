@@ -145,7 +145,7 @@ target process using APIs in \fBlibpctx\fR and \fBlibcpc\fR that consume
 .SH SEE ALSO
 .sp
 .LP
-\fBcputrack\fR(1), \fBcpustat\fR(1M), \fBcpc_bind_curlwp\fR(3CPC),
+\fBcputrack\fR(1), \fBcpustat\fR(8), \fBcpc_bind_curlwp\fR(3CPC),
 \fBcpc_buf_create\fR(3CPC), \fBcpc_enable\fR(3CPC), \fBcpc_npic\fR(3CPC),
 \fBcpc_open\fR(3CPC), \fBcpc_set_create\fR(3CPC), \fBcpc_seterrhndlr\fR(3CPC),
 \fBgeneric_events\fR(3CPC), \fBlibcpc\fR(3LIB), \fBpctx_capture\fR(3CPC),

@@ -44,7 +44,7 @@ dir path=lib/svc/method variant.opensolaris.zone=global
 dir path=usr group=sys
 dir path=usr/sbin
 dir path=usr/share/man
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man7d
 driver name=iscsi class=scsi-self-identify perms="* 0600 root sys"
 file path=kernel/drv/iscsi group=sys
@@ -55,7 +55,7 @@ file path=lib/svc/method/iscsi-initiator mode=0555 \
     variant.opensolaris.zone=global
 file path=lib/svc/method/iscsid mode=0555 variant.opensolaris.zone=global
 file path=usr/sbin/iscsiadm mode=0555
-file path=usr/share/man/man1m/iscsiadm.1m
+file path=usr/share/man/man8/iscsiadm.8
 file path=usr/share/man/man7d/iscsi.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

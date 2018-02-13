@@ -136,8 +136,8 @@ The encrypted password consists of at most \fBCRYPT_MAXCIPHERTEXTLEN\fR
 characters chosen from a 64-character alphabet (\fB\&.\fR, \fB/\fR,
 \fB0\(mi9\fR, \fBA\(miZ\fR, \fBa\(miz\fR). Two additional special characters,
 "$" and ",", can also be used and are defined in \fBcrypt\fR(3C). To update
-this file, use the \fBpasswd\fR(1), \fBuseradd\fR(1M), \fBusermod\fR(1M), or
-\fBuserdel\fR(1M) commands.
+this file, use the \fBpasswd\fR(1), \fBuseradd\fR(8), \fBusermod\fR(8), or
+\fBuserdel\fR(8) commands.
 .sp
 .LP
 In order to make system administration manageable, \fB/etc/shadow\fR entries
@@ -201,8 +201,8 @@ Interface Stability	Stable
 
 .SH SEE ALSO
 .LP
-\fBlogin\fR(1), \fBpasswd\fR(1), \fBuseradd\fR(1M), \fBuserdel\fR(1M),
-\fBusermod\fR(1M), \fBstrtol\fR(3C), \fBcrypt\fR(3C), \fBcrypt_gensalt\fR(3C),
+\fBlogin\fR(1), \fBpasswd\fR(1), \fBuseradd\fR(8), \fBuserdel\fR(8),
+\fBusermod\fR(8), \fBstrtol\fR(3C), \fBcrypt\fR(3C), \fBcrypt_gensalt\fR(3C),
 \fBgetspnam\fR(3C), \fBputspent\fR(3C), \fBnsswitch.conf\fR(4),
 \fBpasswd\fR(4), \fBattributes\fR(5), \fBpam_unix_account\fR(5),
 \fBpam_unix_auth\fR(5)

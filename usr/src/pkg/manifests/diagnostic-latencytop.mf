@@ -33,10 +33,10 @@ dir path=usr group=sys
 dir path=usr/bin
 $(i386_ONLY)dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 $(i386_ONLY)file path=usr/bin/$(ARCH32)/latencytop mode=0555
 file path=usr/bin/$(ARCH64)/latencytop mode=0555
-file path=usr/share/man/man1m/latencytop.1m
+file path=usr/share/man/man8/latencytop.8
 hardlink path=usr/bin/latencytop target=../../usr/lib/isaexec
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

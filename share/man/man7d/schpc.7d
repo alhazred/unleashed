@@ -35,4 +35,4 @@ Driver configuration file.
 .SH SEE ALSO
 .sp
 .LP
-\fBcfgadm\fR(1M)
+\fBcfgadm\fR(8)

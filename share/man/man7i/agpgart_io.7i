@@ -43,7 +43,7 @@ cannot be made generic. Currently, the \fBagpgart_io\fR driver only supports
 specific AGP  systems. To determine if a system is supported, run an
 \fBopen\fR(2) system  call on the AGP_DEVICE node. (Note that  \fBopen\fR(2)
 fails if a system is not supported). After the AGP_DEVICE is opened, you can
-use \fBkstat\fR(1M) to  read the system architecture  type.
+use \fBkstat\fR(8) to  read the system architecture  type.
 .sp
 .LP
 In addition to AGP system support, the \fBagpgart\fR ioctls can also be used on
@@ -921,6 +921,6 @@ Stability level	Unstable
 .SH SEE ALSO
 .sp
 .LP
-\fBprctl\fR(1), \fBkstat\fR(1M), \fBclose\fR(2), \fBioctl\fR(2), \fBopen\fR(2),
+\fBprctl\fR(1), \fBkstat\fR(8), \fBclose\fR(2), \fBioctl\fR(2), \fBopen\fR(2),
 \fBmmap\fR(2), \fBproject\fR(4), \fBprivileges\fR(5), \fBattributes\fR(5),
 \fBresource_controls\fR(5)

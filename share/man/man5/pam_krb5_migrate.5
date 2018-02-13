@@ -32,11 +32,11 @@ client.
 .LP
 \fBpam_sm_authenticate\fR(3PAM) uses a host-based client service principal,
 present in the local \fBkeytab\fR (\fB/etc/krb5/krb5.keytab\fR) to authenticate
-to \fBkadmind\fR(1M) (defaults to the \fBhost/nodename.fqdn\fR service
+to \fBkadmind\fR(8) (defaults to the \fBhost/nodename.fqdn\fR service
 principal), for the principal creation operation. Also, for successful creation
 of the \fBkrb5\fR user principal account, the host-based client service
 principal being used needs to be assigned the appropriate privilege on the
-master KDC's \fBkadm5.acl\fR(4) file. \fBkadmind\fR(1M) checks for the
+master KDC's \fBkadm5.acl\fR(4) file. \fBkadmind\fR(8) checks for the
 appropriate privilege and validates the user password using PAM by calling
 \fBpam_authenticate\fR(3PAM) and \fBpam_acct_mgmt\fR(3PAM) for the
 \fBk5migrate\fR service.
@@ -75,7 +75,7 @@ Provides \fBsyslog\fR(3C) debugging information at \fBLOG_DEBUG\fR level.
 .ad
 .sp .6
 .RS 4n
-Name of the service used to authenticate to \fBkadmind\fR(1M) defaults to
+Name of the service used to authenticate to \fBkadmind\fR(8) defaults to
 \fBhost\fR. This means that the module uses \fBhost/\fR\fI<nodename.fqdn>\fR as
 its client service principal name, KerberosV5 user principal creation operation
 or \fI<service>\fR/\fI<nodename.fqdn>\fR if this option is provided.
@@ -169,7 +169,7 @@ principals for addition of the root user account.
 \fBExample 3 \fRSample Entries in \fBpam.conf\fR of the Master KDC
 .sp
 .LP
-The entries below enable \fBkadmind\fR(1M) on the master KDC to use the
+The entries below enable \fBkadmind\fR(8) on the master KDC to use the
 \fBk5migrate\fR PAM service in order to validate Unix user passwords for
 accounts that require migration to the Kerberos realm.
 
@@ -200,7 +200,7 @@ Interface Stability	Evolving
 .SH SEE ALSO
 .sp
 .LP
-\fBkadmind\fR(1M), \fBsyslog\fR(3C), \fBpam_authenticate\fR(3PAM),
+\fBkadmind\fR(8), \fBsyslog\fR(3C), \fBpam_authenticate\fR(3PAM),
 \fBpam_acct_mgmt\fR(3PAM), \fBpam_sm_authenticate\fR(3PAM), \fBkadm5.acl\fR(4),
 \fBpam.conf\fR(4), \fBattributes\fR(5), \fBpam_authtok_get\fR(5),
 \fBpam_krb5\fR(5)

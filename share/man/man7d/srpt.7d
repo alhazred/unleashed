@@ -78,7 +78,7 @@ Architecture	x86
 .SH SEE ALSO
 .sp
 .LP
-\fBstmfadm\fR(1M), \fBib\fR(7D), \fBibdma\fR(7D), \fBibtl\fR(7D),
+\fBstmfadm\fR(8), \fBib\fR(7D), \fBibdma\fR(7D), \fBibtl\fR(7D),
 \fBattributes\fR(5)
 .sp
 .LP

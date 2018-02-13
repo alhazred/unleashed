@@ -1,5 +1,4 @@
 SUBDIR = man1 \
-	 man1m \
 	 man2 \
 	 man3 \
 	 man3avl \
@@ -69,6 +68,7 @@ SUBDIR = man1 \
 	 man7ipp \
 	 man7m \
 	 man7p \
+	 man8 \
 	 man9 \
 	 man9e \
 	 man9f \

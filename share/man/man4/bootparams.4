@@ -17,7 +17,7 @@ bootparams \- boot parameter data base
 .LP
 The \fBbootparams\fR file contains a list of client entries that diskless
 clients use for booting. Diskless booting clients retrieve this information by
-issuing requests to a server running the \fBrpc.bootparamd\fR(1M) program. The
+issuing requests to a server running the \fBrpc.bootparamd\fR(8) program. The
 \fBbootparams\fR file may be used in conjunction with or in place of other
 sources for the \fBbootparams\fR information. See \fBnsswitch.conf\fR(4).
 .sp
@@ -218,7 +218,7 @@ ns=otis:nisplus(255.255.255.0) term=:xterms domain=eu.cte.work.com
 
 .SH SEE ALSO
 .LP
-\fBrpc.bootparamd\fR(1M), \fBnsswitch.conf\fR(4)
+\fBrpc.bootparamd\fR(8), \fBnsswitch.conf\fR(4)
 .SH NOTES
 .LP
 The \fBNIS+\fR, \fBsysidtool\fR, and jumpstart facilities are not present in
@@ -229,4 +229,4 @@ a jumpstart server for older Solaris releases.
 Solaris diskless clients use the keywords \fBroot\fR and \fBrootopts\fR to look
 up the pathname for the root filesystem and the mount options for the root
 filesystem, respectively. These are the only keywords meaningful for diskless
-booting clients. See \fBmount_ufs\fR(1M).
+booting clients. See \fBmount_ufs\fR(8).

@@ -42,7 +42,7 @@ The error values are as follows:
 .ad
 .sp .6
 .RS 4n
-The storage mechanism that the repository server (\fBsvc.configd\fR(1M)) chose
+The storage mechanism that the repository server (\fBsvc.configd\fR(8)) chose
 for the operation denied access.
 .RE
 
@@ -56,7 +56,7 @@ for the operation denied access.
 The storage mechanism that the repository server (\fBsvc.configd\fR) chose for
 the operation is read-only. For the local filesystem storage mechanism
 (currently \fB/etc/svc/repository.db\fR), this usually occurs because the
-filesystem that contains it is mounted read-only. See \fBmount\fR(1M)
+filesystem that contains it is mounted read-only. See \fBmount\fR(8)
 .RE
 
 .sp
@@ -278,5 +278,5 @@ MT-Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBsvc.configd\fR(1M), \fBlibscf\fR(3LIB), \fBattributes\fR(5),
-\fBsvc.configd\fR(1M)
+\fBsvc.configd\fR(8), \fBlibscf\fR(3LIB), \fBattributes\fR(5),
+\fBsvc.configd\fR(8)

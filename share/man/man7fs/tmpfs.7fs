@@ -61,7 +61,7 @@ This means that  large sized  \fBtmpfs\fR files can affect the amount of space
 left over for programs to execute. Likewise, programs requiring large amounts
 of memory use up the space available to \fBtmpfs\fR. Users running into this
 constraint (for example, running out of space on \fBtmpfs\fR) can allocate more
-swap space by using the \fBswap\fR(1M) command.
+swap space by using the \fBswap\fR(8) command.
 .sp
 .LP
 Another constraint is that the number of files available in a  \fBtmpfs\fR file
@@ -85,7 +85,7 @@ individual \fBtmpfs\fR file system.
 .SH SEE ALSO
 .sp
 .LP
-\fBdf\fR(1M), \fBmount\fR(1M), \fBmount_tmpfs\fR(1M), \fBswap\fR(1M),
+\fBdf\fR(8), \fBmount\fR(8), \fBmount_tmpfs\fR(8), \fBswap\fR(8),
 \fBmmap\fR(2), \fBmount\fR(2), \fBumount\fR(2), \fBvfstab\fR(4)
 .sp
 .LP
@@ -106,7 +106,7 @@ This message appears because a page could not be allocated while writing to a
 file. This can occur if \fBtmpfs\fR is attempting to write more than it is
 allowed, or if currently executing programs are using a lot of memory. To make
 more space available, remove unnecessary files, exit from some programs, or
-allocate more swap space using \fBswap\fR(1M).
+allocate more swap space using \fBswap\fR(8).
 .RE
 
 .sp
@@ -140,6 +140,6 @@ intermediate files.
 \fBswap\fR to a \fBtmpfs\fR file is not supported.
 .sp
 .LP
-\fBdf\fR(1M) output is of limited accuracy since a \fBtmpfs\fR file system size
+\fBdf\fR(8) output is of limited accuracy since a \fBtmpfs\fR file system size
 is not static and the space available to \fBtmpfs\fR is dependent on the swap
 space demands of the entire system.

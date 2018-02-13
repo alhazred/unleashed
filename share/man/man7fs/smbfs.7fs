@@ -94,7 +94,7 @@ Currently, all access through an \fBsmbfs\fR mount point uses the Windows
 credentials established by the user that ran the \fBmount\fR command. Normally,
 permissions on \fBsmbfs\fR mount points should be \fB0700\fR to prevent Unix
 users from using each others' Windows credentials. See the \fBdirperms\fR
-option to \fBmount_smbfs\fR(1M) for details regarding how to control
+option to \fBmount_smbfs\fR(8) for details regarding how to control
 \fBsmbfs\fR mount point permissions.
 .sp
 .LP
@@ -120,4 +120,4 @@ Interface Stability	Uncommitted
 .SH SEE ALSO
 .sp
 .LP
-\fBsmbutil\fR(1), \fBmount_smbfs\fR(1M), \fBnsmbrc\fR(4), \fBattributes\fR(5)
+\fBsmbutil\fR(1), \fBmount_smbfs\fR(8), \fBnsmbrc\fR(4), \fBattributes\fR(5)

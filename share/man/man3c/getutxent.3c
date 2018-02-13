@@ -199,7 +199,7 @@ pointed to by \fIutmpx\fR to the database.
 .LP
 The values of the \fBe_termination\fR and \fBe_exit\fR members of the
 \fBut_exit\fR structure are valid only for records of type \fBDEAD_PROCESS\fR.
-For \fButmpx\fR entries created by \fBinit\fR(1M),  these values are set
+For \fButmpx\fR entries created by \fBinit\fR(8),  these values are set
 according to the result of the \fBwait()\fR call that \fBinit\fR performs on
 the process when the process exits. See the \fBwait\fR(3C), manual page for the
 values \fBinit\fR uses. Applications creating \fButmpx\fR entries can set

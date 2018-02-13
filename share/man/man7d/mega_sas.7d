@@ -93,7 +93,7 @@ Interface stability	Uncommitted
 .SH SEE ALSO
 .sp
 .LP
-\fBprtconf\fR(1M), \fBattributes\fR(5), \fBsata\fR(7D),
+\fBprtconf\fR(8), \fBattributes\fR(5), \fBsata\fR(7D),
 \fBscsi_hba_attach_setup\fR(9F), \fBscsi_sync_pkt\fR(9F),
 \fBscsi_transport\fR(9F), \fBscsi_inquiry\fR(9S), \fBscsi_device\fR(9S),
 \fBscsi_pkt\fR(9S)

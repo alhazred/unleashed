@@ -367,7 +367,7 @@ Architecture	 SPARC, x86, PCI-based systems
 
 .SH SEE ALSO
 .LP
-\fBcfgadm_usb\fR(1M), \fBioctl\fR(2), \fBopen\fR(2), \fBmmap\fR(2),
+\fBcfgadm_usb\fR(8), \fBioctl\fR(2), \fBopen\fR(2), \fBmmap\fR(2),
 \fBread\fR(2), \fBattributes\fR(5), \fBugen\fR(7D),
 \fBusba\fR(7D), \fBattach\fR(9E)
 .sp

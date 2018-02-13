@@ -60,7 +60,7 @@ dissolved.
 .LP
 A DLPI style 2 driver calls \fBqassociate()\fR while processing the
 \fBDL_ATTACH_REQ\fR message. The driver is also expected to call this interface
-while performing stream associations through other means, such as \fBndd\fR(1M)
+while performing stream associations through other means, such as \fBndd\fR(8)
 ioctl commands.
 .sp
 .LP

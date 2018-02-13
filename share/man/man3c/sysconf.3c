@@ -476,7 +476,7 @@ Standard	See \fBstandards\fR(5).
 .SH SEE ALSO
 .sp
 .LP
-\fBpooladm\fR(1M), \fBzoneadm\fR(1M), \fBfpathconf\fR(2), \fBseteuid\fR(2),
+\fBpooladm\fR(8), \fBzoneadm\fR(8), \fBfpathconf\fR(2), \fBseteuid\fR(2),
 \fBsetrlimit\fR(2), \fBconfstr\fR(3C), \fBattributes\fR(5), \fBstandards\fR(5)
 .SH NOTES
 .sp

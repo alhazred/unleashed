@@ -18,9 +18,9 @@ Filesystem contents are dynamic and  reflect  the current set of shares in the
 system. File contents are described in \fBsharetab\fR(4).
 .sp
 .LP
-File contents can be modified as a result of \fBshare\fR(1M),
-\fBsharectl\fR(1M), \fBsharemgr\fR(1M) and changing properties of a
-\fBzfs\fR(1M) data set.
+File contents can be modified as a result of \fBshare\fR(8),
+\fBsharectl\fR(8), \fBsharemgr\fR(8) and changing properties of a
+\fBzfs\fR(8) data set.
 .sp
 .LP
 The module may not be unloaded dynamically by the kernel.
@@ -37,5 +37,5 @@ System record of shared file systems.
 .SH SEE ALSO
 .sp
 .LP
-\fBshare\fR(1M), \fBsharectl\fR(1M), \fBsharemgr\fR(1M), \fBzfs\fR(1M),
+\fBshare\fR(8), \fBsharectl\fR(8), \fBsharemgr\fR(8), \fBzfs\fR(8),
 \fBsharetab\fR(4)

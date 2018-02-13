@@ -149,7 +149,7 @@ Configuration file.
 .SH SEE ALSO
 .sp
 .LP
-\fBcryptoadm\fR(1M), \fBkstat\fR(1M), \fBprtconf\fR(1M), \fBattributes\fR(5)
+\fBcryptoadm\fR(8), \fBkstat\fR(8), \fBprtconf\fR(8), \fBattributes\fR(5)
 .sp
 .LP
 \fISolaris Cryptographic Framework\fR \(em Solaris Software Developer

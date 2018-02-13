@@ -256,4 +256,4 @@ context only.
 .sp
 .LP
 Compiling with \fB_LOCKTEST\fR or \fB_MPSTATS\fR defined no longer has any
-effect. To gather lock statistics, see \fBlockstat\fR(1M).
+effect. To gather lock statistics, see \fBlockstat\fR(8).

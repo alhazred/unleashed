@@ -33,10 +33,10 @@ dir path=usr group=sys
 dir path=usr/platform group=sys
 $(i386_ONLY)dir path=usr/platform/i86pc group=sys
 $(i386_ONLY)dir path=usr/platform/i86pc/lib
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man3lib
-file path=usr/share/man/man1m/device_remap.1m
-file path=usr/share/man/man1m/scadm.1m
+file path=usr/share/man/man8/device_remap.8
+file path=usr/share/man/man8/scadm.8
 file path=usr/share/man/man3lib/libtsalarm.3lib
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

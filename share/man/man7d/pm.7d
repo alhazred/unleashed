@@ -394,7 +394,7 @@ Interface stability	Unstable
 .SH SEE ALSO
 .sp
 .LP
-\fBpmconfig\fR(1M), \fBIntro\fR(2), \fBioctl\fR(2), \fBlibdevinfo\fR(3LIB),
+\fBpmconfig\fR(8), \fBIntro\fR(2), \fBioctl\fR(2), \fBlibdevinfo\fR(3LIB),
 \fBpower.conf\fR(4), \fBattributes\fR(5), \fBattach\fR(9E), \fBdetach\fR(9E),
 \fBpower\fR(9E), \fBpm_busy_component\fR(9F), \fBpm_idle_component\fR(9F),
 \fBpm_lower_power\fR(9F), \fBpm_power_has_changed\fR(9F),

@@ -153,7 +153,7 @@ as shown in the following example:
 
 .SH CONFIGURING SCHEDULER WITH DISPADMIN
 .LP
-You can use the \fBdispadmin\fR(1M) command to examine and tune the FSS
+You can use the \fBdispadmin\fR(8) command to examine and tune the FSS
 scheduler's time quantum value. Time quantum is the amount of time that a
 thread is allowed to run before it must relinquish the processor. The following
 example dumps the current time quantum for the fair share scheduler:
@@ -188,11 +188,11 @@ different while the amount of time is the same.
 .LP
 You can use the \fB-s\fR option to change the time quantum value. Note that
 such changes are not preserved across reboot. Please refer to the
-\fBdispadmin\fR(1M) man page for additional information.
+\fBdispadmin\fR(8) man page for additional information.
 
 .SH SEE ALSO
 .LP
-\fBprctl\fR(1), \fBpriocntl\fR(1), \fBdispadmin\fR(1M), \fBpsrset\fR(1M),
+\fBprctl\fR(1), \fBpriocntl\fR(1), \fBdispadmin\fR(8), \fBpsrset\fR(8),
 \fBpriocntl\fR(2), \fBproject\fR(4), \fBresource_controls\fR(5)
 .sp
 .LP

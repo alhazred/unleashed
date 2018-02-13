@@ -35,7 +35,7 @@ file, where the generic node name and \fBcompatible\fR property associated with
 a self-identifying devices are typically not used, the node name must be a
 binding name. The binding name is the name chosen by the system to bind a
 driver to the device. The binding name is either an alias associated with the
-driver established by \fBadd_drv\fR(1M) or the driver name itself.
+driver established by \fBadd_drv\fR(8) or the driver name itself.
 .sp
 .LP
 The syntax of a single entry in a driver configuration file takes one of three
@@ -204,7 +204,7 @@ the second node retrieves the value of the global \fBdebug-level\fR property
 .SH SEE ALSO
 .sp
 .LP
-\fBadd_drv\fR(1M), \fBpci\fR(4), \fBpseudo\fR(4), \fBsbus\fR(4), \fBscsi\fR(4),
+\fBadd_drv\fR(8), \fBpci\fR(4), \fBpseudo\fR(4), \fBsbus\fR(4), \fBscsi\fR(4),
 \fBprobe\fR(9E), \fBddi_getlongprop\fR(9F), \fBddi_getprop\fR(9F),
 \fBddi_getproplen\fR(9F), \fBddi_prop_get_int\fR(9F),
 \fBddi_prop_lookup\fR(9F), \fBddi_prop_op\fR(9F)
@@ -221,7 +221,7 @@ over-the-counter stock symbol.
 .SH NOTES
 .sp
 .LP
-The \fBupdate_drv\fR(1M) command should be used to prompt the kernel to reread
-\fBdriver.conf\fR files. Using \fBmodunload\fR(1M) to update \fBdriver.conf\fR
+The \fBupdate_drv\fR(8) command should be used to prompt the kernel to reread
+\fBdriver.conf\fR files. Using \fBmodunload\fR(8) to update \fBdriver.conf\fR
 continues to work in release 9 of the Solaris operating environment, but the
 behavior will change in a future release.

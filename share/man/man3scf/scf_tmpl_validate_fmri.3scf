@@ -489,7 +489,7 @@ The \fBscf_tmpl_validate_fmri()\fR function will fail if:
 .ad
 .sp .6
 .RS 4n
-The storage mechanism that the repository server (\fBsvc.configd\fR(1M)) chose
+The storage mechanism that the repository server (\fBsvc.configd\fR(8)) chose
 for the operation denied access.
 .RE
 
@@ -657,5 +657,5 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBsvc.configd\fR(1M), \fBscf_tmpl_value_in_constraint\fR(3SCF),
+\fBsvc.configd\fR(8), \fBscf_tmpl_value_in_constraint\fR(3SCF),
 \fBattributes\fR(5), \fBsmf_template\fR(5)

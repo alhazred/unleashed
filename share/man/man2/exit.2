@@ -203,14 +203,14 @@ accounting routine is enabled (see \fBacct\fR(2)).
 .el o
 An extended accounting record is written to the extended process accounting
 file if the system's extended process accounting facility is enabled (see
-\fBacctadm\fR(1M)).
+\fBacctadm\fR(8)).
 .RE
 .RS +4
 .TP
 .ie t \(bu
 .el o
 If the current process is the last process within its task and if the system's
-extended task accounting facility is enabled (see \fBacctadm\fR(1M)), an
+extended task accounting facility is enabled (see \fBacctadm\fR(8)), an
 extended accounting record is written to the extended task accounting file.
 .RE
 .SH RETURN VALUES
@@ -251,7 +251,7 @@ The \fB_exit()\fR and \fB_Exit()\fR functions are Async-Signal-Safe.
 .SH SEE ALSO
 .sp
 .LP
-\fBacctadm\fR(1M), \fBIntro\fR(2), \fBacct\fR(2), \fBclose\fR(2),
+\fBacctadm\fR(8), \fBIntro\fR(2), \fBacct\fR(2), \fBclose\fR(2),
 \fBmemcntl\fR(2), \fBsemop\fR(2), \fBshmget\fR(2), \fBsigaction\fR(2),
 \fBtimes\fR(2), \fBwaitid\fR(2), \fBatexit\fR(3C), \fBfclose\fR(3C),
 \fBmq_close\fR(3C), \fBplock\fR(3C), \fBsignal.h\fR(3HEAD), \fBtmpfile\fR(3C),

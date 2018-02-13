@@ -332,7 +332,7 @@ file, if any is present, to get the default domain name, search list and the
 Internet address of the local name server(s). See \fBresolv.conf\fR(4). If no
 server is configured, \fBres_init()\fR or \fBres_ninit()\fR will try to obtain
 name resolution services from the host on which it is running. The current
-domain name is defined by \fBdomainname\fR(1M), or by the hostname if it is not
+domain name is defined by \fBdomainname\fR(8), or by the hostname if it is not
 specified in the configuration file. Use the environment variable
 \fBLOCALDOMAIN\fR to override the domain name. This environment variable may
 contain several blank-separated tokens if you wish to override the search list
@@ -518,7 +518,7 @@ T}
 
 .SH SEE ALSO
 .LP
-\fBdomainname\fR(1M), \fBgethostbyname\fR(3NSL), \fBlibresolv\fR(3LIB),
+\fBdomainname\fR(8), \fBgethostbyname\fR(3NSL), \fBlibresolv\fR(3LIB),
 \fBresolv.conf\fR(4), \fBattributes\fR(5)
 .sp
 .LP

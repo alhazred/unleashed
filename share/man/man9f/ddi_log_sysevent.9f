@@ -341,7 +341,7 @@ static int
 .SH SEE ALSO
 .sp
 .LP
-\fBsyseventd\fR(1M), \fBattributes\fR(5), \fBnvlist_add_boolean\fR(9F),
+\fBsyseventd\fR(8), \fBattributes\fR(5), \fBnvlist_add_boolean\fR(9F),
 \fBnvlist_alloc\fR(9F)
 .sp
 .LP

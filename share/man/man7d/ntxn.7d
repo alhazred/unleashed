@@ -34,9 +34,9 @@ The cloning character-special device, \fB/dev/ntxn\fR, is used to access all
 NetXen devices installed within the system.
 .sp
 .LP
-The \fBntxn\fR driver is managed by the \fBdladm\fR(1M) command line utility,
+The \fBntxn\fR driver is managed by the \fBdladm\fR(8) command line utility,
 which allows VLANs to be defined on top of \fBntxn\fR instances and for
-\fBntxn\fR instances to be aggregated. See \fBdladm\fR(1M) for more details.
+\fBntxn\fR instances to be aggregated. See \fBdladm\fR(8) for more details.
 .sp
 .LP
 The values returned by the driver in the DL_INFO_ACK primitive in response to
@@ -140,7 +140,7 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBndd\fR(1M), \fBnetstat\fR(1M), \fBdriver.conf\fR(4),
+\fBdladm\fR(8), \fBndd\fR(8), \fBnetstat\fR(8), \fBdriver.conf\fR(4),
 \fBattributes\fR(5), \fBstreamio\fR(7I), \fBdlpi\fR(7P)
 .sp
 .LP

@@ -8,11 +8,11 @@
 smf_method \- service management framework conventions for methods
 .SH DESCRIPTION
 .LP
-The class of services managed by \fBsvc.startd\fR(1M) in the service management
+The class of services managed by \fBsvc.startd\fR(8) in the service management
 framework, \fBsmf\fR(5), consists of applications that fit a simple
-\fBfork\fR(2)-\fBexec\fR(2) model. The \fBsvc.startd\fR(1M) master daemon and
+\fBfork\fR(2)-\fBexec\fR(2) model. The \fBsvc.startd\fR(8) master daemon and
 other restarters support the \fBfork\fR(2)-\fBexec\fR(2) model, potentially
-with additional capabilities. The \fBsvc.startd\fR(1M) daemon and other
+with additional capabilities. The \fBsvc.startd\fR(8) daemon and other
 restarters require that the methods which activate, manipulate, or examine a
 service instance follow the conventions described in this manual page.
 .SS "Invocation form"
@@ -33,7 +33,7 @@ form:
 .LP
 The \fIabbr_method_name\fR used for the recommended form is a supported method
 such as \fBstart\fR or \fBstop\fR. The set of methods supported by a restarter
-is given on the related restarter page. The \fBsvc.startd\fR(1M) daemon
+is given on the related restarter page. The \fBsvc.startd\fR(8) daemon
 supports \fBstart\fR, \fBstop\fR, and \fBrefresh\fR methods.
 .sp
 .LP
@@ -140,7 +140,7 @@ the method. See the \fBMethod Context\fR section for more information.
 When defined in the \fBexec\fR string of the method by the restarter
 \fBsvc.startd\fR, a set of tokens are parsed and expanded with appropriate
 value. Other restarters might not support method tokens. The delegated
-restarter for inet services, \fBinetd\fR(1M), does not support the following
+restarter for inet services, \fBinetd\fR(8), does not support the following
 method expansions.
 .sp
 .ne 2
@@ -480,7 +480,7 @@ include further flags which may harm poorly implemented software.
 .sp .6
 .RS 4n
 An optional string that specifies the corefile pattern to use for the service,
-as per \fBcoreadm\fR(1M). Most restarters supply a default. Setting this
+as per \fBcoreadm\fR(8). Most restarters supply a default. Setting this
 property overrides local customizations to the global core pattern.
 .RE
 
@@ -567,8 +567,8 @@ Definitions of exit status codes.
 
 .SH SEE ALSO
 .LP
-\fBzonename\fR(1), \fBcoreadm\fR(1M), \fBinetd\fR(1M), \fBsvccfg\fR(1M),
-\fBsvc.startd\fR(1M), \fBexec\fR(2), \fBfork\fR(2),
+\fBzonename\fR(1), \fBcoreadm\fR(8), \fBinetd\fR(8), \fBsvccfg\fR(8),
+\fBsvc.startd\fR(8), \fBexec\fR(2), \fBfork\fR(2),
 \fBgetdefaultproj\fR(3PROJECT), \fBexec_attr\fR(4), \fBproject\fR(4),
 \fBservice_bundle\fR(4), \fBattributes\fR(5), \fBprivileges\fR(5),
 \fBrbac\fR(5), \fBsmf\fR(5), \fBsmf_bootstrap\fR(5), \fBzones\fR(5),

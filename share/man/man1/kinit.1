@@ -126,7 +126,7 @@ not specified, the default ticket lifetime (configured by each site) is used.
 Specifying a ticket lifetime longer than the maximum ticket lifetime
 (configured by each site) results in a ticket with the maximum lifetime. See
 the \fBTime\fR \fBFormats\fR section for the valid time duration formats that
-you can specify for \fIlifetime\fR. See \fBkdc.conf\fR(4) and \fBkadmin\fR(1M)
+you can specify for \fIlifetime\fR. See \fBkdc.conf\fR(4) and \fBkadmin\fR(8)
 (for \fBgetprinc\fR command to verify the lifetime values for the server
 principal).
 .sp
@@ -189,7 +189,7 @@ option allows a user to explicitly obtain a non-proxiable ticket.
 Requests renewable tickets, with a total lifetime of \fIrenewable_life\fR. See
 the \fBTime\fR \fBFormats\fR section for the valid time duration formats that
 you can specify for \fIrenewable_life\fR. See \fBkdc.conf\fR(4) and
-\fBkadmin\fR(1M) (for \fBgetprinc\fR command to verify the lifetime values for
+\fBkadmin\fR(8) (for \fBgetprinc\fR command to verify the lifetime values for
 the server principal).
 .sp
 The renewable lifetime of the tickets returned is the minimum of the following:
@@ -592,11 +592,11 @@ The command arguments are Evolving. The command output is Unstable.
 .SH SEE ALSO
 .sp
 .LP
-\fBkdestroy\fR(1), \fBklist\fR(1), \fBkadmin\fR(1M), \fBktkt_warnd\fR(1M),
+\fBkdestroy\fR(1), \fBklist\fR(1), \fBkadmin\fR(8), \fBktkt_warnd\fR(8),
 \fBlibpkcs11\fR(3LIB), \fBkdc.conf\fR(4), \fBkrb5.conf\fR(4),
 \fBattributes\fR(5), \fBkerberos\fR(5), \fBkrb5envvar\fR(5), \fBpam_krb5\fR(5)
 .SH NOTES
 .sp
 .LP
-On success, \fBkinit\fR notifies \fBktkt_warnd\fR(1M) to alert the user when
+On success, \fBkinit\fR notifies \fBktkt_warnd\fR(8) to alert the user when
 the initial credentials (ticket-granting ticket) are about to expire.

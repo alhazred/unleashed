@@ -122,7 +122,7 @@ return \fBDDI_FAILURE\fR if the driver is not detaching at the time of the
 call.
 .sp
 .LP
-If automatic Power Management is disabled (see \fBdtpower\fR(1M) and
+If automatic Power Management is disabled (see \fBdtpower\fR(8) and
 \fBpower.conf\fR(4)), \fBpm_lower_power\fR(9F) returns \fBDDI_SUCCESS\fR
 without changing the power level of the component. Otherwise, when
 \fBpm_lower_power\fR(9F) returns with success, the \fIcomponent \fR is

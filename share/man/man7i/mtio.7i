@@ -1068,7 +1068,7 @@ Tape drives other than 1/2" reel tapes will return an \fBerrno\fR of
 .sp
 .LP
 Suppose you have written three files to the non-rewinding 1/2" tape device,
-\fB/dev/rmt/0ln,\fR and that you want to go back and \fBdd\fR(1M) the second
+\fB/dev/rmt/0ln,\fR and that you want to go back and \fBdd\fR(8) the second
 file off the tape. The commands to do this are:
 
 .sp
@@ -1144,7 +1144,7 @@ For example, \fB/dev/rmt/0hbn\fR specifies unit 0, high density, \fBBSD\fR
 behavior and no rewind.
 .SH SEE ALSO
 .LP
-\fBmt\fR(1), \fBtar\fR(1), \fBdd\fR(1M), \fBopen\fR(2), \fBread\fR(2),
+\fBmt\fR(1), \fBtar\fR(1), \fBdd\fR(8), \fBopen\fR(2), \fBread\fR(2),
 \fBwrite\fR(2), \fBaioread\fR(3C), \fBaiowrite\fR(3C), \fBar.h\fR(3HEAD),
 \fBst\fR(7D)
 .sp

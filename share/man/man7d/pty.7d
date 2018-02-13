@@ -237,7 +237,7 @@ pseudo-terminal slave devices
 .SH SEE ALSO
 .sp
 .LP
-\fBrlogin\fR(1), \fBrlogind\fR(1M), \fBldterm\fR(7M), \fBtermio\fR(7I),
+\fBrlogin\fR(1), \fBrlogind\fR(8), \fBldterm\fR(7M), \fBtermio\fR(7I),
 \fBttcompat\fR(7M),
 .SH NOTES
 .sp

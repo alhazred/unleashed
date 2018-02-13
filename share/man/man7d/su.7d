@@ -31,7 +31,7 @@ Sun machines using those same Intel, National Semiconductor and Southbridge
 chipsets. The \fBsu\fR driver provides basic asynchronous communication support
 for serial ports. Both the serial devices and keyboard/mouse devices will have
 streams built with appropriate modules pushed atop the  \fBsu\fR driver by
-means of either the \fBautopush\fR(1M) or \fBdacf.conf\fR(4) facilities,
+means of either the \fBautopush\fR(8) or \fBdacf.conf\fR(4) facilities,
 depending on the OS revision and architecture in use.
 .sp
 .LP
@@ -104,7 +104,7 @@ run over the serial console port when Alternate Break sequence is in effect.
 Although PPP is a binary protocol, it is able to avoid these sequences using
 the ACCM feature in \fIRFC 1662\fR. For Solaris PPP 4.0, you do this by adding
 the following line to the \fB/etc/ppp/options\fR file (or other configuration
-files used for the connection; see \fBpppd\fR(1M) for details):
+files used for the connection; see \fBpppd\fR(8) for details):
 .sp
 .in +2
 .nf
@@ -196,7 +196,7 @@ Architecture	 SPARC
 .SH SEE ALSO
 .LP
 \fBstrconf\fR(1), \fBkbd\fR(1), \fBtip\fR(1),
-\fBautopush\fR(1M), \fBkstat\fR(1M), \fBpppd\fR(1M), \fBioctl\fR(2),
+\fBautopush\fR(8), \fBkstat\fR(8), \fBpppd\fR(8), \fBioctl\fR(2),
 \fBopen\fR(2), \fBtermios\fR(3C), \fBdacf.conf\fR(4), \fBattributes\fR(5),
 \fBkb\fR(7M), \fBldterm\fR(7M), \fBttcompat\fR(7M), \fBtermio\fR(7I)
 .SH DIAGNOSTICS

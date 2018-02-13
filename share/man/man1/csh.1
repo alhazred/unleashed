@@ -1761,7 +1761,7 @@ Limit the consumption by the current process or any process it spawns, each not
 to exceed \fImax-use\fR on the specified \fIresource\fR. The string
 \fBunlimited\fR requests that the current limit, if any, be removed. If
 \fImax-use\fR is omitted, print the current limit. If \fIresource\fR is
-omitted, display all limits. Run the \fBsysdef\fR(1M) command to display
+omitted, display all limits. Run the \fBsysdef\fR(8) command to display
 maximum limits for certain resources in your system (although it does not
 report stack size). The values reported are in hexadecimal, but can be
 translated into decimal numbers using the \fBbc\fR(1) command.
@@ -1793,7 +1793,7 @@ Maximum \fBCPU\fR seconds per process.
 .ad
 .RS 23n
 Largest single file allowed. Limited to the size of the filesystem. (See
-\fBdf\fR(1M)).
+\fBdf\fR(8)).
 .RE
 
 .sp
@@ -1803,7 +1803,7 @@ Largest single file allowed. Limited to the size of the filesystem. (See
 .ad
 .RS 23n
 Maximum data size (including stack) for the process. This is the size of your
-virtual memory See \fBswap\fR(1M).
+virtual memory See \fBswap\fR(8).
 .RE
 
 .sp
@@ -2995,8 +2995,8 @@ CSI	Enabled
 .LP
 \fBbc\fR(1), \fBecho\fR(1), \fBlimit\fR(1), \fBlogin\fR(1), \fBls\fR(1),
 \fBmore\fR(1), \fBpfcsh\fR(1), \fBpfexec\fR(1), \fBps\fR(1), \fBsh\fR(1),
-\fBshell_builtins\fR(1), \fBtset\fR(1B), \fBwhich\fR(1), \fBdf\fR(1M),
-\fBswap\fR(1M), \fBsysdef\fR(1M), \fBaccess\fR(2), \fBexec\fR(2),
+\fBshell_builtins\fR(1), \fBtset\fR(1B), \fBwhich\fR(1), \fBdf\fR(8),
+\fBswap\fR(8), \fBsysdef\fR(8), \fBaccess\fR(2), \fBexec\fR(2),
 \fBfork\fR(2), \fBpipe\fR(2), \fBa.out\fR(4), \fBascii\fR(5),
 \fBattributes\fR(5), \fBenviron\fR(5), \fBlargefile\fR(5), \fBtermio\fR(7I)
 .SH DIAGNOSTICS

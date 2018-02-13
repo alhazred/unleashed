@@ -220,7 +220,7 @@ other attempt to use \fB-d\fR causes \fBlogin\fR to quietly exit.
 \fB\fB-h\fR \fIhostname\fR [\fIterminal\fR]\fR
 .ad
 .RS 26n
-Used by \fBin.telnetd\fR(1M) to pass information about the remote host and
+Used by \fBin.telnetd\fR(8) to pass information about the remote host and
 terminal type.
 .sp
 Terminal type as a second argument to the \fB-h\fR option should not start with
@@ -556,7 +556,7 @@ not been reached or the \fBPAM\fR framework is returned \fBPAM_MAXTRIES\fR.
 Default is \fB4\fR seconds. Minimum is \fB0\fR seconds. Maximum is \fB5\fR
 seconds.
 .sp
-Both \fBsu\fR(1M) and \fBsulogin\fR(1M) are affected by the value of
+Both \fBsu\fR(8) and \fBsulogin\fR(8) are affected by the value of
 \fBSLEEPTIME\fR.
 .RE
 
@@ -607,9 +607,9 @@ Interface Stability	Committed
 \fBcsh\fR(1), \fBexit\fR(1), \fBksh\fR(1), \fBksh93\fR(1), \fBmail\fR(1),
 \fBmailx\fR(1), \fBnewgrp\fR(1), \fBpasswd\fR(1),
 \fBrsh\fR(1), \fBsh\fR(1), \fBshell_builtins\fR(1), \fBtelnet\fR(1),
-\fBumask\fR(1), \fBin.telnetd\fR(1M), \fBlogins\fR(1M),
-\fBquota\fR(1M), \fBsu\fR(1M), \fBsulogin\fR(1M), \fBsyslogd\fR(1M),
-\fBuseradd\fR(1M), \fBuserdel\fR(1M), \fBpam\fR(3PAM), \fBrcmd\fR(3SOCKET),
+\fBumask\fR(1), \fBin.telnetd\fR(8), \fBlogins\fR(8),
+\fBquota\fR(8), \fBsu\fR(8), \fBsulogin\fR(8), \fBsyslogd\fR(8),
+\fBuseradd\fR(8), \fBuserdel\fR(8), \fBpam\fR(3PAM), \fBrcmd\fR(3SOCKET),
 \fBsyslog\fR(3C), \fBttyname\fR(3C), \fBauth_attr\fR(4), \fBexec_attr\fR(4),
 \fBhosts.equiv\fR(4), \fBissue\fR(4), \fBlogindevperm\fR(4), \fBloginlog\fR(4),
 \fBnologin\fR(4), \fBnsswitch.conf\fR(4), \fBpam.conf\fR(4), \fBpasswd\fR(4),

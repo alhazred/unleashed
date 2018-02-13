@@ -54,4 +54,4 @@ also contain other information (such as a version number).
 .SH SEE ALSO
 .sp
 .LP
-\fBmodload\fR(1M), \fBmodlinkage\fR(9S)
+\fBmodload\fR(8), \fBmodlinkage\fR(9S)

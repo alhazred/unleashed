@@ -45,7 +45,7 @@ keyboards are coalesced into a single input stream, meaning that all keyboards
 appear as a single keyboard to a console or window system and accordingly, are
 treated as a single device. The virtual keyboard layout is consistent with the
 layout of the first keyboard plugged into the system. Note that on x86
-platforms, the virtual keyboard layout can be overloaded by \fBeeprom\fR(1M).
+platforms, the virtual keyboard layout can be overloaded by \fBeeprom\fR(8).
 .sp
 .LP
 \fB/dev/mouse\fR is the virtual mouse device file. Inputs from multiple mice
@@ -216,7 +216,7 @@ Interface Stability	Evolving
 
 .SH SEE ALSO
 .LP
-\fBkbd\fR(1), \fBeeprom\fR(1M), \fBread\fR(2), \fBattributes\fR(5),
+\fBkbd\fR(1), \fBeeprom\fR(8), \fBread\fR(2), \fBattributes\fR(5),
 \fBhid\fR(7D), \fBusba\fR(7D), \fBkb\fR(7M), \fBusbkbm\fR(7M), \fBusbms\fR(7M),
 \fBvuidmice\fR(7M)
 .SH DIAGNOSTICS

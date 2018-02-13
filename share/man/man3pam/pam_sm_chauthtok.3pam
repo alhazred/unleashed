@@ -198,7 +198,7 @@ MT-Level	MT-Safe with exceptions
 .SH SEE ALSO
 .sp
 .LP
-\fBping\fR(1M), \fBpam\fR(3PAM), \fBpam_chauthtok\fR(3PAM),
+\fBping\fR(8), \fBpam\fR(3PAM), \fBpam_chauthtok\fR(3PAM),
 \fBpam_get_data\fR(3PAM), \fBpam_get_item\fR(3PAM), \fBpam_set_data\fR(3PAM),
 \fBlibpam\fR(3LIB), \fBpam.conf\fR(4), \fBattributes\fR(5)
 .SH NOTES

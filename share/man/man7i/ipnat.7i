@@ -130,7 +130,7 @@ cleared in the structure returned to the caller.
 .ad
 .RS 13n
 Move a NAT mapping  structure from user space into the kernel. This ioctl is
-used by \fBipfs\fR(1M) to restore NAT sessions saved in
+used by \fBipfs\fR(8) to restore NAT sessions saved in
 \fB/var/db/ipf/ipnat.ipf\fR. The nat_save structure must have its ipn_nat and
 ipn_ipnat structures filled out correctly. Fields not assigned a value must be
 initialised to  0. All pointer fields are adjusted, as appropriate, once the
@@ -459,4 +459,4 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBipfs\fR(1M), \fBipnat\fR(1M), \fBioctl\fR(2), \fBattributes\fR(5)
+\fBipfs\fR(8), \fBipnat\fR(8), \fBioctl\fR(2), \fBattributes\fR(5)

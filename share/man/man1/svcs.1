@@ -60,7 +60,7 @@ Error messages are printed to the standard error stream.
 .sp
 .LP
 The output of this command can be used appropriately as input to the
-\fBsvcadm\fR(1M) command.
+\fBsvcadm\fR(8) command.
 .SH OPTIONS
 .sp
 .LP
@@ -211,7 +211,7 @@ temporarily (until the next system reboot). The former is specified as either
 .sp
 A service might be temporarily disabled because an administrator has run
 \fBsvcadm disable -t\fR, used \fBsvcadm milestone\fR, or booted the system to a
-specific milestone. See \fBsvcadm\fR(1M) for details.
+specific milestone. See \fBsvcadm\fR(8) for details.
 .RE
 
 .RE
@@ -721,7 +721,7 @@ svc:/application/print/server:default (LP print server)
  State: disabled since Mon Feb 13 17:56:21 2006
 Reason: Disabled by an administrator.
    See: http://illumos.org/msg/SMF-8000-05
-   See: lpsched(1M)
+   See: lpsched(8)
 Impact: 2 dependent services are not running. (Use -v for list.)
 .fi
 .in -2
@@ -759,7 +759,7 @@ Reason: Service svc:/network/nfs/status:default
   Path: svc:/network/nfs/client:default
           svc:/network/nfs/nlockmgr:default
             svc:/network/nfs/status:default
-   See: man -M /usr/share/man -s 1M mount_nfs
+   See: man -M /usr/share/man -s 8 mount_nfs
    See: /var/svc/log/network-nfs-client:default.log
 Impact: This service is not running.
 .fi
@@ -819,6 +819,6 @@ Screen output is Uncommitted. The invocation is Committed.
 .SH SEE ALSO
 .sp
 .LP
-\fBps\fR(1), \fBsvcprop\fR(1), \fBsvcadm\fR(1M), \fBsvccfg\fR(1M),
-\fBsvc.startd\fR(1M), \fBstat\fR(2), \fBlibscf\fR(3LIB), \fBattributes\fR(5),
+\fBps\fR(1), \fBsvcprop\fR(1), \fBsvcadm\fR(8), \fBsvccfg\fR(8),
+\fBsvc.startd\fR(8), \fBstat\fR(2), \fBlibscf\fR(3LIB), \fBattributes\fR(5),
 \fBfnmatch\fR(5), \fBsmf\fR(5), \fBzones\fR(5)

@@ -61,7 +61,7 @@ Determines whether caller can sleep for memory or other event resources.
 .LP
 The \fBddi_fm_ereport_post()\fR function causes an encoded fault management
 error report name-value pair list to be queued for delivery to the Fault
-Manager daemon, \fBfmd\fR(1M). The \fIsflag\fR parameter indicates whether or
+Manager daemon, \fBfmd\fR(8). The \fIsflag\fR parameter indicates whether or
 not the caller is willing to wait for system memory and event channel resources
 to become available.
 .sp
@@ -191,4 +191,4 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBfmd\fR(1M), \fBattributes\fR(5), \fBddi_fm_service_impact\fR(9F)
+\fBfmd\fR(8), \fBattributes\fR(5), \fBddi_fm_service_impact\fR(9F)

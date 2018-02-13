@@ -52,7 +52,7 @@ dir path=usr/sbin/$(ARCH32)
 dir path=usr/sbin/$(ARCH64)
 dir path=usr/share
 dir path=usr/share/lib
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man3lib
 file path=usr/include/dtrace.h
 file path=usr/include/sys/dtrace.h
@@ -98,10 +98,10 @@ file path=usr/sbin/$(ARCH64)/dtrace mode=0555
 file path=usr/sbin/$(ARCH64)/intrstat mode=0555
 file path=usr/sbin/$(ARCH64)/lockstat mode=0555
 file path=usr/sbin/$(ARCH64)/plockstat mode=0555
-file path=usr/share/man/man1m/dtrace.1m
-file path=usr/share/man/man1m/intrstat.1m
-file path=usr/share/man/man1m/lockstat.1m
-file path=usr/share/man/man1m/plockstat.1m
+file path=usr/share/man/man8/dtrace.8
+file path=usr/share/man/man8/intrstat.8
+file path=usr/share/man/man8/lockstat.8
+file path=usr/share/man/man8/plockstat.8
 file path=usr/share/man/man3lib/libdtrace.3lib
 hardlink path=usr/sbin/dtrace target=../../usr/lib/isaexec
 hardlink path=usr/sbin/intrstat target=../../usr/lib/isaexec

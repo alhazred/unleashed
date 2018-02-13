@@ -66,7 +66,7 @@ can be identified as trustworthy.
 If the audit context is already initialized, the \fBPAM_REINITIALIZE_CRED\fR
 flag merges the current audit context with that of the user specified in
 \fBPAM_USER\fR. \fBPAM_REINITIALIZE_CRED\fR is useful when a user is assuming a
-new identity, as with \fBsu\fR(1M).
+new identity, as with \fBsu\fR(8).
 .RE
 
 .sp
@@ -192,7 +192,7 @@ MT Level	MT-Safe with exceptions
 .SH SEE ALSO
 .sp
 .LP
-\fBssh\fR(1), \fBsu\fR(1M), \fBsettaskid\fR(2), \fBlibpam\fR(3LIB),
+\fBssh\fR(1), \fBsu\fR(8), \fBsettaskid\fR(2), \fBlibpam\fR(3LIB),
 \fBgetprojent\fR(3PROJECT), \fBpam\fR(3PAM), \fBpam_set_item\fR(3PAM),
 \fBpam_sm_authenticate\fR(3PAM), \fBsyslog\fR(3C),
 \fBsetproject\fR(3PROJECT),\fBpam.conf\fR(4), \fBnsswitch.conf\fR(4),

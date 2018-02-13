@@ -131,7 +131,7 @@ when a file is sparse or is being extended and is opened with \fBO_SYNC\fR or
 .sp
 .LP
 The \fBdirectio()\fR function is supported for the NFS and UFS file system
-types (see \fBfstyp\fR(1M)).
+types (see \fBfstyp\fR(8)).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -151,7 +151,7 @@ MT-Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBfstyp\fR(1M), \fBmmap\fR(2), \fBopen\fR(2), \fBread\fR(2), \fBwrite\fR(2),
+\fBfstyp\fR(8), \fBmmap\fR(2), \fBopen\fR(2), \fBread\fR(2), \fBwrite\fR(2),
 \fBfcntl.h\fR(3HEAD), \fBattributes\fR(5)
 .SH WARNINGS
 .sp

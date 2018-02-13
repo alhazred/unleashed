@@ -30,7 +30,7 @@ USB  architecture) compliant client driver that provides basic asynchronous
 communication support for Prolific PL2303 USB-to-serial converters. Supported
 devices include PL2303H, PL2303HX and PL2303X.  Serial device streams are built
 with appropriate modules that are pushed atop the \fBusbsprl\fR driver by the
-\fBautopush\fR(1M) facility.
+\fBautopush\fR(8) facility.
 .sp
 .LP
 The \fBusbsprl\fR module supports the \fBtermio\fR(7I) device control functions
@@ -198,7 +198,7 @@ Architecture	SPARC, x86, PCI-based systems
 .SH SEE ALSO
 .sp
 .LP
-\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(1M),
+\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(8),
 \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C), \fBattributes\fR(5),
 \fBusba\fR(7D), \fBtermio\fR(7I), \fBldterm\fR(7M), \fBttcompat\fR(7M)
 .SH DIAGNOSTICS

@@ -159,5 +159,5 @@ DDI_INFO_DEVT2DEVINFO \fBgetinfo()\fR calls to style-2 minor nodes. (The
 correct association is already established by \fBqassociate\fR(9F)). A driver
 that only supports style-2 minor nodes can use \fBddi_no_info\fR(9F) for its
 \fBgetinfo()\fR implementation. For drivers that do not follow these rules, the
-results of a \fBmodunload\fR(1M) of the driver or a \fBcfgadm\fR(1M) remove of
+results of a \fBmodunload\fR(8) of the driver or a \fBcfgadm\fR(8) remove of
 hardware controlled by the driver are undefined.

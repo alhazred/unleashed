@@ -69,5 +69,5 @@ MT-Level	Async-Signal-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBuptime\fR(1), \fBw\fR(1), \fBpooladm\fR(1M), \fBKstat\fR(3PERL),
+\fBuptime\fR(1), \fBw\fR(1), \fBpooladm\fR(8), \fBKstat\fR(3PERL),
 \fBpset_getloadavg\fR(3C), \fBstandards\fR(5)

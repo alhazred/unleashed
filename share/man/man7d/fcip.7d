@@ -217,7 +217,7 @@ Architecture	SPARC
 .SH SEE ALSO
 .sp
 .LP
-\fBnetstat\fR(1M), \fBprtconf\fR(1M), \fBdriver.conf\fR(4), \fBfp\fR(7d),
+\fBnetstat\fR(8), \fBprtconf\fR(8), \fBdriver.conf\fR(4), \fBfp\fR(7d),
 \fBdlpi\fR(7P)
 .sp
 .LP

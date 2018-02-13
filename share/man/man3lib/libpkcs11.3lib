@@ -34,7 +34,7 @@ When available, the meta slot is always the first slot provided by
 The meta slot feature can be configured either system-wide or by individual
 users.
 System-wide configuration for meta slot features is done with the
-.Xr cryptoadm 1M
+.Xr cryptoadm 8
 utility.
 User configuration for meta slot features is performed with environment
 variables.
@@ -91,7 +91,7 @@ All of its functionality can be used with the meta slot.
 .Lp
 This library filters the list of mechanisms available from plug-ins based on
 the policy set by
-.Xr cryptoadm 1M .
+.Xr cryptoadm 8 .
 .Lp
 This library provides entry points for all PKCS#11 v2.40 functions.
 See the PKCS#11 v2.40 specifications at
@@ -103,9 +103,9 @@ by the
 .Sy pkcs11conf
 class action
 script during execution of
-.Xr pkgadd 1M .
+.Xr pkgadd 8 .
 The available mechanisms are administered by the
-.Xr cryptoadm 1M
+.Xr cryptoadm 8
 utility.
 .Lp
 Plug-ins must have all of their library dependancies specified, including
@@ -210,8 +210,8 @@ Section 5.1.5 of PKCS#11 Cryptographic Token Interface Base Standard v2.40
 The PKCS#11 Standard functions conform to PKCS#11 Cryptographic Token
 Interface Profiles v2.40 Extended Provider.
 .Sh SEE ALSO
-.Xr cryptoadm 1M ,
-.Xr pkgadd 1M ,
+.Xr cryptoadm 8 ,
+.Xr pkgadd 8 ,
 .Xr Intro 3 ,
 .Xr syslog 3C ,
 .Xr SUNW_C_GetMechSession 3EXT ,

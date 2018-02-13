@@ -36,7 +36,7 @@ may provide weaker protection than \fBAH\fR. See \fBipsecah\fR(7P).
 .sp
 .LP
 \fBESP\fR is implemented as a module that is auto-pushed on top of \fBIP\fR.
-Use the \fB/dev/ipsecesp\fR entry to tune \fBESP\fR with \fBndd\fR(1M).
+Use the \fB/dev/ipsecesp\fR entry to tune \fBESP\fR with \fBndd\fR(8).
 .SS "Algorithms"
 .sp
 .LP
@@ -45,7 +45,7 @@ algorithms include HMAC-MD5 and HMAC-SHA-1. Encryption algorithms include DES,
 Triple-DES, Blowfish and AES. Each authentication and encryption algorithm
 contain key size and key format properties. You can obtain a list of
 authentication and encryption algorithms and their properties by using the
-\fBipsecalgs\fR(1M) command. You can also use the functions described in the
+\fBipsecalgs\fR(8) command. You can also use the functions described in the
 \fBgetipsecalgbyname\fR(3NSL) man page to retrieve the properties of
 algorithms. Because of export laws in the United States, not all encryption
 algorithms are available outside of the United States.
@@ -73,7 +73,7 @@ Interface Stability	Evolving
 .SH SEE ALSO
 .sp
 .LP
-\fBipsecalgs\fR(1M), \fBipsecconf\fR(1M), \fBndd\fR(1M), \fBattributes\fR(5),
+\fBipsecalgs\fR(8), \fBipsecconf\fR(8), \fBndd\fR(8), \fBattributes\fR(5),
 \fBgetipsecalgbyname\fR(3NSL), \fBip\fR(7P), \fBipsec\fR(7P), \fBipsecah\fR(7P)
 .sp
 .LP

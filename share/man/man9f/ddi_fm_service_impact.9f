@@ -105,5 +105,5 @@ Interface Stability	Committed
 
 .SH SEE ALSO
 .LP
-\fBfmd\fR(1M), \fBattributes\fR(5), \fBddi_fm_ereport_post\fR(9F),
+\fBfmd\fR(8), \fBattributes\fR(5), \fBddi_fm_ereport_post\fR(9F),
 \fBpci_ereport_post\fR(9F)

@@ -90,7 +90,7 @@ Architecture	SPARC, x86, PCI-based systems
 
 .SH SEE ALSO
 .LP
-\fBadd_drv\fR(1M), \fBprtconf\fR(1M), \fBrem_drv\fR(1M), \fBupdate_drv\fR(1M),
+\fBadd_drv\fR(8), \fBprtconf\fR(8), \fBrem_drv\fR(8), \fBupdate_drv\fR(8),
 \fBattributes\fR(5), \fBhubd\fR(7D), \fBuhci\fR(7D), \fBohci\fR(7D),
 \fBusba\fR(7D)
 .sp
@@ -293,10 +293,10 @@ support is provided in this man page.
 .LP
 VIA chips may not be compatible with this driver. To bind \fBehci\fR
 specifically to the chip and eliminate the warnings, and to enable USB2.x
-support, a new, more specific driver alias (refer to \fBadd_drv\fR(1M) and
-\fBupdate_drv\fR(1M)) must be specified for \fBehci\fR. By default, the
+support, a new, more specific driver alias (refer to \fBadd_drv\fR(8) and
+\fBupdate_drv\fR(8)) must be specified for \fBehci\fR. By default, the
 \fBehci\fR alias is 'pciclass,0c0320.' The compatible names in the
-\fBprtconf\fR(1M) output provides additional aliases. For example:
+\fBprtconf\fR(8) output provides additional aliases. For example:
 .RE
 .sp
 .in +2

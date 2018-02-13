@@ -242,7 +242,7 @@ realm.
 This relation controls the encryption types for session keys permitted by
 server applications that use Kerberos for authentication. In addition, it
 controls the encryption types of keys added to a \fBkeytab\fR by means of the
-\fBkadmin\fR(1M) \fBktadd\fR command. The default is:
+\fBkadmin\fR(8) \fBktadd\fR command. The default is:
 \fBaes256-cts-hmac-sha1-96\fR, \fBaes128-cts-hmac-sha1-96\fR,
 \fBdes3-hmac-sha1-kd\fR, \fBarcfour-hmac-md5\fR, \fBarcfour-hmac-md5-exp\fR,
 \fBdes-cbc-md5\fR, \fBdes-cbc-crc\fR.
@@ -1745,7 +1745,7 @@ Each server URI should be separated by whitespace.
 .RS 4n
 File containing stashed passwords used by the KDC when binding to the LDAP
 Directory Server. The default is \fB/var/krb5/service_passwd\fR. This file is
-created using \fBkdb5_ldap_util\fR(1M).
+created using \fBkdb5_ldap_util\fR(8).
 .RE
 
 .sp

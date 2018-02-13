@@ -70,7 +70,7 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBwificonfig\fR(1M), \fBattributes\fR(5), \fBgld\fR(7D),
+\fBdladm\fR(8), \fBwificonfig\fR(8), \fBattributes\fR(5), \fBgld\fR(7D),
 \fBdlpi\fR(7P)
 .sp
 .LP

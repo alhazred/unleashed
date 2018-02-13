@@ -25,7 +25,7 @@ connection is permitted only between domains within the same Sun Enterprise
 .LP
 The \fBidn\fR driver supports 1 to 32 logical network interfaces that can be
 connected to domains linked to the local domain through the
-\fBdomain_link\fR(1M) command. (See \fBdomain_link\fR(1M) in the \fISun
+\fBdomain_link\fR(8) command. (See \fBdomain_link\fR(8) in the \fISun
 Enterprise 10000 SSP 3.5 Reference Manual\fR for more information.) The
 \fBidn\fR driver works in conjunction with the System Service Processor (SSP)
 to perform domain linking/unlinking and automated linking upon host bootup.
@@ -224,10 +224,10 @@ System-wide and per-interface default device driver properties
 .SH SEE ALSO
 .sp
 .LP
-\fBnetstat\fR(1M), \fBndd\fR(1M), \fBdlpi\fR(7P)
+\fBnetstat\fR(8), \fBndd\fR(8), \fBdlpi\fR(7P)
 .sp
 .LP
-\fBdomain_link\fR(1M) in the \fISun Enterprise 10000 SSP 3.5 Reference
+\fBdomain_link\fR(8) in the \fISun Enterprise 10000 SSP 3.5 Reference
 Manual\fR.
 .sp
 .LP

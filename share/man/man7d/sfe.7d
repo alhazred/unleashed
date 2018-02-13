@@ -76,7 +76,7 @@ Likewise, inbound frames with a SAP between zero and 1500 are interpreted as
 .SH PROPERTIES
 .sp
 .LP
-The following properties  may  be  configured  using  either \fBndd\fR(1M) or
+The following properties  may  be  configured  using  either \fBndd\fR(8) or
 the \fBsfe.conf\fR configuration file as described by \fBdriver.conf\fR(4):
 .sp
 .ne 2
@@ -194,7 +194,7 @@ Configuration file.
 .SH SEE ALSO
 .sp
 .LP
-\fBndd\fR(1M), \fBdriver.conf\fR(4), \fBattributes\fR(5), \fBstreamio\fR(7I),
+\fBndd\fR(8), \fBdriver.conf\fR(4), \fBattributes\fR(5), \fBstreamio\fR(7I),
 \fBdlpi\fR(7P)
 .sp
 .LP

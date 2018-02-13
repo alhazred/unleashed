@@ -345,13 +345,13 @@ Prefer a destination that is not deprecated (\fBIFF_DEPRECATED\fR).
 T}
 _
 T{
-Prefer matching label. This rule uses labels that are obtained through the IPv6 default address selection policy table. See \fBipaddrsel\fR(1M) for a description of the default contents of the table and how the table is configured.
+Prefer matching label. This rule uses labels that are obtained through the IPv6 default address selection policy table. See \fBipaddrsel\fR(8) for a description of the default contents of the table and how the table is configured.
 T}	T{
 Prefer a destination whose label is equal to the label of its source address.
 T}
 _
 T{
-Prefer higher precedence. This rule uses precedence values that are obtained through the IPv6 default address selection policy table. See \fBipaddrsel\fR(1M) for a description of the default contents of the table and how the table is configured.
+Prefer higher precedence. This rule uses precedence values that are obtained through the IPv6 default address selection policy table. See \fBipaddrsel\fR(8) for a description of the default contents of the table and how the table is configured.
 T}	T{
 Prefer the destination whose precedence is higher than the other destination.
 T}
@@ -531,7 +531,7 @@ Standard	See \fBstandards\fR(5).
 
 .SH SEE ALSO
 .LP
-\fBipaddrsel\fR(1M), \fBgethostbyname\fR(3NSL), \fBgetipnodebyname\fR(3SOCKET),
+\fBipaddrsel\fR(8), \fBgethostbyname\fR(3NSL), \fBgetipnodebyname\fR(3SOCKET),
 \fBhtonl\fR(3SOCKET), \fBinet\fR(3SOCKET), \fBsockaddr\fR(3SOCKET),
 \fBnetdb.h\fR(3HEAD), \fBsocket\fR(3SOCKET), \fBhosts\fR(4),
 \fBnsswitch.conf\fR(4), \fBattributes\fR(5), \fBstandards\fR(5), \fBinet6\fR(7P)

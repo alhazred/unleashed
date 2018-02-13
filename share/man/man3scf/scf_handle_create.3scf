@@ -70,7 +70,7 @@ invalid values will not cause errors prior to the call to
 .sp
 .LP
 The \fBscf_handle_bind()\fR function binds the handle to a running
-\fBsvc.configd\fR(1M) daemon, using the current decorations to modify the
+\fBsvc.configd\fR(8) daemon, using the current decorations to modify the
 connection. All states derived from the handle are reset immediately after a
 successful binding.
 .sp

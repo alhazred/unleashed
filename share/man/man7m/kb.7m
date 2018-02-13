@@ -1256,7 +1256,7 @@ binary protocols should not be run over the serial console port when Alternate
 Break sequence is in effect. Although PPP is a binary protocol, it is able to
 avoid these sequences using the ACCM feature in \fIRFC 1662\fR. For Solaris PPP
 4.0, you do this by adding the following line to the \fB/etc/ppp/options\fR
-file (or other configuration files used for the connection; see \fBpppd\fR(1M)
+file (or other configuration files used for the connection; see \fBpppd\fR(8)
 for details):
 .sp
 .in +2
@@ -1363,7 +1363,7 @@ Interface Stability	Stable
 .SH SEE ALSO
 .sp
 .LP
-\fBkbd\fR(1), \fBloadkeys\fR(1), \fBkadb\fR(1M), \fBpppd\fR(1M),
+\fBkbd\fR(1), \fBloadkeys\fR(1), \fBkadb\fR(8), \fBpppd\fR(8),
 \fBkeytables\fR(4), \fBattributes\fR(5), \fBzs\fR(7D), \fBse\fR(7D),
 \fBasy\fR(7D), \fBvirtualkm\fR(7D), \fBtermio\fR(7I), \fBusbkbm\fR(7M)
 .SH NOTES

@@ -217,7 +217,7 @@ int (*gl_stat)(const char *, struct stat *);
 .fi
 .sp
 This extension is provided to allow programs such as
-\fBufsrestore\fR(1M) to provide globbing from directories stored
+\fBufsrestore\fR(8) to provide globbing from directories stored
 on tape.
 .RE
 

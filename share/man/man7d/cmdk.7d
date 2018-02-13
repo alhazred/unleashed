@@ -43,7 +43,7 @@ systems or system reserved area.
 .sp
 .LP
 The fdisk partition 0 is to access the entire disk and is generally used by the
-\fBfdisk\fR(1M) program.
+\fBfdisk\fR(8) program.
 .SH FILES
 .sp
 .ne 2
@@ -138,6 +138,6 @@ Architecture	x86
 .SH SEE ALSO
 .sp
 .LP
-\fBfdisk\fR(1M), \fBmount\fR(1M), \fBlseek\fR(2), \fBread\fR(2),
+\fBfdisk\fR(8), \fBmount\fR(8), \fBlseek\fR(2), \fBread\fR(2),
 \fBwrite\fR(2), \fBreaddir\fR(3C), \fBscsi\fR(4), \fBvfstab\fR(4),
 \fBattributes\fR(5), \fBdkio\fR(7I)

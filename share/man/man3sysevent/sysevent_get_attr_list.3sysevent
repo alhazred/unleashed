@@ -92,7 +92,7 @@ MT-Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBsyseventd\fR(1M), \fBnvlist_alloc\fR(3NVPAIR),
+\fBsyseventd\fR(8), \fBnvlist_alloc\fR(3NVPAIR),
 \fBnvlist_lookup_boolean\fR(3NVPAIR), \fBattributes\fR(5)
 .SH NOTES
 .sp

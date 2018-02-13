@@ -47,7 +47,7 @@ dir path=usr/kernel/drv group=sys
 dir path=usr/kernel/strmod group=sys
 dir path=usr/sbin
 dir path=usr/share/man
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man7m
 driver name=sppp
 driver name=sppptun
@@ -69,9 +69,9 @@ file path=usr/kernel/drv/sppptun.conf group=sys
 file path=usr/kernel/strmod/spppasyn group=sys mode=0755
 file path=usr/kernel/strmod/spppcomp group=sys mode=0755
 file path=usr/sbin/asppp2pppd mode=0550
-file path=usr/share/man/man1m/chat.1m
-file path=usr/share/man/man1m/pppd.1m
-file path=usr/share/man/man1m/pppstats.1m
+file path=usr/share/man/man8/chat.8
+file path=usr/share/man/man8/pppd.8
+file path=usr/share/man/man8/pppstats.8
 file path=usr/share/man/man7m/sppptun.7m
 hardlink path=etc/rc0.d/K50pppd target=../../etc/init.d/pppd
 hardlink path=etc/rc1.d/K50pppd target=../../etc/init.d/pppd

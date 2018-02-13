@@ -35,9 +35,9 @@ The cloning,  character-special device \fB/dev/xge\fR is used to access all
 Xframe devices installed within the system.
 .sp
 .LP
-The \fBxge\fR driver is managed by the \fBdladm\fR(1M) command line utility,
+The \fBxge\fR driver is managed by the \fBdladm\fR(8) command line utility,
 which allows VLANs to be defined on top of xge  instances and for \fBxge\fR
-instances to be aggregated. See \fBdladm\fR(1M) for more details.
+instances to be aggregated. See \fBdladm\fR(8) for more details.
 .sp
 .LP
 The values returned by the driver in the DL_INFO_ACK primitive in response to
@@ -87,7 +87,7 @@ By default, the \fBxge\fR driver works without any configuration file.
 .sp
 .LP
 You can check the running-time status of a device  instance using
-\fBndd\fR(1M). Currently, the driver provides an interface to print all
+\fBndd\fR(8). Currently, the driver provides an interface to print all
 hardware statistics.
 .sp
 .LP
@@ -150,7 +150,7 @@ Architecture	x86
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBndd\fR(1M), \fBattributes\fR(5), \fBstreamio\fR(7I),
+\fBdladm\fR(8), \fBndd\fR(8), \fBattributes\fR(5), \fBstreamio\fR(7I),
 \fBdlpi\fR(7P)
 .sp
 .LP

@@ -15,7 +15,7 @@ kadm5.acl \- Kerberos access control list (ACL) file
 .SH DESCRIPTION
 .sp
 .LP
-The \fBACL\fR file is used by the \fBkadmind\fR(1M) command to determine which
+The \fBACL\fR file is used by the \fBkadmind\fR(8) command to determine which
 principals are allowed to perform Kerberos administration actions. For
 operations that affect principals, the \fBACL\fR file also controls which
 principals can operate on which other principals. The location of the \fBACL\fR
@@ -23,7 +23,7 @@ file is determined by the \fBacl_file\fR configuration variable in the
 \fBkdc.conf\fR(4) file. The default location is \fB/etc/krb5/kadm5.acl\fR.
 .sp
 .LP
-For incremental propagation, see \fBkadmind\fR(1M). The ACL file must contain
+For incremental propagation, see \fBkadmind\fR(8). The ACL file must contain
 the \fBkiprop\fR service principal with propagation privileges in order for the
 slave KDC to pull updates from the master's principal database. Refer to the
 EXAMPLES section for this case.
@@ -390,6 +390,6 @@ Interface Stability	Evolving
 .SH SEE ALSO
 .sp
 .LP
-\fBkpasswd\fR(1), \fBkadmind\fR(1M), \fBkadmin.local\fR(1M),
-\fBkdb5_util\fR(1M), \fBkdc.conf\fR(4), \fBattributes\fR(5), \fBkerberos\fR(5),
+\fBkpasswd\fR(1), \fBkadmind\fR(8), \fBkadmin.local\fR(8),
+\fBkdb5_util\fR(8), \fBkdc.conf\fR(4), \fBattributes\fR(5), \fBkerberos\fR(5),
 \fBpam_krb5_migrate\fR(5)

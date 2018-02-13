@@ -31,7 +31,7 @@ specification from the USB website at
 \fIhttp://www.usb.org/developers/devclass_docs/usbcdc11.pdf\fR. Supported
 devices include mobile phones and PCMCIA cards which provide modem function by
 the usb cable. Serial device streams are built with appropriate modules that
-are pushed atop the usbsacm driver by the \fBautopush\fR(1M) facility.
+are pushed atop the usbsacm driver by the \fBautopush\fR(8) facility.
 .sp
 .LP
 The \fBusbsacm\fR module supports the \fBtermio\fR(7I) device control functions
@@ -45,7 +45,7 @@ stream, providing the standard \fBtermio\fR(7I) interface.
 .LP
 You use device logical names /dev/term/[\fI0-9\fR]* to access the serial ports.
 These names are typically used to provide a logical access point for a dial-in
-line that is used with a modem. You can use \fBpppd\fR(1M) to transmit
+line that is used with a modem. You can use \fBpppd\fR(8) to transmit
 datagrams over these serial ports.
 .sp
 .LP
@@ -202,8 +202,8 @@ Architecture	 SPARC, x86 PCI-based systems
 .SH SEE ALSO
 .sp
 .LP
-\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(1M),
-\fBpppd\fR(1M), \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C),
+\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(8),
+\fBpppd\fR(8), \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C),
 \fBattributes\fR(5), \fBusba\fR(7D), \fBtermio\fR(7I), \fBldterm\fR(7M),
 \fBttcompat\fR(7M)
 .SH DIAGNOSTICS

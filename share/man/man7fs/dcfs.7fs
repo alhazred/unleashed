@@ -38,7 +38,7 @@ Interface Stability	Uncommitted
 .SH SEE ALSO
 .sp
 .LP
-\fBboot\fR(1M), \fBbootadm\fR(1M), \fBfiocompress\fR(1M), \fBattributes\fR(5),
+\fBboot\fR(8), \fBbootadm\fR(8), \fBfiocompress\fR(8), \fBattributes\fR(5),
 \fBufs\fR(7FS)
 .SH NOTES
 .sp

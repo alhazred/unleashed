@@ -21,7 +21,7 @@ The \fBusbftdi\fR driver is a loadable STREAMS and USBA (Solaris USB
 Architecture) compliant client driver that provides basic asynchronous
 communication support for FTDI USB-to-serial converters. Serial device streams
 are built with appropriate modules that are pushed atop the \fBusbftdi\fR
-driver by the \fBautopush\fR(1M) facility.
+driver by the \fBautopush\fR(8) facility.
 .SS "Application Programming Interface"
 .sp
 .LP
@@ -71,7 +71,7 @@ waiting for DCD to be asserted.
 .sp
 .LP
 This behavior also matches the default \fBignore carrier detect\fR behavior of
-the onboard serial ports of machines that have them. See \fBeeprom\fR(1M) for
+the onboard serial ports of machines that have them. See \fBeeprom\fR(8) for
 further details.
 .sp
 .LP
@@ -234,10 +234,10 @@ Architecture	SPARC, x86, PCI-based systems
 .SH SEE ALSO
 .sp
 .LP
-\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(1M),
-\fBeeprom\fR(1M), \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C),
+\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(8),
+\fBeeprom\fR(8), \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C),
 \fBusba\fR(7D), \fBtermio\fR(7I), \fBldterm\fR(7M), \fBttcompat\fR(7M),
-\fBeeprom\fR(1M), \fBattributes\fR(5),
+\fBeeprom\fR(8), \fBattributes\fR(5),
 .SH DIAGNOSTICS
 .sp
 .LP

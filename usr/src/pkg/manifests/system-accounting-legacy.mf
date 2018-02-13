@@ -48,7 +48,7 @@ dir path=usr/sbin
 dir path=usr/share
 dir path=usr/share/man
 dir path=usr/share/man/man1
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man4
 dir path=var group=sys
 dir path=var/adm group=sys mode=0775
@@ -105,15 +105,15 @@ file path=usr/sbin/sar mode=0555
 file path=usr/share/man/man1/acctcom.1
 file path=usr/share/man/man1/sar.1
 file path=usr/share/man/man1/timex.1
-file path=usr/share/man/man1m/acct.1m
-file path=usr/share/man/man1m/acctcms.1m
-file path=usr/share/man/man1m/acctcon.1m
-file path=usr/share/man/man1m/acctmerg.1m
-file path=usr/share/man/man1m/acctprc.1m
-file path=usr/share/man/man1m/acctsh.1m
-file path=usr/share/man/man1m/fwtmp.1m
-file path=usr/share/man/man1m/runacct.1m
-file path=usr/share/man/man1m/sar.1m
+file path=usr/share/man/man8/acct.8
+file path=usr/share/man/man8/acctcms.8
+file path=usr/share/man/man8/acctcon.8
+file path=usr/share/man/man8/acctmerg.8
+file path=usr/share/man/man8/acctprc.8
+file path=usr/share/man/man8/acctsh.8
+file path=usr/share/man/man8/fwtmp.8
+file path=usr/share/man/man8/runacct.8
+file path=usr/share/man/man8/sar.8
 file path=usr/share/man/man4/holidays.4
 file path=var/spool/cron/crontabs/sys group=sys mode=0600 preserve=true
 license cr_ATT license=cr_ATT

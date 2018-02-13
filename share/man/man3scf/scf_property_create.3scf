@@ -258,7 +258,7 @@ The \fBscf_pg_get_property()\fR function will fail if:
 .ad
 .sp .6
 .RS 4n
-The  storage  mechanism  that  the   repository server (\fBsvc.configd\fR(1M))
+The  storage  mechanism  that  the   repository server (\fBsvc.configd\fR(8))
 chose for the operation denied access.
 .RE
 

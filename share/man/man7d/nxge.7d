@@ -49,9 +49,9 @@ The cloning character-special device, \fB/dev/nxge\fR, is used to access all
 Sun Neptune NIU devices installed within the system.
 .sp
 .LP
-The \fBnxge\fR driver is managed by the \fBdladm\fR(1M) command line utility,
+The \fBnxge\fR driver is managed by the \fBdladm\fR(8) command line utility,
 which allows VLANs to be defined on top of \fBnxge\fR  instances and for
-\fBnxge\fR instances to be aggregated. See \fBdladm\fR(1M) for more details.
+\fBnxge\fR instances to be aggregated. See \fBdladm\fR(8) for more details.
 .sp
 .LP
 You must send an explicit DL_ATTACH_REQ message to associate the opened stream
@@ -135,7 +135,7 @@ other device.
 .sp
 .LP
 You can also set the capabilities advertised by the \fBnxge\fR device using
-\fBdladm\fR(1M). The driver supports a number of parameters whose names begin
+\fBdladm\fR(8). The driver supports a number of parameters whose names begin
 with \fBen_\fR (see below). Each of these parameters contains a boolean value
 that determines if the device advertises that mode of operation. The
 \fBadv_autoneg_cap\fR parameter controls  whether auto-negotiation is
@@ -223,7 +223,7 @@ Architecture	SPARC, x86
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBnetstat\fR(1M), \fBattributes\fR(5), \fBstreamio\fR(7I),
+\fBdladm\fR(8), \fBnetstat\fR(8), \fBattributes\fR(5), \fBstreamio\fR(7I),
 \fBdlpi\fR(7P), \fBdriver.conf\fR(4)
 .sp
 .LP

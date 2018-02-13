@@ -97,7 +97,7 @@ Interface Stability	Uncommitted
 .SH SEE ALSO
 .sp
 .LP
-\fBcfgadm_usb\fR(1M), \fBioctl\fR(2), \fBattributes\fR(5), \fBhid\fR(7D),
+\fBcfgadm_usb\fR(8), \fBioctl\fR(2), \fBattributes\fR(5), \fBhid\fR(7D),
 \fBusba\fR(7D), \fBusb_as\fR(7D), \fBaudio\fR(7I), \fBmixer\fR(7I),
 \fBstreamio\fR(7I), \fBusb_ah\fR(7M)
 .sp

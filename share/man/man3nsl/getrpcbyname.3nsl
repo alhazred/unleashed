@@ -208,7 +208,7 @@ T}
 .SH SEE ALSO
 .sp
 .LP
-\fBrpcinfo\fR(1M), \fBrpc\fR(3NSL), \fBnsswitch.conf\fR(4), \fBrpc\fR(4),
+\fBrpcinfo\fR(8), \fBrpc\fR(3NSL), \fBnsswitch.conf\fR(4), \fBrpc\fR(4),
 \fBattributes\fR(5)
 .SH WARNINGS
 .sp

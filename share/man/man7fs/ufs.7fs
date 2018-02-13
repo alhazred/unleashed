@@ -180,7 +180,7 @@ approximately 1 Mbyte per 1 Gbyte of file system, up to 256 Mbytes. The log
 size may be larger (up to a maximum of 512 Mbytes), depending upon the number
 of cylinder groups present in the file system. The log is continually flushed
 as it fills up. The log is also flushed when the file system is unmounted or as
-a result of a \fBlockfs\fR(1M) command.
+a result of a \fBlockfs\fR(8) command.
 .SS "Mounting UFS File Systems"
 .sp
 .LP
@@ -215,7 +215,7 @@ boot time:
 .RE
 .sp
 .LP
-For more information on mounting UFS file systems, see \fBmount_ufs\fR(1M).
+For more information on mounting UFS file systems, see \fBmount_ufs\fR(8).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -235,31 +235,31 @@ Interface Stability	Uncommitted
 .SH SEE ALSO
 .sp
 .LP
-\fBdf\fR(1M), \fBfsck\fR(1M), \fBfsck_ufs\fR(1M), \fBfstyp\fR(1M),
-\fBlockfs\fR(1M), \fBmkfs_ufs\fR(1M), \fBnewfs\fR(1M), \fBufsdump\fR(1M),
-\fBufsrestore\fR(1M), \fBtunefs\fR(1M), \fBmount\fR(2), \fBattributes\fR(5)
+\fBdf\fR(8), \fBfsck\fR(8), \fBfsck_ufs\fR(8), \fBfstyp\fR(8),
+\fBlockfs\fR(8), \fBmkfs_ufs\fR(8), \fBnewfs\fR(8), \fBufsdump\fR(8),
+\fBufsrestore\fR(8), \fBtunefs\fR(8), \fBmount\fR(2), \fBattributes\fR(5)
 .sp
 .LP
 \fIWriting Device Drivers\fR
 .SH NOTES
 .sp
 .LP
-For information about internal UFS structures, see \fBnewfs\fR(1M) and
-\fBmkfs_ufs\fR(1M). For information about the \fBufsdump\fR and
-\fBufsrestore\fR commands, see \fBufsdump\fR(1M), \fBufsrestore\fR(1M), and
+For information about internal UFS structures, see \fBnewfs\fR(8) and
+\fBmkfs_ufs\fR(8). For information about the \fBufsdump\fR and
+\fBufsrestore\fR commands, see \fBufsdump\fR(8), \fBufsrestore\fR(8), and
 \fB/usr/include/protocols/dumprestore.h\fR.
 .sp
 .LP
 If you experience difficulty in allocating space on the ufs filesystem, it may
 be due to framentation. Fragmentation can occur when you do not have sufficient
-free blocks to satisfy an allocation request even though \fBdf\fR(1M) indicates
+free blocks to satisfy an allocation request even though \fBdf\fR(8) indicates
 that enough free space is available. (This may occur because df only uses the
 available fragment count to calculate available space, but the file system
 requires contiguous sets of fragments for most allocations). If you suspect
 that you have exhausted contiguous  fragments on  your file system, you can use
-the \fBfstyp\fR(1M) utility with the -v option. In the \fBfstyp\fR output,
+the \fBfstyp\fR(8) utility with the -v option. In the \fBfstyp\fR output,
 look at the  \fInbfree\fR (number  of  blocks  free) and \fInffree\fR (number
-of fragments free) fields. On unmounted filesystems, you can use \fBfsck\fR(1M)
+of fragments free) fields. On unmounted filesystems, you can use \fBfsck\fR(8)
 and observe  the  last line of output, which reports, among other items, the
 number of fragments and the degree of fragmentation. To correct a fragmentation
-problem, run \fBufsdump\fR(1M) and \fBufsrestore\fR(1M) on the ufs filesystem.
+problem, run \fBufsdump\fR(8) and \fBufsrestore\fR(8) on the ufs filesystem.

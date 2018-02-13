@@ -136,7 +136,7 @@ MT-Level	Unsafe
 .SH SEE ALSO
 .sp
 .LP
-\fBdatadm\fR(1M), \fBIntro\fR(3), \fBdat.conf\fR(4), \fBattributes\fR(5)
+\fBdatadm\fR(8), \fBIntro\fR(3), \fBdat.conf\fR(4), \fBattributes\fR(5)
 .SH NOTES
 .sp
 .LP
@@ -154,6 +154,6 @@ l l .
 .sp
 .LP
 In terms of installation, the service provider package should include a
-\fBservice_provider.conf\fR(4) file. The \fBdatadm\fR(1M) administrative
+\fBservice_provider.conf\fR(4) file. The \fBdatadm\fR(8) administrative
 configuration program should be used to add and remove service provider's
 entries in the system-wide \fBdat.conf\fR(4).

@@ -49,7 +49,7 @@ dir path=usr/share/lib
 dir path=usr/share/lib/xml group=sys
 dir path=usr/share/lib/xml/dtd group=sys
 dir path=usr/share/man
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man3lib
 dir path=usr/share/man/man3pool
 dir path=var group=sys variant.opensolaris.zone=global
@@ -70,10 +70,10 @@ file path=usr/sbin/pooladm mode=0555
 file path=usr/sbin/poolbind mode=0555
 file path=usr/sbin/poolcfg mode=0555
 file path=usr/share/lib/xml/dtd/rm_pool.dtd.1
-file path=usr/share/man/man1m/pooladm.1m
-file path=usr/share/man/man1m/poolbind.1m
-file path=usr/share/man/man1m/poolcfg.1m
-file path=usr/share/man/man1m/poolstat.1m
+file path=usr/share/man/man8/pooladm.8
+file path=usr/share/man/man8/poolbind.8
+file path=usr/share/man/man8/poolcfg.8
+file path=usr/share/man/man8/poolstat.8
 file path=usr/share/man/man3lib/libpool.3lib
 file path=usr/share/man/man3pool/pool_associate.3pool
 file path=usr/share/man/man3pool/pool_component_info.3pool

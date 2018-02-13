@@ -26,12 +26,12 @@ The content under \fB/devices\fR is under the exclusive control of the
 The system may be configured to include a device in one of two ways:
 .br
 .in +2
-By means of dynamic reconfiguration (DR), using, for example, \fBcfgadm\fR(1M).
+By means of dynamic reconfiguration (DR), using, for example, \fBcfgadm\fR(8).
 .in -2
 .br
 .in +2
 For devices driven by \fBdriver.conf\fR(4) enumeration, edit the
-\fBdriver.conf\fR file to add a new entry, then use \fBupdate_drv\fR(1M) to
+\fBdriver.conf\fR file to add a new entry, then use \fBupdate_drv\fR(8) to
 cause the system to re-read the \fBdriver.conf\fR file and thereby enumerate
 the instance.
 .in -2
@@ -59,7 +59,7 @@ Mount point for \fBdevfs\fR file system
 .SH SEE ALSO
 .sp
 .LP
-\fBdevfsadm\fR(1M), \fBvfstab\fR(4), \fBattach\fR(9E)
+\fBdevfsadm\fR(8), \fBvfstab\fR(4), \fBattach\fR(9E)
 .SH NOTES
 .sp
 .LP

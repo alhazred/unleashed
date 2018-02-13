@@ -101,7 +101,7 @@ functions map directly to the respective \fBlibfstyp\fR interfaces.
 .LP
 The \fBfstyp_mod_dump()\fR function is optional. It can be used to output
 unformatted information about the file system. This function is used by the
-\fBfstyp\fR(1M) command when the \fB-v\fR option is specified. The
+\fBfstyp\fR(8) command when the \fB-v\fR option is specified. The
 \fBfstyp_mod_dump()\fR function is not recommended and should be used only in
 legacy modules.
 .SH FILES
@@ -146,5 +146,5 @@ MT-Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBfstyp\fR(1M), \fBfstyp_strerror\fR(3FSTYP), \fBlibfstyp\fR(3LIB),
+\fBfstyp\fR(8), \fBfstyp_strerror\fR(3FSTYP), \fBlibfstyp\fR(3LIB),
 \fBattributes\fR(5)

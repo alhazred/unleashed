@@ -207,7 +207,7 @@ default \fBTCP\fR limit of 64K.
 .TP
 .ie t \(bu
 .el o
-For all applications, use \fBipadm\fR(1M) to modify the property
+For all applications, use \fBipadm\fR(8) to modify the property
 \fB_wscale_always\fR. If \fB_wscale_always\fR is set to \fB1\fR, the
 window scale option will always be set when connecting to a remote system. If
 \fB_wscale_always\fR is \fB0,\fR the window scale option will be set only if
@@ -229,7 +229,7 @@ Turn on \fBSACK\fR capabilities in the following way:
 .TP
 .ie t \(bu
 .el o
-Use \fBipadm\fR(1M) to modify the TCP property \fBsack\fR.
+Use \fBipadm\fR(8) to modify the TCP property \fBsack\fR.
 If \fBsack\fR is set to \fBnever\fR, \fBTCP\fR will not accept
 \fBSACK\fR or send out \fBSACK\fR information. If \fBsack\fR is
 set to \fBpassive\fR, \fBTCP\fR will not initiate a connection with \fBSACK\fR
@@ -248,7 +248,7 @@ Turn on \fBTCP ECN\fR mechanism in the following way:
 .TP
 .ie t \(bu
 .el o
-Use \fBipadm\fR(1M) to modify the TCP property \fBecn\fR. If
+Use \fBipadm\fR(8) to modify the TCP property \fBecn\fR. If
 \fBecn\fR is set to \fBnever\fR, \fBTCP\fR will not negotiate with a
 peer that supports \fBECN\fR mechanism. If \fBecn\fR is set to
 \fBpassive\fR when initiating a connection, TCP will not tell a peer that it supports
@@ -267,7 +267,7 @@ Turn on the timestamp option in the following way:
 .TP
 .ie t \(bu
 .el o
-Use \fBipadm\fR(1M) to modify the TCP property \fB_tstamp_always\fR. If
+Use \fBipadm\fR(8) to modify the TCP property \fB_tstamp_always\fR. If
 \fB_tstamp_always\fR is \fB1\fR, the timestamp option will always be set
 when connecting to a remote machine. If \fB_tstamp_always\fR is \fB0\fR, the
 timestamp option will not be set when connecting to a remote system. The
@@ -289,7 +289,7 @@ window scale option is in effect:
 .TP
 .ie t \(bu
 .el o
-Use \fBipadm\fR(1M) to modify the TCP property \fB_tstamp_if_wscale\fR.
+Use \fBipadm\fR(8) to modify the TCP property \fB_tstamp_if_wscale\fR.
 Setting \fB_tstamp_if_wscale\fR to \fB1\fR will cause the timestamp option
 to be set when connecting to a remote system, if the window scale option has
 been set. If \fB_tstamp_if_wscale\fR is \fB0\fR, the timestamp option will
@@ -323,14 +323,14 @@ keep-alive probe is sent out after a TCP is idle for two hours If the peer does
 not respond to the probe within eight minutes, the TCP connection is aborted.
 You can alter the interval for sending out the first probe using the socket
 option TCP_KEEPALIVE_THRESHOLD. The option value is an unsigned integer in
-milliseconds. The system default is controlled by the TCP \fBipadm\fR(1M) property
+milliseconds. The system default is controlled by the TCP \fBipadm\fR(8) property
 _keepalive_interval. The minimum value is ten seconds. The maximum is ten
 days, while the default is two hours. If you receive no response to the probe,
 you can use the TCP_KEEPALIVE_ABORT_THRESHOLD socket option to change the time
 threshold for aborting a TCP connection. The option value is an unsigned
 integer in milliseconds. The value zero indicates that TCP should never time
 out and abort the connection when probing. The system default is controlled by
-the TCP \fBipadm\fR(1M) property _keepalive_abort_interval. The default is eight
+the TCP \fBipadm\fR(8) property _keepalive_abort_interval. The default is eight
 minutes.
 .sp
 .LP
@@ -342,7 +342,7 @@ connection in the event of no response from peer. TCP_KEEPINTVL specifies the
 interval in seconds between successive keep-alive probes.
 .SH SEE ALSO
 .LP
-\fBsvcs\fR(1), \fBioctl\fR(2), \fBread\fR(2), \fBsvcadm\fR(1M),
+\fBsvcs\fR(1), \fBioctl\fR(2), \fBread\fR(2), \fBsvcadm\fR(8),
 \fBwrite\fR(2), \fBaccept\fR(3SOCKET), \fBbind\fR(3SOCKET),
 \fBconnect\fR(3SOCKET), \fBgetprotobyname\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBlisten\fR(3SOCKET), \fBsend\fR(3SOCKET),
@@ -465,5 +465,5 @@ svc:/network/initial:default
 .sp
 .LP
 Administrative actions on this service, such as enabling, disabling, or
-requesting restart, can be performed using \fBsvcadm\fR(1M). The service's
+requesting restart, can be performed using \fBsvcadm\fR(8). The service's
 status can be queried using the \fBsvcs\fR(1) command.

@@ -237,4 +237,4 @@ not set, a service module performs its default action.
 PAM_AUSER is not intended as a replacement for PAM_USER.  It is expected to be
 used to supplement PAM_USER when there is an authenticated user from a source
 other than \fBpam_authenticate\fR(3PAM). Such sources could be \fBsshd\fR
-host-based authentication, kerberized \fBrlogin\fR, and \fBsu\fR(1M).
+host-based authentication, kerberized \fBrlogin\fR, and \fBsu\fR(8).

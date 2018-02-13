@@ -37,7 +37,7 @@ against the \fBgsscred\fR table. If a \fBgsscred\fR table exists and the
 principal name is matched in the table, access is granted if the Unix user ID
 listed in the table corresponds to the user account the client is attempting to
 access. If the Unix user ID does not match, access is denied. See
-\fBgsscred\fR(1M).
+\fBgsscred\fR(8).
 .sp
 .LP
 For example, an originating user listed in the \fBgsscred\fR table with the
@@ -123,6 +123,6 @@ Interface Stability	Evolving
 .sp
 .LP
 \fBftp\fR(1), \fBrcp\fR(1), \fBrlogin\fR(1), \fBrsh\fR(1),
-\fBtelnet\fR(1), \fBgsscred\fR(1M), \fBkadm5.acl\fR(4),
+\fBtelnet\fR(1), \fBgsscred\fR(8), \fBkadm5.acl\fR(4),
 \fBkrb5.conf\fR(4), \fBpasswd\fR(4), \fBattributes\fR(5),
 \fBgss_auth_rules\fR(5)

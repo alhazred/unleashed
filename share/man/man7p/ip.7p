@@ -413,13 +413,13 @@ record route, and internet timestamp.
 .sp
 .LP
 By default, the IP layer will not forward IPv4 packets that are not addressed
-to it. This behavior can be overridden by using  \fBipadm\fR(1M) to enable
+to it. This behavior can be overridden by using  \fBipadm\fR(8) to enable
 the forwarding option for ipv4.
 .sp
 .LP
 Additionally, finer-grained forwarding can be configured in IP. Each interface
 can be configured to forward IP packets by setting the IFF_ROUTER interface
-flag. This flag can be set and cleared using \fBifconfig\fR(1M)'s router and
+flag. This flag can be set and cleared using \fBifconfig\fR(8)'s router and
 router options. If an interface's IFF_ROUTER flag is set, packets can be
 forwarded to or from the interface. If it is clear, packets will neither be
 forwarded from this interface to others, nor forwarded to this interface.
@@ -615,7 +615,7 @@ An address has changed on a logical  interface.
 .SH SEE ALSO
 .sp
 .LP
-\fBifconfig\fR(1M), \fBipadm\fR(1M), \fBread\fR(2),
+\fBifconfig\fR(8), \fBipadm\fR(8), \fBread\fR(2),
 \fBwrite\fR(2), \fBbind\fR(3SOCKET), \fBconnect\fR(3SOCKET),
 \fBgetsockopt\fR(3SOCKET), \fBrecv\fR(3SOCKET), \fBsend\fR(3SOCKET),
 \fBdefaultrouter\fR(4), \fBicmp\fR(7P), \fBif_tcp\fR(7P), \fBinet\fR(7P),

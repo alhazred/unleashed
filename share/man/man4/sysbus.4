@@ -87,7 +87,7 @@ The order of the tuples in the reg property is determined by the boot system
 probe code and depends on the characteristics of each particular device.
 However, the reg property maintains the same order of entries from system boot
 to system boot.  The recommended way to determine the reg property for a
-particular device is to use the \fBprtconf\fR(1M) command after installing the
+particular device is to use the \fBprtconf\fR(8) command after installing the
 particular device.  The output of the \fBprtconf\fR command can be examined to
 determine the reg property for any installed device.
 .sp
@@ -124,7 +124,7 @@ Architecture	x86
 .SH SEE ALSO
 .sp
 .LP
-\fBprtconf\fR(1M), \fBdriver.conf\fR(4), \fBscsi\fR(4), \fBattributes\fR(5),
+\fBprtconf\fR(8), \fBdriver.conf\fR(4), \fBscsi\fR(4), \fBattributes\fR(5),
 \fBddi_add_intr\fR(9F), \fBddi_intr_hilevel\fR(9F), \fBddi_map_regs\fR(9F),
 \fBddi_prop_op\fR(9F)
 .sp

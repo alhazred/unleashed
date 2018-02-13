@@ -235,7 +235,7 @@ The default value is 1, which causes partition IO statistics to be maintained.
 Set this value to zero to prevent the driver from recording partition
 statistics. This slightly reduces the CPU overhead for IO, mimimizes the amount
 of \fBsar\fR(1) data collected and makes these statistics unavailable for
-reporting by \fBiostat\fR(1M) even though the \fB-p\fR/\fB-P\fR option is
+reporting by \fBiostat\fR(8) even though the \fB-p\fR/\fB-P\fR option is
 specified. Regardless of this setting, disk IO statistics are always
 maintained.
 .RE
@@ -449,8 +449,8 @@ Where \fIn\fR=0 the node corresponds to the entire disk.
 
 .SH SEE ALSO
 .LP
-\fBsar\fR(1), \fBcfgadm_scsi\fR(1M), \fBfdisk\fR(1M), \fBformat\fR(1M),
-\fBiostat\fR(1M), \fBclose\fR(2), \fBioctl\fR(2), \fBlseek\fR(2),
+\fBsar\fR(1), \fBcfgadm_scsi\fR(8), \fBfdisk\fR(8), \fBformat\fR(8),
+\fBiostat\fR(8), \fBclose\fR(2), \fBioctl\fR(2), \fBlseek\fR(2),
 \fBread\fR(2), \fBwrite\fR(2), \fBdriver.conf\fR(4), \fBscsi\fR(4),
 \fBfilesystem\fR(5), \fBscsa2usb\fR(7D), \fBssd\fR(7D), \fBhsfs\fR(7FS),
 \fBpcfs\fR(7FS), \fBudfs\fR(7FS), \fBcdio\fR(7I), \fBdkio\fR(7I),

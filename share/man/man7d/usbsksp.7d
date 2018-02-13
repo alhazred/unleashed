@@ -35,7 +35,7 @@ the USB 2.0 host controller is required to support the USA49WG model. Note that
 the USA49WG is not compatible with USB 1.1 host controllers). The Keyspan
 USA49WLC model requires a firmware package that is no longer publicly available.
 Serial device streams are built with appropriate modules that are pushed atop
-the \fBusbsksp\fR driver by the \fBautopush\fR(1M) facility.
+the \fBusbsksp\fR driver by the \fBautopush\fR(8) facility.
 .sp
 .LP
 The \fBusbsksp\fR module supports the \fBtermio\fR(7I) device control functions
@@ -201,7 +201,7 @@ Architecture	SPARC, x86, PCI-based systems
 
 .SH SEE ALSO
 .LP
-\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(1M),
+\fBstrconf\fR(1), \fBtip\fR(1), \fBautopush\fR(8),
 \fBioctl\fR(2), \fBopen\fR(2), \fBtermios\fR(3C), \fBattributes\fR(5),
 \fBusba\fR(7D), \fBtermio\fR(7I), \fBldterm\fR(7M), \fBttcompat\fR(7M)
 .SH DIAGNOSTICS

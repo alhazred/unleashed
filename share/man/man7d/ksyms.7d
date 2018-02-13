@@ -63,7 +63,7 @@ table entries reference.
 .SH SEE ALSO
 .sp
 .LP
-\fBkernel\fR(1M), \fBstat\fR(2), \fBelf\fR(3ELF), \fBkvm_open\fR(3KVM),
+\fBkernel\fR(8), \fBstat\fR(2), \fBelf\fR(3ELF), \fBkvm_open\fR(3KVM),
 \fBa.out\fR(4), \fBmem\fR(7D)
 .SH WARNINGS
 .sp

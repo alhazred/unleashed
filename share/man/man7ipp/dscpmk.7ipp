@@ -55,7 +55,7 @@ Also, for each DSCP the following is exported:
 .SH SEE ALSO
 .sp
 .LP
-\fBipqosconf\fR(1M), \fBdlcosmk\fR(7ipp), \fBflowacct\fR(7ipp),
+\fBipqosconf\fR(8), \fBdlcosmk\fR(7ipp), \fBflowacct\fR(7ipp),
 \fBipqos\fR(7ipp), \fBipgpc\fR(7ipp), \fBtokenmt\fR(7ipp), \fBtswtclmt\fR(7ipp)
 .sp
 .LP

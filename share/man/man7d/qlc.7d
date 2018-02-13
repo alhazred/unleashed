@@ -84,7 +84,7 @@ Architecture	SPARC, x86
 .SH SEE ALSO
 .sp
 .LP
-\fBprtconf\fR(1M), \fBdriver.conf\fR(4), \fBfcp\fR(7D), \fBfp\fR(7d)
+\fBprtconf\fR(8), \fBdriver.conf\fR(4), \fBfcp\fR(7D), \fBfp\fR(7d)
 .sp
 .LP
 \fIWriting Device Drivers\fR

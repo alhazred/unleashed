@@ -264,7 +264,7 @@ The \fBscf_scope_get_service()\fR function will fail if:
 \fB\fBSCF_ERROR_BACKEND_ACCESS\fR\fR
 .ad
 .RS 28n
-The  storage  mechanism  that  the   repository server (\fBsvc.configd\fR(1M))
+The  storage  mechanism  that  the   repository server (\fBsvc.configd\fR(8))
 chose for the operation denied access.
 .RE
 

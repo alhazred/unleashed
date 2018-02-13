@@ -99,7 +99,7 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBcputrack\fR(1), \fBcpustat\fR(1M), \fBIntro\fR(3), \fBcpc\fR(3CPC),
+\fBcputrack\fR(1), \fBcpustat\fR(8), \fBIntro\fR(3), \fBcpc\fR(3CPC),
 \fBattributes\fR(5), \fBxVM\fR(5)
 .SH NOTES
 .sp

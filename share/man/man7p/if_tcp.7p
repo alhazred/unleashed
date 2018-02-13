@@ -33,7 +33,7 @@ when an interface's address is set.
 .sp
 .LP
 You cannot create IPMP IP  interfaces using  the procedure described above.
-Instead, use \fBifconfig\fR(1M).
+Instead, use \fBifconfig\fR(8).
 .SH IOCTLS
 .LP
 The following \fBioctl()\fR calls may be used to manipulate \fBIP\fR network
@@ -209,7 +209,7 @@ Get the maximum transmission unit size for interface.
 .ad
 .RS 19n
 Set the metric associated with the interface.  The metric is used by routing
-daemons such as \fBin.routed\fR(1M).
+daemons such as \fBin.routed\fR(8).
 .RE
 
 .sp
@@ -389,7 +389,7 @@ Set the interface from which to choose a source address. The \fBlifr_index\fR
 field has the interface index corresponding to the interface whose address is
 to be used as the source address for packets going out on the interface whose
 name is provided by \fBlifr_name\fR. If the \fBlifr_index\fR field is set to
-zero, the previous setting is cleared.  See \fBifconfig\fR(1M) for examples of
+zero, the previous setting is cleared.  See \fBifconfig\fR(8) for examples of
 the \fBusesrc\fR option.
 .RE
 
@@ -402,7 +402,7 @@ the \fBusesrc\fR option.
 Get the interface index of the interface whose address is used as the source
 address for packets going out on the interface provided by \fBlifr_name\fR
 field. The value is retrieved in the \fBlifr_index\fR field. See
-\fBifconfig\fR(1M) for examples of the \fBusesrc\fR option.
+\fBifconfig\fR(8) for examples of the \fBusesrc\fR option.
 .RE
 
 .sp
@@ -421,7 +421,7 @@ required buffer size instead of estimating a buffer size. The application tests
 \fBlifs_len\fR <= \fBlifs_maxlen\fR -- if that's true,  the buffer was big
 enough and the application has an accurate list.  If it is false, it needs to
 allocate a bigger buffer and try again, and \fBlifs_len\fR provides a hint of
-how big to make the next trial. See \fBifconfig\fR(1M) for examples of the
+how big to make the next trial. See \fBifconfig\fR(8) for examples of the
 \fBusesrc\fR option.
 .RE
 
@@ -678,7 +678,7 @@ is placed in the \fBifr_metric\fR field.
 .ad
 .RS 18n
 Set the metric associated with the interface.  The metric is used by routine
-daemons such as \fBin.routed\fR(1M).
+daemons such as \fBin.routed\fR(8).
 .RE
 
 .sp
@@ -747,9 +747,9 @@ struct ifconf {
 
 .SS "IFF_ Flags"
 .LP
-You can use the \fBifconfig\fR(1M) command to display the \fBIFF\fR_ flags
+You can use the \fBifconfig\fR(8) command to display the \fBIFF\fR_ flags
 listed below (with the leading \fBIFF\fR_ prefix removed). See the
-\fBifconfig\fR(1M) manpage for a definition of each flag.
+\fBifconfig\fR(8) manpage for a definition of each flag.
 .sp
 .in +2
 .nf
@@ -867,6 +867,6 @@ specified by \fBlifr_ppa\fR plumbed.
 
 .SH SEE ALSO
 .LP
-\fBifconfig\fR(1M), \fBin.routed\fR(1M), \fBioctl\fR(2),
+\fBifconfig\fR(8), \fBin.routed\fR(8), \fBioctl\fR(2),
 \fBsockaddr\fR(3SOCKET), \fBstreamio\fR(7I), \fBarp\fR(7P), \fBdlpi\fR(7P),
 \fBip\fR(7P), \fBip6\fR(7P), \fBndp\fR(7P)

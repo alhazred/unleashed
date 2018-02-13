@@ -88,7 +88,7 @@ Note -
 .RS 2
 This module is affected by the setting of specific eeprom variables. For
 information on parameters that are persistent across reboots, see the
-\fBeeprom\fR(1M) man page.
+\fBeeprom\fR(8) man page.
 .RE
 .SH IOCTLS
 .LP
@@ -142,7 +142,7 @@ binary protocols should not be run over the serial console port when Alternate
 Break sequence is in effect. Although PPP is a binary protocol, it is able to
 avoid these sequences using the ACCM feature in \fIRFC 1662\fR. For Solaris PPP
 4.0, you do this by adding the following line to the \fB/etc/ppp/options\fR
-file (or other configuration files used for the connection; see \fBpppd\fR(1M)
+file (or other configuration files used for the connection; see \fBpppd\fR(8)
 for details):
 .sp
 .in +2
@@ -252,8 +252,8 @@ Architecture	SPARC
 
 .SH SEE ALSO
 .LP
-\fBeeprom\fR(1M), \fBkadb\fR(1M), \fBtip\fR(1),
-\fBports\fR(1M), \fBpppd\fR(1M), \fBioctl\fR(2), \fBopen\fR(2),
+\fBeeprom\fR(8), \fBkadb\fR(8), \fBtip\fR(1),
+\fBports\fR(8), \fBpppd\fR(8), \fBioctl\fR(2), \fBopen\fR(2),
 \fBattributes\fR(5), \fBzsh\fR(7D), \fBtermio\fR(7I), \fBkb\fR(7M),
 \fBldterm\fR(7M), \fBttcompat\fR(7M)
 .SH DIAGNOSTICS

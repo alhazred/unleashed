@@ -65,7 +65,7 @@ argument to the invoked event delivery function, \fIevent_handler\fR.
 .sp
 .LP
 Additional threads are created to service communication between
-\fBsyseventd\fR(1M) and the calling process and to run the event handler
+\fBsyseventd\fR(8) and the calling process and to run the event handler
 routine, \fIevent_handler\fR.
 .sp
 .LP
@@ -152,7 +152,7 @@ MT-Level	MT-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBsyseventd\fR(1M), \fBsysevent_subscribe_event\fR(3SYSEVENT),
+\fBsyseventd\fR(8), \fBsysevent_subscribe_event\fR(3SYSEVENT),
 \fBattributes\fR(5)
 .SH NOTES
 .sp

@@ -82,6 +82,6 @@ MT-Level	Async-Signal-Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBuptime\fR(1), \fBw\fR(1), \fBpsrset\fR(1M), \fBprstat\fR(1M),
+\fBuptime\fR(1), \fBw\fR(1), \fBpsrset\fR(8), \fBprstat\fR(8),
 \fBpset_bind\fR(2), \fBpset_create\fR(2), \fBKstat\fR(3PERL),
 \fBattributes\fR(5)

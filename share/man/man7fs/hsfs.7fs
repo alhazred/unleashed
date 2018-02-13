@@ -108,8 +108,8 @@ information. If more than one version of a file is present on the
 .sp
 .LP
 Conversion of uppercase to lowercase characters may be disabled by using the
-\fB-o\fR \fBnomaplcase\fR option to \fBmount\fR(1M). (See
-\fBmount_hsfs\fR(1M)).
+\fB-o\fR \fBnomaplcase\fR option to \fBmount\fR(8). (See
+\fBmount_hsfs\fR(8)).
 .sp
 .LP
 If the  \fBCD-ROM\fR contains Rock Ridge, ISO  9660 version 2 or Joliet
@@ -180,7 +180,7 @@ on a High Sierra or \fBISO\fR 9660 format \fBCD-ROM,\fR only the file
 .SH SEE ALSO
 .sp
 .LP
-\fBmount\fR(1M), \fBmount_hsfs\fR(1M), \fBvfstab\fR(4)
+\fBmount\fR(8), \fBmount_hsfs\fR(8), \fBvfstab\fR(4)
 .sp
 .LP
 N. V. Phillips and Sony Corporation, \fISystem Description Compact Disc Digital
@@ -291,8 +291,8 @@ if you are consulting documentation for \fBCD-ROMs\fR originally intended for
 \fBMS-DOS\fR systems.
 .sp
 .LP
-Use of the \fB-o\fR \fBnotraildot\fR option to \fBmount\fR(1M) makes it
-optional to specify the trailing dot. (See \fBmount_hsfs\fR(1M)).
+Use of the \fB-o\fR \fBnotraildot\fR option to \fBmount\fR(8) makes it
+optional to specify the trailing dot. (See \fBmount_hsfs\fR(8)).
 .SH NOTES
 .sp
 .LP

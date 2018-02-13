@@ -423,7 +423,7 @@ Standard	See \fBstandards\fR(5).
 .SH SEE ALSO
 .sp
 .LP
-\fBlockd\fR(1M), \fBIntro\fR(2), \fBalarm\fR(2), \fBexit\fR(2), \fBfcntl\fR(2),
+\fBlockd\fR(8), \fBIntro\fR(2), \fBalarm\fR(2), \fBexit\fR(2), \fBfcntl\fR(2),
 \fBgetrlimit\fR(2), \fBioctl\fR(2), \fBkill\fR(2), \fBpause\fR(2),
 \fBsetrctl\fR(2), \fBsigaction\fR(2), \fBsigaltstack\fR(2),
 \fBsigprocmask\fR(2), \fBsigsend\fR(2), \fBsigsuspend\fR(2), \fBsigwait\fR(2),

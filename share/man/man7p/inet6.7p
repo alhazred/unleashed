@@ -321,7 +321,7 @@ packets to D and the other is not, then prefer the former.
 .ad
 .RS 30n
 This rule uses labels which are obtained through the IPv6 default address
-selection policy table. See \fBipaddrsel\fR(1M) for a description of the
+selection policy table. See \fBipaddrsel\fR(8) for a description of the
 default contents of the table and how the table is configured.
 .sp
 If Label(SA) == Label(D) and Label(SB) != Label(D), then prefer SA.

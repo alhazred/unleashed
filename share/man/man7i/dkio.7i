@@ -836,7 +836,7 @@ unsigned short   dkg_extra[7];         /* for compatible expansion*/
 .RS 4n
 This \fBioctl()\fR forces the driver to re-examine the alternates slice and
 rebuild the internal bad block map accordingly. It should be used whenever the
-alternates slice is changed by any method other than the \fBformat\fR(1M)
+alternates slice is changed by any method other than the \fBformat\fR(8)
 utility. \fBDKIOCADDBAD\fR can only be used for software remapping on
 \fB IDE\fR drives; \fBSCSI\fR drives use hardware remapping of alternate
 sectors.
@@ -913,7 +913,7 @@ recreation of all logical device nodes.
 
 .SH SEE ALSO
 .LP
-\fBaddbadsec\fR(1M), \fBfdisk\fR(1M), \fBformat\fR(1M), \fBioctl\fR(2),
+\fBaddbadsec\fR(8), \fBfdisk\fR(8), \fBformat\fR(8), \fBioctl\fR(2),
 \fBcdio\fR(7I), \fBcmdk\fR(7D), \fBfdio\fR(7I), \fBhdio\fR(7I), \fBsd\fR(7D)
 .SH NOTES
 .LP

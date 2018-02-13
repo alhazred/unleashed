@@ -51,7 +51,7 @@ authenticated. See NOTES for information on password prompting.
 .sp
 .LP
 The authentication method used is either defined in the client profile , or the
-authentication method is configured by using the \fBldapclient\fR(1M) command.
+authentication method is configured by using the \fBldapclient\fR(8) command.
 To determine the authentication method to use, this module first attempts to
 use the authentication method that is defined, for service \fBpam_ldap\fR, for
 example, \fBserviceAuthenticationMethod:pam_ldap:sasl/DIGEST-MD5\fR. If no
@@ -349,7 +349,7 @@ other password required   pam_authtok_store.so.1 server_policy
 .ad
 .RS 30n
 The LDAP configuration files of the client. Do not manually modify these files,
-as these files might not be human readable. Use \fBldapclient\fR(1M) to update
+as these files might not be human readable. Use \fBldapclient\fR(8) to update
 these files.
 .RE
 
@@ -381,8 +381,8 @@ MT-Level	MT-Safe with exceptions
 
 .SH SEE ALSO
 .LP
-\fBldap\fR(1), \fBidsconfig\fR(1M), \fBldap_cachemgr\fR(1M),
-\fBldapclient\fR(1M), \fBlibpam\fR(3LIB), \fBpam\fR(3PAM),
+\fBldap\fR(1), \fBidsconfig\fR(8), \fBldap_cachemgr\fR(8),
+\fBldapclient\fR(8), \fBlibpam\fR(3LIB), \fBpam\fR(3PAM),
 \fBpam_sm_acct_mgmt\fR(3PAM), \fBpam_sm_authenticate\fR(3PAM),
 \fBpam_sm_chauthtok\fR(3PAM), \fBpam_sm_close_session\fR(3PAM),
 \fBpam_sm_open_session\fR(3PAM), \fBpam_sm_setcred\fR(3PAM), \fBsyslog\fR(3C),

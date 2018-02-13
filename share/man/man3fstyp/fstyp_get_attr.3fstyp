@@ -54,7 +54,7 @@ generic and are returned when appropriate for a particular file system type:
 .RS 4n
 Attribute for which \fBtrue\fR and \fBfalse\fR values are allowed. A
 \fBfalse\fR value is returned if the file system is damaged or if the file
-system is not cleanly unmounted. In the latter case, \fBfsck\fR(1M) is required
+system is not cleanly unmounted. In the latter case, \fBfsck\fR(8) is required
 before the file system can be mounted.
 .RE
 

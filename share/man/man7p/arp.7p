@@ -236,7 +236,7 @@ the IPMP group has not entirely failed).
 logical  interface is brought up (\fBIFF_UP\fR) or any time the hardware link
 goes up  (\fBIFF_RUNNING\fR), ARP sends probes (ar$spa == 0) for the assigned
 address.  If  a conflict is  found, the interface is torn down. See
-\fBifconfig\fR(1M) for more details.
+\fBifconfig\fR(8) for more details.
 .sp
 .LP
 \fBARP\fR watches for hosts impersonating the local host, that is, any host
@@ -343,7 +343,7 @@ A network interface is no longer  associated with ARP.
 
 .SH SEE ALSO
 .LP
-\fBarp\fR(1M), \fBifconfig\fR(1M), \fBsockaddr\fR(3SOCKET), \fBprivileges\fR(5),
+\fBarp\fR(8), \fBifconfig\fR(8), \fBsockaddr\fR(3SOCKET), \fBprivileges\fR(5),
 \fBif_tcp\fR(7P), \fBinet\fR(7P), \fBnetinfo\fR(9F)
 .sp
 .LP
@@ -414,7 +414,7 @@ automatically and reenabled. The conflict has been resolved.
 .ad
 .sp .6
 .RS 4n
-This  message appears if \fBarp\fR(1M) has been used to create a published
+This  message appears if \fBarp\fR(8) has been used to create a published
 permanent (\fBATF_AUTHORITY\fR) entry, and some other host on the local network
 responds to mapping requests for the published ARP entry.
 .RE

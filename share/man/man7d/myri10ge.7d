@@ -32,9 +32,9 @@ The cloning character-special device, \fB/dev/myri10ge\fR, is used to access
 all Myricom Myri10GE 10 -Gigabit Ethernet dev ices installed within the system.
 .sp
 .LP
-The \fBmyri10ge\fR driver is managed by the \fBdladm\fR(1M) command line
+The \fBmyri10ge\fR driver is managed by the \fBdladm\fR(8) command line
 utility. dladm allows VLANs to be defined on top of \fBmyri10ge\fR instances
-and for \fBmyri10ge\fR instances to be aggregated. See \fBdladm\fR(1M) for more
+and for \fBmyri10ge\fR instances to be aggregated. See \fBdladm\fR(8) for more
 details.
 .sp
 .LP
@@ -172,7 +172,7 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBnetstat\fR(1M), \fBdriver.conf\fR(4), \fBattributes\fR(5),
+\fBdladm\fR(8), \fBnetstat\fR(8), \fBdriver.conf\fR(4), \fBattributes\fR(5),
 \fBdlpi\fR(7P), \fBstreamio\fR(7I)
 .sp
 .LP

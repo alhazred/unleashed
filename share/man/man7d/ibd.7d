@@ -108,7 +108,7 @@ versions, the same general information will be provided.
 .LP
 While joining IBA multicast groups corresponding to IP multicast groups as part
 of multicast promiscuous operations as required by IP multicast routers, or as
-part of running \fBsnoop\fR(1M), it is possible that joins to some multicast
+part of running \fBsnoop\fR(8), it is possible that joins to some multicast
 groups can fail due to inherent resource constraints in the IBA components. In
 such cases, warning message similar to the following appear in the system log,
 indicating the interface on which the failure occurred:
@@ -160,7 +160,7 @@ NOTICE: ibd0: Failure on port up to rejoin multicast gid
 .sp
 .LP
 If the corresponding HCA port is in the unavailable state defined above when
-initializing an ibd interface using \fBifconfig\fR(1M), a message is emitted by
+initializing an ibd interface using \fBifconfig\fR(8), a message is emitted by
 the driver:
 .sp
 .in +2
@@ -185,7 +185,7 @@ maximum MTU 2048
 
 .sp
 .LP
-In all cases of these reported problems when running \fBifconfig\fR(1M), it
+In all cases of these reported problems when running \fBifconfig\fR(8), it
 should be checked that IBA cabling is intact, an SM is running on the fabric,
 and the broadcast-GID with appropriate properties has been created in the IBA
 partition.
@@ -193,7 +193,7 @@ partition.
 .LP
 The IPoIB service comes preconfigured on all HCA ports in the system. To turn
 the service off, or back on after turning it off, refer to documentation in
-\fBcfgadm_ib(1M)\fR.
+\fBcfgadm_ib(8)\fR.
 .SH FILES
 .ne 2
 .na
@@ -241,7 +241,7 @@ configuration file to start IPoIB service
 
 .SH SEE ALSO
 .LP
-\fBcfgadm\fR(1M), \fBcfgadm_ib(1M)\fR, \fBifconfig\fR(1M), \fBsyslogd\fR(1M),
+\fBcfgadm\fR(8), \fBcfgadm_ib(8)\fR, \fBifconfig\fR(8), \fBsyslogd\fR(8),
 \fBgld\fR(7D), \fBib\fR(7D), \fBkstat\fR(7D), \fBstreamio\fR(7I),
 \fBdlpi\fR(7P), \fBattributes\fR(5), \fBattach\fR(9E)
 .SH NOTES

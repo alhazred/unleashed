@@ -38,7 +38,7 @@ The \fBusbrpn\fR driver includes support for communicating with many different
 printers. To use these printers, it may be necessary to install and configure
 additional format conversion packages available in the Solaris distribution.
 Configuration of these conversion packages under the Solaris printing system
-can be simplified through the use of the \fBprintmgr\fR(1M). This tool allows
+can be simplified through the use of the \fBprintmgr\fR(8). This tool allows
 selection of printer manufacturer/model information while creating a print
 queue. For USB connected printers, it attempts to pre-select the
 manufacturer and model information based on the 1284 device id supplied by the
@@ -370,7 +370,7 @@ Architecture	SPARC, x86, PCI-based systems
 
 .SH SEE ALSO
 .LP
-\fBcfgadm_usb\fR(1M), \fBprintmgr\fR(1M), \fBioctl\fR(2), \fBopen\fR(2),
+\fBcfgadm_usb\fR(8), \fBprintmgr\fR(8), \fBioctl\fR(2), \fBopen\fR(2),
 \fBread\fR(2), \fBwrite\fR(2), \fBattributes\fR(5),
 \fBbpp\fR(7D), \fBecpp\fR(7D), \fBugen\fR(7D), \fBusba\fR(7D), \fBprnio\fR(7I),
 \fBattach\fR(9E)

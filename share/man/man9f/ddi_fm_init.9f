@@ -126,7 +126,7 @@ driver. Before returning from \fBddi_fm_init()\fR, the \fBI/O\fR Fault
 Management framework creates a set of fault management capability properties:
 \fBfm-ereport-capable\fR, \fBfm-errcb-capable\fR, \fBfm-accchk-capable\fR, and
 \fBfm-dmachk-capable\fR. The current supported fault management capability
-levels are observable via \fBprtconf\fR(1M).
+levels are observable via \fBprtconf\fR(8).
 .sp
 .LP
 A driver can support the administrative selection of fault management
@@ -178,7 +178,7 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBprtconf\fR(1M), \fBdriver.conf\fR(4), \fBattributes\fR(5), \fBattach\fR(9E),
+\fBprtconf\fR(8), \fBdriver.conf\fR(4), \fBattributes\fR(5), \fBattach\fR(9E),
 \fBdetach\fR(9E)
 .sp
 .LP

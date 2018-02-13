@@ -143,7 +143,7 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBdi_minor_nodetype\fR(3DEVINFO), dlpi_walk(3DLPI),
+\fBdladm\fR(8), \fBdi_minor_nodetype\fR(3DEVINFO), dlpi_walk(3DLPI),
 \fBlibdevinfo\fR(3LIB), \fBattributes\fR(5), \fBfilesystem\fR(5),
 \fBddi_create_minor_node\fR(9F)
 .sp

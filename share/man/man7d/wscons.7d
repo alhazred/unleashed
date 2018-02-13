@@ -87,7 +87,7 @@ smaller text capacities may display less. On SPARC systems, the \fBscreen-#rows
 screen-#columns\fR should be set to 34 or 80 respectively or text capacities
 will vary from those described above. On SPARC systems, the \fBscreen-#rows and
 screen-#columns\fR fields are stored in \fBNVRAM/EEPROM\fR. See
-\fBeeprom\fR(1M) for more information. Both SPARC and x86 consoles offer
+\fBeeprom\fR(8) for more information. Both SPARC and x86 consoles offer
 scrolling, (x, y) cursor addressing ability and a number of other control
 functions.
 .sp
@@ -241,10 +241,10 @@ required by that particular command character.
 Parameters which are omitted or set to 0 are reset to the default value of 1
 (with certain exceptions). For example, the command character \fBM\fR requires
 one parameter. \fBESC[;M\fR, \fBESC[0M\fR, \fBESC[M\fR and
-\fBESC[23;15;32;1M\fR are all equivalent to \fBESC[1M\fR and provide a
+\fBESC[23;15;32;8\fR are all equivalent to \fBESC[8\fR and provide a
 parameter value of 1.  Note that \fBESC[;5M\fR (interpreted as \fB`ESC[5M\fR')
-is \fInot\fR equivalent to \fBESC[5;M\fR (interpreted as `\fBESC[5;1M\fR')
-which is ultimately interpreted as `\fBESC[1M\fR').
+is \fInot\fR equivalent to \fBESC[5;M\fR (interpreted as `\fBESC[5;8\fR')
+which is ultimately interpreted as `\fBESC[8\fR').
 .SS "ANSI Control Functions"
 .sp
 .LP
@@ -1052,7 +1052,7 @@ Interface Stability	Stable
 .SH SEE ALSO
 .sp
 .LP
-\fBcvcd\fR(1M), \fBeeprom\fR(1M), \fBioctl\fR(2), \fBpoll\fR(2), \fBread\fR(2),
+\fBcvcd\fR(8), \fBeeprom\fR(8), \fBioctl\fR(2), \fBpoll\fR(2), \fBread\fR(2),
 \fBwrite\fR(2), \fBcvc\fR(7D), \fBconsole\fR(7D), \fBvisual_io\fR(7I)
 .SH WARNINGS
 .sp

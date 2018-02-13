@@ -154,7 +154,7 @@ manual_configuration_only	Obsolete
 .SH SEE ALSO
 .sp
 .LP
-\fBcfgadm_fp\fR(1M), \fBprtconf\fR(1M), \fBstmsboot\fR(1M),
+\fBcfgadm_fp\fR(8), \fBprtconf\fR(8), \fBstmsboot\fR(8),
 \fBdriver.conf\fR(4), \fBattributes\fR(5), \fBfcp\fR(7D), \fBfctl\fR(7D),
 \fBscsi_vhci\fR(7D)
 .sp

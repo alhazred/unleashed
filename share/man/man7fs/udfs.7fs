@@ -68,7 +68,7 @@ Socket.
 .SH SEE ALSO
 .sp
 .LP
-\fBmount\fR(1M), \fBmount_udfs\fR(1M), \fBvfstab\fR(4)
+\fBmount\fR(8), \fBmount_udfs\fR(8), \fBvfstab\fR(4)
 .SH NOTES
 .sp
 .LP

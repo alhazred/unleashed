@@ -28,7 +28,6 @@
 #
 
 <include SUNWcs.man1.inc>
-<include SUNWcs.man1m.inc>
 <include SUNWcs.man4.inc>
 <include SUNWcs.man5.inc>
 <include SUNWcs.man8.inc>
@@ -206,7 +205,7 @@ dir path=usr/share/lib/xml/dtd group=sys
 dir path=usr/share/lib/xml/style group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man4
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7d

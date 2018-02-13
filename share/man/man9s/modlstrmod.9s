@@ -65,7 +65,7 @@ the kernel's class table when the module is loaded.
 .SH SEE ALSO
 .sp
 .LP
-\fBmodload\fR(1M)
+\fBmodload\fR(8)
 .sp
 .LP
 \fIWriting Device Drivers\fR

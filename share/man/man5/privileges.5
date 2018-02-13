@@ -563,7 +563,7 @@ Allow a process to enable and disable and manage accounting through
 .sp .6
 .RS 4n
 Allow a process to perform system administration tasks such as setting node and
-domain name and specifying \fBcoreadm\fR(1M) and \fBnscd\fR(1M) settings
+domain name and specifying \fBcoreadm\fR(8) and \fBnscd\fR(8) settings
 .RE
 
 .sp
@@ -704,8 +704,8 @@ locking operations, bind to NFS reserved ports: ports 2049 (\fBnfs\fR) and port
 .ad
 .sp .6
 .RS 4n
-Allow a process to create, configure, and destroy PPP instances with pppd(1M)
-\fBpppd\fR(1M) and control PPPoE plumbing with \fBsppptun\fR(1M)sppptun(1M).
+Allow a process to create, configure, and destroy PPP instances with pppd(8)
+\fBpppd\fR(8) and control PPPoE plumbing with \fBsppptun\fR(8)sppptun(8).
 This privilege is granted by default to exclusive IP stack instance zones.
 .RE
 
@@ -1045,15 +1045,15 @@ set priv_debug = 1
 On a running system, you can use \fBmdb\fR(1) to change this variable.
 .SS "Privilege Administration"
 .LP
-Use \fBusermod\fR(1M) or \fBrolemod\fR(1M)
+Use \fBusermod\fR(8) or \fBrolemod\fR(8)
 to assign privileges to or modify privileges for, respectively, a user or a
 role. Use \fBppriv\fR(1) to enumerate the privileges supported on a system and
 \fBtruss\fR(1) to determine which privileges a program requires.
 .SH SEE ALSO
 .LP
-\fBmdb\fR(1), \fBppriv\fR(1), \fBadd_drv\fR(1M), \fBifconfig\fR(1M),
-\fBlockd\fR(1M), \fBnfsd\fR(1M), \fBpppd\fR(1M), \fBrem_drv\fR(1M),
-\fBsmbd\fR(1M), \fBsppptun\fR(1M), \fBupdate_drv\fR(1M), \fBIntro\fR(2),
+\fBmdb\fR(1), \fBppriv\fR(1), \fBadd_drv\fR(8), \fBifconfig\fR(8),
+\fBlockd\fR(8), \fBnfsd\fR(8), \fBpppd\fR(8), \fBrem_drv\fR(8),
+\fBsmbd\fR(8), \fBsppptun\fR(8), \fBupdate_drv\fR(8), \fBIntro\fR(2),
 \fBaccess\fR(2), \fBacct\fR(2), \fBacl\fR(2), \fBadjtime\fR(2), \fBaudit\fR(2),
 \fBauditon\fR(2), \fBchmod\fR(2), \fBchown\fR(2), \fBchroot\fR(2),
 \fBcreat\fR(2), \fBexec\fR(2), \fBfcntl\fR(2), \fBfork\fR(2),

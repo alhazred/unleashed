@@ -85,7 +85,7 @@ The password must not be based on a dictionary word. The list of words to be
 used for the site's dictionary can be specified with \fBDICTIONLIST\fR. It
 should contain a comma-separated list of filenames, one word per line. The
 database that is created from these files is stored in the directory named by
-\fBDICTIONDBDIR\fR (defaults to \fB/var/passwd\fR). See \fBmkpwdict\fR(1M) for
+\fBDICTIONDBDIR\fR (defaults to \fB/var/passwd\fR). See \fBmkpwdict\fR(8) for
 information on pre-generating the database. If neither \fBDICTIONLIST\fR nor
 \fBDICTIONDBDIR\fR is specified, no dictionary check is made.
 .RE
@@ -171,7 +171,7 @@ MT Level	MT-Safe with exceptions
 .SH SEE ALSO
 .sp
 .LP
-\fBpasswd\fR(1), \fBpam\fR(3PAM), \fBmkpwdict\fR(1M),
+\fBpasswd\fR(1), \fBpam\fR(3PAM), \fBmkpwdict\fR(8),
 \fBpam_chauthtok\fR(3PAM), \fBsyslog\fR(3C), \fBlibpam\fR(3LIB),
 \fBpam.conf\fR(4), \fBpasswd\fR(4), \fBshadow\fR(4), \fBattributes\fR(5),
 \fBpam_authtok_get\fR(5), \fBpam_authtok_store\fR(5), \fBpam_dhkeys\fR(5),

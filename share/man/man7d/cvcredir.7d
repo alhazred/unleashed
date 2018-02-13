@@ -12,7 +12,7 @@ cvcredir \- virtual console redirection driver
 The \fBcvcredir\fR virtual console redirection driver is a STREAMS-based pseudo
 driver that supports the network console provided on some platforms. The
 \fBcvcredir\fR driver interfaces with the virtual console driver \fBcvc\fR(7D),
-and the  virtual console  daemon,  \fBcvcd\fR(1M).
+and the  virtual console  daemon,  \fBcvcd\fR(8).
 .sp
 .LP
 The  \fBcvcredir\fR driver receives console output from \fBcvc\fR and passes it
@@ -39,7 +39,7 @@ T}
 .SH SEE ALSO
 .sp
 .LP
-\fBcvcd\fR(1M), \fBattributes\fR(5), \fBconsole\fR(7D), \fBcvc\fR(7D)
+\fBcvcd\fR(8), \fBattributes\fR(5), \fBconsole\fR(7D), \fBcvc\fR(7D)
 .sp
 .LP
 \fISun Enterprise 10000 SSP Reference Manual \fR

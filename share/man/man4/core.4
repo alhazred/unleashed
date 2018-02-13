@@ -31,7 +31,7 @@ The operating system attempts to create up to two core files for each
 abnormally terminating process, using a global core file name pattern and a
 per-process core file name pattern. These patterns are expanded to determine
 the pathname of the resulting core files, and can be configured by
-\fBcoreadm\fR(1M). By default, the global core file pattern is disabled and not
+\fBcoreadm\fR(8). By default, the global core file pattern is disabled and not
 used, and the per-process core file pattern is set to \fBcore\fR. Therefore, by
 default, the operating system attempts to create a core file named \fBcore\fR
 in the process's current working directory.
@@ -107,7 +107,7 @@ If the process's effective user ID is different from its real user ID or if its
 effective group ID is different from its real group ID. Similarly, set-user-ID
 and set-group-ID programs do not produce core files as this could potentially
 compromise system security. These processes can be explicitly granted
-permission to produce core files using \fBcoreadm\fR(1M), at the risk of
+permission to produce core files using \fBcoreadm\fR(8), at the risk of
 exposing secure information.
 .RE
 .sp
@@ -122,7 +122,7 @@ also an ELF file, containing ELF program and file headers. The \fBe_type\fR
 field in the file header has type \fBET_CORE\fR. The program header contains an
 entry for every segment that was part of the process address space, including
 shared library segments. The contents of the mappings specified by
-\fBcoreadm\fR(1M) are also part of the core image. Each program header has its
+\fBcoreadm\fR(8) are also part of the core image. Each program header has its
 \fBp_memsz\fR field set to the size of the mapping. The program headers that
 represent mappings whose data is included in the core file have their
 \fBp_filesz\fR field set the same as \fBp_memsz\fR, otherwise \fBp_filesz\fR is
@@ -130,7 +130,7 @@ represent mappings whose data is included in the core file have their
 .sp
 .LP
 A mapping's data can be excluded due to the core file content settings (see
-\fBcoreadm\fR(1M)), due to a failure, or due to a signal received after
+\fBcoreadm\fR(8)), due to a failure, or due to a signal received after
 core dump initiation but before its completion. If the data is excluded
 because of a failure, the program header entry will have the
 \fBPF_SUNW_FAILURE\fR flag
@@ -366,7 +366,7 @@ of the current thread information structure in a multithreaded process. The
 .RS 20n
 \fBn_type\fR: \fBNT_CONTENT\fR. This optional entry indicates which parts of
 the process image are specified to be included in the core file. See
-\fBcoreadm\fR(1M).
+\fBcoreadm\fR(8).
 .RE
 
 .sp
@@ -457,12 +457,12 @@ more details.
 .RS 15n
 \fBn_type\fR: \fbNT_SECFLAGS\fR.  This entry contains the process
 security-flags, see \fBsecurity-flags\fR(5), \fBproc\fR(4), and
-\fBpsecflags\fR(1M) for more information.
+\fBpsecflags\fR(8) for more information.
 .RE
 
 .sp
 .LP
-Depending on the \fBcoreadm\fR(1M) settings, the section header of an ELF core
+Depending on the \fBcoreadm\fR(8) settings, the section header of an ELF core
 file can contain entries for CTF, symbol table, and string table sections. The
 \fBsh_addr\fR fields are set to the base address of the first mapping of the
 load object that they came from to. This can be used to match those sections
@@ -474,7 +474,7 @@ The size of the core file created by a process can be controlled by the user
 .SH SEE ALSO
 .LP
 \fBelfdump\fR(1), \fBgcore\fR(1), \fBmdb\fR(1), \fBproc\fR(1), \fBps\fR(1),
-\fBcoreadm\fR(1M), \fBgetrlimit\fR(2), \fBsetrlimit\fR(2), \fBsetuid\fR(2),
+\fBcoreadm\fR(8), \fBgetrlimit\fR(2), \fBsetrlimit\fR(2), \fBsetuid\fR(2),
 \fBsysinfo\fR(2), \fBuname\fR(2), \fBgetzonenamebyid\fR(3C),
 \fBgetzoneid\fR(3C), \fBelf\fR(3ELF), \fBsignal.h\fR(3HEAD), \fBa.out\fR(4),
 \fBproc\fR(4), \fBzones\fR(5), \fBsecurity-flags\fR(5)

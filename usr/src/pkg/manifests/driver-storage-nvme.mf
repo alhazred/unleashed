@@ -41,6 +41,6 @@ driver name=nvme alias=pciexclass,010802 class=disk perms="* 0600 root sys"
 file path=kernel/drv/nvme group=sys
 file path=kernel/drv/nvme.conf group=sys
 file path=usr/sbin/nvmeadm mode=0555
-file path=usr/share/man/man1m/nvmeadm.1m
+file path=usr/share/man/man8/nvmeadm.8
 file path=usr/share/man/man7d/nvme.7d
 license lic_CDDL license=lic_CDDL

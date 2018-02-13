@@ -16,11 +16,11 @@ ypserv \- configuration file for NIS to LDAP transition daemons
 .SH DESCRIPTION
 .LP
 The \fBypserv\fR file specifies configuration information for the
-\fBypserv\fR(1M) daemon. Configuration information can come from LDAP or be
+\fBypserv\fR(8) daemon. Configuration information can come from LDAP or be
 specified in the \fBypserv\fR file.
 .sp
 .LP
-You can create a simple \fBypserv\fR file by running \fBinityp2l\fR(1M). The
+You can create a simple \fBypserv\fR file by running \fBinityp2l\fR(8). The
 \fBypserv\fR file can then be customized as required.
 .sp
 .LP
@@ -29,7 +29,7 @@ NIS entries into LDAP entries. See the \fBNISLDAPmapping\fR(4) man page for an
 overview of the setup that is needed to map NIS data to or from LDAP.
 .SH EXTENDED DESCRIPTION
 .LP
-The \fBypserv\fR(1M) server recognizes the attributes that follow. Values
+The \fBypserv\fR(8) server recognizes the attributes that follow. Values
 specified for these attributes in the \fBypserv\fR file, including any empty
 values, override values that are obtained from LDAP. However, the
 \fBnisLDAPconfig*\fR values are read from the \fBypserv\fR file only
@@ -273,7 +273,7 @@ recognized and default values for \fBnisLDAPTLSCertificateDBPath\fR, see the
 .ad
 .sp .6
 .RS 4n
-Proxy user used by \fBypserv\fR(1M), \fBypxfrd\fR(1M) and \fByppasswdd\fR(1M)
+Proxy user used by \fBypserv\fR(8), \fBypxfrd\fR(8) and \fByppasswdd\fR(8)
 to read or to write from or to LDAP. Assumed to have the appropriate permission
 to read and modify LDAP data. There is no default value. If the value ends in a
 comma, the value of the context for the current domain, as defined by a
@@ -705,8 +705,8 @@ Interface Stability	Obsolete
 
 .SH SEE ALSO
 .LP
-\fBldapadd\fR(1), \fBldapmodify\fR(1), \fBinityp2l\fR(1M), \fByppasswdd\fR(1M),
-\fBypserv\fR(1M), \fBypxfrd\fR(1M), \fBNISLDAPmapping\fR(4),
+\fBldapadd\fR(1), \fBldapmodify\fR(1), \fBinityp2l\fR(8), \fByppasswdd\fR(8),
+\fBypserv\fR(8), \fBypxfrd\fR(8), \fBNISLDAPmapping\fR(4),
 \fBattributes\fR(5)
 .sp
 .LP

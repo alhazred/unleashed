@@ -469,7 +469,7 @@ To remove a CPU cap, enter:
 .LP
 The \fBprctl\fR command can use the \fBzone.cpu-cap\fR resource control (see
 \fBresource_controls\fR(5)) to set and modify CPU caps for a zone. (The same
-resource control can be manipulated using the \fBzonecfg\fR(1M) command.) The
+resource control can be manipulated using the \fBzonecfg\fR(8) command.) The
 following command modifies the CPU cap to limit the global zone to 80 percent
 of a CPU:
 
@@ -553,7 +553,7 @@ The command-line syntax is Committed. The human-readable output is Uncommitted.
 The parsable output is Committed.
 .SH SEE ALSO
 .LP
-\fBrctladm\fR(1M), \fBzonecfg\fR(1M), \fBsetrctl\fR(2),
+\fBrctladm\fR(8), \fBzonecfg\fR(8), \fBsetrctl\fR(2),
 \fBrctlblk_get_local_action\fR(3C), \fBproject\fR(4), \fBattributes\fR(5),
 \fBresource_controls\fR(5)
 .SH NOTES

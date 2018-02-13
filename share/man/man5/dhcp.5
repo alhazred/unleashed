@@ -21,7 +21,7 @@ implementation.
 .SS "DHCP Client"
 .LP
 The DHCP client is implemented as background daemon,
-\fBdhcpagent\fR(1M).
+\fBdhcpagent\fR(8).
 .LP
 For IPv4, this daemon is started automatically during bootup if there exists at
 least one \fBdhcp.\fR\fIinterface\fR file in \fB/etc\fR. Only interfaces with a
@@ -37,13 +37,13 @@ Network parameters needed for system configuration during bootup are extracted
 from the information received by the daemon through the use of the
 \fBdhcpinfo\fR(1) command. The daemon's default behavior can be altered by
 changing the tunables in the \fB/etc/default/dhcpagent\fR file. The daemon is
-controlled by the \fBifconfig\fR(1M) utility. Check the status of the daemon
-using the \fBnetstat\fR(1M) and \fBifconfig\fR(1M) commands.
+controlled by the \fBifconfig\fR(8) utility. Check the status of the daemon
+using the \fBnetstat\fR(8) and \fBifconfig\fR(8) commands.
 .SH SEE ALSO
 .LP
-\fBdhcpinfo\fR(1), \fBdhcpagent\fR(1M),
-\fBifconfig\fR(1M),
-\fBin.ndpd\fR(1M), \fBnetstat\fR(1M),
+\fBdhcpinfo\fR(1), \fBdhcpagent\fR(8),
+\fBifconfig\fR(8),
+\fBin.ndpd\fR(8), \fBnetstat\fR(8),
 \fBsyslog\fR(3C),
 \fBdhcp_network\fR(4), \fBdhcptab\fR(4), \fBdhcpsvc.conf\fR(4),
 \fBdhcp_inittab\fR(4), \fBndpd.conf\fR(4), \fBdhcp_modules\fR(5)

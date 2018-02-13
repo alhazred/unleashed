@@ -43,7 +43,7 @@ Roles must have valid passwords and one of the shells that interprets profiles:
 either \fBpfcsh\fR, \fBpfksh\fR, or \fBpfsh\fR. See \fBpfexec\fR(1).
 .sp
 .LP
-Role assumption may be performed using \fBsu\fR(1M), \fBrlogin\fR(1), or some
+Role assumption may be performed using \fBsu\fR(8), \fBrlogin\fR(1), or some
 other service that supports the \fBPAM_RUSER\fR variable. Successful assumption
 requires knowledge of the role's password and membership in the role. Role
 assignments are specified in \fBuser_attr\fR(4).
@@ -97,5 +97,5 @@ An error occurred.
 .SH SEE ALSO
 .LP
 \fBauths\fR(1), \fBpfexec\fR(1), \fBprofiles\fR(1), \fBrlogin\fR(1),
-\fBsu\fR(1M), \fBauth_attr\fR(4), \fBpasswd\fR(4),
+\fBsu\fR(8), \fBauth_attr\fR(4), \fBpasswd\fR(4),
 \fBprof_attr\fR(4), \fBshadow\fR(4), \fBuser_attr\fR(4), \fBattributes\fR(5)

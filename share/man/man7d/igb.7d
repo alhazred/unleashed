@@ -41,9 +41,9 @@ The cloning character-special device, \fB /dev/igb\fR, is used to access all
 Intel 82575 Gigabit devices installed within the system.
 .sp
 .LP
-The igb driver is managed  by the \fBdladm\fR(1M) command  line utility, which
+The igb driver is managed  by the \fBdladm\fR(8) command  line utility, which
 allows  VLANs to be defined on top of \fBigb\fR instances and  for \fBigb\fR
-instances to be aggregated.  See \fBdladm\fR(1M) for more details.
+instances to be aggregated.  See \fBdladm\fR(8) for more details.
 .sp
 .LP
 You must send an explicit DL_ATTACH_REQ message to associate the opened stream
@@ -127,7 +127,7 @@ common denominator supported by both link partners.
 .sp
 .LP
 Alternatively, you can set the capabilities advertised by the \fBigb\fR device
-using \fBndd\fR(1M). The driver supports a number of parameters whose names
+using \fBndd\fR(8). The driver supports a number of parameters whose names
 begin with \fIadv_\fR (see below). Each of these parameters contains a boolean
 value that determines if the device advertises that mode of operation. For
 example,  the \fIadv_1000fdx_cap\fR parameter indicates if 1000M full duplex is
@@ -202,7 +202,7 @@ Configuration file.
 .SH SEE ALSO
 .sp
 .LP
-\fBdladm\fR(1M), \fBndd\fR(1M), \fBnetstat\fR(1M), \fBdriver.conf\fR(4),
+\fBdladm\fR(8), \fBndd\fR(8), \fBnetstat\fR(8), \fBdriver.conf\fR(4),
 \fBattributes\fR(5), \fBstreamio\fR(7I), \fBdlpi\fR(7P),
 .sp
 .LP

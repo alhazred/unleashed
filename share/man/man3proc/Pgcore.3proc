@@ -107,7 +107,7 @@ See
 in
 .Xr libproc 3LIB .
 .Sh SEE ALSO
-.Xr coreadm 1M ,
+.Xr coreadm 8 ,
 .Xr libproc 3LIB ,
 .Xr Pstop 3PROC ,
 .Xr core 4 ,

@@ -26,7 +26,7 @@ getipsecprotobyname, getipsecprotobynum \- query IPsec protocols entries
 .sp
 .LP
 Use the \fBgetipsecprotobyname()\fR and \fBgetipsecprotobynum()\fR functions to
-obtain the IPsec algorithm mappings that are defined by \fBipsecalgs\fR(1M).
+obtain the IPsec algorithm mappings that are defined by \fBipsecalgs\fR(8).
 You can also use the \fBgetipsecprotobyname()\fR and \fBgetipsecprotobynum()\fR
 functions in conjunction with \fBgetipsecalgbyname\fR(3NSL) and
 \fBgetipsecalgbynum\fR(3NSL) to obtain information about the supported IPsec
@@ -113,7 +113,7 @@ Interface Stability	Evolving
 .SH SEE ALSO
 .sp
 .LP
-\fBipsecalgs\fR(1M), \fBgetipsecalgbyname\fR(3NSL),
+\fBipsecalgs\fR(8), \fBgetipsecalgbyname\fR(3NSL),
 \fBgetipsecalgbyname\fR(3NSL), \fBattributes\fR(5)
 .sp
 .LP

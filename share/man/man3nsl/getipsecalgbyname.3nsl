@@ -35,7 +35,7 @@ entries
 .LP
 Use the \fBgetipsecalgbyname()\fR, \fBgetipsecalgbynum()\fR,
 \fBfreeipsecalgent()\fR functions to obtain the IPsec algorithm mappings  that
-are defined by \fBipsecalgs\fR(1M). The IPsec algorithms and associated
+are defined by \fBipsecalgs\fR(8). The IPsec algorithms and associated
 protocol name spaces are defined by \fIRFC 2407\fR.
 .sp
 .LP
@@ -195,7 +195,7 @@ Interface Stability	Evolving
 .SH SEE ALSO
 .sp
 .LP
-\fBcryptoadm\fR(1M), \fBipsecalgs\fR(1M), \fBgetipsecprotobyname\fR(3NSL),
+\fBcryptoadm\fR(8), \fBipsecalgs\fR(8), \fBgetipsecprotobyname\fR(3NSL),
 \fBgetipsecprotobyname\fR(3NSL), \fBattributes\fR(5)
 .sp
 .LP

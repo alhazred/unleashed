@@ -216,7 +216,7 @@ processes in the \fBSYS\fR class that are included in a specified set of
 processes are disregarded by  \fBpriocntl()\fR. For example, an \fIidtype\fR of
 \fBP_UID\fR and an \fIid\fR value of 0 would specify all processes with a user
 ID of 0 except processes in the \fBSYS\fR class and (if changing the parameters
-using \fBPC_SETPARMS\fR or \fBPC_SETXPARMS\fR) the  \fBinit\fR(1M) process.
+using \fBPC_SETPARMS\fR or \fBPC_SETXPARMS\fR) the  \fBinit\fR(8) process.
 .sp
 .LP
 The \fBinit\fR process is a special case. For a \fBpriocntl()\fR call to change
@@ -316,7 +316,7 @@ Available \fBpriocntl()\fR commands are:
 .ad
 .RS 16n
 This command provides functionality needed for the implementation of the
-\fBdispadmin\fR(1M) utility. It is not intended for general use by other
+\fBdispadmin\fR(8) utility. It is not intended for general use by other
 applications.
 .RE
 
@@ -1496,7 +1496,7 @@ None of the specified LWPs exist.
 .SH SEE ALSO
 .sp
 .LP
-\fBpriocntl\fR(1), \fBdispadmin\fR(1M), \fBinit\fR(1M), \fBexec\fR(2),
+\fBpriocntl\fR(1), \fBdispadmin\fR(8), \fBinit\fR(8), \fBexec\fR(2),
 \fBfork\fR(2), \fBnice\fR(2), \fBpriocntlset\fR(2), \fBfx_dptbl\fR(4),
 \fBprocess\fR(4), \fBrt_dptbl\fR(4), \fBprivileges\fR(5)
 .sp

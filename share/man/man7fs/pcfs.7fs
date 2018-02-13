@@ -36,7 +36,7 @@ directory.
 .sp
 .LP
 \fBpcfs\fR file systems can be force umounted using the \fB-f\fR argument to
-\fBumount\fR(1M).
+\fBumount\fR(8).
 .sp
 .LP
 The \fBpcfs\fR file system contained on the block special file identified by
@@ -44,7 +44,7 @@ The \fBpcfs\fR file system contained on the block special file identified by
 \fIdir\fR are pointers to pathnames. \fImflag\fR specifies the \fBmount\fR
 options. The \fBMS_DATA\fR bit in \fImflag\fR must be set. Mount options can be
 passed to \fBpcfs\fR  using the  optptr and optlen  arguments.  See
-\fBmount_pcfs\fR(1M) for a list of mount options supported by \fBpcfs\fR.
+\fBmount_pcfs\fR(8) for a list of mount options supported by \fBpcfs\fR.
 .sp
 .LP
 Because FAT formatted media can record file timestamps between January 1st 1980
@@ -56,7 +56,7 @@ prevent this, the default behaviour of \fBpcfs\fR has been modified to clamp
 post-2038 timestamps to the latest possible value for a 32bit \fBtime_t\fR,
 which is January 19th 2038, 03:14:06 UTC when setting and retrieving file
 timestamps. You can override this behavior using the \fBnoclamptime\fR mount
-option, as described in \fBmount_pcfs\fR(1M).
+option, as described in \fBmount_pcfs\fR(8).
 .sp
 .LP
 Timestamps on FAT formatted media are recorded in local time. If the recording
@@ -65,7 +65,7 @@ timestamps shown on the two systems for the same medium might vary. To correct
 this,  \fBpcfs\fR  provides a  timezone mount option to force  interpretation
 of timestamps as read from a FAT formatted medium in a given  timezone (that of
 the recorder). By default, the local timezone of the  receiver is used. See
-\fBmount_pcfs\fR(1M) for details.
+\fBmount_pcfs\fR(8) for details.
 .sp
 .LP
 The root directory of a FAT formatted medium has no timestamps and \fBpcfs\fR
@@ -442,8 +442,8 @@ for the current locale setting: LANG, LC_ALL, LC_CTYPE, and LC_COLLATE.
 .sp
 .LP
 \fBchgrp\fR(1), \fBchown\fR(1), \fBdos2unix\fR(1), \fBeject\fR(1),
-\fBfdformat\fR(1), \fBunix2dos\fR(1), \fBvolcheck\fR(1), \fBmount\fR(1M),
-\fBmount_pcfs\fR(1M), \fBumount\fR(1M), \fBctime\fR(3C), \fBvfstab\fR(4),
+\fBfdformat\fR(1), \fBunix2dos\fR(1), \fBvolcheck\fR(1), \fBmount\fR(8),
+\fBmount_pcfs\fR(8), \fBumount\fR(8), \fBctime\fR(3C), \fBvfstab\fR(4),
 \fBenviron\fR(5), \fBpcmem\fR(7D)
 .SH WARNINGS
 .sp

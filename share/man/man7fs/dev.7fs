@@ -16,13 +16,13 @@ is mounted during boot on \fB/dev\fR.
 .LP
 A subdirectory under \fB/dev\fR may have unique operational semantics. Most of
 the common device names under \fB/dev\fR are created automatically by
-\fBdevfsadm\fR(1M).  Others, such as \fB/dev/pts\fR, are dynamic and reflect
+\fBdevfsadm\fR(8).  Others, such as \fB/dev/pts\fR, are dynamic and reflect
 the operational state of the system. You can manually generate device names for
-newly attached hardware by invoking \fBdevfsadm\fR(1M) or implicitly, by
+newly attached hardware by invoking \fBdevfsadm\fR(8) or implicitly, by
 indirectly causing a lookup or readdir operation in the filesystem to occur.
 For example, you can discover a disk that was attached when the system was
 powered down (and generate a name for that device) by invoking
-\fBformat\fR(1M)).
+\fBformat\fR(8)).
 .SH FILES
 .sp
 .ne 2
@@ -36,7 +36,7 @@ Mount point for the \fB/dev\fR filesystem in the global zone.
 .SH SEE ALSO
 .sp
 .LP
-\fBdevfsadm\fR(1M), \fBformat\fR(1M), \fBdevfs\fR(7FS)
+\fBdevfsadm\fR(8), \fBformat\fR(8), \fBdevfs\fR(7FS)
 .SH NOTES
 .sp
 .LP

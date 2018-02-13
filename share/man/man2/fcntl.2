@@ -1124,7 +1124,7 @@ MT-Level	Async-Signal Safe
 
 .SH SEE ALSO
 .LP
-\fBlockd\fR(1M), \fBchmod\fR(2), \fBclose\fR(2), \fBcreat\fR(2), \fBdup\fR(2),
+\fBlockd\fR(8), \fBchmod\fR(2), \fBclose\fR(2), \fBcreat\fR(2), \fBdup\fR(2),
 \fBexec\fR(2), \fBfork\fR(2), \fBmmap\fR(2), \fBopen\fR(2), \fBpipe\fR(2),
 \fBread\fR(2), \fBsigaction\fR(2), \fBwrite\fR(2), \fBdup2\fR(3C),
 \fBflock\fR(3C), \fBlockf\fR(3C), \fBfcntl.h\fR(3HEAD), \fBattributes\fR(5),
@@ -1161,6 +1161,6 @@ meaningful.
 .sp
 .LP
 If the file server crashes and has to be rebooted, the lock manager (see
-\fBlockd\fR(1M)) attempts to recover all locks that were associated with that
+\fBlockd\fR(8)) attempts to recover all locks that were associated with that
 server. If a lock cannot be reclaimed, the process that held the lock is issued
 a \fBSIGLOST\fR signal.

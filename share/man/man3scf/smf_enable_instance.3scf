@@ -71,7 +71,7 @@ flags are to be use.
 .LP
 The \fBsmf_disable_instance()\fR function places the service instance specified
 by \fIinstance\fR FMRI in the disabled state and triggers the stop method (see
-\fBsvc.startd\fR(1M)). If \fIflags\fR is \fBSMF_TEMPORARY\fR, the disabling of
+\fBsvc.startd\fR(8)). If \fIflags\fR is \fBSMF_TEMPORARY\fR, the disabling of
 the service instance is a temporary change, lasting only for the lifetime of
 the current system instance. The \fIflags\fR argument is set to \fB0\fR if no
 flags are to be use.
@@ -261,5 +261,5 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBsvc.startd\fR(1M), \fBlibscf\fR(3LIB), \fBscf_error\fR(3SCF),
+\fBsvc.startd\fR(8), \fBlibscf\fR(3LIB), \fBscf_error\fR(3SCF),
 \fBattributes\fR(5), \fBsmf_security\fR(5)

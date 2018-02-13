@@ -231,7 +231,7 @@ quota-related structure/function definitions and defines
 .SH SEE ALSO
 .sp
 .LP
-\fBquota\fR(1M), \fBquotacheck\fR(1M), \fBquotaon\fR(1M), \fBgetrlimit\fR(2),
+\fBquota\fR(8), \fBquotacheck\fR(8), \fBquotaon\fR(8), \fBgetrlimit\fR(2),
 \fBmount\fR(2)
 .SH BUGS
 .sp

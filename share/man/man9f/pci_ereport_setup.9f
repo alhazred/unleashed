@@ -163,7 +163,7 @@ Error report events are generated automatically if \fBfme_flag\fR is set to
 \fBDDI_FM_ERR_UNEXPECTED\fR and the corresponding error bits are set in the
 various \fBPCI\fR, \fBPCI/X\fR or \fBPCI Express Bus\fR error registers of the
 device associated with \fIdip\fR. The generated error report events are posted
-to the Solaris Fault Manager, \fBfmd\fR(1M), for diagnosis.
+to the Solaris Fault Manager, \fBfmd\fR(8), for diagnosis.
 .sp
 .LP
 If the status argument is non-null, \fBpci_ereport_post()\fR saves the contents
@@ -276,6 +276,6 @@ Interface Stability	Committed
 
 .SH SEE ALSO
 .LP
-\fBfmd\fR(1M), \fBattributes\fR(5), \fBddi_fm_handler_register\fR(9F),
+\fBfmd\fR(8), \fBattributes\fR(5), \fBddi_fm_handler_register\fR(9F),
 \fBddi_fm_init\fR(9F), \fBddi_peek\fR(9F), \fBddi_poke\fR(9F),
 \fBddi_fm_error\fR(9S)

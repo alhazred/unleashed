@@ -48,7 +48,7 @@ dir path=usr/share
 dir path=usr/share/lib
 dir path=usr/share/lib/ldif group=sys
 dir path=usr/share/man
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 dir path=usr/share/man/man4
 dir path=usr/share/man/man5
 dir path=var group=sys
@@ -87,17 +87,17 @@ file path=usr/sbin/kdb5_util mode=0555
 file path=usr/sbin/kdcmgr mode=0555
 file path=usr/sbin/kproplog mode=0555
 file path=usr/share/lib/ldif/kerberos.ldif
-file path=usr/share/man/man1m/k5srvutil.1m
-file path=usr/share/man/man1m/kadmin.1m
-file path=usr/share/man/man1m/kadmind.1m
-file path=usr/share/man/man1m/kclient.1m
-file path=usr/share/man/man1m/kdb5_ldap_util.1m
-file path=usr/share/man/man1m/kdb5_util.1m
-file path=usr/share/man/man1m/kdcmgr.1m
-file path=usr/share/man/man1m/kprop.1m
-file path=usr/share/man/man1m/kpropd.1m
-file path=usr/share/man/man1m/kproplog.1m
-file path=usr/share/man/man1m/krb5kdc.1m
+file path=usr/share/man/man8/k5srvutil.8
+file path=usr/share/man/man8/kadmin.8
+file path=usr/share/man/man8/kadmind.8
+file path=usr/share/man/man8/kclient.8
+file path=usr/share/man/man8/kdb5_ldap_util.8
+file path=usr/share/man/man8/kdb5_util.8
+file path=usr/share/man/man8/kdcmgr.8
+file path=usr/share/man/man8/kprop.8
+file path=usr/share/man/man8/kpropd.8
+file path=usr/share/man/man8/kproplog.8
+file path=usr/share/man/man8/krb5kdc.8
 file path=usr/share/man/man4/kadm5.acl.4
 file path=usr/share/man/man4/kdc.conf.4
 file path=usr/share/man/man4/krb5.conf.4

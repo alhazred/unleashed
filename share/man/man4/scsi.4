@@ -41,8 +41,8 @@ on each child. The compatible property is an ordered array of strings, each
 string is a compatible \fBform\fR. High precedence forms are defined first. For
 a particular device, the highest precedence form that has an established driver
 alias selects the driver for the device. Driver associations to compatible
-forms, called aliases, are administered by way of \fBadd_drv\fR(1M),
-\fBupdate_drv\fR(1M), and \fBrem_drv\fR(1M) utilities.
+forms, called aliases, are administered by way of \fBadd_drv\fR(8),
+\fBupdate_drv\fR(8), and \fBrem_drv\fR(8) utilities.
 .sp
 .LP
 The forms for self-identifying SCSI target devices are derived from the SCSI
@@ -328,7 +328,7 @@ Interface Stability	Committed
 .SH SEE ALSO
 .sp
 .LP
-\fBadd_drv\fR(1M), \fBrem_drv\fR(1M), \fBupdate_drv\fR(1M),
+\fBadd_drv\fR(8), \fBrem_drv\fR(8), \fBupdate_drv\fR(8),
 \fBdriver.conf\fR(4), \fBattributes\fR(5), \fBfcp\fR(7D), \fBifp\fR(7D),
 \fBsata\fR(7D), \fBscsi_vhci\fR(7D), \fBsd\fR(7D), \fBsf\fR(7D), \fBst\fR(7D),
 \fBscsi_ifgetcap\fR(9F), \fBscsi_init_pkt\fR(9F), \fBscsi_transport\fR(9F)

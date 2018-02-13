@@ -25,7 +25,7 @@ dir path=usr group=sys
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 dir path=usr/sbin
-dir path=usr/share/man/man1m
+dir path=usr/share/man/man8
 driver name=ipd perms="* 0600 root sys"
 file path=kernel/drv/ipd group=sys
 file path=kernel/drv/ipd.conf group=sys
@@ -34,7 +34,7 @@ file path=usr/include/sys/ipd.h
 file path=usr/lib/$(ARCH64)/libipd.so.1
 file path=usr/lib/libipd.so.1
 file path=usr/sbin/ipdadm mode=0555
-file path=usr/share/man/man1m/ipdadm.1m
+file path=usr/share/man/man8/ipdadm.8
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libipd.so target=libipd.so.1

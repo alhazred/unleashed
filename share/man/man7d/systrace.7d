@@ -39,7 +39,7 @@ Interface Stability	Private
 .SH SEE ALSO
 .sp
 .LP
-\fBdtrace\fR(1M), \fBattributes\fR(5), \fBdtrace\fR(7D)
+\fBdtrace\fR(8), \fBattributes\fR(5), \fBdtrace\fR(7D)
 .sp
 .LP
 \fISolaris Dynamic Tracing Guide\fR

@@ -51,7 +51,7 @@ T}
 .SH SEE ALSO
 .sp
 .LP
-\fBcvcd\fR(1M), \fBattributes\fR(5), \fBconsole\fR(7D), \fBcvcredir\fR(7D),
+\fBcvcd\fR(8), \fBattributes\fR(5), \fBconsole\fR(7D), \fBcvcredir\fR(7D),
 \fBwscons\fR(7D)
 .sp
 .LP

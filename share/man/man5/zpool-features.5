@@ -23,7 +23,7 @@ zpool\-features \- ZFS pool feature descriptions
 ZFS pool on\-disk format versions are specified via "features" which replace
 the old on\-disk format numbers (the last supported on\-disk format number is
 28). To enable a feature on a pool use the \fBupgrade\fR subcommand of the
-\fBzpool\fR(1M) command, or set the \fBfeature@\fR\fIfeature_name\fR property
+\fBzpool\fR(8) command, or set the \fBfeature@\fR\fIfeature_name\fR property
 to \fBenabled\fR.
 .sp
 .LP
@@ -100,7 +100,7 @@ Some features may make on\-disk format changes that do not interfere with other
 software's ability to read from the pool. These features are referred to as
 "read\-only compatible". If all unsupported features on a pool are read\-only
 compatible, the pool can be imported in read\-only mode by setting the
-\fBreadonly\fR property during import (see \fBzpool\fR(1M) for details on
+\fBreadonly\fR property during import (see \fBzpool\fR(8) for details on
 importing pools).
 .SS "Unsupported features"
 .LP
@@ -237,7 +237,7 @@ giving approximately 10% better compression ratio.
 
 When the \fBlz4_compress\fR feature is set to \fBenabled\fR, the
 administrator can turn on \fBlz4\fR compression on any dataset on the
-pool using the \fBzfs\fR(1M) command. Also, all newly written metadata
+pool using the \fBzfs\fR(8) command. Also, all newly written metadata
 will be compressed with \fBlz4\fR algorithm. Since this feature is not
 read-only compatible, this operation will render the pool unimportable
 on systems without support for the \fBlz4_compress\fR feature. Booting
@@ -285,7 +285,7 @@ of multiple vdevs.  Those vdevs may be arranged in any mirrored or raidz
 configuration.
 
 When the \fBmulti_vdev_crash_dump\fR feature is set to \fBenabled\fR,
-the administrator can use the \fBdumpadm\fR(1M) command to configure a
+the administrator can use the \fBdumpadm\fR(8) command to configure a
 dump device on a pool comprised of multiple vdevs.
 .RE
 
@@ -468,7 +468,7 @@ cannot for whatever reason utilize the faster \fBskein\fR and
 
 When the \fBsha512\fR feature is set to \fBenabled\fR, the administrator
 can turn on the \fBsha512\fR checksum on any dataset using the
-\fBzfs set checksum=sha512\fR(1M) command.  This feature becomes
+\fBzfs set checksum=sha512\fR(8) command.  This feature becomes
 \fBactive\fR once a \fBchecksum\fR property has been set to \fBsha512\fR,
 and will return to being \fBenabled\fR once all filesystems that have
 ever had their checksum set to \fBsha512\fR are destroyed.
@@ -502,7 +502,7 @@ given pool, preventing hash collision attacks on systems with dedup.
 
 When the \fBskein\fR feature is set to \fBenabled\fR, the administrator
 can turn on the \fBskein\fR checksum on any dataset using the
-\fBzfs set checksum=skein\fR(1M) command.  This feature becomes
+\fBzfs set checksum=skein\fR(8) command.  This feature becomes
 \fBactive\fR once a \fBchecksum\fR property has been set to \fBskein\fR,
 and will return to being \fBenabled\fR once all filesystems that have
 ever had their checksum set to \fBskein\fR are destroyed.
@@ -544,7 +544,7 @@ pool.
 
 When the \fBedonr\fR feature is set to \fBenabled\fR, the administrator
 can turn on the \fBedonr\fR checksum on any dataset using the
-\fBzfs set checksum=edonr\fR(1M) command.  This feature becomes
+\fBzfs set checksum=edonr\fR(8) command.  This feature becomes
 \fBactive\fR once a \fBchecksum\fR property has been set to \fBedonr\fR,
 and will return to being \fBenabled\fR once all filesystems that have
 ever had their checksum set to \fBedonr\fR are destroyed.
@@ -554,4 +554,4 @@ Booting off of pools using \fBedonr\fR is \fBNOT\fR supported
 error.
 
 .SH "SEE ALSO"
-\fBzpool\fR(1M)
+\fBzpool\fR(8)

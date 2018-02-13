@@ -24,7 +24,7 @@ Network groups are stored in a network information service, such as
 .sp
 .LP
 This manual page describes the format for a file that is used to supply input
-to a program such as \fBldapaddent\fR(1M) for LDAP or \fBmakedbm\fR(1M) for
+to a program such as \fBldapaddent\fR(8) for LDAP or \fBmakedbm\fR(8) for
 NIS. These programs build maps or tables used by
 their corresponding network information services.
 .sp
@@ -101,7 +101,7 @@ is equivalent to
 .sp
 .LP
 You can also use netgroups to control \fBNFS\fR mount access (see
-\fBshare_nfs\fR(1M)) and to control remote login and shell access (see
+\fBshare_nfs\fR(8)) and to control remote login and shell access (see
 \fBhosts.equiv\fR(4)). You can also use them to control local login access (see
 \fBpasswd\fR(4), \fBshadow\fR(4), and \fBcompat\fR in \fBnsswitch.conf\fR(4)).
 .sp
@@ -129,7 +129,7 @@ basis of host and user membership in separate netgroups.
 .ad
 .RS 17n
 Used by a network information service's utility to construct a map or table
-that contains \fBnetgroup\fR information. For example, \fBldapaddent\fR(1M)
+that contains \fBnetgroup\fR information. For example, \fBldapaddent\fR(8)
 uses \fB/etc/netgroup\fR to construct an LDAP container.
 .RE
 
@@ -141,8 +141,8 @@ only used to construct a map or table for the network information service. It
 is never consulted directly.
 .SH SEE ALSO
 .LP
-\fBldapaddent\fR(1M), \fBmakedbm\fR(1M),
-\fBshare_nfs\fR(1M), \fBinnetgr\fR(3C), \fBhosts\fR(4), \fBhosts.equiv\fR(4),
+\fBldapaddent\fR(8), \fBmakedbm\fR(8),
+\fBshare_nfs\fR(8), \fBinnetgr\fR(3C), \fBhosts\fR(4), \fBhosts.equiv\fR(4),
 \fBnsswitch.conf\fR(4), \fBpasswd\fR(4), \fBshadow\fR(4)
 .SH NOTES
 .LP
