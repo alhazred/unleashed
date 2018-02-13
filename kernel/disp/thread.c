@@ -52,7 +52,6 @@
 #include <sys/poll.h>
 #include <sys/vtrace.h>
 #include <sys/callb.h>
-#include <c2/audit.h>
 #include <sys/tnf.h>
 #include <sys/sobject.h>
 #include <sys/cpupart.h>
@@ -373,8 +372,6 @@ thread_create(
 		stksize &= -PTR24_ALIGN;	/* make thread aligned */
 		t = (kthread_t *)(stk + stksize);
 		bzero(t, sizeof (kthread_t));
-		if (audit_active)
-			audit_thread_create(t);
 		t->t_stk = stk + stksize;
 		t->t_stkbase = stk;
 #else	/* stack grows to larger addresses */
@@ -390,8 +387,6 @@ thread_create(
 		t = kmem_cache_alloc(thread_cache, KM_SLEEP);
 		bzero(t, sizeof (kthread_t));
 		ASSERT(((uintptr_t)t & (PTR24_ALIGN - 1)) == 0);
-		if (audit_active)
-			audit_thread_create(t);
 		/*
 		 * Initialize t_stk to the kernel stack pointer to use
 		 * upon entry to the kernel
@@ -740,8 +735,6 @@ thread_free(kthread_t *t)
 		kmem_free(t->t_pdmsg, strlen(t->t_pdmsg) + 1);
 		t->t_pdmsg = NULL;
 	}
-	if (audit_active)
-		audit_thread_free(t);
 #ifndef NPROBE
 	if (t->t_tnf_tpdp)
 		tnf_thread_free(t);

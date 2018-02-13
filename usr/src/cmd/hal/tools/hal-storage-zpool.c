@@ -23,8 +23,6 @@
 #include <sys/types.h>
 #include <wait.h>
 #include <unistd.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 
 #include <libhal.h>
 #include <libhal-storage.h>
@@ -51,52 +49,6 @@ unknown_zpool_error (const char *detail)
 }
 
 void
-audit_pool(const adt_export_data_t *imported_state, au_event_t event_id,
-    int result, const char *auth_used, const char *pool, const char *device)
-{
-	adt_session_data_t      *ah;
-	adt_event_data_t        *event;
-
-	if (adt_start_session(&ah, imported_state, 0) != 0) {
-        	printf ("adt_start_session failed %d\n", errno);
-        	return;
-	}
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-        	printf ("adt_alloc_event(ADT_attach)\n", errno);
-        	return;
-	}
-
-	switch (event_id) {
-	case ADT_pool_export:
-		event->adt_pool_export.auth_used = (char *)auth_used;
-		event->adt_pool_export.pool = (char *)pool;
-		event->adt_pool_export.device = (char *)device;
-		break;
-	case ADT_pool_import:
-		event->adt_pool_import.auth_used = (char *)auth_used;
-		event->adt_pool_import.pool = (char *)pool;
-		event->adt_pool_import.device = (char *)device;
-		break;
-	default:
-		goto out;
-	}
-
-	if (result == 0) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-			printf ("adt_put_event(%d, success)\n", event_id);
-		}
-	} else {
-		if (adt_put_event(event, ADT_FAILURE, result) != 0) {
-			printf ("adt_put_event(%d, failure)\n", event_id);
-		}
-	}
-out:
-	adt_free_event(event);
-	(void) adt_end_session(ah);
-}
-
-
-void
 handle_zpool (LibHalContext *hal_ctx, 
 #ifdef HAVE_POLKIT
 	      LibPolKitContext *pol_ctx, 
@@ -111,9 +63,6 @@ handle_zpool (LibHalContext *hal_ctx,
 	int exit_status = 0;
 	char *args[10];
 	int na;
-	adt_export_data_t *adt_data;
-	size_t adt_data_size;
-	au_event_t event_id;
 
 #ifdef DEBUG
 	printf ("subcmd                           = %s\n", subcmd);
@@ -147,15 +96,6 @@ handle_zpool (LibHalContext *hal_ctx,
 			   &err)) {
 		printf ("Cannot execute zpool %s\n", subcmd);
 		unknown_zpool_error ("Cannot spawn zpool");
-	}
-
-	if ((adt_data = get_audit_export_data (system_bus,
-	    invoked_by_syscon_name, &adt_data_size)) != NULL) {
-		event_id = (strcmp (subcmd, "import") == 0) ?
-		    ADT_pool_import : ADT_pool_export;
-		audit_pool (adt_data, event_id, WEXITSTATUS(exit_status),
-		    "solaris.device.mount.removable", pool, device);
-		free (adt_data);
 	}
 
 	if (exit_status != 0) {

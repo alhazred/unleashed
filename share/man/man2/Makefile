@@ -13,8 +13,6 @@ MAN = Intro.2 \
       acl.2 \
       adjtime.2 \
       alarm.2 \
-      audit.2 \
-      auditon.2 \
       brk.2 \
       chdir.2 \
       chmod.2 \
@@ -29,8 +27,6 @@ MAN = Intro.2 \
       fork.2 \
       fpathconf.2 \
       getacct.2 \
-      getaudit.2 \
-      getauid.2 \
       getcontext.2 \
       getdents.2 \
       getgroups.2 \

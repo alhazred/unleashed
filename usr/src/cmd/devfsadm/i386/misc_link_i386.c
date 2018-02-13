@@ -32,7 +32,6 @@
 #include <limits.h>
 #include <ctype.h>
 #include <sys/mc_amd.h>
-#include <bsm/devalloc.h>
 
 static int lp(di_minor_t minor, di_node_t node);
 static int serial_dialout(di_minor_t minor, di_node_t node);

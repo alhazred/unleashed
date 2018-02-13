@@ -32,6 +32,7 @@
 #include <sys/vnode.h>
 #include <sys/vfs.h>
 #include <sys/stat.h>
+#include <sys/fcntl.h>
 #include <sys/errno.h>
 #include <sys/kmem.h>
 #include <sys/user.h>
@@ -44,7 +45,6 @@
 #include <sys/kobj.h>
 #include <sys/msg.h>
 #include <sys/devpolicy.h>
-#include <c2/audit.h>
 #include <sys/varargs.h>
 #include <sys/klpd.h>
 #include <sys/modctl.h>
@@ -374,8 +374,6 @@ static void
 priv_policy_err(const cred_t *cr, int priv, boolean_t allzone, const char *msg)
 {
 
-	if (AU_AUDITING())
-		audit_priv(priv, allzone ? ZONEPRIVS(cr) : NULL, 0);
 	DTRACE_PROBE2(priv__err, int, priv, boolean_t, allzone);
 
 	if (priv_debug || (CR_FLAGS(cr) & PRIV_DEBUG) ||
@@ -405,14 +403,10 @@ priv_policy_ap(const cred_t *cr, int priv, boolean_t allzone, int err,
 		    !PRIV_ISMEMBER(priv_basic, priv)) &&
 		    !servicing_interrupt()) {
 			PTOU(curproc)->u_acflag |= ASU;
-			if (AU_AUDITING())
-				audit_priv(priv,
-				    allzone ? ZONEPRIVS(cr) : NULL, 1);
 		}
 		err = 0;
 		DTRACE_PROBE2(priv__ok, int, priv, boolean_t, allzone);
 	} else if (!servicing_interrupt()) {
-		/* Failure audited in this procedure */
 		priv_policy_err(cr, priv, allzone, msg);
 	}
 	return (err);
@@ -448,12 +442,6 @@ priv_policy_choice(const cred_t *cr, int priv, boolean_t allzone)
 	boolean_t res = HAS_PRIVILEGE(cr, priv) &&
 	    (!allzone || HAS_ALLZONEPRIVS(cr));
 
-	/* Audit success only */
-	if (res && AU_AUDITING() &&
-	    (allzone || priv == PRIV_ALL || !PRIV_ISMEMBER(priv_basic, priv)) &&
-	    !servicing_interrupt()) {
-		audit_priv(priv, allzone ? ZONEPRIVS(cr) : NULL, 1);
-	}
 	if (res) {
 		DTRACE_PROBE2(priv__ok, int, priv, boolean_t, allzone);
 	} else {
@@ -512,8 +500,6 @@ secpolicy_require_set(const cred_t *cr, const priv_set_t *req,
 	priv_inverse(&pset);		/* all non present privileges */
 	priv_intersect(req, &pset);	/* the actual missing privs */
 
-	if (AU_AUDITING())
-		audit_priv(PRIV_NONE, &pset, 0);
 	/*
 	 * Privilege debugging; special case "one privilege in set".
 	 */
@@ -995,8 +981,8 @@ secpolicy_vnode_access2(const cred_t *cr, vnode_t *vp, uid_t owner,
 /*
  * This is a special routine for ZFS; it is used to determine whether
  * any of the privileges in effect allow any form of access to the
- * file.  There's no reason to audit this or any reason to record
- * this.  More work is needed to do the "KPLD" stuff.
+ * file.  There's no reason to record this.  More work is needed to do the
+ * "KPLD" stuff.
  */
 int
 secpolicy_vnode_any_access(const cred_t *cr, vnode_t *vp, uid_t owner)
@@ -1551,46 +1537,6 @@ secpolicy_rsm_access(const cred_t *cr, uid_t owner, mode_t mode)
 }
 
 /*
- * Audit configuration.
- */
-int
-secpolicy_audit_config(const cred_t *cr)
-{
-	return (PRIV_POLICY(cr, PRIV_SYS_AUDIT, B_FALSE, EPERM, NULL));
-}
-
-/*
- * Audit record generation.
- */
-int
-secpolicy_audit_modify(const cred_t *cr)
-{
-	return (PRIV_POLICY(cr, PRIV_PROC_AUDIT, B_FALSE, EPERM, NULL));
-}
-
-/*
- * Get audit attributes.
- * Either PRIV_SYS_AUDIT or PRIV_PROC_AUDIT required; report the
- * "Least" of the two privileges on error.
- */
-int
-secpolicy_audit_getattr(const cred_t *cr, boolean_t checkonly)
-{
-	int priv;
-
-	if (PRIV_POLICY_ONLY(cr, PRIV_SYS_AUDIT, B_FALSE))
-		priv = PRIV_SYS_AUDIT;
-	else
-		priv = PRIV_PROC_AUDIT;
-
-	if (checkonly)
-		return (!PRIV_POLICY_ONLY(cr, priv, B_FALSE));
-	else
-		return (PRIV_POLICY(cr, priv, B_FALSE, EPERM, NULL));
-}
-
-
-/*
  * Locking physical memory
  */
 int
@@ -1820,7 +1766,7 @@ secpolicy_clock_highres(const cred_t *cr)
 
 /*
  * drv_priv() is documented as callable from interrupt context, not that
- * anyone ever does, but still.  No debugging or auditing can be done when
+ * anyone ever does, but still.  No debugging can be done when
  * it is called from interrupt context.
  * returns 0 on succes, EPERM on failure.
  */
@@ -2313,7 +2259,7 @@ secpolicy_contract_observer(const cred_t *cr, struct contract *ct)
  * secpolicy_contract_observer_choice
  *
  * Determine if the subject may observe any contract's events.  Just
- * tests privilege and audits on success.
+ * tests privilege.
  */
 boolean_t
 secpolicy_contract_observer_choice(const cred_t *cr)
@@ -2338,7 +2284,7 @@ secpolicy_contract_event(const cred_t *cr)
  *
  * Determine if the subject may retain contract events in its critical
  * set when a change in other terms would normally require a change in
- * the critical set.  Just tests privilege and audits on success.
+ * the critical set.  Just tests privilege.
  */
 boolean_t
 secpolicy_contract_event_choice(const cred_t *cr)
@@ -2485,7 +2431,7 @@ secpolicy_require_privs(const cred_t *cr, const priv_set_t *nset)
  *
  * Determine if the cred_t has PRIV_SYS_SMB privilege, indicating
  * that it has permission to access the smbsrv kernel driver.
- * PRIV_POLICY checks the privilege and audits the check.
+ * PRIV_POLICY checks the privilege.
  *
  * Returns:
  * 0       Driver access is allowed.
@@ -2505,7 +2451,7 @@ secpolicy_smb(const cred_t *cr)
  * PRIV_FILE_DAC_SEARCH, PRIV_FILE_DAC_READ - file access
  * PRIV_FILE_FLAG_SET - set extended system attributes
  *
- * PRIV_POLICY checks the privilege and audits the check.
+ * PRIV_POLICY checks the privilege.
  *
  * Returns:
  * 0      file access for virus scanning allowed.

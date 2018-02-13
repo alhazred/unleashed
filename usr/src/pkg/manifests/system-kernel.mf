@@ -681,7 +681,6 @@ file path=kernel/strmod/rpcmod group=sys mode=0755
 file path=kernel/strmod/timod group=sys mode=0755
 file path=kernel/strmod/tirdwr group=sys mode=0755
 file path=kernel/strmod/ttcompat group=sys mode=0755
-file path=kernel/sys/c2audit group=sys mode=0755
 file path=kernel/sys/doorfs group=sys mode=0755
 file path=kernel/sys/inst_sync group=sys mode=0755
 file path=kernel/sys/kaio group=sys mode=0755

@@ -37,7 +37,6 @@
 #include <sys/cmn_err.h>
 #include <sys/socket.h>
 #include <sys/strsubr.h>
-#include <c2/audit.h>
 
 /*
  * Getpeerucred system call implementation.
@@ -131,7 +130,6 @@ ucred_get(pid_t pid, void *ubuf)
 	cred_t *pcr;
 	int err;
 	struct ucred_s *uc;
-	uint32_t auditing = AU_AUDITING();
 
 	if (pid == P_MYID || pid == curproc->p_pid) {
 		pcr = CRED();
@@ -143,9 +141,6 @@ ucred_get(pid_t pid, void *ubuf)
 		if (pid < 0)
 			return (set_errno(EINVAL));
 
-		if (auditing)
-			updcred = cralloc();
-
 		mutex_enter(&pidlock);
 		p = prfind(pid);
 
@@ -155,13 +150,6 @@ ucred_get(pid_t pid, void *ubuf)
 				crfree(updcred);
 			return (set_errno(ESRCH));
 		}
-
-		/*
-		 * Assure that audit data in cred is up-to-date.
-		 * updcred will be used or freed.
-		 */
-		if (auditing)
-			audit_update_context(p, updcred);
 
 		err = priv_proc_cred_perm(CRED(), p, &pcr, VREAD);
 		mutex_exit(&pidlock);

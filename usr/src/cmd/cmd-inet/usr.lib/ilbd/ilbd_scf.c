@@ -1447,13 +1447,6 @@ ilbd_scf_instance_walk_pg(scf_instance_t *inst,
 				 * create a servergroup is two-step operation.
 				 * 1. create an empty servergroup.
 				 * 2. add server(s) to the group.
-				 *
-				 * since we are here from:
-				 * main_loop()->ilbd_read_config()->
-				 * ilbd_walk_sg_pgs()
-				 * there is no cli to send. So in this
-				 * path auditing will skip the
-				 * adt_set_from_ucred() check
 				 */
 				if (data.sg_data->sg_srvcount > 0) {
 					ret = ilbd_add_server_to_group(

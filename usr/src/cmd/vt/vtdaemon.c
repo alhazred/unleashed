@@ -130,9 +130,6 @@
 #include <syslog.h>
 #include <deflt.h>
 
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
-
 #include <alloca.h>
 #include <assert.h>
 #include <errno.h>
@@ -192,12 +189,7 @@ static mutex_t	vt_mutex = DEFAULTMUTEX;
 static boolean_t vt_hotkeys_pending = B_FALSE;
 static boolean_t vt_auth_doing = B_FALSE;
 
-static adt_session_data_t **vt_ah_array = NULL;
 static int vtnodecount = 0;
-
-static int vt_audit_start(adt_session_data_t **, pid_t);
-static void vt_audit_event(adt_session_data_t *, au_event_t, int);
-static void vt_check_source_audit(void);
 
 static int
 vt_setup_signal(int signo, int mask)
@@ -685,7 +677,6 @@ vt_do_auth(int target_vt)
 	int		chpasswd_tries;
 	struct pam_conv pam_conv = {vt_conv, NULL};
 	pid_t		pid;
-	adt_session_data_t	*ah;
 
 	vt_read_utx(target_vt, &pid, user_name);
 
@@ -709,11 +700,6 @@ vt_do_auth(int target_vt)
 	vt_auth_doing = B_TRUE;
 	vt_hotkeys_pending = B_FALSE;
 	(void) mutex_unlock(&vt_mutex);
-
-	/*
-	 * Fetch audit handle.
-	 */
-	ah = vt_ah_array[target_vt - 1];
 
 	if (vt_default())
 		pam_flag = PAM_DISALLOW_NULL_AUTHTOK;
@@ -772,20 +758,12 @@ vt_do_auth(int target_vt)
 					break;
 				}
 				(void) mutex_unlock(&vt_mutex);
-
-				vt_audit_event(ah, ADT_passwd, err);
 			}
 		}
 
-		/*
-		 * Only audit failed unlock here, successful unlock
-		 * will be audited after switching to target vt.
-		 */
 		if (err != PAM_SUCCESS) {
 			(void) fprintf(stdout, "%s",
 			    pam_strerror(vt_pamh, err));
-
-			vt_audit_event(ah, ADT_screenunlock, err);
 		}
 
 		(void) mutex_lock(&vt_mutex);
@@ -803,14 +781,6 @@ vt_do_auth(int target_vt)
 		 * Should be PAM_SUCCESS to reach here.
 		 */
 		(void) ioctl(daemonfd, VT_ACTIVATE, target_vt);
-
-		vt_audit_event(ah, ADT_screenunlock, err);
-
-		/*
-		 * Free audit handle.
-		 */
-		(void) adt_end_session(ah);
-		vt_ah_array[target_vt - 1] = NULL;
 	}
 	(void) mutex_unlock(&vt_mutex);
 
@@ -998,10 +968,6 @@ vt_do_hotkeys(pid_t pid, uint32_t target_vt)
 
 	/* check source session for this hotkeys request */
 	if (pid == 0) {
-		/* ok, it comes from kernel. */
-		if (vt_secure)
-			vt_check_source_audit();
-
 		/* then only need to check target session */
 		vt_check_target_session(target_vt);
 		return;
@@ -1284,10 +1250,6 @@ main(int argc, char *argv[])
 	if (vtnodecount >= 2)
 		(void) ioctl(daemonfd, VT_CONFIG, vtnodecount);
 
-	if ((vt_ah_array = calloc(vtnodecount - 1,
-	    sizeof (adt_session_data_t *))) == NULL)
-		return (1);
-
 	(void) ioctl(daemonfd, VT_GETACTIVE, &active);
 
 	if (active == 1) {
@@ -1304,93 +1266,4 @@ main(int argc, char *argv[])
 
 	vt_serve_events();
 	/*NOTREACHED*/
-}
-
-static int
-vt_audit_start(adt_session_data_t **ah, pid_t pid)
-{
-	ucred_t *uc;
-
-	if (adt_start_session(ah, NULL, 0))
-		return (-1);
-
-	if ((uc = ucred_get(pid)) == NULL) {
-		(void) adt_end_session(*ah);
-		return (-1);
-	}
-
-	if (adt_set_from_ucred(*ah, uc, ADT_NEW)) {
-		ucred_free(uc);
-		(void) adt_end_session(*ah);
-		return (-1);
-	}
-
-	ucred_free(uc);
-	return (0);
-}
-
-/*
- * Write audit event
- */
-static void
-vt_audit_event(adt_session_data_t *ah, au_event_t event_id, int status)
-{
-	adt_event_data_t	*event;
-
-
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-		return;
-	}
-
-	(void) adt_put_event(event,
-	    status == PAM_SUCCESS ? ADT_SUCCESS : ADT_FAILURE,
-	    status == PAM_SUCCESS ? ADT_SUCCESS : ADT_FAIL_PAM + status);
-
-	adt_free_event(event);
-}
-
-static void
-vt_check_source_audit(void)
-{
-	int	fd;
-	int	source_vt;
-	int	real_vt;
-	struct vt_stat state;
-	pid_t	pid;
-	adt_session_data_t *ah;
-
-	if ((fd = open(VT_DAEMON_CONSOLE_FILE, O_WRONLY)) < 0)
-		return;
-
-	if (ioctl(fd, VT_GETSTATE, &state) != 0 ||
-	    ioctl(fd, VT_GETACTIVE, &real_vt) != 0) {
-		(void) close(fd);
-		return;
-	}
-
-	source_vt = state.v_active;	/* 1..n */
-	(void) close(fd);
-
-	/* check if it's already locked */
-	if (real_vt == 1)	/* vtdaemon is taking over the screen */
-		return;
-
-	vt_read_utx(source_vt, &pid, NULL);
-	if (pid == (pid_t)-1)
-		return;
-
-	if (vt_audit_start(&ah, pid) != 0) {
-		syslog(LOG_ERR, "audit start failed ");
-		return;
-	}
-
-	/*
-	 * In case the previous session terminated abnormally.
-	 */
-	if (vt_ah_array[source_vt - 1] != NULL)
-		(void) adt_end_session(vt_ah_array[source_vt - 1]);
-
-	vt_ah_array[source_vt - 1] = ah;
-
-	vt_audit_event(ah, ADT_screenlock, PAM_SUCCESS);
 }

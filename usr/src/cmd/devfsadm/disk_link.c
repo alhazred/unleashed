@@ -35,7 +35,6 @@
 #include <unistd.h>
 #include <sys/int_fmtio.h>
 #include <sys/stat.h>
-#include <bsm/devalloc.h>
 #include <sys/scsi/scsi_address.h>
 #include <sys/libdevid.h>
 #include <sys/lofi.h>

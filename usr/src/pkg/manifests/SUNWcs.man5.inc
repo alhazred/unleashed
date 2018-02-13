@@ -19,7 +19,6 @@ file path=usr/share/man/man5/acl.5
 file path=usr/share/man/man5/ad.5
 file path=usr/share/man/man5/ascii.5
 file path=usr/share/man/man5/attributes.5
-file path=usr/share/man/man5/device_clean.5
 file path=usr/share/man/man5/dhcp.5
 file path=usr/share/man/man5/filesystem.5
 file path=usr/share/man/man5/formats.5

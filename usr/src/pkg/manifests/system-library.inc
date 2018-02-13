@@ -30,7 +30,6 @@
 
 <include system-library.man3.inc>
 <include system-library.man3avl.inc>
-<include system-library.man3bsm.inc>
 <include system-library.man3c.inc>
 <include system-library.man3c_db.inc>
 <include system-library.man3cfgadm.inc>
@@ -113,7 +112,6 @@ dir path=usr/lib/security/$(ARCH64)
 dir path=usr/share/man
 dir path=usr/share/man/man3
 dir path=usr/share/man/man3avl
-dir path=usr/share/man/man3bsm
 dir path=usr/share/man/man3c
 dir path=usr/share/man/man3c_db
 dir path=usr/share/man/man3cfgadm
@@ -160,7 +158,6 @@ file path=lib/$(ARCH64)/ld.so.1
 file path=lib/$(ARCH64)/libadm.so.1
 file path=lib/$(ARCH64)/libaio.so.1
 file path=lib/$(ARCH64)/libavl.so.1
-file path=lib/$(ARCH64)/libbsm.so.1
 file path=lib/$(ARCH64)/libc.so.1
 file path=lib/$(ARCH64)/libc_db.so.1
 file path=lib/$(ARCH64)/libcmdutils.so.1
@@ -230,8 +227,7 @@ file path=lib/ld.so.1
 file path=lib/libadm.so.1
 file path=lib/libaio.so.1
 file path=lib/libavl.so.1
-file path=lib/libbsm.so.1
-file path=lib/libc.so.1 mountpoint=true reboot-needed=true
+file path=lib/libc.so.1 reboot-needed=true
 file path=lib/libc_db.so.1
 file path=lib/libcmdutils.so.1
 file path=lib/libcontract.so.1
@@ -447,9 +443,6 @@ file path=usr/lib/security/$(ARCH64)/pam_unix_cred.so.1
 file path=usr/lib/security/$(ARCH64)/pam_unix_session.so.1
 file path=usr/lib/security/$(ARCH64)/pkcs11_kernel.so.1
 file path=usr/lib/security/$(ARCH64)/pkcs11_softtoken.so.1
-file path=usr/lib/security/audit_binfile.so.1
-file path=usr/lib/security/audit_remote.so.1
-file path=usr/lib/security/audit_syslog.so.1
 file path=usr/lib/security/crypt_bsdbf.so.1
 file path=usr/lib/security/crypt_bsdmd5.so.1
 file path=usr/lib/security/crypt_sha256.so.1
@@ -524,7 +517,6 @@ license usr/src/lib/passwdutil/THIRDPARTYLICENSE \
 link path=lib/$(ARCH64)/libadm.so target=libadm.so.1
 link path=lib/$(ARCH64)/libaio.so target=libaio.so.1
 link path=lib/$(ARCH64)/libavl.so target=libavl.so.1
-link path=lib/$(ARCH64)/libbsm.so target=libbsm.so.1
 link path=lib/$(ARCH64)/libc.so reboot-needed=true target=libc.so.1
 link path=lib/$(ARCH64)/libc_db.so target=libc_db.so.1
 link path=lib/$(ARCH64)/libcmdutils.so target=libcmdutils.so.1
@@ -581,7 +573,6 @@ link path=lib/crypto/64 target=$(ARCH64)
 link path=lib/libadm.so target=libadm.so.1
 link path=lib/libaio.so target=libaio.so.1
 link path=lib/libavl.so target=libavl.so.1
-link path=lib/libbsm.so target=libbsm.so.1
 link path=lib/libc.so target=libc.so.1
 link path=lib/libc_db.so target=libc_db.so.1
 link path=lib/libcmdutils.so target=libcmdutils.so.1
@@ -650,10 +641,6 @@ link path=usr/lib/$(ARCH64)/libavl.so \
 link path=usr/lib/$(ARCH64)/libavl.so.1 \
     target=../../../lib/$(ARCH64)/libavl.so.1
 link path=usr/lib/$(ARCH64)/libbsdmalloc.so target=libbsdmalloc.so.1
-link path=usr/lib/$(ARCH64)/libbsm.so \
-    target=../../../lib/$(ARCH64)/libbsm.so.1
-link path=usr/lib/$(ARCH64)/libbsm.so.1 \
-    target=../../../lib/$(ARCH64)/libbsm.so.1
 link path=usr/lib/$(ARCH64)/libc.so target=../../../lib/$(ARCH64)/libc.so.1
 link path=usr/lib/$(ARCH64)/libc.so.1 target=../../../lib/$(ARCH64)/libc.so.1
 link path=usr/lib/$(ARCH64)/libc_db.so \
@@ -897,8 +884,6 @@ link path=usr/lib/libaio.so.1 target=../../lib/libaio.so.1
 link path=usr/lib/libavl.so target=../../lib/libavl.so.1
 link path=usr/lib/libavl.so.1 target=../../lib/libavl.so.1
 link path=usr/lib/libbsdmalloc.so target=./libbsdmalloc.so.1
-link path=usr/lib/libbsm.so target=../../lib/libbsm.so.1
-link path=usr/lib/libbsm.so.1 target=../../lib/libbsm.so.1
 link path=usr/lib/libc.so target=../../lib/libc.so.1
 link path=usr/lib/libc.so.1 target=../../lib/libc.so.1
 link path=usr/lib/libc_db.so target=../../lib/libc_db.so.1
@@ -1089,9 +1074,6 @@ link path=usr/lib/security/$(ARCH64)/pkcs11_kernel.so \
 link path=usr/lib/security/$(ARCH64)/pkcs11_softtoken.so \
     target=./pkcs11_softtoken.so.1
 link path=usr/lib/security/64 target=$(ARCH64)
-link path=usr/lib/security/audit_binfile.so target=./audit_binfile.so.1
-link path=usr/lib/security/audit_remote.so target=./audit_remote.so.1
-link path=usr/lib/security/audit_syslog.so target=./audit_syslog.so.1
 link path=usr/lib/security/crypt_bsdbf.so target=./crypt_bsdbf.so.1
 link path=usr/lib/security/crypt_bsdmd5.so target=./crypt_bsdmd5.so.1
 link path=usr/lib/security/crypt_sha256.so target=./crypt_sha256.so.1

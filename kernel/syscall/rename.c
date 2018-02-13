@@ -42,7 +42,6 @@
 #include <sys/debug.h>
 #include <sys/file.h>
 #include <sys/fcntl.h>
-#include <c2/audit.h>
 
 /*
  * Rename a file relative to a given directory

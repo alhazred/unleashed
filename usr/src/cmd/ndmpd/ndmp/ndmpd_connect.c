@@ -217,7 +217,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 		NDMP_LOG(LOG_ERR,
 		    "Authorization type should be md5 or cleartext.");
 		reply.error = NDMP_ILLEGAL_ARGS_ERR;
-		ndmpd_audit_connect(connection, EINVAL);
 		break;
 
 	case NDMP_AUTH_TEXT:
@@ -230,8 +229,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 			ndmp_set_authorized(connection, FALSE);
 			ndmp_send_reply(connection, (void *) &reply,
 			    "sending ndmp_connect_client_auth reply");
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			return;
 		}
 		auth = &request->auth_data.ndmp_auth_data_u.auth_text;
@@ -239,8 +236,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 			NDMP_LOG(LOG_ERR,
 			    "Authorization denied. Not a valid user.");
 			reply.error = NDMP_NOT_AUTHORIZED_ERR;
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			break;
 		}
 		passwd = ndmpd_get_prop(NDMP_CLEARTEXT_PASSWORD);
@@ -252,8 +247,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 			ndmp_set_authorized(connection, FALSE);
 			ndmp_send_reply(connection, (void *) &reply,
 			    "sending ndmp_connect_client_auth reply");
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			return;
 		} else {
 			dec_passwd = ndmp_base64_decode(passwd);
@@ -266,8 +259,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 		} else {
 			NDMP_LOG(LOG_DEBUG, "Authorization granted.");
 		}
-		ndmpd_audit_connect(connection, reply.error ?
-		    ADT_FAIL_PAM + PAM_AUTH_ERR : 0);
 
 		free(dec_passwd);
 		break;
@@ -282,8 +273,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 			ndmp_set_authorized(connection, FALSE);
 			ndmp_send_reply(connection, (void *) &reply,
 			    "sending ndmp_connect_client_auth reply");
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			return;
 		}
 		md5 = &request->auth_data.ndmp_auth_data_u.auth_md5;
@@ -295,8 +284,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 			ndmp_set_authorized(connection, FALSE);
 			ndmp_send_reply(connection, (void *) &reply,
 			    "sending ndmp_connect_client_auth reply");
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			return;
 		} else {
 			dec_passwd = ndmp_base64_decode(passwd);
@@ -317,8 +304,6 @@ ndmpd_connect_client_auth_v2(ndmp_connection_t *connection, void *body)
 		} else {
 			NDMP_LOG(LOG_DEBUG, "Authorization granted");
 		}
-		ndmpd_audit_connect(connection, reply.error ?
-		    ADT_FAIL_PAM + PAM_AUTH_ERR : 0);
 
 		free(dec_passwd);
 		break;
@@ -454,7 +439,6 @@ ndmpd_connect_client_auth_v3(ndmp_connection_t *connection, void *body)
 	case NDMP_AUTH_NONE:
 		type = "none";
 		reply.error = NDMP_NOT_SUPPORTED_ERR;
-		ndmpd_audit_connect(connection, ENOTSUP);
 		break;
 
 	case NDMP_AUTH_TEXT:
@@ -467,16 +451,12 @@ ndmpd_connect_client_auth_v3(ndmp_connection_t *connection, void *body)
 			ndmp_set_authorized(connection, FALSE);
 			ndmp_send_reply(connection, (void *) &reply,
 			    "sending ndmp_connect_client_auth reply");
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			return;
 		}
 		type = "text";
 		auth = &request->auth_data.ndmp_auth_data_v3_u.auth_text;
 		reply.error = ndmpd_connect_auth_text(uname, auth->auth_id,
 		    auth->auth_password);
-		ndmpd_audit_connect(connection, reply.error ?
-		    ADT_FAIL_PAM + PAM_AUTH_ERR : 0);
 		break;
 
 	case NDMP_AUTH_MD5:
@@ -489,8 +469,6 @@ ndmpd_connect_client_auth_v3(ndmp_connection_t *connection, void *body)
 			ndmp_set_authorized(connection, FALSE);
 			ndmp_send_reply(connection, (void *) &reply,
 			    "sending ndmp_connect_client_auth reply");
-			ndmpd_audit_connect(connection,
-			    ADT_FAIL_PAM + PAM_AUTH_ERR);
 			return;
 		}
 		type = "md5";
@@ -498,14 +476,11 @@ ndmpd_connect_client_auth_v3(ndmp_connection_t *connection, void *body)
 		md5 = &request->auth_data.ndmp_auth_data_v3_u.auth_md5;
 		reply.error = ndmpd_connect_auth_md5(uname, md5->auth_id,
 		    md5->auth_digest, session->ns_challenge);
-		ndmpd_audit_connect(connection, reply.error ?
-		    ADT_FAIL_PAM + PAM_AUTH_ERR : 0);
 		break;
 
 	default:
 		type = "unknown";
 		reply.error = NDMP_ILLEGAL_ARGS_ERR;
-		ndmpd_audit_connect(connection, EINVAL);
 	}
 
 	if (reply.error == NDMP_NO_ERR) {

@@ -874,7 +874,7 @@ PORTNSL= _conn_util.o _data2.o _errlst.o _utility.o algs.o auth_des.o \
          can_use_af.o checkver.o clnt_bcast.o clnt_dg.o clnt_door.o \
          clnt_generic.o clnt_perror.o clnt_raw.o clnt_simple.o clnt_vc.o \
          daemon_utils.o dbm.o des_crypt.o des_soft.o doconfig.o getauthattr.o \
-         getauuser.o getdname.o getexecattr.o gethostby_door.o \
+         getdname.o getexecattr.o gethostby_door.o \
          gethostbyname_r.o gethostent.o gethostent6.o gethostent_r.o \
          getipnodeby.o getipnodeby_door.o getprofattr.o getrpcent.o \
          getrpcent_r.o getuserattr.o inet_matchaddr.o \

@@ -69,7 +69,6 @@
 #define	NOTALLOWED	"you are not authorized to use cron.  Sorry."
 #define	NOTROOT		\
 	"you must be super-user to access another user's crontab file"
-#define	AUDITREJECT	"The audit context for your shell has not been set."
 #define	EOLN		"unexpected end of line."
 #define	UNEXPECT	"unexpected character found in line."
 #define	OUTOFBOUND	"number out of bounds."
@@ -85,10 +84,6 @@
 #define	BAD_HOME	"Unable to access directory: %s\t%s\n"
 
 extern int	per_errno;
-
-extern int	audit_crontab_modify(char *, char *, int);
-extern int	audit_crontab_delete(char *, int);
-extern int	audit_crontab_not_allowed(uid_t, char *);
 
 int		err;
 int		cursor;
@@ -212,17 +207,12 @@ main(int argc, char **argv)
 	(void) pam_end(pamh, PAM_SUCCESS);
 
 
-	/* check for unaudited shell */
-	if (audit_crontab_not_allowed(ruid, pp))
-		crabort(AUDITREJECT);
-
 	cf = xmalloc(strlen(CRONDIR)+strlen(login)+2);
 	strcat(strcat(strcpy(cf, CRONDIR), "/"), login);
 
 	if (rflag) {
 		r = unlink(cf);
 		cron_sendmsg(DELETE, login, login, CRON);
-		audit_crontab_delete(cf, r);
 		exit(0);
 	}
 	if (lflag) {
@@ -482,9 +472,6 @@ cont:
 	}
 	fclose(fp);
 	fclose(tfp);
-
-	/* audit differences between old and new crontabs */
-	audit_crontab_modify(cf, tnam, err);
 
 	if (!err) {
 		/* make file tfp the new crontab */

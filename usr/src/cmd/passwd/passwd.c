@@ -61,8 +61,6 @@
 #include <deflt.h>
 
 #undef	GROUP
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 
 /*
  * flags indicate password attributes to be modified
@@ -181,8 +179,6 @@ static int		passwd_conv(int, struct pam_message **,
 static struct pam_conv	pam_conv = {passwd_conv, NULL};
 static pam_handle_t	*pamh;		/* Authentication handle */
 static char		*usrname;	/* user whose attribute we update */
-static adt_session_data_t *ah;  /* audit session handle */
-static adt_event_data_t *event = NULL; /* event to be generated */
 
 static pam_repository_t	auth_rep;
 static pwu_repository_t	repository;
@@ -368,16 +364,6 @@ main(int argc, char *argv[])
 
 		dprintf1("call pam_chauthtok() repository name =%s\n",
 		    repository.type);
-
-		/* Set up for Audit */
-		if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0) {
-			perror("adt_start_session");
-			passwd_exit(SYSERR);
-		}
-		if ((event = adt_alloc_event(ah, ADT_passwd)) == NULL) {
-			perror("adt_alloc_event");
-			passwd_exit(NOMEM);
-		}
 
 		/* Don't check account expiration when invoked by root */
 		if (ckuid() != SUCCESS) {
@@ -1531,31 +1517,6 @@ passwd_exit(int retcode)
 			retcode = NOPERM;
 			break;
 	}
-	/* write password record */
-	if (event != NULL) {
-		struct passwd *pass;
-
-		if ((pass = getpwnam(usrname)) == NULL) {
-			/* unlikely to ever get here, but ... */
-			event->adt_passwd.username = usrname;
-		} else if (pass->pw_uid != uid) {
-			/* save target user */
-			event->adt_passwd.uid = pass->pw_uid;
-			event->adt_passwd.username = pass->pw_name;
-		}
-
-		if (adt_put_event(event,
-		    retcode == SUCCESS ? ADT_SUCCESS : ADT_FAILURE,
-		    retcode == SUCCESS ? ADT_SUCCESS : ADT_FAIL_PAM +
-		    pam_retval) != 0) {
-			adt_free_event(event);
-			(void) adt_end_session(ah);
-			perror("adt_put_event");
-			exit(retcode);
-		}
-		adt_free_event(event);
-	}
-	(void) adt_end_session(ah);
 	exit(retcode);
 }
 

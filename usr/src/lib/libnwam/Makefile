@@ -26,7 +26,7 @@
 include		$(SRC)/lib/Makefile.lib
 
 HDRS =		libnwam.h libnwam_priv.h
-SRCS =		libnwam_audit.c libnwam_backend.c libnwam_enm.c \
+SRCS =		libnwam_backend.c libnwam_enm.c \
 		libnwam_events.c libnwam_error.c libnwam_files.c \
 		libnwam_known_wlan.c libnwam_loc.c libnwam_ncp.c \
 		libnwam_object.c libnwam_util.c libnwam_values.c \

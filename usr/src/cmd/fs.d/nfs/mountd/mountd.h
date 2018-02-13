@@ -91,20 +91,6 @@ extern boolean_t cln_havehost(struct cln *);
 extern char *cln_gethost(struct cln *);
 
 /*
- * These functions are defined here due to the fact
- * that we can not find the proper header file to
- * include. These functions are, at present, not
- * listed in any other header files.
- */
-/*
- * These three functions are hidden functions in the
- * bsm libraries (libbsm).
- */
-extern void audit_mountd_setup(void);
-extern void audit_mountd_mount(char *, char *, int);
-extern void audit_mountd_umount(char *, char *);
-
-/*
  * This appears to be a hidden function in libc.
  * Private interface to nss_search().
  * Accepts N strings rather than 1.

@@ -70,9 +70,6 @@
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
 
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
-
 #include <alloca.h>
 #include <assert.h>
 #include <errno.h>
@@ -1125,57 +1122,6 @@ zone_wait_shutdown(zlog_t *zlogp)
 	return (rc);
 }
 
-
-
-/*
- * Generate AUE_zone_state for a command that boots a zone.
- */
-static void
-audit_put_record(zlog_t *zlogp, ucred_t *uc, int return_val,
-    char *new_state)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-	int			pass_fail, fail_reason;
-
-	if (!adt_audit_enabled())
-		return;
-
-	if (return_val == 0) {
-		pass_fail = ADT_SUCCESS;
-		fail_reason = ADT_SUCCESS;
-	} else {
-		pass_fail = ADT_FAILURE;
-		fail_reason = ADT_FAIL_VALUE_PROGRAM;
-	}
-
-	if (adt_start_session(&ah, NULL, 0)) {
-		zerror(zlogp, B_TRUE, gettext("audit failure."));
-		return;
-	}
-	if (adt_set_from_ucred(ah, uc, ADT_NEW)) {
-		zerror(zlogp, B_TRUE, gettext("audit failure."));
-		(void) adt_end_session(ah);
-		return;
-	}
-
-	event = adt_alloc_event(ah, ADT_zone_state);
-	if (event == NULL) {
-		zerror(zlogp, B_TRUE, gettext("audit failure."));
-		(void) adt_end_session(ah);
-		return;
-	}
-	event->adt_zone_state.zonename = zone_name;
-	event->adt_zone_state.new_state = new_state;
-
-	if (adt_put_event(event, pass_fail, fail_reason))
-		zerror(zlogp, B_TRUE, gettext("audit failure."));
-
-	adt_free_event(event);
-
-	(void) adt_end_session(ah);
-}
-
 /*
  * The main routine for the door server that deals with zone state transitions.
  */
@@ -1359,7 +1305,6 @@ server(void *cookie, char *args, size_t alen, door_desc_t *dp,
 				rval = zone_bootup(zlogp, zargp->bootbuf,
 				    zstate);
 			}
-			audit_put_record(zlogp, uc, rval, "boot");
 			if (rval != 0) {
 				bringup_failure_recovery = B_TRUE;
 				(void) zone_halt(zlogp, B_FALSE, B_FALSE,
@@ -1481,7 +1426,6 @@ server(void *cookie, char *args, size_t alen, door_desc_t *dp,
 			    sizeof (boot_args));
 			eventstream_write(Z_EVT_ZONE_BOOTING);
 			rval = zone_bootup(zlogp, zargp->bootbuf, zstate);
-			audit_put_record(zlogp, uc, rval, "boot");
 			if (rval != 0) {
 				bringup_failure_recovery = B_TRUE;
 				(void) zone_halt(zlogp, B_FALSE, B_TRUE,
@@ -1581,7 +1525,6 @@ server(void *cookie, char *args, size_t alen, door_desc_t *dp,
 				break;
 			}
 			rval = zone_bootup(zlogp, zargp->bootbuf, zstate);
-			audit_put_record(zlogp, uc, rval, "reboot");
 			if (rval != 0) {
 				(void) zone_halt(zlogp, B_FALSE, B_TRUE,
 				    zstate);

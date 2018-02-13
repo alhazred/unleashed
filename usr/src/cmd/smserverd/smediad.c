@@ -53,9 +53,6 @@
 #include "smserver.h"
 #include <rpc/rpc.h>
 #include "smed.h"
-#include "myaudit.h"
-#include <bsm/libbsm.h>
-#include <bsm/audit_uevents.h>
 #include <utmpx.h>
 
 
@@ -1705,7 +1702,6 @@ set_protection_status(door_data_t *door_dp, smedia_services_t *req)
 
 	/*
 	 * Read the current protection state before modifiying.
-	 * Needed for audit purposes.
 	 */
 	switch (get_device_type_scsi(door_dp->dd_fd, &inq)) {
 	case SCSI_IOMEGA:
@@ -1731,12 +1727,6 @@ set_protection_status(door_data_t *door_dp, smedia_services_t *req)
 	    req->reqset_protection_status.prot_state.sm_new_state);
 	old_state = xlate_state(status);
 
-	if (can_audit()) {
-		(void) audit_save_me(door_dp);
-		door_dp->audit_text[0] = 0;
-		door_dp->audit_text1[0] = 0;
-		door_dp->audit_event = AUE_smserverd;
-	}
 	(void) strlcpy(vid, inq.inq_vid, sizeof (vid));
 	(void) strlcpy(pid, inq.inq_pid, sizeof (pid));
 	if (ret_val < 0) {
@@ -1747,41 +1737,9 @@ set_protection_status(door_data_t *door_dp, smedia_services_t *req)
 				pwd->pw_name, MAXUGNAME);
 		} else uname[0] = 0;
 
-		if (can_audit()) {
-			(void) snprintf(door_dp->audit_text,
-				sizeof (door_dp->audit_text),
-				dgettext(TEXT_DOMAIN, "from %s to %s"),
-				old_state, new_state);
-
-			(void) snprintf(door_dp->audit_text1,
-				sizeof (door_dp->audit_text1),
-				"%s %s (%d,%d)", vid, pid,
-				(int)major(door_dp->dd_stat.st_rdev),
-				(int)minor(door_dp->dd_stat.st_rdev));
-
-			door_dp->audit_sorf = 1;
-			if (audit_audit(door_dp) == -1)
-			    warning("Error in writing audit info\n");
-		}
 	    } /* errno == EACCES */
 	    errno = saved_errno;
 	    return (-1);
-	}
-	if (can_audit()) {
-		(void) snprintf(door_dp->audit_text,
-			sizeof (door_dp->audit_text),
-			dgettext(TEXT_DOMAIN, "from %s to %s"),
-			old_state, new_state);
-
-		(void) snprintf(door_dp->audit_text1,
-			sizeof (door_dp->audit_text1),
-			"%s %s (%d,%d)", vid, pid,
-			(int)major(door_dp->dd_stat.st_rdev),
-			(int)minor(door_dp->dd_stat.st_rdev));
-
-		door_dp->audit_sorf = 0;
-		if (audit_audit(door_dp) == -1)
-		    warning("Error in writing audit info\n");
 	}
 	errno = saved_errno;
 	return (0);
@@ -2581,8 +2539,6 @@ main_servproc(void *server_data, char *argp, size_t arg_size,
 		debug(5, "main_servproc[%d]: Client Door = %d, "
 		    "Death Door = %d", pthread_self(),
 		    ddata->dd_cdoor_descriptor, ddata->dd_ddoor_descriptor);
-
-		audit_init(ddata);
 
 		/* wait until sm_server_thread does door_bind() */
 		(void) cond_wait(&ddata->dd_cv_bind, &ddata->dd_lock);

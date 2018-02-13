@@ -27,15 +27,15 @@
 #
 
 PROG =		hald-addon-cpufreq
-OBJS =		addon-cpufreq.o logger.o adt_data.o
-SRCS =		addon-cpufreq.c ../../hald/logger.c ../../utils/adt_data.c
+OBJS =		addon-cpufreq.o logger.o
+SRCS =		addon-cpufreq.c ../../hald/logger.c
 
 include ../../../Makefile.cmd
 include ../../Makefile.hal
 
 ROOTCMDDIR =	$(ROOTLIB_HAL)
 
-LDLIBS +=	-lc -ldbus-1 -lhal -lglib-2.0 -ldbus-glib-1 -lpolkit -lbsm
+LDLIBS +=	-lc -ldbus-1 -lhal -lglib-2.0 -ldbus-glib-1 -lpolkit
 
 CPPFLAGS +=	$(HAL_DBUS_CPPFLAGS) $(HAL_GLIB_CPPFLAGS) $(HAL_CONFIG_CPPFLAGS)
 CPPFLAGS +=	-I$(ROOT)/usr/include/hal -I../../hald
@@ -48,10 +48,6 @@ all:$(PROG)
 
 logger.o: ../../hald/logger.c
 	$(COMPILE.c) -o $@ ../../hald/logger.c
-	$(POST_PROCESS_O)
-
-adt_data.o: ../../utils/adt_data.c
-	$(COMPILE.c) -o $@ ../../utils/adt_data.c
 	$(POST_PROCESS_O)
 
 $(PROG): $(OBJS)

@@ -197,7 +197,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	nwam_string_to_object_type;
 	nwam_backend_init;
 	nwam_backend_fini;
-	nwam_record_audit_event;
 	nwam_event_send;
 	nwam_event_send_fini;
 	nwam_event_queue_init;

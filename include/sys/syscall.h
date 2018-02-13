@@ -391,7 +391,6 @@ extern "C" {
 	 */
 #define	SYS_pollsys		183
 #define	SYS_acl			185
-#define	SYS_auditsys		186
 #define	SYS_processor_bind	187
 #define	SYS_processor_info	188
 #define	SYS_p_online		189

@@ -36,7 +36,6 @@
 #include <sys/procfs.h>
 #include <sys/mman.h>
 #include <sys/int_types.h>
-#include <c2/audit.h>
 #include <sys/stat.h>
 #include <sys/times.h>
 #include <sys/statfs.h>
@@ -59,7 +58,6 @@ struct mmaplf32a;
  */
 
 int	alarm(int);
-int	auditsys(struct auditcalls *, rval_t *);
 int64_t	brandsys(int, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t,
     uintptr_t);
 intptr_t	brk(caddr_t);
@@ -624,7 +622,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 183 */ SYSENT_CI("pollsys",		pollsys,	4),
 	/* 184 */ SYSENT_LOADABLE(),		/* (was labelsys) */
 	/* 185 */ SYSENT_CI("acl",		acl,		4),
-	/* 186 */ SYSENT_AP("auditsys",		auditsys,	6),
+	/* 186 */ SYSENT_LOADABLE(),		/* (was auditsys) */
 	/* 187 */ SYSENT_CI("processor_bind",	processor_bind,	4),
 	/* 188 */ SYSENT_CI("processor_info",	processor_info,	2),
 	/* 189 */ SYSENT_CI("p_online",		p_online,	2),
@@ -963,7 +961,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 183 */ SYSENT_CI("pollsys",		pollsys,	4),
 	/* 184 */ SYSENT_LOADABLE32(),		/* (was labelsys) */
 	/* 185 */ SYSENT_CI("acl",		acl,		4),
-	/* 186 */ SYSENT_AP("auditsys",		auditsys,	6),
+	/* 186 */ SYSENT_LOADABLE32(),		/* (was auditsys) */
 	/* 187 */ SYSENT_CI("processor_bind",	processor_bind,	4),
 	/* 188 */ SYSENT_CI("processor_info",	processor_info,	2),
 	/* 189 */ SYSENT_CI("p_online",		p_online,	2),

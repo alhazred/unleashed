@@ -33,7 +33,6 @@ extern gss_name_t get_clnt_name(struct svc_req *);
 extern char *client_addr(struct svc_req *, char *);
 extern void *global_server_handle;
 extern int nofork;
-extern short l_port;
 static char abuf[33];
 
 static char *reply_ok_str	= "UPDATE_OK";
@@ -156,9 +155,6 @@ iprop_get_updates_1(kdb_last_t *arg, struct svc_req *rqstp)
 		    NULL)) {
 		ret.ret = UPDATE_PERM_DENIED;
 
-		audit_kadmind_unauth(rqstp->rq_xprt, l_port,
-				    whoami,
-				    "<null>", client_name);
 		krb5_klog_syslog(LOG_NOTICE, LOG_UNAUTH, whoami,
 				"<null>", client_name, service_name,
 				client_addr(rqstp, abuf));
@@ -179,10 +175,6 @@ iprop_get_updates_1(kdb_last_t *arg, struct svc_req *rqstp)
 				replystr(ret.ret),
 				(ulong_t)arg->last_sno);
 	}
-
-	audit_kadmind_auth(rqstp->rq_xprt, l_port,
-			whoami,
-			obuf, client_name, kret);
 
 	krb5_klog_syslog(LOG_NOTICE, LOG_DONE, whoami,
 			obuf,
@@ -274,9 +266,6 @@ iprop_full_resync_1(
 		    NULL)) {
 		ret.ret = UPDATE_PERM_DENIED;
 
-		audit_kadmind_unauth(rqstp->rq_xprt, l_port,
-				    whoami,
-				    "<null>", client_name);
 		krb5_klog_syslog(LOG_NOTICE, LOG_UNAUTH, whoami,
 				"<null>", client_name, service_name,
 				client_addr(rqstp, abuf));
@@ -383,10 +372,6 @@ iprop_full_resync_1(
 		ret.lastentry.last_sno = 0;
 		ret.lastentry.last_time.seconds = 0;
 		ret.lastentry.last_time.useconds = 0;
-
-		audit_kadmind_auth(rqstp->rq_xprt, l_port,
-				whoami,
-				"<null>", client_name, 0);
 
 		krb5_klog_syslog(LOG_NOTICE, LOG_DONE, whoami,
 				"<null>",

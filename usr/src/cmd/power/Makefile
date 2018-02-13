@@ -63,7 +63,7 @@ LDEVINFO=	-ldevinfo
 
 DAEMON_LDLIBS =	$(LDLIBS.cmd) -lkstat $(LDEVINFO)
 PMCFG_LDLIBS =	$(LDLIBS.cmd) -lsmbios -lkstat $($(MACH)_LDEVINFO)
-SUSPEND_LDLIBS = $(LDLIBS.cmd) -lbsm -lpam -lsecdb
+SUSPEND_LDLIBS = $(LDLIBS.cmd) -lpam -lsecdb
 
 ROOTUSRSBINPMCFG= $(PMCFG:%=$(ROOTUSRSBIN)/%)
 $(ROOTUSRSBINPMCFG) := FILEMODE= 4555

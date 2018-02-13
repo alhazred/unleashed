@@ -54,7 +54,6 @@
 #include <locale.h>
 #include <libintl.h>
 #include <libzonecfg.h>
-#include <bsm/adt.h>
 #include <sys/brand.h>
 #include <sys/param.h>
 #include <sys/types.h>

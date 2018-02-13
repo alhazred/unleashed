@@ -720,13 +720,6 @@ extern ndmp_stat_t ndstat;
 
 extern void ndmpd_main(void);
 extern void connection_handler(ndmp_connection_t *);
-extern void ndmpd_audit_backup(ndmp_connection_t *conn, char *path,
-    int dest, char *local_path, int result);
-extern void ndmpd_audit_restore(ndmp_connection_t *conn,
-    char *path, int dest, char *local_path, int result);
-extern void ndmpd_audit_connect(ndmp_connection_t *conn,
-    int result);
-extern void ndmpd_audit_disconnect(ndmp_connection_t *conn);
 
 /* Variables from ndmpd_main.c */
 extern	libzfs_handle_t	*zlibh;

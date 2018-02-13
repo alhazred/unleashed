@@ -79,7 +79,6 @@
 #include <sys/corectl.h>
 #include <sys/modctl.h>
 #include <sys/tuneable.h>
-#include <c2/audit.h>
 #include <sys/bootconf.h>
 #include <sys/dumphdr.h>
 #include <sys/promif.h>

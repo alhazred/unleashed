@@ -107,11 +107,6 @@ void atabort(char *)__NORETURN;
 void yyerror(void);
 extern int yyparse(void);
 
-extern void	audit_at_delete(char *, char *, int);
-extern int	audit_at_create(char *, int);
-extern int	audit_cron_is_anc_name(char *);
-extern int	audit_cron_delete_anc_file(char *, char *);
-
 /*
  * Error in getdate(3G)
  */
@@ -403,8 +398,6 @@ main(int argc, char **argv)
 		}
 	}
 	unlink(tfname);
-	if (audit_at_create(job, 0))
-		atabort(CANTCREATE);
 
 	cron_sendmsg(ADD, login, strrchr(job, '/')+1, AT);
 	if (per_errno == 2)
@@ -776,7 +769,6 @@ remove_jobs(int argc, char **argv, char *login)
 			}
 			cron_sendmsg(DELETE, login, argv[i], AT);
 			r = unlink(argv[i]);
-			audit_at_delete(argv[i], ATDIR, r);
 		}
 	return (error);
 }
@@ -828,12 +820,8 @@ list_jobs(int argc, char **argv, int qflag, int queue)
 			if ((dentry->d_ino == st1.st_ino) ||
 			    (dentry->d_ino == st2.st_ino))
 				continue;
-			if ((r = audit_cron_is_anc_name(dentry->d_name)) == 1)
-				continue;
 			if (stat(dentry->d_name, &buf)) {
 				unlink(dentry->d_name);
-				audit_cron_delete_anc_file(dentry->d_name,
-				    NULL);
 				continue;
 			}
 			if ((!cron_admin(pwd->pw_name)) &&

@@ -3134,14 +3134,6 @@ $endif
 	tpool_member;
 	_ttyname_dev;
 	_ucred_alloc;
-	ucred_getamask;
-	_ucred_getamask;
-	ucred_getasid;
-	_ucred_getasid;
-	ucred_getatid;
-	_ucred_getatid;
-	ucred_getauid;
-	_ucred_getauid;
 	_ulltostr;
 	_uncached_getgrgid_r;
 	_uncached_getgrnam_r;
@@ -3766,7 +3758,6 @@ $endif
 	_doexeclist;
 	_dup_execstr;
 	_endauthattr;
-	_endauuser;
 	_endexecattr;
 	__endhostent6;
 	_endprofattr;
@@ -3778,8 +3769,6 @@ $endif
 	_free_execstr;
 	_getauthattr;
 	_getauthnam;
-	_getauuserent;
-	_getauusernam;
 	_getexecattr;
 	_getexecprof;
 	__gethostent6;
@@ -3792,7 +3781,6 @@ $endif
 	_readbufline;
 	__rpc_bindresvport_ipv6;
 	_setauthattr;
-	_setauuser;
 	_setexecattr;
 	__sethostent6;
 	_setprofattr;

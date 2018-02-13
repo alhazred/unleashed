@@ -101,14 +101,6 @@
 
 static libzfs_handle_t *g_zfs;
 
-extern int audit_halt_setup(int, char **);
-extern int audit_halt_success(void);
-extern int audit_halt_fail(void);
-
-extern int audit_reboot_setup(void);
-extern int audit_reboot_success(void);
-extern int audit_reboot_fail(void);
-
 static char *cmdname;	/* basename(argv[0]), the name of the command */
 
 typedef struct ctidlist_struct {
@@ -1263,7 +1255,7 @@ main(int argc, char *argv[])
 	int fast_reboot = 0;
 	int prom_reboot = 0;
 	uintptr_t mdep = (uintptr_t)NULL;
-	int cmd, fcn, c, aval, r;
+	int cmd, fcn, c, r;
 	const char *usage;
 	const char *optstring;
 	zoneid_t zoneid = getzoneid();
@@ -1280,19 +1272,16 @@ main(int argc, char *argv[])
 	cmdname = basename(argv[0]);
 
 	if (strcmp(cmdname, "halt") == 0) {
-		(void) audit_halt_setup(argc, argv);
 		optstring = "dlnqy";
 		usage = gettext("usage: %s [ -dlnqy ]\n");
 		cmd = A_SHUTDOWN;
 		fcn = AD_HALT;
 	} else if (strcmp(cmdname, "poweroff") == 0) {
-		(void) audit_halt_setup(argc, argv);
 		optstring = "dlnqy";
 		usage = gettext("usage: %s [ -dlnqy ]\n");
 		cmd = A_SHUTDOWN;
 		fcn = AD_POWEROFF;
 	} else if (strcmp(cmdname, "reboot") == 0) {
-		(void) audit_reboot_setup();
 #if defined(__x86)
 		optstring = "dlnqpfe:";
 		usage = gettext("usage: %s [ -dlnq(p|fe:) ] [ boot args ]\n");
@@ -1470,21 +1459,6 @@ main(int argc, char *argv[])
 			syslog(LOG_CRIT, "initiated by %s on %s", user, tty);
 	}
 
-	/*
-	 * We must assume success and log it before auditd is terminated.
-	 */
-	if (fcn == AD_BOOT)
-		aval = audit_reboot_success();
-	else
-		aval = audit_halt_success();
-
-	if (aval == -1) {
-		(void) fprintf(stderr,
-		    gettext("%s: can't turn off auditd\n"), cmdname);
-		if (needlog)
-			(void) sleep(5); /* Give syslogd time to record this */
-	}
-
 	(void) signal(SIGHUP, SIG_IGN);	/* for remote connections */
 
 	/*
@@ -1646,11 +1620,6 @@ main(int argc, char *argv[])
 		(void) kill(get_initpid(), SIGHUP);
 
 fail:
-	if (fcn == AD_BOOT)
-		(void) audit_reboot_fail();
-	else
-		(void) audit_halt_fail();
-
 	if (fast_reboot == 1) {
 		if (bename) {
 			(void) halt_exec(BEADM_PROG, "umount", bename, NULL);

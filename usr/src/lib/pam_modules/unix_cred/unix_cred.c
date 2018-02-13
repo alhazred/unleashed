@@ -39,9 +39,6 @@
 #include <errno.h>
 #include <alloca.h>
 
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>	/* adt_get_auid() */
-
 #include <security/pam_appl.h>
 #include <security/pam_modules.h>
 #include <security/pam_impl.h>
@@ -56,8 +53,7 @@
  *		only implements pam_sm_setcred so that the authentication
  *		can be separated without knowledge of the Solaris Unix style
  *		credential setting.
- *		Solaris Unix style credential setting includes initializing
- *		the audit characteristics if not already initialized and
+ *		Solaris Unix style credential setting includes
  *		setting the user's default and limit privileges.
  */
 
@@ -165,8 +161,7 @@ finddeflim(const char *name, kva_t *kva, void *ctxt, void *pres)
  *		PAM_CRED_ERR, if unable to set credentials.
  *		PAM_USER_UNKNOWN, if PAM_USER not set, or unable to find
  *			user in databases.
- *		PAM_SYSTEM_ERR, if no valid flag, or unable to get/set
- *			user's audit state.
+ *		PAM_SYSTEM_ERR, if no valid flag.
  */
 
 int
@@ -180,9 +175,6 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 	char	*auser;
 	char	*rhost;
 	char	*tty;
-	au_id_t	auid;
-	adt_session_data_t *ah;
-	adt_termid_t	*termid = NULL;
 	priv_set_t	*lim, *def, *tset;
 	char		messages[PAM_MAX_NUM_MSG][PAM_MAX_MSG_SIZE];
 	char		buf[PROJECT_BUFSZ];
@@ -247,170 +239,13 @@ pam_sm_setcred(pam_handle_t *pamh, int flags, int argc, const char **argv)
 		return (PAM_SYSTEM_ERR);
 	}
 
-	/*
-	 * if auditing on and process audit state not set,
-	 * setup audit context for process.
-	 */
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0) {
-		syslog(LOG_AUTH | LOG_ERR,
-		    "pam_unix_cred: cannot create start audit session %m");
-		return (PAM_SYSTEM_ERR);
-	}
-	adt_get_auid(ah, &auid);
-	if (debug) {
-		int	auditstate;
-
-		if (auditon(A_GETCOND, (caddr_t)&auditstate,
-		    sizeof (auditstate)) != 0) {
-			auditstate = AUC_DISABLED;
-		}
-		syslog(LOG_AUTH | LOG_DEBUG,
-		    "pam_unix_cred: state = %d, auid = %d", auditstate,
-		    auid);
-	}
 	getpwnam_r(user, &pwd, pwbuf, sizeof (pwbuf), &pwdp);
 	if (!pwdp) {
 		syslog(LOG_AUTH | LOG_ERR,
 		    "pam_unix_cred: cannot get passwd entry for user = %s",
 		    user);
-		ret = PAM_USER_UNKNOWN;
-		goto adt_done;
+		return (PAM_USER_UNKNOWN);
 	}
-
-	if ((auid == AU_NOAUDITID) &&
-	    (flags & PAM_ESTABLISH_CRED)) {
-		struct passwd	apwd;
-		char	apwbuf[NSS_BUFLEN_PASSWD];
-
-		errno = 0;
-		if ((rhost == NULL || *rhost == '\0')) {
-			if (adt_load_ttyname(tty, &termid) != 0) {
-				if (errno == ENETDOWN) {
-					/*
-					 * tolerate not being able to
-					 * translate local hostname
-					 * to a termid -- it will be
-					 * "loopback".
-					 */
-					syslog(LOG_AUTH | LOG_ERR,
-					    "pam_unix_cred: cannot load "
-					    "ttyname: %m, continuing.");
-					goto adt_setuser;
-				} else if (errno != 0) {
-					syslog(LOG_AUTH | LOG_ERR,
-					    "pam_unix_cred: cannot load "
-					    "ttyname: %m.");
-				} else {
-					syslog(LOG_AUTH | LOG_ERR,
-					    "pam_unix_cred: cannot load "
-					    "ttyname.");
-				}
-				ret = PAM_SYSTEM_ERR;
-				goto adt_done;
-			}
-		} else {
-			if (adt_load_hostname(rhost, &termid) != 0) {
-				if (errno != 0) {
-					syslog(LOG_AUTH | LOG_ERR,
-					    "pam_unix_cred: cannot load "
-					    "hostname: %m.");
-				} else {
-					syslog(LOG_AUTH | LOG_ERR,
-					    "pam_unix_cred: cannot load "
-					    "hostname.");
-				}
-				ret = PAM_SYSTEM_ERR;
-				goto adt_done;
-			}
-		}
-adt_setuser:
-		if ((auser != NULL) && (*auser != '\0') &&
-		    (getpwnam_r(auser, &apwd, apwbuf,
-		    sizeof (apwbuf), &pwdp) == 0 && pwdp != NULL)) {
-			/*
-			 * set up the initial audit for user coming
-			 * from another user
-			 */
-			if (adt_set_user(ah, apwd.pw_uid, apwd.pw_gid,
-			    apwd.pw_uid, apwd.pw_gid, termid, ADT_NEW) != 0) {
-				syslog(LOG_AUTH | LOG_ERR,
-				    "pam_unix_cred: cannot set auser audit "
-				    "%m");
-				ret = PAM_SYSTEM_ERR;
-				goto adt_done;
-			}
-			if (adt_set_user(ah, pwd.pw_uid, pwd.pw_gid,
-			    pwd.pw_uid, pwd.pw_gid, NULL,
-			    ADT_UPDATE) != 0) {
-				syslog(LOG_AUTH | LOG_ERR,
-				    "pam_unix_cred: cannot merge user audit "
-				    "%m");
-				ret = PAM_SYSTEM_ERR;
-				goto adt_done;
-			}
-			if (debug) {
-				syslog(LOG_AUTH | LOG_DEBUG,
-				    "pam_unix_cred: new audit set for %d:%d",
-				    apwd.pw_uid, pwd.pw_uid);
-			}
-		} else {
-			/*
-			 * No authenticated user or authenticated user is
-			 * not a local user, no remote attribution, set
-			 * up the initial audit as for direct user login
-			 */
-			if (adt_set_user(ah, pwd.pw_uid, pwd.pw_gid,
-			    pwd.pw_uid, pwd.pw_gid, termid, ADT_NEW) != 0) {
-				syslog(LOG_AUTH | LOG_ERR,
-				    "pam_unix_cred: cannot set user audit %m");
-				ret = PAM_SYSTEM_ERR;
-				goto adt_done;
-			}
-		}
-		if (adt_set_proc(ah) != 0) {
-			syslog(LOG_AUTH | LOG_ERR,
-			    "pam_unix_cred: cannot set process audit %m");
-			ret = PAM_CRED_ERR;
-			goto adt_done;
-		}
-		if (debug) {
-			syslog(LOG_AUTH | LOG_DEBUG,
-			    "pam_unix_cred: new audit set for %d",
-			    pwd.pw_uid);
-		}
-	} else if ((auid != AU_NOAUDITID) &&
-	    (flags & PAM_REINITIALIZE_CRED)) {
-		if (adt_set_user(ah, pwd.pw_uid, pwd.pw_gid, pwd.pw_uid,
-		    pwd.pw_gid, NULL, ADT_UPDATE) != 0) {
-			syslog(LOG_AUTH | LOG_ERR,
-			    "pam_unix_cred: cannot set user audit %m");
-			ret = PAM_SYSTEM_ERR;
-			goto adt_done;
-		}
-		if (adt_set_proc(ah) != 0) {
-			syslog(LOG_AUTH | LOG_ERR,
-			    "pam_unix_cred: cannot set process audit %m");
-			ret = PAM_CRED_ERR;
-			goto adt_done;
-		}
-		if (debug) {
-			syslog(LOG_AUTH | LOG_DEBUG,
-			    "pam_unix_cred: audit merged for %d:%d",
-			    auid, pwd.pw_uid);
-		}
-	} else if (debug) {
-		syslog(LOG_AUTH | LOG_DEBUG,
-		    "pam_unix_cred: audit already set for %d", auid);
-	}
-adt_done:
-	free(termid);
-	if (adt_end_session(ah) != 0) {
-		syslog(LOG_AUTH | LOG_ERR,
-		    "pam_unix_cred: unable to end audit session");
-	}
-
-	if (ret != PAM_SUCCESS)
-		return (ret);
 
 	/* Initialize the user's project */
 	(void) pam_get_item(pamh, PAM_RESOURCE, (void **)&kvs);

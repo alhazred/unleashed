@@ -302,8 +302,6 @@ do_logging_queue(logging_data *lq)
 		} else
 			host = lq->ld_host;
 
-		audit_mountd_mount(host, lq->ld_path, lq->ld_status); /* BSM */
-
 		/* add entry to mount list */
 		if (lq->ld_rpath)
 			mntlist_new(host, lq->ld_rpath);
@@ -465,12 +463,11 @@ main(int argc, char *argv[])
 	 *		doesn't do any locking before first truncate;
 	 *		NFS share does; should use fcntl locking instead)
 	 *	Needed privileges:
-	 *		auditing
 	 *		nfs syscall
 	 *		file dac search (so it can stat all files)
 	 */
 	if (__init_daemon_priv(PU_RESETGROUPS|PU_CLEARLIMITSET, -1, -1,
-	    PRIV_SYS_NFS, PRIV_PROC_AUDIT, PRIV_FILE_DAC_SEARCH,
+	    PRIV_SYS_NFS, PRIV_FILE_DAC_SEARCH,
 	    PRIV_NET_PRIVADDR, NULL) == -1) {
 		(void) fprintf(stderr,
 		    "%s: must be run with sufficient privileges\n",
@@ -632,8 +629,6 @@ main(int argc, char *argv[])
 		exit(0);
 	}
 
-	audit_mountd_setup();	/* BSM */
-
 	/*
 	 * Get required system variables
 	 */
@@ -734,8 +729,8 @@ main(int argc, char *argv[])
 	}
 
 	/*
-	 * Create an additional thread to service the rmtab and
-	 * audit_mountd_mount logging for mount requests. Use the same
+	 * Create an additional thread to service the rmtab
+	 * logging for mount requests. Use the same
 	 * signal disposition as the main thread. We create
 	 * a separate thread to allow the mount request threads to
 	 * clear as soon as possible.
@@ -1299,7 +1294,7 @@ mount(struct svc_req *rqstp)
 	int flavor_count;
 	ucred_t	*uc = NULL;
 
-	int audit_status;
+	int status;
 
 	transp = rqstp->rq_xprt;
 	version = rqstp->rq_vers;
@@ -1431,7 +1426,7 @@ reply:
 		if (!svc_sendreply(transp, xdr_fhstatus, (char *)&fhs))
 			log_cant_reply_cln(&cln);
 
-		audit_status = fhs.fhs_status;
+		status = fhs.fhs_status;
 		break;
 
 	case MOUNTVERS3:
@@ -1448,7 +1443,7 @@ reply:
 		if (!svc_sendreply(transp, xdr_mountres3, (char *)&mountres3))
 			log_cant_reply_cln(&cln);
 
-		audit_status = mountres3.fhs_status;
+		status = mountres3.fhs_status;
 		break;
 	}
 
@@ -1465,7 +1460,7 @@ reply:
 	 * in the context of this thread.
 	 */
 	enqueued = enqueue_logging_data(host, transp, path, rpath,
-	    audit_status, error);
+	    status, error);
 	if (enqueued == FALSE) {
 		if (host == NULL) {
 			DTRACE_PROBE(mountd, name_by_in_thread);
@@ -1473,7 +1468,6 @@ reply:
 		}
 
 		DTRACE_PROBE(mountd, logged_in_thread);
-		audit_mountd_mount(host, path, audit_status); /* BSM */
 		if (!error)
 			mntlist_new(host, rpath); /* add entry to mount list */
 	}
@@ -3136,8 +3130,8 @@ umount(struct svc_req *rqstp)
 	host = cln_gethost(&cln);
 	if (host == NULL) {
 		/*
-		 * Without the hostname we can't do audit or delete
-		 * this host from the mount entries.
+		 * Without the hostname we can't delete this host from the
+		 * mount entries.
 		 */
 		svc_freeargs(transp, xdr_dirpath, (caddr_t)&path);
 		return;
@@ -3145,8 +3139,6 @@ umount(struct svc_req *rqstp)
 
 	if (verbose)
 		syslog(LOG_NOTICE, "UNMOUNT: %s unmounted %s", host, path);
-
-	audit_mountd_umount(host, path);
 
 	remove_path = rpath;	/* assume we will use the cannonical path */
 	if (realpath(path, rpath) == NULL) {

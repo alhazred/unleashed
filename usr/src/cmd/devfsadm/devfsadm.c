@@ -36,18 +36,10 @@
 
 #include <string.h>
 #include <deflt.h>
-#include <bsm/devices.h>
-#include <bsm/devalloc.h>
 #include <utime.h>
 #include <sys/param.h>
-#include <bsm/libbsm.h>
 #include <zone.h>
 #include "devfsadm_impl.h"
-
-/* externs from devalloc.c */
-extern void  _reset_devalloc(int);
-extern void _update_devalloc_db(devlist_t *, int, int, char *, char *);
-extern int _da_check_for_usb(char *, char *);
 
 /* create or remove nodes or links. unset with -n */
 static int file_mods = TRUE;
@@ -57,24 +49,6 @@ static int cleanup = FALSE;
 
 /* devlinks -d compatibility */
 static int devlinks_debug = FALSE;
-
-/* flag to enable/disable device allocation with -e/-d */
-static int devalloc_flag = 0;
-
-/* flag that indicates if device allocation is on or not */
-static int devalloc_is_on = 0;
-
-/*
- * devices to be deallocated with -d :
- *	audio, floppy, cd, floppy, tape, rmdisk.
- */
-static char *devalloc_list[10] = {DDI_NT_AUDIO, DDI_NT_CD, DDI_NT_CD_CHAN,
-				    DDI_NT_FD, DDI_NT_TAPE, DDI_NT_BLOCK_CHAN,
-				    DDI_NT_UGEN, DDI_NT_USB_ATTACHMENT_POINT,
-				    DDI_NT_SCSI_NEXUS, NULL};
-
-/* list of allocatable devices */
-static devlist_t devlist;
 
 /* load a single driver only.  set with -i */
 static int single_drv = FALSE;
@@ -296,18 +270,9 @@ main(int argc, char *argv[])
 
 	(void) umask(0);
 
-	/*
-	 * Check if device allocation is enabled.
-	 */
-	devalloc_is_on = (da_is_on() == 1) ? 1 : 0;
-
 	parse_args(argc, argv);
 
 	(void) sema_init(&dev_sema, 1, USYNC_THREAD, NULL);
-
-	/* Initialize device allocation list */
-	devlist.audio = devlist.cd = devlist.floppy = devlist.tape =
-	    devlist.rmdisk = NULL;
 
 	if (daemon_mode == TRUE) {
 		/*
@@ -382,21 +347,7 @@ main(int argc, char *argv[])
 		}
 	} else {
 		/* not a daemon, so just build /dev and /devices */
-
-		/*
-		 * If turning off device allocation, load the
-		 * minor_perm file because process_devinfo_tree() will
-		 * need this in order to reset the permissions of the
-		 * device files.
-		 */
-		if (devalloc_flag == DA_OFF) {
-			read_minor_perm_file();
-		}
-
 		process_devinfo_tree();
-		if (devalloc_flag != 0)
-			/* Enable/disable device allocation */
-			_reset_devalloc(devalloc_flag);
 	}
 	return (0);
 }
@@ -708,7 +659,7 @@ parse_args(int argc, char *argv[])
 		devlinktab_file = DEVLINKTAB_FILE;
 
 		while ((opt = getopt(argc, argv,
-		    "a:Cc:deIi:l:np:PR:r:sSt:uvV:x:")) != EOF) {
+		    "a:Cc:Ii:l:np:PR:r:sSt:uvV:x:")) != EOF) {
 			if (opt == 'I' || opt == 'P' || opt == 'S') {
 				if (public_mode)
 					usage();
@@ -729,24 +680,6 @@ parse_args(int argc, char *argv[])
 				classes = s_realloc(classes,
 				    num_classes * sizeof (char *));
 				classes[num_classes - 1] = optarg;
-				break;
-			case 'd':
-				if (daemon_mode == FALSE) {
-					/*
-					 * Device allocation to be disabled.
-					 */
-					devalloc_flag = DA_OFF;
-					build_dev = FALSE;
-				}
-				break;
-			case 'e':
-				if (daemon_mode == FALSE) {
-					/*
-					 * Device allocation to be enabled.
-					 */
-					devalloc_flag = DA_ON;
-					build_dev = FALSE;
-				}
 				break;
 			case 'I':	/* update kernel driver.conf cache */
 				if (daemon_mode == TRUE)
@@ -1853,10 +1786,6 @@ minor_process(di_node_t node, di_minor_t minor, struct mlist *dep)
 
 	if (dep != NULL) {
 
-		/*
-		 * Reset /devices node to minor_perm perm/ownership
-		 * if we are here to deactivate device allocation
-		 */
 		if (build_devices == TRUE) {
 			reset_node_permissions(node, minor);
 		}
@@ -2954,50 +2883,20 @@ reset_node_permissions(di_node_t node, di_minor_t minor)
 
 	/*
 	 * If we are here for a new device
-	 *	If device allocation is on
 	 *	then
-	 *		set ownership to root:other and permissions to 0000
-	 *	else
 	 *		set ownership and permissions as specified in minor_perm
 	 * If we are here for an existing device
-	 *	If device allocation is to be turned on
 	 *	then
-	 *		reset ownership to root:other and permissions to 0000
-	 *	else if device allocation is to be turned off
-	 *		reset ownership and permissions to those specified in
-	 *		minor_perm
-	 *	else
 	 *		preserve existing/user-modified ownership and
 	 *		permissions
 	 *
 	 * devfs indicates a new device by faking access time to be zero.
 	 */
 	if (sb.st_atime != 0) {
-		int  i;
-		char *nt;
-
-		if ((devalloc_flag == 0) && (devalloc_is_on != 1))
-			/*
-			 * Leave existing devices as they are if we are not
-			 * turning device allocation on/off.
-			 */
-			return;
-
-		nt = di_minor_nodetype(minor);
-
-		if (nt == NULL)
-			return;
-
-		for (i = 0; devalloc_list[i]; i++) {
-			if (strcmp(nt, devalloc_list[i]) == 0)
-				/*
-				 * One of the types recognized by devalloc,
-				 * reset attrs.
-				 */
-				break;
-		}
-		if (devalloc_list[i] == NULL)
-			return;
+		/*
+		 * Leave existing devices as they are.
+		 */
+		return;
 	}
 
 	if (file_mods == FALSE) {
@@ -3006,27 +2905,12 @@ reset_node_permissions(di_node_t node, di_minor_t minor)
 		return;
 	}
 
-	if ((devalloc_flag == DA_ON) ||
-	    ((devalloc_is_on == 1) && (devalloc_flag != DA_OFF))) {
-		/*
-		 * we are here either to turn device allocation on or
-		 * to add a new device while device allocation is on
-		 * (and we've confirmed that we're not turning it
-		 * off).
-		 */
-		mode = DEALLOC_MODE;
-		uid = DA_UID;
-		gid = DA_GID;
-	}
-
-	if ((devalloc_is_on == 1) || (devalloc_flag == DA_ON) ||
-	    (sb.st_mode != mode)) {
+	if (sb.st_mode != mode) {
 		if (chmod(phy_path, mode) == -1)
 			vprint(VERBOSE_MID, CHMOD_FAILED,
 			    phy_path, strerror(errno));
 	}
-	if ((devalloc_is_on == 1) || (devalloc_flag == DA_ON) ||
-	    (sb.st_uid != uid || sb.st_gid != gid)) {
+	if (sb.st_uid != uid || sb.st_gid != gid) {
 		if (chown(phy_path, uid, gid) == -1)
 			vprint(VERBOSE_MID, CHOWN_FAILED,
 			    phy_path, strerror(errno));

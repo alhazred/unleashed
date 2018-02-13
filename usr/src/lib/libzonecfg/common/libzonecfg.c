@@ -53,7 +53,6 @@
 #include <sys/priocntl.h>
 #include <libuutil.h>
 #include <wait.h>
-#include <bsm/adt.h>
 #include <auth_attr.h>
 #include <auth_list.h>
 #include <secdb.h>
@@ -7483,38 +7482,6 @@ get_doorname(const char *zone_name, char *buffer)
 	    zonecfg_get_root(), zone_name) < PATH_MAX);
 }
 
-/*
- * system daemons are not audited.  For the global zone, this occurs
- * "naturally" since init is started with the default audit
- * characteristics.  Since zoneadmd is a system daemon and it starts
- * init for a zone, it is necessary to clear out the audit
- * characteristics inherited from whomever started zoneadmd.  This is
- * indicated by the audit id, which is set from the ruid parameter of
- * adt_set_user(), below.
- */
-
-static void
-prepare_audit_context(const char *zone_name)
-{
-	adt_session_data_t	*ah;
-	char			*failure = gettext("audit failure: %s");
-
-	if (adt_start_session(&ah, NULL, 0)) {
-		zerror(zone_name, failure, strerror(errno));
-		return;
-	}
-	if (adt_set_user(ah, ADT_NO_AUDIT, ADT_NO_AUDIT,
-	    ADT_NO_AUDIT, ADT_NO_AUDIT, NULL, ADT_NEW)) {
-		zerror(zone_name, failure, strerror(errno));
-		(void) adt_end_session(ah);
-		return;
-	}
-	if (adt_set_proc(ah))
-		zerror(zone_name, failure, strerror(errno));
-
-	(void) adt_end_session(ah);
-}
-
 static int
 start_zoneadmd(const char *zone_name, boolean_t lock)
 {
@@ -7558,9 +7525,6 @@ start_zoneadmd(const char *zone_name, boolean_t lock)
 
 	if (child_pid == 0) {
 		const char *argv[6], **ap;
-
-		/* child process */
-		prepare_audit_context(zone_name);
 
 		ap = argv;
 		*ap++ = "zoneadmd";

@@ -67,9 +67,6 @@
 #include <user_attr.h>
 #include <priv.h>
 
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
-
 #include <security/pam_appl.h>
 
 #define	PATH	"/usr/bin:"		/* path for users other than root */
@@ -119,10 +116,6 @@ static void message(enum messagemode, char *, ...);
 static char *alloc_vsprintf(const char *, va_list);
 static char *tail(char *);
 
-static void audit_success(int, struct passwd *);
-static void audit_logout(adt_session_data_t *, au_event_t);
-static void audit_failure(int, struct passwd *, char *, int);
-
 #ifdef DYNAMIC_SU
 static void validate(char *, int *);
 static int legalenvvar(char *);
@@ -134,8 +127,6 @@ static struct pam_conv pam_conv = {su_conv, NULL};
 static struct pam_conv emb_pam_conv = {emb_su_conv, NULL};
 static void quotemsg(char *, ...);
 static void readinitblock(void);
-#else	/* !DYNAMIC_SU */
-static void update_audit(struct passwd *pwd);
 #endif	/* DYNAMIC_SU */
 
 static pam_handle_t	*pamh = NULL;	/* Authentication handle */
@@ -329,12 +320,10 @@ main(int argc, char **argv)
 
 	if (retcode != PAM_SUCCESS) {
 		/*
-		 * 1st step: audit and log the error.
+		 * 1st step: log the error.
 		 * 2nd step: sleep.
 		 * 3rd step: print out message to user.
 		 */
-		/* don't let audit_failure distinguish a role here */
-		audit_failure(PW_FALSE, NULL, nptr, retcode);
 		switch (retcode) {
 		case PAM_USER_UNKNOWN:
 			closelog();
@@ -386,7 +375,6 @@ main(int argc, char **argv)
 	if (!result ||
 	    (getspnam_r(nptr, &sp, spbuf, sizeof (spbuf)) == NULL)) {
 		message(ERR, gettext("Unknown id: %s"), nptr);
-		audit_failure(PW_FALSE, NULL, nptr, PAM_USER_UNKNOWN);
 		closelog();
 		exit(1);
 	}
@@ -405,7 +393,6 @@ main(int argc, char **argv)
 		if (Sulog != NULL)
 			log(Sulog, nptr, 0);    /* log entry */
 		message(ERR, gettext("Sorry"));
-		audit_failure(PW_FALSE, NULL, nptr, PAM_AUTH_ERR);
 		if (dosyslog)
 			syslog(LOG_CRIT, "'su %s' failed for %s on %s",
 			    pwd.pw_name, username, ttyn);
@@ -415,15 +402,12 @@ main(int argc, char **argv)
 	/* clear password file entry */
 	(void) memset(spbuf, 0, sizeof (spbuf));
 ok:
-	/* update audit session in a non-pam environment */
-	update_audit(&pwd);
 	if (dosyslog)
 		syslog(pwd.pw_uid == 0 ? LOG_NOTICE : LOG_INFO,
 		    "'su %s' succeeded for %s on %s",
 		    pwd.pw_name, username, ttyn);
 #endif	/* DYNAMIC_SU */
 
-	audit_success(pw_change, &pwd);
 	uid = pwd.pw_uid;
 	gid = pwd.pw_gid;
 	dir = strdup(pwd.pw_dir);
@@ -761,308 +745,6 @@ static void
 to(int sig)
 {}
 
-/*
- * audit_success - audit successful su
- *
- *	Entry	process audit context established -- i.e., pam_setcred()
- *			or equivalent called.
- *		pw_change = PW_TRUE, if successful password change audit
- *				required.
- *		pwd = passwd entry for new user.
- */
-
-static void
-audit_success(int pw_change, struct passwd *pwd)
-{
-	adt_session_data_t	*ah = NULL;
-	adt_event_data_t	*event;
-	au_event_t		event_id = ADT_su;
-	userattr_t		*user_entry;
-	char			*kva_value;
-
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_start_session(ADT_su): %m");
-		return;
-	}
-	if (((user_entry = getusernam(pwd->pw_name)) != NULL) &&
-	    ((kva_value = kva_match((kva_t *)user_entry->attr,
-	    USERATTR_TYPE_KW)) != NULL) &&
-	    ((strcmp(kva_value, USERATTR_TYPE_NONADMIN_KW) == 0) ||
-	    (strcmp(kva_value, USERATTR_TYPE_ADMIN_KW) == 0))) {
-		event_id = ADT_role_login;
-	}
-	free_userattr(user_entry);	/* OK to use, checks for NULL */
-
-	/* since proc uid/gid not yet updated */
-	if (adt_set_user(ah, pwd->pw_uid, pwd->pw_gid, pwd->pw_uid,
-	    pwd->pw_gid, NULL, ADT_USER) != 0) {
-		syslog(LOG_AUTH | LOG_ERR,
-		    "adt_set_user(ADT_su, ADT_FAILURE): %m");
-	}
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-		syslog(LOG_AUTH | LOG_ALERT, "adt_alloc_event(ADT_su): %m");
-	} else if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_put_event(ADT_su, ADT_SUCCESS): %m");
-	}
-
-	if (pw_change == PW_TRUE) {
-		/* Also audit password change */
-		adt_free_event(event);
-		if ((event = adt_alloc_event(ah, ADT_passwd)) == NULL) {
-			syslog(LOG_AUTH | LOG_ALERT,
-			    "adt_alloc_event(ADT_passwd): %m");
-		} else if (adt_put_event(event, ADT_SUCCESS,
-		    ADT_SUCCESS) != 0) {
-			syslog(LOG_AUTH | LOG_ALERT,
-			    "adt_put_event(ADT_passwd, ADT_SUCCESS): %m");
-		}
-	}
-	adt_free_event(event);
-	/*
-	 * The preceeding code is a noop if audit isn't enabled,
-	 * but, let's not make a new process when it's not necessary.
-	 */
-	if (adt_audit_state(AUC_AUDITING)) {
-		audit_logout(ah, event_id);	/* fork to catch logout */
-	}
-	(void) adt_end_session(ah);
-}
-
-
-/*
- * audit_logout - audit successful su logout
- *
- *	Entry	ah = Successful su audit handle
- *		event_id = su event ID: ADT_su, ADT_role_login
- *
- *	Exit	Errors are just ignored and we go on.
- *		su logout event written.
- */
-static void
-audit_logout(adt_session_data_t *ah, au_event_t event_id)
-{
-	adt_event_data_t	*event;
-	int			status;		/* wait status */
-	pid_t			pid;
-	priv_set_t		*priv;		/* waiting process privs */
-
-	if (event_id == ADT_su) {
-		event_id = ADT_su_logout;
-	} else {
-		event_id = ADT_role_logout;
-	}
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_alloc_event(ADT_su_logout): %m");
-		return;
-	}
-	if ((priv = priv_allocset())  == NULL) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "su audit_logout: could not alloc basic privs: %m");
-		adt_free_event(event);
-		return;
-	}
-
-	/*
-	 * The child returns and continues su processing.
-	 * The parent's sole job is to wait for child exit, write the
-	 * logout audit record, and replay the child's exit code.
-	 */
-	if ((pid = fork()) == 0) {
-		/* child */
-
-		adt_free_event(event);
-		priv_freeset(priv);
-		return;
-	}
-	if (pid == -1) {
-		/* failure */
-
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "su audit_logout: could not fork: %m");
-		adt_free_event(event);
-		priv_freeset(priv);
-		return;
-	}
-
-	/* parent process */
-
-	/*
-	 * When this routine is called, the current working
-	 * directory is the unknown and there are unknown open
-	 * files. For the waiting process, change the current
-	 * directory to root and close open files so that
-	 * directories can be unmounted if necessary.
-	 */
-	if (chdir("/") != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "su audit_logout: could not chdir /: %m");
-	}
-	/*
-	 * Reduce privileges to just those needed.
-	 */
-	priv_basicset(priv);
-	(void) priv_delset(priv, PRIV_PROC_EXEC);
-	(void) priv_delset(priv, PRIV_PROC_FORK);
-	(void) priv_delset(priv, PRIV_PROC_INFO);
-	(void) priv_delset(priv, PRIV_PROC_SESSION);
-	(void) priv_delset(priv, PRIV_FILE_LINK_ANY);
-	if ((priv_addset(priv, PRIV_PROC_AUDIT) != 0) ||
-	    (setppriv(PRIV_SET, PRIV_PERMITTED, priv) != 0)) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "su audit_logout: could not reduce privs: %m");
-	}
-	closefrom(0);
-	priv_freeset(priv);
-
-	for (;;) {
-		if (pid != waitpid(pid, &status, WUNTRACED)) {
-			if (errno == ECHILD) {
-				/*
-				 * No existing child with the given pid. Lets
-				 * audit the logout.
-				 */
-				break;
-			}
-			continue;
-		}
-
-		if (WIFEXITED(status) || WIFSIGNALED(status)) {
-			/*
-			 * The child shell exited or was terminated by
-			 * a signal. Lets audit logout.
-			 */
-			break;
-		} else if (WIFSTOPPED(status)) {
-			pid_t pgid;
-			int fd;
-			void (*sg_handler)();
-			/*
-			 * The child shell has been stopped/suspended.
-			 * We need to suspend here as well and pass down
-			 * the control to the parent process.
-			 */
-			sg_handler = signal(WSTOPSIG(status), SIG_DFL);
-			(void) sigsend(P_PGID, getpgrp(), WSTOPSIG(status));
-			/*
-			 * We stop here. When resumed, mark the child
-			 * shell group as foreground process group
-			 * which gives the child shell a control over
-			 * the controlling terminal.
-			 */
-			(void) signal(WSTOPSIG(status), sg_handler);
-
-			pgid = getpgid(pid);
-			if ((fd = open("/dev/tty", O_RDWR)) != -1) {
-				/*
-				 * Pass down the control over the controlling
-				 * terminal iff we are in a foreground process
-				 * group. Otherwise, we are in a background
-				 * process group and the kernel will send
-				 * SIGTTOU signal to stop us (by default).
-				 */
-				if (tcgetpgrp(fd) == getpgrp()) {
-					(void) tcsetpgrp(fd, pgid);
-				}
-				(void) close(fd);
-			}
-			/* Wake up the child shell */
-			(void) sigsend(P_PGID, pgid, SIGCONT);
-		}
-	}
-
-	(void) adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS);
-	adt_free_event(event);
-	(void) adt_end_session(ah);
-	exit(WEXITSTATUS(status));
-}
-
-
-/*
- * audit_failure - audit failed su
- *
- *	Entry	New audit context not set.
- *		pw_change == PW_FALSE, if no password change requested.
- *			     PW_FAILED, if failed password change audit
- *				      required.
- *		pwd = NULL, or password entry to use.
- *		user = username entered.  Add to record if pwd == NULL.
- *		pamerr = PAM error code; reason for failure.
- */
-
-static void
-audit_failure(int pw_change, struct passwd *pwd, char *user, int pamerr)
-{
-	adt_session_data_t	*ah;	/* audit session handle */
-	adt_event_data_t	*event;	/* event to generate */
-	au_event_t		event_id = ADT_su;
-	userattr_t		*user_entry;
-	char			*kva_value;
-
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_start_session(ADT_su, ADT_FAILURE): %m");
-		return;
-	}
-
-	if (pwd != NULL) {
-		/* target user authenticated, merge audit state */
-		if (adt_set_user(ah, pwd->pw_uid, pwd->pw_gid, pwd->pw_uid,
-		    pwd->pw_gid, NULL, ADT_UPDATE) != 0) {
-			syslog(LOG_AUTH | LOG_ERR,
-			    "adt_set_user(ADT_su, ADT_FAILURE): %m");
-		}
-		if (((user_entry = getusernam(pwd->pw_name)) != NULL) &&
-		    ((kva_value = kva_match((kva_t *)user_entry->attr,
-		    USERATTR_TYPE_KW)) != NULL) &&
-		    ((strcmp(kva_value, USERATTR_TYPE_NONADMIN_KW) == 0) ||
-		    (strcmp(kva_value, USERATTR_TYPE_ADMIN_KW) == 0))) {
-			event_id = ADT_role_login;
-		}
-		free_userattr(user_entry);	/* OK to use, checks for NULL */
-	}
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_alloc_event(ADT_su, ADT_FAILURE): %m");
-		return;
-	}
-	/*
-	 * can't tell if user not found is a role, so always use su
-	 * If we do pass in pwd when the JNI is fixed, then can
-	 * distinguish and set name in both su and role_login
-	 */
-	if (pwd == NULL) {
-		/*
-		 * this should be "fail_user" rather than "message"
-		 * see adt_xml.  The JNI breaks, so for now we leave
-		 * this alone.
-		 */
-		event->adt_su.message = user;
-	}
-	if (adt_put_event(event, ADT_FAILURE,
-	    ADT_FAIL_PAM + pamerr) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_put_event(ADT_su(ADT_FAIL, %s): %m",
-		    pam_strerror(pamh, pamerr));
-	}
-	if (pw_change != PW_FALSE) {
-		/* Also audit password change failed */
-		adt_free_event(event);
-		if ((event = adt_alloc_event(ah, ADT_passwd)) == NULL) {
-			syslog(LOG_AUTH | LOG_ALERT,
-			    "su: adt_alloc_event(ADT_passwd): %m");
-		} else if (adt_put_event(event, ADT_FAILURE,
-		    ADT_FAIL_PAM + pamerr) != 0) {
-			syslog(LOG_AUTH | LOG_ALERT,
-			    "su: adt_put_event(ADT_passwd, ADT_FAILURE): %m");
-		}
-	}
-	adt_free_event(event);
-	(void) adt_end_session(ah);
-}
-
 #ifdef DYNAMIC_SU
 /*
  * su_conv():
@@ -1329,7 +1011,6 @@ validate(char *usernam, int *pw_change)
 					continue;
 				}
 				message(ERR, gettext("Sorry"));
-				audit_failure(PW_FAILED, &pwd, NULL, error);
 				if (dosyslog)
 					syslog(LOG_CRIT,
 					    "'su %s' failed for %s on %s",
@@ -1341,7 +1022,6 @@ validate(char *usernam, int *pw_change)
 			return;
 		} else {
 			message(ERR, gettext("Sorry"));
-			audit_failure(PW_FALSE, &pwd, NULL, error);
 			if (dosyslog)
 				syslog(LOG_CRIT, "'su %s' failed for %s on %s",
 				    pwd.pw_name, usernam, ttyn);
@@ -1415,31 +1095,6 @@ readinitblock(void)
 		if (bol && strcmp(buf, ".\n") == 0)
 			return;
 		bol = (strchr(buf, '\n') != NULL);
-	}
-}
-#else	/* !DYNAMIC_SU */
-static void
-update_audit(struct passwd *pwd)
-{
-	adt_session_data_t	*ah;	/* audit session handle */
-
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0) {
-		message(ERR, gettext("Sorry"));
-		if (dosyslog)
-			syslog(LOG_CRIT, "'su %s' failed for %s "
-			    "cannot start audit session %m",
-			    pwd->pw_name, username);
-		closelog();
-		exit(2);
-	}
-	if (adt_set_user(ah, pwd->pw_uid, pwd->pw_gid, pwd->pw_uid,
-	    pwd->pw_gid, NULL, ADT_UPDATE) != 0) {
-		if (dosyslog)
-			syslog(LOG_CRIT, "'su %s' failed for %s "
-			    "cannot update audit session %m",
-			    pwd->pw_name, username);
-		closelog();
-		exit(2);
 	}
 }
 #endif	/* DYNAMIC_SU */

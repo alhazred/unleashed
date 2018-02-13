@@ -70,7 +70,7 @@ LDFLAGS += -R/usr/lib/smbsrv
 LDLIBS += -L$(ROOT)/usr/lib/smbsrv
 # prefer to keep libs ordered by dependence
 LDLIBS += -lmlsvc -lmlrpc -lsmbns -lsmb -lsmbfs -lgss
-LDLIBS += -lzfs -lbsm -lscf -lcmdutils -lumem
+LDLIBS += -lzfs -lscf -lcmdutils -lumem
 $(PROG) := LDLIBS += -lkrb5
 
 ROOTSMBDDIR = $(ROOTLIB)/smbsrv

@@ -196,7 +196,6 @@ typedef struct ipc_service {
 	ipc_func_t	*ipcs_dtor;	/* object destructor		*/
 	ipc_func_t	*ipcs_rmid;	/* object removal		*/
 	list_t		ipcs_usedids;	/* list of allocated ids	*/
-	int		ipcs_atype;	/* audit type (see c2/audit.h)	*/
 } ipc_service_t;
 
 int ipcperm_access(kipc_perm_t *, int, cred_t *);
@@ -208,7 +207,7 @@ int ipcperm_set64(ipc_service_t *, struct cred *, kipc_perm_t *,
 void ipcperm_stat64(ipc_perm64_t *, kipc_perm_t *);
 
 ipc_service_t *ipcs_create(const char *, rctl_hndl_t, rctl_hndl_t, size_t,
-    ipc_func_t *, ipc_func_t *, int, size_t);
+    ipc_func_t *, ipc_func_t *, size_t);
 void ipcs_destroy(ipc_service_t *);
 void ipcs_lock(ipc_service_t *);
 void ipcs_unlock(ipc_service_t *);

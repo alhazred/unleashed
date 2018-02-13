@@ -15,8 +15,6 @@
 #
 
 file path=usr/share/man/man1/Intro.1
-file path=usr/share/man/man1/allocate.1
-file path=usr/share/man/man1/amt.1
 file path=usr/share/man/man1/at.1
 file path=usr/share/man/man1/atq.1
 file path=usr/share/man/man1/atrm.1
@@ -42,7 +40,6 @@ file path=usr/share/man/man1/ctstat.1
 file path=usr/share/man/man1/ctwatch.1
 file path=usr/share/man/man1/cut.1
 file path=usr/share/man/man1/date.1
-file path=usr/share/man/man1/deallocate.1
 file path=usr/share/man/man1/dhcpinfo.1
 file path=usr/share/man/man1/digest.1
 file path=usr/share/man/man1/disown.1
@@ -93,7 +90,6 @@ file path=usr/share/man/man1/less.1
 file path=usr/share/man/man1/lesskey.1
 file path=usr/share/man/man1/let.1
 file path=usr/share/man/man1/line.1
-file path=usr/share/man/man1/list_devices.1
 file path=usr/share/man/man1/listusers.1
 file path=usr/share/man/man1/ln.1
 file path=usr/share/man/man1/loadkeys.1

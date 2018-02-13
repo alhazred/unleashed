@@ -111,7 +111,6 @@
 #include <libscf.h>
 #include <libuutil.h>
 #include <stddef.h>
-#include <bsm/adt_event.h>
 #include <ucred.h>
 #include "inetd_impl.h"
 
@@ -226,9 +225,6 @@ int				deny_severity = LOG_WARNING;
 
 /* path of the configuration file being monitored by check_conf_file() */
 static char			*conf_file = NULL;
-
-/* Auditing session handle */
-static adt_session_data_t	*audit_handle;
 
 /* Number of pending connections */
 static size_t			tlx_pending_counter;
@@ -2735,73 +2731,6 @@ exec_method(instance_t *instance, instance_method_t method, method_info_t *mi,
 		args = mi->exec_args_we.we_wordv;
 	}
 
-	/* Generate audit trail for start operations */
-	if (method == IM_START) {
-		adt_event_data_t *ae;
-		struct sockaddr_storage ss;
-		priv_set_t *privset;
-		socklen_t sslen = sizeof (ss);
-
-		if ((ae = adt_alloc_event(audit_handle, ADT_inetd_connect))
-		    == NULL) {
-			error_msg(gettext("Unable to allocate audit event for "
-			    "the %s method of instance %s"),
-			    methods[method].name, instance->fmri);
-			exit(IMRET_FAILURE);
-		}
-
-		/*
-		 * The inetd_connect audit record consists of:
-		 *	Service name
-		 *	Execution path
-		 *	Remote address and port
-		 *	Local port
-		 *	Process privileges
-		 */
-		ae->adt_inetd_connect.service_name = cfg->svc_name;
-		ae->adt_inetd_connect.cmd = mi->exec_path;
-
-		if (instance->remote_addr.ss_family == AF_INET) {
-			struct in_addr *in = SS_SINADDR(instance->remote_addr);
-			ae->adt_inetd_connect.ip_adr[0] = in->s_addr;
-			ae->adt_inetd_connect.ip_type = ADT_IPv4;
-		} else {
-			uint32_t *addr6;
-			int i;
-
-			ae->adt_inetd_connect.ip_type = ADT_IPv6;
-			addr6 = (uint32_t *)SS_SINADDR(instance->remote_addr);
-			for (i = 0; i < 4; ++i)
-				ae->adt_inetd_connect.ip_adr[i] = addr6[i];
-		}
-
-		ae->adt_inetd_connect.ip_remote_port =
-		    ntohs(SS_PORT(instance->remote_addr));
-
-		if (getsockname(instance->conn_fd, (struct sockaddr *)&ss,
-		    &sslen) == 0)
-			ae->adt_inetd_connect.ip_local_port =
-			    ntohs(SS_PORT(ss));
-
-		privset = mthd_ctxt->priv_set;
-		if (privset == NULL) {
-			privset = priv_allocset();
-			if (privset != NULL &&
-			    getppriv(PRIV_EFFECTIVE, privset) != 0) {
-				priv_freeset(privset);
-				privset = NULL;
-			}
-		}
-
-		ae->adt_inetd_connect.privileges = privset;
-
-		(void) adt_put_event(ae, ADT_SUCCESS, ADT_SUCCESS);
-		adt_free_event(ae);
-
-		if (privset != NULL && mthd_ctxt->priv_set == NULL)
-			priv_freeset(privset);
-	}
-
 	/*
 	 * Set method context before the fd setup below so we can output an
 	 * error message if it fails.
@@ -3220,7 +3149,6 @@ process_nowait_request(instance_t *instance, proto_info_t *pi)
 {
 	basic_cfg_t		*cfg = instance->config->basic;
 	int			ret;
-	adt_event_data_t	*ae;
 	char			buf[BUFSIZ];
 
 	/* accept nowait service connections on a new fd */
@@ -3250,29 +3178,6 @@ process_nowait_request(instance_t *instance, proto_info_t *pi)
 				instance->conn_rate_start = now;
 				instance->conn_rate_count = 1;
 			} else {
-				/* Generate audit record */
-				if ((ae = adt_alloc_event(audit_handle,
-				    ADT_inetd_ratelimit)) == NULL) {
-					error_msg(gettext("Unable to allocate "
-					    "rate limit audit event"));
-				} else {
-					adt_inetd_ratelimit_t *rl =
-					    &ae->adt_inetd_ratelimit;
-					/*
-					 * The inetd_ratelimit audit
-					 * record consists of:
-					 * 	Service name
-					 *	Connection rate limit
-					 */
-					rl->service_name = cfg->svc_name;
-					(void) snprintf(buf, sizeof (buf),
-					    "limit=%lld", cfg->conn_rate_max);
-					rl->limit = buf;
-					(void) adt_put_event(ae, ADT_SUCCESS,
-					    ADT_SUCCESS);
-					adt_free_event(ae);
-				}
-
 				error_msg(gettext(
 				    "Instance %s has exceeded its configured "
 				    "connection rate, additional connections "
@@ -3308,25 +3213,6 @@ process_nowait_request(instance_t *instance, proto_info_t *pi)
 	 * Limit concurrent connections of nowait services.
 	 */
 	if (copies_limit_exceeded(instance)) {
-		/* Generate audit record */
-		if ((ae = adt_alloc_event(audit_handle, ADT_inetd_copylimit))
-		    == NULL) {
-			error_msg(gettext("Unable to allocate copy limit "
-			    "audit event"));
-		} else {
-			/*
-			 * The inetd_copylimit audit record consists of:
-			 *	Service name
-			 * 	Copy limit
-			 */
-			ae->adt_inetd_copylimit.service_name = cfg->svc_name;
-			(void) snprintf(buf, sizeof (buf), "limit=%lld",
-			    cfg->max_copies);
-			ae->adt_inetd_copylimit.limit = buf;
-			(void) adt_put_event(ae, ADT_SUCCESS, ADT_SUCCESS);
-			adt_free_event(ae);
-		}
-
 		warn_msg(gettext("Instance %s has reached its maximum "
 		    "configured copies, no new connections will be accepted"),
 		    instance->fmri);
@@ -3346,7 +3232,6 @@ process_wait_request(instance_t *instance, const proto_info_t *pi)
 {
 	basic_cfg_t		*cfg = instance->config->basic;
 	int			ret;
-	adt_event_data_t	*ae;
 	char			buf[BUFSIZ];
 
 	instance->conn_fd = pi->listen_fd;
@@ -3370,34 +3255,6 @@ process_wait_request(instance_t *instance, const proto_info_t *pi)
 				instance->fail_rate_start = now;
 				instance->fail_rate_count = 1;
 			} else {
-				/* Generate audit record */
-				if ((ae = adt_alloc_event(audit_handle,
-				    ADT_inetd_failrate)) == NULL) {
-					error_msg(gettext("Unable to allocate "
-					    "failure rate audit event"));
-				} else {
-					adt_inetd_failrate_t *fr =
-					    &ae->adt_inetd_failrate;
-					/*
-					 * The inetd_failrate audit record
-					 * consists of:
-					 * 	Service name
-					 * 	Failure rate
-					 *	Interval
-					 * Last two are expressed as k=v pairs
-					 * in the values field.
-					 */
-					fr->service_name = cfg->svc_name;
-					(void) snprintf(buf, sizeof (buf),
-					    "limit=%lld,interval=%d",
-					    cfg->wait_fail_cnt,
-					    cfg->wait_fail_interval);
-					fr->values = buf;
-					(void) adt_put_event(ae, ADT_SUCCESS,
-					    ADT_SUCCESS);
-					adt_free_event(ae);
-				}
-
 				error_msg(gettext(
 				    "Instance %s has exceeded its configured "
 				    "failure rate, transitioning to "
@@ -3628,9 +3485,6 @@ fini(void)
 	config_fini();
 	repval_fini();
 	poll_fini();
-
-	/* Close audit session */
-	(void) adt_end_session(audit_handle);
 }
 
 static int
@@ -3709,11 +3563,6 @@ init(void)
 
 	if (method_init() < 0)
 		goto failed;
-
-	/* Initialize auditing session */
-	if (adt_start_session(&audit_handle, NULL, ADT_USE_PROC_DATA) != 0) {
-		error_msg(gettext("Unable to start audit session"));
-	}
 
 	/*
 	 * Initialize signal dispositions/masks

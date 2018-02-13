@@ -112,8 +112,7 @@ $($(MACH)_ARCHITECTURES): $(PREREQ_TARGET) FRC
 # the architecture/machine dependent subdirectories are in completely
 # isomorphic locations.
 #
-COMMON_HDRDIRS= common/c2 \
-		common/des \
+COMMON_HDRDIRS= common/des \
 		common/gssapi \
 		common/idmap \
 		common/klm \

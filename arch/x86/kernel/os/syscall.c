@@ -50,7 +50,6 @@
 #include <sys/sysinfo.h>
 #include <sys/procfs.h>
 #include <sys/prsystm.h>
-#include <c2/audit.h>
 #include <sys/modctl.h>
 #include <sys/aio_impl.h>
 #include <sys/tnf.h>
@@ -58,6 +57,7 @@
 #include <sys/copyops.h>
 #include <sys/priv.h>
 #include <sys/msacct.h>
+#include <vm/as.h>
 
 int syscalltrace = 0;
 #ifdef SYSCALLTRACE
@@ -226,7 +226,7 @@ syscall_exit(kthread_t *t, long rval1, long rval2)
 
 /*
  * Perform pre-system-call processing, including stopping for tracing,
- * auditing, etc.
+ * etc.
  *
  * This routine is called only if the t_pre_sys flag is set. Any condition
  * requiring pre-syscall handling must set the t_pre_sys flag. If the
@@ -302,7 +302,7 @@ pre_syscall()
 				 * for ia32.  Either way, arrange to
 				 * copy them again, both for the syscall
 				 * handler and for other consumers in
-				 * post_syscall (like audit).  Here, we
+				 * post_syscall.  Here, we
 				 * only do amd64, and just set lwp_ap
 				 * back to the kernel-entry stack copy;
 				 * the syscall ml code redoes
@@ -344,25 +344,6 @@ pre_syscall()
 		(void) set_errno(EINTR);	/* forces post_sys */
 		t->t_pre_sys = 1;	/* repost anyway */
 		return (1);		/* don't do system call, return EINTR */
-	}
-
-	/*
-	 * begin auditing for this syscall if the c2audit module is loaded
-	 * and auditing is enabled
-	 */
-	if (audit_active == C2AUDIT_LOADED) {
-		uint32_t auditing = au_zone_getstate(NULL);
-
-		if (auditing & AU_AUDIT_MASK) {
-			int error;
-			if (error = audit_start(T_SYSCALL, code, auditing, \
-			    0, lwp)) {
-				t->t_pre_sys = 1;	/* repost anyway */
-				(void) set_errno(error);
-				return (1);
-			}
-			repost = 1;
-		}
 	}
 
 #ifndef NPROBE
@@ -461,17 +442,6 @@ post_syscall(long rval1, long rval2)
 		lwp->lwp_pcb.pcb_flags |= DEBUG_PENDING;
 		rp->r_ps &= ~PS_T;
 		aston(curthread);
-	}
-
-	/* put out audit record for this syscall */
-	if (AU_AUDITING()) {
-		rval_t	rval;
-
-		/* XX64 -- truncation of 64-bit return values? */
-		rval.r_val1 = (int)rval1;
-		rval.r_val2 = (int)rval2;
-		audit_finish(T_SYSCALL, code, error, &rval);
-		repost = 1;
 	}
 
 	if (curthread->t_pdmsg != NULL) {

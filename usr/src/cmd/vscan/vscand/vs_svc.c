@@ -35,8 +35,6 @@
 #include <syslog.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <pthread.h>
 
 #include "vs_incl.h"
@@ -83,7 +81,6 @@ static pthread_mutex_t vs_svc_mutex = PTHREAD_MUTEX_INITIALIZER;
 static void *vs_svc_async_scan(void *);
 static int vs_svc_scan_file(vs_svc_node_t *, vs_scanstamp_t *);
 static void vs_svc_vlog(char *, vs_result_t *);
-static void vs_svc_audit(char *, vs_result_t *);
 
 
 /*
@@ -295,12 +292,11 @@ vs_svc_scan_file(vs_svc_node_t *node, vs_scanstamp_t *scanstamp)
 	/*
 	 * VS_RESULT_CLEANED - file infected, cleaned data available
 	 * VS_RESULT_FORBIDDEN - file infected, no cleaned data
-	 * Log virus, write audit record and return INFECTED status
+	 * Log virus and return INFECTED status
 	 */
 	if (result.vsr_rc == VS_RESULT_CLEANED ||
 	    result.vsr_rc == VS_RESULT_FORBIDDEN) {
 		vs_svc_vlog(req->vsr_path, &result);
-		vs_svc_audit(req->vsr_path, &result);
 		return (VS_STATUS_INFECTED);
 	}
 
@@ -367,64 +363,4 @@ vs_svc_vlog(char *filepath, vs_result_t *result)
 	}
 
 	(void) fclose(fp);
-}
-
-
-/*
- * vs_svc_audit
- *
- * Generate AUE_vscan_quarantine audit record containing name
- * of infected file, and violation details if available.
- */
-static void
-vs_svc_audit(char *filepath, vs_result_t *result)
-{
-	int i;
-	char *violations[VS_MAX_VIOLATIONS];
-	char data[VS_MAX_VIOLATIONS][VS_DESCRIPTION_MAX];
-	adt_session_data_t *ah;
-	adt_termid_t *p_tid;
-	adt_event_data_t *event;
-
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA)) {
-		syslog(LOG_AUTH | LOG_ALERT, "adt_start_session: %m");
-		return;
-	}
-
-	if (adt_load_ttyname("/dev/console", &p_tid) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_load_ttyname(/dev/console): %m");
-		return;
-	}
-
-	if (adt_set_user(ah, ADT_NO_ATTRIB, ADT_NO_ATTRIB, ADT_NO_ATTRIB,
-	    ADT_NO_ATTRIB, p_tid, ADT_NEW) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT, "adt_set_user(ADT_NO_ATTRIB): %m");
-		(void) adt_end_session(ah);
-		return;
-	}
-
-	if ((event = adt_alloc_event(ah, ADT_vscan_quarantine)) == NULL) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_alloc_event(ADT_vscan_quarantine)): %m");
-		(void) adt_end_session(ah);
-		return;
-	}
-
-	/* populate vscan audit event */
-	event->adt_vscan_quarantine.file = filepath;
-	for (i = 0; i < result->vsr_nviolations; i++) {
-		(void) snprintf(data[i], VS_DESCRIPTION_MAX, "%d - %s",
-		    result->vsr_vrec[i].vr_id, result->vsr_vrec[i].vr_desc);
-		violations[i] = data[i];
-	}
-
-	event->adt_vscan_quarantine.violations = (char **)violations;
-	event->adt_vscan_quarantine.nviolations = result->vsr_nviolations;
-
-	if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS))
-		syslog(LOG_AUTH | LOG_ALERT, "adt_put_event: %m");
-
-	adt_free_event(event);
-	(void) adt_end_session(ah);
 }

@@ -106,10 +106,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/brand/sn1/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/c2/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/conf/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)

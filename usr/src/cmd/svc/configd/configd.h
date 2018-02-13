@@ -31,7 +31,6 @@
 #ifndef	_CONFIGD_H
 #define	_CONFIGD_H
 
-#include <bsm/adt.h>
 #include <door.h>
 #include <pthread.h>
 #include <synch.h>
@@ -485,21 +484,6 @@ typedef struct repcache_client {
 	int		rc_doorfd;	/* our door's FD */
 
 	/*
-	 * Constants used for security auditing
-	 *
-	 * rc_adt_session points to the audit session data that is used for
-	 * the life of the client.  rc_adt_sessionid is the session ID that
-	 * is initially assigned when the audit session is started.  See
-	 * start_audit_session() in client.c.  This session id is used for
-	 * audit events except when we are processing a set of annotated
-	 * events.  Annotated events use a separate session id so that they
-	 * can be grouped.  See set_annotation() in client.c.
-	 */
-	adt_session_data_t *rc_adt_session;	/* Session data. */
-	au_asid_t	rc_adt_sessionid;	/* Main session ID for */
-						/* auditing */
-
-	/*
 	 * client list linkage, protected by hash chain lock
 	 */
 	uu_list_node_t	rc_link;
@@ -532,16 +516,6 @@ typedef struct repcache_client {
 	pthread_cond_t	rc_cv;
 	pthread_mutex_t	rc_lock;
 
-	/*
-	 * Per-client audit information.  These fields must be protected by
-	 * rc_annotate_lock separately from rc_lock because they may need
-	 * to be accessed from rc_node.c with an entity or iterator lock
-	 * held, and those must be taken after rc_lock.
-	 */
-	int		rc_annotate;	/* generate annotation event if set */
-	const char	*rc_operation;	/* operation for audit annotation */
-	const char	*rc_file;	/* file name for audit annotation */
-	pthread_mutex_t	rc_annotate_lock;
 } repcache_client_t;
 
 /* Bit definitions for rc_flags. */
@@ -635,8 +609,6 @@ thread_info_t *thread_self(void);
 void thread_newstate(thread_info_t *, thread_state_t);
 ucred_t *get_ucred(void);
 int ucred_is_privileged(ucred_t *);
-
-adt_session_data_t *get_audit_session(void);
 
 void configd_critical(const char *, ...);
 void configd_vcritical(const char *, va_list);

@@ -8,9 +8,6 @@ MAN = Intro.4 \
       NISLDAPmapping.4 \
       a.out.4 \
       au.4 \
-      audit.log.4 \
-      audit_class.4 \
-      audit_event.4 \
       auth_attr.4 \
       autofs.4 \
       bart_manifest.4 \
@@ -27,9 +24,7 @@ MAN = Intro.4 \
       default_fs.4 \
       defaultdomain.4 \
       defaultrouter.4 \
-      device_allocate.4 \
       device_contract.4 \
-      device_maps.4 \
       devices.4 \
       dfstab.4 \
       dhcp_inittab.4 \

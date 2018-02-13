@@ -25,8 +25,8 @@
 
 /*
  * This file contains private data structures and APIs of libnwam.  Currently
- * these are used by nwamd (nwam_event_*() and nwam_record_audit_event()) and
- * netcfgd (nwam_backend_*()) only, supporting the event messaging, audit
+ * these are used by nwamd (nwam_event_*()) and
+ * netcfgd (nwam_backend_*()) only, supporting the event messaging
  * and backend configuration access that nwamd and netcfgd supply.
  *
  * Implementation is MT safe.
@@ -144,12 +144,6 @@ typedef struct nwam_backend_door_arg {
  */
 extern nwam_error_t nwam_backend_init(void);
 extern void nwam_backend_fini(void);
-
-/*
- * create audit session, report event, end session.  Used by nwamd.
- */
-extern void nwam_record_audit_event(const ucred_t *, au_event_t, char *, char *,
-    int, int);
 
 /*
  * NWAM daemon functions, used to send, stop sending, initialize or finish

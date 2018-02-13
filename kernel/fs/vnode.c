@@ -48,6 +48,7 @@
 #include <sys/uio.h>
 #include <sys/file.h>
 #include <sys/pathname.h>
+#include <sys/atomic.h>
 #include <sys/vfs.h>
 #include <sys/vnode.h>
 #include <sys/vnode_dispatch.h>
@@ -61,7 +62,6 @@
 #include <sys/systm.h>
 #include <sys/kmem.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 #include <sys/acl.h>
 #include <sys/nbmlock.h>
 #include <sys/fcntl.h>
@@ -1163,7 +1163,6 @@ vn_createat(
 	struct vattr vattr;
 	enum symfollow follow;
 	int estale_retry = 0;
-	uint32_t auditing = AU_AUDITING();
 
 	ASSERT((vap->va_mask & (VATTR_TYPE|VATTR_MODE)) == (VATTR_TYPE|VATTR_MODE));
 
@@ -1187,8 +1186,6 @@ top:
 	 */
 	if (error = pn_get(pnamep, seg, &pn))
 		return (error);
-	if (auditing)
-		audit_vncreate_start();
 	dvp = NULL;
 	*vpp = NULL;
 	/*
@@ -1391,8 +1388,6 @@ top:
 
 out:
 
-	if (auditing)
-		audit_vncreate_finish(*vpp, error);
 	if (in_crit) {
 		nbl_end_crit(vp);
 		in_crit = 0;
@@ -1437,18 +1432,13 @@ vn_linkat(vnode_t *fstartvp, char *from, enum symfollow follow,
 	struct vattr vattr;
 	dev_t fsid;
 	int estale_retry = 0;
-	uint32_t auditing = AU_AUDITING();
 
 top:
 	fvp = tdvp = NULL;
 	if (error = pn_get(to, seg, &pn))
 		return (error);
-	if (auditing && fstartvp != NULL)
-		audit_setfsat_path(1);
 	if (error = lookupnameat(from, seg, follow, NULLVPP, &fvp, fstartvp))
 		goto out;
-	if (auditing && tstartvp != NULL)
-		audit_setfsat_path(3);
 	if (error = lookuppnat(&pn, NULL, NO_FOLLOW, &tdvp, NULLVPP, tstartvp))
 		goto out;
 	/*
@@ -1505,7 +1495,6 @@ vn_renameat(vnode_t *fdvp, char *fname, vnode_t *tdvp,
 	vnode_t *fromvp, *fvp;
 	vnode_t *tovp, *targvp;
 	int estale_retry = 0;
-	uint32_t auditing = AU_AUDITING();
 
 top:
 	fvp = fromvp = tovp = targvp = NULL;
@@ -1529,8 +1518,6 @@ top:
 	 * use the lib directory for the rename.
 	 */
 
-	if (auditing && fdvp != NULL)
-		audit_setfsat_path(1);
 	/*
 	 * Lookup to and from directories.
 	 */
@@ -1546,8 +1533,6 @@ top:
 		goto out;
 	}
 
-	if (auditing && tdvp != NULL)
-		audit_setfsat_path(3);
 	if (error = lookuppnat(&tpn, NULL, NO_FOLLOW, &tovp, &targvp, tdvp)) {
 		goto out;
 	}

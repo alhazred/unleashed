@@ -32,7 +32,6 @@ LIBRARY =	libnss_ldap.a
 VERS =		.1
 
 OBJECTS =	getauthattr.o	\
-		getauuser.o	\
 		getbootparams.o	\
 		getether.o	\
 		getexecattr.o	\

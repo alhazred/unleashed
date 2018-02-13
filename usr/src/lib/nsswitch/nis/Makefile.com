@@ -32,7 +32,6 @@ VERS =		.1
 OBJECTS =	bootparams_getbyname.o	\
 		ether_addr.o		\
 		getauthattr.o		\
-		getauuser.o		\
 		getexecattr.o		\
 		getgrent.o		\
 		gethostent.o		\

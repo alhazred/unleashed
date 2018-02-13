@@ -65,7 +65,6 @@
 #include <sys/ksynch.h>
 #include <sys/errno.h>
 #include <sys/sunddi.h>
-#include <c2/audit.h>
 #include <sys/fs/dv_node.h>
 
 /*
@@ -474,9 +473,6 @@ devpolicy_load(int nitems, size_t sz, devplcysys_t *uitmp)
 		lastlen = len;
 		lastwild = wild;
 	}
-
-	if (AU_AUDITING())
-		audit_devpolicy(nitems, items);
 
 	/*
 	 * Parse the policy.  We create an array for all major numbers

@@ -39,10 +39,6 @@
 #pragma weak _ucred_getruid = ucred_getruid
 #pragma weak _ucred_getsgid = ucred_getsgid
 #pragma weak _ucred_getsuid = ucred_getsuid
-#pragma weak _ucred_getauid = ucred_getauid
-#pragma weak _ucred_getasid = ucred_getasid
-#pragma weak _ucred_getatid = ucred_getatid
-#pragma weak _ucred_getamask = ucred_getamask
 #pragma weak _ucred_size = ucred_size
 
 #include "lint.h"
@@ -296,58 +292,6 @@ ucred_getpflags(const ucred_t *uc, uint_t flag)
 
 	errno = EINVAL;
 	return ((uint_t)-1);
-}
-
-au_id_t
-ucred_getauid(const ucred_t *uc)
-{
-	/* LINTED: alignment */
-	const auditinfo64_addr_t *ainfo = UCAUD(uc);
-
-	if (ainfo == NULL)
-		return (AU_NOAUDITID);
-
-	return (ainfo->ai_auid);
-}
-
-au_asid_t
-ucred_getasid(const ucred_t *uc)
-{
-	/* LINTED: alignment */
-	const auditinfo64_addr_t *ainfo = UCAUD(uc);
-
-	if (ainfo == NULL)
-		return ((au_asid_t)-1);
-
-	return (ainfo->ai_asid);
-}
-
-const au_tid64_addr_t *
-ucred_getatid(const ucred_t *uc)
-{
-	/* LINTED: alignment */
-	const auditinfo64_addr_t *ainfo = UCAUD(uc);
-
-	if (ainfo == NULL) {
-		errno = EINVAL;
-		return (NULL);
-	}
-
-	return (&ainfo->ai_termid);
-}
-
-const au_mask_t *
-ucred_getamask(const ucred_t *uc)
-{
-	/* LINTED: alignment */
-	const auditinfo64_addr_t *ainfo = UCAUD(uc);
-
-	if (ainfo == NULL) {
-		errno = EINVAL;
-		return (NULL);
-	}
-
-	return (&ainfo->ai_mask);
 }
 
 size_t

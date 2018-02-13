@@ -487,8 +487,6 @@ handle_mount (LibHalContext *hal_ctx,
 	const char *model;
 	const char *drive_type;
 #ifdef sun
-	adt_export_data_t *adt_data;
-	size_t adt_data_size;
 	gboolean append_ro = FALSE;
 	gboolean is_abs_path = FALSE;
 	uid_t calling_uid;
@@ -1039,16 +1037,6 @@ handle_mount (LibHalContext *hal_ctx,
 		syslog (LOG_INFO, "mounted %s on behalf of uid %s", device, invoked_by_uid);
 	}
 	closelog ();
-
-#ifdef sun
-	if ((adt_data = get_audit_export_data (system_bus,
-	    invoked_by_syscon_name, &adt_data_size)) != NULL) {
-		audit_volume (adt_data, ADT_attach,
-		    WEXITSTATUS(exit_status), auth_from_privilege(privilege),
-		    mount_dir, device, mount_option_commasep);
-		free (adt_data);
-	}
-#endif
 
 	g_free (sout);
 	g_free (serr);

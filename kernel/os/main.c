@@ -77,7 +77,6 @@
 #include <vm/as.h>
 #include <vm/seg_kmem.h>
 
-#include <c2/audit.h>
 #include <sys/bootprops.h>
 
 /* well known processes */
@@ -91,15 +90,6 @@ pgcnt_t	freemem;	/* Current available memory in pages.	*/
 int	interrupts_unleashed;	/* set when we do the first spl0() */
 
 kmem_cache_t *process_cache;	/* kmem cache for proc structures */
-
-/*
- * Indicates whether the auditing module (c2audit) is loaded. Possible
- * values are:
- * 0 - c2audit module is excluded in /etc/system and cannot be loaded
- * 1 - c2audit module is not loaded but can be anytime
- * 2 - c2audit module is loaded
- */
-int audit_active = C2AUDIT_DISABLED;
 
 /*
  * Process 0's lwp directory and lwpid hash table.
@@ -503,11 +493,6 @@ main(void)
 
 	post_startup();
 	swaploaded = 1;
-
-	/*
-	 * Initialize Solaris Audit Subsystem
-	 */
-	audit_init();
 
 	/*
 	 * Plumb the protocol modules and drivers only if we are not

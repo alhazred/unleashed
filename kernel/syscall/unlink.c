@@ -42,7 +42,6 @@
 #include <sys/debug.h>
 #include <sys/file.h>
 #include <sys/fcntl.h>
-#include <c2/audit.h>
 
 /*
  * Unlink a file from a directory
@@ -57,8 +56,6 @@ unlinkat(int fd, char *name, int flags)
 		return (set_errno(EFAULT));
 	if ((error = fgetstartvp(fd, name, &startvp)) != 0)
 		return (set_errno(error));
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 
 	error = vn_removeat(startvp, name, UIO_USERSPACE,
 	    (flags == AT_REMOVEDIR) ? RMDIRECTORY : RMFILE);

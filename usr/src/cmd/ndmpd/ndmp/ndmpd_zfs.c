@@ -563,21 +563,12 @@ ndmpd_zfs_backup(ndmpd_zfs_args_t *ndmpd_zfs_args)
 	}
 
 	if (session->ns_data.dd_abort) {
-		ndmpd_audit_backup(session->ns_connection,
-		    ndmpd_zfs_args->nz_dataset,
-		    session->ns_data.dd_data_addr.addr_type,
-		    ndmpd_zfs_args->nz_dataset, EINTR);
 		NDMP_LOG(LOG_DEBUG, "Backing up \"%s\" aborted.",
 		    ndmpd_zfs_args->nz_dataset);
 
 		(void) ndmpd_zfs_post_backup(ndmpd_zfs_args);
 		err = -1;
 	} else {
-		ndmpd_audit_backup(session->ns_connection,
-		    ndmpd_zfs_args->nz_dataset,
-		    session->ns_data.dd_data_addr.addr_type,
-		    ndmpd_zfs_args->nz_dataset, result);
-
 		err = ndmpd_zfs_post_backup(ndmpd_zfs_args);
 		if (err || result)
 			err = -1;
@@ -800,17 +791,9 @@ ndmpd_zfs_restore(ndmpd_zfs_args_t *ndmpd_zfs_args)
 	if (session->ns_data.dd_abort) {
 		NDMP_LOG(LOG_DEBUG, "Restoring to \"%s\" aborted.",
 		    ndmpd_zfs_args->nz_dataset);
-		ndmpd_audit_restore(session->ns_connection,
-		    ndmpd_zfs_args->nz_dataset,
-		    session->ns_data.dd_data_addr.addr_type,
-		    ndmpd_zfs_args->nz_dataset, EINTR);
 		(void) ndmpd_zfs_post_restore(ndmpd_zfs_args);
 		err = -1;
 	} else {
-		ndmpd_audit_restore(session->ns_connection,
-		    ndmpd_zfs_args->nz_dataset,
-		    session->ns_data.dd_data_addr.addr_type,
-		    ndmpd_zfs_args->nz_dataset, result);
 		err = ndmpd_zfs_post_restore(ndmpd_zfs_args);
 		if (err || result)
 			err = -1;

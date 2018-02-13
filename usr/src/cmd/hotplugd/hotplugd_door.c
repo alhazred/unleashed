@@ -37,8 +37,6 @@
 #include <pwd.h>
 #include <auth_list.h>
 #include <auth_attr.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <sys/sunddi.h>
 #include <sys/ddi_hp.h>
 #include <libnvpair.h>
@@ -76,11 +74,6 @@ static void	add_buffer(uint64_t, char *);
 static void	free_buffer(uint64_t);
 static uint64_t	get_seqnum(void);
 static char	*state_str(int);
-static int	audit_session(ucred_t *, adt_session_data_t **);
-static void	audit_changestate(ucred_t *, char *, char *, char *, int, int,
-		    int);
-static void	audit_setprivate(ucred_t *, char *, char *, char *, char *,
-		    int);
 
 /*
  * door_server_init()
@@ -391,8 +384,6 @@ cmd_changestate(nvlist_t *args, nvlist_t **resultsp)
 	/* Check authorization */
 	if (check_auth(uc, HP_MODIFY_AUTH) != 0) {
 		dprintf("cmd_changestate: access denied.\n");
-		audit_changestate(uc, HP_MODIFY_AUTH, path, connection,
-		    state, -1, ADT_FAIL_VALUE_AUTH);
 		ucred_free(uc);
 		return (EACCES);
 	}
@@ -400,10 +391,6 @@ cmd_changestate(nvlist_t *args, nvlist_t **resultsp)
 	/* Perform the state change operation */
 	status = changestate(path, connection, state, flags, &old_state, &root);
 	dprintf("cmd_changestate: changestate() == %d\n", status);
-
-	/* Audit the operation */
-	audit_changestate(uc, HP_MODIFY_AUTH, path, connection, state,
-	    old_state, status);
 
 	/* Caller's credentials no longer needed */
 	ucred_free(uc);
@@ -488,8 +475,6 @@ cmd_private(hp_cmd_t cmd, nvlist_t *args, nvlist_t **resultsp)
 	if ((cmd == HP_CMD_SETPRIVATE) &&
 	    (check_auth(uc, HP_MODIFY_AUTH) != 0)) {
 		dprintf("cmd_private: access denied.\n");
-		audit_setprivate(uc, HP_MODIFY_AUTH, path, connection, options,
-		    ADT_FAIL_VALUE_AUTH);
 		ucred_free(uc);
 		return (EACCES);
 	}
@@ -500,8 +485,6 @@ cmd_private(hp_cmd_t cmd, nvlist_t *args, nvlist_t **resultsp)
 
 	/* Audit the operation */
 	if (cmd == HP_CMD_SETPRIVATE) {
-		audit_setprivate(uc, HP_MODIFY_AUTH, path, connection, options,
-		    status);
 		ucred_free(uc);
 	}
 
@@ -612,116 +595,6 @@ free_buffer(uint64_t seqnum)
 	}
 
 	(void) pthread_mutex_unlock(&buffer_lock);
-}
-
-/*
- * audit_session()
- *
- *	Initialize an audit session.
- */
-static int
-audit_session(ucred_t *ucred, adt_session_data_t **sessionp)
-{
-	adt_session_data_t	*session;
-
-	if (adt_start_session(&session, NULL, 0) != 0) {
-		log_err("Cannot start audit session.\n");
-		return (-1);
-	}
-
-	if (adt_set_from_ucred(session, ucred, ADT_NEW) != 0) {
-		log_err("Cannot set audit session from ucred.\n");
-		(void) adt_end_session(session);
-		return (-1);
-	}
-
-	*sessionp = session;
-	return (0);
-}
-
-/*
- * audit_changestate()
- *
- *	Audit a 'changestate' door command.
- */
-static void
-audit_changestate(ucred_t *ucred, char *auth, char *path, char *connection,
-    int new_state, int old_state, int result)
-{
-	adt_session_data_t	*session;
-	adt_event_data_t	*event;
-	int			pass_fail, fail_reason;
-
-	if (audit_session(ucred, &session) != 0)
-		return;
-
-	if ((event = adt_alloc_event(session, ADT_hotplug_state)) == NULL) {
-		(void) adt_end_session(session);
-		return;
-	}
-
-	if (result == 0) {
-		pass_fail = ADT_SUCCESS;
-		fail_reason = ADT_SUCCESS;
-	} else {
-		pass_fail = ADT_FAILURE;
-		fail_reason = result;
-	}
-
-	event->adt_hotplug_state.auth_used = auth;
-	event->adt_hotplug_state.device_path = path;
-	event->adt_hotplug_state.connection = connection;
-	event->adt_hotplug_state.new_state = state_str(new_state);
-	event->adt_hotplug_state.old_state = state_str(old_state);
-
-	/* Put the event */
-	if (adt_put_event(event, pass_fail, fail_reason) != 0)
-		log_err("Cannot put audit event.\n");
-
-	adt_free_event(event);
-	(void) adt_end_session(session);
-}
-
-/*
- * audit_setprivate()
- *
- *	Audit a 'set private' door command.
- */
-static void
-audit_setprivate(ucred_t *ucred, char *auth, char *path, char *connection,
-    char *options, int result)
-{
-	adt_session_data_t	*session;
-	adt_event_data_t	*event;
-	int			pass_fail, fail_reason;
-
-	if (audit_session(ucred, &session) != 0)
-		return;
-
-	if ((event = adt_alloc_event(session, ADT_hotplug_set)) == NULL) {
-		(void) adt_end_session(session);
-		return;
-	}
-
-	if (result == 0) {
-		pass_fail = ADT_SUCCESS;
-		fail_reason = ADT_SUCCESS;
-	} else {
-		pass_fail = ADT_FAILURE;
-		fail_reason = result;
-	}
-
-	event->adt_hotplug_set.auth_used = auth;
-	event->adt_hotplug_set.device_path = path;
-	event->adt_hotplug_set.connection = connection;
-	event->adt_hotplug_set.options = options;
-
-	/* Put the event */
-	if (adt_put_event(event, pass_fail, fail_reason) != 0)
-		log_err("Cannot put audit event.\n");
-
-	adt_free_event(event);
-	(void) adt_end_session(session);
 }
 
 /*

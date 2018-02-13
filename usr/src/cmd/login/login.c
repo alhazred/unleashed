@@ -83,7 +83,6 @@
 #include <strings.h>
 #include <libdevinfo.h>
 #include <zone.h>
-#include "login_audit.h"
 
 #include <krb5_repository.h>
 /*
@@ -185,11 +184,6 @@ static int	retry = MAXTRYS;
  */
 static int trys = 0;
 static int count = 1;
-
-/*
- * error value for login_exit() audit output (0 == no audit record)
- */
-static int	audit_error = 0;
 
 /*
  * Externs a plenty
@@ -355,7 +349,6 @@ static 	int	legalenvvar(char *);
 static	void	check_for_console(void);
 static	void	check_for_dueling_unix(char *);
 static	void	get_user_name(void);
-static	uint_t	get_audit_id(void);
 static	void	login_exit(int)__NORETURN;
 static	int	logins_disabled(char *);
 static	void	log_bad_attempts(void);
@@ -425,7 +418,6 @@ main(int argc, char *argv[], char **renvp)
 	 */
 	if (get_options(argc, argv) == -1) {
 		usage();
-		audit_error = ADT_FAIL_VALUE_BAD_CMD;
 		login_exit(1);
 	}
 
@@ -444,16 +436,13 @@ main(int argc, char *argv[], char **renvp)
 
 	if ((pam_rc = pam_start(progname, user_name, &pam_conv, &pamh))
 	    != PAM_SUCCESS) {
-		audit_error = ADT_FAIL_PAM + pam_rc;
 		login_exit(1);
 	}
 	if ((pam_rc = pam_set_item(pamh, PAM_TTY, ttyn)) != PAM_SUCCESS) {
-		audit_error = ADT_FAIL_PAM + pam_rc;
 		login_exit(1);
 	}
 	if ((pam_rc = pam_set_item(pamh, PAM_RHOST, remote_host)) !=
 	    PAM_SUCCESS) {
-		audit_error = ADT_FAIL_PAM + pam_rc;
 		login_exit(1);
 	}
 
@@ -494,7 +483,6 @@ main(int argc, char *argv[], char **renvp)
 	/* we are already authenticated. fill in what we must, then continue */
 	if (fflag) {
 		if ((pwd = getpwnam(user_name)) == NULL) {
-			audit_error = ADT_FAIL_VALUE_USERNAME;
 
 			log_bad_attempts();
 			(void) printf("Login failed: unknown user '%s'.\n",
@@ -522,7 +510,6 @@ main(int argc, char *argv[], char **renvp)
 	 * we are not root then throw the user off the system
 	 */
 	if (logins_disabled(user_name) == TRUE) {
-		audit_error = ADT_FAIL_VALUE_LOGIN_DISABLED;
 		login_exit(1);
 	}
 
@@ -1041,7 +1028,6 @@ getargs(char *input_line)
 		/* Attempt at overflow, exit */
 		if (input_line - p >= MAXLINE - 1 ||
 		    ptr >= &envbuf[sizeof (envbuf) - 1]) {
-			audit_error = ADT_FAIL_VALUE_INPUT_OVERFLOW;
 			login_exit(1);
 		}
 	}
@@ -1156,7 +1142,6 @@ check_for_console(void)
 
 	(void) printf("Not on system console\n");
 
-	audit_error = ADT_FAIL_VALUE_CONSOLE;
 	login_exit(10);
 
 }
@@ -1303,7 +1288,6 @@ get_options(int argc, char *argv[])
 			 * otherwise we exit() as punishment for trying.
 			 */
 			if (getuid() != 0 || geteuid() != 0) {
-				audit_error = ADT_FAIL_VALUE_DEVICE_PERM;
 				login_exit(1);	/* sigh */
 				/*NOTREACHED*/
 			}
@@ -1344,7 +1328,6 @@ get_options(int argc, char *argv[])
 			 * otherwise we exit() as punishment for trying.
 			 */
 			if (getuid() != 0 || geteuid() != 0) {
-				audit_error = ADT_FAIL_VALUE_AUTH_BYPASS;
 
 				login_exit(1);	/* sigh */
 				/*NOTREACHED*/
@@ -1508,10 +1491,7 @@ validate_account(void)
 					syslog(LOG_CRIT,
 					    "change password failure: %s",
 					    pam_strerror(pamh, error));
-				audit_error = ADT_FAIL_PAM + error;
 				login_exit(1);
-			} else {
-				audit_success(ADT_passwd, pwd, zone_name);
 			}
 		} else {
 			(void) printf(incorrectmsg);
@@ -1520,7 +1500,6 @@ validate_account(void)
 				syslog(LOG_CRIT,
 				    "login account failure: %s",
 				    pam_strerror(pamh, error));
-			audit_error = ADT_FAIL_PAM + error;
 			login_exit(1);
 		}
 	}
@@ -1620,8 +1599,6 @@ login_authenticate(void)
 		case PAM_AUTH_ERR:
 		case PAM_AUTHINFO_UNAVAIL:
 		case PAM_USER_UNKNOWN:
-			audit_failure(get_audit_id(), ADT_FAIL_PAM + err, pwd,
-			    remote_host, ttyn, zone_name);
 			log_bad_attempts();
 			break;
 		case PAM_ABORT:
@@ -1629,11 +1606,9 @@ login_authenticate(void)
 			(void) sleep(Disabletime);
 			(void) printf(incorrectmsg);
 
-			audit_error = ADT_FAIL_PAM + err;
 			login_exit(1);
 			/*NOTREACHED*/
 		default:	/* Some other PAM error */
-			audit_error = ADT_FAIL_PAM + err;
 			login_exit(1);
 			/*NOTREACHED*/
 		}
@@ -1653,8 +1628,6 @@ login_authenticate(void)
 	} while (count++ < retry);
 
 	if (count >= retry) {
-		audit_failure(get_audit_id(), ADT_FAIL_VALUE_MAX_TRIES, pwd,
-		    remote_host, ttyn, zone_name);
 		/*
 		 * If logging is turned on, output the
 		 * string storage area to the log file,
@@ -1727,34 +1700,13 @@ setup_credentials(void)
 	 */
 	if ((user_name[0] == '\0') ||
 	    (initgroups(user_name, pwd->pw_gid) == -1)) {
-		audit_error = ADT_FAIL_VALUE_PROGRAM;
 		login_exit(1);
 	}
 
 	if ((error = pam_setcred(pamh, zflag ? PAM_REINITIALIZE_CRED :
 	    PAM_ESTABLISH_CRED)) != PAM_SUCCESS) {
-		audit_error = ADT_FAIL_PAM + error;
 		login_exit(error);
 	}
-
-	/*
-	 * Record successful login and fork process that records logout.
-	 * We have to do this after setting credentials because pam_setcred()
-	 * loads key audit info into the cred, but before setuid() so audit
-	 * system calls will work.
-	 */
-	audit_success(get_audit_id(), pwd, zone_name);
-}
-
-static uint_t
-get_audit_id(void)
-{
-	if (hflag)
-		return (ADT_telnet);
-	else if (zflag)
-		return (ADT_zlogin);
-
-	return (ADT_login);
 }
 
 /*
@@ -1831,13 +1783,11 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 	 */
 
 	if ((err = pam_open_session(pamh, pamflags)) != PAM_SUCCESS) {
-		audit_error = ADT_FAIL_PAM + err;
 		login_exit(1);
 	}
 
 	if ((err = pam_get_item(pamh, PAM_USER, (void **) &user)) !=
 	    PAM_SUCCESS) {
-		audit_error = ADT_FAIL_PAM + err;
 		login_exit(1);
 	}
 
@@ -1898,7 +1848,6 @@ update_utmpx_entry(int sublogin, boolean_t silent)
 			 */
 			(void) puts(errmsg);
 
-			audit_error = ADT_FAIL_VALUE_PROGRAM;
 			login_exit(1);
 		}
 	} else {
@@ -1930,10 +1879,6 @@ process_chroot_logins(void)
 		if (chroot(pwd->pw_dir) < 0) {
 			(void) printf("No Root Directory\n");
 
-			audit_failure(get_audit_id(),
-			    ADT_FAIL_VALUE_CHDIR_FAILED,
-			    pwd, remote_host, ttyn, zone_name);
-
 			return (ERROR);
 		}
 		/*
@@ -1947,8 +1892,6 @@ process_chroot_logins(void)
 		    &envinit[0]);
 		(void) execle("/etc/login", "login", (char *)0, &envinit[0]);
 		(void) printf("No /usr/bin/login or /etc/login on root\n");
-
-		audit_error = ADT_FAIL_VALUE_PROGRAM;
 
 		login_exit(1);
 	}
@@ -2257,10 +2200,6 @@ login_exit(int exit_code)
 {
 	if (pamh)
 		(void) pam_end(pamh, PAM_ABORT);
-
-	if (audit_error)
-		audit_failure(get_audit_id(), audit_error,
-		    pwd, remote_host, ttyn, zone_name);
 
 	exit(exit_code);
 	/*NOTREACHED*/

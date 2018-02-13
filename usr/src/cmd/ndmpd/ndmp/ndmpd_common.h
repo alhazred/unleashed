@@ -53,9 +53,6 @@
 #include <rpc/rpc.h>
 #include <sys/stat.h>
 #include <stdio.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
-
 
 #define	XDR_AND_SIZE(func) (bool_t(*)(XDR*, ...))xdr_##func, sizeof (func)
 #define	AUTH_REQUIRED	TRUE
@@ -84,7 +81,6 @@ typedef struct ndmp_connection {
 	ushort_t conn_version;
 	void *conn_client_data;
 	mutex_t conn_lock;
-	adt_session_data_t *conn_ah;
 } ndmp_connection_t;
 
 typedef void (*ndmp_con_handler_func_t) (struct ndmp_connection *);

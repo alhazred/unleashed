@@ -30,7 +30,6 @@
 #include <strings.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <bsm/devalloc.h>
 
 #define	SMP_LINK_RE	"^smp/expd[0-9]+$"
 #define	SMP_CLASS	"sas"

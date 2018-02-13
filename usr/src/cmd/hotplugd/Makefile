@@ -45,7 +45,7 @@ $(ROOTMANIFEST)		:= FILEMODE= 444
 CPPFLAGS += -I$(SRC)/lib/libhotplug/common
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
-LDLIBS += -ldevinfo -lhotplug -lnvpair -lsecdb -lrcm -lbsm
+LDLIBS += -ldevinfo -lhotplug -lnvpair -lsecdb -lrcm
 
 .KEEP_STATE:
 

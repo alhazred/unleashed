@@ -45,7 +45,6 @@
 #include <sys/proc.h>
 #include <sys/uio.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 #include <sys/fs_subr.h>
 
 /*
@@ -63,7 +62,6 @@ symlinkat(char *target, int dfd, char *linkname)
 	size_t tlen;
 	int error;
 	int estale_retry = 0;
-	int auditing = AU_AUDITING();
 
 	if (linkname == NULL)
 		return (set_errno(EFAULT));
@@ -73,8 +71,6 @@ symlinkat(char *target, int dfd, char *linkname)
 top:
 	if (error = pn_get(linkname, UIO_USERSPACE, &lpn))
 		goto out;
-	if (auditing && startvp != NULL)
-		audit_setfsat_path(2);
 	if (error = lookuppnat(&lpn, NULL, NO_FOLLOW, &dvp, NULLVPP, startvp)) {
 		pn_free(&lpn);
 		if (error == ESTALE && fs_need_estale_retry(estale_retry++))
@@ -93,9 +89,6 @@ top:
 			vattr.va_mask = VATTR_TYPE|VATTR_MODE;
 			error = fop_symlink(dvp, lpn.pn_path, &vattr,
 			    tbuf, CRED(), NULL, 0);
-			if (auditing)
-				audit_symlink_create(dvp, lpn.pn_path,
-				    tbuf, error);
 		}
 		kmem_free(tbuf, MAXPATHLEN);
 	}

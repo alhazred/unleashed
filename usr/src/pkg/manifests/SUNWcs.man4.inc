@@ -16,9 +16,6 @@
 #
 
 file path=usr/share/man/man4/Intro.4
-file path=usr/share/man/man4/audit.log.4
-file path=usr/share/man/man4/audit_class.4
-file path=usr/share/man/man4/audit_event.4
 file path=usr/share/man/man4/auth_attr.4
 file path=usr/share/man/man4/contract.4
 file path=usr/share/man/man4/core.4
@@ -29,9 +26,7 @@ file path=usr/share/man/man4/d_passwd.4
 file path=usr/share/man/man4/dacf.conf.4
 file path=usr/share/man/man4/default_fs.4
 file path=usr/share/man/man4/defaultrouter.4
-file path=usr/share/man/man4/device_allocate.4
 file path=usr/share/man/man4/device_contract.4
-file path=usr/share/man/man4/device_maps.4
 file path=usr/share/man/man4/devices.4
 file path=usr/share/man/man4/dfstab.4
 file path=usr/share/man/man4/dhcp_inittab.4

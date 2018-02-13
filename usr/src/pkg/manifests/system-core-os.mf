@@ -103,12 +103,8 @@ dir path=etc/saf
 dir path=etc/saf/zsmon group=sys
 dir path=etc/sasl group=sys
 dir path=etc/security group=sys
-dir path=etc/security/audit group=sys
-dir path=etc/security/audit/localhost group=sys
 dir path=etc/security/auth_attr.d group=sys
-dir path=etc/security/dev group=sys
 dir path=etc/security/exec_attr.d group=sys
-dir path=etc/security/lib group=sys
 dir path=etc/security/prof_attr.d group=sys
 dir path=etc/skel group=sys
 dir path=etc/svc group=sys
@@ -168,7 +164,6 @@ dir path=usr/bin/$(ARCH64)
 dir path=usr/games
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
-dir path=usr/lib/audit
 dir path=usr/lib/class
 dir path=usr/lib/class/FX
 dir path=usr/lib/class/IA
@@ -232,7 +227,6 @@ dir path=usr/share/lib
 dir path=usr/share/lib/mailx
 dir path=usr/share/lib/xml group=sys
 dir path=usr/share/lib/xml/dtd group=sys
-dir path=usr/share/lib/xml/style group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1
 dir path=usr/share/man/man4
@@ -247,7 +241,6 @@ dir path=var/adm group=sys mode=0775
 dir path=var/adm/exacct group=adm owner=adm
 dir path=var/adm/log group=adm owner=adm
 dir path=var/adm/streams group=sys
-dir path=var/audit group=sys
 dir path=var/cores group=sys
 dir path=var/cron group=sys
 dir path=var/games
@@ -387,26 +380,14 @@ file path=etc/rpc group=sys preserve=true
 file path=etc/saf/_sactab group=sys preserve=true
 file path=etc/saf/_sysconfig group=sys preserve=true
 file path=etc/saf/zsmon/_pmtab group=sys preserve=true
-file path=etc/security/audit_class group=sys preserve=renamenew
-file path=etc/security/audit_event group=sys preserve=renamenew
-file path=etc/security/audit_warn group=sys mode=0740 preserve=renamenew
 file path=etc/security/auth_attr group=sys preserve=true \
     timestamp=19700101T000000Z
 file path=etc/security/auth_attr.d/core-os group=sys
 file path=etc/security/crypt.conf group=sys preserve=renamenew
-file path=etc/security/dev/audio mode=0400
-file path=etc/security/dev/fd0 mode=0400
-file path=etc/security/dev/sr0 mode=0400
-file path=etc/security/dev/st0 mode=0400
-file path=etc/security/dev/st1 mode=0400
 file path=etc/security/exec_attr group=sys preserve=true \
     timestamp=19700101T000000Z
 file path=etc/security/exec_attr.d/core-os group=sys
 file path=etc/security/kmfpolicy.xml
-file path=etc/security/lib/audio_clean group=sys mode=0555
-file path=etc/security/lib/fd_clean group=sys mode=0555
-file path=etc/security/lib/sr_clean group=sys mode=0555
-file path=etc/security/lib/st_clean group=sys mode=0555
 file path=etc/security/policy.conf group=sys preserve=true
 file path=etc/security/priv_names group=sys preserve=renameold
 file path=etc/security/prof_attr group=sys preserve=true \
@@ -475,8 +456,6 @@ file path=lib/svc/manifest/network/rpc/bind.xml group=sys mode=0444
 file path=lib/svc/manifest/network/rpc/keyserv.xml group=sys mode=0444
 file path=lib/svc/manifest/network/shares/group.xml group=sys mode=0444
 file path=lib/svc/manifest/network/shares/reparsed.xml group=sys mode=0444
-file path=lib/svc/manifest/system/auditd.xml group=sys mode=0444
-file path=lib/svc/manifest/system/auditset.xml group=sys mode=0444
 file path=lib/svc/manifest/system/boot-archive-update.xml group=sys mode=0444
 file path=lib/svc/manifest/system/boot-archive.xml group=sys mode=0444
 file path=lib/svc/manifest/system/boot-config.xml group=sys mode=0444
@@ -485,7 +464,6 @@ file path=lib/svc/manifest/system/console-login.xml group=sys mode=0444
 file path=lib/svc/manifest/system/coreadm.xml group=sys mode=0444
 file path=lib/svc/manifest/system/cron.xml group=sys mode=0444
 file path=lib/svc/manifest/system/cryptosvc.xml group=sys mode=0444
-file path=lib/svc/manifest/system/device/allocate.xml group=sys mode=0444
 file path=lib/svc/manifest/system/device/devices-audio.xml group=sys mode=0444
 file path=lib/svc/manifest/system/device/devices-local.xml group=sys mode=0444
 file path=lib/svc/manifest/system/device/mpxio-upgrade.xml group=sys mode=0444
@@ -546,9 +524,6 @@ file path=lib/svc/method/net-routing-setup mode=0555
 file path=lib/svc/method/net-svc mode=0555
 file path=lib/svc/method/rmtmpfiles mode=0555
 file path=lib/svc/method/rpc-bind mode=0555
-file path=lib/svc/method/svc-allocate mode=0555
-file path=lib/svc/method/svc-auditd mode=0555
-file path=lib/svc/method/svc-auditset mode=0555
 file path=lib/svc/method/svc-boot-config mode=0555
 file path=lib/svc/method/svc-consadm mode=0555
 file path=lib/svc/method/svc-cron mode=0555
@@ -609,7 +584,6 @@ file path=sbin/uadmin group=sys mode=0555
 file path=sbin/umount mode=0555
 file path=sbin/umountall group=sys mode=0555
 file path=sbin/zonename mode=0555
-file path=usr/bin/$(ARCH32)/amt mode=0555
 file path=usr/bin/$(ARCH32)/decrypt mode=0555
 file path=usr/bin/$(ARCH32)/digest mode=0555
 file path=usr/bin/$(ARCH32)/newtask group=sys mode=4555
@@ -619,7 +593,6 @@ file path=usr/bin/$(ARCH32)/prstat mode=0555
 file path=usr/bin/$(ARCH32)/ps mode=0555
 file path=usr/bin/$(ARCH32)/savecore mode=0555
 file path=usr/bin/$(ARCH32)/uptime mode=4555
-file path=usr/bin/$(ARCH64)/amt mode=0555
 file path=usr/bin/$(ARCH64)/crle mode=0555
 file path=usr/bin/$(ARCH64)/decrypt mode=0555
 file path=usr/bin/$(ARCH64)/digest mode=0555
@@ -631,7 +604,6 @@ file path=usr/bin/$(ARCH64)/prstat mode=0555
 file path=usr/bin/$(ARCH64)/ps mode=0555
 file path=usr/bin/$(ARCH64)/savecore mode=0555
 file path=usr/bin/$(ARCH64)/uptime mode=4555
-file path=usr/bin/amt mode=0555
 file path=usr/bin/at group=sys mode=4755
 file path=usr/bin/atq group=sys mode=4755
 file path=usr/bin/atrm group=sys mode=4755
@@ -788,7 +760,6 @@ file path=usr/bin/write group=tty mode=2555
 file path=usr/bin/xargs mode=0555
 file path=usr/bin/xstr mode=0555
 file path=usr/lib/$(ARCH64)/libshare.so.1
-file path=usr/lib/audit/audit_record_attr mode=0444
 file path=usr/lib/class/FX/FXdispadmin mode=0555
 file path=usr/lib/class/FX/FXpriocntl mode=0555
 file path=usr/lib/class/IA/IAdispadmin mode=0555
@@ -1098,14 +1069,7 @@ file path=usr/libexec/unleashed/utmp_update mode=4555
 file path=usr/sbin/6to4relay mode=0555
 file path=usr/sbin/acctadm mode=0555
 file path=usr/sbin/add_drv group=sys mode=0555
-file path=usr/sbin/allocate mode=4555
 file path=usr/sbin/arp mode=0555
-file path=usr/sbin/audit mode=0555
-file path=usr/sbin/auditconfig mode=0555
-file path=usr/sbin/auditd mode=0555
-file path=usr/sbin/auditrecord mode=0555
-file path=usr/sbin/auditreduce mode=0555
-file path=usr/sbin/auditstat mode=0555
 file path=usr/sbin/cfgadm mode=0555
 file path=usr/sbin/chroot mode=0555
 file path=usr/sbin/clear_locks mode=0555
@@ -1117,7 +1081,6 @@ file path=usr/sbin/devinfo mode=0555
 file path=usr/sbin/df mode=0555
 file path=usr/sbin/dfmounts mode=0555
 file path=usr/sbin/dispadmin mode=0555
-file path=usr/sbin/dminfo mode=0555
 file path=usr/sbin/dumpadm mode=0555
 file path=usr/sbin/eeprom group=sys mode=2555
 file path=usr/sbin/ff mode=0555
@@ -1150,7 +1113,6 @@ file path=usr/sbin/link mode=0555
 file path=usr/sbin/lofiadm mode=0555
 file path=usr/sbin/logadm mode=0555
 file path=usr/sbin/makedbm mode=0555
-file path=usr/sbin/mkdevalloc mode=0555
 file path=usr/sbin/mkfile mode=0555
 file path=usr/sbin/mknod mode=0555
 file path=usr/sbin/modinfo group=sys mode=0555
@@ -1168,7 +1130,6 @@ file path=usr/sbin/nwamcfg mode=0555
 file path=usr/sbin/pbind group=sys mode=0555
 file path=usr/sbin/ping mode=4555
 file path=usr/sbin/pmadm group=sys mode=0555
-file path=usr/sbin/praudit mode=0555
 file path=usr/sbin/prtconf group=sys mode=2555
 file path=usr/sbin/prtdiag group=sys mode=2755
 file path=usr/sbin/prtvtoc group=sys mode=0555
@@ -1224,10 +1185,8 @@ file path=usr/sbin/zic mode=0555
 file path=usr/share/lib/mailx/mailx.help
 file path=usr/share/lib/mailx/mailx.help.~
 file path=usr/share/lib/unittab
-file path=usr/share/lib/xml/dtd/adt_record.dtd.1
 file path=usr/share/lib/xml/dtd/kmfpolicy.dtd
 file path=usr/share/lib/xml/dtd/service_bundle.dtd.1 group=sys
-file path=usr/share/lib/xml/style/adt_record.xsl.1
 file path=usr/share/misc/less.help
 file path=usr/share/misc/more.help
 file path=var/adm/aculog mode=0600 owner=uucp preserve=true
@@ -1296,13 +1255,10 @@ hardlink path=usr/lib/fs/ufs/quotaon \
     target=../../../../usr/lib/fs/ufs/quotaoff
 hardlink path=usr/sbin/audlinks target=./devfsadm
 hardlink path=usr/sbin/consadmd target=../../usr/sbin/consadm
-hardlink path=usr/sbin/deallocate target=../../usr/sbin/allocate
 hardlink path=usr/sbin/devlinks target=./devfsadm
 hardlink path=usr/sbin/dfshares target=../../usr/sbin/dfmounts
 hardlink path=usr/sbin/disks target=./devfsadm
 hardlink path=usr/sbin/drvconfig target=./devfsadm
-hardlink path=usr/sbin/list_devices target=../../usr/sbin/allocate
-hardlink path=usr/sbin/mkdevmaps target=../../usr/sbin/mkdevalloc
 hardlink path=usr/sbin/ports target=./devfsadm
 hardlink path=usr/sbin/poweroff target=./halt
 hardlink path=usr/sbin/reboot target=./halt
@@ -1372,7 +1328,6 @@ link path=etc/rc3 target=../sbin/rc3
 link path=etc/rc5 target=../sbin/rc5
 link path=etc/rc6 target=../sbin/rc6
 link path=etc/rcS target=../sbin/rcS
-link path=etc/security/audit/localhost/files target=../../../../var/audit
 link path=etc/services target=./inet/services
 link path=etc/utmpx target=../var/adm/utmpx
 link path=etc/wtmpx target=../var/adm/wtmpx

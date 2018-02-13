@@ -48,7 +48,7 @@ CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs
 
 CERRWARN += -Wno-unused-label
 
-LDLIBS += -lbsm -lscf -lzfs -lgen
+LDLIBS += -lscf -lzfs -lgen
 LDLIBS_i386 +=	-lbe
 LDLIBS +=	$(LDLIBS_$(MACH))
 

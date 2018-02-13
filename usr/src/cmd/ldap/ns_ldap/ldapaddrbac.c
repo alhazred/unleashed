@@ -45,7 +45,6 @@
 
 #undef opaque
 #undef	GROUP
-#include <bsm/libbsm.h>
 
 extern	char	*_strtok_escape(char *, char *, char **); /* from libnsl */
 

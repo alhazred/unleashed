@@ -49,7 +49,7 @@
 #include <sys/mode.h>
 #include <sys/uio.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
+#include <sys/pathname.h>
 
 /*
  * Common code for openat().  Check permissions, allocate an open
@@ -69,7 +69,6 @@ copen(int startfd, char *fname, int filemode, int createmode)
 	proc_t *p = curproc;
 	uio_seg_t seg = UIO_USERSPACE;
 	char *open_filename = fname;
-	uint32_t auditing = AU_AUDITING();
 	char startchar;
 
 	switch (filemode & (FEXEC|FSEARCH|FREAD|FWRITE)) {
@@ -124,8 +123,6 @@ copen(int startfd, char *fname, int filemode, int createmode)
 	 * Handle __openattrdirat() requests
 	 */
 	if (filemode & FXATTRDIROPEN) {
-		if (auditing && startvp != NULL)
-			audit_setfsat_path(1);
 		if (error = lookupnameat(fname, seg, FOLLOW,
 		    NULLVPP, &vp, startvp))
 			return (set_errno(error));
@@ -217,8 +214,6 @@ noxattr:
 			filemode &= ~FNDELAY;
 		error = falloc(NULL, filemode, &fp, &fd);
 		if (error == 0) {
-			if (auditing && startvp != NULL)
-				audit_setfsat_path(1);
 			/*
 			 * Last arg is a don't-care term if
 			 * !(filemode & FCREAT).

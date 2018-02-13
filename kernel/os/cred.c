@@ -57,7 +57,6 @@
 #include <sys/modctl.h>
 #include <sys/avl.h>
 #include <sys/door.h>
-#include <c2/audit.h>
 #include <sys/zone.h>
 #include <sys/sid.h>
 #include <sys/idmap.h>
@@ -86,17 +85,11 @@ static zone_key_t	ephemeral_zone_key;
 
 static struct kmem_cache *cred_cache;
 static size_t		crsize = 0;
-static int		audoff = 0;
 uint32_t		ucredsize;
 cred_t			*kcred;
 static cred_t		*dummycr;
 
 int rstlink;		/* link(2) restricted to files owned by user? */
-
-static int get_c2audit_load(void);
-
-#define	CR_AUINFO(c)	(auditinfo_addr_t *)((audoff == 0) ? NULL : \
-			    ((char *)(c)) + audoff)
 
 #define	REMOTE_PEER_CRED(c)	((c)->cr_gid == -1)
 
@@ -168,18 +161,6 @@ cred_init(void)
 	priv_init();
 
 	crsize = sizeof (cred_t);
-
-	if (get_c2audit_load() > 0) {
-#ifdef _LP64
-		/* assure audit context is 64-bit aligned */
-		audoff = (crsize +
-		    sizeof (int64_t) - 1) & ~(sizeof (int64_t) - 1);
-#else	/* _LP64 */
-		audoff = crsize;
-#endif	/* _LP64 */
-		crsize = audoff + sizeof (auditinfo_addr_t);
-		crsize = (crsize + sizeof (int) - 1) & ~(sizeof (int) - 1);
-	}
 
 	cred_cache = kmem_cache_create("cred_cache", crsize, 0,
 	    NULL, NULL, NULL, NULL, NULL, 0);
@@ -495,8 +476,7 @@ crgetcred(void)
 
 /*
  * Backward compatibility check for suser().
- * Accounting flag is now set in the policy functions; auditing is
- * done through use of privilege in the audit trail.
+ * Accounting flag is now set in the policy functions.
  */
 int
 suser(cred_t *cr)
@@ -692,18 +672,6 @@ crgetsgid(const cred_t *cr)
 	return (cr->cr_sgid);
 }
 
-const auditinfo_addr_t *
-crgetauinfo(const cred_t *cr)
-{
-	return ((const auditinfo_addr_t *)CR_AUINFO(cr));
-}
-
-auditinfo_addr_t *
-crgetauinfo_modifiable(cred_t *cr)
-{
-	return (CR_AUINFO(cr));
-}
-
 zoneid_t
 crgetzoneid(const cred_t *cr)
 {
@@ -869,39 +837,10 @@ cred2prcred(const cred_t *cr, prcred_t *pcrp)
 		    sizeof (gid_t) * pcrp->pr_ngroups);
 }
 
-static int
-cred2ucaud(const cred_t *cr, auditinfo64_addr_t *ainfo, const cred_t *rcr)
-{
-	auditinfo_addr_t	*ai;
-	au_tid_addr_t	tid;
-
-	if (secpolicy_audit_getattr(rcr, B_TRUE) != 0)
-		return (-1);
-
-	ai = CR_AUINFO(cr);	/* caller makes sure this is non-NULL */
-	tid = ai->ai_termid;
-
-	ainfo->ai_auid = ai->ai_auid;
-	ainfo->ai_mask = ai->ai_mask;
-	ainfo->ai_asid = ai->ai_asid;
-
-	ainfo->ai_termid.at_type = tid.at_type;
-	bcopy(&tid.at_addr, &ainfo->ai_termid.at_addr, 4 * sizeof (uint_t));
-
-	ainfo->ai_termid.at_port.at_major = (uint32_t)getmajor(tid.at_port);
-	ainfo->ai_termid.at_port.at_minor = (uint32_t)getminor(tid.at_port);
-
-	return (0);
-}
-
 /*
  * Convert a credential into a "ucred".  Allow the caller to specify
  * and aligned buffer, e.g., in an mblk, so we don't have to allocate
  * memory and copy it twice.
- *
- * This function may call cred2ucaud(), which calls CRED(). Since this
- * can be called from an interrupt thread, receiver's cred (rcr) is needed
- * to determine whether audit info should be included.
  */
 struct ucred_s *
 cred2ucred(const cred_t *cr, pid_t pid, void *buf, const cred_t *rcr)
@@ -924,13 +863,9 @@ cred2ucred(const cred_t *cr, pid_t pid, void *buf, const cred_t *rcr)
 	if (!REMOTE_PEER_CRED(cr)) {
 		uc->uc_credoff = UCRED_CRED_OFF;
 		uc->uc_privoff = UCRED_PRIV_OFF;
-		uc->uc_audoff = UCRED_AUD_OFF;
 
 		cred2prcred(cr, UCCRED(uc));
 		cred2prpriv(cr, UCPRIV(uc));
-
-		if (audoff == 0 || cred2ucaud(cr, UCAUD(uc), rcr) != 0)
-			uc->uc_audoff = 0;
 	}
 
 	return (uc);
@@ -1006,28 +941,6 @@ uint_t
 crgetref(const cred_t *cr)
 {
 	return (cr->cr_ref);
-}
-
-static int
-get_c2audit_load(void)
-{
-	static int	gotit = 0;
-	static int	c2audit_load;
-
-	if (gotit)
-		return (c2audit_load);
-	c2audit_load = 1;		/* set default value once */
-	if (mod_sysctl(SYS_CHECK_EXCLUDE, "c2audit") != 0)
-		c2audit_load = 0;
-	gotit++;
-
-	return (c2audit_load);
-}
-
-int
-get_audit_ucrsize(void)
-{
-	return (get_c2audit_load() ? sizeof (auditinfo64_addr_t) : 0);
 }
 
 /*

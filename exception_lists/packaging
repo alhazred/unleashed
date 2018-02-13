@@ -46,9 +46,6 @@ usr/include/rpc/rpc_sztypes.x
 # but not included in any packages - this is intentional.
 #
 usr/include/auth_list.h
-usr/include/bsm/audit_door_infc.h
-usr/include/bsm/audit_private.h
-usr/include/bsm/devalloc.h
 usr/include/getxby_door.h
 usr/include/lastlog.h
 usr/include/passwdutil.h

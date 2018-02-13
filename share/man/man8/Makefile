@@ -15,13 +15,6 @@ MAN = 6to4relay.8 \
       add_drv.8 \
       arcstat.8 \
       arp.8 \
-      audit.8 \
-      audit_warn.8 \
-      auditconfig.8 \
-      auditd.8 \
-      auditrecord.8 \
-      auditreduce.8 \
-      auditstat.8 \
       automount.8 \
       automountd.8 \
       autopush.8 \
@@ -72,7 +65,6 @@ MAN = 6to4relay.8 \
       dladm.8 \
       dlmgmtd.8 \
       dmesg.8 \
-      dminfo.8 \
       dns-sd.8 \
       domainname.8 \
       drvconfig.8 \
@@ -215,8 +207,6 @@ MAN = 6to4relay.8 \
       luxadm.8 \
       makedbm.8 \
       mdnsd.8 \
-      mkdevalloc.8 \
-      mkdevmaps.8 \
       mkfifo.8 \
       mkfile.8 \
       mkfs.8 \
@@ -281,7 +271,6 @@ MAN = 6to4relay.8 \
       pppoec.8 \
       pppoed.8 \
       pppstats.8 \
-      praudit.8 \
       projadd.8 \
       projdel.8 \
       projmod.8 \

@@ -30,7 +30,7 @@ include ../../Makefile.lib
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lc -luuid -lnvpair -lsysevent -lsec -lbrand \
-		-lpool -lscf -lproc -luutil -lbsm -lsecdb -lxml2
+		-lpool -lscf -lproc -luutil -lsecdb -lxml2
 
 SRCDIR =	../common
 CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(SRCDIR)

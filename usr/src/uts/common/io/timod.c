@@ -49,7 +49,6 @@
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
 #include <sys/strsun.h>
-#include <c2/audit.h>
 
 /*
  * This is the loadable module wrapper.
@@ -680,7 +679,6 @@ timodprocessinfo(queue_t *q, struct tim_tim *tp, struct T_info_ack *tia)
 static int
 timodrproc(queue_t *q, mblk_t *mp)
 {
-	uint32_t auditing = AU_AUDITING();
 	union T_primitives *pptr;
 	struct tim_tim *tp;
 	struct iocblk *iocbp;
@@ -770,8 +768,6 @@ timodrproc(queue_t *q, mblk_t *mp)
 		switch (pptr->type) {
 		default:
 
-			if (auditing)
-				audit_sock(T_UNITDATA_IND, q, mp, TIMOD_ID);
 			putnext(q, mp);
 			break;
 
@@ -1207,8 +1203,6 @@ timodrproc(queue_t *q, mblk_t *mp)
 					return (1);
 				}
 			}
-			if (auditing)
-				audit_sock(T_CONN_IND, q, mp, TIMOD_ID);
 			putnext(q, mp);
 			break;
 		}
@@ -1595,7 +1589,6 @@ timodwproc(queue_t *q, mblk_t *mp)
 {
 	union T_primitives *pptr;
 	struct tim_tim *tp;
-	uint32_t auditing = AU_AUDITING();
 	mblk_t *tmp;
 	struct iocblk *iocbp;
 	int error;
@@ -1974,8 +1967,6 @@ getname:
 					mp = tmp;
 				}
 			}
-			if (auditing)
-				audit_sock(T_UNITDATA_REQ, q, mp, TIMOD_ID);
 		if (!bcanputnext(q, mp->b_band)) {
 				(void) putbq(q, mp);
 				return (1);
@@ -2028,8 +2019,6 @@ getname:
 			}
 			if (tp->tim_flags & COTS)
 				tp->tim_flags |= CONNWAIT;
-			if (auditing)
-				audit_sock(T_CONN_REQ, q, mp, TIMOD_ID);
 		putnext(q, mp);
 		break;
 		}

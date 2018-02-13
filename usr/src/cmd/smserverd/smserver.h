@@ -34,7 +34,6 @@ extern "C" {
 #include <thread.h>
 #include <synch.h>
 #include <sys/dkio.h>
-#include <bsm/audit.h>
 
 #define	RQ_LEN 18
 #define	MAX_RQ_LEN 32
@@ -131,25 +130,6 @@ typedef struct door_data {
 	int32_t		dd_sector_size;	/* sector size of the device */
 	struct stat	dd_stat;	/* stat of the dd_fd */
 	struct dk_cinfo	dd_dkinfo;
-
-	au_id_t		audit_auid;	/* auid of user writing audit record */
-	uid_t		audit_uid;	/* uid of user writing audit record */
-	uid_t		audit_euid;	/* euid of user writing audit record */
-	gid_t		audit_gid;	/* gid of user writing audit record */
-	gid_t		audit_egid;	/* euid of user writing audit record */
-	pid_t		audit_pid;	/* pid of user writing audit record */
-	au_tid_addr_t	audit_tid;	/* tid of user writing audit record */
-	int		audit_na;	/* 0 if event is attributable */
-	au_mask_t	audit_namask;	/* not attributable flags */
-	au_event_t	audit_event;	/* id of event being audited */
-	int 		audit_sorf;	/* success or failure of audit_event */
-	char 		*audit_user;	/* text version of audit_uid */
-	au_asid_t	audit_asid;	/* asid of process writing record */
-	char 		*audit_path;	/* path token */
-	uint32_t	audit_policy;	/* kernel audit policy */
-	struct auditpinfo_addr audit_ap;
-	char		audit_text[128];
-	char		audit_text1[128];
 } door_data_t;
 
 /* Symbols to simplify access of door_data_t */

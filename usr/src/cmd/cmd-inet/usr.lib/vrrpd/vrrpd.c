@@ -48,8 +48,6 @@
 #include <signal.h>
 #include <assert.h>
 #include <ucred.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <priv_utils.h>
 #include <libdllink.h>
 #include <libdlvnic.h>

@@ -551,8 +551,6 @@ smbd_dop_user_nonauth_logon(smbd_arg_t *arg)
 	if (smb_common_decode(arg->data, arg->datalen,
 	    xdr_uint32_t, &sid) != 0)
 		return (SMB_DOP_DECODE_ERROR);
-
-	smbd_user_nonauth_logon(sid);
 	return (SMB_DOP_SUCCESS);
 }
 
@@ -564,8 +562,6 @@ smbd_dop_user_auth_logoff(smbd_arg_t *arg)
 	if (smb_common_decode(arg->data, arg->datalen,
 	    xdr_uint32_t, &sid) != 0)
 		return (SMB_DOP_DECODE_ERROR);
-
-	smbd_user_auth_logoff(sid);
 	return (SMB_DOP_SUCCESS);
 }
 

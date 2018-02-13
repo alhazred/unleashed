@@ -43,7 +43,6 @@ extern "C" {
 #define	_ALIASES		"aliases"
 #define	_AUTOMOUNT		"automount"
 #define	_AUTHATTR		"auth_attr"
-#define	_AUUSER			"audit_user"
 #define	_BOOTPARAMS		"bootparams"
 #define	_DEFAULT		"default"
 #define	_ETHERS			"ethers"

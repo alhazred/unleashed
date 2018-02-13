@@ -68,8 +68,6 @@
 
 #include <sys/isa_defs.h>
 
-#include <c2/audit.h>
-
 /*
  * This is a transport provider for the PF_POLICY IPsec policy
  * management socket, which provides a management interface into the
@@ -608,44 +606,17 @@ spdsock_flush(queue_t *q, ipsec_policy_head_t *iph, ipsec_tun_pol_t *itp,
 	boolean_t active;
 	spdsock_t *ss = (spdsock_t *)q->q_ptr;
 	netstack_t *ns = ss->spdsock_spds->spds_netstack;
-	uint32_t auditing = AU_AUDITING();
 
 	if (iph != ALL_ACTIVE_POLHEADS && iph != ALL_INACTIVE_POLHEADS) {
 		spdsock_flush_one(iph, ns);
-		if (auditing) {
-			spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-			audit_pf_policy(SPD_FLUSH, cr, ns,
-			    ITP_NAME(itp), active, 0, cpid);
-		}
 	} else {
 		active = (iph == ALL_ACTIVE_POLHEADS);
 
 		/* First flush the global policy. */
 		spdsock_flush_one(active ? ipsec_system_policy(ns) :
 		    ipsec_inactive_policy(ns), ns);
-		if (auditing) {
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			audit_pf_policy(SPD_FLUSH, cr, ns, NULL,
-			    active, 0, cpid);
-		}
 		/* Then flush every tunnel's appropriate one. */
 		itp_walk(spdsock_flush_node, (void *)active, ns);
-		if (auditing) {
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			audit_pf_policy(SPD_FLUSH, cr, ns,
-			    "all tunnels", active, 0, cpid);
-		}
 	}
 
 	spd_echo(q, mp);
@@ -1044,21 +1015,9 @@ spdsock_addrule(queue_t *q, ipsec_policy_head_t *iph, mblk_t *mp,
 	uint64_t *index = (itp == NULL) ? NULL : &itp->itp_next_policy_index;
 	spdsock_t *ss = (spdsock_t *)q->q_ptr;
 	spd_stack_t *spds = ss->spdsock_spds;
-	uint32_t auditing = AU_AUDITING();
 
 	if (rule == NULL) {
 		spdsock_diag(q, mp, SPD_DIAGNOSTIC_NO_RULE_EXT);
-		if (auditing) {
-			spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-			audit_pf_policy(SPD_ADDRULE, cr,
-			    spds->spds_netstack, ITP_NAME(itp), active,
-			    SPD_DIAGNOSTIC_NO_RULE_EXT, cpid);
-		}
 		return;
 	}
 
@@ -1158,16 +1117,6 @@ spdsock_addrule(queue_t *q, ipsec_policy_head_t *iph, mblk_t *mp,
 
 	ipsec_actvec_free(actp, nact);
 	spd_echo(q, mp);
-	if (auditing) {
-		spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-		cred_t *cr;
-		pid_t cpid;
-
-		cr = msg_getcred(mp, &cpid);
-		active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-		audit_pf_policy(SPD_ADDRULE, cr, spds->spds_netstack,
-		    ITP_NAME(itp), active, 0, cpid);
-	}
 	return;
 
 fail:
@@ -1182,16 +1131,6 @@ fail2:
 		mutex_exit(&itp->itp_lock);
 	}
 	spdsock_error(q, mp, error, diag);
-	if (auditing) {
-		spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-		cred_t *cr;
-		pid_t cpid;
-
-		cr = msg_getcred(mp, &cpid);
-		active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-		audit_pf_policy(SPD_ADDRULE, cr, spds->spds_netstack,
-		    ITP_NAME(itp), active, error, cpid);
-	}
 }
 
 void
@@ -1203,22 +1142,9 @@ spdsock_deleterule(queue_t *q, ipsec_policy_head_t *iph, mblk_t *mp,
 	int err, diag = 0;
 	spdsock_t *ss = (spdsock_t *)q->q_ptr;
 	netstack_t *ns = ss->spdsock_spds->spds_netstack;
-	uint32_t auditing = AU_AUDITING();
 
 	if (rule == NULL) {
 		spdsock_diag(q, mp, SPD_DIAGNOSTIC_NO_RULE_EXT);
-		if (auditing) {
-			boolean_t active;
-			spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-			audit_pf_policy(SPD_DELETERULE, cr, ns,
-			    ITP_NAME(itp), active, SPD_DIAGNOSTIC_NO_RULE_EXT,
-			    cpid);
-		}
 		return;
 	}
 
@@ -1268,33 +1194,11 @@ spdsock_deleterule(queue_t *q, ipsec_policy_head_t *iph, mblk_t *mp,
 		mutex_exit(&itp->itp_lock);
 	}
 	spd_echo(q, mp);
-	if (auditing) {
-		boolean_t active;
-		spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-		cred_t *cr;
-		pid_t cpid;
-
-		cr = msg_getcred(mp, &cpid);
-		active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-		audit_pf_policy(SPD_DELETERULE, cr, ns, ITP_NAME(itp),
-		    active, 0, cpid);
-	}
 	return;
 fail:
 	if (itp != NULL)
 		mutex_exit(&itp->itp_lock);
 	spdsock_error(q, mp, err, diag);
-	if (auditing) {
-		boolean_t active;
-		spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-		cred_t *cr;
-		pid_t cpid;
-
-		cr = msg_getcred(mp, &cpid);
-		active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-		audit_pf_policy(SPD_DELETERULE, cr, ns, ITP_NAME(itp),
-		    active, err, cpid);
-	}
 }
 
 /* Do NOT consume a reference to itp. */
@@ -1317,84 +1221,25 @@ spdsock_flip(queue_t *q, mblk_t *mp, spd_if_t *tunname)
 	ipsec_tun_pol_t *itp;
 	spdsock_t *ss = (spdsock_t *)q->q_ptr;
 	netstack_t *ns = ss->spdsock_spds->spds_netstack;
-	uint32_t auditing = AU_AUDITING();
 
 	if (tunname != NULL) {
 		tname = (char *)tunname->spd_if_name;
 		if (*tname == '\0') {
 			/* can't fail */
 			ipsec_swap_global_policy(ns);
-			if (auditing) {
-				boolean_t active;
-				spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-				audit_pf_policy(SPD_FLIP, cr, ns,
-				    NULL, active, 0, cpid);
-			}
 			itp_walk(spdsock_flip_node, NULL, ns);
-			if (auditing) {
-				boolean_t active;
-				spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-				audit_pf_policy(SPD_FLIP, cr, ns,
-				    "all tunnels", active, 0, cpid);
-			}
 		} else {
 			itp = get_tunnel_policy(tname, ns);
 			if (itp == NULL) {
 				/* Better idea for "tunnel not found"? */
 				spdsock_error(q, mp, ESRCH, 0);
-				if (auditing) {
-					boolean_t active;
-					spd_msg_t *spmsg =
-					    (spd_msg_t *)mp->b_rptr;
-					cred_t *cr;
-					pid_t cpid;
-
-					cr = msg_getcred(mp, &cpid);
-					active = (spmsg->spd_msg_spdid ==
-					    SPD_ACTIVE);
-					audit_pf_policy(SPD_FLIP, cr, ns,
-					    ITP_NAME(itp), active,
-					    ESRCH, cpid);
-				}
 				return;
 			}
 			spdsock_flip_node(itp, NULL, ns);
-			if (auditing) {
-				boolean_t active;
-				spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-				audit_pf_policy(SPD_FLIP, cr, ns,
-				    ITP_NAME(itp), active, 0, cpid);
-			}
 			ITP_REFRELE(itp, ns);
 		}
 	} else {
 		ipsec_swap_global_policy(ns);	/* can't fail */
-		if (auditing) {
-			boolean_t active;
-			spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-			audit_pf_policy(SPD_FLIP, cr,
-			    ns, NULL, active, 0, cpid);
-		}
 	}
 	spd_echo(q, mp);
 }
@@ -2128,86 +1973,25 @@ spdsock_clone(queue_t *q, mblk_t *mp, spd_if_t *tunname)
 	ipsec_tun_pol_t *itp;
 	spdsock_t *ss = (spdsock_t *)q->q_ptr;
 	netstack_t *ns = ss->spdsock_spds->spds_netstack;
-	uint32_t auditing = AU_AUDITING();
 
 	if (tunname != NULL) {
 		tname = (char *)tunname->spd_if_name;
 		if (*tname == '\0') {
 			error = ipsec_clone_system_policy(ns);
-			if (auditing) {
-				boolean_t active;
-				spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-				audit_pf_policy(SPD_CLONE, cr, ns,
-				    NULL, active, error, cpid);
-			}
 			if (error == 0) {
 				itp_walk(spdsock_clone_node, &error, ns);
-				if (auditing) {
-					boolean_t active;
-					spd_msg_t *spmsg =
-					    (spd_msg_t *)mp->b_rptr;
-					cred_t *cr;
-					pid_t cpid;
-
-					cr = msg_getcred(mp, &cpid);
-					active = (spmsg->spd_msg_spdid ==
-					    SPD_ACTIVE);
-					audit_pf_policy(SPD_CLONE, cr,
-					    ns, "all tunnels", active, 0,
-					    cpid);
-				}
 			}
 		} else {
 			itp = get_tunnel_policy(tname, ns);
 			if (itp == NULL) {
 				spdsock_error(q, mp, ENOENT, 0);
-				if (auditing) {
-					boolean_t active;
-					spd_msg_t *spmsg =
-					    (spd_msg_t *)mp->b_rptr;
-					cred_t *cr;
-					pid_t cpid;
-
-					cr = msg_getcred(mp, &cpid);
-					active = (spmsg->spd_msg_spdid ==
-					    SPD_ACTIVE);
-					audit_pf_policy(SPD_CLONE, cr,
-					    ns, NULL, active, ENOENT, cpid);
-				}
 				return;
 			}
 			spdsock_clone_node(itp, &error, NULL);
-			if (auditing) {
-				boolean_t active;
-				spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-				audit_pf_policy(SPD_CLONE, cr, ns,
-				    ITP_NAME(itp), active, error, cpid);
-			}
 			ITP_REFRELE(itp, ns);
 		}
 	} else {
 		error = ipsec_clone_system_policy(ns);
-		if (auditing) {
-			boolean_t active;
-			spd_msg_t *spmsg = (spd_msg_t *)mp->b_rptr;
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			active = (spmsg->spd_msg_spdid == SPD_ACTIVE);
-			audit_pf_policy(SPD_CLONE, cr, ns, NULL,
-			    active, error, cpid);
-		}
 	}
 
 	if (error != 0)
@@ -2792,7 +2576,6 @@ spdsock_updatealg(queue_t *q, mblk_t *mp, spd_ext_t *extv[])
 	spdsock_t *ss = (spdsock_t *)q->q_ptr;
 	spd_stack_t	*spds = ss->spdsock_spds;
 	ipsec_stack_t	*ipss = spds->spds_netstack->netstack_ipsec;
-	uint32_t auditing = AU_AUDITING();
 
 	if (!ipsec_loaded(ipss)) {
 		/*
@@ -2813,15 +2596,6 @@ spdsock_updatealg(queue_t *q, mblk_t *mp, spd_ext_t *extv[])
 			freemsg(spds->spds_mp_algs);
 		spds->spds_mp_algs = mp;
 		mutex_exit(&spds->spds_alg_lock);
-		if (auditing) {
-			cred_t *cr;
-			pid_t cpid;
-
-			cr = msg_getcred(mp, &cpid);
-			audit_pf_policy(SPD_UPDATEALGS, cr,
-			    spds->spds_netstack, NULL, B_TRUE, EAGAIN,
-			    cpid);
-		}
 		spd_echo(q, new_mp);
 	} else {
 		/*
@@ -2837,27 +2611,9 @@ spdsock_updatealg(queue_t *q, mblk_t *mp, spd_ext_t *extv[])
 			    spds->spds_netstack);
 			mutex_exit(&spds->spds_alg_lock);
 			spd_echo(q, mp);
-			if (auditing) {
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				audit_pf_policy(SPD_UPDATEALGS, cr,
-				    spds->spds_netstack, NULL, B_TRUE, 0,
-				    cpid);
-			}
 		} else {
 			mutex_exit(&spds->spds_alg_lock);
 			spdsock_diag(q, mp, diag);
-			if (auditing) {
-				cred_t *cr;
-				pid_t cpid;
-
-				cr = msg_getcred(mp, &cpid);
-				audit_pf_policy(SPD_UPDATEALGS, cr,
-				    spds->spds_netstack, NULL, B_TRUE, diag,
-				    cpid);
-			}
 		}
 	}
 }

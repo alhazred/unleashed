@@ -37,7 +37,7 @@
  *   the kernel in the zonehash.  Elsewhere in the kernel, Zone IDs
  *   (zoneid_t) are used to track zone association.  Zone IDs are
  *   dynamically generated when the zone is created; if a persistent
- *   identifier is needed (core files, accounting logs, audit trail,
+ *   identifier is needed (core files, accounting logs,
  *   etc.), the zone name should be used.
  *
  *
@@ -200,7 +200,6 @@
 
 #include <sys/priv_impl.h>
 #include <sys/cred.h>
-#include <c2/audit.h>
 #include <sys/debug.h>
 #include <sys/file.h>
 #include <sys/kmem.h>
@@ -3560,10 +3559,6 @@ zone_chdir(vnode_t *vp, vnode_t **vpp, proc_t *pp)
 
 	/* we're going to hold a reference here to the directory */
 	VN_HOLD(vp);
-
-	/* update abs cwd/root path see c2/audit.c */
-	if (AU_AUDITING())
-		audit_chdirec(vp, vpp);
 
 	mutex_enter(&pp->p_lock);
 	oldvp = *vpp;

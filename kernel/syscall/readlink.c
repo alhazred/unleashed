@@ -45,7 +45,6 @@
 #include <sys/uio.h>
 #include <sys/debug.h>
 #include <sys/fs_subr.h>
-#include <c2/audit.h>
 
 /*
  * Read the contents of a symbolic link.
@@ -70,8 +69,6 @@ readlinkat(int dfd, char *name, char *buf, size_t count)
 		return (set_errno(error));
 
 lookup:
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 	if (error = lookupnameat(name, UIO_USERSPACE, NO_FOLLOW,
 	    NULLVPP, &vp, startvp)) {
 		if (error == ESTALE && fs_need_estale_retry(estale_retry++))

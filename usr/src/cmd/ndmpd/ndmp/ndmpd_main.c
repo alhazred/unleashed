@@ -46,6 +46,7 @@
 #include <sys/wait.h>
 #include <zone.h>
 #include <dlfcn.h>
+#include <priv.h>
 #include "ndmpd.h"
 #include "ndmpd_common.h"
 

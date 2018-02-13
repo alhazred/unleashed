@@ -56,7 +56,6 @@
 #include <sys/zone.h>
 
 #include <sys/debug.h>
-#include <c2/audit.h>
 #include <sys/fs_subr.h>
 
 /*
@@ -213,10 +212,6 @@ chdirec(vnode_t *vp, int ischroot, int do_traverse)
 	} else {
 		vpp = &PTOU(pp)->u_cdir;
 	}
-
-	/* update abs cwd/root path see c2/audit.c */
-	if (AU_AUDITING())
-		audit_chdirec(vp, vpp);
 
 	mutex_enter(&pp->p_lock);
 	/*

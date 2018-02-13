@@ -543,8 +543,6 @@ $(ROOT)/usr/lib/libaio.so.1:=		REALPATH=../../lib/libaio.so.1
 $(ROOT)/usr/lib/libaio.so:=		REALPATH=../../lib/libaio.so.1
 $(ROOT)/usr/lib/libavl.so.1:=		REALPATH=../../lib/libavl.so.1
 $(ROOT)/usr/lib/libavl.so:=		REALPATH=../../lib/libavl.so.1
-$(ROOT)/usr/lib/libbsm.so.1:=		REALPATH=../../lib/libbsm.so.1
-$(ROOT)/usr/lib/libbsm.so:=		REALPATH=../../lib/libbsm.so.1
 $(ROOT)/usr/lib/libc.so.1:=		REALPATH=../../lib/libc.so.1
 $(ROOT)/usr/lib/libc.so:=		REALPATH=../../lib/libc.so.1
 $(ROOT)/usr/lib/libc_db.so.1:=		REALPATH=../../lib/libc_db.so.1
@@ -685,10 +683,6 @@ $(ROOT)/usr/lib/$(MACH64)/libavl.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libavl.so.1
 $(ROOT)/usr/lib/$(MACH64)/libavl.so:= \
 	REALPATH=../../../lib/$(MACH64)/libavl.so.1
-$(ROOT)/usr/lib/$(MACH64)/libbsm.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libbsm.so.1
-$(ROOT)/usr/lib/$(MACH64)/libbsm.so:= \
-	REALPATH=../../../lib/$(MACH64)/libbsm.so.1
 $(ROOT)/usr/lib/$(MACH64)/libc.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libc.so.1
 $(ROOT)/usr/lib/$(MACH64)/libc.so:= \
@@ -921,8 +915,6 @@ SYM.USRLIB= \
 	/usr/lib/libaio.so.1 \
 	/usr/lib/libavl.so \
 	/usr/lib/libavl.so.1 \
-	/usr/lib/libbsm.so \
-	/usr/lib/libbsm.so.1 \
 	/usr/lib/libc.so \
 	/usr/lib/libc.so.1 \
 	/usr/lib/libc_db.so \
@@ -1051,8 +1043,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libaio.so.1 \
 	/usr/lib/$(MACH64)/libavl.so \
 	/usr/lib/$(MACH64)/libavl.so.1 \
-	/usr/lib/$(MACH64)/libbsm.so \
-	/usr/lib/$(MACH64)/libbsm.so.1 \
 	/usr/lib/$(MACH64)/libc.so \
 	/usr/lib/$(MACH64)/libc.so.1 \
 	/usr/lib/$(MACH64)/libc_db.so \

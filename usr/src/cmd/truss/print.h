@@ -91,7 +91,6 @@ extern "C" {
 #define	WHN	49		/* print lseek() whence argument */
 #define	ACL	50		/* print acl() code */
 #define	AIO	51		/* print kaio() code */
-#define	AUD	52		/* print auditsys() code */
 #define	UNS	53		/* print value in unsigned decimal */
 #define	COR	54		/* print corectl() subcode */
 #define	CCO	55		/* print corectl() options */

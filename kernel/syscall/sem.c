@@ -140,8 +140,6 @@
 #include <sys/list.h>
 #include <sys/zone.h>
 
-#include <c2/audit.h>
-
 extern rctl_hndl_t rc_zone_semmni;
 extern rctl_hndl_t rc_project_semmni;
 extern rctl_hndl_t rc_process_semmsl;
@@ -211,7 +209,7 @@ _init(void)
 	int result;
 
 	sem_svc = ipcs_create("semids", rc_project_semmni, rc_zone_semmni,
-	    sizeof (ksemid_t), sem_dtor, sem_rmid, AT_IPC_SEM,
+	    sizeof (ksemid_t), sem_dtor, sem_rmid,
 	    offsetof(ipc_rqty_t, ipcq_semmni));
 	zone_key_create(&sem_zone_key, NULL, sem_remove_zone, NULL);
 
@@ -725,9 +723,6 @@ top:
 		}
 		lock = ipc_commit_end(sem_svc, &sp->sem_perm);
 	}
-
-	if (AU_AUDITING())
-		audit_ipcget(AT_IPC_SEM, (void *)sp);
 
 	id = sp->sem_perm.ipc_id;
 	mutex_exit(lock);

@@ -59,7 +59,6 @@
 #include <sys/door_data.h>
 #include <vm/as.h>
 #include <vm/rm.h>
-#include <c2/audit.h>
 #include <sys/var.h>
 #include <sys/schedctl.h>
 #include <sys/utrap.h>
@@ -1162,12 +1161,6 @@ getproc(proc_t **cpp, pid_t pid, uint_t flags)
 
 	avl_create(&cp->p_ct_held, contract_compar, sizeof (contract_t),
 	    offsetof(contract_t, ct_ctlist));
-
-	/*
-	 * Duplicate any audit information kept in the process table
-	 */
-	if (audit_active)	/* copy audit data to cp */
-		audit_newproc(cp);
 
 	crhold(cp->p_cred = cr);
 

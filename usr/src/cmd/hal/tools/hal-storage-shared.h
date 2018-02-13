@@ -29,11 +29,6 @@
 #ifdef HAVE_POLKIT
 #include <libpolkit.h>
 #endif
-#ifdef sun
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
-#include "../utils/adt_data.h"
-#endif
 
 /*#define DEBUG*/
 #define DEBUG
@@ -72,8 +67,6 @@ void handle_eject (LibHalContext *hal_ctx,
 
 #ifdef sun
 char *auth_from_privilege(const char *privilege);
-void audit_volume(const adt_export_data_t *imported_state, au_event_t event_id, int result,
-    const char *auth_used, const char *mount_point, const char *device, const char *options);
 #endif /* sun */
 		
 #endif /* HAL_STORAGE_SHARED_H */

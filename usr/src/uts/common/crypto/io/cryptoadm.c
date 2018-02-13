@@ -47,7 +47,6 @@
 #include <sys/crypto/impl.h>
 #include <sys/crypto/sched_impl.h>
 #include <sys/crypto/ioctladmin.h>
-#include <c2/audit.h>
 #include <sys/disp.h>
 
 /*
@@ -59,9 +58,6 @@ static int cryptoadm_getinfo(dev_info_t *, ddi_info_cmd_t, void *, void **);
 static int cryptoadm_open(dev_t *, int, int, cred_t *);
 static int cryptoadm_close(dev_t, int, int, cred_t *);
 static int cryptoadm_ioctl(dev_t, int, intptr_t, int, cred_t *, int *);
-
-extern void audit_cryptoadm(int, char *, crypto_mech_name_t *, uint_t,
-    uint_t, uint32_t, int);
 
 /*
  * Module linkage.
@@ -557,9 +553,6 @@ out:
 		error = EFAULT;
 	}
 out2:
-	if (AU_AUDITING())
-		audit_cryptoadm(CRYPTO_LOAD_DEV_DISABLED, dev_name, entries,
-		    count, instance, rv, error);
 	return (error);
 }
 
@@ -635,9 +628,6 @@ out:
 		error = EFAULT;
 	}
 out2:
-	if (AU_AUDITING())
-		audit_cryptoadm(CRYPTO_LOAD_SOFT_DISABLED, name, entries,
-		    count, 0, rv, error);
 	return (error);
 }
 
@@ -717,9 +707,6 @@ out:
 		error = EFAULT;
 	}
 out2:
-	if (AU_AUDITING())
-		audit_cryptoadm(CRYPTO_LOAD_SOFT_CONFIG, name, entries, count,
-		    0, rv, error);
 	return (error);
 }
 
@@ -762,10 +749,6 @@ out:
 		error = EFAULT;
 	}
 out2:
-	if (AU_AUDITING())
-		audit_cryptoadm(CRYPTO_UNLOAD_SOFT_MODULE, name, NULL, 0, 0,
-		    rv, error);
-
 	return (error);
 }
 

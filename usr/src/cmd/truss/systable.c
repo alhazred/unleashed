@@ -405,7 +405,7 @@ const struct systable systable[] = {
 {"pollsys",	4, DEC, NOV, HEX, DEC, HEX, HEX},		/* 183 */
 { NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"acl",		4, DEC, NOV, STG, ACL, DEC, HEX},		/* 185 */
-{"auditsys",	4, DEC, NOV, AUD, HEX, HEX, HEX},		/* 186 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"processor_bind", 4, DEC, NOV, IDT, DEC, DEC, HEX},		/* 187 */
 {"processor_info", 2, DEC, NOV, DEC, HEX},			/* 188 */
 {"p_online",	2, DEC, NOV, DEC, DEC},				/* 189 */
@@ -973,7 +973,6 @@ const	struct sysalias sysalias[] = {
 	{ "aiowait",	SYS_kaio	},
 	{ "aiocancel",	SYS_kaio	},
 	{ "aionotify",	SYS_kaio	},
-	{ "audit",	SYS_auditsys	},
 	{ "door_create",	SYS_door	},
 	{ "door_revoke",	SYS_door	},
 	{ "door_info",		SYS_door	},

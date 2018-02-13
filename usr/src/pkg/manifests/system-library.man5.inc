@@ -14,9 +14,6 @@
 # Copyright 2014 Nexenta Systems, Inc.
 #
 
-file path=usr/share/man/man5/audit_binfile.5
-file path=usr/share/man/man5/audit_remote.5
-file path=usr/share/man/man5/audit_syslog.5
 file path=usr/share/man/man5/byteorder.5
 file path=usr/share/man/man5/cancellation.5
 file path=usr/share/man/man5/charmap.5

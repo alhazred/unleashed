@@ -41,8 +41,6 @@ extern "C" {
 #include <locale.h>
 #include <libinetutil.h>
 #include <auth_list.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 
 #define	SGNAME_SZ	80
 #define	ILB_FMRI	"svc:/network/loadbalancer/ilb:default"
@@ -278,19 +276,6 @@ typedef struct ilbd_hc_srv_s {
 	int			shc_ev_port;
 } ilbd_hc_srv_t;
 
-/*
- * Structure for holding audit server and servergroup event
- * data. Not all events use all members of the structure.
- */
-typedef struct audit_sg_event_data {
-	int32_t	ed_ipaddr_type;	/* ADT_IPv4 or ADT_IPv6 */
-	uint32_t ed_server_address[4];  /* server's IP address */
-	char	*ed_serverid;   /* serverid. */
-	uint16_t	ed_minport;	/* server's minport */
-	uint16_t	ed_maxport;	/* server's maxport */
-	char		*ed_sgroup;	/* servergroup */
-} audit_sg_event_data_t;
-
 /* Struct to store client info */
 typedef struct {
 	ilbd_event_t	cli_ev;
@@ -425,7 +410,6 @@ void		ilbd_algo_to_str(ilb_algo_t, char *);
 void		ilbd_topo_to_str(ilb_topo_t, char *);
 void		ilbd_ip_to_str(uint16_t, struct in6_addr *, char *);
 void		cvt_addr(uint32_t *, int32_t, struct in6_addr);
-int		ilberror2auditerror(ilb_status_t);
 
 #ifdef __cplusplus
 }

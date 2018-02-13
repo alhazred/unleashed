@@ -582,10 +582,6 @@ tgt_again:
 			tmp = 0;
 		if (tmp != NULL)
 		    limit_string(tmp);
-		audit_krb5kdc_tgs_req_2ndtktmm(
-			(struct in_addr *)from->address->contents,
-			(in_port_t)from->port,
-			0, cname, sname);
 		krb5_klog_syslog(LOG_INFO,
 				 "TGS_REQ %s: 2ND_TKT_MISMATCH: "
 				 "authtime %d, %s for %s, 2nd tkt client %s",
@@ -699,11 +695,6 @@ tgt_again:
 cleanup:
     if (status) {
 	const char * emsg = NULL;
-	    audit_krb5kdc_tgs_req((struct in_addr *)from->address->contents,
-				(in_port_t)from->port, 0,
-				cname ? cname : "<unknown client>",
-				sname ? sname : "<unknown client>",
-				errcode);
 	if (!errcode)
 	    rep_etypes2str(rep_etypestr, sizeof(rep_etypestr), &reply);
 	if (errcode) 
@@ -868,18 +859,10 @@ find_alternate_tgs(krb5_kdc_req *request, krb5_db_entry *server,
 	    request->server = tmpprinc;
 	    if (krb5_unparse_name(kdc_context, request->server, &sname)) {
 
-		audit_krb5kdc_tgs_req_alt_tgt(
-			(struct in_addr *)from->address->contents,
-			(in_port_t)from->port,
-			0, cname, "<unparseable>", 0);
 		krb5_klog_syslog(LOG_INFO,
 		       "TGS_REQ: issuing alternate <un-unparseable> TGT");
 	    } else {
 		limit_string(sname);
-		audit_krb5kdc_tgs_req_alt_tgt(
-			(struct in_addr *)from->address->contents,
-			(in_port_t)from->port,
-			0, cname, sname, 0);
 		krb5_klog_syslog(LOG_INFO,
 		       "TGS_REQ: issuing TGT %s", sname);
 		free(sname);

@@ -3,9 +3,6 @@ MAN = Intro.5 \
       ad.5 \
       ascii.5 \
       attributes.5 \
-      audit_binfile.5 \
-      audit_remote.5 \
-      audit_syslog.5 \
       brand.4th.5 \
       brands.5 \
       byteorder.5 \
@@ -21,7 +18,6 @@ MAN = Intro.5 \
       crypt_sunmd5.5 \
       crypt_unix.5 \
       delay.4th.5 \
-      device_clean.5 \
       dhcp.5 \
       environ.5 \
       epoll.5 \

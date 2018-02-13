@@ -29,7 +29,6 @@
 #include <strings.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <bsm/devalloc.h>
 
 static int tape_process(di_minor_t minor, di_node_t node);
 

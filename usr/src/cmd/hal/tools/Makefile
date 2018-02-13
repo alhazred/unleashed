@@ -49,7 +49,7 @@ PROGSRCS =	$(PROG:%=%.c) $(STORAGE_PROG:%=%.c)
 
 
 STORAGE_OBJS =		$(STORAGE_PROG:%=%.o)
-STORAGE_SHAREDOBJS =	hal-storage-shared.o adt_data.o
+STORAGE_SHAREDOBJS =	hal-storage-shared.o
 STORAGE_SHAREDSRCS =	$(STORAGE_SHAREDOBJS:%.o=%.c) $(STORAGE_SHAREDOBJS:%.o=../utils/%.c)
 
 SRCS =		$(PROGSRCS) $(STORAGE_SHAREDSRCS)
@@ -66,7 +66,7 @@ lshal :=		LDLIBS += -ldbus-glib-1 -lglib-2.0
 
 $(HAL_LIB) :=	LDLIBS += -lc -ldbus-1 -lpolkit $(ZIGNORE) -lglib-2.0
 
-$(STORAGE_PROG)	:=	LDLIBS += -lc -ldbus-1 -lglib-2.0 -lhal -lhal-storage -lbsm
+$(STORAGE_PROG)	:=	LDLIBS += -lc -ldbus-1 -lglib-2.0 -lhal -lhal-storage
 
 $(STORAGE_METHOD_PROG) := LDLIBS += -lpolkit
 
@@ -94,9 +94,6 @@ all: $(HAL_PROG) $(STORAGE_PROG) $(SCRIPT_BIN) $(SCRIPT_LIB) $(HAL_LIB) $(SUBDIR
 
 hal-storage-shared.o: hal-storage-shared.c
 	$(COMPILE.c) -o $@ hal-storage-shared.c
-
-adt_data.o: ../utils/adt_data.c
-	$(COMPILE.c) -o $@ ../utils/adt_data.c
 
 hal-storage-closetray: hal-storage-closetray.o $(STORAGE_SHAREDOBJS)
 	$(LINK.c) hal-storage-closetray.o $(STORAGE_SHAREDOBJS) -o $@ $(LDLIBS)

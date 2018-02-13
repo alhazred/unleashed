@@ -62,7 +62,6 @@ dmod/$(MODULE) := LDLIBS += -lm -lproc
 #
 CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/include
 
-# Needed to include c2/audit.h (from cred.h)
 CPPFLAGS += -I$(SRC)/uts/common
 CPPFLAGS += -I$(SRCTOP)/include
 

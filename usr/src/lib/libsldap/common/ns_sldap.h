@@ -479,7 +479,6 @@ typedef struct _ns_automount {
 #define	NS_LDAP_TYPE_USERATTR	"user_attr"
 #define	NS_LDAP_TYPE_PROJECT	"project"
 #define	NS_LDAP_TYPE_PUBLICKEY	"publickey"
-#define	NS_LDAP_TYPE_AUUSER	"audit_user"
 #define	NS_LDAP_TYPE_BOOTPARAMS "bootparams"
 #define	NS_LDAP_TYPE_AUTOMOUNT  "auto_"
 

@@ -43,7 +43,7 @@ CERRWARN += -Wno-switch
 CERRWARN += -Wno-unused-label
 
 LDLIBS    += -lrestart -lscf -lcontract -linetutil \
-		-lwrap -linetsvc -luutil -lumem -lbsm
+		-lwrap -linetsvc -luutil -lumem
 
 CLOBBERFILES += $(SVCMETHOD)
 

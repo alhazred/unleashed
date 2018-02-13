@@ -44,11 +44,11 @@ $(PROG_STATIC) := FILEMODE = 0555
 # A reduced su.static is created, with just enough functionality
 # to satisfy the needs of a single-user login with /usr not mounted.
 # In particular, nss_files.so.1 may be dlopen()'ed at runtime.
-$(ROOTFS_PROG) :=	LDLIBS += -lbsm -lpam -lsecdb
+$(ROOTFS_PROG) :=	LDLIBS =
 
 # The standard su is fully functional.
 $(PROG) :=	CPPFLAGS += -DDYNAMIC_SU
-$(PROG) :=	LDLIBS += -lbsm -lpam -lsecdb
+$(PROG) :=	LDLIBS += -lpam
 
 
 CLOBBERFILES	+= $(ROOTFS_PROG) $(EMB_PROG)

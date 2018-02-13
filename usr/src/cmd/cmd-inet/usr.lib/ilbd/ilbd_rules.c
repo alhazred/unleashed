@@ -494,259 +494,6 @@ ilbd_disable_one_rule(ilbd_rule_t *irl, boolean_t is_rollback)
 	return (rc);
 }
 
-/*
- * Generates an audit record for a supplied rule name
- * Used for enable_rule, disable_rule, delete_rule,
- * and create_rule subcommands
- */
-static void
-ilbd_audit_rule_event(const char *audit_rule_name,
-    ilb_rule_info_t *rlinfo, ilbd_cmd_t cmd, ilb_status_t rc,
-    ucred_t *ucredp)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-	au_event_t		flag;
-	int			scf_val_len = ILBD_MAX_VALUE_LEN;
-	char			*aobuf = NULL; /* algo:topo */
-	char			*valstr1 = NULL;
-	char			*valstr2 = NULL;
-	char			pbuf[PROTOCOL_LEN]; /* protocol */
-	char			hcpbuf[PORT_LEN]; /* hcport */
-	int			audit_error;
-
-	if ((ucredp == NULL) && (cmd == ILBD_CREATE_RULE))  {
-		/*
-		 * we came here from the path where ilbd incorporates
-		 * the configuration that is listed in SCF :
-		 * i_ilbd_read_config->ilbd_walk_rule_pgs->
-		 *    ->ilbd_scf_instance_walk_pg->ilbd_create_rule
-		 * We skip auditing in that case
-		 */
-		return;
-	}
-	if (adt_start_session(&ah, NULL, 0) != 0) {
-		logerr("ilbd_audit_rule_event: adt_start_session failed");
-		exit(EXIT_FAILURE);
-	}
-	if (adt_set_from_ucred(ah, ucredp, ADT_NEW) != 0) {
-		(void) adt_end_session(ah);
-		logerr("ilbd_audit_rule_event: adt_set_from_ucred failed");
-		exit(EXIT_FAILURE);
-	}
-	if (cmd == ILBD_ENABLE_RULE)
-		flag = ADT_ilb_enable_rule;
-	else if (cmd == ILBD_DISABLE_RULE)
-		flag = ADT_ilb_disable_rule;
-	else if (cmd == ILBD_DESTROY_RULE)
-		flag = ADT_ilb_delete_rule;
-	else if (cmd == ILBD_CREATE_RULE)
-		flag = ADT_ilb_create_rule;
-
-	if ((event = adt_alloc_event(ah, flag)) == NULL) {
-		logerr("ilbd_audit_rule_event: adt_alloc_event failed");
-		exit(EXIT_FAILURE);
-	}
-
-	(void) memset((char *)event, 0, sizeof (adt_event_data_t));
-
-	switch (cmd) {
-	case ILBD_DESTROY_RULE:
-		event->adt_ilb_delete_rule.auth_used = NET_ILB_CONFIG_AUTH;
-		event->adt_ilb_delete_rule.rule_name = (char *)audit_rule_name;
-		break;
-	case ILBD_ENABLE_RULE:
-		event->adt_ilb_enable_rule.auth_used = NET_ILB_ENABLE_AUTH;
-		event->adt_ilb_enable_rule.rule_name = (char *)audit_rule_name;
-		break;
-	case ILBD_DISABLE_RULE:
-		event->adt_ilb_disable_rule.auth_used = NET_ILB_ENABLE_AUTH;
-		event->adt_ilb_disable_rule.rule_name = (char *)audit_rule_name;
-		break;
-	case ILBD_CREATE_RULE:
-		if (((aobuf = malloc(scf_val_len)) == NULL) ||
-		    ((valstr1 = malloc(scf_val_len)) == NULL) ||
-		    ((valstr2 = malloc(scf_val_len)) == NULL)) {
-			logerr("ilbd_audit_rule_event: could not"
-			    " allocate buffer");
-			exit(EXIT_FAILURE);
-		}
-
-		event->adt_ilb_create_rule.auth_used = NET_ILB_CONFIG_AUTH;
-
-		/* Fill in virtual IP address type */
-		if (IN6_IS_ADDR_V4MAPPED(&rlinfo->rl_vip)) {
-			event->adt_ilb_create_rule.virtual_ipaddress_type =
-			    ADT_IPv4;
-			cvt_addr(event->adt_ilb_create_rule.virtual_ipaddress,
-			    ADT_IPv4, rlinfo->rl_vip);
-		} else {
-			event->adt_ilb_create_rule.virtual_ipaddress_type =
-			    ADT_IPv6;
-			cvt_addr(event->adt_ilb_create_rule.virtual_ipaddress,
-			    ADT_IPv6, rlinfo->rl_vip);
-		}
-		/* Fill in port - could be a single value or a range */
-		event->adt_ilb_create_rule.min_port = ntohs(rlinfo->rl_minport);
-		if (ntohs(rlinfo->rl_maxport) > ntohs(rlinfo->rl_minport)) {
-			/* port range */
-			event->adt_ilb_create_rule.max_port =
-			    ntohs(rlinfo->rl_maxport);
-		} else {
-			/* in audit record, max=min when single port */
-			event->adt_ilb_create_rule.max_port =
-			    ntohs(rlinfo->rl_minport);
-		}
-
-		/*
-		 * Fill in  protocol - if user does not specify it,
-		 * its TCP by default
-		 */
-		if (rlinfo->rl_proto == IPPROTO_UDP)
-			(void) snprintf(pbuf, PROTOCOL_LEN, "UDP");
-		else
-			(void) snprintf(pbuf, PROTOCOL_LEN, "TCP");
-		event->adt_ilb_create_rule.protocol = pbuf;
-
-		/* Fill in algorithm and operation type */
-		ilbd_algo_to_str(rlinfo->rl_algo, valstr1);
-		ilbd_topo_to_str(rlinfo->rl_topo, valstr2);
-		(void) snprintf(aobuf, scf_val_len, "%s:%s",
-		    valstr1, valstr2);
-		event->adt_ilb_create_rule.algo_optype = aobuf;
-
-		/* Fill in proxy-src for the NAT case */
-		if (rlinfo->rl_topo == ILB_TOPO_NAT)  {
-			/* copy starting proxy-src address */
-			if (IN6_IS_ADDR_V4MAPPED(&rlinfo->rl_nat_src_start)) {
-				/* V4 case */
-				event->adt_ilb_create_rule.proxy_src_min_type =
-				    ADT_IPv4;
-				cvt_addr(
-				    event->adt_ilb_create_rule.proxy_src_min,
-				    ADT_IPv4, rlinfo->rl_nat_src_start);
-			} else {
-				/* V6 case */
-				event->adt_ilb_create_rule.proxy_src_min_type =
-				    ADT_IPv6;
-				cvt_addr(
-				    event->adt_ilb_create_rule.proxy_src_min,
-				    ADT_IPv6, rlinfo->rl_nat_src_start);
-			}
-
-			/* copy ending proxy-src address */
-			if (&rlinfo->rl_nat_src_end == 0) {
-				/* proxy-src is a single address */
-				event->adt_ilb_create_rule.proxy_src_max_type =
-				    event->
-				    adt_ilb_create_rule.proxy_src_min_type;
-				(void) memcpy(
-				    event->adt_ilb_create_rule.proxy_src_max,
-				    event->adt_ilb_create_rule.proxy_src_min,
-				    (4 * sizeof (uint32_t)));
-			} else if (
-			    IN6_IS_ADDR_V4MAPPED(&rlinfo->rl_nat_src_end)) {
-				/*
-				 * proxy-src is a address range - copy ending
-				 * proxy-src address
-				 * V4 case
-				 */
-				event->adt_ilb_create_rule.proxy_src_max_type =
-				    ADT_IPv4;
-				cvt_addr(
-				    event->adt_ilb_create_rule.proxy_src_max,
-				    ADT_IPv4, rlinfo->rl_nat_src_end);
-			} else {
-				/* V6 case */
-				event->adt_ilb_create_rule.proxy_src_max_type =
-				    ADT_IPv6;
-				cvt_addr(
-				    event->adt_ilb_create_rule.proxy_src_max,
-				    ADT_IPv6, rlinfo->rl_nat_src_end);
-			}
-		}
-
-		/*
-		 * Fill in pmask if user has specified one - 0 means
-		 * no persistence
-		 */
-		valstr1[0] = '\0';
-		ilbd_ip_to_str(rlinfo->rl_ipversion, &rlinfo->rl_stickymask,
-		    valstr1);
-			event->adt_ilb_create_rule.persist_mask = valstr1;
-
-		/* If there is a hcname */
-		if (rlinfo->rl_hcname[0] != '\0')
-			event->adt_ilb_create_rule.hcname = rlinfo->rl_hcname;
-
-		/* Fill in hcport */
-		if (rlinfo->rl_hcpflag == ILB_HCI_PROBE_FIX) {
-			/* hcport is specified by user */
-			(void) snprintf(hcpbuf, PORT_LEN, "%d",
-			    rlinfo->rl_hcport);
-			event->adt_ilb_create_rule.hcport = hcpbuf;
-		} else if (rlinfo->rl_hcpflag == ILB_HCI_PROBE_ANY) {
-			/* user has specified "ANY" */
-			(void) snprintf(hcpbuf, PORT_LEN, "ANY");
-			event->adt_ilb_create_rule.hcport = hcpbuf;
-		}
-		/*
-		 * Fill out the conndrain, nat_timeout and persist_timeout
-		 * If the user does not specify them, the default value
-		 * is set in the kernel. Userland does not know what
-		 * the values are. So if the user
-		 * does not specify these values they will show up as
-		 * 0 in the audit record.
-		 */
-		event->adt_ilb_create_rule.conndrain_timeout =
-		    rlinfo->rl_conndrain;
-		event->adt_ilb_create_rule.nat_timeout =
-		    rlinfo->rl_nat_timeout;
-		event->adt_ilb_create_rule.persist_timeout =
-		    rlinfo->rl_sticky_timeout;
-
-		/* Fill out servergroup and rule name */
-		event->adt_ilb_create_rule.server_group = rlinfo->rl_sgname;
-		event->adt_ilb_create_rule.rule_name = rlinfo->rl_name;
-		break;
-	}
-	if (rc == ILB_STATUS_OK) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-			logerr("ilbd_audit_rule_event:adt_put_event failed");
-			exit(EXIT_FAILURE);
-		}
-	} else {
-		audit_error = ilberror2auditerror(rc);
-		if (adt_put_event(event, ADT_FAILURE, audit_error) != 0) {
-			logerr("ilbd_audit_rule_event: adt_put_event failed");
-			exit(EXIT_FAILURE);
-		}
-	}
-	adt_free_event(event);
-	free(aobuf);
-	free(valstr1);
-	free(valstr2);
-	(void) adt_end_session(ah);
-}
-/*
- * converts IP address from in6_addr format to uint32_t[4]
- * This conversion is needed for recording IP address in
- * audit records.
- */
-void
-cvt_addr(uint32_t *audit, int32_t type, struct in6_addr address)
-{
-
-	if (type == ADT_IPv4)  {
-		/* address is IPv4 */
-		audit[0] = address._S6_un._S6_u32[3];
-	} else {
-		/* address is IPv6 */
-		(void) memcpy(audit, address._S6_un._S6_u32,
-		    (4 * sizeof (uint32_t)));
-	}
-}
-
 static ilb_status_t
 i_ilbd_action_switch(ilbd_rule_t *irl, ilbd_cmd_t cmd,
     boolean_t is_rollback, ucred_t *ucredp)
@@ -756,24 +503,12 @@ i_ilbd_action_switch(ilbd_rule_t *irl, ilbd_cmd_t cmd,
 	switch (cmd) {
 	case ILBD_DESTROY_RULE:
 		rc = ilbd_destroy_one_rule(irl);
-		if (!is_rollback) {
-			ilbd_audit_rule_event(irl->irl_name, NULL,
-			    cmd, rc, ucredp);
-		}
 		return (rc);
 	case ILBD_ENABLE_RULE:
 		rc = ilbd_enable_one_rule(irl, is_rollback);
-		if (!is_rollback) {
-			ilbd_audit_rule_event(irl->irl_name, NULL, cmd,
-			    rc, ucredp);
-		}
 		return (rc);
 	case ILBD_DISABLE_RULE:
 		rc = ilbd_disable_one_rule(irl, is_rollback);
-		if (!is_rollback) {
-			ilbd_audit_rule_event(irl->irl_name, NULL, cmd,
-			    rc, ucredp);
-		}
 		return (rc);
 	}
 	return (ILB_STATUS_INVAL_CMD);
@@ -837,17 +572,7 @@ i_ilbd_rule_action(const char *rule_name, const struct passwd *ps,
 			rc = ilbd_check_client_enable_auth(ps);
 		else
 			rc = ilbd_check_client_config_auth(ps);
-		/* generate the audit record before bailing out */
 		if (rc != ILB_STATUS_OK) {
-			if (*rule_name != '\0') {
-				ilbd_audit_rule_event(rule_name, NULL,
-				    cmd, rc, ucredp);
-			} else {
-				(void) snprintf(rulename, sizeof (rulename),
-				    "all");
-				ilbd_audit_rule_event(rulename, NULL, cmd, rc,
-				    ucredp);
-			}
 			goto out;
 		}
 	}
@@ -858,10 +583,8 @@ i_ilbd_rule_action(const char *rule_name, const struct passwd *ps,
 		irl = i_find_rule_byname(rule_name);
 		if (irl == NULL) {
 			rc = ILB_STATUS_ENORULE;
-			ilbd_audit_rule_event(rule_name, NULL, cmd, rc, ucredp);
 			goto out;
 		}
-		/* auditing will be done by i_ilbd_action_switch() */
 		rc = i_ilbd_action_switch(irl, cmd, B_FALSE, ucredp);
 		goto out;
 	}
@@ -873,7 +596,6 @@ i_ilbd_rule_action(const char *rule_name, const struct passwd *ps,
 	rc = do_ioctl(&kcmd, 0);
 	if (rc != ILB_STATUS_OK) {
 		(void) snprintf(rulename, sizeof (rulename), "all");
-		ilbd_audit_rule_event(rulename, NULL, cmd, rc, ucredp);
 		goto out;
 	}
 
@@ -881,7 +603,6 @@ i_ilbd_rule_action(const char *rule_name, const struct passwd *ps,
 	while (irl != NULL) {
 		irl_next = list_next(&ilbd_rule_hlist, irl);
 		irl->irl_flags |= ILB_FLAGS_RULE_ALLRULES;
-		/* auditing will be done by i_ilbd_action_switch() */
 		rc = i_ilbd_action_switch(irl, cmd, B_FALSE, ucredp);
 		irl->irl_flags &= ~ILB_FLAGS_RULE_ALLRULES;
 		if (rc != ILB_STATUS_OK)
@@ -909,8 +630,7 @@ rollback_list:
 		 * When the processing of a command consists of
 		 * multiple sequential steps, and one of them fails,
 		 * ilbd performs rollback to undo the steps taken before the
-		 * failing step. Since ilbd is initiating these steps
-		 * there is not need to audit them.
+		 * failing step.
 		 */
 		rc = i_ilbd_action_switch(irl, u_cmd, B_TRUE, NULL);
 		irl->irl_flags &= ~ILB_FLAGS_RULE_ALLRULES;
@@ -1117,8 +837,6 @@ ilbd_create_rule(ilb_rule_info_t *rl, int ev_port,
 	if (i_find_rule_byname(rl->rl_name) != NULL) {
 		logdebug("ilbd_create_rule: rule %s"
 		    " already exists", rl->rl_name);
-		ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE,
-		    ILB_STATUS_DUP_RULE, ucredp);
 		return (ILB_STATUS_DUP_RULE);
 	}
 
@@ -1126,21 +844,16 @@ ilbd_create_rule(ilb_rule_info_t *rl, int ev_port,
 	if (sg == NULL) {
 		logdebug("ilbd_create_rule: rule %s uses non-existent"
 		    " servergroup name %s", rl->rl_name, rl->rl_sgname);
-		ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE,
-		    ILB_STATUS_SGUNAVAIL, ucredp);
 		return (ILB_STATUS_SGUNAVAIL);
 	}
 
 	if ((rc = ilbd_sg_check_rule_port(sg, rl)) != ILB_STATUS_OK) {
-		ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE, rc, ucredp);
 		return (rc);
 	}
 
 	/* allocs and copies contents of arg (if != NULL) into new rule */
 	irl = i_alloc_ilbd_rule(rl);
 	if (irl == NULL) {
-		ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE,
-		    ILB_STATUS_ENOMEM, ucredp);
 		return (ILB_STATUS_ENOMEM);
 	}
 
@@ -1200,8 +913,6 @@ ilbd_create_rule(ilb_rule_info_t *rl, int ev_port,
 	}
 
 	free(kcmd);
-	ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE,
-	    ILB_STATUS_OK, ucredp);
 	return (ILB_STATUS_OK);
 
 rollback_rule:
@@ -1211,7 +922,6 @@ rollback_rule:
 	 * and return.
 	 */
 	(void) ilbd_destroy_one_rule(irl);
-	ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE, rc, ucredp);
 	free(kcmd);
 	return (rc);
 
@@ -1222,7 +932,6 @@ rollback_hc:
 	if (RULE_HAS_HC(irl))
 		(void) ilbd_hc_dissociate_rule(irl);
 out:
-	ilbd_audit_rule_event(NULL, rl, ILBD_CREATE_RULE, rc, ucredp);
 	free(irl);
 	return (rc);
 }

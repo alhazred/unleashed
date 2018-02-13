@@ -2,7 +2,6 @@ SUBDIR = man1 \
 	 man2 \
 	 man3 \
 	 man3avl \
-	 man3bsm \
 	 man3c \
 	 man3c_db \
 	 man3cfgadm \

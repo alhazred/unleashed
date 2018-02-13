@@ -43,7 +43,6 @@
 #include <sys/fcntl.h>
 #include <sys/uio.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 
 /*
  * Make a directory.
@@ -64,8 +63,6 @@ mkdirat(int fd, char *dname, int dmode)
 		return (set_errno(EFAULT));
 	if ((error = fgetstartvp(fd, dname, &startvp)) != 0)
 		return (set_errno(error));
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 
 	error = vn_createat(dname, UIO_USERSPACE, &vattr, EXCL, 0, &vp,
 	    CRMKDIR, 0, PTOU(curproc)->u_cmask, startvp);

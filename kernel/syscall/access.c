@@ -45,7 +45,6 @@
 #include <sys/debug.h>
 #include <sys/file.h>
 #include <sys/fs_subr.h>
-#include <c2/audit.h>
 #include <sys/fcntl.h>
 
 /*
@@ -129,8 +128,6 @@ faccessat(int fd, char *fname, int fmode, int flag)
 		return (set_errno(EFAULT));
 	if ((error = fgetstartvp(fd, fname, &startvp)) != 0)
 		return (set_errno(error));
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 
 	/* Do not allow E_OK unless AT_EACCESS flag is set */
 	fmode &= ~E_OK;

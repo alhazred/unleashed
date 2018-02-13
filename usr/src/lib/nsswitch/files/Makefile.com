@@ -46,7 +46,6 @@ OBJECTS =	bootparams_getbyname.o	\
 		getprofattr.o		\
 		getexecattr.o		\
 		getuserattr.o		\
-		getauuser.o		\
 		netmasks.o
 
 # include common nsswitch library definitions.

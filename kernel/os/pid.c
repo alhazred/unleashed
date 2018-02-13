@@ -42,7 +42,6 @@
 #include <sys/cmn_err.h>
 #include <sys/bitmap.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 #include <sys/project.h>
 #include <sys/task.h>
 #include <sys/zone.h>
@@ -287,9 +286,6 @@ pid_exit(proc_t *prp, struct task *tk)
 	pidp = prp->p_pidp;
 
 	proc_entry_free(pidp);
-
-	if (audit_active)
-		audit_pfree(prp);
 
 	if (practive == prp) {
 		practive = prp->p_next;

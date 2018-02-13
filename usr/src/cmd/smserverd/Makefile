@@ -24,7 +24,7 @@
 #
 
 PROG =	rpc.smserverd
-OBJS =	smediad.o smediad_err.o myaudit.o smed_svc.o smed_xdr.o
+OBJS =	smediad.o smediad_err.o smed_svc.o smed_xdr.o
 SRCS =	$(OBJS:%.o=%.c)
 
 MANIFEST=	smserver.xml
@@ -39,8 +39,6 @@ ROOTLIBSMSERVERD= $(PROG:%=$(ROOTLIBSMSERVERDIR)/%)
 include ../Makefile.cmd
 
 ROOTMANIFESTDIR=	$(ROOTSVCNETWORKRPC)
-
-LDLIBS += -lbsm
 
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-variable

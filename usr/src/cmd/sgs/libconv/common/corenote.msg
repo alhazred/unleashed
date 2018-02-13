@@ -940,8 +940,7 @@
 @ MSG_SYS_184				"184"				# 184(u)
 @ MSG_SYS_ACL				"[ acl ]"			# 185
 @ MSG_SYS_ACL_ALT			"acl"
-@ MSG_SYS_AUDITSYS			"[ auditsys ]"			# 186
-@ MSG_SYS_AUDITSYS_ALT			"auditsys"
+@ MSG_SYS_186				"184"				# 186(u)
 @ MSG_SYS_PROCESSOR_BIND		"[ processor_bind ]"		# 187
 @ MSG_SYS_PROCESSOR_BIND_ALT		"processor_bind"
 @ MSG_SYS_PROCESSOR_INFO		"[ processor_info ]"		# 188

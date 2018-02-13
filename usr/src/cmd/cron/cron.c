@@ -355,18 +355,6 @@ static int reset_needed; /* set to 1 when cron(8) needs to re-initialize */
 static int		refresh;
 static sigset_t		defmask, sigmask;
 
-/*
- * BSM hooks
- */
-extern int	audit_cron_session(char *, char *, uid_t, gid_t, char *);
-extern void	audit_cron_new_job(char *, int, void *);
-extern void	audit_cron_bad_user(char *);
-extern void	audit_cron_user_acct_expired(char *);
-extern int	audit_cron_create_anc_file(char *, char *, char *, uid_t);
-extern int	audit_cron_delete_anc_file(char *, char *);
-extern int	audit_cron_is_anc_name(char *);
-extern int	audit_cron_mode();
-
 static int cron_conv(int, struct pam_message **,
 		struct pam_response **, void *);
 
@@ -390,19 +378,12 @@ static int verify_user_cred(struct usr *u);
 #define	VUC_NEW_AUTH	4
 
 /*
- * Modes of process_anc_files function
- */
-#define	CRON_ANC_DELETE	1
-#define	CRON_ANC_CREATE	0
-
-/*
  * Functions to remove a user or job completely from the running database.
  */
 static void clean_out_atjobs(struct usr *u);
 static void clean_out_ctab(struct usr *u);
 static void clean_out_user(struct usr *u);
 static void cron_unlink(char *name);
-static void process_anc_files(int);
 
 /*
  * functions in elm.c
@@ -804,10 +785,6 @@ valid_entry(char *name, int type)
 	    strcmp(name, "..") == 0)
 		return (0);
 
-	/* skip over ancillary file names */
-	if (audit_cron_is_anc_name(name))
-		return (0);
-
 	if (stat(name, &buf)) {
 		mail(name, BADSTAT, ERR_UNIXERR);
 		cron_unlink(name);
@@ -895,10 +872,6 @@ mod_ctab(char *name, time_t reftime)
 	struct	usr	*u;
 	char	namebuf[LINE_MAX];
 	char	*pname;
-
-	/* skip over ancillary file names */
-	if (audit_cron_is_anc_name(name))
-		return;
 
 	if ((pw = getpwnam(name)) == NULL) {
 		msg("No such user as %s - cron entries not created", name);
@@ -1001,10 +974,6 @@ mod_atjob(char *name, time_t reftime)
 	if (!isalpha(*ptr))
 		return;
 	jobtype = *ptr - 'a';
-
-	/* check for audit ancillary file */
-	if (audit_cron_is_anc_name(name))
-		return;
 
 	if (cwd != AT) {
 		if (snprintf(namebuf, sizeof (namebuf), "%s/%s", ATDIR, name)
@@ -2386,19 +2355,16 @@ ex(struct event *e)
 	r = set_user_cred(e->u, pproj);
 	if (r == VUC_EXPIRED) {
 		msg("user (%s) account is expired", e->u->name);
-		audit_cron_user_acct_expired(e->u->name);
 		clean_out_user(e->u);
 		exit(1);
 	}
 	if (r == VUC_NEW_AUTH) {
 		msg("user (%s) password has expired", e->u->name);
-		audit_cron_user_acct_expired(e->u->name);
 		clean_out_user(e->u);
 		exit(1);
 	}
 	if (r != VUC_OK) {
 		msg("bad user (%s)", e->u->name);
-		audit_cron_bad_user(e->u->name);
 		clean_out_user(e->u);
 		exit(1);
 	}
@@ -2413,7 +2379,6 @@ ex(struct event *e)
 	    initgroups(e->u->name, e->u->gid) == -1) {
 		msg("bad user (%s) or setgid failed (%s)",
 		    e->u->name, e->u->name);
-		audit_cron_bad_user(e->u->name);
 		clean_out_user(e->u);
 		exit(1);
 	}
@@ -2425,21 +2390,8 @@ ex(struct event *e)
 		envinit[2] = path;
 	}
 
-	if (e->etype != CRONEVENT) {
-		r = audit_cron_session(e->u->name, NULL,
-		    e->u->uid, e->u->gid, at_cmdfile);
+	if (e->etype != CRONEVENT)
 		cron_unlink(at_cmdfile);
-	} else {
-		r = audit_cron_session(e->u->name, CRONDIR,
-		    e->u->uid, e->u->gid, NULL);
-	}
-	if (r != 0) {
-		msg("cron audit problem. job failed (%s) for user %s",
-		    e->cmd, e->u->name);
-		exit(1);
-	}
-
-	audit_cron_new_job(e->cmd, e->etype, (void *)e);
 
 	if (setuid(e->u->uid) == -1)  {
 		msg("setuid failed (%s)", e->u->name);
@@ -3371,96 +3323,7 @@ clean_out_ctab(struct usr *u)
 static void
 cron_unlink(char *name)
 {
-	int r;
-
-	r = unlink(name);
-	if (r == 0 || (r == -1 && errno == ENOENT)) {
-		(void) audit_cron_delete_anc_file(name, NULL);
-	}
-}
-
-static void
-create_anc_ctab(struct event *e)
-{
-	if (audit_cron_create_anc_file(e->u->name,
-	    (cwd == CRON) ? NULL:CRONDIR,
-	    e->u->name, e->u->uid) == -1) {
-		process_anc_files(CRON_ANC_DELETE);
-		crabort("cannot create ancillary files for crontabs",
-		    REMOVE_FIFO|CONSOLE_MSG);
-	}
-}
-
-static void
-delete_anc_ctab(struct event *e)
-{
-	(void) audit_cron_delete_anc_file(e->u->name,
-	    (cwd == CRON) ? NULL:CRONDIR);
-}
-
-static void
-create_anc_atjob(struct event *e)
-{
-	if (!e->of.at.exists)
-		return;
-
-	if (audit_cron_create_anc_file(e->cmd,
-	    (cwd == AT) ? NULL:ATDIR,
-	    e->u->name, e->u->uid) == -1) {
-		process_anc_files(CRON_ANC_DELETE);
-		crabort("cannot create ancillary files for atjobs",
-		    REMOVE_FIFO|CONSOLE_MSG);
-	}
-}
-
-static void
-delete_anc_atjob(struct event *e)
-{
-	if (!e->of.at.exists)
-		return;
-
-	(void) audit_cron_delete_anc_file(e->cmd,
-	    (cwd == AT) ? NULL:ATDIR);
-}
-
-
-static void
-process_anc_files(int del)
-{
-	struct usr	*u = uhead;
-	struct event	*e;
-
-	if (!audit_cron_mode())
-		return;
-
-	for (;;) {
-		if (u->ctexists && u->ctevents != NULL) {
-			e = u->ctevents;
-			for (;;) {
-				if (del)
-					delete_anc_ctab(e);
-				else
-					create_anc_ctab(e);
-				if ((e = e->link) == NULL)
-					break;
-			}
-		}
-
-		if (u->atevents != NULL) {
-			e = u->atevents;
-			for (;;) {
-				if (del)
-					delete_anc_atjob(e);
-				else
-					create_anc_atjob(e);
-				if ((e = e->link) == NULL)
-					break;
-			}
-		}
-
-		if ((u = u->nextusr)  == NULL)
-			break;
-	}
+	unlink(name);
 }
 
 /*ARGSUSED*/

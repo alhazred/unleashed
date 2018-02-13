@@ -32,13 +32,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <bsm/libbsm.h>
 #include <user_attr.h>
 #include <pwd.h>
 #include <shadow.h>
 #include <grp.h>
 #include <unistd.h>	/* for GF_PATH */
 #include <dlfcn.h>
+#include <sys/param.h>
 #include "compat_common.h"
 
 /*
@@ -59,31 +59,10 @@ extern int str2group(const char *instr, int lenstr, void *ent,
 extern char *_strtok_escape(char *, char *, char **);
 
 /*
- * str2auuser_s and str2userattr_s are very simple version
- * of the str2auuser() and str2userattr() that can be found in
- * libnsl. They only copy the user name into the userstr_t
- * or au_user_str_t structure (so check on user name can be
- * performed).
+ * str2userattr_s is a very simple version of libnsl str2userattr().  It only
+ * copies the user name into the userstr_t or structure (so check on user name
+ * can be performed).
  */
-static int
-str2auuser_s(
-	const char	*instr,
-	int		lenstr,
-	void		*ent,
-	char		*buffer,
-	int		buflen)
-{
-	char		*last = NULL;
-	char		*sep = KV_TOKEN_DELIMIT;
-	au_user_str_t	*au_user = (au_user_str_t *)ent;
-
-	if (lenstr >= buflen)
-		return (NSS_STR_PARSE_ERANGE);
-	(void) strncpy(buffer, instr, buflen);
-	au_user->au_name = _strtok_escape(buffer, sep, &last);
-	return (0);
-}
-
 static int
 str2userattr_s(
 	const char	*instr,
@@ -393,8 +372,7 @@ _nss_compat_setent(be, dummy)
 	strset_free(&be->minuses);
 	/* ===> ??? nss_endent(be->db_rootp, be->db_initf, &be->db_context); */
 
-	if ((strcmp(be->filename, USERATTR_FILENAME) == 0) ||
-	    (strcmp(be->filename, AUDITUSER_FILENAME) == 0))
+	if ((strcmp(be->filename, USERATTR_FILENAME) == 0))
 		be->state = GETENT_ATTRDB;
 	else
 		be->state = GETENT_FILE;
@@ -498,8 +476,7 @@ is_nss_lookup_by_name(int attrdb, nss_dbop_t op)
 	int result = 0;
 
 	if ((attrdb != 0) &&
-	    ((op == NSS_DBOP_AUDITUSER_BYNAME) ||
-	    (op == NSS_DBOP_USERATTR_BYNAME))) {
+	    (op == NSS_DBOP_USERATTR_BYNAME)) {
 		result = 1;
 	} else if ((attrdb == 0) &&
 	    ((op == NSS_DBOP_GROUP_BYNAME) ||
@@ -671,8 +648,7 @@ _attrdb_compat_XY_all(be, argp, netdb, check, op_num)
 		if (be->return_string_data == 1)
 			argp->buf.result = NULL;
 
-		if ((op_num == NSS_DBOP_USERATTR_BYNAME) ||
-		    (op_num == NSS_DBOP_AUDITUSER_BYNAME)) {
+		if ((op_num == NSS_DBOP_USERATTR_BYNAME)) {
 			res = nss_search(be->db_rootp,
 			    be->db_initf,
 			    op_num,
@@ -1257,10 +1233,6 @@ _nss_compat_constr(ops, n_ops, filename, min_bufsize, rootp, initf, netgroups,
 		be->state = GETENT_ATTRDB;
 		be->str2ent_alt = str2userattr_s;
 		be->workarea = calloc(1, sizeof (userstr_t));
-	} else if (strcmp(be->filename, AUDITUSER_FILENAME) == 0) {
-		be->state = GETENT_ATTRDB;
-		be->str2ent_alt = str2auuser_s;
-		be->workarea = calloc(1, sizeof (au_user_str_t));
 	} else if (strcmp(be->filename, PASSWD) == 0) {
 		be->str2ent_alt = str2passwd;
 		be->workarea = calloc(1, sizeof (struct passwd));

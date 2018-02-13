@@ -25,8 +25,6 @@
 
 #include <auth_attr.h>
 #include <auth_list.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <door.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -271,10 +269,6 @@ nwamd_door_req_action(nwamd_door_arg_t *req, ucred_t *ucr, struct passwd *pwd)
 	 */
 	if (action == NWAM_ACTION_ENABLE || action == NWAM_ACTION_DISABLE) {
 		if (chkauthattr(AUTOCONF_SELECT_AUTH, pwd->pw_name) == 0) {
-			nwam_record_audit_event(ucr,
-			    action == NWAM_ACTION_ENABLE ?
-			    ADT_nwam_enable : ADT_nwam_disable, name,
-			    obj_type_str, ADT_FAILURE, ADT_FAIL_VALUE_AUTH);
 			nlog(LOG_ERR, "nwamd_door_req_action: "
 			    "need %s for %s action", AUTOCONF_SELECT_AUTH,
 			    nwam_action_to_string(action));
@@ -312,11 +306,6 @@ nwamd_door_req_action(nwamd_door_arg_t *req, ucred_t *ucr, struct passwd *pwd)
 	switch (action) {
 	case NWAM_ACTION_ENABLE:
 	case NWAM_ACTION_DISABLE:
-		nwam_record_audit_event(ucr,
-		    action == NWAM_ACTION_ENABLE ?
-		    ADT_nwam_enable : ADT_nwam_disable, name,
-		    obj_type_str, ADT_SUCCESS, ADT_SUCCESS);
-
 		nlog(LOG_DEBUG, "nwamd_door_req_action: %s %s",
 		    action == NWAM_ACTION_ENABLE ? "enabling" : "disabling",
 		    name);

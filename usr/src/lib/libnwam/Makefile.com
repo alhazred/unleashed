@@ -26,8 +26,7 @@
 
 LIBRARY=	libnwam.a
 VERS=		.1
-OBJECTS=	libnwam_audit.o \
-		libnwam_backend.o \
+OBJECTS=	libnwam_backend.o \
 		libnwam_enm.o \
 		libnwam_events.o \
 		libnwam_error.o \
@@ -44,7 +43,7 @@ include ../../Makefile.lib
 include ../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lbsm -lc -ldladm -lnvpair -lscf -lsecdb -lipadm
+LDLIBS +=	-lc -ldladm -lnvpair -lscf -lsecdb -lipadm
 
 SRCDIR =	../common
 

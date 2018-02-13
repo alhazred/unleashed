@@ -34,7 +34,7 @@ include ../Makefile.cmd
 
 CERRWARN += -Wno-uninitialized
 
-vtdaemon := LDLIBS += -lpam -lbsm
+vtdaemon := LDLIBS += -lpam
 
 .KEEP_STATE:
 

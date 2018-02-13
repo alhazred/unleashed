@@ -38,7 +38,6 @@ ROOTFS_PROG=	hostconfig route soconfig
 SBINLINKS=	hostconfig route
 
 RPCSVCPROG=	hostconfig
-AUDITPROG=	in.telnetd
 PAMPROG=	in.telnetd
 SOCKETPROG=	6to4relay arp hostconfig if_mpadm in.comsat \
 		in.fingerd in.rarpd \
@@ -105,7 +104,6 @@ include $(SRC)/lib/gss_mechs/mech_krb5/Makefile.mech_krb5
 K5LIBS=
 
 $(SYNCPROG)		:=	LDLIBS += -ldlpi
-$(AUDITPROG)		:=	LDLIBS += -lbsm
 $(PAMPROG)		:=	LDLIBS += -lpam
 $(RPCSVCPROG)		:=	LDLIBS += -lrpcsvc
 $(K5PROGS)		:=	LDFLAGS += $(KRUNPATH) \

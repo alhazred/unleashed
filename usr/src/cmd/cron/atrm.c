@@ -39,7 +39,6 @@
 
 extern time_t	num();
 extern char	*errmsg();
-extern void	audit_at_delete(char *, char *, int);
 
 #define	SUPERUSER	0			/* is user super-user? */
 #define	CANTCD		"can't change directory to the at directory"
@@ -294,10 +293,8 @@ removentry(char *filename, struct stat *statptr, uid_t user)
 				(void) fprintf(stderr, "atrm: %s: %s\n",
 				    filename, errmsg(errno));
 			}
-			audit_at_delete(filename, NULL, r);
 			return (0);
 		}
-		audit_at_delete(filename, NULL, r);
 		if (!fflag && !iflag)
 			printf("removed\n");
 		return (1);

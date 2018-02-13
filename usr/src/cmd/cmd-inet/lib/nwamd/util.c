@@ -38,6 +38,7 @@
 #include <limits.h>
 #include <libscf.h>
 #include <net/if.h>
+#include <priv.h>
 #include <pthread.h>
 #include <pwd.h>
 #include <spawn.h>

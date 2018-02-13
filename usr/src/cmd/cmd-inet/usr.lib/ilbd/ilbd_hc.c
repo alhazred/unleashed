@@ -102,99 +102,6 @@ ilbd_get_hc(const char *name)
 }
 
 /*
- * Generates an audit record for create-healthcheck,
- * delete-healtcheck subcommands.
- */
-static void
-ilbd_audit_hc_event(const char *audit_hcname,
-    const ilb_hc_info_t *audit_hcinfo, ilbd_cmd_t cmd,
-    ilb_status_t rc, ucred_t *ucredp)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-	au_event_t	flag;
-	int	audit_error;
-
-	if ((ucredp == NULL) && (cmd == ILBD_CREATE_HC))  {
-		/*
-		 * we came here from the path where ilbd incorporates
-		 * the configuration that is listed in SCF:
-		 * i_ilbd_read_config->ilbd_walk_hc_pgs->
-		 *   ->ilbd_scf_instance_walk_pg->ilbd_create_hc
-		 * We skip auditing in that case
-		 */
-		logdebug("ilbd_audit_hc_event: skipping auditing");
-		return;
-	}
-
-	if (adt_start_session(&ah, NULL, 0) != 0) {
-		logerr("ilbd_audit_hc_event: adt_start_session failed");
-		exit(EXIT_FAILURE);
-	}
-	if (adt_set_from_ucred(ah, ucredp, ADT_NEW) != 0) {
-		(void) adt_end_session(ah);
-		logerr("ilbd_audit_rule_event: adt_set_from_ucred failed");
-		exit(EXIT_FAILURE);
-	}
-	if (cmd == ILBD_CREATE_HC)
-		flag = ADT_ilb_create_healthcheck;
-	else if (cmd == ILBD_DESTROY_HC)
-		flag = ADT_ilb_delete_healthcheck;
-
-	if ((event = adt_alloc_event(ah, flag)) == NULL) {
-		logerr("ilbd_audit_hc_event: adt_alloc_event failed");
-		exit(EXIT_FAILURE);
-	}
-	(void) memset((char *)event, 0, sizeof (adt_event_data_t));
-
-	switch (cmd) {
-	case ILBD_CREATE_HC:
-		event->adt_ilb_create_healthcheck.auth_used =
-		    NET_ILB_CONFIG_AUTH;
-		event->adt_ilb_create_healthcheck.hc_test =
-		    (char *)audit_hcinfo->hci_test;
-		event->adt_ilb_create_healthcheck.hc_name =
-		    (char *)audit_hcinfo->hci_name;
-
-		/*
-		 * If the value 0 is stored, the default values are
-		 * set in the kernel. User land does not know about them
-		 * So if the user does not specify them, audit record
-		 * will show them as 0
-		 */
-		event->adt_ilb_create_healthcheck.hc_timeout =
-		    audit_hcinfo->hci_timeout;
-		event->adt_ilb_create_healthcheck.hc_count =
-		    audit_hcinfo->hci_count;
-		event->adt_ilb_create_healthcheck.hc_interval =
-		    audit_hcinfo->hci_interval;
-		break;
-	case ILBD_DESTROY_HC:
-		event->adt_ilb_delete_healthcheck.auth_used =
-		    NET_ILB_CONFIG_AUTH;
-		event->adt_ilb_delete_healthcheck.hc_name =
-		    (char *)audit_hcname;
-		break;
-	}
-
-	/* Fill in success/failure */
-	if (rc == ILB_STATUS_OK) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-			logerr("ilbd_audit_hc_event: adt_put_event failed");
-			exit(EXIT_FAILURE);
-		}
-	} else {
-		audit_error = ilberror2auditerror(rc);
-		if (adt_put_event(event, ADT_FAILURE, audit_error) != 0) {
-			logerr("ilbd_audit_hc_event: adt_put_event failed");
-			exit(EXIT_FAILURE);
-		}
-	}
-	adt_free_event(event);
-	(void) adt_end_session(ah);
-}
-
-/*
  * Given the ilb_hc_info_t passed in (from the libilb), create a hc object
  * in ilbd.  The parameter ev_port is not used, refer to comments of
  * ilbd_create_sg() in ilbd_sg.c
@@ -214,16 +121,12 @@ ilbd_create_hc(const ilb_hc_info_t *hc_info, int ev_port,
 	if (ps != NULL) {
 		ret = ilbd_check_client_config_auth(ps);
 		if (ret != ILB_STATUS_OK) {
-			ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-			    ret, ucredp);
 			return (ret);
 		}
 	}
 
 	if (hc_info->hci_name[0] == '\0') {
 		logdebug("ilbd_create_hc: missing healthcheck info");
-		ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-		    ILB_STATUS_ENOHCINFO, ucredp);
 		return (ILB_STATUS_ENOHCINFO);
 	}
 
@@ -231,8 +134,6 @@ ilbd_create_hc(const ilb_hc_info_t *hc_info, int ev_port,
 	if (hc != NULL) {
 		logdebug("ilbd_create_hc: healthcheck name %s already"
 		    " exists", hc_info->hci_name);
-		ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-		    ILB_STATUS_EEXIST, ucredp);
 		return (ILB_STATUS_EEXIST);
 	}
 
@@ -249,14 +150,10 @@ ilbd_create_hc(const ilb_hc_info_t *hc_info, int ev_port,
 		if (errno == ENOENT) {
 			logdebug("ilbd_create_hc: user script %s doesn't "
 			    "exist", hc_info->hci_test);
-			ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-			    ILB_STATUS_ENOENT, ucredp);
 			return (ILB_STATUS_ENOENT);
 		} else {
 			logdebug("ilbd_create_hc: user script %s is "
 			    "invalid", hc_info->hci_test);
-			ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-			    ILB_STATUS_EINVAL, ucredp);
 			return (ILB_STATUS_EINVAL);
 		}
 	}
@@ -264,8 +161,6 @@ ilbd_create_hc(const ilb_hc_info_t *hc_info, int ev_port,
 	/* Create and add the hc object */
 	hc = calloc(1, sizeof (ilbd_hc_t));
 	if (hc == NULL) {
-		ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-		    ILB_STATUS_ENOMEM, ucredp);
 		return (ILB_STATUS_ENOMEM);
 	}
 	(void) memcpy(&hc->ihc_info, hc_info, sizeof (ilb_hc_info_t));
@@ -284,8 +179,6 @@ ilbd_create_hc(const ilb_hc_info_t *hc_info, int ev_port,
 	if (ps != NULL) {
 		if ((ret = ilbd_create_pg(ILBD_SCF_HC, (void *)hc)) !=
 		    ILB_STATUS_OK) {
-			ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC,
-			    ret, ucredp);
 			list_destroy(&hc->ihc_rules);
 			free(hc);
 			return (ret);
@@ -294,7 +187,6 @@ ilbd_create_hc(const ilb_hc_info_t *hc_info, int ev_port,
 
 	/* Everything is fine, now add it to the global list. */
 	list_insert_tail(&ilbd_hc_list, hc);
-	ilbd_audit_hc_event(NULL, hc_info, ILBD_CREATE_HC, ret, ucredp);
 	return (ret);
 }
 
@@ -314,8 +206,6 @@ ilbd_destroy_hc(const char *hc_name, const struct passwd *ps,
 	 */
 	ret = ilbd_check_client_config_auth(ps);
 	if (ret != ILB_STATUS_OK) {
-		ilbd_audit_hc_event(hc_name, NULL, ILBD_DESTROY_HC,
-		    ret, ucredp);
 		return (ret);
 	}
 
@@ -323,8 +213,6 @@ ilbd_destroy_hc(const char *hc_name, const struct passwd *ps,
 	if (hc == NULL) {
 		logdebug("ilbd_destroy_hc: healthcheck %s does not exist",
 		    hc_name);
-		ilbd_audit_hc_event(hc_name, NULL, ILBD_DESTROY_HC,
-		    ILB_STATUS_ENOENT, ucredp);
 		return (ILB_STATUS_ENOENT);
 	}
 
@@ -332,8 +220,6 @@ ilbd_destroy_hc(const char *hc_name, const struct passwd *ps,
 	if (hc->ihc_rule_cnt > 0) {
 		logdebug("ilbd_destroy_hc: healthcheck %s is associated"
 		    " with a rule - cannot remove", hc_name);
-		ilbd_audit_hc_event(hc_name, NULL, ILBD_DESTROY_HC,
-		    ILB_STATUS_INUSE, ucredp);
 		return (ILB_STATUS_INUSE);
 	}
 
@@ -341,15 +227,12 @@ ilbd_destroy_hc(const char *hc_name, const struct passwd *ps,
 	    ILB_STATUS_OK) {
 		logdebug("ilbd_destroy_hc: cannot destroy healthcheck %s "
 		    "property group", hc_name);
-		ilbd_audit_hc_event(hc_name, NULL, ILBD_DESTROY_HC,
-		    ret, ucredp);
 		return (ret);
 	}
 
 	list_remove(&ilbd_hc_list, hc);
 	list_destroy(&hc->ihc_rules);
 	free(hc);
-	ilbd_audit_hc_event(hc_name, NULL, ILBD_DESTROY_HC, ret, ucredp);
 	return (ret);
 }
 

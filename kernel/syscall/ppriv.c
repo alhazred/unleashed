@@ -36,7 +36,6 @@
 #include <sys/ddi.h>
 #include <sys/thread.h>
 #include <sys/cmn_err.h>
-#include <c2/audit.h>
 
 /*
  * System call support for manipulating privileges.
@@ -72,9 +71,6 @@ setppriv(priv_op_t op, priv_ptype_t type, priv_set_t *in_pset)
 
 retry:
 	pcr = p->p_cred;
-
-	if (AU_AUDITING())
-		audit_setppriv(op, type, &pset, pcr);
 
 	/*
 	 * Filter out unallowed request (bad op and bad type)

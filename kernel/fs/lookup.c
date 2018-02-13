@@ -54,7 +54,6 @@
 #include <sys/sysmacros.h>
 #include <sys/debug.h>
 #include <sys/dirent.h>
-#include <c2/audit.h>
 #include <sys/zone.h>
 #include <sys/dnlc.h>
 #include <sys/fs/snode.h>
@@ -229,7 +228,6 @@ lookuppnvp(
 	vnode_t *zonevp = curproc->p_zone->zone_rootvp;		/* zone root */
 	int must_be_directory = 0;
 	boolean_t retry_with_kcred;
-	uint32_t auditing = AU_AUDITING();
 
 	CPU_STATS_ADDQ(CPU, sys, namei, 1);
 	nlink = 0;
@@ -243,9 +241,6 @@ lookuppnvp(
 		pn_alloc(&presrvd);
 		pp = &presrvd;
 	}
-
-	if (auditing)
-		audit_anchorpath(pnp, vp == rootvp);
 
 	/*
 	 * Eliminate any trailing slashes in the pathname.
@@ -405,10 +400,6 @@ checkforroot:
 		 */
 		if (pn_pathleft(pnp) || dirvpp == NULL || error != ENOENT)
 			goto bad;
-		if (auditing) {	/* directory access */
-			if (error = audit_savepath(pnp, vp, vp, error, cr))
-				goto bad_noaudit;
-		}
 
 		pn_setlast(pnp);
 		/*
@@ -463,9 +454,6 @@ checkforroot:
 			goto bad;
 		}
 
-		if (auditing)
-			audit_symlink(pnp, &linkpath);
-
 		if (pn_pathleft(&linkpath) == 0)
 			(void) pn_set(&linkpath, ".");
 		error = pn_insert(pnp, &linkpath, strlen(component));
@@ -487,8 +475,6 @@ checkforroot:
 			vp = rootvp;
 			VN_HOLD(vp);
 		}
-		if (auditing)
-			audit_anchorpath(pnp, vp == rootvp);
 		if (pn_fixslash(pnp)) {
 			flags |= FOLLOW;
 			must_be_directory = 1;
@@ -560,9 +546,6 @@ checkforroot:
 			 * an alias of the last component.
 			 */
 			if (vn_compare(vp, cvp)) {
-				if (auditing)
-					(void) audit_savepath(pnp, cvp, vp,
-					    EINVAL, cr);
 				pn_setlast(pnp);
 				VN_RELE(vp);
 				VN_RELE(cvp);
@@ -575,8 +558,6 @@ checkforroot:
 			*dirvpp = vp;
 		} else
 			VN_RELE(vp);
-		if (auditing)
-			(void) audit_savepath(pnp, cvp, vp, 0, cr);
 		if (pnp->pn_path == pnp->pn_buf)
 			(void) pn_set(pnp, ".");
 		else
@@ -618,9 +599,6 @@ checkforroot:
 	goto next;
 
 bad:
-	if (auditing)	/* reached end of path */
-		(void) audit_savepath(pnp, cvp, vp, error, cr);
-bad_noaudit:
 	/*
 	 * Error.  Release vnodes and return.
 	 */

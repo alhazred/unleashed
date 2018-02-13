@@ -930,52 +930,6 @@ fcnname##_info:							\
 #endif
 
 /*
- * Stubs for auditing.
- */
-#ifndef C2AUDIT_MODULE
-	MODULE(c2audit,sys);
-	NO_UNLOAD_STUB(c2audit, audit_init_module,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_start, 		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_finish,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit,			nomod_zero);
-	NO_UNLOAD_STUB(c2audit, auditdoor,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_closef,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_core_start,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_core_finish,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_strputmsg,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_savepath,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_anchorpath,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_exit,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_exec,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_symlink,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_symlink_create,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_vncreate_start,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_vncreate_finish,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_enterprom,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_exitprom,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_chdirec,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_setf,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_sock,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_strgetmsg,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_ipc,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_ipcget,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_fdsend,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_fdrecv,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_priv,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_setppriv,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_psecflags,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_devpolicy,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_setfsat_path,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_cryptoadm,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, audit_pf_policy,	nomod_zero);
-	NO_UNLOAD_STUB(c2audit, au_doormsg,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, au_uwrite,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, au_to_arg32,		nomod_zero);
-	NO_UNLOAD_STUB(c2audit, au_free_rec,		nomod_zero);
-	END_MODULE(c2audit);
-#endif
-
-/*
  * Stubs for kernel rpc security service module
  */
 #ifndef RPCSEC_MODULE

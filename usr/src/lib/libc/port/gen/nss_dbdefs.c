@@ -252,7 +252,6 @@ static int getXbyYdbop_hashed = 0;
  */
 static getXbyY_to_dbop_t getXbyY_to_dbop[] = {
 	/* NSS_MK_GETXYDBOP(ALIASES, ?, ?), */
-	NSS_MK_GETXYDBOPD(AUDITUSER, BYNAME, "auuser", "audituser", "n"),
 	NSS_MK_GETXYDBOP(AUTHATTR, BYNAME, "authattr", "n"),
 	/* NSS_MK_GETXYDBOP(AUTOMOUNT, ?, ?), */
 	NSS_MK_GETXYDBOP(BOOTPARAMS, BYNAME, "bootparams", "n"),

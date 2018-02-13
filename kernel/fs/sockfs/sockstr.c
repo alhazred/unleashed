@@ -63,8 +63,6 @@
 #define	_SUN_TPI_VERSION	2
 #include <sys/tihdr.h>
 
-#include <c2/audit.h>
-
 #include "socktpi.h"
 #include "socktpi_impl.h"
 
@@ -1661,7 +1659,6 @@ strsock_proto(vnode_t *vp, mblk_t *mp,
 	union T_primitives *tpr;
 	struct sonode *so;
 	sotpi_info_t *sti;
-	uint32_t auditing = AU_AUDITING();
 
 	so = VTOSO(vp);
 	sti = SOTOTPI(so);
@@ -1771,9 +1768,6 @@ strsock_proto(vnode_t *vp, mblk_t *mp,
 			*allmsgsigs = S_INPUT | S_RDNORM;
 			*pollwakeups = POLLIN | POLLRDNORM;
 			*wakeups = RSLEEP;
-			if (auditing)
-				audit_sock(T_UNITDATA_IND, strvp2wq(vp),
-				    mp, 0);
 			return (mp);
 		}
 
@@ -2257,8 +2251,6 @@ strsock_proto(vnode_t *vp, mblk_t *mp,
 			return (NULL);
 		}
 
-		if (auditing)
-			audit_sock(T_CONN_IND, strvp2wq(vp), mp, 0);
 		if (!(so->so_state & SS_ACCEPTCONN)) {
 			zcmn_err(getzoneid(), CE_WARN,
 			    "sockfs: T_conn_ind on non-listening socket\n");

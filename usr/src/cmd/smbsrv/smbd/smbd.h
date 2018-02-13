@@ -50,8 +50,6 @@ int smbd_nicmon_refresh(void);
 int smbd_dc_monitor_init(void);
 void smbd_dc_monitor_refresh(void);
 smb_token_t *smbd_user_auth_logon(smb_logon_t *);
-void smbd_user_nonauth_logon(uint32_t);
-void smbd_user_auth_logoff(uint32_t);
 void smbd_join(smb_joininfo_t *, smb_joinres_t *);
 void smbd_set_secmode(int);
 boolean_t smbd_online(void);

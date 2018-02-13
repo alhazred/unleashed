@@ -37,7 +37,6 @@
 
 #include <libhal.h>
 #include "../../hald/logger.h"
-#include "../../utils/adt_data.h"
 
 #include <pwd.h>
 #ifdef HAVE_POLKIT
@@ -45,8 +44,6 @@
 #endif
 
 #ifdef sun
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <sys/pm.h>
 #endif
 
@@ -587,63 +584,6 @@ gen_cpufreq_err(DBusConnection *con,
 	    err_str);
 }
 
-
-/*
- * Puts the required cpufreq audit data and calls adt_put_event()
- * to generate auditing
- */
-static void
-audit_cpufreq(const adt_export_data_t *imported_state, au_event_t event_id,
-    int result, const char *auth_used, const int cpu_thr_value)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-	struct passwd		*msg_pwd;
-	uid_t			gid;
-
-	if (adt_start_session (&ah, imported_state, 0) != 0) {
-		HAL_INFO (("adt_start_session failed: %s", strerror (errno)));
-		return;
-	}
-
-	if ((event = adt_alloc_event (ah, event_id)) == NULL) {
-		HAL_INFO(("adt_alloc_event audit_cpufreq failed: %s",
-		    strerror (errno)));
-		return;
-	}
-
-	switch (event_id) {
-	case ADT_cpu_ondemand:
-		event->adt_cpu_ondemand.auth_used = (char *)auth_used;
-		break;
-	case ADT_cpu_performance:
-		event->adt_cpu_performance.auth_used = (char *)auth_used;
-		break;
-	case ADT_cpu_threshold:
-		event->adt_cpu_threshold.auth_used = (char *)auth_used;
-		event->adt_cpu_threshold.threshold = cpu_thr_value;
-		break;
-	default:
-		goto clean;
-	}
-
-	if (result == 0) {
-		if (adt_put_event (event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-			HAL_INFO (("adt_put_event(%d, ADT_SUCCESS) failed",
-			    event_id));
-		}
-	} else {
-		if (adt_put_event (event, ADT_FAILURE, result) != 0) {
-			HAL_INFO (("adt_put_event(%d, ADT_FAILURE) failed",
-			    event_id));
-		}
-	}
-
-clean:
-	adt_free_event (event);
-	(void) adt_end_session (ah);
-}
-
 /*
  * Check if the cpufreq related operations are authorized
  */
@@ -651,7 +591,7 @@ clean:
 static int
 check_authorization(DBusConnection *con, DBusMessage *msg)
 {
-	int		adt_res = 0;
+	int		res = 0;
 #ifdef HAVE_POLKIT
 	char		user_id[128];
 	char		*udi;
@@ -674,7 +614,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 		HAL_INFO (("Cannot connect to the system bus"));
 		LIBHAL_FREE_DBUS_ERROR (&error);
 		gen_cpufreq_err (con, msg, "Cannot connect to the system bus");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -685,7 +625,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 		HAL_INFO (("Could not get the sender of the message"));
 		gen_cpufreq_err (con, msg,
 		    "Could not get the sender of the message");
-		adt_res = ADT_FAIL_VALUE_AUTH;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -696,7 +636,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 		LIBHAL_FREE_DBUS_ERROR (&error);
 		gen_cpufreq_err (con, msg,
 		    "Could not get the user id of the message sender");
-		adt_res = ADT_FAIL_VALUE_AUTH;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -708,7 +648,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 		HAL_INFO (("Cannot get libpolkit context"));
 		gen_cpufreq_err (con, msg,
 		    "Cannot get libpolkit context to check privileges");
-		adt_res = ADT_FAIL_VALUE_AUTH;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -723,7 +663,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 		HAL_INFO (("Cannot lookup privilege from PolicyKit"));
 		gen_cpufreq_err (con, msg,
 		    "Error looking up privileges from Policykit");
-		adt_res = ADT_FAIL_VALUE_AUTH;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -733,7 +673,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 		gen_cpufreq_err (con, msg,
 		    "Caller doesn't possess required "
 		    "privilege to change the governor");
-		adt_res = ADT_FAIL_VALUE_AUTH;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -741,7 +681,7 @@ check_authorization(DBusConnection *con, DBusMessage *msg)
 
 #endif
 out:
-	return (adt_res);
+	return (res);
 }
 
 /*
@@ -760,14 +700,12 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 	int		done_flag = 0;
 	int		sleep_time = 0;
 	int		status;
-	int		adt_res = 0;
+	int		res = 0;
 	char		tmp_conf_file[64] = "/tmp/power.conf.XXXXXX";
 	int		tmp_fd;
 	char		pmconfig_cmd[128];
 	pconf_edit_type pc_edit_type;
 #ifdef sun
-	adt_export_data_t *adt_data;
-	size_t 		adt_data_size;
 	DBusConnection 	*system_bus = NULL;
 	DBusError 	error;
 #endif
@@ -775,7 +713,7 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 	if (! dbus_message_iter_init (msg, &arg_iter)) {
 		HAL_DEBUG (("Incoming message has no arguments"));
 		gen_unknown_gov_err (con, msg, "No governor specified");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 	arg_type = dbus_message_iter_get_arg_type (&arg_iter);
@@ -784,7 +722,7 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_DEBUG (("Incomming message arg type is not string"));
 		gen_unknown_gov_err (con, msg,
 		    "Specified governor is not a string");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 	dbus_message_iter_get_basic (&arg_iter, &arg_val);
@@ -792,13 +730,13 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_DEBUG (("SetCPUFreqGov is: %s", arg_val));
 	} else {
 		HAL_DEBUG (("Could not get SetCPUFreqGov from message iter"));
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 
-	adt_res = check_authorization (con, msg);
+	res = check_authorization (con, msg);
 
-	if (adt_res != 0) {
+	if (res != 0) {
 		goto out;
 	}
 
@@ -808,12 +746,12 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 	tmp_fd = mkstemp (tmp_conf_file);
 	if (tmp_fd == -1) {
 		HAL_ERROR ((" Error in creating a temp conf file"));
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 	strcpy (pc_edit_type.cpu_gov, arg_val);
-	adt_res = edit_power_conf_file (pc_edit_type, CPU_GOV, tmp_conf_file);
-	if (adt_res != 0) {
+	res = edit_power_conf_file (pc_edit_type, CPU_GOV, tmp_conf_file);
+	if (res != 0) {
 		HAL_DEBUG (("Error in edit /etc/power.conf"));
 		gen_cpufreq_err (con, msg,
 		    "Internal Error while setting the governor");
@@ -828,7 +766,7 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 	if (system (pmconfig_cmd) != 0) {
 		HAL_ERROR ((" Error in executing pmconfig: %s",
 		    strerror (errno)));
-		adt_res = errno;
+		res = errno;
 		gen_cpufreq_err (con, msg, "Error in executing pmconfig");
 		unlink (tmp_conf_file);
 		goto out;
@@ -846,7 +784,7 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_ERROR (("Out of memory to msg reply"));
 		gen_cpufreq_err (con, msg,
 		    "Out of memory to create a response");
-		adt_res = ENOMEM;
+		res = ENOMEM;
 		goto out;
 	}
 
@@ -854,41 +792,14 @@ set_cpufreq_gov(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_ERROR (("Out of memory to msg reply"));
 		gen_cpufreq_err (con, msg,
 		    "Out of memory to create a response");
-		adt_res = ENOMEM;
+		res = ENOMEM;
 		goto out;
 	}
 
 	dbus_connection_flush (con);
 
 out:
-
-#ifdef sun
-	/*
-	 * Audit the new governor change
-	 */
-	dbus_error_init (&error);
-	system_bus = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (system_bus == NULL) {
-		HAL_INFO (("Cannot connect to the system bus %s",
-		    error.message));
-		LIBHAL_FREE_DBUS_ERROR (&error);
-		return;
-	}
-
-	adt_data = get_audit_export_data (system_bus, sender, &adt_data_size);
-	if (adt_data != NULL) {
-		if (strcmp (arg_val, "ondemand") == 0) {
-			audit_cpufreq (adt_data, ADT_cpu_ondemand, adt_res,
-			    "solaris.system.power.cpu", 0);
-		} else if (strcmp (arg_val, "performance") == 0) {
-			audit_cpufreq (adt_data, ADT_cpu_performance, adt_res,
-			    "solaris.system.power.cpu", 0);
-		}
-		free (adt_data);
-	} else {
-		HAL_INFO ((" Could not get audit export data"));
-	}
-#endif /* sun */
+	return;
 }
 
 /*
@@ -907,21 +818,19 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 	int		pid;
 	int		done_flag = 0;
 	int		sleep_time = 0;
-	int		adt_res = 0;
+	int		res = 0;
 	char		tmp_conf_file[64] = "/tmp/power.conf.XXXXXX";
 	int		tmp_fd;
 	char		pmconfig_cmd[128];
 	pconf_edit_type pc_edit_type;
 #ifdef sun
-	adt_export_data_t *adt_data;
-	size_t 		adt_data_size;
 	DBusConnection 	*system_bus = NULL;
 	DBusError 	error;
 #endif
 
-	adt_res = check_authorization (con, msg);
+	res = check_authorization (con, msg);
 
-	if (adt_res != 0) {
+	if (res != 0) {
 		goto out;
 	}
 
@@ -937,7 +846,7 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 			HAL_ERROR ((" Error in reading from /etc/power.conf"));
 			gen_cpufreq_err (con, msg, "Internal error while "
 			    "getting the governor");
-			adt_res = EINVAL;
+			res = EINVAL;
 			goto out;
 		}
 		sprintf (current_gov, "%s", pc_edit_type.cpu_gov);
@@ -948,14 +857,14 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 		    "dynamic like ondemand"));
 		gen_no_suitable_gov_err (con, msg, "Cannot set performance "
 		    "to the current governor");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 
 	if (! dbus_message_iter_init (msg, &arg_iter)) {
 		HAL_DEBUG (("Incoming message has no arguments"));
 		gen_no_suitable_gov_err(con, msg, "No performance specified");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 	arg_type = dbus_message_iter_get_arg_type (&arg_iter);
@@ -964,7 +873,7 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_DEBUG (("Incomming message arg type is not Integer"));
 		gen_no_suitable_gov_err (con, msg,
 		    "Specified performance is not a Integer");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 	dbus_message_iter_get_basic (&arg_iter, &arg_val);
@@ -973,7 +882,7 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 		    ": %d", arg_val));
 		gen_no_suitable_gov_err (con, msg,
 		    "Performance value should be between 1 and 100");
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 
@@ -985,13 +894,13 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 	tmp_fd = mkstemp (tmp_conf_file);
 	if (tmp_fd == -1) {
 		HAL_ERROR ((" Error in creating a temp conf file"));
-		adt_res = EINVAL;
+		res = EINVAL;
 		goto out;
 	}
 	pc_edit_type.cpu_th = arg_val * 15;
-	adt_res = edit_power_conf_file (pc_edit_type, CPU_PERFORMANCE,
+	res = edit_power_conf_file (pc_edit_type, CPU_PERFORMANCE,
 	    tmp_conf_file);
-	if (adt_res != 0) {
+	if (res != 0) {
 		HAL_DEBUG (("Error while editing /etc/power.conf"));
 		gen_cpufreq_err (con, msg,
 		    "Internal error while setting the performance");
@@ -1006,7 +915,7 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 	if (system (pmconfig_cmd) != 0) {
 		HAL_ERROR ((" Error in executing pmconfig: %s",
 		    strerror (errno)));
-		adt_res = errno;
+		res = errno;
 		gen_cpufreq_err (con, msg,
 		    "Internal error while setting the performance");
 		unlink (tmp_conf_file);
@@ -1025,7 +934,7 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_ERROR (("Out of memory to msg reply"));
 		gen_cpufreq_err (con, msg,
 		    "Out of memory to create a response");
-		adt_res = ENOMEM;
+		res = ENOMEM;
 		goto out;
 	}
 
@@ -1033,36 +942,13 @@ set_cpufreq_performance(DBusConnection *con, DBusMessage *msg, void *udata)
 		HAL_ERROR (("Out of memory to msg reply"));
 		gen_cpufreq_err (con, msg,
 		    "Out of memory to create a response");
-		adt_res = ENOMEM;
+		res = ENOMEM;
 		goto out;
 	}
 
 	dbus_connection_flush (con);
 out:
-#ifdef sun
-
-	/*
-	 * Audit the new performance change
-	 */
-	dbus_error_init (&error);
-	system_bus = dbus_bus_get (DBUS_BUS_SYSTEM, &error);
-	if (system_bus == NULL) {
-		HAL_INFO (("Cannot connect to the system bus %s",
-		    error.message));
-		LIBHAL_FREE_DBUS_ERROR (&error);
-		return;
-	}
-
-	adt_data = get_audit_export_data (system_bus, sender, &adt_data_size);
-	if (adt_data != NULL) {
-		audit_cpufreq (adt_data, ADT_cpu_threshold, adt_res,
-		    "solaris.system.power.cpu", arg_val);
-		free (adt_data);
-	} else {
-		HAL_INFO ((" Could not get audit export data"));
-	}
-
-#endif /* sun */
+	return;
 }
 
 /*

@@ -33,7 +33,6 @@ include ../Makefile.master
 #
 MANIFEST_TOPDIRS=			\
 	acctadm				\
-	auditd				\
 	consadm				\
 	coreadm				\
 	cron				\

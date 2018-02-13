@@ -26,7 +26,6 @@ PROG= newgrp
 
 include ../Makefile.cmd
 
-LDLIBS += -lbsm
 FILEMODE = 04755
 XGETFLAGS += -a -x newgrp.xcl
 

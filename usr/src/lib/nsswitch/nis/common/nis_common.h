@@ -44,7 +44,6 @@
 extern "C" {
 #endif
 
-#define	NIS_MAP_AUDITUSER	"audit_user"
 #define	NIS_MAP_AUTHATTR	"auth_attr"
 #define	NIS_MAP_EXECATTR	"exec_attr"
 #define	NIS_MAP_PROFATTR	"prof_attr"

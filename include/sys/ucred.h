@@ -34,12 +34,6 @@
 #include <sys/cred.h>
 #include <sys/priv.h>
 
-#ifdef _KERNEL
-#include <c2/audit.h>
-#else
-#include <bsm/audit.h>
-#endif
-
 #ifndef _KERNEL
 #include <unistd.h>
 #endif
@@ -61,7 +55,6 @@ struct ucred_s {
 	uint32_t	uc_credoff;	/* Credential offset: 0 - no cred */
 	uint32_t	uc_privoff;	/* Privilege offset: 0 - no privs */
 	pid_t		uc_pid;		/* Process id */
-	uint32_t	uc_audoff;	/* Audit info offset: 0 - no aud */
 	zoneid_t	uc_zoneid;	/* Zone id */
 	projid_t	uc_projid;	/* Project id */
 					/* The rest goes here */
@@ -74,10 +67,6 @@ struct ucred_s {
 /* Get the process privileges */
 #define	UCPRIV(uc)	(prpriv_t *)(((uc)->uc_privoff == 0) ? NULL : \
 				((char *)(uc)) + (uc)->uc_privoff)
-
-/* Get the process audit info */
-#define	UCAUD(uc)	(auditinfo64_addr_t *)(((uc)->uc_audoff == 0) ? NULL : \
-				((char *)(uc)) + (uc)->uc_audoff)
 
 #endif /* _KERNEL || _STRUCTURED_PROC != 0 */
 
@@ -92,9 +81,8 @@ struct ucred_s {
 extern uint32_t ucredminsize(const cred_t *);
 
 #define	UCRED_PRIV_OFF	(sizeof (struct ucred_s))
-#define	UCRED_AUD_OFF	(UCRED_PRIV_OFF + priv_prgetprivsize(NULL))
 /* The prcred_t has a variable size; it should be last. */
-#define	UCRED_CRED_OFF	(UCRED_AUD_OFF + get_audit_ucrsize())
+#define	UCRED_CRED_OFF	(UCRED_PRIV_OFF + priv_prgetprivsize(NULL))
 
 #define	UCRED_SIZE	(UCRED_CRED_OFF + sizeof (prcred_t) + \
 			    (ngroups_max - 1) * sizeof (gid_t))
@@ -105,7 +93,6 @@ struct proc;
 extern struct ucred_s *pgetucred(struct proc *);
 extern struct ucred_s *cred2ucred(const cred_t *, pid_t, void *,
     const cred_t *);
-extern int get_audit_ucrsize(void);
 
 #else
 
@@ -116,8 +103,7 @@ extern int get_audit_ucrsize(void);
 			sizeof (prpriv_t) + \
 			sizeof (priv_chunk_t) * \
 			((ip)->priv_setsize * (ip)->priv_nsets - 1) + \
-			(ip)->priv_infosize + \
-			sizeof (auditinfo64_addr_t))
+			(ip)->priv_infosize)
 #endif
 
 extern struct ucred_s *_ucred_alloc(void);

@@ -87,7 +87,6 @@
 #include <sys/mman.h>
 #include <sys/x86_archext.h>
 #include <sys/copyops.h>
-#include <c2/audit.h>
 #include <sys/ftrace.h>
 #include <sys/panic.h>
 #include <sys/traptrace.h>
@@ -1834,7 +1833,6 @@ kern_gpfault(struct regs *rp)
 	struct regs tmpregs, *trp = NULL;
 	caddr_t pc = (caddr_t)rp->r_pc;
 	int v;
-	uint32_t auditing = AU_AUDITING();
 
 	/*
 	 * if we're not an lwp, or in the case of running native the
@@ -1947,11 +1945,7 @@ kern_gpfault(struct regs *rp)
 		lwp_exit();
 	}
 
-	if (auditing)		/* audit core dump */
-		audit_core_start(SIGSEGV);
 	v = core(SIGSEGV, B_FALSE);
-	if (auditing)		/* audit core dump */
-		audit_core_finish(v ? CLD_KILLED : CLD_DUMPED);
 	exit(v ? CLD_KILLED : CLD_DUMPED, SIGSEGV);
 	return (0);
 }

@@ -54,8 +54,6 @@
 #include <libdlstat.h>
 #include <libdlaggr.h>
 #include <libinetutil.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <stddef.h>
 #include <ofmt.h>
 

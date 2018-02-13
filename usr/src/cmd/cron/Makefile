@@ -104,8 +104,6 @@ $(ROOTBIN)/atq :=		FILEMODE = 04755
 $(ROOTBIN)/crontab :=		FILEMODE = 04555
 $(ROOTUSRSBIN)/cron :=		FILEMODE = 0555
 
-LDLIBS +=	-lbsm
-
 at :=		LDLIBS += -lproject -lsecdb
 atq :=		LDLIBS += -lsecdb
 atrm :=		LDLIBS += -lsecdb

@@ -45,7 +45,6 @@
 #define	CANTCD		"can't change directory to the at directory"
 #define	NOREADDIR	"can't read the at directory"
 #define	YEAR		1900
-extern int audit_cron_is_anc_name(char *);
 
 time_t
 num(char **ptr)
@@ -212,8 +211,6 @@ filewanted(struct dirent *direntry)
 	c = *p++;
 	if (c < 'a' || c > 'z')
 		return (0);	/* followed by a queue name */
-	if (audit_cron_is_anc_name(direntry->d_name))
-		return (0);
 	return (1);
 }
 

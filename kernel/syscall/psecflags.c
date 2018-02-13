@@ -18,7 +18,6 @@
 #include <sys/procset.h>
 #include <sys/systm.h>
 #include <sys/types.h>
-#include <c2/audit.h>
 
 struct psdargs {
 	psecflagwhich_t which;
@@ -60,9 +59,6 @@ psecdo(proc_t *p, struct psdargs *args)
 		ret = EINVAL;
 		goto out;
 	}
-
-	if (AU_AUDITING())
-		audit_psecflags(p, args->which, args->delta);
 
 	switch (args->which) {
 	case PSF_INHERIT:

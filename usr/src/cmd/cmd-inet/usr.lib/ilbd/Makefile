@@ -65,7 +65,7 @@ clean:=		TARGET= clean
 clobber:=	TARGET= clobber
 
 
-LDLIBS +=	-lcmdutils -lsecdb -lilb -lscf -linetutil -lbsm
+LDLIBS +=	-lcmdutils -lsecdb -lilb -lscf -linetutil
 
 .KEEP_STATE:
 

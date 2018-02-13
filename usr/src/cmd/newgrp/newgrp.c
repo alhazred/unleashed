@@ -50,8 +50,6 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#include <bsm/adt_event.h>
-
 #define	SHELL	"/usr/bin/sh"
 
 #define	PATH	"PATH=:/usr/bin:"
@@ -203,31 +201,6 @@ error(char *s)
 	exit(1);
 }
 
-void
-put_event(char *gname, int sorf)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_start_session(ADT_newgrp_login): %m");
-	}
-	if ((event = adt_alloc_event(ah, ADT_newgrp_login)) == NULL) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_alloc_event(ADT_newgrp_login): %m");
-	} else {
-		event->adt_newgrp_login.groupname = gname;
-	}
-
-	if (adt_put_event(event, sorf, sorf) != 0) {
-		syslog(LOG_AUTH | LOG_ALERT,
-		    "adt_put_event(ADT_newgrp, %d): %m", sorf);
-	}
-	adt_free_event(event);
-	(void) adt_end_session(ah);
-}
-
 gid_t
 chkgrp(gname, p)
 char	*gname;
@@ -240,31 +213,25 @@ struct	passwd *p;
 	endgrent();
 	if (g == NULL) {
 		warn(UG);
-		put_event(gname, ADT_FAILURE);
 		return (getgid());
 	}
 	if (p->pw_gid == g->gr_gid || getuid() == 0) {
-		put_event(gname, ADT_SUCCESS);
 		return (g->gr_gid);
 	}
 	for (t = g->gr_mem; *t; ++t) {
 		if (strcmp(p->pw_name, *t) == 0) {
-			put_event(gname, ADT_SUCCESS);
 			return (g->gr_gid);
 		}
 	}
 	if (*g->gr_passwd) {
 		if (!isatty(fileno(stdin))) {
-			put_event(gname, ADT_FAILURE);
 			error(PD);
 		}
 		if (strcmp(g->gr_passwd,
 		    crypt(getpassphrase(PW), g->gr_passwd)) == 0) {
-			put_event(gname, ADT_SUCCESS);
 			return (g->gr_gid);
 		}
 	}
-	put_event(gname, ADT_FAILURE);
 	warn(NG);
 	return (getgid());
 }

@@ -60,7 +60,7 @@ CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-uninitialized
 MYLDLIBS = -lumem -luutil
-LDLIBS	+= -lsecdb -lbsm $(MYLDLIBS)
+LDLIBS	+= -lsecdb $(MYLDLIBS)
 
 CLOBBERFILES +=	$(MYPROG:%=%-native)
 

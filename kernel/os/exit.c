@@ -52,7 +52,6 @@
 #include <sys/prsystm.h>
 #include <sys/ipc.h>
 #include <sys/sem_impl.h>
-#include <c2/audit.h>
 #include <sys/aio_impl.h>
 #include <vm/as.h>
 #include <sys/poll.h>
@@ -563,16 +562,6 @@ proc_exit(int why, int what)
 
 	acct(rv & 0xff);
 	exacct_commit_proc(p, rv);
-
-	/*
-	 * Release any resources associated with C2 auditing
-	 */
-	if (AU_AUDITING()) {
-		/*
-		 * audit exit system call
-		 */
-		audit_exit(why, what);
-	}
 
 	/*
 	 * Free address space.

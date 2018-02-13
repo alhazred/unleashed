@@ -42,7 +42,7 @@ CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lzonecfg -ldevinfo -ldevice -lnvpair \
-	-lgen -lbsm -lcontract -lzfs -luuid -lbrand -ldladm \
+	-lgen -lcontract -lzfs -luuid -lbrand -ldladm \
 	-linetutil -lscf
 XGETFLAGS += -a -x zoneadmd.xcl
 

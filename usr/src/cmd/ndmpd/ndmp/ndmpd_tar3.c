@@ -2473,20 +2473,12 @@ tar_backup_v3(ndmpd_session_t *session, ndmpd_module_params_t *params,
 			err = -1;
 		}
 		if (!session->ns_data.dd_abort) {
-			ndmpd_audit_backup(session->ns_connection,
-			    nlp->nlp_backup_path,
-			    session->ns_data.dd_data_addr.addr_type,
-			    session->ns_tape.td_adapter_name, result);
 			NDMP_LOG(LOG_DEBUG, "Backing up \"%s\" Finished.",
 			    nlp->nlp_backup_path);
 		}
 	}
 
 	if (session->ns_data.dd_abort) {
-		ndmpd_audit_backup(session->ns_connection,
-		    nlp->nlp_backup_path,
-		    session->ns_data.dd_data_addr.addr_type,
-		    session->ns_tape.td_adapter_name, EINTR);
 		NDMP_LOG(LOG_DEBUG,
 		    "Backing up \"%s\" aborted.", nlp->nlp_backup_path);
 		err = -1;
@@ -3394,10 +3386,6 @@ ndmpd_rs_dar_tar_v3(ndmpd_session_t *session, ndmpd_module_params_t *params,
 		if ((ret = ndmpd_dar_tar_v3(session, params, nlp, jname, i+1))
 		    != 0)
 			result = EIO;
-		ndmpd_audit_restore(session->ns_connection,
-		    ep->nm3_opath ? ep->nm3_opath : "NULL",
-		    session->ns_data.dd_data_addr.addr_type,
-		    session->ns_tape.td_adapter_name, result);
 	}
 
 	NDMP_LOG(LOG_DEBUG, "End of restore list");
@@ -3629,19 +3617,11 @@ ndmpd_rs_sar_tar_v3(ndmpd_session_t *session, ndmpd_module_params_t *params,
 		NDMP_LOG(LOG_DEBUG, "Restoring to \"%s\" aborted.",
 		    (nlp->nlp_restore_path) ? nlp->nlp_restore_path : "NULL");
 		result = EINTR;
-		ndmpd_audit_restore(session->ns_connection,
-		    nlp->nlp_restore_path,
-		    session->ns_data.dd_data_addr.addr_type,
-		    session->ns_tape.td_adapter_name, result);
 		err = -1;
 	} else {
 		NDMP_LOG(LOG_DEBUG, "Restoring to \"%s\" finished. (%d)",
 		    (nlp->nlp_restore_path) ? nlp->nlp_restore_path : "NULL",
 		    err);
-		ndmpd_audit_restore(session->ns_connection,
-		    nlp->nlp_restore_path,
-		    session->ns_data.dd_data_addr.addr_type,
-		    session->ns_tape.td_adapter_name, result);
 
 restore_out:
 		/* Plug-in module */

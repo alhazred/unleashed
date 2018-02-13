@@ -71,8 +71,6 @@
 #include <sys/klpd.h>
 #include <sys/random.h>
 
-#include <c2/audit.h>
-
 #include <vm/hat.h>
 #include <vm/anon.h>
 #include <vm/as.h>
@@ -2032,10 +2030,6 @@ exec_args(execa_t *uap, uarg_t *args, intpdata_t *intp, void **auxvpp)
 	 * to be inherited across exec().
 	 */
 	delete_itimer_realprof();
-
-	if (AU_AUDITING())
-		audit_exec(args->stk_base, args->stk_base + args->arglen,
-		    args->na - args->ne, args->ne, args->pfcred);
 
 	/*
 	 * Ensure that we don't change resource associations while we

@@ -49,7 +49,6 @@ FIRST_SUBDIRS=		\
 	platexec
 
 COMMON_SUBDIRS=		\
-	allocate	\
 	perl		\
 	Adm		\
 	abi		\
@@ -413,13 +412,7 @@ i386_SUBDIRS=		\
 MSGSUBDIRS=		\
 	abi		\
 	acctadm		\
-	allocate	\
 	audio		\
-	audit		\
-	auditconfig	\
-	auditd		\
-	auditrecord	\
-	auditset	\
 	auths		\
 	autopush	\
 	backup		\
@@ -620,21 +613,6 @@ DCSUBDIRS=		\
 	write
 
 #
-# commands that belong only to audit.
-#
-AUDITSUBDIRS=		\
-	amt		\
-	audit		\
-	audit_warn	\
-	auditconfig	\
-	auditd		\
-	auditrecord	\
-	auditreduce	\
-	auditset	\
-	auditstat	\
-	praudit		
-
-#
 # commands not owned by the systems group
 #
 BWOSDIRS=
@@ -651,10 +629,9 @@ _dc :=		TARGET = _dc
 
 SUBDIRS = $(COMMON_SUBDIRS) $($(MACH)_SUBDIRS)
 
-.PARALLEL:	$(BWOSDIRS) $(SUBDIRS) $(MSGSUBDIRS) $(AUDITSUBDIRS)
+.PARALLEL:	$(BWOSDIRS) $(SUBDIRS) $(MSGSUBDIRS)
 
-all install clean clobber: $(FIRST_SUBDIRS) .WAIT $(SUBDIRS) \
-	$(AUDITSUBDIRS)
+all install clean clobber: $(FIRST_SUBDIRS) .WAIT $(SUBDIRS)
 
 #
 # Manifests cannot be checked in parallel, because we are using
@@ -683,7 +660,7 @@ ksh:	isaexec
 mdb: 	terminfo
 fmt:	mailx
 
-$(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS) $(AUDITSUBDIRS): FRC
+$(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS): FRC
 	@if [ -f $@/Makefile  ]; then \
 		cd $@; pwd; $(MAKE) $(TARGET); \
 	else \

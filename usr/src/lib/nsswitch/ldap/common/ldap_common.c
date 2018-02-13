@@ -37,7 +37,6 @@
 /* getent attributes filters */
 #define	_F_GETALIASENT		"(objectClass=rfc822MailGroup)"
 #define	_F_GETAUTHNAME		"(objectClass=SolarisAuthAttr)"
-#define	_F_GETAUUSERNAME	"(objectClass=SolarisAuditUser)"
 #define	_F_GETEXECNAME		"(objectClass=SolarisExecAttr)"
 #define	_F_GETGRENT		"(objectClass=posixGroup)"
 #define	_F_GETHOSTENT		"(objectClass=ipHost)"
@@ -76,8 +75,6 @@ static struct gettablefilter {
 	{(char *)_RPC,		(char *)_F_GETRPCENT,	(char *)_A_CN},
 	{(char *)_ALIASES,	(char *)_F_GETALIASENT,	(char *)_A_CN},
 	{(char *)_SERVICES,	(char *)_F_GETSERVENT,	(char *)_A_CN},
-	{(char *)_AUUSER,	(char *)_F_GETAUUSERNAME,
-							(char *)_A_UID},
 	{(char *)_AUTHATTR,	(char *)_F_GETAUTHNAME,	(char *)_A_CN},
 	{(char *)_EXECATTR,	(char *)_F_GETEXECNAME,	(char *)_A_CN},
 	{(char *)_PROFATTR,	(char *)_F_GETPROFNAME,	(char *)_A_CN},

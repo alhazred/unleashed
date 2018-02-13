@@ -47,7 +47,6 @@
 #include <sys/mkdev.h>
 #include <sys/policy.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 
 /*
  * Create a special file, a regular file, or a FIFO.
@@ -94,8 +93,6 @@ mknodat(int fd, char *fname, mode_t fmode, dev_t dev)
 		return (set_errno(EFAULT));
 	if ((error = fgetstartvp(fd, fname, &startvp)) != 0)
 		return (set_errno(error));
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 
 	why = ((fmode & S_IFMT) == S_IFDIR) ? CRMKDIR : CRMKNOD;
 	error = vn_createat(fname, UIO_USERSPACE, &vattr, EXCL, 0, &vp,

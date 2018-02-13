@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#include <bsm/adt.h>
 #include <net/if.h>
 #include <inet/ip.h>
 #include <inet/ip6.h>

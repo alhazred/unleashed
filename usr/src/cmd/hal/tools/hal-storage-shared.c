@@ -44,8 +44,6 @@
 #include <sys/vfstab.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #else
 #include <mntent.h>
 #endif
@@ -282,10 +280,6 @@ handle_unmount (LibHalContext *hal_ctx,
 	char *mount_point_to_unmount;
 	gboolean mounted_by_other_uid;
 	FILE *hal_mtab_new;
-#ifdef sun
-	adt_export_data_t *adt_data;
-	size_t adt_data_size;
-#endif
 
 #ifdef DEBUG
 	printf ("device                           = %s\n", device);
@@ -490,16 +484,6 @@ line_found:
 		}
 	}
 
-#ifdef sun
-	if ((adt_data = get_audit_export_data (system_bus,
-	    invoked_by_syscon_name, &adt_data_size)) != NULL) {
-		audit_volume (adt_data, ADT_detach, WEXITSTATUS(exit_status),
-		    "solaris.device.mount.removable",
-		    mount_point_to_unmount, device, NULL);
-		free (adt_data);
-	}
-#endif
-
 	/* unmount was succesful, remove directory we created in Mount() */
 #ifdef sun
 	if (strncmp (mount_point_to_unmount, "/media/", 7) == 0)
@@ -545,10 +529,6 @@ handle_eject (LibHalContext *hal_ctx,
 	int exit_status;
 	char *args[10];
 	int na;
-#ifdef sun
-	adt_export_data_t *adt_data;
-	size_t adt_data_size;
-#endif
 	/* TODO: should we require privileges here? */
 
 #ifdef DEBUG
@@ -596,13 +576,6 @@ handle_eject (LibHalContext *hal_ctx,
 	 */
 	if (WEXITSTATUS(exit_status) == 4) {
 		exit_status = 0;
-	}
-
-	if ((adt_data = get_audit_export_data (system_bus,
-	    invoked_by_syscon_name, &adt_data_size)) != NULL) {
-		audit_volume (adt_data, ADT_remove, WEXITSTATUS(exit_status),
-		    "solaris.device.mount.removable", NULL, device, NULL);
-		free (adt_data);
 	}
 #endif /* sun */
 
@@ -696,59 +669,6 @@ auth_from_privilege(const char *privilege)
 		}
 	}
 	return (authname);
-}
-
-void
-audit_volume(const adt_export_data_t *imported_state, au_event_t event_id,
-    int result, const char *auth_used, const char *mount_point,
-    const char *device, const char *options)
-{
-	adt_session_data_t      *ah;
-	adt_event_data_t        *event;
-
-	if (adt_start_session(&ah, imported_state, 0) != 0) {
-        	printf ("adt_start_session failed %d\n", errno);
-        	return;
-	}
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-        	printf ("adt_alloc_event(ADT_attach)\n", errno);
-        	return;
-	}
-
-	switch (event_id) {
-	case ADT_attach:
-		event->adt_attach.auth_used = (char *)auth_used;
-		event->adt_attach.mount_point = (char *)mount_point;
-		event->adt_attach.device = (char *)device;
-		event->adt_attach.options = (char *)options;
-		break;
-	case ADT_detach:
-		event->adt_detach.auth_used = (char *)auth_used;
-		event->adt_detach.mount_point = (char *)mount_point;
-		event->adt_detach.device = (char *)device;
-		event->adt_detach.options = (char *)options;
-		break;
-	case ADT_remove:
-		event->adt_remove.auth_used = (char *)auth_used;
-		event->adt_remove.mount_point = (char *)mount_point;
-		event->adt_remove.device = (char *)device;
-		break;
-	default:
-		goto out;
-	}
-
-	if (result == 0) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-			printf ("adt_put_event(%d, success)\n", event_id);
-		}
-	} else {
-		if (adt_put_event(event, ADT_FAILURE, result) != 0) {
-			printf ("adt_put_event(%d, failure)\n", event_id);
-		}
-	}
-out:
-	adt_free_event(event);
-	(void) adt_end_session(ah);
 }
 
 #endif /* sun */

@@ -254,21 +254,6 @@ ucred_is_privileged(ucred_t *uc)
 	return (0);
 }
 
-/*
- * The purpose of this function is to get the audit session data for use in
- * generating SMF audit events.  We use a single audit session per client.
- *
- * get_audit_session() may return NULL.  It is legal to use a NULL pointer
- * in subsequent calls to adt_* functions.
- */
-adt_session_data_t *
-get_audit_session(void)
-{
-	thread_info_t	*ti = thread_self();
-
-	return (ti->ti_active_client->rc_adt_session);
-}
-
 static void *
 thread_start(void *arg)
 {

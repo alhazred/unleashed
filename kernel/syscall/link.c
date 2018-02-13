@@ -42,7 +42,6 @@
 #include <sys/fcntl.h>
 #include <sys/uio.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 
 /*
  * Make a hard link.

@@ -63,8 +63,6 @@
 #include <libdlbridge.h>
 #include <libinetutil.h>
 #include <libvrrpadm.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <libdlvnic.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -7183,57 +7181,6 @@ check_auth(const char *auth)
 }
 
 static void
-audit_secobj(char *auth, char *class, char *obj,
-    boolean_t success, boolean_t create)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-	au_event_t		flag;
-	char			*errstr;
-
-	if (create) {
-		flag = ADT_dladm_create_secobj;
-		errstr = "ADT_dladm_create_secobj";
-	} else {
-		flag = ADT_dladm_delete_secobj;
-		errstr = "ADT_dladm_delete_secobj";
-	}
-
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) != 0)
-		die("adt_start_session: %s", strerror(errno));
-
-	if ((event = adt_alloc_event(ah, flag)) == NULL)
-		die("adt_alloc_event (%s): %s", errstr, strerror(errno));
-
-	/* fill in audit info */
-	if (create) {
-		event->adt_dladm_create_secobj.auth_used = auth;
-		event->adt_dladm_create_secobj.obj_class = class;
-		event->adt_dladm_create_secobj.obj_name = obj;
-	} else {
-		event->adt_dladm_delete_secobj.auth_used = auth;
-		event->adt_dladm_delete_secobj.obj_class = class;
-		event->adt_dladm_delete_secobj.obj_name = obj;
-	}
-
-	if (success) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0) {
-			die("adt_put_event (%s, success): %s", errstr,
-			    strerror(errno));
-		}
-	} else {
-		if (adt_put_event(event, ADT_FAILURE,
-		    ADT_FAIL_VALUE_AUTH) != 0) {
-			die("adt_put_event: (%s, failure): %s", errstr,
-			    strerror(errno));
-		}
-	}
-
-	adt_free_event(event);
-	(void) adt_end_session(ah);
-}
-
-static void
 do_create_secobj(int argc, char **argv, const char *use)
 {
 	int			option, rval;
@@ -7301,7 +7248,6 @@ do_create_secobj(int argc, char **argv, const char *use)
 		die("invalid secure object name '%s'", obj_name);
 
 	success = check_auth(LINK_SEC_AUTH);
-	audit_secobj(LINK_SEC_AUTH, class_name, obj_name, success, B_TRUE);
 	if (!success)
 		die("authorization '%s' is required", LINK_SEC_AUTH);
 
@@ -7384,7 +7330,6 @@ do_delete_secobj(int argc, char **argv, const char *use)
 		die("no memory");
 
 	success = check_auth(LINK_SEC_AUTH);
-	audit_secobj(LINK_SEC_AUTH, "unknown", argv[optind], success, B_FALSE);
 	if (!success)
 		die("authorization '%s' is required", LINK_SEC_AUTH);
 

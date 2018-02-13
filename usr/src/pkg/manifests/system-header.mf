@@ -41,7 +41,6 @@ dir path=usr/include/$(ARCH64)/sys
 dir path=usr/include/ads
 dir path=usr/include/arpa
 dir path=usr/include/asm
-dir path=usr/include/bsm
 dir path=usr/include/dat
 dir path=usr/include/des
 dir path=usr/include/gssapi
@@ -153,15 +152,6 @@ file path=usr/include/assert.h
 file path=usr/include/atomic.h
 file path=usr/include/attr.h
 file path=usr/include/auth_attr.h
-file path=usr/include/bsm/adt.h mode=0644
-file path=usr/include/bsm/adt_event.h mode=0644
-file path=usr/include/bsm/audit.h mode=0644
-file path=usr/include/bsm/audit_kernel.h mode=0644
-file path=usr/include/bsm/audit_kevents.h mode=0644
-file path=usr/include/bsm/audit_record.h mode=0644
-file path=usr/include/bsm/audit_uevents.h
-file path=usr/include/bsm/devices.h mode=0644
-file path=usr/include/bsm/libbsm.h mode=0644
 file path=usr/include/config_admin.h
 file path=usr/include/cpio.h
 file path=usr/include/crypt.h
@@ -551,7 +541,6 @@ file path=usr/include/scsi/plugins/ses/vendor/sun.h
 file path=usr/include/sdp.h
 file path=usr/include/search.h
 file path=usr/include/secdb.h
-file path=usr/include/security/auditd.h mode=0644
 file path=usr/include/security/cryptoki.h
 file path=usr/include/security/pam_appl.h
 file path=usr/include/security/pam_modules.h

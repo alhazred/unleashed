@@ -91,8 +91,6 @@
 #include <sys/policy.h>
 #include <sys/zone.h>
 
-#include <c2/audit.h>
-
 /*
  * The following tunables are obsolete.  Though for compatibility we
  * still read and interpret msginfo_msgmnb, msginfo_msgmni, and
@@ -320,7 +318,7 @@ _init(void)
 	int result;
 
 	msq_svc = ipcs_create("msqids", rc_project_msgmni, rc_zone_msgmni,
-	    sizeof (kmsqid_t), msg_dtor, msg_rmid, AT_IPC_MSG,
+	    sizeof (kmsqid_t), msg_dtor, msg_rmid,
 	    offsetof(ipc_rqty_t, ipcq_msgmni));
 	zone_key_create(&msg_zone_key, NULL, msg_remove_zone, NULL);
 
@@ -653,9 +651,6 @@ top:
 		    pp->p_rctls, pp);
 		lock = ipc_commit_end(msq_svc, &qp->msg_perm);
 	}
-
-	if (AU_AUDITING())
-		audit_ipcget(AT_IPC_MSG, (void *)qp);
 
 	id = qp->msg_perm.ipc_id;
 	mutex_exit(lock);

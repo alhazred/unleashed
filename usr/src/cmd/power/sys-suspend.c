@@ -52,10 +52,6 @@
 #include <security/pam_appl.h>
 #include <utmpx.h>
 
-/* For audit */
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
-
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/pm.h>
@@ -77,12 +73,10 @@ struct utmpx 	utmp;
 #ifdef i386
 #define	AD_CHECK_SUSPEND	AD_CHECK_SUSPEND_TO_RAM
 #define	AD_SUSPEND		AD_SUSPEND_TO_RAM
-#define	ADT_FCN			ADT_UADMIN_FCN_AD_SUSPEND_TO_RAM
 #define	AUTHNAME_SUSPEND	AUTHNAME_SUSPEND_RAM
 #else
 #define	AD_CHECK_SUSPEND	AD_CHECK_SUSPEND_TO_DISK
 #define	AD_SUSPEND		AD_SUSPEND_TO_DISK
-#define	ADT_FCN			ADT_UADMIN_FCN_AD_SUSPEND_TO_DISK
 #define	AUTHNAME_SUSPEND	AUTHNAME_SUSPEND_DISK
 #endif
 
@@ -113,7 +107,7 @@ static	int	is_mou3(void);
 static	void	suspend_error(int);
 static	int	pm_check_suspend(void);
 static	void	pm_suspend(void);
-static	void	pm_do_auth(adt_session_data_t *);
+static	void	pm_do_auth(void);
 
 /*
  *  External Declarations.
@@ -121,90 +115,6 @@ static	void	pm_do_auth(adt_session_data_t *);
 extern	int	pam_tty_conv(int, struct pam_message **,
     struct pam_response **, void *);
 extern	char	*optarg;
-
-/*
- * Audit related code.  I would also think that some of this could be
- * in external code, as they could be useful of other apps.
- */
-/*
- * Write audit event.  Could be useful in the PM library, so it is
- * included here.  For the most part it is only used by the PAM code.
- */
-static void
-pm_audit_event(adt_session_data_t *ah, au_event_t event_id, int status)
-{
-	adt_event_data_t	*event;
-
-
-	if ((event = adt_alloc_event(ah, event_id)) == NULL) {
-		return;
-	}
-
-	(void) adt_put_event(event,
-	    status == PAM_SUCCESS ? ADT_SUCCESS : ADT_FAILURE,
-	    status == PAM_SUCCESS ? ADT_SUCCESS : ADT_FAIL_PAM + status);
-
-	adt_free_event(event);
-}
-
-#define	RETRY_COUNT 15
-static int
-change_audit_file(void)
-{
-	pid_t	pid;
-
-	if (!adt_audit_state(AUC_AUDITING)) {
-		/* auditd not running, just return */
-		return (0);
-	}
-
-	if ((pid = fork()) == 0) {
-		(void) execl("/usr/sbin/audit", "audit", "-n", NULL);
-		(void) fprintf(stderr, gettext("error changing audit files: "
-		    "%s\n"), strerror(errno));
-		_exit(-1);
-	} else if (pid == -1) {
-		(void) fprintf(stderr, gettext("error changing audit files: "
-		    "%s\n"), strerror(errno));
-		return (-1);
-	} else {
-		pid_t	rc;
-		int	retries = RETRY_COUNT;
-
-		/*
-		 * Wait for audit(8) -n process to complete
-		 *
-		 */
-		do {
-			if ((rc = waitpid(pid, NULL, WNOHANG)) == pid) {
-				return (0);
-			} else if (rc == -1) {
-				return (-1);
-			} else {
-				(void) sleep(1);
-				retries--;
-			}
-
-		} while (retries != 0);
-	}
-	return (-1);
-}
-
-static void
-wait_for_auqueue()
-{
-	au_stat_t	au_stat;
-	int		retries = 10;
-
-	while (retries-- && auditon(A_GETSTAT, (caddr_t)&au_stat, 0) == 0) {
-		if (au_stat.as_enqueue == au_stat.as_written) {
-			break;
-		}
-		(void) sleep(1);
-	}
-}
-
-/* End of Audit-related code */
 
 /* ARGSUSED0 */
 static void
@@ -217,11 +127,6 @@ alarm_handler(int sig)
  * These are functions that would be candidates for moving to a library.
  */
 
-/*
- * pm_poweroff - similar to poweroff(8)
- * This should do the same auditing as poweroff(1m) would do when it
- * becomes a libpower function.  Till then we use poweroff(1m).
- */
 static void
 pm_poweroff(void)
 {
@@ -266,10 +171,6 @@ static void
 pm_suspend(void)
 {
 	int			cprarg = AD_SUSPEND;
-	enum adt_uadmin_fcn	fcn_id = ADT_FCN;
-	au_event_t		event_id = ADT_uadmin_freeze;
-	adt_event_data_t	*event = NULL; /* event to be generated */
-	adt_session_data_t	*ah = NULL;  /* audit session handle */
 
 	/*
 	 * Does the user have permission to use this command?
@@ -324,80 +225,20 @@ pm_suspend(void)
 		}
 
 		/* Time to do the actual deed!  */
-		/*
-		 * Before we actually suspend, we need to audit and
-		 * "suspend" the audit files.
-		 */
-		/* set up audit session and event */
-		if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA) == 0) {
-			if ((event = adt_alloc_event(ah, event_id)) != NULL) {
-				event->adt_uadmin_freeze.fcn = fcn_id;
-				event->adt_uadmin_freeze.mdep = NULL;
-				if (adt_put_event(event, ADT_SUCCESS, 0) != 0) {
-					(void) fprintf(stderr, gettext(
-					    "%s: can't put audit event\n"),
-					    argvl[0]);
-				} else {
-					wait_for_auqueue();
-				}
-			}
-			(void) change_audit_file();
-		} else {
-			(void) fprintf(stderr, gettext(
-			    "%s: can't start audit session\n"), argvl[0]);
-		}
-
 		if (uadmin(A_FREEZE, cprarg, 0) != 0) {
 			(void) printf(gettext("Suspend Failed\n"));
 			if (flags & FORCE) {
-				/*
-				 * Note, that if we actually poweroff,
-				 * that the poweroff function will handle
-				 * that audit trail, and the resume
-				 * trail is effectively done.
-				 */
 				pm_poweroff();
 			} else {
 				/* suspend_error() will exit. */
 				suspend_error(errno);
-				/*
-				 * Audit the suspend failure and
-				 * reuse the event, but don't create one
-				 * if we don't already have one.
-				 */
-				if (event != NULL) {
-					(void) adt_put_event(event,
-					    ADT_FAILURE, 0);
-				}
 			}
 		}
 
-		/*
-		 * Write the thaw event.
-		 */
-		if (ah != NULL) {
-			if ((event == NULL) &&
-			    ((event = adt_alloc_event(ah, ADT_uadmin_thaw))
-			    == NULL)) {
-				(void) fprintf(stderr, gettext(
-				    "%s: can't allocate thaw audit event\n"),
-				    argvl[0]);
-			} else {
-				event->adt_uadmin_thaw.fcn = fcn_id;
-				if (adt_put_event(event, ADT_SUCCESS, 0) != 0) {
-					(void) fprintf(stderr, gettext(
-					    "%s: can't put thaw audit event\n"),
-					    argvl[0]);
-				}
-				(void) adt_free_event(event);
-			}
-		}
 	}
 	if ((no_tty ? 0 : 1) && !(flags & NO_XLOCK)) {
-		pm_do_auth(ah);
+		pm_do_auth();
 	}
-
-	(void) adt_end_session(ah);
 }
 /* End of "library" functions */
 
@@ -797,14 +638,11 @@ is_mou3()
  * Reauthenticate the user on return from suspend.
  * This is here and not in the PAM-specific file, as there are
  * items specific to sys-suspend, and not generic to PAM.  This may
- * become part of a future PM library.  The audit handle is passed,
- * as the pm_suspend code actually starts an audit session, so it
- * makes sense to just continue to use it.  If it were separated
- * from the pm_suspend code, it will need to open a new session.
+ * become part of a future PM library.
  */
 #define	DEF_ATTEMPTS	3
 static void
-pm_do_auth(adt_session_data_t *ah)
+pm_do_auth(void)
 {
 	pam_handle_t	*pm_pamh;
 	int		err;
@@ -838,17 +676,14 @@ pm_do_auth(adt_session_data_t *ah)
 				} while ((err == PAM_AUTHTOK_ERR ||
 				    err == PAM_TRY_AGAIN) &&
 				    chpasswd_tries < DEF_ATTEMPTS);
-				pm_audit_event(ah, ADT_passwd, err);
 			}
 			err = pam_setcred(pm_pamh, PAM_REFRESH_CRED);
 		}
 		if (err != PAM_SUCCESS) {
 			(void) fprintf(stdout, "%s\n",
 			    pam_strerror(pm_pamh, err));
-			pm_audit_event(ah, ADT_screenunlock, err);
 		}
 	} while (err != PAM_SUCCESS);
-	pm_audit_event(ah, ADT_passwd, 0);
 
 	(void) pam_end(pm_pamh, err);
 }

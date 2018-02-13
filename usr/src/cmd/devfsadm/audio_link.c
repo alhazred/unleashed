@@ -30,9 +30,11 @@
 #include <limits.h>
 #include <stdio.h>
 #include <syslog.h>
-#include <bsm/devalloc.h>
 #include <sys/audio.h>
 #include <sys/soundcard.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 #define	MAX_AUDIO_LINK 100

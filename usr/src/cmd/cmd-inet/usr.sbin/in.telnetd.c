@@ -95,7 +95,6 @@
 #include <des/des.h>
 #include <rpc/des_crypt.h>
 #include <sys/cryptmod.h>
-#include <bsm/adt.h>
 
 #define	TELNETD_OPTS "Ss:a:dEXUhR:M:"
 #ifdef DEBUG
@@ -2157,30 +2156,6 @@ issock(int fd)
 	return (S_ISSOCK(stats.st_mode));
 }
 
-/*
- * audit_telnet_settid stores the terminal id while it is still
- * available.  Subsequent calls to adt_load_hostname() return
- * the id which is stored here.
- */
-static int
-audit_telnet_settid(int sock) {
-	adt_session_data_t	*ah;
-	adt_termid_t		*termid;
-	int			rc;
-
-	if ((rc = adt_start_session(&ah, NULL, 0)) == 0) {
-		if ((rc = adt_load_termid(sock, &termid)) == 0) {
-			if ((rc = adt_set_user(ah, ADT_NO_AUDIT,
-			    ADT_NO_AUDIT, 0, ADT_NO_AUDIT,
-			    termid, ADT_SETTID)) == 0)
-				(void) adt_set_proc(ah);
-			free(termid);
-		}
-		(void) adt_end_session(ah);
-	}
-	return (rc);
-}
-
 /* ARGSUSED */
 int
 main(int argc, char *argv[])
@@ -2364,12 +2339,6 @@ main(int argc, char *argv[])
 		(void) fprintf(stderr, "%s: ", argv[0]);
 		perror("getpeername");
 		_exit(EXIT_FAILURE);
-	}
-
-	if (audit_telnet_settid(0)) {	/* set terminal ID */
-		(void) fprintf(stderr, "%s: ", argv[0]);
-		perror("audit");
-		exit(EXIT_FAILURE);
 	}
 
 	if (setsockopt(0, SOL_SOCKET, SO_KEEPALIVE, (const char *)&on,

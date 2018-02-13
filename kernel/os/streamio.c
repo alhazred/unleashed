@@ -79,7 +79,6 @@
 #include <sys/dld.h>
 #include <sys/zone.h>
 #include <sys/limits.h>
-#include <c2/audit.h>
 
 /*
  * This define helps improve the readability of streams code while
@@ -3241,7 +3240,6 @@ strioctl(struct vnode *vp, int cmd, intptr_t arg, int flag, int copyflag,
 	queue_t *wrq;
 	queue_t *rdq;
 	boolean_t kioctl = B_FALSE;
-	uint32_t auditing = AU_AUDITING();
 
 	if (flag & FKIOCTL) {
 		copyflag = K_TO_K;
@@ -5349,9 +5347,6 @@ strioctl(struct vnode *vp, int cmd, intptr_t arg, int flag, int copyflag,
 		if ((fp = getf((int)arg)) == NULL)
 			return (EBADF);
 		error = do_sendfp(stp, fp, crp);
-		if (auditing) {
-			audit_fdsend((int)arg, fp, error);
-		}
 		releasef((int)arg);
 		return (error);
 	}
@@ -5437,9 +5432,6 @@ strioctl(struct vnode *vp, int cmd, intptr_t arg, int flag, int copyflag,
 			putback(stp, rdq, mp, mp->b_band);
 			mutex_exit(&stp->sd_lock);
 			return (error);
-		}
-		if (auditing) {
-			audit_fdrecv(fd, srf->fp);
 		}
 
 		/*
@@ -7813,9 +7805,6 @@ strputmsg(
 	xpg4 = (flag & MSG_XPG4) ? 1 : 0;
 	flag &= ~MSG_XPG4;
 
-	if (AU_AUDITING())
-		audit_strputmsg(vp, mctl, mdata, pri, flag, fmode);
-
 	mutex_enter(&stp->sd_lock);
 
 	if ((error = i_straccess(stp, JCWRITE)) != 0) {
@@ -8002,8 +7991,6 @@ kstrputmsg(
 	ASSERT(vp->v_stream);
 	stp = vp->v_stream;
 	wqp = stp->sd_wrq;
-	if (AU_AUDITING())
-		audit_strputmsg(vp, NULL, NULL, pri, flag, fmode);
 	if (mctl == NULL)
 		return (EINVAL);
 

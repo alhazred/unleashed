@@ -68,8 +68,6 @@
 #define	_SUN_TPI_VERSION	2
 #include <sys/tihdr.h>
 
-#include <c2/audit.h>
-
 #include "sockcommon.h"
 #include "sockfilter_impl.h"
 #include "socktpi.h"
@@ -745,8 +743,6 @@ fdbuf_extract(struct fdbuf *fdbuf, void *rights, int rightslen)
 		mutex_exit(&fp->f_tlock);
 		setf(fd, fp);
 		*rp++ = fd;
-		if (AU_AUDITING())
-			audit_fdrecv(fd, fp);
 		dprint(1, ("fdbuf_extract: [%d] = %d, %p refcnt %d\n",
 		    i, fd, (void *)fp, fp->f_count));
 	}
@@ -819,8 +815,6 @@ fdbuf_create(void *rights, int rightslen, struct fdbuf **fdbufp)
 		fdbuf->fd_fds[i] = fp;
 		fdbuf->fd_numfd++;
 		releasef(fds[i]);
-		if (AU_AUDITING())
-			audit_fdsend(fds[i], fp, 0);
 	}
 	*fdbufp = fdbuf;
 	return (0);

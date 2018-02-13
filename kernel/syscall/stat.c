@@ -53,7 +53,6 @@
 #include <sys/uio.h>
 #include <sys/debug.h>
 #include <sys/cmn_err.h>
-#include <c2/audit.h>
 #include <sys/fs_subr.h>
 
 /*
@@ -101,9 +100,6 @@ cstatat_getvp(int fd, char *name, int follow, vnode_t **vp, cred_t **cred)
 		}
 	}
 	*cred = cr;
-
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 
 lookup:
 	if (error = lookupnameat(name, UIO_USERSPACE, follow, NULLVPP,

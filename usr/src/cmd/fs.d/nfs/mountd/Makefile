@@ -38,7 +38,7 @@ SRCS	  =	$(LOCAL:%.o=%.c) $(FSLIBSRC) ../lib/nfs_sec.c \
 		../lib/sharetab.c ../lib/daemon.c ../lib/smfcfg.c
 DSRC	  =	mountd_dt.d
 DOBJ	  =	$(DSRC:%.d=%.o)
-LDLIBS	 +=	-lrpcsvc -lbsm -lnvpair -lscf -lumem
+LDLIBS	 +=	-lrpcsvc -lnvpair -lscf -lumem
 CPPFLAGS +=	-I../lib
 
 CERRWARN +=	-Wno-uninitialized

@@ -100,8 +100,6 @@
 #include <sys/types.h>
 #include <sys/utsname.h>
 
-#include <bsm/adt_event.h>
-#include <bsm/libbsm.h>
 #include <security/pam_appl.h>
 
 #include <assert.h>
@@ -597,15 +595,12 @@ static void	contract_event(struct pollfd *);
 static int	startd_run(const char *, int, ctid_t);
 static void	startd_record_failure();
 static int	startd_failure_rate_critical();
-static char	*audit_boot_msg();
-static int	audit_put_record(int, int, char *);
 static void	update_boot_archive(int new_state);
 
 int
 main(int argc, char *argv[])
 {
 	int	chg_lvl_flag = FALSE, print_banner = FALSE;
-	int	may_need_audit = 1;
 	int	c;
 	char	*msg;
 
@@ -782,8 +777,6 @@ main(int argc, char *argv[])
 				if (rl != -1)
 					lscf_set_runlevel(rl);
 			}
-
-			may_need_audit = 1;
 		}
 
 		/*
@@ -851,15 +844,6 @@ main(int argc, char *argv[])
 
 			if (wakeup.w_mask == 0) {
 				int ret;
-
-				if (may_need_audit && (cur_state == LVL3)) {
-					msg = audit_boot_msg();
-
-					may_need_audit = 0;
-					(void) audit_put_record(ADT_SUCCESS,
-					    ADT_SUCCESS, msg);
-					free(msg);
-				}
 
 				/*
 				 * "init" is finished with all actions for
@@ -3531,8 +3515,6 @@ userinit(int argc, char **argv)
 
 	if ((init_signal = lvlname_to_state((char)argv[1][0])) == -1) {
 		(void) fprintf(stderr, usage_msg);
-		(void) audit_put_record(ADT_FAILURE, ADT_FAIL_VALUE_BAD_CMD,
-		    argv[1]);
 		exit(1);
 	}
 
@@ -3545,8 +3527,6 @@ userinit(int argc, char **argv)
 		if (ln == NULL) {
 			(void) fprintf(stderr,
 			    "Standard input not a tty line\n");
-			(void) audit_put_record(ADT_FAILURE,
-			    ADT_FAIL_VALUE_BAD_TTY, argv[1]);
 			exit(1);
 		}
 
@@ -3562,8 +3542,6 @@ userinit(int argc, char **argv)
 				perror("Can't unlink /dev/syscon");
 				(void) fprintf(stderr,
 				    "Run command on the system console.\n");
-				(void) audit_put_record(ADT_FAILURE,
-				    ADT_FAIL_VALUE_PROGRAM, argv[1]);
 				exit(1);
 			}
 			if (symlink(ln, SYSCON) == FAILURE) {
@@ -3573,8 +3551,6 @@ userinit(int argc, char **argv)
 
 				/* Try to leave a syscon */
 				(void) link(SYSTTY, SYSCON);
-				(void) audit_put_record(ADT_FAILURE,
-				    ADT_FAIL_VALUE_PROGRAM, argv[1]);
 				exit(1);
 			}
 
@@ -3593,15 +3569,11 @@ userinit(int argc, char **argv)
 
 	update_boot_archive(init_signal);
 
-	(void) audit_put_record(ADT_SUCCESS, ADT_SUCCESS, argv[1]);
-
 	/*
 	 * Signal init; init will take care of telling svc.startd.
 	 */
 	if (kill(init_pid, init_signal) == FAILURE) {
 		(void) fprintf(stderr, "Must be super-user\n");
-		(void) audit_put_record(ADT_FAILURE,
-		    ADT_FAIL_VALUE_AUTH, argv[1]);
 		exit(1);
 	}
 
@@ -4524,77 +4496,4 @@ startd_failure_rate_critical()
 	    NSTARTD_FAILURE_TIMES;
 
 	return (avg_ns < STARTD_FAILURE_RATE_NS);
-}
-
-/*
- * returns string that must be free'd
- */
-
-static char
-*audit_boot_msg()
-{
-	char		*b, *p;
-	char		desc[] = "booted";
-	zoneid_t	zid = getzoneid();
-
-	b = malloc(sizeof (desc) + MAXNAMELEN + 3);
-	if (b == NULL)
-		return (b);
-
-	p = b;
-	p += strlcpy(p, desc, sizeof (desc));
-	if (zid != GLOBAL_ZONEID) {
-		p += strlcpy(p, ": ", 3);
-		(void) getzonenamebyid(zid, p, MAXNAMELEN);
-	}
-	return (b);
-}
-
-/*
- * Generate AUE_init_solaris audit record.  Return 1 if
- * auditing is enabled in case the caller cares.
- *
- * In the case of userint() or a local zone invocation of
- * one_true_init, the process initially contains the audit
- * characteristics of the process that invoked init.  The first pass
- * through here uses those characteristics then for the case of
- * one_true_init in a local zone, clears them so subsequent system
- * state changes won't be attributed to the person who booted the
- * zone.
- */
-static int
-audit_put_record(int pass_fail, int status, char *msg)
-{
-	adt_session_data_t	*ah;
-	adt_event_data_t	*event;
-
-	if (!adt_audit_enabled())
-		return (0);
-
-	/*
-	 * the PROC_DATA picks up the context to tell whether this is
-	 * an attributed record (auid = -2 is unattributed)
-	 */
-	if (adt_start_session(&ah, NULL, ADT_USE_PROC_DATA)) {
-		console(B_TRUE, "audit failure:  %s\n", strerror(errno));
-		return (1);
-	}
-	event = adt_alloc_event(ah, ADT_init_solaris);
-	if (event == NULL) {
-		console(B_TRUE, "audit failure:  %s\n", strerror(errno));
-		(void) adt_end_session(ah);
-		return (1);
-	}
-	event->adt_init_solaris.info = msg;	/* NULL is ok here */
-
-	if (adt_put_event(event, pass_fail, status)) {
-		console(B_TRUE, "audit failure:  %s\n", strerror(errno));
-		(void) adt_end_session(ah);
-		return (1);
-	}
-	adt_free_event(event);
-
-	(void) adt_end_session(ah);
-
-	return (1);
 }

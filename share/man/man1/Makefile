@@ -1,8 +1,6 @@
 MAN = acctcom.1 \
       adb.1 \
       alias.1 \
-      allocate.1 \
-      amt.1 \
       appcert.1 \
       apptrace.1 \
       ar.1 \
@@ -42,7 +40,6 @@ MAN = acctcom.1 \
       ctwatch.1 \
       date.1 \
       dc.1 \
-      deallocate.1 \
       dhcpinfo.1 \
       diff.1 \
       diff3.1 \
@@ -130,7 +127,6 @@ MAN = acctcom.1 \
       lex.1 \
       lgrpinfo.1 \
       line.1 \
-      list_devices.1 \
       listusers.1 \
       ln.1 \
       loadkeys.1 \

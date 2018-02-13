@@ -49,7 +49,6 @@
 #include <sys/filio.h>
 #include <sys/fcntl.h>
 #include <sys/debug.h>
-#include <c2/audit.h>
 
 /*
  * Change ownership of file.

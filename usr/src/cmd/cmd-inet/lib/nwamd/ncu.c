@@ -26,6 +26,7 @@
 
 #include <arpa/inet.h>
 #include <assert.h>
+#include <errno.h>
 #include <libdlaggr.h>
 #include <libdllink.h>
 #include <libdlstat.h>

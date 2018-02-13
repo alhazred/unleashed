@@ -34,8 +34,7 @@ OBJECTS =	getpwent.o	\
 		getgrent.o	\
 		getspent.o	\
 		compat_common.o	\
-		getuserattr.o	\
-		getauuser.o
+		getuserattr.o
 
 # include common nsswitch library definitions.
 include		../../Makefile.com

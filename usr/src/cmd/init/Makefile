@@ -31,7 +31,7 @@ DEFAULTFILES= init.dfl
 
 include ../Makefile.cmd
 
-LDLIBS += -lpam -lbsm -lcontract -lscf
+LDLIBS += -lpam -lcontract -lscf
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 CLOBBERFILES= $(STATIC)

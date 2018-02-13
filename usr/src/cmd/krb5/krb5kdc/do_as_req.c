@@ -448,12 +448,6 @@ process_as_req(krb5_kdc_req *request, krb5_data *req_pkt,
     memset(reply.enc_part.ciphertext.data, 0, reply.enc_part.ciphertext.length);
     free(reply.enc_part.ciphertext.data);
 
-    /* SUNW14resync:
-     * The third argument to audit_krb5kdc_as_req() is zero as the local
-     * portnumber is no longer passed to process_as_req().
-     */ 
-    audit_krb5kdc_as_req(&from_in4, (in_port_t)from->port, 0, 
-                        cname, sname, 0);  
     rep_etypes2str(rep_etypestr, sizeof(rep_etypestr), &reply);
     krb5_klog_syslog(LOG_INFO,
 		     "AS_REQ (%s) %s: ISSUE: authtime %d, "
@@ -481,8 +475,6 @@ errout:
 	if (errcode) 
 	    emsg = krb5_get_error_message (kdc_context, errcode);
 
-	audit_krb5kdc_as_req(&from_in4, (in_port_t)from->port,
-	    0, cname, sname, errcode);
         krb5_klog_syslog(LOG_INFO, "AS_REQ (%s) %s: %s: %s for %s%s%s",
 	    ktypestr,
 	    fromstring, status,

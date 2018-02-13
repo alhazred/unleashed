@@ -35,7 +35,6 @@
 
 #include <alloca.h>
 #include <assert.h>
-#include <bsm/adt_event.h>
 #include <door.h>
 #include <errno.h>
 #include <libintl.h>
@@ -278,7 +277,6 @@ client_alloc(void)
 	cp->rc_doorid = INVALID_DOORID;
 
 	(void) pthread_mutex_init(&cp->rc_lock, NULL);
-	(void) pthread_mutex_init(&cp->rc_annotate_lock, NULL);
 
 	rc_node_ptr_init(&cp->rc_notify_ptr);
 
@@ -306,7 +304,6 @@ client_free(repcache_client_t *cp)
 	uu_avl_destroy(cp->rc_iters);
 	uu_list_node_fini(cp, &cp->rc_link, client_pool);
 	(void) pthread_mutex_destroy(&cp->rc_lock);
-	(void) pthread_mutex_destroy(&cp->rc_annotate_lock);
 	rc_node_ptr_free_mem(&cp->rc_notify_ptr);
 	uu_free(cp);
 }
@@ -720,21 +717,6 @@ client_destroy(uint32_t id)
 	 * clean up notifications
 	 */
 	rc_pg_notify_fini(&cp->rc_pg_notify);
-
-	/*
-	 * clean up annotations
-	 */
-	if (cp->rc_operation != NULL)
-		free((void *)cp->rc_operation);
-	if (cp->rc_file != NULL)
-		free((void *)cp->rc_file);
-
-	/*
-	 * End audit session.
-	 */
-#ifndef	NATIVE_BUILD
-	(void) adt_end_session(cp->rc_adt_session);
-#endif
 
 	client_free(cp);
 }
@@ -1791,224 +1773,11 @@ backup_repository(repcache_client_t *cp,
 	return (result);
 }
 
-/*
- * This function captures the information that will be used for an
- * annotation audit event.  Specifically, it captures the operation to be
- * performed and the name of the file that is being used.  These values are
- * copied from the rep_protocol_annotation request at rpr to the client
- * structure.  If both these values are null, the client is turning
- * annotation off.
- *
- * Fails with
- *	_NO_RESOURCES - unable to allocate memory
- */
 static rep_protocol_responseid_t
 set_annotation(repcache_client_t *cp, struct rep_protocol_annotation *rpr)
 {
-	au_id_t audit_uid;
-	const char *file = NULL;
-	const char *old_ptrs[2];
-	const char *operation = NULL;
-	rep_protocol_responseid_t rc = REP_PROTOCOL_FAIL_NO_RESOURCES;
-	au_asid_t sessionid;
-
-	(void) memset(old_ptrs, 0, sizeof (old_ptrs));
-
-	/* Copy rpr_operation and rpr_file if they are not empty strings. */
-	if (rpr->rpr_operation[0] != 0) {
-		/*
-		 * Make sure that client did not send us an unterminated buffer.
-		 */
-		rpr->rpr_operation[sizeof (rpr->rpr_operation) - 1] = 0;
-		if ((operation = strdup(rpr->rpr_operation)) == NULL)
-			goto out;
-	}
-	if (rpr->rpr_file[0] != 0) {
-		/*
-		 * Make sure that client did not send us an unterminated buffer.
-		 */
-		rpr->rpr_file[sizeof (rpr->rpr_file) - 1] = 0;
-		if ((file = strdup(rpr->rpr_file)) == NULL)
-			goto out;
-	}
-
-	(void) pthread_mutex_lock(&cp->rc_annotate_lock);
-	/* Save addresses of memory to free when not locked */
-	old_ptrs[0] = cp->rc_operation;
-	old_ptrs[1] = cp->rc_file;
-
-	/* Save pointers to annotation strings. */
-	cp->rc_operation = operation;
-	cp->rc_file = file;
-
-	/*
-	 * Set annotation flag.  Annotations should be turned on if either
-	 * operation or file are not NULL.
-	 */
-	cp->rc_annotate = (operation != NULL) || (file != NULL);
-	(void) pthread_mutex_unlock(&cp->rc_annotate_lock);
-
-	/*
-	 * operation and file pointers are saved in cp, so don't free them
-	 * during cleanup.
-	 */
-	operation = NULL;
-	file = NULL;
-	rc = REP_PROTOCOL_SUCCESS;
-
-	/*
-	 * Native builds are done to create svc.configd-native.  This
-	 * program runs only on the Open Solaris build machines to create
-	 * the seed repository.  Until the SMF auditing code is distributed
-	 * to the Open Solaris build machines, adt_get_unique_id() in the
-	 * following code is not a global function in libbsm.  Hence the
-	 * following conditional compilation.
-	 */
-#ifndef	NATIVE_BUILD
-	/*
-	 * Set the appropriate audit session id.
-	 */
-	if (cp->rc_annotate) {
-		/*
-		 * We're starting a group of annotated audit events, so
-		 * create and set an audit session ID for this annotation.
-		 */
-		adt_get_auid(cp->rc_adt_session, &audit_uid);
-		sessionid = adt_get_unique_id(audit_uid);
-	} else {
-		/*
-		 * Annotation is done so restore our client audit session
-		 * id.
-		 */
-		sessionid = cp->rc_adt_sessionid;
-	}
-	adt_set_asid(cp->rc_adt_session, sessionid);
-#endif	/* NATIVE_BUILD */
-
-out:
-	if (operation != NULL)
-		free((void *)operation);
-	if (file != NULL)
-		free((void *)file);
-	free((void *)old_ptrs[0]);
-	free((void *)old_ptrs[1]);
-	return (rc);
+	return REP_PROTOCOL_SUCCESS;
 }
-
-/*
- * Determine if an annotation event needs to be generated.  If it does
- * provide the operation and file name that should be used in the event.
- *
- * Can return:
- *	0		No annotation event needed or buffers are not large
- *			enough.  Either way an event should not be
- *			generated.
- *	1		Generate annotation event.
- */
-int
-client_annotation_needed(char *operation, size_t oper_sz,
-    char *file, size_t file_sz)
-{
-	thread_info_t *ti = thread_self();
-	repcache_client_t *cp = ti->ti_active_client;
-	int rc = 0;
-
-	(void) pthread_mutex_lock(&cp->rc_annotate_lock);
-	if (cp->rc_annotate) {
-		rc = 1;
-		if (cp->rc_operation == NULL) {
-			if (oper_sz > 0)
-				operation[0] = 0;
-		} else {
-			if (strlcpy(operation, cp->rc_operation, oper_sz) >=
-			    oper_sz) {
-				/* Buffer overflow, so do not generate event */
-				rc = 0;
-			}
-		}
-		if (cp->rc_file == NULL) {
-			if (file_sz > 0)
-				file[0] = 0;
-		} else if (rc == 1) {
-			if (strlcpy(file, cp->rc_file, file_sz) >= file_sz) {
-				/* Buffer overflow, so do not generate event */
-				rc = 0;
-			}
-		}
-	}
-	(void) pthread_mutex_unlock(&cp->rc_annotate_lock);
-	return (rc);
-}
-
-void
-client_annotation_finished()
-{
-	thread_info_t *ti = thread_self();
-	repcache_client_t *cp = ti->ti_active_client;
-
-	(void) pthread_mutex_lock(&cp->rc_annotate_lock);
-	cp->rc_annotate = 0;
-	(void) pthread_mutex_unlock(&cp->rc_annotate_lock);
-}
-
-#ifndef	NATIVE_BUILD
-static void
-start_audit_session(repcache_client_t *cp)
-{
-	ucred_t *cred = NULL;
-	adt_session_data_t *session;
-
-	/*
-	 * A NULL session pointer value can legally be used in all
-	 * subsequent calls to adt_* functions.
-	 */
-	cp->rc_adt_session = NULL;
-
-	if (!adt_audit_state(AUC_AUDITING))
-		return;
-
-	if (door_ucred(&cred) != 0) {
-		switch (errno) {
-		case EAGAIN:
-		case ENOMEM:
-			syslog(LOG_ERR, gettext("start_audit_session(): cannot "
-			    "get ucred.  %m\n"));
-			return;
-		case EINVAL:
-			/*
-			 * Door client went away.  This is a normal,
-			 * although infrequent event, so there is no need
-			 * to create a syslog message.
-			 */
-			return;
-		case EFAULT:
-		default:
-			bad_error("door_ucred", errno);
-			return;
-		}
-	}
-	if (adt_start_session(&session, NULL, 0) != 0) {
-		syslog(LOG_ERR, gettext("start_audit_session(): could not "
-		    "start audit session.\n"));
-		ucred_free(cred);
-		return;
-	}
-	if (adt_set_from_ucred(session, cred, ADT_NEW) != 0) {
-		syslog(LOG_ERR, gettext("start_audit_session(): cannot set "
-		    "audit session data from ucred\n"));
-		/* Something went wrong.  End the session. */
-		(void) adt_end_session(session);
-		ucred_free(cred);
-		return;
-	}
-
-	/* All went well.  Save the session data and session ID */
-	cp->rc_adt_session = session;
-	adt_get_asid(session, &cp->rc_adt_sessionid);
-
-	ucred_free(cred);
-}
-#endif
 
 /*
  * Handle switch client request
@@ -2458,10 +2227,6 @@ create_client(pid_t pid, uint32_t debugflags, int privileged, int *out_fd)
 	cp->rc_all_auths = privileged;
 	cp->rc_pid = pid;
 	cp->rc_debug = debugflags;
-
-#ifndef	NATIVE_BUILD
-	start_audit_session(cp);
-#endif
 
 	cp->rc_doorfd = door_create(client_switcher, (void *)cp->rc_id,
 	    door_flags);

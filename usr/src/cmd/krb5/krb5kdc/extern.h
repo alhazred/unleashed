@@ -108,16 +108,6 @@ extern krb5_keyblock	psr_key;	/* key for predicted sam response */
 extern volatile int signal_requests_exit;
 extern volatile int signal_requests_hup;
 
-/* libbsm */ 
-extern void audit_krb5kdc_as_req(struct in_addr *, in_port_t, in_port_t,
-				char *, char *, int);
-extern void audit_krb5kdc_tgs_req(struct in_addr *, in_port_t, in_port_t,
-				char *, char *, int);
-extern void audit_krb5kdc_tgs_req_2ndtktmm(struct in_addr *, in_port_t,
-					in_port_t, char *, char *);
-extern void audit_krb5kdc_tgs_req_alt_tgt(struct in_addr *, in_port_t,
-					in_port_t, char *, char *, int);
-
 #ifdef	__cplusplus
 }
 #endif

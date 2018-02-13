@@ -45,7 +45,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	global:
 		_nss_nis_bootparams_constr;
 		_nss_nis_auth_attr_constr;
- 		_nss_nis_audit_user_constr;
 		_nss_nis_ethers_constr;
  		_nss_nis_exec_attr_constr;
 		_nss_nis_group_constr;

@@ -27,9 +27,8 @@
 #include <assert.h>
 #include <auth_attr.h>
 #include <auth_list.h>
-#include <bsm/adt.h>
-#include <bsm/adt_event.h>
 #include <ctype.h>
+#include <door.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <libgen.h>
@@ -234,14 +233,6 @@ nwam_backend_door_server(void *cookie, char *arg, size_t arg_size,
 		write = B_FALSE;
 	if ((err = nwam_check_auths(uid, write, req->nwbda_flags))
 	    != NWAM_SUCCESS) {
-		if (write) {
-			nwam_record_audit_event(ucr,
-			    req->nwbda_cmd == NWAM_BACKEND_DOOR_CMD_UPDATE_REQ ?
-			    ADT_netcfg_update : ADT_netcfg_remove,
-			    (char *)req->nwbda_object,
-			    (char *)req->nwbda_dbname, ADT_FAILURE,
-			    ADT_FAIL_VALUE_AUTH);
-		}
 		req->nwbda_result = err;
 		goto door_return;
 	}
@@ -287,10 +278,6 @@ nwam_backend_door_server(void *cookie, char *arg, size_t arg_size,
 		nwam_free_object_list(obj);
 		if (req->nwbda_result == NWAM_SUCCESS) {
 			req->nwbda_datalen = 0;
-			nwam_record_audit_event(ucr, ADT_netcfg_update,
-			    (char *)req->nwbda_object,
-			    (char *)req->nwbda_dbname, ADT_SUCCESS,
-			    ADT_SUCCESS);
 		}
 		break;
 
@@ -299,12 +286,6 @@ nwam_backend_door_server(void *cookie, char *arg, size_t arg_size,
 		    (strlen(req->nwbda_dbname) > 0 ? req->nwbda_dbname : NULL,
 		    strlen(req->nwbda_object) > 0 ? req->nwbda_object : NULL,
 		    req->nwbda_flags);
-		if (req->nwbda_result == NWAM_SUCCESS) {
-			nwam_record_audit_event(ucr, ADT_netcfg_update,
-			    (char *)req->nwbda_object,
-			    (char *)req->nwbda_dbname, ADT_SUCCESS,
-			    ADT_SUCCESS);
-		}
 		break;
 
 	default:

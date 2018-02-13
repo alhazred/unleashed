@@ -131,11 +131,7 @@
 #include <sys/traptrace.h>
 #endif	/* TRAPTRACE */
 
-#include <c2/audit.h>
 #include <sys/clock_impl.h>
-
-extern void audit_enterprom(int);
-extern void audit_exitprom(int);
 
 /*
  * Tunable to enable apix PSM; if set to 0, pcplusmp PSM will be used.
@@ -395,15 +391,9 @@ void
 abort_sequence_enter(char *msg)
 {
 	if (abort_enable == 0) {
-		if (AU_ZONE_AUDITING(GET_KCTX_GZ))
-			audit_enterprom(0);
 		return;
 	}
-	if (AU_ZONE_AUDITING(GET_KCTX_GZ))
-		audit_enterprom(1);
 	debug_enter(msg);
-	if (AU_ZONE_AUDITING(GET_KCTX_GZ))
-		audit_exitprom(1);
 }
 
 /*

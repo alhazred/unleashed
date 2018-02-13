@@ -53,7 +53,6 @@
 #include <sys/isa_defs.h>
 #include <sys/systeminfo.h>
 #include <sys/lwp.h>
-#include <bsm/audit.h>
 #include <libproc.h>
 #include <priv.h>
 #include <sys/aio.h>
@@ -1221,30 +1220,6 @@ prt_aio(private_t *pri, int raw, long val)	/* print kaio() code */
 			(void) strlcpy(buf, s, sizeof (buf));
 			(void) strlcat(buf, "|AIO_POLL_BIT", sizeof (buf));
 			s = (const char *)buf;
-		}
-	}
-
-	if (s == NULL)
-		prt_dec(pri, 0, val);
-	else
-		outstring(pri, s);
-}
-
-void
-prt_aud(private_t *pri, int raw, long val)	/* print auditsys() code */
-{
-	const char *s = NULL;
-
-	if (!raw) {
-		switch (val) {
-		case BSM_GETAUID:	s = "BSM_GETAUID";	break;
-		case BSM_SETAUID:	s = "BSM_SETAUID";	break;
-		case BSM_GETAUDIT:	s = "BSM_GETAUDIT";	break;
-		case BSM_SETAUDIT:	s = "BSM_SETAUDIT";	break;
-		case BSM_AUDIT:		s = "BSM_AUDIT";	break;
-		case BSM_AUDITCTL:	s = "BSM_AUDITCTL";	break;
-		case BSM_GETAUDIT_ADDR:	s = "BSM_GETAUDIT_ADDR"; break;
-		case BSM_SETAUDIT_ADDR:	s = "BSM_SETAUDIT_ADDR"; break;
 		}
 	}
 
@@ -2747,7 +2722,6 @@ void (* const Print[])() = {
 	prt_whn,	/* WHN -- print lseek() whence arguiment */
 	prt_acl,	/* ACL -- print acl() code */
 	prt_aio,	/* AIO -- print kaio() code */
-	prt_aud,	/* AUD -- print auditsys() code */
 	prt_uns,	/* DEC -- print value in unsigned decimal */
 	prt_cor,	/* COR -- print corectl() subcode */
 	prt_cco,	/* CCO -- print corectl() options */

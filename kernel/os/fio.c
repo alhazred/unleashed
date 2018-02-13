@@ -58,7 +58,6 @@
 #include <sys/port_impl.h>
 #include <sys/dtrace.h>
 
-#include <c2/audit.h>
 #include <sys/nbmlock.h>
 
 #ifdef DEBUG
@@ -929,11 +928,6 @@ closef(file_t *fp)
 	int flag;
 	offset_t offset;
 
-	/*
-	 * audit close of file (may be exit)
-	 */
-	if (AU_AUDITING())
-		audit_closef(fp);
 	ASSERT(MUTEX_NOT_HELD(&P_FINFO(curproc)->fi_lock));
 
 	mutex_enter(&fp->f_tlock);
@@ -970,11 +964,6 @@ closef(file_t *fp)
 		(*dtrace_closef)();
 
 	VN_RELE(vp);
-	/*
-	 * deallocate resources to audit_data
-	 */
-	if (audit_active)
-		audit_unfalloc(fp);
 	crfree(fp->f_cred);
 	kmem_cache_free(file_cache, fp);
 	return (error);
@@ -1105,13 +1094,7 @@ falloc(vnode_t *vp, int flag, file_t **fpp, int *fdp)
 	fp->f_flag = (uint32_t)flag;
 	fp->f_vnode = vp;
 	fp->f_offset = 0;
-	fp->f_audit_data = 0;
 	crhold(fp->f_cred = CRED());
-	/*
-	 * allocate resources to audit_data
-	 */
-	if (audit_active)
-		audit_falloc(fp);
 	*fpp = fp;
 	if (fdp)
 		*fdp = fd;
@@ -1149,11 +1132,6 @@ unfalloc(file_t *fp)
 {
 	ASSERT(MUTEX_HELD(&fp->f_tlock));
 	if (--fp->f_count <= 0) {
-		/*
-		 * deallocate resources to audit_data
-		 */
-		if (audit_active)
-			audit_unfalloc(fp);
 		crfree(fp->f_cred);
 		mutex_exit(&fp->f_tlock);
 		kmem_cache_free(file_cache, fp);
@@ -1170,9 +1148,6 @@ setf(int fd, file_t *fp)
 {
 	uf_info_t *fip = P_FINFO(curproc);
 	uf_entry_t *ufp;
-
-	if (AU_AUDITING())
-		audit_setf(fp, fd);
 
 	if (fp == NULL) {
 		mutex_enter(&fip->fi_lock);
@@ -1548,8 +1523,6 @@ fsetattrat(int fd, char *path, int flags, struct vattr *vap)
 
 	if ((error = fgetstartvp(fd, path, &startvp)) != 0)
 		return (error);
-	if (AU_AUDITING() && startvp != NULL)
-		audit_setfsat_path(1);
 
 	/*
 	 * Do lookup for fchownat/fchmodat when path not NULL

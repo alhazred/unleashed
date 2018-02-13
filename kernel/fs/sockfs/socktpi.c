@@ -68,8 +68,6 @@
 #include <sys/tihdr.h>
 #include <sys/timod.h>		/* TI_GETMYNAME, TI_GETPEERNAME */
 
-#include <c2/audit.h>
-
 #include <inet/common.h>
 #include <inet/ip.h>
 #include <inet/ip6.h>
@@ -2404,9 +2402,6 @@ sotpi_connect(struct sonode *so,
 	soisconnecting(so);
 	mutex_exit(&so->so_lock);
 
-	if (AU_AUDITING())
-		audit_sock(T_CONN_REQ, strvp2wq(SOTOV(so)), mp, 0);
-
 	error = kstrputmsg(SOTOV(so), mp, NULL, 0, 0,
 	    MSG_BAND|MSG_HOLDSIG|MSG_IGNERROR, 0);
 	mp = NULL;
@@ -3558,8 +3553,6 @@ sosend_dgramcmsg(struct sonode *so, struct sockaddr *name, socklen_t namelen,
 	ASSERT(MBLKL(mp) <= (ssize_t)size);
 
 	ASSERT(mp->b_wptr <= mp->b_datap->db_lim);
-	if (AU_AUDITING())
-		audit_sock(T_UNITDATA_REQ, strvp2wq(SOTOV(so)), mp, 0);
 
 	error = kstrputmsg(SOTOV(so), mp, uiop, len, 0, MSG_BAND, 0);
 #ifdef SOCK_DEBUG
@@ -3867,9 +3860,6 @@ sosend_dgram(struct sonode *so, struct sockaddr	*name, socklen_t namelen,
 		mp->b_wptr += _TPI_ALIGN_TOPT(srclen) - srclen;
 		ASSERT(mp->b_wptr <= mp->b_datap->db_lim);
 	}
-
-	if (AU_AUDITING())
-		audit_sock(T_UNITDATA_REQ, strvp2wq(SOTOV(so)), mp, 0);
 
 	error = kstrputmsg(SOTOV(so), mp, uiop, len, 0, MSG_BAND, 0);
 done:
@@ -4456,7 +4446,6 @@ sodgram_direct(struct sonode *so, struct sockaddr *name,
 	boolean_t		connected;
 	mblk_t			*mpdata = NULL;
 	sotpi_info_t		*sti = SOTOTPI(so);
-	uint32_t		auditing = AU_AUDITING();
 
 	ASSERT(name != NULL && namelen != 0);
 	ASSERT(!(so->so_mode & SM_CONNREQUIRED));
@@ -4521,8 +4510,6 @@ sodgram_direct(struct sonode *so, struct sockaddr *name,
 			linkb(mp, mpdata);
 		else
 			mp = mpdata;
-		if (auditing)
-			audit_sock(T_UNITDATA_REQ, strvp2wq(SOTOV(so)), mp, 0);
 
 		udp_wput(udp_wq, mp);
 		return (0);
@@ -4540,9 +4527,6 @@ sodgram_direct(struct sonode *so, struct sockaddr *name,
 	 */
 	if (connected)
 		return (strwrite(SOTOV(so), uiop, CRED()));
-
-	if (auditing)
-		audit_sock(T_UNITDATA_REQ, strvp2wq(SOTOV(so)), mp, 0);
 
 	error = kstrputmsg(SOTOV(so), mp, uiop, len, 0, MSG_BAND, 0);
 done:

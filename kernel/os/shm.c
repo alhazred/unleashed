@@ -122,8 +122,6 @@
 #include <vm/vpage.h>
 #include <vm/seg_spt.h>
 
-#include <c2/audit.h>
-
 static int shmem_lock(kshmid_t *sp, struct anon_map *amp);
 static void shmem_unlock(kshmid_t *sp, struct anon_map *amp);
 static void sa_add(struct proc *pp, caddr_t addr, size_t len, ulong_t flags,
@@ -222,7 +220,7 @@ _init(void)
 	int result;
 
 	shm_svc = ipcs_create("shmids", rc_project_shmmni, rc_zone_shmmni,
-	    sizeof (kshmid_t), shm_dtor, shm_rmid, AT_IPC_SHM,
+	    sizeof (kshmid_t), shm_dtor, shm_rmid,
 	    offsetof(ipc_rqty_t, ipcq_shmmni));
 	zone_key_create(&shm_zone_key, NULL, shm_remove_zone, NULL);
 
@@ -903,9 +901,6 @@ top:
 
 		lock = ipc_commit_end(shm_svc, &sp->shm_perm);
 	}
-
-	if (AU_AUDITING())
-		audit_ipcget(AT_IPC_SHM, (void *)sp);
 
 	*rvp = (uintptr_t)(sp->shm_perm.ipc_id);
 

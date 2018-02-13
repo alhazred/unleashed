@@ -29,7 +29,7 @@ OBJECTS=	unix_cred.o
 
 include		../../Makefile.pam_modules
 
-LDLIBS		+= -lbsm -lpam -lsecdb -lproject -lc
+LDLIBS		+= -lpam -lsecdb -lproject -lc
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
 

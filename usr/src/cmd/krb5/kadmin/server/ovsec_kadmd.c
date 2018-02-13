@@ -153,8 +153,6 @@ extern kadm5_ret_t kiprop_get_adm_host_srv_name(
 static int schpw;
 
 
-in_port_t l_port = 0;	/* global local port num, for BSM audits */
-
 int nofork = 0; /* global; don't fork (debug mode) */
 
 
@@ -680,7 +678,6 @@ int main(int argc, char *argv[])
      memset((char *) &addr, 0, sizeof (struct sockaddr_in));
      addr.sin_family = AF_INET;
      addr.sin_addr.s_addr = INADDR_ANY;
-     l_port = addr.sin_port = htons(params.kadmind_port);
      sin = &addr;
 
 	if ((handlep = setnetconfig()) == NULL) {

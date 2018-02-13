@@ -58,7 +58,8 @@
 #include <exec_attr.h>
 #include <prof_attr.h>
 #include <user_attr.h>
-#include <bsm/libbsm.h>
+#include <priv.h>
+#include <sys/param.h>
 
 static int send_to_cachemgr(const char *,
     ns_ldap_attr_t **, ns_ldap_error_t **);
@@ -3526,73 +3527,6 @@ __s_cvt_userattr(const void *data, char **rdn,
 	return (NS_LDAP_SUCCESS);
 }
 /*
- * Conversion:			audit_user
- * Input format:		au_user_str_t
- * Exported objectclass:	SolarisAuditUser
- */
-static int
-__s_cvt_audituser(const void *data, char **rdn,
-    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
-{
-	ns_ldap_entry_t	*e;
-	int		rc;
-	char		trdn[RDNSIZE];
-	/* routine specific */
-	au_user_str_t	*ptr;
-	int		max_attr = 3;
-	static		char *oclist[] = {
-			"SolarisAuditUser",
-			NULL
-			};
-
-	if (data == NULL || rdn == NULL || entry == NULL || errorp == NULL)
-		return (NS_LDAP_OP_FAILED);
-
-	*entry = e = __s_mk_entry(oclist, max_attr);
-	if (e == NULL)
-		return (NS_LDAP_MEMORY);
-
-	/* Convert the structure */
-	ptr = (au_user_str_t *)data;
-
-	if (ptr->au_name == NULL || ptr->au_name[0] == '\0') {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_INVALID_PARAM);
-	}
-
-	/* Create an appropriate rdn */
-	(void) snprintf(trdn, RDNSIZE, "uid=%s", ptr->au_name);
-	*rdn = strdup(trdn);
-	if (*rdn == NULL) {
-		__ns_ldap_freeEntry(e);
-		*entry = NULL;
-		return (NS_LDAP_MEMORY);
-	}
-
-	/*
-	 * Solaris AuditUser has no uid attribute
-	 */
-
-	if (ptr->au_always != NULL) {
-		rc = __s_add_attr(e, "SolarisAuditAlways", ptr->au_always);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
-	}
-
-	if (ptr->au_never != NULL) {
-		rc = __s_add_attr(e, "SolarisAuditNever", ptr->au_never);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
-	}
-
-	return (NS_LDAP_SUCCESS);
-}
-/*
  * Add Typed Entry Conversion data structures
  */
 
@@ -3627,7 +3561,6 @@ static __ns_cvt_type_t __s_cvtlist[] = {
 	{ NS_LDAP_TYPE_USERATTR,	AE, __s_cvt_userattr },
 	{ NS_LDAP_TYPE_AUTOMOUNT,	0, __s_cvt_auto_mount },
 	{ NS_LDAP_TYPE_PUBLICKEY,	AE, __s_cvt_publickey },
-	{ NS_LDAP_TYPE_AUUSER,		AE, __s_cvt_audituser },
 	{ NS_LDAP_TYPE_PROJECT,		0,  __s_cvt_project },
 	{ NULL,				0, NULL },
 };

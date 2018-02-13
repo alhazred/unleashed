@@ -65,7 +65,6 @@ SUBDIRS +=				\
 	../cmd/sgs/libelf	\
 	../cmd/sgs/librtld_db	\
 	abi		\
-	auditd_plugins	\
 	brand		\
 	cfgadm_plugins	\
 	crypt_modules	\
@@ -88,7 +87,6 @@ SUBDIRS +=				\
 	libbe		\
 	libbrand	\
 	libbsdmalloc	\
-	libbsm		\
 	libc_db		\
 	libcfgadm	\
 	libcmd		\
@@ -249,14 +247,12 @@ DCSUBDIRS=
 
 MSGSUBDIRS=		\
 	abi		\
-	auditd_plugins	\
 	brand		\
 	cfgadm_plugins	\
 	gss_mechs/mech_dh	\
 	gss_mechs/mech_krb5	\
 	krb5		\
 	libast		\
-	libbsm		\
 	libc		\
 	libcfgadm	\
 	libcmd		\
@@ -300,14 +296,12 @@ MSGSUBDIRS=		\
 i386_MSGSUBDIRS= libfdisk
 
 HDRSUBDIRS=				\
-	auditd_plugins	\
 	fm		\
 	hal		\
 	hbaapi		\
 	libads		\
 	libast		\
 	libbrand	\
-	libbsm		\
 	libc		\
 	libcmd		\
 	libcmdutils	\
@@ -473,13 +467,11 @@ dbusdeps:	libsecdb libinetutil libscf libgen libsmbios
 # before everything else:
 # libc libm libmd libmp libnsl libnvpair
 abi:		libctf libmapmalloc libproc
-auditd_plugins: libbsm libsecdb libgss libmtmalloc
 brand:		libzonecfg libmapmalloc
 cfgadm_plugins:	libdevice libdevinfo libhotplug librcm hbaapi libkstat libscf
 fm:		libexacct libipmi libzfs scsi libdevinfo libdevid libcfgadm \
 		libcontract libsysevent ../cmd/sgs/libelf libdladm libsff \
 		libpcidb
-hal:		libbsm
 gss_mechs/mech_dh: libgss
 gss_mechs/mech_dummy: libgss
 gss_mechs/mech_krb5: libgss libresolv2 pkcs11 libkstat
@@ -488,7 +480,6 @@ hal:		dbusdeps
 krb5:		gss_mechs/mech_krb5 libtecla libldap5
 libadutils:	libldap5 libresolv2
 libbe:		libzfs libzonecfg libuuid libgen libdevinfo libefi libficl
-libbsm:		libinetutil libscf libsecdb
 libcfgadm:	libdevinfo
 libcmd:		libsum libast
 libcmdutils:	libavl
@@ -525,7 +516,7 @@ libmapid:	libresolv2 libscf
 libmlrpc:	libsmbfs libuuid
 libndmp:	libscf
 libnisdb:	libldap5
-libnwam:	libscf libbsm libdladm libipadm
+libnwam:	libscf libdladm libipadm
 libpctx:	libproc
 libpool:	libscf libexacct
 libpp:		libast
@@ -557,14 +548,14 @@ libvscan:	libscf libsecdb
 libzfs:		libdevid libgen libadm libavl libefi libidmap \
 		libumem libzfs_core
 libzonecfg:	libuuid libsysevent libsec libbrand libpool libscf libproc \
-		libbsm libsecdb
+		libsecdb
 libzonestat:	libcmdutils libumem
 libzpool:	libavl libumem libcmdutils libsysevent
 madv:		libgen
 mpapi:		libpthread libdevinfo libsysevent
 mpss:		libgen
 nsswitch:	libadutils libidmap libdns_sd libscf libldap5 libsldap
-pam_modules:	libproject passwdutil smbsrv libpam libbsm libsecdb
+pam_modules:	libproject passwdutil smbsrv libpam libsecdb
 passwdutil:	libsldap
 pkcs11:		libcryptoutil libgen libuuid
 policykit:	dbusdeps

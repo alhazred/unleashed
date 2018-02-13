@@ -419,8 +419,6 @@
 #include <sys/task.h>
 #include <sys/modctl.h>
 
-#include <c2/audit.h>
-
 static struct modlmisc modlmisc = {
 	&mod_miscops,
 	"common ipc code",
@@ -502,7 +500,7 @@ ipcperm_access(kipc_perm_t *p, int mode, cred_t *cr)
  *   ipcperm_???_64     - for use with IPC_SET64/STAT64
  *
  * These functions encapsulate the common portions (copying, permission
- * checks, and auditing) of the set/stat operations.  All, except for
+ * checks) of the set/stat operations.  All, except for
  * stat and stat_64 which are void, return 0 on success or a non-zero
  * errno value on error.
  */
@@ -534,9 +532,6 @@ ipcperm_set(ipc_service_t *service, struct cred *cr,
 	kperm->ipc_uid = uid;
 	kperm->ipc_gid = gid;
 	kperm->ipc_mode = (mode & 0777) | (kperm->ipc_mode & ~0777);
-
-	if (AU_AUDITING())
-		audit_ipcget(service->ipcs_atype, kperm);
 
 	return (0);
 }
@@ -576,9 +571,6 @@ ipcperm_set64(ipc_service_t *service, struct cred *cr,
 	kperm->ipc_gid = perm64->ipcx_gid;
 	kperm->ipc_mode = (perm64->ipcx_mode & 0777) |
 	    (kperm->ipc_mode & ~0777);
-
-	if (AU_AUDITING())
-		audit_ipcget(service->ipcs_atype, kperm);
 
 	return (0);
 }
@@ -638,8 +630,7 @@ ipc_key_compar(const void *a, const void *b)
  */
 ipc_service_t *
 ipcs_create(const char *name, rctl_hndl_t proj_rctl, rctl_hndl_t zone_rctl,
-    size_t size, ipc_func_t *dtor, ipc_func_t *rmid, int audit_type,
-    size_t rctl_offset)
+    size_t size, ipc_func_t *dtor, ipc_func_t *rmid, size_t rctl_offset)
 {
 	ipc_service_t *result;
 
@@ -657,7 +648,6 @@ ipcs_create(const char *name, rctl_hndl_t proj_rctl, rctl_hndl_t zone_rctl,
 	result->ipcs_rmid = rmid;
 	result->ipcs_proj_rctl = proj_rctl;
 	result->ipcs_zone_rctl = zone_rctl;
-	result->ipcs_atype = audit_type;
 	ASSERT(rctl_offset < sizeof (ipc_rqty_t));
 	result->ipcs_rctlofs = rctl_offset;
 	list_create(&result->ipcs_usedids, sizeof (kipc_perm_t),
@@ -803,8 +793,6 @@ ipc_lookup(ipc_service_t *service, int id, kipc_perm_t **perm)
 	ASSERT(IPC_SEQ(id) == service->ipcs_table[index].ipct_seq);
 
 	*perm = result;
-	if (AU_AUDITING())
-		audit_ipc(service->ipcs_atype, id, result);
 
 	return (&service->ipcs_table[index].ipct_lock);
 }
@@ -925,8 +913,6 @@ ipc_keylookup(ipc_service_t *service, key_t key, int flag, kipc_perm_t **permp)
 		if ((flag & (IPC_CREAT | IPC_EXCL)) == (IPC_CREAT | IPC_EXCL))
 			return (EEXIST);
 		if ((flag & 0777) & ~perm->ipc_mode) {
-			if (AU_AUDITING())
-				audit_ipcget(0, (void *)perm);
 			return (EACCES);
 		}
 		*permp = perm;
@@ -1105,7 +1091,7 @@ errout:
 /*
  * Commit the ID allocation transaction.  Called with p_lock and the
  * service lock held, both of which are dropped.  Returns the held ID
- * lock so the caller can extract the ID and perform ipcget auditing.
+ * lock so the caller can extract the ID.
  */
 kmutex_t *
 ipc_commit_end(ipc_service_t *service, kipc_perm_t *perm)

@@ -196,7 +196,6 @@ ndmp_close(ndmp_connection_t *connection_handle)
 {
 	ndmp_connection_t *connection = (ndmp_connection_t *)connection_handle;
 
-	ndmpd_audit_disconnect(connection);
 	if (connection->conn_sock >= 0) {
 		(void) mutex_destroy(&connection->conn_lock);
 		(void) close(connection->conn_sock);
@@ -335,15 +334,8 @@ ndmpd_worker(void *ptarg)
 		exit(1);
 	}
 
-	/* initialize auditing session */
-	if (adt_start_session(&connection->conn_ah, NULL, 0) != 0) {
-		free(argp);
-		return ((void *)-1);
-	}
-
 	((ndmp_connection_t *)connection)->conn_sock = sock;
 	(*argp->nw_con_handler_func)(connection);
-	(void) adt_end_session(connection->conn_ah);
 	ndmp_destroy_connection(connection);
 	NS_DEC(trun);
 
@@ -1490,145 +1482,6 @@ get_default_nic_addr(void)
 	free(al);
 
 	return (inet_ntoa(IN_ADDR(addr.s_addr)));
-}
-
-
-/*
- * ndmpd_audit_backup
- *
- * Generate AUE_ndmp_backup audit record
- */
-/*ARGSUSED*/
-void
-ndmpd_audit_backup(ndmp_connection_t *conn,
-    char *path, int dest, char *local_path, int result)
-{
-	adt_event_data_t *event;
-
-	if ((event = adt_alloc_event(conn->conn_ah, ADT_ndmp_backup)) == NULL) {
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-		return;
-	}
-	event->adt_ndmp_backup.source = path;
-
-	if (dest == NDMP_ADDR_LOCAL) {
-		event->adt_ndmp_backup.local_dest = local_path;
-	} else {
-		event->adt_ndmp_backup.remote_dest = conn->conn_sock;
-	}
-
-	if (result == 0) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0)
-			NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-	} else {
-		if (adt_put_event(event, ADT_FAILURE, result) != 0)
-			NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-	}
-
-	adt_free_event(event);
-}
-
-
-/*
- * ndmpd_audit_restore
- *
- * Generate AUE_ndmp_restore audit record
- */
-/*ARGSUSED*/
-void
-ndmpd_audit_restore(ndmp_connection_t *conn,
-    char *path, int dest, char *local_path, int result)
-{
-	adt_event_data_t *event;
-
-	if ((event = adt_alloc_event(conn->conn_ah,
-	    ADT_ndmp_restore)) == NULL) {
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-		return;
-	}
-	event->adt_ndmp_restore.destination = path;
-
-	if (dest == NDMP_ADDR_LOCAL) {
-		event->adt_ndmp_restore.local_source = local_path;
-	} else {
-		event->adt_ndmp_restore.remote_source = conn->conn_sock;
-	}
-
-	if (result == 0) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0)
-			NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-	} else {
-		if (adt_put_event(event, ADT_FAILURE, result) != 0)
-			NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-	}
-
-	adt_free_event(event);
-}
-
-
-/*
- * ndmpd_audit_connect
- *
- * Generate AUE_ndmp_connect audit record
- */
-/*ARGSUSED*/
-void
-ndmpd_audit_connect(ndmp_connection_t *conn, int result)
-{
-	adt_event_data_t *event;
-	adt_termid_t *termid;
-
-	if (adt_load_termid(conn->conn_sock, &termid) != 0) {
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-		return;
-	}
-
-	if (adt_set_user(conn->conn_ah, ADT_NO_ATTRIB, ADT_NO_ATTRIB,
-	    ADT_NO_ATTRIB, ADT_NO_ATTRIB, termid, ADT_NEW) != 0) {
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-		free(termid);
-		return;
-	}
-	free(termid);
-
-	if ((event = adt_alloc_event(conn->conn_ah,
-	    ADT_ndmp_connect)) == NULL) {
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-		return;
-	}
-
-	if (result == 0) {
-		if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0)
-			NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-	} else {
-		if (adt_put_event(event, ADT_FAILURE, result) != 0)
-			NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-	}
-
-	adt_free_event(event);
-}
-
-
-/*
- * ndmpd_audit_disconnect
- *
- * Generate AUE_ndmp_disconnect audit record
- */
-/*ARGSUSED*/
-void
-ndmpd_audit_disconnect(ndmp_connection_t *conn)
-{
-	adt_event_data_t *event;
-
-	if ((event = adt_alloc_event(conn->conn_ah,
-	    ADT_ndmp_disconnect)) == NULL) {
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-		return;
-	}
-	if (adt_put_event(event, ADT_SUCCESS, ADT_SUCCESS) != 0)
-		NDMP_LOG(LOG_ERR, "Audit failure: %m.");
-
-	adt_free_event(event);
 }
 
 void *

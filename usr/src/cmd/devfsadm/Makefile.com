@@ -34,15 +34,13 @@ UTSBASE = $(COMMON)/../../uts
 
 DEVFSADM_MOD = devfsadm
 
-DEVALLOCSRC =	devalloc.c
-
 PLCYSRC = devpolicy.c plcysubr.c
 
 MODLOADDIR = $(COMMON)/../modload
 
 DEVFSADM_SRC = $(COMMON)/$(DEVFSADM_MOD:%=%.c) \
-		$(DEVALLOCSRC:%=$(COMMON)/%) $(PLCYSRC:%=$(COMMON)/%)
-DEVFSADM_OBJ = $(DEVFSADM_MOD:%=%.o) $(DEVALLOCSRC:%.c=%.o) $(PLCYSRC:%.c=%.o)
+		$(PLCYSRC:%=$(COMMON)/%)
+DEVFSADM_OBJ = $(DEVFSADM_MOD:%=%.o) $(PLCYSRC:%.c=%.o)
 
 DEVFSADM_DAEMON = devfsadmd
 
@@ -96,7 +94,7 @@ CERRWARN += -Wno-parentheses
 
 # Define the dependencies required by devfsadm and all shared objects.
 LDLIBS +=		-ldevinfo
-devfsadm :=		LDLIBS += -lgen -lsysevent -lnvpair -lzonecfg -lbsm
+devfsadm :=		LDLIBS += -lgen -lsysevent -lnvpair -lzonecfg
 SUNW_md_link.so :=	LDLIBS += -lmeta
 SUNW_disk_link.so :=	LDLIBS += -ldevid
 SUNW_sgen_link.so :=	LDLIBS += -ldevid
