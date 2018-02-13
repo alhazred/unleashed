@@ -43,7 +43,6 @@ MAN = 6to4relay.8 \
       boot.8 \
       bootadm.8 \
       busstat.8 \
-      captoinfo.8 \
       cfgadm.8 \
       cfgadm_ac.8 \
       cfgadm_fp.8 \
@@ -172,7 +171,6 @@ MAN = 6to4relay.8 \
       inetadm.8 \
       inetconv.8 \
       inetd.8 \
-      infocmp.8 \
       init.8 \
       inityp2l.8 \
       installboot.8 \
@@ -408,7 +406,6 @@ MAN = 6to4relay.8 \
       tcpdmatch.8 \
       th_define.8 \
       th_manage.8 \
-      tic.8 \
       traceroute.8 \
       trapstat.8 \
       ttyadm.8 \
