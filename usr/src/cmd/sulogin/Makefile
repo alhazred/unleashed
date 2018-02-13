@@ -41,8 +41,6 @@ $(PROG):	$(PROG).c
 		$(POST_PROCESS)
 
 install:	all $(ROOTSBINPROG)
-		$(RM) $(ROOTETCPROG)
-		$(SYMLINK) ../sbin/$(PROG) $(ROOTETCPROG)
 
 clean:
 

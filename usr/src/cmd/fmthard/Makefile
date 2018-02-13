@@ -29,17 +29,13 @@ PROG= fmthard
 include ../Makefile.cmd
 
 RELUSRSBIN=     ../usr/sbin
-ROOTSYMLINK=    $(ROOTETC)/$(PROG)
 LDLIBS +=	-ladm -lefi
 
 .KEEP_STATE:
 
 all: $(PROG)
 
-install: all $(ROOTUSRSBINPROG) $(ROOTSYMLINK)
-
-$(ROOTSYMLINK):
-	-$(RM) $@; $(SYMLINK) $(RELUSRSBIN)/$(PROG) $@
+install: all $(ROOTUSRSBINPROG)
 
 clean:
 

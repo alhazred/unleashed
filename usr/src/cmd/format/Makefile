@@ -53,7 +53,6 @@ CERRWARN += -Wno-clobbered
 
 SRCS= $(OBJS:.o=.c)
 
-ROOTSYMLINK= $(ROOTETCPROG)
 ROOTETCDATA= $(ROOTETC)/$(DATA)
 
 $(ROOTETCDATA) := FILEMODE = 0644
@@ -75,12 +74,9 @@ $(PROG): $(OBJS)
 	$(POST_PROCESS)
 
 #
-# Install format as /usr/sbin/format, with link from /etc/format
+# Install format as /usr/sbin/format
 #
-install: $(ROOTUSRSBINPROG) $(ROOTSYMLINK) $(ROOTETCDATA)
-
-$(ROOTSYMLINK):
-	$(RM) $@; $(SYMLINK) ../usr/sbin/$(PROG) $@
+install: $(ROOTUSRSBINPROG) $(ROOTETCDATA)
 
 clean:
 	$(RM) $(OBJS)

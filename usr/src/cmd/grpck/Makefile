@@ -30,7 +30,6 @@ include ../Makefile.cmd
 CERRWARN += -Wno-unused-variable
 
 RELUSRSBIN=	../usr/sbin
-ROOTSYMLINK=	$(ROOTETC)/$(PROG)
 
 .KEEP_STATE:
 
@@ -38,10 +37,7 @@ all: $(PROG)
 
 XGETFLAGS= -a -x grpck.xcl
 
-install: all $(ROOTUSRSBINPROG) $(ROOTSYMLINK)
-
-$(ROOTSYMLINK):
-	-$(RM) $@; $(SYMLINK) $(RELUSRSBIN)/$(PROG) $@
+install: all $(ROOTUSRSBINPROG)
 
 clean:
 

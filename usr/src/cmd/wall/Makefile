@@ -39,8 +39,6 @@ CERRWARN += -Wno-uninitialized
 all: $(PROG) 
 
 install: all $(ROOTUSRSBINPROG)
-	-$(RM) $(ROOTETCPROG)
-	-$(SYMLINK) ../usr/sbin/$(PROG) $(ROOTETCPROG)
 
 clean:
 

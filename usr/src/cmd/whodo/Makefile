@@ -48,16 +48,12 @@ all:	$(SUBDIRS)
 
 clean clobber:	$(SUBDIRS)
 
-install:	$(SUBDIRS) $(ROOTETCPROG)
+install:	$(SUBDIRS)
 	-$(RM) $(ROOTUSRSBINPROG)
 	-$(LN) $(ISAEXEC) $(ROOTUSRSBINPROG)
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
-
-$(ROOTETCPROG):
-	-$(RM) $@
-	-$(SYMLINK) ../usr/sbin/$(PROG) $@
 
 $(DCFILE):
 	$(RM) messages.po
