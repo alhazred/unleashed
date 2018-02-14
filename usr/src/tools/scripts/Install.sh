@@ -472,7 +472,7 @@ function copy_kernel {
 	make=dmake
 	dmvers=`$make -version`
 	if [ $? -ne 0 ]; then
-		make=/usr/ccs/bin/make
+		make=/usr/bin/make
 	elif [[ $dmvers = *Distributed?Make?7.3* ]]; then
 		unset make
 		searchpath="/ws/onnv-tools/SUNWspro/SOS10/bin
@@ -489,7 +489,7 @@ function copy_kernel {
 			fi
 		done
 		if [ -z $make ]; then
-			make=/usr/ccs/bin/make
+			make=/usr/bin/make
 			echo "Warning: dmake 7.3 doesn't work with Install;" \
 				"using $make"
 		fi

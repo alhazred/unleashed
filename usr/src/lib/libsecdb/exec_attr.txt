@@ -266,7 +266,7 @@ Software Installation:suser:cmd:::/usr/bin/pkgmk:uid=0
 Software Installation:suser:cmd:::/usr/bin/pkgparam:uid=0
 Software Installation:suser:cmd:::/usr/bin/pkgproto:uid=0
 Software Installation:suser:cmd:::/usr/bin/pkgtrans:uid=0
-Software Installation:suser:cmd:::/usr/ccs/bin/make:euid=0
+Software Installation:suser:cmd:::/usr/bin/make:euid=0
 Software Installation:suser:cmd:::/usr/sbin/install:euid=0
 Software Installation:suser:cmd:::/usr/sbin/pkgadd:uid=0;gid=bin
 Software Installation:suser:cmd:::/usr/sbin/pkgask:uid=0

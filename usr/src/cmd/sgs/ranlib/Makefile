@@ -34,7 +34,7 @@ include 	../../Makefile.cmd
 
 all:		$(PROG)
 
-install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
+install:	all $(ROOTPROG)
 
 clean:
 

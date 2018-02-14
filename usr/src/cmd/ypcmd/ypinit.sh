@@ -32,7 +32,7 @@
 
 # set -xv
 YPXFR=/usr/lib/netsvc/yp/ypxfr
-MAKEPATH=/usr/ccs/bin
+MAKEPATH=/usr/bin
 maps="publickey publickey.byname"
 yproot_dir=/var/yp
 yproot_exe=/usr/sbin/yp

@@ -63,7 +63,7 @@ static	int	match(char *line, char *name);
 static	int	_openchild(char *command, FILE **fto, FILE **ffrom);
 static	char	SHELL[] = "/bin/sh";
 static	char	UPDATEFILE[] = "updaters";
-static	char	MAKE[] = "/usr/ccs/bin/make";
+static	char	MAKE[] = "/usr/bin/make";
 
 /*
  * Determine if requester is allowed to update the given map,

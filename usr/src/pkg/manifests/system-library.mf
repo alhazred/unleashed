@@ -90,9 +90,6 @@ dir path=lib/secure
 dir path=lib/secure/$(ARCH64)
 dir path=usr group=sys
 dir path=usr/bin
-dir path=usr/ccs
-dir path=usr/ccs/lib
-dir path=usr/ccs/lib/$(ARCH64)
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/cfgadm
@@ -653,15 +650,6 @@ link path=lib/libw.so target=libw.so.1
 link path=lib/libxnet.so target=libxnet.so.1
 link path=lib/secure/32 target=.
 link path=lib/secure/64 target=$(ARCH64)
-link path=usr/ccs/lib/$(ARCH64)/libgen.so \
-    target=../../../../lib/$(ARCH64)/libgen.so.1
-link path=usr/ccs/lib/$(ARCH64)/libl.so \
-    target=../../../lib/$(ARCH64)/libl.so.1
-link path=usr/ccs/lib/$(ARCH64)/libmalloc.so \
-    target=../../../lib/$(ARCH64)/libmalloc.so.1
-link path=usr/ccs/lib/libgen.so target=../../../lib/libgen.so.1
-link path=usr/ccs/lib/libl.so target=../../lib/libl.so.1
-link path=usr/ccs/lib/libmalloc.so target=../../lib/libmalloc.so.1
 link path=usr/lib/$(ARCH64)/libadm.so \
     target=../../../lib/$(ARCH64)/libadm.so.1
 link path=usr/lib/$(ARCH64)/libadm.so.1 \

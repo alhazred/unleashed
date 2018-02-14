@@ -60,7 +60,7 @@ Target		ld_targ;
 #if	defined(_ELF64)
 static char	def_Plibpath[] = "/lib/64:/usr/lib/64";
 #else
-static char	def_Plibpath[] = "/usr/ccs/lib:/lib:/usr/lib";
+static char	def_Plibpath[] = "/lib:/usr/lib";
 #endif
 
 /*

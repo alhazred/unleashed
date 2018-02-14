@@ -91,7 +91,6 @@ keep_processing = True
 
 # Default search path for wsdiff
 wsdiff_path = [ "/usr/bin",
-		"/usr/ccs/bin",
 		"/lib/svc/bin",
 		"/opt/onbld/bin" ]
 
@@ -996,9 +995,9 @@ def compareArchives(base, ptch, fileType) :
 		ptchCmd = "cd " + ArchTmpDir2 + "; " + "jar xf " + bname + \
 			  "; rm -f " + bname + " META-INF/MANIFEST.MF"
 	elif fileType == "ELF Object Archive" :
-		baseCmd = "cd " + ArchTmpDir1 + "; " + "/usr/ccs/bin/ar x " + \
+		baseCmd = "cd " + ArchTmpDir1 + "; " + "/usr/bin/ar x " + \
 			  bname + "; rm -f " + bname
-		ptchCmd = "cd " + ArchTmpDir2 + "; " + "/usr/ccs/bin/ar x " + \
+		ptchCmd = "cd " + ArchTmpDir2 + "; " + "/usr/bin/ar x " + \
 			  bname + "; rm -f " + bname
 	else :
 		error("unexpected file type: " + fileType)

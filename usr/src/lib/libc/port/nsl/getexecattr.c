@@ -307,7 +307,7 @@ _doexeclist(nss_XbyY_args_t *argp)
 
 /*
  * Converts id to a wildcard string. e.g.:
- *   For type = KV_COMMAND: /usr/ccs/bin/what ---> /usr/ccs/bin/\* ---> \*
+ *   For type = KV_COMMAND: /usr/bin/what ---> /usr/bin/\* ---> \*
  *   For type = KV_ACTION: Dtfile;*;*;*;0 ---> *;*;*;*;*
  *
  * Returns NULL if id is already a wild-card.
@@ -332,11 +332,11 @@ _exec_wild_id(char *id, const char *type)
 			return (NULL);
 		else if (*(++pchar) == KV_WILDCHAR)
 			/*
-			 * id = /usr/ccs/bin/\*
+			 * id = /usr/bin/\*
 			 */
 			return (pchar);
 		/*
-		 * id = /usr/ccs/bin/what
+		 * id = /usr/bin/what
 		 */
 		(void) strcpy(pchar, KV_WILDCARD);
 		return (id);

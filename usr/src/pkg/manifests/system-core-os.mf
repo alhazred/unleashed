@@ -137,8 +137,6 @@ dir path=usr group=sys
 dir path=usr/bin
 dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
-dir path=usr/ccs
-dir path=usr/ccs/bin
 dir path=usr/games
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
@@ -1365,7 +1363,6 @@ link path=usr/bin/strclean target=../sbin/strclean
 link path=usr/bin/strerr target=../sbin/strerr
 link path=usr/bin/sync target=../../sbin/sync
 link path=usr/bin/tar target=../sbin/tar
-link path=usr/ccs/bin/m4 target=../../bin/m4
 link path=usr/lib/$(ARCH64)/ld.so.1 target=../../../lib/$(ARCH64)/ld.so.1
 link path=usr/lib/cron target=../../etc/cron.d
 link path=usr/lib/devfsadm/devfsadmd target=../../sbin/devfsadm

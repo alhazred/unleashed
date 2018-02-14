@@ -9,7 +9,7 @@
 #
 # In addition the script also "distills" code suitable for GNU
 # assembler, so that it can be compiled with more rigid assemblers,
-# such as Solaris /usr/ccs/bin/as.
+# such as Solaris /usr/bin/as.
 #
 # This translator is not designed to convert *arbitrary* assembler
 # code from AT&T format to MASM one. It's designed to convert just
@@ -196,7 +196,7 @@ my %globals;
     	my $self = shift;
 
 	if ($gas) {
-	    # Solaris /usr/ccs/bin/as can't handle multiplications
+	    # Solaris /usr/bin/as can't handle multiplications
 	    # in $self->{value}
 	    $self->{value} =~ s/(?<![\w\$\.])(0x?[0-9a-f]+)/oct($1)/egi;
 	    $self->{value} =~ s/([0-9]+\s*[\*\/\%]\s*[0-9]+)/eval($1)/eg;
@@ -246,7 +246,7 @@ my %globals;
 	$self->{index} =~ s/^[er](.?[0-9xpi])[d]?$/r\1/;
 	$self->{base}  =~ s/^[er](.?[0-9xpi])[d]?$/r\1/;
 
-	# Solaris /usr/ccs/bin/as can't handle multiplications
+	# Solaris /usr/bin/as can't handle multiplications
 	# in $self->{label}, new gas requires sign extension...
 	use integer;
 	$self->{label} =~ s/(?<![\w\$\.])(0x?[0-9a-f]+)/oct($1)/egi;

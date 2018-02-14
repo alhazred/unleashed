@@ -101,7 +101,7 @@ confstr(int name, char *buf, size_t length)
 	/* Keep _CS_PATH in sync with execvp.c */
 
 	if (name == _CS_PATH) {
-		path = "/usr/bin:/usr/ccs/bin:"
+		path = "/usr/bin:"
 		    "/opt/SUNWspro/bin";
 
 		conf_length = strlen(path) + 1;

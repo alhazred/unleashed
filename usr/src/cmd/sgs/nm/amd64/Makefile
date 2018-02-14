@@ -49,7 +49,7 @@ LDLIBS +=	$(CONVLIBDIR64) $(CONV_LIB) $(ELFLIBDIR) -lelf
 %.o:		../common/%.c
 		$(COMPILE.c) $<
 
-$(ROOTCCSBIN64)/%: %
+$(ROOTBIN64)/%: %
 	$(INS.file)
 
 .KEEP_STATE:
@@ -61,7 +61,7 @@ $(PROG):	$(OBJS)
 		$(POST_PROCESS)
 
 package \
-install:	all $(VAR_SGSBINPROG64) $(VAR_SGSCCSLINK64)
+install:	all $(VAR_SGSBINPROG64)
 
 clean:
 		$(RM) $(OBJS) $(CLEANFILES)

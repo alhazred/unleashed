@@ -38,7 +38,7 @@ include		$(SRC)/cmd/sgs/Makefile.com
 
 all:		$(PROG)
 
-install:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
+install:	all $(VAR_SGSBINPROG)
 
 clean:
 

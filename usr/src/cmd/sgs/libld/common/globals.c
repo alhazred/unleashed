@@ -53,7 +53,7 @@ char		*Ulibdir;	/* User specified -YU */
  * part of the path processing.
  */
 char		def64_Plibpath[] = "/lib/64:/usr/lib/64";
-char		def32_Plibpath[] = "/usr/ccs/lib:/lib:/usr/lib";
+char		def32_Plibpath[] = "/lib:/usr/lib";
 
 /*
  * Rejected file error messages (indexed to match SGS_REJ_ values).

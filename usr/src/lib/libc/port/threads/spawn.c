@@ -453,15 +453,15 @@ posix_spawnp(
 		 */
 		if (geteuid() == 0 || getuid() == 0) {
 			if (!xpg4)
-				pathstr = "/usr/sbin:/usr/ccs/bin:/usr/bin";
+				pathstr = "/usr/sbin:/usr/bin";
 			else
-				pathstr = "/usr/bin:/usr/ccs/bin:"
+				pathstr = "/usr/bin:"
 				    "/opt/SUNWspro/bin:/usr/sbin";
 		} else {
 			if (!xpg4)
-				pathstr = "/usr/ccs/bin:/usr/bin:";
+				pathstr = "/usr/bin:";
 			else
-				pathstr = "/usr/bin:/usr/ccs/bin:"
+				pathstr = "/usr/bin:"
 				    "/opt/SUNWspro/bin:";
 		}
 	}

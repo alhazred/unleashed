@@ -194,9 +194,6 @@ DIRS= \
 	/usr/ast/bin \
 	/usr/bin \
 	/usr/bin/$(MACH32) \
-	/usr/ccs \
-	/usr/ccs/bin \
-	/usr/ccs/lib \
 	/usr/games \
 	/usr/include \
 	/usr/include/ads \
@@ -354,8 +351,6 @@ DIRS64= \
 	/lib/fm/$(MACH64) \
 	/lib/secure/$(MACH64) \
 	/usr/bin/$(MACH64) \
-	/usr/ccs/bin/$(MACH64)  \
-	/usr/ccs/lib/$(MACH64) \
 	/usr/lib/$(MACH64) \
 	/usr/lib/$(MACH64)/gss \
 	/usr/lib/brand/sn1/$(MACH64) \
@@ -521,68 +516,20 @@ $(BUILD64) $(ROOT)/var/ld/64:=		LINKDEST=$(MACH64)
 $(DIRLINKS:%=$(ROOT)%):= \
    INS.dir= -$(RM) -r $@; $(SYMLINK) $(LINKDEST) $@
 
-# Special symlinks to populate usr/ccs/lib, whose objects
-# have actually been moved to usr/lib
 # Rather than adding another set of rules, we add usr/lib/lwp files here
-$(ROOT)/usr/ccs/lib/libgen.so:=		REALPATH=../../../lib/libgen.so.1
-$(ROOT)/usr/ccs/lib/libmalloc.so:=	REALPATH=../../lib/libmalloc.so.1
-$(ROOT)/usr/ccs/lib/values-Xa.o:=	REALPATH=../../lib/values-Xa.o
-$(ROOT)/usr/ccs/lib/values-Xc.o:=	REALPATH=../../lib/values-Xc.o
-$(ROOT)/usr/ccs/lib/values-Xs.o:=	REALPATH=../../lib/values-Xs.o
-$(ROOT)/usr/ccs/lib/values-Xt.o:=	REALPATH=../../lib/values-Xt.o
-$(ROOT)/usr/ccs/lib/values-xpg4.o:=	REALPATH=../../lib/values-xpg4.o
-$(ROOT)/usr/ccs/lib/values-xpg6.o:=	REALPATH=../../lib/values-xpg6.o
-$(ROOT)/usr/ccs/lib/libl.so:=		REALPATH=../../lib/libl.so.1
 $(ROOT)/usr/lib/lwp/libthread.so.1:=	REALPATH=../libthread.so.1
 $(ROOT)/usr/lib/lwp/libthread_db.so.1:=	REALPATH=../libthread_db.so.1
 
-# symlinks to populate usr/ccs/lib/$(MACH64)
-$(ROOT)/usr/ccs/lib/$(MACH64)/libgen.so:= \
-	REALPATH=../../../../lib/$(MACH64)/libgen.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/libmalloc.so:= \
-	REALPATH=../../../lib/$(MACH64)/libmalloc.so.1
-$(ROOT)/usr/ccs/lib/$(MACH64)/values-Xa.o:= \
-	REALPATH=../../../lib/$(MACH64)/values-Xa.o
-$(ROOT)/usr/ccs/lib/$(MACH64)/values-Xc.o:= \
-	REALPATH=../../../lib/$(MACH64)/values-Xc.o
-$(ROOT)/usr/ccs/lib/$(MACH64)/values-Xs.o:= \
-	REALPATH=../../../lib/$(MACH64)/values-Xs.o
-$(ROOT)/usr/ccs/lib/$(MACH64)/values-Xt.o:= \
-	REALPATH=../../../lib/$(MACH64)/values-Xt.o
-$(ROOT)/usr/ccs/lib/$(MACH64)/values-xpg4.o:= \
-	REALPATH=../../../lib/$(MACH64)/values-xpg4.o
-$(ROOT)/usr/ccs/lib/$(MACH64)/values-xpg6.o:= \
-	REALPATH=../../../lib/$(MACH64)/values-xpg6.o
-$(ROOT)/usr/ccs/lib/$(MACH64)/libl.so:= \
-	REALPATH=../../../lib/$(MACH64)/libl.so.1
 $(ROOT)/usr/lib/lwp/$(MACH64)/libthread.so.1:= \
 	REALPATH=../../$(MACH64)/libthread.so.1
 $(ROOT)/usr/lib/lwp/$(MACH64)/libthread_db.so.1:= \
 	REALPATH=../../$(MACH64)/libthread_db.so.1
 
 SYM.USRCCSLIB= \
-	/usr/ccs/lib/libgen.so \
-	/usr/ccs/lib/libmalloc.so \
-	/usr/ccs/lib/values-Xa.o \
-	/usr/ccs/lib/values-Xc.o \
-	/usr/ccs/lib/values-Xs.o \
-	/usr/ccs/lib/values-Xt.o \
-	/usr/ccs/lib/values-xpg4.o \
-	/usr/ccs/lib/values-xpg6.o \
-	/usr/ccs/lib/libl.so \
 	/usr/lib/lwp/libthread.so.1 \
 	/usr/lib/lwp/libthread_db.so.1
 
 SYM.USRCCSLIB64= \
-	/usr/ccs/lib/$(MACH64)/libgen.so \
-	/usr/ccs/lib/$(MACH64)/libmalloc.so \
-	/usr/ccs/lib/$(MACH64)/values-Xa.o \
-	/usr/ccs/lib/$(MACH64)/values-Xc.o \
-	/usr/ccs/lib/$(MACH64)/values-Xs.o \
-	/usr/ccs/lib/$(MACH64)/values-Xt.o \
-	/usr/ccs/lib/$(MACH64)/values-xpg4.o \
-	/usr/ccs/lib/$(MACH64)/values-xpg6.o \
-	/usr/ccs/lib/$(MACH64)/libl.so \
 	/usr/lib/lwp/$(MACH64)/libthread.so.1 \
 	/usr/lib/lwp/$(MACH64)/libthread_db.so.1
 

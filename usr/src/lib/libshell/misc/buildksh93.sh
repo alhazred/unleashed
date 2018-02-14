@@ -55,7 +55,7 @@ fi
 # side-effects
 export LANG=C
 export LC_ALL=$LANG LC_MONETARY=$LANG LC_NUMERIC=$LANG LC_MESSAGES=$LANG LC_COLLATE=$LANG LC_CTYPE=$LANG
-export PATH=/usr/ccs/bin:/usr/bin:/bin:/opt/SUNWspro/bin
+export PATH=/usr/bin:/bin:/opt/SUNWspro/bin
 
 function print_solaris_builtin_header
 {
@@ -121,7 +121,7 @@ extern "C" {
 #endif
 /*
  * Make all ksh93 builtins accessible when /usr/ast/bin was added to
- * /usr/ccs/bin:/usr/bin:/bin:/opt/SUNWspro/bin
+ * /usr/bin:/bin:/opt/SUNWspro/bin
  */
 #define	ASTCMDLIST(f)	\\
 	{ "/usr/ast/bin/" #f, NV_BLTIN|NV_BLTINOPT|NV_NOFREE, bltin(f) },

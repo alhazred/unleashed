@@ -24,8 +24,8 @@
 # Use is subject to license terms.
 #
 
-ROOTSTRIPFILEPROG=      $(STRIPFILE:%=$(ROOTCCSBIN)/%)
-ROOTSTRIPFILEPROG64=    $(STRIPFILE:%=$(ROOTCCSBIN64)/%)
+ROOTSTRIPFILEPROG=      $(STRIPFILE:%=$(ROOTBIN)/%)
+ROOTSTRIPFILEPROG64=    $(STRIPFILE:%=$(ROOTBIN64)/%)
 
 %.o:		../common/%.c
 		$(COMPILE.c) $<

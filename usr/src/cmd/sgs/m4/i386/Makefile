@@ -53,7 +53,7 @@ $(PROG):	$(OBJS)
 		$(POST_PROCESS)
 
 
-install:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
+install:	all $(VAR_SGSBINPROG)
 
 clean:
 		$(RM) $(OBJS)

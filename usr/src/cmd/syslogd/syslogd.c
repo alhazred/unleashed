@@ -2867,10 +2867,10 @@ checkm4(void)
 		mythreadno = pthread_self();
 	}
 
-	if (access("/usr/ccs/bin/m4", X_OK) < 0) {
+	if (access("/usr/bin/m4", X_OK) < 0) {
 		saverrno = errno;
-		logerror("/usr/ccs/bin/m4");
-		DPRINT2(1, "checkm4(%u): /usr/ccs/bin/m4 - access "
+		logerror("/usr/bin/m4");
+		DPRINT2(1, "checkm4(%u): /usr/bin/m4 - access "
 		    "returned %d\n", mythreadno, saverrno);
 		notfound++;
 	}
@@ -3237,7 +3237,7 @@ conf_init(void)
 		goto nofile;
 	}
 
-	if (checkm4() != 0 || conf_open(&cf, "/usr/ccs/bin/m4", m4argv) == -1) {
+	if (checkm4() != 0 || conf_open(&cf, "/usr/bin/m4", m4argv) == -1) {
 		DPRINT2(1, "conf_init(%u): cannot open %s\n", mythreadno,
 		    ConfFile);
 		/* CSTYLED */

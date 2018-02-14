@@ -34,7 +34,7 @@
 # single "-". The newline previous to the 1st "-" must be "\" quoted.
 # Special keywords in <expression>:
 #	file =~ -> $file =~ where $file is `/bin/file /path/to/object`
-#	dump =~ -> $dump =~ where $dump is `/usr/ccs/bin/dump /path/to/object`
+#	dump =~ -> $dump =~ where $dump is `/usr/bin/dump /path/to/object`
 #	needed =~ -> $needed =~ where $needed is a list of all ldd needed libs.
 #	syms =~ -> $syms =~ where $syms is a string of the direct symbols.
 #

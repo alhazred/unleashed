@@ -37,8 +37,8 @@ CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-parentheses
 
 
-AR=     /usr/ccs/bin/ar
-RANLIB= /usr/ccs/bin/ranlib
+AR=     /usr/bin/ar
+RANLIB= /usr/bin/ranlib
 RM=     /usr/bin/rm -f
 
 LIBCSRCS        = device_ctl.c \

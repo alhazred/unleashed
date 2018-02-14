@@ -38,7 +38,7 @@ all:		$(PROG)
 
 all_lib:	$(LIBS)
 
-install:	all $(ROOTPROG) $(ROOTFORMS) $(ROOTCCSBINLINK)
+install:	all $(ROOTPROG) $(ROOTFORMS)
 
 install_lib:	all_lib $(ROOTLIBS) $(ROOTLINKS) $(DYNLINKLIB)
 

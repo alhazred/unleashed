@@ -38,7 +38,7 @@
 extern "C" {
 #endif
 
-#define	_PATH_DEFPATH	"/usr/ccs/bin:/usr/bin:/bin"
+#define	_PATH_DEFPATH	"/usr/bin:/bin"
 #define	_PATH_STDPATH   _PATH_DEFPATH ":/usr/sbin:/sbin"
 
 #define	_PATH_BPF	"/dev/bpf"

@@ -120,11 +120,9 @@ UNUSED_RPATH	/usr/lib/mps.*\ from\ .*libssl3\.so
 UNUSED_RPATH	/usr/X11/lib.*\ from\ .*libglib-2\.0\.so\.0
 UNUSED_RPATH	/usr/X11/lib.*\ from\ .*libgobject-2\.0\.so\.0
 UNUSED_RPATH	/usr/X11/lib.*\ from\ .*libgthread-2\.0\.so\.0
-UNUSED_RPATH	/usr/ccs/lib.*\ from\ .*libgcc_s\.so\.1
 UNUSED_RPATH	/usr/lib.*\ from\ .*libgcc_s\.so\.1
 UNUSED_RPATH	/usr/postgres/8.3/lib.*\ from\ .*libpq\.so\.5
 UNUSED_RPATH	/usr/lib.*\ from\ .*/usr/lib/mps
-UNUSED_RPATH	/usr/ccs/lib.*\ from\ .*/usr/lib/mps
 UNUSED_RPATH	/usr/gnu/lib.*\ from\ .*/usr/lib/libpython2\..
 UNUSED_RPATH	/usr/gnu/lib.*\ from\ .*/usr/lib/64/libpython2\..
 UNUSED_RPATH	/usr/snadm/lib.*\ from\ .*/usr/snadm/lib/libspmicommon\.so\.1

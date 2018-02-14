@@ -29,7 +29,7 @@
 all:		$(PROG)
 
 package \
-install:	all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
+install:	all $(VAR_SGSBINPROG)
 
 %.o:		../common/%.c
 		$(COMPILE.c) $<

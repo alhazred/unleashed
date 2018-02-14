@@ -68,8 +68,6 @@ dirs="	$SRCTOP/proto \
 	$SRCTOP/proto/root_$MACH/usr/lib/pics \
 	$SRCTOP/proto/root_$MACH/usr/4lib \
 	$SRCTOP/proto/root_$MACH/usr/bin \
-	$SRCTOP/proto/root_$MACH/usr/ccs \
-	$SRCTOP/proto/root_$MACH/usr/ccs/bin \
 	$SRCTOP/proto/root_$MACH/usr/include \
 	$SRCTOP/proto/root_$MACH/usr/include/sys \
 	$SRCTOP/proto/root_$MACH/etc \
@@ -101,7 +99,6 @@ if [ "${MACH64}x" != x ]; then
 	dirs="$dirs \
 	$SRCTOP/proto/root_$MACH/lib/$MACH64 \
 	$SRCTOP/proto/root_$MACH/usr/bin/$MACH64 \
-	$SRCTOP/proto/root_$MACH/usr/ccs/bin/$MACH64 \
 	$SRCTOP/proto/root_$MACH/usr/lib/$MACH64 \
 	$SRCTOP/proto/root_$MACH/usr/lib/abi/$MACH64 \
 	$SRCTOP/proto/root_$MACH/usr/lib/link_audit/$MACH64 \

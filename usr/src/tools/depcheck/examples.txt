@@ -182,7 +182,7 @@ Analyzing /usr/bin/chkey:
 /usr/lib/libresolv.so.2:SUNWcsl
 /etc/nsswitch.conf:SUNWcsr
 /etc/publickey:SUNWnisr
-/usr/ccs/bin/make:SUNWsprot
+/usr/bin/make:SUNWsprot
 
 
 Analyzing /usr/bin/getent:
@@ -387,7 +387,7 @@ Analyzing /usr/sbin/newkey:
 /usr/lib/libresolv.so.2:SUNWcsl
 /etc/nsswitch.conf:SUNWcsr
 /etc/publickey:SUNWnisr
-/usr/ccs/bin/make:SUNWsprot
+/usr/bin/make:SUNWsprot
 
 
 Analyzing /usr/sbin/rpc.rexd:

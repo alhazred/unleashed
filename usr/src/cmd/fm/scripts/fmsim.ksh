@@ -25,7 +25,7 @@
 #
 #ident	"%Z%%M%	%I%	%E% SMI"
 
-export PATH=/usr/bin:/usr/sbin:/usr/ccs/bin
+export PATH=/usr/bin:/usr/sbin
 unset ENV TMPDIR
 umask 022
 cwd=$PWD

@@ -126,11 +126,11 @@ execvpe(const char *name, char *const *argv, char *const *envp)
 	}
 	if ((pathstr = getenv("PATH")) == NULL) {
 		if (geteuid() == 0 || getuid() == 0) {
-			pathstr = "/usr/bin:/usr/ccs/bin:/usr/bin:"
+			pathstr = "/usr/bin:"
 				    "/opt/SUNWspro/bin:/usr/sbin";
 			
 		} else {
-				pathstr = "/usr/bin:/usr/ccs/bin:"
+				pathstr = "/usr/bin:"
 				    "/opt/SUNWspro/bin:";
 		}
 	}

@@ -100,7 +100,7 @@ VERSION=${VERSION:-"`basename $INCROOT`:`date '+%m/%d/%y'`"}; export VERSION
 MACH=`uname -p`; export MACH
 TMPDIR=/tmp; export TMPDIR
 NODENAME=`uname -n`; export NODENAME
-PATH="$PUBLIC/bin:$PUBLIC/bin/$MACH:/opt/onbld/bin:/opt/onbld/bin/$MACH:/opt/SUNWspro/bin:/usr/ccs/bin:/usr/bin:/usr/sbin:/usr/openwin/bin:."; export PATH
+PATH="$PUBLIC/bin:$PUBLIC/bin/$MACH:/opt/onbld/bin:/opt/onbld/bin/$MACH:/opt/SUNWspro/bin:/usr/bin:/usr/sbin:/usr/openwin/bin:."; export PATH
 MAKEFLAGS=e; export MAKEFLAGS
 
 #

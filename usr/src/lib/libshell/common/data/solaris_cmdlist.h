@@ -59,7 +59,7 @@ extern "C" {
 #endif
 /*
  * Make all ksh93 builtins accessible when /usr/ast/bin was added to
- * /usr/ccs/bin:/usr/bin:/bin:/opt/SUNWspro/bin
+ * /usr/bin:/bin:/opt/SUNWspro/bin
  */
 #define	ASTCMDLIST(f)	\
 	{ "/usr/ast/bin/" #f, NV_BLTIN|NV_BLTINOPT|NV_NOFREE, bltin(f) },

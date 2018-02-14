@@ -310,7 +310,7 @@ update(requester, mapname, op, keylen, key, datalen, data)
 	int yperrno = 0;
 	int pid;
 
-	sprintf(updater, "/usr/ccs/bin/make -s -f %s %s", UPDATEFILE, mapname);
+	sprintf(updater, "/usr/bin/make -s -f %s %s", UPDATEFILE, mapname);
 #ifdef DEBUG
 	fprintf(stderr, "updater: %s\n", updater);
 	fprintf(stderr, "requestor = %s, op = %d, key = %s\n",

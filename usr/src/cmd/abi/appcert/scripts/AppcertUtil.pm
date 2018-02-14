@@ -156,8 +156,8 @@ my $LC_ALL = '';
 # Get the name of the program:
 $command_name = basename($0);
 
-$cmd_dump	= '/usr/ccs/bin/dump';
-$cmd_elfdump	= '/usr/ccs/bin/elfdump';
+$cmd_dump	= '/usr/bin/dump';
+$cmd_elfdump	= '/usr/bin/elfdump';
 $cmd_file	= '/usr/bin/file';
 $cmd_find	= '/usr/bin/find';
 $cmd_ldd	= '/usr/bin/ldd';
@@ -338,7 +338,7 @@ sub cmd_output_file
 }
 
 #
-# When appcert started up, it stored the /usr/ccs/bin/dump output in the
+# When appcert started up, it stored the /usr/bin/dump output in the
 # app's output directory (appcert: record_binary()). This subroutine
 # retrieves it.  If it cannot find it, it runs the dump -Lv command
 # instead.  The result is stored in memory in %cmd_output_dump_cache
@@ -371,7 +371,7 @@ sub cmd_output_dump
 		}
 	}
 
-	# Otherwise run /usr/ccs/bin/dump -Lv on it:
+	# Otherwise run /usr/bin/dump -Lv on it:
 	if (! defined($str) && -f $filename && $filename !~ /'/) {
 		c_locale(1);
 		$str = `$cmd_dump -Lv '$filename' 2>/dev/null`;

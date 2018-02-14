@@ -76,17 +76,12 @@ VAR_DTRDIR=             $(SRCBASE)/common/dtrace
 #
 # For Solaris 10 and earlier releases, the SGS components were installed in
 # /usr/ccs/bin.  These components are now installed in /usr/bin with associated
-# symbolic links for compatibility. For previous behavior, set the VAR_SGSBIN*
-# variables to the appropriate ROOTCCSBIN* rule and set the VAR_SGSCCSLINK*
-# rules to null.
+# symbolic links for compatibility.
 #
 VAR_SGSBIN=		$(ROOTBIN)
 VAR_SGSBINPROG=		$(ROOTPROG)
 VAR_SGSBIN64=		$(ROOTBIN64)
 VAR_SGSBINPROG64=	$(ROOTPROG64)
-
-VAR_SGSCCSLINK=		$(ROOTCCSBINLINK)
-VAR_SGSCCSLINK64=	$(ROOTCCSBINLINK64)
 
 #
 # ld

@@ -35,6 +35,6 @@ DEFLIST=	-DI386 -DELF
 
 all:		$(PROG)
 
-install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
+install:	all $(ROOTPROG)
 
 include		../Makefile.targ

@@ -34,10 +34,6 @@ dir path=usr group=sys
 dir path=usr/bin
 dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
-dir path=usr/ccs
-dir path=usr/ccs/bin
-dir path=usr/ccs/bin/$(ARCH64)
-dir path=usr/ccs/lib
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/abi
@@ -107,9 +103,6 @@ license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license lic_OSBL license=lic_OSBL
 license lic_OSBL_preamble license=lic_OSBL_preamble
-link path=usr/ccs/bin/$(ARCH64)/ld target=../../../bin/$(ARCH64)/ld
-link path=usr/ccs/bin/ld target=../../bin/ld
-link path=usr/ccs/bin/regcmp target=../../bin/regcmp
 link path=usr/lib/ld/$(ARCH64)/map.above4G target=../map.above4G
 link path=usr/lib/ld/$(ARCH64)/map.below4G target=../map.below4G
 link path=usr/lib/ld/$(ARCH64)/map.default target=../map.default

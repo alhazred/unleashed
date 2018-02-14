@@ -31,6 +31,4 @@ include		../Makefile.com
 include		../Makefile.targ
 
 install \
-package:	all $(VAR_SGSBINPROG) $(ROOTLINKS) $(VAR_SGSCCSLINK)
-		$(RM) $(ROOTSTRIPFILEPROG)
-		$(SYMLINK) ../../bin/$(STRIPFILE) $(ROOTSTRIPFILEPROG)
+package:	all $(VAR_SGSBINPROG) $(ROOTLINKS)

@@ -77,7 +77,7 @@ delete:
 		$(RM) $(PROG)
 
 package \
-install:        all $(VAR_SGSBINPROG) $(VAR_SGSCCSLINK)
+install:        all $(VAR_SGSBINPROG)
 
 include		$(SRC)/cmd/Makefile.targ
 include		$(SRC)/cmd/sgs/Makefile.targ

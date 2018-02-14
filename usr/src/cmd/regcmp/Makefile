@@ -33,7 +33,7 @@ CERRWARN += -Wno-parentheses
 
 all: $(PROG)
 
-install: all $(ROOTPROG) $(ROOTCCSBINLINK)
+install: all $(ROOTPROG)
 
 clean:
 	$(RM) $(PROG)

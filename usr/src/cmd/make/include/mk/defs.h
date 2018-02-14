@@ -74,7 +74,7 @@
  * New feature added to SUN5_0 make,  invoke the vanilla svr4 make when
  * the USE_SVR4_MAKE environment variable is set.
  */
-#define SVR4_MAKE		"/usr/ccs/lib/svr4.make"
+#define SVR4_MAKE		"/usr/lib/svr4.make"
 #define USE_SVR4_MAKE		"USE_SVR4_MAKE"
 /*
  * The standard MAXHOSTNAMELEN is 64. We want 32.

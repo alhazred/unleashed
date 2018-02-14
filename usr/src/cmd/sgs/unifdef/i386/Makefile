@@ -49,7 +49,7 @@ $(PROG):	$(OBJS)
 		$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 		$(POST_PROCESS)
 
-install:	all $(ROOTPROG) $(ROOTCCSBINLINK)
+install:	all $(ROOTPROG)
 
 clean:
 		$(RM) $(OBJS) $(CLEANFILES)

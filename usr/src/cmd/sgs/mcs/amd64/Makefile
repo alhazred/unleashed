@@ -38,9 +38,7 @@ ROOTLINKS=	$(VAR_SGSBIN64)/$(STRIPFILE)
 VAR_SGSBINPROG=	$(VAR_SGSBINPROG64)
 
 install \
-package:	all $(VAR_SGSBINPROG64) $(ROOTLINKS) $(VAR_SGSCCSLINK64)
-		$(RM) $(ROOTSTRIPFILEPROG64)
-		$(SYMLINK) ../../../bin/$(MACH64)/$(STRIPFILE) $(ROOTSTRIPFILEPROG64)
+package:	all $(VAR_SGSBINPROG64) $(ROOTLINKS)
 
 include		../Makefile.targ
 include		../../Makefile.sub.64

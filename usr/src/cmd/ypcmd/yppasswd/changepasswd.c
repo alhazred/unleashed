@@ -772,7 +772,7 @@ cleanup:
 		if (retval < 0) {
 			syslog(LOG_ERR, "yppasswdd: Fork failed %m");
 		} else if (retval == 0) {
-			strcpy(cmdbuf, "/usr/ccs/bin/make");
+			strcpy(cmdbuf, "/usr/bin/make");
 			for (i = Mstart + 1; i < Argc; i++) {
 				strcat(cmdbuf, " ");
 				strcat(cmdbuf, Argv[i]);

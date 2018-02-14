@@ -158,9 +158,9 @@ main(int argc, char **argv)
 
 	for (i = 1, errorflag = 0, dfexcl = 0; i < argc; i++) {
 		if (argv[i][0] == '-' && argv[i][1] == 'm') {
-		    if (access("/usr/ccs/bin/make", X_OK) < 0)
+		    if (access("/usr/bin/make", X_OK) < 0)
 			fprintf(stderr,
-				"%s: /usr/ccs/bin/make is not available, "
+				"%s: /usr/bin/make is not available, "
 				"ignoring -m option",
 				argv[0]);
 		    else {

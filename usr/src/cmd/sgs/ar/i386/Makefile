@@ -28,7 +28,7 @@ include		../Makefile.com
 all:		$(PROG)
 
 install \
-package:	all $(ROOTPROG) $(ROOTCCSBINLINK)
+package:	all $(ROOTPROG)
 
 
 

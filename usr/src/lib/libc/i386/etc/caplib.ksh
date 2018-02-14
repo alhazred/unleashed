@@ -44,7 +44,7 @@ if [ -z "$FLASH_DIR" ]; then
 fi
 
 CHMOD=/usr/bin/chmod
-ELFDUMP=/usr/ccs/bin/elfdump
+ELFDUMP=/usr/bin/elfdump
 MOUNT=/usr/sbin/mount
 UMOUNT=/usr/sbin/umount
 EGREP=/usr/bin/egrep

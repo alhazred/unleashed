@@ -33,6 +33,6 @@ include 	../Makefile.com
 
 all:		$(PROG)
 
-install:	all .WAIT $(ROOTPROG) $(ROOTLIBBLURB) $(ROOTCCSBINLINK)
+install:	all .WAIT $(ROOTPROG) $(ROOTLIBBLURB)
 
 include		../Makefile.targ

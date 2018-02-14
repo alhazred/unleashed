@@ -309,13 +309,13 @@ ___
 	$code.="\t_align	@X[$i],@X[$i+1],@X[$i]\n";	}
 $code.=<<___;
 L\$aligned
-	nop	; otherwise /usr/ccs/bin/as is confused by below .WORD
+	nop	; otherwise /usr/bin/as is confused by below .WORD
 ___
 
 for($i=0;$i<16;$i++)	{ &ROUND_00_15($i,@V); unshift(@V,pop(@V)); }
 $code.=<<___;
 L\$rounds
-	nop	; otherwise /usr/ccs/bin/as is confused by below .WORD
+	nop	; otherwise /usr/bin/as is confused by below .WORD
 ___
 for(;$i<32;$i++)	{ &ROUND_16_xx($i,@V); unshift(@V,pop(@V)); }
 $code.=<<___;

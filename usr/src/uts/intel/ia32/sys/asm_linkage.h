@@ -48,7 +48,7 @@ extern "C" {
  */
 #if !defined(__GNUC_AS__)
 /*
- * /usr/ccs/bin/as prefixes are parsed as separate instructions
+ * /usr/bin/as prefixes are parsed as separate instructions
  */
 #define	D16	data16;
 #define	A16	addr16;

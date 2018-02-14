@@ -94,7 +94,7 @@ CHMOD=		/usr/bin/chmod
 MV=		/usr/bin/mv -f
 RM=		/usr/bin/rm -f
 CUT=		/usr/bin/cut
-NM=		/usr/ccs/bin/nm
+NM=		/usr/bin/nm
 DIFF=		/usr/bin/diff
 GREP=		/usr/bin/grep
 EGREP=		/usr/bin/egrep
@@ -103,12 +103,12 @@ KSH93=		/usr/bin/ksh93
 SED=		/usr/bin/sed
 AWK=		/usr/bin/nawk
 CP=		/usr/bin/cp -f
-MCS=		/usr/ccs/bin/mcs
+MCS=		/usr/bin/mcs
 CAT=            /usr/bin/cat
-ELFDUMP=	/usr/ccs/bin/elfdump
+ELFDUMP=	/usr/bin/elfdump
 M4=		/usr/bin/m4
-STRIP=		/usr/ccs/bin/strip
-LEX=		/usr/ccs/bin/lex
+STRIP=		/usr/bin/strip
+LEX=		/usr/bin/lex
 LFLAGS=		-n
 FLEX=		/usr/bin/flex
 YACC=		/usr/bin/yacc
@@ -584,26 +584,26 @@ BASIC_AS_ARGS=	-x assembler-with-cpp \
 sparc_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 sparc_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 sparc_CPP=		$(GCC_ROOT)/bin/cpp
-sparc_AS=		/usr/ccs/bin/as -xregsym=no
-sparc_LD=		/usr/ccs/bin/ld
+sparc_AS=		/usr/bin/as -xregsym=no
+sparc_LD=		/usr/bin/ld
 
 sparcv9_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 sparcv9_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 sparcv9_CPP=		$(GCC_ROOT)/bin/cpp
-sparcv9_AS=		/usr/ccs/bin/as -xregsym=no
-sparcv9_LD=		/usr/ccs/bin/ld
+sparcv9_AS=		/usr/bin/as -xregsym=no
+sparcv9_LD=		/usr/bin/ld
 
 i386_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 i386_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 i386_CPP=		$(GCC_ROOT)/bin/cpp
 i386_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
-i386_LD=		/usr/ccs/bin/ld
+i386_LD=		/usr/bin/ld
 
 amd64_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
 amd64_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GCC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 amd64_CPP=		$(GCC_ROOT)/bin/cpp
 amd64_AS=		$(GCC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
-amd64_LD=		/usr/ccs/bin/ld
+amd64_LD=		/usr/bin/ld
 
 NATIVECC=		$($(NATIVE_MACH)_CC)
 NATIVECCC=		$($(NATIVE_MACH)_CCC)

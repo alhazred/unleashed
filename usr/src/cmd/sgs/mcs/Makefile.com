@@ -33,7 +33,7 @@ include		$(SRC)/cmd/Makefile.cmd
 include		$(SRC)/cmd/sgs/Makefile.com
 
 # avoid bootstrap problems
-MCS =		/usr/ccs/bin/mcs
+MCS =		/usr/bin/mcs
 
 COMOBJS =	main.o		file.o		utils.o		global.o \
 		message.o
