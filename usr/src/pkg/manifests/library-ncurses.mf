@@ -17,6 +17,7 @@ set name=pkg.fmri \
 set name=pkg.description \
     value="A CRT screen handling and optimization package."
 set name=pkg.summary value="A CRT screen handling and optimization package."
+dir path=usr/share/man/man1m
 dir path=usr/share/man/man3x
 dir path=usr/share/tabset
 dir path=usr/share/terminfo
