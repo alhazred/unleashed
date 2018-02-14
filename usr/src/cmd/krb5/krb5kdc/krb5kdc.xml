@@ -62,7 +62,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='krb5kdc' section='1M'
+			<manpage title='krb5kdc' section='8'
 			    manpath='/usr/share/man' />
 		</documentation>
 	</template>

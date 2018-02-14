@@ -204,7 +204,7 @@ typedef struct {
 /*
  * zone_status values
  *
- * You must modify zone_status_names in mdb(1M)'s genunix module
+ * You must modify zone_status_names in mdb(8)'s genunix module
  * (genunix/zone.c) when you modify this enum.
  */
 typedef enum {

@@ -99,9 +99,9 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='powerd' section='1M' manpath='/usr/share/man' />
-			<manpage title='pmconfig' section='1M' manpath='/usr/share/man' />
-			<manpage title='dtpower' section='1M' manpath='/usr/share/man' />
+			<manpage title='powerd' section='8' manpath='/usr/share/man' />
+			<manpage title='pmconfig' section='8' manpath='/usr/share/man' />
+			<manpage title='dtpower' section='8' manpath='/usr/share/man' />
 			<manpage title='power.conf' section='4' manpath='/usr/share/man' />
 		</documentation>
 	</template>

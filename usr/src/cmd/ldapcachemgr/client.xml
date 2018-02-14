@@ -95,7 +95,7 @@ Information Service lookups
 			</loctext>
 		</description>
 		<documentation>
-			<manpage title='ldap_cachemgr' section='1M' manpath='/usr/share/man' />
+			<manpage title='ldap_cachemgr' section='8' manpath='/usr/share/man' />
 		</documentation>
 	</template>
 

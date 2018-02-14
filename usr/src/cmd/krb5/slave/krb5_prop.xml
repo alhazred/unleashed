@@ -69,7 +69,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='kpropd' section='1M'
+			<manpage title='kpropd' section='8'
 			    manpath='/usr/share/man' />
 		</documentation>
 	</template>

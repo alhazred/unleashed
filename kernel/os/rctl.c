@@ -169,7 +169,7 @@
  *
  *      rctl->rc_values - a linked list of rctl_val_t.  These are the active
  *      resource values associated with this rctl, and may have been set by
- *      setrctl() - via prctl(1M), or by setprojrctl() - via
+ *      setrctl() - via prctl(8), or by setprojrctl() - via
  *      setproject(3PROJECT).
  *
  *      rctl->rc_projdb - a linked list of rctl_val_t.  These reflect the

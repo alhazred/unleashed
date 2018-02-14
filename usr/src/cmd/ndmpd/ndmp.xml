@@ -150,7 +150,7 @@ POSSIBILITY OF SUCH DAMAGE.
 			<loctext xml:lang='C'> NDMP Service</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='ndmpd' section='1M'
+			<manpage title='ndmpd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

@@ -1591,16 +1591,16 @@ sanity_check(char *zone, int cmd_num, boolean_t running,
 	if (getzoneid() != GLOBAL_ZONEID) {
 		switch (cmd_num) {
 		case CMD_HALT:
-			zerror(gettext("use %s to %s this zone."), "halt(1M)",
+			zerror(gettext("use %s to %s this zone."), "halt(8)",
 			    cmd_to_str(cmd_num));
 			break;
 		case CMD_SHUTDOWN:
 			zerror(gettext("use %s to %s this zone."),
-			    "shutdown(1M)", cmd_to_str(cmd_num));
+			    "shutdown(8)", cmd_to_str(cmd_num));
 			break;
 		case CMD_REBOOT:
 			zerror(gettext("use %s to %s this zone."),
-			    "reboot(1M)", cmd_to_str(cmd_num));
+			    "reboot(8)", cmd_to_str(cmd_num));
 			break;
 		default:
 			zerror(gettext("must be in the global zone to %s a "
@@ -5205,7 +5205,7 @@ check_sched_fss(zone_dochandle_t handle)
 		    "FSS is not the default scheduling class for this zone.  "
 		    "FSS will be\nused for processes in the zone but to get "
 		    "the full benefit of FSS,\nit should be the default "
-		    "scheduling class.  See dispadmin(1M) for\nmore details."));
+		    "scheduling class.  See dispadmin(8) for\nmore details."));
 		return (Z_SYSTEM);
 	}
 

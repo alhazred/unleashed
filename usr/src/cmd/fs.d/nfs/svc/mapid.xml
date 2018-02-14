@@ -111,7 +111,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='nfsmapid' section='1M'
+			<manpage title='nfsmapid' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

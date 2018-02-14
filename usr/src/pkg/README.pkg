@@ -144,7 +144,7 @@ available from /opt/onbld/bin or usr/src/tools/scripts/ to setup and
 upgrade your system.  A manpage is available in /opt/onbld/man
 or usr/src/tools/scripts/onu.1.
 
-Alternatively, you can manually start a pkg.depot(1M) server to
+Alternatively, you can manually start a pkg.depot(8) server to
 serve the generated repository to multiple test machines.
 
 	Start up a depot on your build machine.

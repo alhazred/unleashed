@@ -29,8 +29,8 @@
 /*
  * Console support for zones requires a significant infrastructure.  The
  * core pieces are contained in this file, but other portions of note
- * are in the zlogin(1M) command, the zcons(7D) driver, and in the
- * devfsadm(1M) misc_link generator.
+ * are in the zlogin(8) command, the zcons(7D) driver, and in the
+ * devfsadm(8) misc_link generator.
  *
  * Care is taken to make the console behave in an "intuitive" fashion for
  * administrators.  Essentially, we try as much as possible to mimic the

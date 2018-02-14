@@ -81,7 +81,7 @@ static const char SYSLOG_POINTER[] = "syslog-msgs-pointer";
 
 /*
  * Ideally we would just use syslog(3C) for outputting our messages, but our
- * messaging standard defines a nice multi-line format and syslogd(1M) is very
+ * messaging standard defines a nice multi-line format and syslogd(8) is very
  * inflexible and stupid when it comes to multi-line messages.  It pulls data
  * out of log(7D) and splits it up by \n, printing each line to the console
  * with its usual prefix of date and sender; it uses the same behavior for the

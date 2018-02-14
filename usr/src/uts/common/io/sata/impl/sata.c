@@ -11487,7 +11487,7 @@ sata_reprobe_pmult(sata_hba_inst_t *sata_hba_inst, sata_device_t *sata_device,
 	 * after which the port multiplier is not correct initialized and
 	 * recognized. In that case the new device will be marked as unknown
 	 * and will not be automatically probed in this routine. Instead
-	 * system administrator could manually restart it via cfgadm(1M).
+	 * system administrator could manually restart it via cfgadm(8).
 	 */
 	if (sata_device->satadev_type != SATA_DTYPE_PMULT) {
 		cportinfo->cport_dev_type = SATA_DTYPE_UNKNOWN;

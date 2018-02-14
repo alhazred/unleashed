@@ -84,7 +84,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='vntsd' section='1M'
+			<manpage title='vntsd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

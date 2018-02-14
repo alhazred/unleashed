@@ -2030,7 +2030,7 @@ put_config_file_copyright_info
 
 echo "\
 #
-# Configuration file for ypserv(1M); see ypserv(4) for more information,
+# Configuration file for ypserv(8); see ypserv(4) for more information,
 # and NISLDAPmapping(4) for configuration of NIS to LDAP mapping.
 
 # Unless otherwise noted, commented lines show default values.

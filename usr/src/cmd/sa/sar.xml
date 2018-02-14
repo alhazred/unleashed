@@ -90,7 +90,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='sar' section='1M' manpath='/usr/share/man' />
+			<manpage title='sar' section='8' manpath='/usr/share/man' />
 		</documentation>
 	</template>
 </service>

@@ -1987,7 +1987,7 @@ integrity_fail:
 "  your service provider%s%s\n"
 "\n"
 "  The system will not be able to boot until you have restored a working\n"
-"  database.  svc.startd(1M) will provide a sulogin(1M) prompt for recovery\n"
+"  database.  svc.startd(8) will provide a sulogin(8) prompt for recovery\n"
 "  purposes.  The command:\n"
 "\n"
 "    /lib/svc/bin/restore_repository\n"

@@ -58,7 +58,7 @@ typedef struct fssinfo {
 #define	FSS_KY_UPRI	2	/* user priority */
 
 /*
- * The following is used by the dispadmin(1M) command for scheduler
+ * The following is used by the dispadmin(8) command for scheduler
  * administration and is not for general use.
  */
 typedef struct fssadmin {

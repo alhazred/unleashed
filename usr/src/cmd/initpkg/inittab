@@ -19,8 +19,8 @@
 #
 # Copyright (c) 1988, 2010, Oracle and/or its affiliates. All rights reserved.
 #
-# The /etc/inittab file controls the configuration of init(1M); for more
-# information refer to init(1M) and inittab(4).  It is no longer
+# The /etc/inittab file controls the configuration of init(8); for more
+# information refer to init(8) and inittab(4).  It is no longer
 # necessary to edit inittab(4) directly; administrators should use the
 # Solaris Service Management Facility (SMF) to define services instead.
 # Refer to smf(5) and the System Administration Guide for more

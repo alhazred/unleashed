@@ -332,14 +332,14 @@ zfs_prop_init(void)
 	    PROP_INHERIT, ZFS_TYPE_FILESYSTEM, "<path> | legacy | none",
 	    "MOUNTPOINT");
 	zprop_register_string(ZFS_PROP_SHARENFS, "sharenfs", "off",
-	    PROP_INHERIT, ZFS_TYPE_FILESYSTEM, "on | off | share(1M) options",
+	    PROP_INHERIT, ZFS_TYPE_FILESYSTEM, "on | off | share(8) options",
 	    "SHARENFS");
 	zprop_register_string(ZFS_PROP_TYPE, "type", NULL, PROP_READONLY,
 	    ZFS_TYPE_DATASET | ZFS_TYPE_BOOKMARK,
 	    "filesystem | volume | snapshot | bookmark", "TYPE");
 	zprop_register_string(ZFS_PROP_SHARESMB, "sharesmb", "off",
 	    PROP_INHERIT, ZFS_TYPE_FILESYSTEM,
-	    "on | off | sharemgr(1M) options", "SHARESMB");
+	    "on | off | sharemgr(8) options", "SHARESMB");
 	zprop_register_string(ZFS_PROP_RECEIVE_RESUME_TOKEN,
 	    "receive_resume_token",
 	    NULL, PROP_READONLY, ZFS_TYPE_FILESYSTEM | ZFS_TYPE_VOLUME,

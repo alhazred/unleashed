@@ -95,7 +95,7 @@ char **argv;
 
 	/*
 	 * Take special note that "getuid()" is called here.  This call is used
-	 * rather that app_krb5_user_uid(), to ensure ktkt_warnd(1M) is running
+	 * rather that app_krb5_user_uid(), to ensure ktkt_warnd(8) is running
 	 * as root.
 	 */
 #ifdef DEBUG

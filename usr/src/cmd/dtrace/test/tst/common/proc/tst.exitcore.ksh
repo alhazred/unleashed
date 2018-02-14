@@ -30,7 +30,7 @@
 # when the process core dumps.  The problematic bit here is making sure that
 # a process _can_ dump core -- if core dumps are disabled on both a global
 # and per-process basis, this test will fail.  Rather than having this test
-# muck with coreadm(1M) settings, it will fail explicitly in this case and
+# muck with coreadm(8) settings, it will fail explicitly in this case and
 # provide a hint as to the problem.  In general, machines should never be
 # running with both per-process and global core dumps disabled -- so this
 # should be a non-issue in practice.
@@ -52,7 +52,7 @@ script()
 	/curpsinfo->pr_ppid == $child &&
 	    curpsinfo->pr_psargs == "$longsleep" && args[0] != CLD_DUMPED/
 	{
-		printf("Child process could not dump core.  Check coreadm(1M)");
+		printf("Child process could not dump core.  Check coreadm(8)");
 		printf(" settings; either per-process or global core dumps ");
 		printf("must be enabled for this test to work properly.");
 		exit(1);

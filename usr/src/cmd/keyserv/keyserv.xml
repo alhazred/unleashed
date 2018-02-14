@@ -78,7 +78,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='keyserv' section='1M'
+			<manpage title='keyserv' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

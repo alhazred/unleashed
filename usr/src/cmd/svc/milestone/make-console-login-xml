@@ -204,7 +204,7 @@ Console login
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='ttymon' section='1M'
+			<manpage title='ttymon' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 

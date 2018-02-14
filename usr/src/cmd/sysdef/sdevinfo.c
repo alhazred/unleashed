@@ -103,7 +103,7 @@ dump_node(di_node_t node, void *arg)
 			}
 		} else {
 			/*
-			 * prtconf(1M) compatible..
+			 * prtconf(8) compatible..
 			 */
 			(void) printf("%s", di_node_name(node));
 			if (di_instance(node) >= 0)

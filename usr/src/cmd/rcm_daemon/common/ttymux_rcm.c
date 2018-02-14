@@ -857,7 +857,7 @@ rsrc_available(rsrc_t *rsrc)
 		/*
 		 * Now that the resource is present obtain its device number.
 		 * For this to work the node must be present in the /devices
-		 * tree (see devfsadm(1M) or drvconfig(1M)).
+		 * tree (see devfsadm(8) or drvconfig(8)).
 		 * We do not use libdevinfo because the node must be present
 		 * under /devices for the connect step below to work
 		 * (the node needs to be opened).

@@ -2155,7 +2155,7 @@ configure_one_interface(zlog_t *zlogp, zoneid_t zone_id,
 		/*
 		 * Here, we know that the interface can't be brought up.
 		 * A similar warning message was already printed out to
-		 * the console by zoneadm(1M) so instead we log the
+		 * the console by zoneadm(8) so instead we log the
 		 * message to syslog and continue.
 		 */
 		zerror(&logsys, B_TRUE, "WARNING: skipping network interface "
@@ -3824,7 +3824,7 @@ setup_zone_rm(zlog_t *zlogp, char *zone_name, zoneid_t zoneid)
 			    "scheduling class for\nthis zone.  FSS will be "
 			    "used for processes\nin the zone but to get the "
 			    "full benefit of FSS,\nit should be the default "
-			    "scheduling class.\nSee dispadmin(1M) for more "
+			    "scheduling class.\nSee dispadmin(8) for more "
 			    "details.");
 
 			if (zone_setattr(zoneid, ZONE_ATTR_SCHED_CLASS, "FSS",
@@ -3868,7 +3868,7 @@ setup_zone_rm(zlog_t *zlogp, char *zone_name, zoneid_t zoneid)
 		    "enabled.\nThe system will not dynamically adjust the\n"
 		    "processor allocation within the specified range\n"
 		    "until svc:/system/pools/dynamic is enabled.\n"
-		    "See poold(1M).");
+		    "See poold(8).");
 	}
 
 	/* The following is a warning, not an error. */

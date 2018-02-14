@@ -357,9 +357,9 @@ dconf_dev_ioctl(dumpconf_t *dcp, int cmd)
 		break;
 	default:
 		/*
-		 * NOTE: The stmsboot(1M) command's boot-up script parses this
+		 * NOTE: The stmsboot(8) command's boot-up script parses this
 		 * error to get the dump device name. If you change the format
-		 * of this message, make sure that stmsboot(1M) is in sync.
+		 * of this message, make sure that stmsboot(8) is in sync.
 		 */
 		warn(gettext("cannot use %s as dump device"), dcp->dc_device);
 	}

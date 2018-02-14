@@ -105,7 +105,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='nfs4cbd' section='1M'
+			<manpage title='nfs4cbd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

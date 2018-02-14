@@ -55,7 +55,7 @@
  * assigned to the ramdisk.  All 'pseudo' ramdisks share a common devinfo
  * structure.
  *
- * A single character device node is used by ramdiskadm(1M) to communicate
+ * A single character device node is used by ramdiskadm(8) to communicate
  * with the ramdisk driver, with minor number 0:
  *
  *	/dev/ramdiskctl -> /devices/pseudo/ramdisk@0:ctl

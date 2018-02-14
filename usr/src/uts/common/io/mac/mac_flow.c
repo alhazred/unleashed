@@ -1343,7 +1343,7 @@ mac_link_flow_clean(mac_client_handle_t mch, flow_entry_t *sub_flow)
 
 	/*
 	 * Delete the SRSs associated with this subflow. If this is being
-	 * driven by flowadm(1M) then the subflow will be deleted by
+	 * driven by flowadm(8) then the subflow will be deleted by
 	 * dls_rem_flow. However if this is a result of the interface being
 	 * unplumbed then the subflow itself won't be deleted.
 	 */

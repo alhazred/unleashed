@@ -71,7 +71,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='intrd' section='1M'
+			<manpage title='intrd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

@@ -102,7 +102,7 @@ sub usage
 	print "\t -n  execute test suite using dtrace(1m) only\n";
 	print "\t -q  set quiet mode (only report errors and summary)\n";
 	print "\t -s  save results files even for tests that pass\n";
-	print "\t -x  pass corresponding -x argument to dtrace(1M)\n";
+	print "\t -x  pass corresponding -x argument to dtrace(8)\n";
 	exit(2);
 }
 
@@ -396,7 +396,7 @@ sub run_tests {
 			}
 
 			#
-			# DTrace is gone.  Now update_drv(1M), and rip
+			# DTrace is gone.  Now update_drv(8), and rip
 			# everything out again.
 			#
 			system("update_drv dtrace");

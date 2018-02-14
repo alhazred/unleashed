@@ -100,7 +100,7 @@ Service manifests for iSCSI Target
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='itadm' section='1M'
+			<manpage title='itadm' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

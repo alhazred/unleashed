@@ -121,7 +121,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='zonestatd' section='1M'
+			<manpage title='zonestatd' section='8'
 			     manpath='/usr/share/man' />
 		</documentation>
 	</template>

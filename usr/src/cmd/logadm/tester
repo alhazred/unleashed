@@ -271,7 +271,7 @@ sub set_testconffile {
 # logadm.conf
 #
 # Default settings for system log file management.
-# The -w option to logadm(1M) is the preferred way to write to this file,
+# The -w option to logadm(8) is the preferred way to write to this file,
 # but if you do edit it by hand, use "logadm -V" to check it for errors.
 # 
 # The format of lines in this file is:
@@ -287,7 +287,7 @@ sub set_testconffile {
 /var/cron/log -s 512k -t /var/cron/olog
 /var/lp/logs/lpsched -C 2 -N -t '$file.$N'
 #
-# The entry below is used by turnacct(1M)
+# The entry below is used by turnacct(8)
 #
 /var/adm/pacct -C 0 -a '/usr/lib/acct/accton pacct' -g adm -m 664 -o adm -p never
 apache -C 24 -a '/usr/apache/bin/apachectl graceful' -p 1m -t '/var/apache/old-logs/$basename.%Y-%m' '/var/apache/logs/*{access,error}_log'
@@ -1168,7 +1168,7 @@ sub logadm7 {
 #	this comment # has at least another #-sign in it #...
 #
 # Default settings for system log file management.
-# The -w option to logadm(1M) is the preferred way to write to this file,
+# The -w option to logadm(8) is the preferred way to write to this file,
 # but if you do edit it by hand, use "logadm -V" to check it for errors.
 # but if you do edit it by hand, use "logadm -V" to check it for errors.
 #
@@ -1184,7 +1184,7 @@ sub logadm7 {
 dir1/syslog -C 8 -a 'echo kill -HUP `cat /var/run/*syslog*pid` >> cmd.out'
 dir2/messages -C 4 -a 'echo kill -HUP `cat /var/run/*syslog*pid` >> cmd.out'
 #
-# The entry below is used by turnacct(1M)
+# The entry below is used by turnacct(8)
 #
 /var/adm/pacct -C 0 -a '/usr/lib/acct/accton pacct' -g adm -m 664 -o adm -p never
 EOF
@@ -1199,7 +1199,7 @@ second kill -HUP $pid
 EOF
 
 	set_file('sed.out.expect', <<'EOF');
-# This file holds internal data for logadm(1M).
+# This file holds internal data for logadm(8).
 # Do not edit.
 dir1/syslog
 dir2/messages
@@ -1379,7 +1379,7 @@ dir2/messages -P '$lessthanweek'
 EOF
 
 	set_file('sed.out.expect', <<"EOF");
-# This file holds internal data for logadm(1M).
+# This file holds internal data for logadm(8).
 # Do not edit.
 dir1/syslog
 dir2/log
@@ -1737,7 +1737,7 @@ sub logadm14 {
 # logadm.conf
 #
 # Default settings for system log file management.
-# The -w option to logadm(1M) is the preferred way to write to this file,
+# The -w option to logadm(8) is the preferred way to write to this file,
 # but if you do edit it by hand, use "logadm -V" to check it for errors.
 # but if you do edit it by hand, use "logadm -V" to check it for errors.
 #
@@ -1753,7 +1753,7 @@ sub logadm14 {
 dir1/syslog -C 8 -a 'echo kill -HUP `cat /var/run/*syslog*pid` >> cmd.out'
 dir2/messages -C 4 -a 'echo kill -HUP `cat /var/run/*syslog*pid` >> cmd.out'
 #
-# The entry below is used by turnacct(1M)
+# The entry below is used by turnacct(8)
 #
 /var/adm/pacct -C 0 -a '/usr/lib/acct/accton pacct' -g adm -m 664 -o adm -p never
 EOF

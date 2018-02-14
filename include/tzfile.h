@@ -45,7 +45,7 @@
  * future releases.
  */
 
-/* For further information, see ctime(3C) and zic(1M) man pages. */
+/* For further information, see ctime(3C) and zic(8) man pages. */
 
 /*
  * This file is in the public domain, so clarified as of

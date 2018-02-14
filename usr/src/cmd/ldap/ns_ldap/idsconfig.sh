@@ -266,7 +266,7 @@ EOF
 
 HELP - Name of the configuration profile with which the clients will be
        configured. A directory server can store various profiles for multiple 
-       groups of clients.  The initialization tool, (ldapclient(1M)), assumes 
+       groups of clients.  The initialization tool, (ldapclient(8)), assumes 
        "default" unless another is specified.
 
 EOF
@@ -347,7 +347,7 @@ EOF
     ;;
     keyserv_help) cat <<EOF
 
-HELP - The authentication method(s) to be used by newkey(1M) and chkey(1)
+HELP - The authentication method(s) to be used by newkey(8) and chkey(1)
        when contacting the directory server.  This is a ordered list and
        if provided will override the default authentication method
        parameter.
@@ -5218,7 +5218,7 @@ cleanup()
 # This script assumes that the iPlanet Directory Server (iDS) is 
 # installed and that setup has been run.  This script takes the 
 # iDS server from that point and sets up the infrastructure for
-# LDAP Naming Services.  After running this script, ldapaddent(1M)
+# LDAP Naming Services.  After running this script, ldapaddent(8)
 # or some other tools can be used to populate data.
 
 # Initialize the variables that need to be set to NULL, or some 

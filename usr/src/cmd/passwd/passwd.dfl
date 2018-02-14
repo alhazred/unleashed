@@ -65,7 +65,7 @@ PASSLENGTH=6
 # passwd performs dictionary lookups if DICTIONLIST or DICTIONDBDIR
 # is defined. If the password database does not yet exist, it is
 # created by passwd. See passwd(1), pam_authtok_check(5) and
-# mkpwdict(1M) for more information.
+# mkpwdict(8) for more information.
 #
 #DICTIONLIST=
 #DICTIONDBDIR=/var/passwd

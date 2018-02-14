@@ -95,7 +95,7 @@ sub do_queryremove
 	print "rcm_log_debug=do_queryremove: '$rsrc'\n";
 
 	#
-	# fuser(1M) sends to stdout the pids of any processes using the
+	# fuser(8) sends to stdout the pids of any processes using the
 	# device.  Some other information always appears on stderr and
 	# must be discarded to avoid invalidating the test.
 	#

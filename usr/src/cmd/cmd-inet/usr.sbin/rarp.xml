@@ -106,7 +106,7 @@ Reverse Address Resolution Protocol (RARP) server
 		<documentation>
 			<manpage title='rarp' section='7P'
 			    manpath='/usr/share/man' />
-			<manpage title='in.rarpd' section='1M'
+			<manpage title='in.rarpd' section='8'
 			    manpath='/usr/share/man' />
 		</documentation>
 	</template>

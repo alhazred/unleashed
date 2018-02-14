@@ -110,7 +110,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='snmp-notify' section='1M'
+			<manpage title='snmp-notify' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 		<pg_pattern name='config' type='application' target='this'

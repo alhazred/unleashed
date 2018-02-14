@@ -467,13 +467,13 @@ fail:
 /*
  * Initialize svccfg state.  We recognize four environment variables:
  *
- * SVCCFG_REPOSITORY	Create a private instance of svc.configd(1M) to answer
+ * SVCCFG_REPOSITORY	Create a private instance of svc.configd(8) to answer
  *			requests for the specified repository file.
  * SVCCFG_DOOR_PATH	Directory for door creation.
  *
  * SVCCFG_DOOR		Rendezvous via an alternative repository door.
  *
- * SVCCFG_CONFIGD_PATH	Resolvable path to alternative svc.configd(1M) binary.
+ * SVCCFG_CONFIGD_PATH	Resolvable path to alternative svc.configd(8) binary.
  */
 void
 engine_init()

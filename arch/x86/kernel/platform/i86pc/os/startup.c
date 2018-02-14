@@ -189,7 +189,7 @@ static void layout_kernel_va(void);
  *
  * If 64 bit mode is not available (as in IA32) and/or more physical memory
  * than PHYSMEM is required in 32 bit mode, physmem can be set to the desired
- * value or to 0 (to configure all available memory) via eeprom(1M). kernelbase
+ * value or to 0 (to configure all available memory) via eeprom(8). kernelbase
  * should also be carefully tuned to balance out the need of the user
  * application while minimizing the risk of kernel heap exhaustion due to
  * kernelbase being set too high.

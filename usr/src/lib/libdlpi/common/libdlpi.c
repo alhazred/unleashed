@@ -177,8 +177,8 @@ dlpi_open(const char *linkname, dlpi_handle_t *dhp, uint_t flags)
 
 	/*
 	 * Special case: DLPI_SERIAL flag is set to indicate a synchronous
-	 * serial line interface (see syncinit(1M), syncstat(1M),
-	 * syncloop(1M)), which is not a DLPI link.
+	 * serial line interface (see syncinit(8), syncstat(8),
+	 * syncloop(8)), which is not a DLPI link.
 	 */
 	if (dip->dli_oflags & DLPI_SERIAL) {
 		if ((retval = i_dlpi_style2_open(dip)) != DLPI_SUCCESS) {

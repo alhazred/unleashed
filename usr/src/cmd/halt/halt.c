@@ -44,7 +44,7 @@
 
 
 /*
- * Common code for halt(1M), poweroff(1M), and reboot(1M).  We use
+ * Common code for halt(8), poweroff(8), and reboot(8).  We use
  * argv[0] to determine which behavior to exhibit.
  */
 

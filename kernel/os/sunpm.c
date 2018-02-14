@@ -61,7 +61,7 @@
  * tells what each component's power state values are, and provides human
  * readable strings (currently unused) for each component name and power state.
  * Devices which export pm-components(9P) are automatically power managed
- * whenever autopm is enabled (via PM_START_PM ioctl issued by pmconfig(1M)
+ * whenever autopm is enabled (via PM_START_PM ioctl issued by pmconfig(8)
  * after parsing power.conf(4)). The exception to this rule is that power
  * manageable CPU devices may be automatically managed independently of autopm
  * by either enabling or disabling (via PM_START_CPUPM and PM_STOP_CPUPM
@@ -78,7 +78,7 @@
  *
  * The PM framework provides several functions:
  * -implement PM policy as described in power.conf(4)
- *  Policy is set by pmconfig(1M) issuing pm ioctls based on power.conf(4).
+ *  Policy is set by pmconfig(8) issuing pm ioctls based on power.conf(4).
  *  Policies consist of:
  *    -set threshold values (defaults if none provided by pmconfig)
  *    -set dependencies among devices
@@ -382,7 +382,7 @@ int cpr_platform_enable = 0;
 
 /*
  * pm_S3_enabled indicates that we believe the platform can support S3,
- * which we get from pmconfig(1M)
+ * which we get from pmconfig(8)
  */
 int		pm_S3_enabled;
 
@@ -7642,7 +7642,7 @@ pm_cfb_setup(const char *stdout_path)
 			 */
 		} else {
 			cmn_err(CE_WARN, "Kernel debugger present: see "
-			    "kmdb(1M) for interaction with power management.");
+			    "kmdb(8) for interaction with power management.");
 		}
 	}
 #ifdef DEBUG

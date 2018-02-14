@@ -100,7 +100,7 @@ extern "C" {
 #define	TASK_EVENT_CONSUMER_FLG	0x20
 
 /*
- * strace(1M) prints out the debug data once the debug value is set in
+ * strace(8) prints out the debug data once the debug value is set in
  * the bscv.conf file and the debug driver is installed.
  *
  * Debug flags
@@ -131,7 +131,7 @@ extern "C" {
 /*
  * Debug tips :
  *
- * strace(1M) prints out the debug data.
+ * strace(8) prints out the debug data.
  * A nice way to work out the debug value set in bscv.conf is to use mdb
  * Say we want to show 'D' Daemon and 'I' IOCTL processing,
  * you calculate the debug value with the following mdb session :

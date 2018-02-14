@@ -5484,7 +5484,7 @@ seeMan(void)
 	if (sent)
 		return;
 
-	(void) fprintf(stdout, "%s %s(1M)\n",
+	(void) fprintf(stdout, "%s %s(8)\n",
 	    gettext("For more information, please see"), cmdName);
 
 	sent = 1;

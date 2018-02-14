@@ -69,7 +69,7 @@ following syntax:
 where:
 
    `option_name' is user-interpretable name of the option (for use with
-      dhcpinfo(1M) for instance).  This field should at least be per-
+      dhcpinfo(8) for instance).  This field should at least be per-
       category unique and ideally should be unique across all categories.
       Of particular note is that options names in the STANDARD, SITE, and
       VENDOR spaces should not overlap, or the behavior is undefined.

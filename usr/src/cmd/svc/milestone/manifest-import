@@ -313,7 +313,7 @@ function apply_profile {
 
 #
 # 4.  Upgrade handling.  The upgrade file generally consists of a series
-# of svcadm(1M) and svccfg(1M) commands.
+# of svcadm(8) and svccfg(8) commands.
 #
 function handle_upgrade {
 

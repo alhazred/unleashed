@@ -35,9 +35,9 @@ else
 fi
 
 usage() {
-	echo "This utility is a component of the bootadm(1M) implementation"
+	echo "This utility is a component of the bootadm(8) implementation"
 	echo "and it is not recommended for stand-alone use."
-	echo "Please use bootadm(1M) instead."
+	echo "Please use bootadm(8) instead."
 	echo ""
 	echo "Usage: ${0##*/}: [-R <root>] [-p <platform>] <filelist> ..."
 	echo "where <platform> is one of i86pc, sun4u or sun4v"

@@ -68,7 +68,7 @@ static void graceful_shutdown(void);
  *
  * This is the Network Auto-Magic daemon.  For further high level information
  * see the Network Auto-Magic project and the Approachability communities
- * on opensolaris.org, nwamd(1M), and the README in the source directory.
+ * on opensolaris.org, nwamd(8), and the README in the source directory.
  *
  * The general structure of the code is as a set of event source threads
  * which feed events into the event handling thread. Some of these events

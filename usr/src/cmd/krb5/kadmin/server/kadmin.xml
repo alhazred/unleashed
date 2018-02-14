@@ -61,7 +61,7 @@
 			Kerberos administration daemon </loctext>
 		</common_name>
 		<documentation>
-			<manpage title='kadmind' section='1M'
+			<manpage title='kadmind' section='8'
 			    manpath='/usr/share/man' />
 		</documentation>
         </template>

@@ -35,7 +35,7 @@
  *   console device; configure process runtime attributes such as resource
  *   controls, pool bindings, fine-grained privileges.
  *
- * - Launch the zone's init(1M) process.
+ * - Launch the zone's init(8) process.
  *
  * - Implement a door server; clients (like zoneadm) connect to the door
  *   server and request zone state changes.  The kernel is also a client of
@@ -866,10 +866,10 @@ zone_bootup(zlog_t *zlogp, const char *bootargs, int zstate)
 		goto bad;
 	}
 
-	/* Get the path for this zone's init(1M) (or equivalent) process.  */
+	/* Get the path for this zone's init(8) (or equivalent) process.  */
 	if (brand_get_initname(bh, init_file, MAXPATHLEN) != 0) {
 		zerror(zlogp, B_FALSE,
-		    "unable to determine zone's init(1M) location");
+		    "unable to determine zone's init(8) location");
 		brand_close(bh);
 		goto bad;
 	}

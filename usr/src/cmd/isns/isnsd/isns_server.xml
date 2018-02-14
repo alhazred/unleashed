@@ -128,9 +128,9 @@ Service manifests for the iSNS Server
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='isns' section='1M'
+			<manpage title='isns' section='8'
 				manpath='/usr/share/man' />
-			<manpage title='isnsadm' section='1M'
+			<manpage title='isnsadm' section='8'
 				manpath='/usr/share /man' />
 		</documentation>
 	</template>

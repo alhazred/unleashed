@@ -26,7 +26,7 @@
 
 /*
  * This is the main program file for the configuration administration
- * command as set out in manual page cfgadm(1M).  It uses the configuration
+ * command as set out in manual page cfgadm(8).  It uses the configuration
  * administration library interface, libcfgadm, as set out in manual
  * page config_admin(3X).
  */

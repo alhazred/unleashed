@@ -117,7 +117,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='sharemgr' section='1M'
+			<manpage title='sharemgr' section='8'
 				 manpath='/usr/share/man' />
 		</documentation>
 	</template>

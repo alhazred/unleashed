@@ -1086,7 +1086,7 @@ usage(boolean_t verbose, uint_t flags)
 			    cmd_to_str(CMD_REMOVE), pt_to_str(PT_OPTIONS),
 			    gettext("<file-system options>"));
 			(void) fprintf(fp, gettext("Consult the file-system "
-			    "specific manual page, such as mount_ufs(1M), "
+			    "specific manual page, such as mount_ufs(8), "
 			    "for\ndetails about file-system options.  Note "
 			    "that any file-system options with an\nembedded "
 			    "'=' character must be enclosed in double quotes, "
@@ -1105,7 +1105,7 @@ usage(boolean_t verbose, uint_t flags)
 			    gettext("<IP-address>"));
 			(void) fprintf(fp, "\t%s %s=%s\n", cmd_to_str(CMD_SET),
 			    pt_to_str(PT_PHYSICAL), gettext("<interface>"));
-			(void) fprintf(fp, gettext("See ifconfig(1M) for "
+			(void) fprintf(fp, gettext("See ifconfig(8) for "
 			    "details of the <interface> string.\n"));
 			(void) fprintf(fp, gettext("%s %s is valid "
 			    "if the %s property is set to %s, otherwise it "

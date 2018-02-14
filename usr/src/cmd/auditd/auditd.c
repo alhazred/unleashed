@@ -807,7 +807,7 @@ fail:
 
 /*
  * conf_to_kernel() - configure the event to class mapping; see also
- * auditconfig(1M) -conf option.
+ * auditconfig(8) -conf option.
  */
 static void
 conf_to_kernel(void)

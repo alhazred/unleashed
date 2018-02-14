@@ -135,7 +135,7 @@
 			</loctext>
 		</description>
 		<documentation>
-			<manpage title='prtdscp' section='1M'
+			<manpage title='prtdscp' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

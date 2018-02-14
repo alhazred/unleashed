@@ -111,7 +111,7 @@
 		</common_name>
 
 		<documentation>
-			<manpage title='cvcd' section='1M'
+			<manpage title='cvcd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

@@ -933,7 +933,7 @@ auditd_plugin(const char *input, size_t in_len, uint64_t sequence, char **error)
 
 /*
  * It may be called multiple times as auditd handles SIGHUP and SIGUSR1
- * corresponding to the audit(1M) flags -s and -n
+ * corresponding to the audit(8) flags -s and -n
  *
  * kvlist is NULL only if auditd caught a SIGUSR1 (audit -n), so after the first
  * time open is called; the reason is -s if kvlist != NULL and -n otherwise.

@@ -152,7 +152,7 @@
 		</loctext>
 	</common_name>
 	<documentation>
-		<manpage title='mdnsd' section='1M' />
+		<manpage title='mdnsd' section='8' />
 		<doc_link name='Service Discovery OpenSolaris Project Page'
 		uri="http://opensolaris.org/os/project/nwam/service-discovery/"/>
 	</documentation>

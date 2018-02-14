@@ -108,7 +108,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='gssd' section='1M'
+			<manpage title='gssd' section='8'
 			    manpath='/usr/share/man' />
 		</documentation>
 	</template>

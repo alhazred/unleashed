@@ -72,7 +72,7 @@
 #
 # WARNING:	This file is read before default routes are established, and
 #		before any naming services have been started.  The
-#		ipsecconf(1M) command attempts to resolve names, but it will
+#		ipsecconf(8) command attempts to resolve names, but it will
 #		fail unless the machine uses files, or DNS and the DNS server
 #		is reachable via routing information before ipsecconf(1m)
 #		invocation.  (E.g. the DNS server is on-subnet, or DHCP

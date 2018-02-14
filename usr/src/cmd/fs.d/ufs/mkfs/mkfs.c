@@ -1085,11 +1085,11 @@ main(int argc, char *argv[])
 	dprintf(("DeBuG mtb : %c\n", mtb));
 
 	/*
-	 * With newer and much larger disks, the newfs(1M) and mkfs_ufs(1M)
+	 * With newer and much larger disks, the newfs(8) and mkfs_ufs(8)
 	 * commands had problems in correctly handling the "native" geometries
 	 * for various storage devices.
 	 *
-	 * To handle the new age disks, mkfs_ufs(1M) will use the EFI style
+	 * To handle the new age disks, mkfs_ufs(8) will use the EFI style
 	 * for non-EFI disks that are larger than the CHS addressing limit
 	 * ( > 8GB approx ) and ignore the disk geometry information for
 	 * these drives. This is what is currently done for multi-terrabyte
@@ -3782,7 +3782,7 @@ lockexit(int exitstatus)
 		if (isbad) {
 			(void) fprintf(stderr, gettext(
 			    "Filesystem is currently inconsistent.  It "
-			    "must be repaired with fsck(1M)\nbefore being "
+			    "must be repaired with fsck(8)\nbefore being "
 			    "used.  Use the following command to "
 			    "do this:\n\n\tfsck %s\n\n"), fsys);
 
@@ -3921,7 +3921,7 @@ checksummarysize()
 
 /*
  * checksblock() has two uses:
- *	- One is to sanity test the superblock and is used when newfs(1M)
+ *	- One is to sanity test the superblock and is used when newfs(8)
  *	  is invoked with the "-N" option. If any discrepancy was found,
  *	  just return whatever error was found and do not exit.
  *	- the other use of it is in places where you expect the superblock

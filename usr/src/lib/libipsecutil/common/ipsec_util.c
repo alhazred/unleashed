@@ -844,7 +844,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 
 		/*
 		 * There were errors. Putting the service in maintenance mode.
-		 * When svc.startd(1M) allows services to degrade themselves,
+		 * When svc.startd(8) allows services to degrade themselves,
 		 * this should be revisited.
 		 *
 		 * If this function was called from a program running as a
@@ -861,7 +861,7 @@ do_interactive(FILE *infile, char *configfile, char *promptstring,
 				    "errors.\n"
 				    "Manually check the configuration with:\n"
 				    "ipseckey -c %s\n"
-				    "Use svcadm(1M) to clear maintenance "
+				    "Use svcadm(8) to clear maintenance "
 				    "condition when errors are resolved.\n"),
 				    lines_parsed - lines_added, configfile);
 			} else {

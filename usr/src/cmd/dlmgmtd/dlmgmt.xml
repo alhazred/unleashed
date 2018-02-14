@@ -81,7 +81,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='dlmgmtd' section='1M'
+			<manpage title='dlmgmtd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

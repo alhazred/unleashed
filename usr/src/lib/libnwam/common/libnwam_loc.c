@@ -123,7 +123,7 @@ struct nwam_prop_table_entry loc_prop_table_entries[] = {
 	    NWAM_TYPE_ANY, NWAM_CLASS_ANY},
 	{NWAM_LOC_PROP_DEFAULT_DOMAIN, NWAM_VALUE_TYPE_STRING, B_FALSE, 0, 1,
 	    nwam_valid_domain,
-	    "specifies the domainname(1M) to be set for this location",
+	    "specifies the domainname(8) to be set for this location",
 	    NWAM_TYPE_ANY, NWAM_CLASS_ANY},
 	{NWAM_LOC_PROP_NFSV4_DOMAIN, NWAM_VALUE_TYPE_STRING, B_FALSE, 0, 1,
 	    nwam_valid_domain,
@@ -157,7 +157,7 @@ struct nwam_prop_table_entry loc_prop_table_entries[] = {
 	{NWAM_LOC_PROP_IPSECPOLICY_CONFIG_FILE, NWAM_VALUE_TYPE_STRING,
 	    B_FALSE, 0, 1, nwam_valid_file,
 	    "specifies an absolute path to an IPsec policy configuration file "
-	    "(see ipsecconf(1M)",
+	    "(see ipsecconf(8)",
 	    NWAM_TYPE_ANY, NWAM_CLASS_ANY},
 };
 

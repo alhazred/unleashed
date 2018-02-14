@@ -110,7 +110,7 @@
 				</loctext>
 			</common_name>
 			<documentation>
-				<manpage title='domainname' section='1M'
+				<manpage title='domainname' section='8'
 					manpath='/usr/share/man' />
 				<manpage title='defaultdomain' section='4'
 					manpath='/usr/share/man' />

@@ -92,7 +92,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='in.ndpd' section='1M'
+			<manpage title='in.ndpd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

@@ -177,9 +177,9 @@ services.
 			</loctext>
 		</description>
 		<documentation>
-			<manpage title='inetd' section='1M'
+			<manpage title='inetd' section='8'
 				manpath='/usr/share/man' />
-			<manpage title='inetadm' section='1M'
+			<manpage title='inetadm' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 

@@ -1838,7 +1838,7 @@ hash_keys(pub, sec)
 }
 
 /*
- * problem:  keyserv loads keys from /etc/.rootkey based on nisauthconf(1M)
+ * problem:  keyserv loads keys from /etc/.rootkey based on nisauthconf(8)
  *           which is too nis+-centric (see secure_rpc(3N)).
  *
  * So we want to make sure there is always a AUTH_DES compat entry

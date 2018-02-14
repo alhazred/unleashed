@@ -466,7 +466,7 @@
 6255:AUE_uadmin_config:uadmin(1m) - config:ss
 
 #
-# SMF(5) svc.configd events (svcadm(1M) related)
+# SMF(5) svc.configd events (svcadm(8) related)
 #
 6260:AUE_smf_enable:persistently enable service instance:ss
 6261:AUE_smf_tmp_enable:temporarily enable service instance:ss
@@ -487,7 +487,7 @@
 #
 6275:AUE_smf_read_prop:read restricted access property value:as
 #
-# SMF(5) svc.configd events (svccfg(1M) related)
+# SMF(5) svc.configd events (svccfg(8) related)
 #
 6280:AUE_smf_create:create service instance object:as
 6281:AUE_smf_delete:delete service instance object:as
@@ -503,12 +503,12 @@
 6291:AUE_smf_change_prop:change service instance property:as
 6292:AUE_smf_delete_prop:delete service instance property:as
 #
-# nwamd(1M) events
+# nwamd(8) events
 #
 6300:AUE_nwam_enable:enable nwam profile object:ss
 6301:AUE_nwam_disable:disable nwam profile object:ss
 #
-# ilbd(1M) events
+# ilbd(8) events
 #
 6310:AUE_ilb_create_healthcheck:create ILB health check:as
 6311:AUE_ilb_delete_healthcheck:delete ILB health check:as
@@ -523,7 +523,7 @@
 6320:AUE_ilb_create_servergroup:create ILB server group:as
 6321:AUE_ilb_delete_servergroup:delete ILB server group:as
 #
-# netcfgd(1M) events
+# netcfgd(8) events
 #
 6330:AUE_netcfg_update:create or modify configuration object:ss
 6331:AUE_netcfg_remove:remove configuration object from repository:ss

@@ -39,7 +39,7 @@
  */
 
 /*
- * init(1M) is the general process spawning program.  Its primary job is to
+ * init(8) is the general process spawning program.  Its primary job is to
  * start and restart svc.startd for smf(5).  For backwards-compatibility it also
  * spawns and respawns processes according to /etc/inittab and the current
  * run-level.  It reads /etc/default/inittab for general configuration.
@@ -56,35 +56,35 @@
  * which each inittab entry is valid.
  *
  * State File and Restartability
- *   Premature exit by init(1M) is handled as a special case by the kernel:
- *   init(1M) will be immediately re-executed, retaining its original PID.  (PID
+ *   Premature exit by init(8) is handled as a special case by the kernel:
+ *   init(8) will be immediately re-executed, retaining its original PID.  (PID
  *   1 in the global zone.)  To track the processes it has previously spawned,
- *   as well as other mutable state, init(1M) regularly updates a state file
+ *   as well as other mutable state, init(8) regularly updates a state file
  *   such that its subsequent invocations have knowledge of its various
  *   dependent processes and duties.
  *
  * Process Contracts
- *   We start svc.startd(1M) in a contract and transfer inherited contracts when
+ *   We start svc.startd(8) in a contract and transfer inherited contracts when
  *   restarting it.  Everything else is started using the legacy contract
  *   template, and the created contracts are abandoned when they become empty.
  *
  * utmpx Entry Handling
- *   Because init(1M) no longer governs the startup process, its knowledge of
+ *   Because init(8) no longer governs the startup process, its knowledge of
  *   when utmpx becomes writable is indirect.  However, spawned processes
  *   expect to be constructed with valid utmpx entries.  As a result, attempts
  *   to write normal entries will be retried until successful.
  *
  * Maintenance Mode
- *   In certain failure scenarios, init(1M) will enter a maintenance mode, in
- *   which it invokes sulogin(1M) to allow the operator an opportunity to
+ *   In certain failure scenarios, init(8) will enter a maintenance mode, in
+ *   which it invokes sulogin(8) to allow the operator an opportunity to
  *   repair the system.  Normally, this operation is performed as a
  *   fork(2)-exec(2)-waitpid(3C) sequence with the parent waiting for repair or
  *   diagnosis to be completed.  In the cases that fork(2) requests themselves
- *   fail, init(1M) will directly execute sulogin(1M), and allow the kernel to
- *   restart init(1M) on exit from the operator session.
+ *   fail, init(8) will directly execute sulogin(8), and allow the kernel to
+ *   restart init(8) on exit from the operator session.
  *
- *   One scenario where init(1M) enters its maintenance mode is when
- *   svc.startd(1M) begins to fail rapidly, defined as when the average time
+ *   One scenario where init(8) enters its maintenance mode is when
+ *   svc.startd(8) begins to fail rapidly, defined as when the average time
  *   between recent failures drops below a given threshold.
  */
 
@@ -928,8 +928,8 @@ update_boot_archive(int new_state)
 
 /*
  * void enter_maintenance()
- *   A simple invocation of sulogin(1M), with no baggage, in the case that we
- *   are unable to activate svc.startd(1M).  We fork; the child runs sulogin;
+ *   A simple invocation of sulogin(8), with no baggage, in the case that we
+ *   are unable to activate svc.startd(8).  We fork; the child runs sulogin;
  *   we wait for it to exit.
  */
 static void
@@ -2142,7 +2142,7 @@ boot_init()
 		write_ioctl_syscon();
 
 	/*
-	 * Start svc.startd(1M), which does most of the work.
+	 * Start svc.startd(8), which does most of the work.
 	 */
 	if (startd_cline[0] != '\0' && startd_tmpl >= 0) {
 		/* Start svc.startd. */
@@ -2261,7 +2261,7 @@ setup_pipe()
 }
 
 /*
- * siglvl - handle an asynchronous signal from init(1M) telling us that we
+ * siglvl - handle an asynchronous signal from init(8) telling us that we
  * should change the current run level.  We set new_state accordingly.
  */
 void
@@ -2271,7 +2271,7 @@ siglvl(int sig, siginfo_t *sip, ucontext_t *ucp)
 	struct sigaction act;
 
 	/*
-	 * If the signal was from the kernel (rather than init(1M)) then init
+	 * If the signal was from the kernel (rather than init(8)) then init
 	 * itself tripped the signal.  That is, we might have a bug and tripped
 	 * a real SIGSEGV instead of receiving it as an alias for SIGLVLa.  In
 	 * such a case we reset the disposition to SIG_DFL, block all signals
@@ -3902,7 +3902,7 @@ st_init()
 	do {
 		/*
 		 * If we can exclusively create the file, then we're the
-		 * initial invocation of init(1M).
+		 * initial invocation of init(8).
 		 */
 		st_fd = open(init_state_file, O_RDWR | O_CREAT | O_EXCL,
 		    S_IRUSR | S_IWUSR);
@@ -4353,11 +4353,11 @@ contract_event(struct pollfd *poll)
 }
 
 /*
- * svc.startd(1M) Management
+ * svc.startd(8) Management
  */
 
 /*
- * (Re)start svc.startd(1M).  old_ctid should be the contract ID of the old
+ * (Re)start svc.startd(8).  old_ctid should be the contract ID of the old
  * contract, or 0 if we're starting it for the first time.  If wait is true
  * we'll wait for and return the exit value of the child.
  */

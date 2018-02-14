@@ -98,7 +98,7 @@ privileges='basic,proc_owner,proc_fork,proc_exec,proc_info,proc_session,file_cho
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='in.ripngd' section='1M'
+			<manpage title='in.ripngd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

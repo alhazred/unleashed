@@ -51,7 +51,7 @@
 	</dependency>
 
 	<!--
-	  syslogd(1M) can log to non-root local directories.
+	  syslogd(8) can log to non-root local directories.
 	-->
 	<dependency
 		name='filesystem'
@@ -62,7 +62,7 @@
 	</dependency>
 
 	<!--
-	  syslogd(1M) can log to automounted files.
+	  syslogd(8) can log to automounted files.
 	-->
 	<dependency
 		name='autofs'
@@ -73,7 +73,7 @@
 	</dependency>
 
 	<!--
-	  syslogd(1M) needs nameservice resolution to log to remote hosts.
+	  syslogd(8) needs nameservice resolution to log to remote hosts.
 	-->
 	<dependency
 		name='name-services'
@@ -162,7 +162,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='syslogd' section='1M'
+			<manpage title='syslogd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

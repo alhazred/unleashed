@@ -86,8 +86,8 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='picld' section='1M' manpath='/usr/share/man' />
-			<manpage title='prtpicl' section='1M' manpath='/usr/share/man' />
+			<manpage title='picld' section='8' manpath='/usr/share/man' />
+			<manpage title='prtpicl' section='8' manpath='/usr/share/man' />
 		</documentation>
 	</template>
 

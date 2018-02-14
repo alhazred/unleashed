@@ -32,7 +32,7 @@
  * Destructive actions may never be speculative.
  *
  * SECTION: Speculative Tracing/Using a Speculation
- * SECTION: dtrace(1M) Utility/ -w option
+ * SECTION: dtrace(8) Utility/ -w option
  *
  */
 #pragma D option quiet

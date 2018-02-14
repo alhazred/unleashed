@@ -68,7 +68,7 @@ typedef struct fxinfo {
 
 
 /*
- * The following is used by the dispadmin(1M) command for
+ * The following is used by the dispadmin(8) command for
  * scheduler administration and is not for general use.
  */
 

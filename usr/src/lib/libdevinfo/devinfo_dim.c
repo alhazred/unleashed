@@ -35,7 +35,7 @@
  * information into /devices and /dev paths.  It does this using interfaces to
  * the kernel instance tree so that it can provide translations for devices
  * which are no longer present. An example consumer of these interfaces is
- * iostat(1M) - which shows, in its first iteration, activity since reboot.
+ * iostat(8) - which shows, in its first iteration, activity since reboot.
  * With persistant kstats, a device which was busy a long time ago can still
  * have a decaying presence in iostat output, and that output, when '-n' is
  * used, should show the public name.

@@ -109,7 +109,7 @@
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='smtp-notify' section='1M'
+			<manpage title='smtp-notify' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 		<pg_pattern name='config' type='application' target='this'

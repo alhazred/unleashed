@@ -791,7 +791,7 @@ main(int argc, char *argv[])
 	if (!is_smf_context()) {
 		(void) fprintf(stderr,
 		    "wpad is an smf(5) managed service and cannot be run from "
-		    "the command line; please use dladm(1M).\n");
+		    "the command line; please use dladm(8).\n");
 		return (SMF_EXIT_ERR_NOSMF);
 	}
 

@@ -66,7 +66,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 			omitted, the internal name is the same as the
 			external name.
 
-	title,		these tags are used by auditrecord(1M) build to create
+	title,		these tags are used by auditrecord(8) build to create
 	program,	audit_record_attr database from adt events.
 	see		Following example demonstrates their semantics:
 
@@ -85,7 +85,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 			If the length of string in any of the given
 			elements is longer than defined, the string is
 			silently truncated to the defined length in the
-			auditrecord(1M) runtime: 
+			auditrecord(8) runtime: 
 				
 				element	<= max (non-truncated) string length
 				title	<= 46
@@ -174,11 +174,11 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 			If the type is an array, its length must be given
 			explicitly.
 
-	comment		Used by auditrecord(1M) build to generate 
+	comment		Used by auditrecord(8) build to generate 
 			audit_record_attr. Comment is explanation note
 			printed with token type. Colon (':') may not be
 			used in a comment. See example above for other
-			tags related to auditrecord(1M).
+			tags related to auditrecord(8).
 
 	token		Define allowed token names.
 			- id is the name of token; this name is used
@@ -186,7 +186,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 			- a token id name may not end in digits.
 			- usage is an optional value.
 			See also example above for "token" tag relation to 
-			the auditrecord(1M) output.
+			the auditrecord(8) output.
 
 	msg_list	Define a set of text strings.
 			- id is the name to be used for this group of text
@@ -655,7 +655,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_su" header="0" idNo="30" omit="JNI">
     	<title>su</title>
 	<program>/usr/bin/su</program>
-	<see>su(1M)</see>
+	<see>su(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -878,14 +878,14 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	header="0" idNo="39" omit="JNI">
 	<title>su</title>
 	<program>/usr/bin/su</program>
-	<see>su(1M)</see>
+	<see>su(8)</see>
     </event>
 
     <event id="AUE_role_logout" instance_of="AUE_generic_basic"
 	header="0" idNo="40" omit="JNI">
 	<title>su</title>
 	<program>/usr/bin/su</program>
-	<see>su(1M)</see>
+	<see>su(8)</see>
     </event>
 
     <event id="AUE_newgrp_login" header="0" idNo="41" omit="JNI">
@@ -1060,13 +1060,13 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	header="0" idNo="47" omit="JNI">
 	<title>create wifi security object</title>
 	<program>/usr/sbin/dladm</program>
-	<see>dladm(1M)</see>
+	<see>dladm(8)</see>
     </event>
     <event id="AUE_dladm_delete_secobj" instance_of="AUE_dladm_generic"
 	header="0" idNo="48" omit="JNI">
 	<title>delete wifi security object</title>
 	<program>/usr/sbin/dladm</program>
-	<see>dladm(1M)</see>
+	<see>dladm(8)</see>
     </event>
 
     <!-- uadmin(1m) events -->
@@ -1110,34 +1110,34 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     	<title>uadmin shutdown</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
     <event id="AUE_uadmin_reboot" instance_of="AUE_uadmin_generic"
         header="0" idNo="52" omit="JNI">
     	<title>uadmin reboot</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
     <event id="AUE_uadmin_dump" instance_of="AUE_uadmin_generic"
         header="0" idNo="53" omit="JNI">
     	<title>uadmin dump</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
     <event id="AUE_uadmin_freeze" instance_of="AUE_uadmin_generic"
         header="0" idNo="54" omit="JNI">
     	<title>uadmin freeze</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
     <event id="AUE_uadmin_remount" header="0" idNo="55" omit="JNI">
     	<title>uadmin remount</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1153,20 +1153,20 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     	<title>uadmin ftrace</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
     <event id="AUE_uadmin_swapctl" instance_of="AUE_uadmin_generic_fcn"
         header="0" idNo="57" omit="JNI">
     	<title>uadmin swapctl</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
     <event id="AUE_uadmin_thaw" header="0" idNo="96" omit="JNI">
     	<title>thaw after freeze</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1187,7 +1187,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     	<title>uadmin config</title>
 	<program>/sbin/uadmin</program>
 	<program>/usr/sbin/uadmin</program>
-	<see>uadmin(1M)</see>
+	<see>uadmin(8)</see>
     </event>
 
 <!-- smbd service event; smbd session setup -->
@@ -1247,7 +1247,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_vscan_quarantine" header="0" idNo="60" omit="JNI">
     	<title>VSCAN: quarantine infected file</title>
 	<program>/usr/lib/vscan/vscand</program>
-	<see>vscand(1M), ICAP RFC 3507 (Extensions)</see>
+	<see>vscand(8), ICAP RFC 3507 (Extensions)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1273,7 +1273,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	idNo="61" omit="JNI">
 	<title>NDMP Connect</title>
 	<program>/usr/lib/ndmp/ndmpd</program>
-	<see>ndmpd(1M)</see>
+	<see>ndmpd(8)</see>
     </event>
 
 <!-- ndmp service event; ndmp client disconnect -->
@@ -1281,14 +1281,14 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	idNo="62" omit="JNI">
 	<title>NDMP Disconnect</title>
 	<program>/usr/lib/ndmp/ndmpd</program>
-	<see>ndmpd(1M)</see>
+	<see>ndmpd(8)</see>
     </event>
 
 <!-- ndmp service event; ndmp backup -->
     <event id="AUE_ndmp_backup" header="0" idNo="63" omit="JNI">
 	<title>NDMP Backup</title>
 	<program>/usr/lib/ndmp/ndmpd</program>
-	<see>ndmpd(1M)</see>
+	<see>ndmpd(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1318,7 +1318,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_ndmp_restore" header="0" idNo="64" omit="JNI">
 	<title>NDMP Restore</title>
 	<program>/usr/lib/ndmp/ndmpd</program>
-	<see>ndmpd(1M)</see>
+	<see>ndmpd(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1404,110 +1404,110 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 
     <event id="AUE_smf_enable" instance_of="AUE_smf_generic" header="0"
 	idNo="65" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_tmp_enable" instance_of="AUE_smf_generic" header="0"
 	idNo="66" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_disable" instance_of="AUE_smf_generic" header="0"
 	idNo="67" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_tmp_disable" instance_of="AUE_smf_generic" header="0"
 	idNo="68" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_restart" instance_of="AUE_smf_generic" header="0"
 	idNo="69" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_refresh" instance_of="AUE_smf_generic" header="0"
 	idNo="70" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_clear" instance_of="AUE_smf_generic" header="0"
 	idNo="71" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_degrade" instance_of="AUE_smf_generic" header="0"
 	idNo="72" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_immediate_degrade" instance_of="AUE_smf_generic"
 	header="0" idNo="73" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_maintenance" instance_of="AUE_smf_generic" header="0"
 	idNo="74" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_immediate_maintenance" instance_of="AUE_smf_generic"
 	header="0" idNo="75" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_immtmp_maintenance" instance_of="AUE_smf_generic"
 	header="0" idNo="76" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_tmp_maintenance" instance_of="AUE_smf_generic" header="0"
 	idNo="77" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
     <event id="AUE_smf_milestone" instance_of="AUE_smf_generic" header="0"
 	idNo="78" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svcadm(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svcadm(8)</see>
     </event>
 
     <event id="AUE_smf_create" instance_of="AUE_smf_generic" header="0"
 	idNo="79" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
     <event id="AUE_smf_delete" instance_of="AUE_smf_generic" header="0"
 	idNo="80" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
 
     <event id="AUE_smf_create_pg" instance_of="AUE_smf_generic_pg" header="0"
 	idNo="81" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
     <event id="AUE_smf_create_npg" instance_of="AUE_smf_generic_pg" header="0"
 	idNo="82" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
     <event id="AUE_smf_delete_pg" instance_of="AUE_smf_generic_pg" header="0"
 	idNo="83" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
     <event id="AUE_smf_delete_npg" instance_of="AUE_smf_generic_pg" header="0"
 	idNo="84" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
 
     <event id="AUE_smf_create_snap" header="0" idNo="85" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1533,8 +1533,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	</entry>
     </event>
     <event id="AUE_smf_delete_snap" header="0" idNo="86" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1560,8 +1560,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	</entry>
     </event>
     <event id="AUE_smf_attach_snap" header="0" idNo="87" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1598,8 +1598,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     </event>
 
     <event id="AUE_smf_annotation" header="0" idNo="88" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1621,8 +1621,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     </event>
 
     <event id="AUE_smf_create_prop" header="0" idNo="89" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1654,8 +1654,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     </event>
 
     <event id="AUE_smf_change_prop" header="0" idNo="90" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1686,8 +1686,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	</entry>
     </event>
     <event id="AUE_smf_delete_prop" header="0" idNo="91" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1710,8 +1710,8 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 
     <event id="AUE_smf_read_prop" instance_of="AUE_smf_generic" header="0"
 	idNo="92" omit="JNI">
-	<program>svc.configd(1M)</program>
-	<see>svccfg(1M)</see>
+	<program>svc.configd(8)</program>
+	<see>svccfg(8)</see>
     </event>
 
 <!-- CPUFreq related events -->
@@ -1719,7 +1719,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_cpu_ondemand" header="0" idNo="93" omit="JNI">
 	<title>set CPU freq to minimal unless load increases</title>
 	<program>/usr/lib/hal/hald-addon-cpufreq</program>
-	<see>hald(1M)</see>
+	<see>hald(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1737,7 +1737,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_cpu_performance" header="0" idNo="94" omit="JNI">
 	<title>set CPU freq to Max</title>
 	<program>/usr/lib/hal/hald-addon-cpufreq</program>
-	<see>hald(1M)</see>
+	<see>hald(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1755,7 +1755,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_cpu_threshold" header="0" idNo="95" omit="JNI">
 	<title>set CPU frequency threshold percentage</title>
 	<program>/usr/lib/hal/hald-addon-cpufreq</program>
-	<see>hald(1M)</see>
+	<see>hald(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1908,7 +1908,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_hotplug_state" header="0" idNo="117" omit="JNI">
         <title>change hotplug connection state</title>
         <program>/usr/lib/hotplugd</program>
-        <see>hotplugd(1M)</see>
+        <see>hotplugd(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>
@@ -1947,7 +1947,7 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
     <event id="AUE_hotplug_set" header="0" idNo="118" omit="JNI">
         <title>set hotplug bus private options</title>
         <program>/usr/lib/hotplugd</program>
-        <see>hotplugd(1M)</see>
+        <see>hotplugd(8)</see>
 	<entry id="subject">
 	    <internal token="subject"/>
 	    <external opt="none"/>

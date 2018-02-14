@@ -106,7 +106,7 @@
 			</loctext>
 		</common_name>
 		<documentation> 
-			<manpage title='vrrpd' section='1M' 
+			<manpage title='vrrpd' section='8' 
 				manpath='/usr/share/man' /> 
 		</documentation> 
 	</template>

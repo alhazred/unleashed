@@ -3228,7 +3228,7 @@ metaslab_claim_dva(spa_t *spa, const dva_t *dva, uint64_t txg)
 	VERIFY3U(range_tree_space(msp->ms_tree) - size, <=, msp->ms_size);
 	range_tree_remove(msp->ms_tree, offset, size);
 
-	if (spa_writeable(spa)) {	/* don't dirty if we're zdb(1M) */
+	if (spa_writeable(spa)) {	/* don't dirty if we're zdb(8) */
 		if (range_tree_space(msp->ms_alloctree[txg & TXG_MASK]) == 0)
 			vdev_dirty(vd, VDD_METASLAB, msp, txg);
 		range_tree_add(msp->ms_alloctree[txg & TXG_MASK], offset, size);

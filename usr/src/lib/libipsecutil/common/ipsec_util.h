@@ -61,7 +61,7 @@ extern "C" {
  * Input buffer size limits maximum line length for both file parsing and
  * interactive mode. 4K chars should be enough even for broad commands and
  * all possible key lenghts of today's symmetric ciphers entered via
- * ipseckey(1M) which has the most bifurcated grammar from all IPsec commands.
+ * ipseckey(8) which has the most bifurcated grammar from all IPsec commands.
  */
 #define	IBUF_SIZE	4096
 

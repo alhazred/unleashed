@@ -79,7 +79,7 @@ SunFire-880 dynamic reconfiguration
 			</loctext>
 		</common_name>
 		<documentation>
-			<manpage title='sf880drd' section='1M'
+			<manpage title='sf880drd' section='8'
 				manpath='/usr/share/man' />
 		</documentation>
 	</template>

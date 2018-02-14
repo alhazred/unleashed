@@ -146,7 +146,7 @@ static int	pushdir(const char *dir);
 static boolean_t remove_notify_files(struct action_arg **aa);
 
 /*
- * Old version of rmmount(1M)
+ * Old version of rmmount(8)
  */
 /* ARGSUSED */
 int

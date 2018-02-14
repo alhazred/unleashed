@@ -1456,7 +1456,7 @@ EOF
 	if [[ ${#enctypes[@]} -eq 0 ]]
 	then
 		printf "$(gettext "No enctypes are supported").\n"
-		printf "$(gettext "Please enable arcfour or 1DES, then re-join; see cryptoadm(1M)").\n" >&2
+		printf "$(gettext "Please enable arcfour or 1DES, then re-join; see cryptoadm(8)").\n" >&2
 		error_message
 	fi
 

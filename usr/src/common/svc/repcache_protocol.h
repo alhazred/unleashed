@@ -50,7 +50,7 @@
  * 1.	If libscf(3lib) recieves an EINTR from door_call(), it doesn't know
  *      whether or not the server recieved (and is processing) its request.
  *
- * 2.	When svc.configd(1M) calls door_return(), the client may have already
+ * 2.	When svc.configd(8) calls door_return(), the client may have already
  *	received an EINTR, aborting its door_call().  In this case, the
  *	returned values are dropped on the floor.
  *

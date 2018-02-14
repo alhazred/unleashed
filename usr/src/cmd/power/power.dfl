@@ -24,7 +24,7 @@
 #
 #
 # This file contains tunable parameters for Power Management (PM) and
-# Checkpoint-Resume (CPR). See power.conf(4), pmconfig(1M), pm(7D),
+# Checkpoint-Resume (CPR). See power.conf(4), pmconfig(8), pm(7D),
 # and cpr(7) for details.
 #
 #
