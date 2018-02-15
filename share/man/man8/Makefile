@@ -411,7 +411,6 @@ MAN = 6to4relay.8 \
       ttyadm.8 \
       ttymon.8 \
       tunefs.8 \
-      uadmin.8 \
       ucodeadm.8 \
       ufsdump.8 \
       ufsrestore.8 \
