@@ -364,7 +364,6 @@ COMMON_SUBDIRS=		\
 	tty		\
 	ttymon		\
 	tzreload	\
-	uadmin		\
 	units		\
 	unlink		\
 	unpack		\
