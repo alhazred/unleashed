@@ -248,12 +248,7 @@ actually necessary.  Thus synonyms.h was removed, and no new synonym symbols
 need be added.  However, unfortunately, certain of the private symbols were
 inadvertently exposed to applications, and several are known to have been
 used, thus these existing synonyms must continue to exist to maintain
-compatibility.  A preloadable library, /lib/c_synonyms.so.1 is provided which
-also provides the historical names with underscore prefixes to allow any other
-incorrect application to continue to function.
-
-It should never be necessary to add additional synonym symbols to libc nor to
-add underscore prefixed aliases to c_synonyms.so.1.
+compatibility.
 
 # libc Internals Scoped Protected
 

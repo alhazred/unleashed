@@ -163,7 +163,6 @@ dir path=usr/share/man/man3xnet
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7p
 $(i386_ONLY)file path=etc/flash/precreation/caplib group=sys mode=0500
-file path=lib/$(ARCH64)/c_synonyms.so.1
 file path=lib/$(ARCH64)/ld.so.1
 file path=lib/$(ARCH64)/libadm.so.1
 file path=lib/$(ARCH64)/libaio.so.1
@@ -228,7 +227,6 @@ file path=lib/$(ARCH64)/nss_dns.so.1
 file path=lib/$(ARCH64)/nss_files.so.1
 file path=lib/$(ARCH64)/nss_nis.so.1
 file path=lib/$(ARCH64)/nss_user.so.1
-file path=lib/c_synonyms.so.1
 file path=lib/crypto/$(ARCH64)/kmf_mapper_cn.so.1
 file path=lib/crypto/$(ARCH64)/kmf_nss.so.1
 file path=lib/crypto/$(ARCH64)/kmf_openssl.so.1

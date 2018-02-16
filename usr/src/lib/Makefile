@@ -67,7 +67,6 @@ SUBDIRS +=				\
 	abi		\
 	auditd_plugins	\
 	brand		\
-	c_synonyms	\
 	cfgadm_plugins	\
 	crypt_modules	\
 	extendedFILE	\

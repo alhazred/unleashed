@@ -40,6 +40,7 @@ changed.
     - readdir_r
     - getpwuid_r
     - getpwnam_r
+ - c_synonyms.so
  - drop support for Riyadh87, Riyadh88, and Riyadh89 timezones
  - routeadm(1m), svc:/network/routing/legacy-routing,
    svc:/network/ipv[46]-forwarding removed. use ipadm to manage forwarding and

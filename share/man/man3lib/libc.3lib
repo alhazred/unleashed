@@ -971,26 +971,6 @@ shared object
 64-bit shared object
 .RE
 
-.sp
-.ne 2
-.na
-\fB\fB/lib/c_synonyms.so.1\fR\fR
-.ad
-.RS 27n
-A compatibility library to provide access to obsolete \fBlibc\fR synonym
-symbols
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fB/lib/64/c_synonyms.so.1\fR\fR
-.ad
-.RS 27n
-A 64-bit compatibility library to provide access to obsolete \fBlibc\fR synonym
-symbols
-.RE
-
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
@@ -1009,58 +989,3 @@ MT-Level	Safe
 .LP
 \fBpvs\fR(1), \fBIntro\fR(2), \fBIntro\fR(3), \fBattributes\fR(5),
 \fBlf64\fR(5), \fBstandards\fR(5)
-.SH NOTES
-.LP
-The synonyms compatibility library, \fBc_synonyms.so.1\fR, provides a mechanism
-to support old applications and libraries that were mistakenly built using
-now-obsolete synonym symbols from \fBlibc\fR.
-.LP
-Before the advent of direct binding (-B direct) \fBlibc\fR provided many
-functions with two names.  For example, \fBgetpwent()\fR and \fB_getpwent()\fR.
-These two names referred to exactly the same function in \fBlibc\fR. The
-leading-underscore symbol was intended to be used by system libraries in order
-to avoid conflicting with an application that might define its own version of
-\fBgetpwent()\fR with completely different semantics. Standard-conforming
-applications may not define and use function names with leading underscores.
-.LP
-illumos system libraries are now built with direct binding. This means that a
-system library that calls \fBgetpwent()\fR will bind directly to the instance
-of \fBgetpwent()\fR in \fBlibc\fR, even if the application to which it is
-linked defines a different \fBgetpwent()\fR for its own use. The application
-binds to its instance of \fBgetpwent()\fR and there is no resulting conflict.
-The direct binding mechanism is equally available to libraries not delivered
-with illumos.
-.LP
-As a result of this evolution, most of the leading-underscore synonym symbols
-have been removed from \fBlibc\fR.  This means that applications that call
-these now-obsolete function names will cease to work.  They will typically draw
-the error:
-.sp
-.in +2
-.nf
-$ ./application
-ld.so.1: fatal: relocation error: symbol _getpwent:
-referenced symbol not found
-Killed
-.fi
-.in -2
-.sp
-
-.sp
-.LP
-All of the old leading-underscore symbols have been copied to the synonyms
-compatibility library. This library simply redirects the calls to the
-non-underscore instances of the corresponding functions in \fBlibc\fR. Use it
-as a pre-loaded object:
-.sp
-.in +2
-.nf
-$ LD_PRELOAD=c_synonyms.so.1 ./application
-.fi
-.in -2
-.sp
-
-.LP
-The synonyms compatibility library is intended neither to enable the generation
-of applications that call the obsolete leading-underscore synonym functions,
-nor to endorse this particular programming practice.
