@@ -69,6 +69,9 @@ main(int argc, char **argv)
 #ifdef SVR4
 	{
 	struct sigaction nsig;
+	nsig.sa_handler = SIG_IGN;
+	(void) sigaction(SIGPIPE, &nsig, NULL);
+
 	nsig.sa_handler = SIG_DFL;
 	sigemptyset(&nsig.sa_mask);
 	nsig.sa_flags = SA_RESTART;
