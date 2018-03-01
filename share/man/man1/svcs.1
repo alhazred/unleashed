@@ -3,7 +3,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License").  You may not use this file except in compliance with the License.
 .\" You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.  See the License for the specific language governing permissions and limitations under the License.
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH SVCS 1 "Apr 17, 2011"
+.TH SVCS 1 "Feb 21, 2018"
 .SH NAME
 svcs \- report service status
 .SH SYNOPSIS
@@ -21,12 +21,17 @@ svcs \- report service status
 
 .LP
 .nf
-\fBsvcs\fR [\fB-l\fR | \fB-L\fR] [\fB-vZ\fR] [\fB-z\fR \fIzone\fR] [\fIFMRI\fR | \fIpattern\fR]...
+\fBsvcs\fR [\fB-l] [\fB-vZ\fR] [\fB-z\fR \fIzone\fR] [\fIFMRI\fR | \fIpattern\fR]...
 .fi
 
 .LP
 .nf
-\fBsvcs\fR \fB-x\fR [\fB-v\fR] [\fB-Z\fR | \fB-z\fR \fIzone\fR] [\fIFMRI\fR]...
+\fBsvcs\fR [\fB-L\fR] [\fB-vZ\fR] [\fB-z\fR \fIzone\fR] [\fIFMRI\fR | \fIpattern\fR]...
+.fi
+
+.LP
+.nf
+\fBsvcs\fR \fB-x\fR [\fB-L\fR] [\fB-v\fR] [\fB-Z\fR | \fB-z\fR \fIzone\fR] [\fIFMRI\fR]...
 .fi
 
 .SH DESCRIPTION
@@ -223,7 +228,8 @@ specific milestone. See \fBsvcadm\fR(8) for details.
 .ad
 .RS 20n
 Display the log file of the selected services and service instances, one
-per-line.
+per-line. With \fB-v\fR, displays full contents of the log file. With \fB-x\fR,
+displays the last 5 entries of the log file.
 .RE
 
 .sp

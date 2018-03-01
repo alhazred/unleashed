@@ -1858,8 +1858,9 @@ print_usage(const char *progname, FILE *f, boolean_t do_exit)
 	    "[-sS col] [-Z | -z zone ]\n            [<service> ...]\n"
 	    "       %1$s -d | -D [-Hpv] [-o col[,col ... ]] [-sS col] "
 	    "[-Z | -z zone ]\n            [<service> ...]\n"
-	    "       %1$s [-l | -L] [-Z | -z zone] <service> ...\n"
-	    "       %1$s -x [-v] [-Z | -z zone] [<service> ...]\n"
+	    "       %1$s -l [-v] [-Z | -z zone] <service> ...\n"
+	    "       %1$s -L [-v] [-Z | -z zone] <service> ...\n"
+	    "       %1$s -x [-v] [-L] [-Z | -z zone] [<service> ...]\n"
 	    "       %1$s -?\n"), progname);
 
 	if (do_exit)
@@ -2630,8 +2631,11 @@ restarter_common:
 static int
 print_log(void *unused, scf_walkinfo_t *wip)
 {
+
+	FILE *fp;
 	scf_propertygroup_t *rpg;
-	char buf[MAXPATHLEN];
+	char logfile[PATH_MAX];
+	char line[LOG_MAXLINE];
 
 	if ((rpg = scf_pg_create(h)) == NULL)
 		scfdie();
@@ -2644,8 +2648,26 @@ print_log(void *unused, scf_walkinfo_t *wip)
 	}
 
 	if (pg_get_single_val(rpg, SCF_PROPERTY_LOGFILE,
-	    SCF_TYPE_ASTRING, buf, sizeof (buf), 0) == 0) {
-		(void) printf("%s\n", buf);
+	    SCF_TYPE_ASTRING, logfile, sizeof (logfile), 0) == 0) {
+		if (opt_verbose) {
+			if ((fp = fopen(logfile, "r")) == NULL) {
+				if (errno != ENOENT) {
+					uu_die(gettext("Failed to read log "
+					    "file: %s"), logfile);
+				}
+				goto out;
+			}
+
+			(void) printf("%s\n", wip->fmri);
+			while (fgets(line, LOG_MAXLINE, fp) != NULL) {
+				(void) printf("%s", line);
+			}
+
+			(void) putchar('\n');
+			(void) fclose(fp);
+		} else {
+			(void) printf("%s\n", logfile);
+		}
 	}
 
 out:
@@ -3440,6 +3462,7 @@ main(int argc, char **argv)
 	int show_all = 0;
 	int show_header = 1;
 	int show_zones = 0;
+	int tail = 0;
 
 	const char * const options = "aHpvno:R:s:S:dDlL?xZz:";
 
@@ -3488,11 +3511,20 @@ main(int argc, char **argv)
 		case 'd':
 		case 'D':
 		case 'l':
-		case 'L':
 			if (opt_mode != 0)
 				argserr(progname);
 
 			opt_mode = opt;
+			break;
+
+		case 'L':
+			if (opt_mode == 0) {
+				opt_mode = opt;
+			} else if (opt_mode == 'x') {
+				tail = 1;
+			} else  {
+				argserr(progname);
+			}
 			break;
 
 		case 'n':
@@ -3503,9 +3535,6 @@ main(int argc, char **argv)
 			break;
 
 		case 'x':
-			if (opt_mode != 0)
-				argserr(progname);
-
 			opt_mode = opt;
 			break;
 
@@ -3526,13 +3555,14 @@ main(int argc, char **argv)
 			break;
 
 		case 'H':
-			if (opt_mode == 'l' || opt_mode == 'x')
+			if (opt_mode == 'l' || opt_mode == 'x' ||
+			    opt_mode == 'L')
 				argserr(progname);
 			show_header = 0;
 			break;
 
 		case 'p':
-			if (opt_mode == 'x')
+			if (opt_mode == 'x' || opt_mode == 'L')
 				argserr(progname);
 			opt_processes = 1;
 			break;
@@ -3542,13 +3572,14 @@ main(int argc, char **argv)
 			break;
 
 		case 'o':
-			if (opt_mode == 'l' || opt_mode == 'x')
+			if (opt_mode == 'l' || opt_mode == 'x' ||
+			    opt_mode == 'L')
 				argserr(progname);
 			columns_str = optarg;
 			break;
 
 		case 'R':
-			if (opt_mode != 0 || opt_mode == 'x')
+			if (opt_mode != 0 || opt_mode == 'x' || opt_mode == 'L')
 				argserr(progname);
 
 			add_restarter(optarg);
@@ -3562,13 +3593,16 @@ main(int argc, char **argv)
 			add_sort_column(optarg, optopt == 'S');
 			break;
 
+		case 'L':
+			tail = 1;
+			break;
 		case 'd':
 		case 'D':
 		case 'l':
-		case 'L':
 		case 'n':
 		case 'x':
-			assert(opt_mode == optopt);
+			if (opt_mode != optopt)
+				argserr(progname);
 			break;
 
 		case 'z':
@@ -3606,7 +3640,8 @@ main(int argc, char **argv)
 	 */
 	if (show_all && optind != argc)
 		uu_warn(gettext("-a ignored when used with arguments.\n"));
-
+	if (opt_mode == 'L' && optind == argc)
+		argserr(progname);
 	while (show_zones) {
 		uint_t found;
 
@@ -3762,7 +3797,7 @@ again:
 	}
 
 	if (opt_mode == 'x') {
-		explain(opt_verbose, argc, argv);
+		explain(opt_verbose, tail, argc, argv);
 		goto nextzone;
 	}
 

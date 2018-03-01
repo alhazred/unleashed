@@ -80,7 +80,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <limits.h>
 
 #define	DC_DISABLED	"SMF-8000-05"
 #define	DC_TEMPDISABLED	"SMF-8000-1S"
@@ -115,6 +115,8 @@
 #define	bad_error(func, err)						\
 	uu_panic("%s:%d: %s() failed with unknown error %d.\n",		\
 	    __FILE__, __LINE__, func, err);
+
+#define	NUM_TAIL	5
 
 typedef struct {
 	const char *svcname;
@@ -191,6 +193,8 @@ static const char *g_msgbase = "http://illumos.org/msg/";
 
 static char *emsg_nomem;
 static char *emsg_invalid_dep;
+
+static int log_tail = 0;
 
 extern scf_handle_t *h;
 extern char *g_zonename;
@@ -1945,6 +1949,56 @@ print_docs(scf_instance_t *inst, int verbose)
 	return (0);
 }
 
+/*
+ * Print N last lines from the log file, where N defined as NUM_TAIL.
+ */
+static void
+print_logtail(scf_instance_t *inst)
+{
+	FILE *fp;
+	char logfile[PATH_MAX];
+	char line[LOG_MAXLINE];
+	long offset;
+	int idx = 0;
+
+	if (scf_instance_get_pg(inst, SCF_PG_RESTARTER, g_pg) != 0)
+		return;
+
+	if (pg_get_single_val(g_pg, SCF_PROPERTY_LOGFILE,
+	    SCF_TYPE_ASTRING, logfile, sizeof (logfile), 0) == 0) {
+		if ((fp = fopen(logfile, "r")) == NULL) {
+			if (errno != ENOENT) {
+				uu_die(gettext("Failed to open log "
+				    "file: %si\n"), logfile);
+			}
+		}
+
+		if (fseek(fp, 0L, SEEK_END) != 0) {
+			(void) fclose(fp);
+			uu_die(gettext("Failed to read log file: "
+			    "%s\n"), logfile);
+		}
+
+		offset = ftell(fp);
+		while (offset-- != 0) {
+			if (fseek(fp, offset, SEEK_SET) != 0) {
+				(void) fclose(fp);
+				uu_die(gettext("Failed to read log "
+				    "file: %s\n"), logfile);
+			}
+			if (fgetc(fp) == '\n' && idx++ == NUM_TAIL) {
+				break;
+			}
+		}
+
+		(void) printf("   Last log entries:\n");
+		while (fgets(line, LOG_MAXLINE, fp))
+			(void) printf("%s", line);
+
+		(void) fclose(fp);
+	}
+}
+
 static int first = 1;
 
 /*
@@ -2054,6 +2108,10 @@ print_service(inst_t *svcp, int verbose)
 			(void) printf(gettext("        svc:/%s:%s\n"),
 			    spp->svcp->svcname, spp->svcp->instname);
 	}
+
+	if (log_tail) {
+		print_logtail(g_inst);
+	}
 }
 
 /*
@@ -2093,7 +2151,7 @@ print_service_cb(void *verbose, scf_walkinfo_t *wip)
 }
 
 void
-explain(int verbose, int argc, char **argv)
+explain(int verbose, int tail, int argc, char **argv)
 {
 	/*
 	 * Initialize globals.  If we have been called before (e.g., for a
@@ -2102,6 +2160,8 @@ explain(int verbose, int argc, char **argv)
 	 * anything up.
 	 */
 	x_init();
+
+	log_tail = tail;
 
 	/* Walk the graph and populate services with inst_t's */
 	load_services();

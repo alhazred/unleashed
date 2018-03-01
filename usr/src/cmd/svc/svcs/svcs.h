@@ -35,6 +35,8 @@
 extern "C" {
 #endif
 
+#define LOG_MAXLINE             1024
+
 extern ssize_t max_scf_fmri_length;
 extern ssize_t max_scf_name_length;
 extern ssize_t max_scf_value_length;
@@ -57,7 +59,7 @@ int pg_get_single_val(scf_propertygroup_t *, const char *, scf_type_t, void *,
 int inst_get_single_val(scf_instance_t *, const char *, const char *,
     scf_type_t, void *, size_t, uint_t, int, int);
 
-void explain(int, int, char **);
+void explain(int, int, int, char **);
 
 #ifdef	__cplusplus
 }
