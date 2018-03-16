@@ -60,7 +60,7 @@ static void usage(void);
 int
 main(int argc, char **argv)
 {
-	char *options, *value;
+	char *value;
 	char *special, *mountp;
 	struct mnttab mm;
 	int c;
@@ -91,8 +91,23 @@ main(int argc, char **argv)
 	 * unrecognized options.
 	 */
 	strcpy(obuff, "ro");	/* default */
-	while ((c = getopt(argc, argv, "rmOq")) != EOF) {
+	while ((c = getopt(argc, argv, "o:rmOq")) != EOF) {
 		switch (c) {
+			case 'o':
+				if (strlen(optarg) > MAX_MNTOPT_STR) {
+					(void) fprintf(stderr, gettext(
+					    "%s: option set too long\n"),
+					    myname);
+					exit(1);
+				}
+				if (strlen(optarg) == 0) {
+					(void) fprintf(stderr, gettext(
+					    "%s: missing suboptions\n"),
+					    myname);
+					exit(1);
+				}
+				strcpy(obuff, optarg);
+				break;
 			case 'O':
 				Oflg++;
 				break;
