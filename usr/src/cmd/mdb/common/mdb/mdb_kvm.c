@@ -468,6 +468,8 @@ kt_status_dcmd(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 {
 	kt_data_t *kt = mdb.m_target->t_data;
 	struct utsname uts;
+	static char buff[64];
+	struct tm *ts;
 
 	bzero(&uts, sizeof (uts));
 	(void) strcpy(uts.nodename, "unknown machine");
@@ -491,6 +493,10 @@ kt_status_dcmd(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 		mdb_printf("image uuid: %s\n", dh->dump_uuid[0] != '\0' ?
 		    dh->dump_uuid : "(not set)");
 		mdb_printf("panic message: %s\n", dh->dump_panicstring);
+
+		ts = localtime(&dh->dump_crashtime);
+		(void) strftime(buff, sizeof (buff), "%Y %b %d %H:%M:%S", ts);
+		mdb_printf("dump crash time: %s\n", buff);
 
 		kt->k_dump_print_content(dh, kt->k_dumpcontent);
 	} else {
