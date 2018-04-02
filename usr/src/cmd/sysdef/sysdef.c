@@ -395,27 +395,27 @@ main(int argc, char *argv[])
 			MEMSEEK(vs);
 			MEMREAD(v);
 		}
-		printf("%8d	maximum memory allowed in buffer cache "
+		printf("%10ld	maximum memory allowed in buffer cache "
 		    "(bufhwm)\n", v.v_bufhwm * 1024);
-		printf("%8d	maximum number of processes (v.v_proc)\n",
+		printf("%10d	maximum number of processes (v.v_proc)\n",
 		    v.v_proc);
-		printf("%8d	maximum global priority in sys class "
+		printf("%10d	maximum global priority in sys class "
 		    "(MAXCLSYSPRI)\n", v.v_maxsyspri);
-		printf("%8d	maximum processes per user id (v.v_maxup)\n",
+		printf("%10d	maximum processes per user id (v.v_maxup)\n",
 		    v.v_maxup);
-		printf("%8d	auto update time limit in seconds (NAUTOUP)\n",
+		printf("%10d	auto update time limit in seconds (NAUTOUP)\n",
 		    v.v_autoup);
 		if (SYM_VALUE(tu)) {
 			MEMSEEK(tu);
 			MEMREAD(tune);
 		}
-		printf("%8d	page stealing low water mark (GPGSLO)\n",
+		printf("%10d	page stealing low water mark (GPGSLO)\n",
 		    tune.t_gpgslo);
-		printf("%8d	fsflush run rate (FSFLUSHR)\n",
+		printf("%10d	fsflush run rate (FSFLUSHR)\n",
 		    tune.t_fsflushr);
-		printf("%8d	minimum resident memory for avoiding "
+		printf("%10d	minimum resident memory for avoiding "
 		    "deadlock (MINARMEM)\n", tune.t_minarmem);
-		printf("%8d	minimum swapable memory for avoiding deadlock "
+		printf("%10d	minimum swapable memory for avoiding deadlock "
 		    "(MINASMEM)\n", tune.t_minasmem);
 	}
 
