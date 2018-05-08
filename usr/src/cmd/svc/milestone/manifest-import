@@ -112,7 +112,7 @@ function preserve_system_profiles {
 
 	#
 	# Preserve hashes for the following profiles: generic (two
-	# cases) and platform (uname -i, uname -m outputs).
+	# cases) and platform (uname -m output).
 	#
 	gn="var_svc_profile_generic_open_xml"
 	gh=`/usr/bin/svcprop -p ${gn}/md5sum smf/manifest 2>/dev/null`
@@ -124,22 +124,11 @@ function preserve_system_profiles {
 	[ $? = 0 ] || glh=""
 	gln="etc_svc_profile_generic_limited_net_xml"
 
-	LC_ALL=C pl=`/usr/bin/uname -i | /usr/bin/tr , _`
+	LC_ALL=C pl=`/usr/bin/uname -m | /usr/bin/tr , _`
 	pln="var_svc_profile_platform_${pl}_xml"
 	plh=`/usr/bin/svcprop -p ${pln}/md5sum smf/manifest 2>/dev/null`
 	[ $? = 0 ] || plh=""
 	pln="etc_svc_profile_platform_${pl}_xml"
-
-	LC_ALL=C plm=`/usr/bin/uname -m | /usr/bin/tr , _`
-	if [ $plm != $pl ]; then
-		plmn="var_svc_profile_platform_${plm}_xml"
-		plmh=`/usr/bin/svcprop -p ${plmn}/md5sum smf/manifest \
-		    2>/dev/null`
-		[ $? = 0 ] || plmh=""
-		plmn="etc_svc_profile_platform_${plm}_xml"
-	else
-		plmh=""
-	fi
 
 	[ -n "$gh" ] && {
 		echo "Preserving generic hash ($gh)."
@@ -164,15 +153,6 @@ function preserve_system_profiles {
 		    opaque: $plh
 		/usr/sbin/svccfg -s smf/manifest setprop ${pln}/manifestfile = \
 		    astring: "/etc/svc/profile/platform_${pl}_xml"
-	}
-	[ -n "$plmh" ] && {
-		echo "Preserving platform hash ($plmh)."
-		/usr/sbin/svccfg -s smf/manifest addpg $plmn framework
-		/usr/sbin/svccfg -s smf/manifest setprop $plmn/md5sum = \
-		    opaque: $plmh
-		/usr/sbin/svccfg -s smf/manifest setprop \
-		    ${plmn}/manifestfile = \
-		    astring: "/etc/svc/profile/platform_${plm}_xml"
 	}
 
 	#
@@ -269,14 +249,11 @@ function apply_profile {
 	# this is very likely an import after upgrade so call
 	# preserve_system_profiles in that case.
 	#
-	LC_ALL=C pl=`/usr/bin/uname -i | /usr/bin/tr , _`
+	LC_ALL=C pl=`/usr/bin/uname -m | /usr/bin/tr , _`
 	pln="etc_svc_profile_platform_${pl}_xml"
 
-	LC_ALL=C plm=`/usr/bin/uname -m | /usr/bin/tr , _`
-	[ $plm != $pl ] && plmn="etc_svc_profile_platform_${plm}_xml"
-
 	preserve_profiles=1
-	for prof in $pln $plmn etc_svc_profile_platform_none_xml \
+	for prof in $pln etc_svc_profile_platform_none_xml \
 	    etc_svc_profile_generic_limited_net_xml \
 	    etc_svc_profile_generic_open_xml; do
 		if /usr/bin/svcprop -p $prof smf/manifest >/dev/null 2>&1
@@ -295,11 +272,8 @@ function apply_profile {
 	svccfg_apply $prefix/generic.xml
 	if [ ! -f $prefix/platform.xml ]; then
 		this_karch=`uname -m`
-		this_plat=`uname -i`
 
-		if [ -f $prefix/platform_$this_plat.xml ]; then
-			platform_profile=platform_$this_plat.xml
-		elif [ -f $prefix/platform_$this_karch.xml ]; then
+		if [ -f $prefix/platform_$this_karch.xml ]; then
 			platform_profile=platform_$this_karch.xml
 		else
 			platform_profile=platform_none.xml
@@ -314,7 +288,7 @@ function apply_profile {
 #
 # 4.  Upgrade handling.  The upgrade file generally consists of a series
 # of svcadm(8) and svccfg(8) commands.
-#
+
 function handle_upgrade {
 
 	[ -f /var/svc/profile/upgrade ] && activity=true
