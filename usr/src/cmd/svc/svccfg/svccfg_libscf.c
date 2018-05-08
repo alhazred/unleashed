@@ -6953,6 +6953,33 @@ lscf_instance_verify(scf_scope_t *scope, entity_t *svc, entity_t *inst)
 }
 #endif
 
+static void
+del_tmp_service(void)
+{
+	if (scf_service_delete(imp_tsvc) != 0) {
+		switch (scf_error()) {
+		case SCF_ERROR_DELETED:
+			break;
+
+		case SCF_ERROR_CONNECTION_BROKEN:
+			warn(gettext("Could not delete svc:/%s "
+			    "(repository connection broken).\n"), imp_tsname);
+			break;
+
+		case SCF_ERROR_EXISTS:
+			warn(gettext(
+			    "Could not delete svc:/%s (instances exist).\n"),
+			    imp_tsname);
+			break;
+
+		case SCF_ERROR_NOT_SET:
+		case SCF_ERROR_NOT_BOUND:
+		default:
+			bad_error("scf_service_delete", scf_error());
+		}
+	}
+}
+
 /*
  * If the service is missing, create it, import its properties, and import the
  * instances.  Since the service is brand new, it should be empty, and if we
@@ -7160,7 +7187,8 @@ retry:
 		}
 
 		r = UU_WALK_ERROR;
-		goto deltemp;
+		del_tmp_service();
+		return (r);
 	}
 
 	if (uu_list_walk(s->sc_dependents, entity_pgroup_import, &cbdata,
@@ -7184,8 +7212,8 @@ retry:
 			return (UU_WALK_ERROR);
 		}
 
-		r = UU_WALK_ERROR;
-		goto deltemp;
+		del_tmp_service();
+		return (UU_WALK_ERROR);
 	}
 
 	if (scf_scope_get_service(scope, s->sc_name, imp_svc) != 0) {
@@ -7212,20 +7240,22 @@ retry:
 			case SCF_ERROR_NO_RESOURCES:
 			case SCF_ERROR_BACKEND_READONLY:
 			case SCF_ERROR_BACKEND_ACCESS:
-				r = stash_scferror(lcbdata);
-				goto deltemp;
+				del_tmp_service();
+				return (stash_scferror(lcbdata));
 
 			case SCF_ERROR_EXISTS:
 				warn(gettext("Scope \"%s\" changed unexpectedly"
 				    " (service \"%s\" added).\n"),
 				    SCF_SCOPE_LOCAL, s->sc_name);
 				lcbdata->sc_err = EBUSY;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 
 			case SCF_ERROR_PERMISSION_DENIED:
 				warn(gettext("Could not create service \"%s\" "
 				    "(permission denied).\n"), s->sc_name);
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 
 			case SCF_ERROR_INVALID_ARGUMENT:
 			case SCF_ERROR_HANDLE_MISMATCH:
@@ -7273,8 +7303,8 @@ retry:
 				    cbdata.sc_err);
 			}
 
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 		}
 
 		cbdata.sc_trans = NULL;
@@ -7287,8 +7317,8 @@ retry:
 			lcbdata->sc_err = cbdata.sc_err;
 			if (cbdata.sc_err == ECONNABORTED)
 				goto connaborted;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 		}
 
 		s->sc_import_state = IMPORT_PROP_DONE;
@@ -7319,8 +7349,8 @@ retry:
 		case SCF_ERROR_DELETED:
 			warn(s_deleted, s->sc_fmri);
 			lcbdata->sc_err = EBUSY;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		case SCF_ERROR_HANDLE_MISMATCH:
 		case SCF_ERROR_NOT_BOUND:
@@ -7339,8 +7369,8 @@ retry:
 			case SCF_ERROR_DELETED:
 				warn(s_deleted, s->sc_fmri);
 				lcbdata->sc_err = EBUSY;
-				r = UU_WALK_ERROR;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 
 			case SCF_ERROR_CONNECTION_BROKEN:
 				goto connaborted;
@@ -7396,8 +7426,8 @@ retry:
 		case ENOSPC:
 		case -1:
 			lcbdata->sc_err = r;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		default:
 			bad_error("take_snap", r);
@@ -7432,30 +7462,29 @@ retry:
 			case SCF_ERROR_BACKEND_READONLY:
 			case SCF_ERROR_BACKEND_ACCESS:
 			case SCF_ERROR_NO_RESOURCES:
-				r = stash_scferror(lcbdata);
-				goto deltemp;
+				del_tmp_service();
+				return (stash_scferror(lcbdata));
 
 			case SCF_ERROR_EXISTS:
 				warn(gettext("%s changed unexpectedly "
 				    "(instance \"%s\" added).\n"), s->sc_fmri,
 				    inst->sc_name);
 				lcbdata->sc_err = EBUSY;
-				r = UU_WALK_ERROR;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 
 			case SCF_ERROR_INVALID_ARGUMENT:
 				warn(gettext("Service \"%s\" has instance with "
 				    "invalid name \"%s\".\n"), s->sc_name,
 				    inst->sc_name);
-				r = stash_scferror(lcbdata);
-				goto deltemp;
+				del_tmp_service();
 
 			case SCF_ERROR_PERMISSION_DENIED:
 				warn(gettext("Could not create instance \"%s\" "
 				    "in %s (permission denied).\n"),
 				    inst->sc_name, s->sc_fmri);
-				r = stash_scferror(lcbdata);
-				goto deltemp;
+				del_tmp_service();
+				return (stash_scferror(lcbdata));
 
 			case SCF_ERROR_HANDLE_MISMATCH:
 			case SCF_ERROR_NOT_BOUND:
@@ -7477,8 +7506,8 @@ retry:
 		case ECANCELED:
 			warn(i_deleted, s->sc_fmri, inst->sc_name);
 			lcbdata->sc_err = EBUSY;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		case ECONNABORTED:
 			goto connaborted;
@@ -7486,13 +7515,13 @@ retry:
 		case EPERM:
 			warn(emsg_snap_perm, snap_previous, inst->sc_fmri);
 			lcbdata->sc_err = r;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		case ENOSPC:
 		case -1:
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		default:
 			bad_error("take_snap", r);
@@ -7515,8 +7544,8 @@ retry:
 		case SCF_ERROR_DELETED:
 			warn(s_deleted, s->sc_fmri);
 			lcbdata->sc_err = EBUSY;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		case SCF_ERROR_HANDLE_MISMATCH:
 		case SCF_ERROR_NOT_BOUND:
@@ -7533,8 +7562,8 @@ retry:
 			case SCF_ERROR_DELETED:
 				warn(s_deleted, s->sc_fmri);
 				lcbdata->sc_err = EBUSY;
-				r = UU_WALK_ERROR;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 
 			case SCF_ERROR_CONNECTION_BROKEN:
 				goto connaborted;
@@ -7583,8 +7612,8 @@ retry:
 					if (entity_pgroup_import(mfpg,
 					    &mfcbdata) != UU_WALK_NEXT) {
 						warn(s_mfile_upd, s->sc_fmri);
-						r = UU_WALK_ERROR;
-						goto deltemp;
+						del_tmp_service();
+						return (UU_WALK_ERROR);
 					}
 				}
 				break;
@@ -7618,8 +7647,8 @@ retry:
 					    cbdata.sc_err);
 				}
 
-				r = UU_WALK_ERROR;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 			}
 
 			cbdata.sc_trans = NULL;
@@ -7631,8 +7660,8 @@ retry:
 				lcbdata->sc_err = cbdata.sc_err;
 				if (cbdata.sc_err == ECONNABORTED)
 					goto connaborted;
-				r = UU_WALK_ERROR;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 			}
 			break;
 		}
@@ -7726,8 +7755,8 @@ retry:
 				(void) strcpy(imp_str, "?");
 			warn(badsnap, snap_lastimport, s->sc_name, imp_str);
 			lcbdata->sc_err = EBADF;
-			r = UU_WALK_ERROR;
-			goto deltemp;
+			del_tmp_service();
+			return (UU_WALK_ERROR);
 
 		default:
 			bad_error("get_snaplevel", r);
@@ -7774,8 +7803,8 @@ retry:
 				warn(badsnap, snap_running, s->sc_name,
 				    imp_str);
 				lcbdata->sc_err = EBADF;
-				r = UU_WALK_ERROR;
-				goto deltemp;
+				del_tmp_service();
+				return (UU_WALK_ERROR);
 
 			default:
 				bad_error("get_snaplevel", r);
@@ -7816,8 +7845,8 @@ retry:
 			lcbdata->sc_err = r;
 		}
 
-		r = UU_WALK_ERROR;
-		goto deltemp;
+		del_tmp_service();
+		return (UU_WALK_ERROR);
 	}
 
 	s->sc_import_state = IMPORT_PROP_DONE;
@@ -7838,41 +7867,15 @@ instances:
 		lcbdata->sc_err = cbdata.sc_err;
 		if (cbdata.sc_err == ECONNABORTED)
 			goto connaborted;
-		r = UU_WALK_ERROR;
-		goto deltemp;
+		del_tmp_service();
+		return (UU_WALK_ERROR);
 	}
 
 	s->sc_import_state = IMPORT_COMPLETE;
-	r = UU_WALK_NEXT;
-
-deltemp:
-	/* delete temporary service */
-	if (scf_service_delete(imp_tsvc) != 0) {
-		switch (scf_error()) {
-		case SCF_ERROR_DELETED:
-			break;
-
-		case SCF_ERROR_CONNECTION_BROKEN:
-			goto connaborted;
-
-		case SCF_ERROR_EXISTS:
-			warn(gettext(
-			    "Could not delete svc:/%s (instances exist).\n"),
-			    imp_tsname);
-			break;
-
-		case SCF_ERROR_NOT_SET:
-		case SCF_ERROR_NOT_BOUND:
-		default:
-			bad_error("scf_service_delete", scf_error());
-		}
-	}
-
-	return (r);
+	del_tmp_service();
+	return (UU_WALK_NEXT);
 
 connaborted:
-	warn(gettext("Could not delete svc:/%s "
-	    "(repository connection broken).\n"), imp_tsname);
 	lcbdata->sc_err = ECONNABORTED;
 	return (UU_WALK_ERROR);
 }
