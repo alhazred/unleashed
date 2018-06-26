@@ -3,9 +3,9 @@ Features
 
 This file documents feature changes at a very high level.
 
-A - means that the support for that feature was removed, a + means that the
-support for that feature was added, and a * means that the behavior was
-changed.
+A '-' means that the support for that feature was removed, a '+' means that
+the support for that feature was added, and a '*' means that the behavior
+was changed.
 
 1.0 release
 -----------
