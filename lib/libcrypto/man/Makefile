@@ -1,4 +1,4 @@
-# $OpenBSD: Makefile,v 1.124 2017/08/20 23:18:53 schwarze Exp $
+# $OpenBSD: Makefile,v 1.138 2018/03/18 13:06:36 schwarze Exp $
 
 .include <bsd.own.mk>
 
@@ -25,7 +25,9 @@ MAN=	\
 	BIO_f_md.3 \
 	BIO_f_null.3 \
 	BIO_find_type.3 \
+	BIO_get_data.3 \
 	BIO_get_ex_new_index.3 \
+	BIO_meth_new.3 \
 	BIO_new.3 \
 	BIO_printf.3 \
 	BIO_push.3 \
@@ -71,6 +73,7 @@ MAN=	\
 	DH_generate_key.3 \
 	DH_generate_parameters.3 \
 	DH_get_ex_new_index.3 \
+	DH_get0_pqg.3 \
 	DH_new.3 \
 	DH_set_method.3 \
 	DH_size.3 \
@@ -81,6 +84,8 @@ MAN=	\
 	DSA_generate_key.3 \
 	DSA_generate_parameters.3 \
 	DSA_get_ex_new_index.3 \
+	DSA_get0_pqg.3 \
+	DSA_meth_new.3 \
 	DSA_new.3 \
 	DSA_set_method.3 \
 	DSA_sign.3 \
@@ -113,6 +118,8 @@ MAN=	\
 	EVP_EncodeInit.3 \
 	EVP_EncryptInit.3 \
 	EVP_OpenInit.3 \
+	EVP_PKEY_asn1_new.3 \
+	EVP_PKEY_asn1_get_count.3 \
 	EVP_PKEY_CTX_ctrl.3 \
 	EVP_PKEY_CTX_new.3 \
 	EVP_PKEY_cmp.3 \
@@ -122,6 +129,7 @@ MAN=	\
 	EVP_PKEY_get_default_digest_nid.3 \
 	EVP_PKEY_keygen.3 \
 	EVP_PKEY_meth_get0_info.3 \
+	EVP_PKEY_meth_new.3 \
 	EVP_PKEY_new.3 \
 	EVP_PKEY_print_private.3 \
 	EVP_PKEY_set1_RSA.3 \
@@ -148,8 +156,10 @@ MAN=	\
 	OPENSSL_VERSION_NUMBER.3 \
 	OPENSSL_cleanse.3 \
 	OPENSSL_config.3 \
+	OPENSSL_init_crypto.3 \
 	OPENSSL_load_builtin_modules.3 \
 	OPENSSL_malloc.3 \
+	OPENSSL_sk_new.3 \
 	OpenSSL_add_all_algorithms.3 \
 	PEM_bytes_read_bio.3 \
 	PEM_read.3 \
@@ -182,6 +192,8 @@ MAN=	\
 	RSA_check_key.3 \
 	RSA_generate_key.3 \
 	RSA_get_ex_new_index.3 \
+	RSA_get0_key.3 \
+	RSA_meth_new.3 \
 	RSA_new.3 \
 	RSA_padding_add_PKCS1_type_1.3 \
 	RSA_print.3 \
@@ -194,6 +206,7 @@ MAN=	\
 	SHA1.3 \
 	SMIME_read_PKCS7.3 \
 	SMIME_write_PKCS7.3 \
+	STACK_OF.3 \
 	SXNET_new.3 \
 	TS_REQ_new.3 \
 	UI_UTIL_read_pw.3 \
@@ -214,6 +227,7 @@ MAN=	\
 	X509_NAME_get_index_by_NID.3 \
 	X509_NAME_new.3 \
 	X509_NAME_print_ex.3 \
+	X509_OBJECT_get0_X509.3 \
 	X509_PUBKEY_new.3 \
 	X509_REQ_new.3 \
 	X509_REVOKED_new.3 \
@@ -223,6 +237,7 @@ MAN=	\
 	X509_STORE_CTX_new.3 \
 	X509_STORE_CTX_set_verify_cb.3 \
 	X509_STORE_load_locations.3 \
+	X509_STORE_new.3 \
 	X509_STORE_set_verify_cb_func.3 \
 	X509_STORE_set1_param.3 \
 	X509_VERIFY_PARAM_set_flags.3 \
@@ -236,6 +251,8 @@ MAN=	\
 	X509_get_serialNumber.3 \
 	X509_get_subject_name.3 \
 	X509_get_version.3 \
+	X509_get0_notBefore.3 \
+	X509_get0_signature.3 \
 	X509_new.3 \
 	X509_sign.3 \
 	X509_verify_cert.3 \

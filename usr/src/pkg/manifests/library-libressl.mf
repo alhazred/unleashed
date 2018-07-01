@@ -1,4 +1,4 @@
-# Copyright 2017 Lauri Tirkkonen <lotheac@iki.fi>
+# Copyright 2017-2018 Lauri Tirkkonen <lotheac@iki.fi>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -13,7 +13,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 set name=pkg.fmri \
-    value=pkg:/library/libressl@2.6.4,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
+    value=pkg:/library/libressl@2.7.4,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 set name=pkg.description \
     value="LibreSSL - TLS/crypto stack forked from OpenSSL"
 set name=pkg.summary value="LibreSSL - TLS/crypto stack forked from OpenSSL"
@@ -107,12 +107,12 @@ file path=usr/include/openssl/x509.h
 file path=usr/include/openssl/x509_vfy.h
 file path=usr/include/openssl/x509v3.h
 file path=usr/include/tls.h
-file path=usr/lib/amd64/libcrypto.so.42.0 mode=0555
-file path=usr/lib/amd64/libssl.so.44.1 mode=0555
-file path=usr/lib/amd64/libtls.so.16.1 mode=0555
-file path=usr/lib/libcrypto.so.42.0 mode=0555
-file path=usr/lib/libssl.so.44.1 mode=0555
-file path=usr/lib/libtls.so.16.1 mode=0555
+file path=usr/lib/amd64/libcrypto.so.43.1 mode=0555
+file path=usr/lib/amd64/libssl.so.45.1 mode=0555
+file path=usr/lib/amd64/libtls.so.17.1 mode=0555
+file path=usr/lib/libcrypto.so.43.1 mode=0555
+file path=usr/lib/libssl.so.45.1 mode=0555
+file path=usr/lib/libtls.so.17.1 mode=0555
 file path=usr/lib/pkgconfig/libcrypto.pc mode=0444
 file path=usr/lib/pkgconfig/libssl.pc mode=0444
 file path=usr/lib/pkgconfig/openssl.pc mode=0444
@@ -141,7 +141,9 @@ file path=usr/share/man/man3/BIO_f_md.3
 file path=usr/share/man/man3/BIO_f_null.3
 file path=usr/share/man/man3/BIO_f_ssl.3
 file path=usr/share/man/man3/BIO_find_type.3
+file path=usr/share/man/man3/BIO_get_data.3
 file path=usr/share/man/man3/BIO_get_ex_new_index.3
+file path=usr/share/man/man3/BIO_meth_new.3
 file path=usr/share/man/man3/BIO_new.3
 file path=usr/share/man/man3/BIO_printf.3
 file path=usr/share/man/man3/BIO_push.3
@@ -187,6 +189,7 @@ file path=usr/share/man/man3/DES_set_key.3
 file path=usr/share/man/man3/DH_generate_key.3
 file path=usr/share/man/man3/DH_generate_parameters.3
 file path=usr/share/man/man3/DH_get_ex_new_index.3
+file path=usr/share/man/man3/DH_get0_pqg.3
 file path=usr/share/man/man3/DH_new.3
 file path=usr/share/man/man3/DH_set_method.3
 file path=usr/share/man/man3/DH_size.3
@@ -197,6 +200,8 @@ file path=usr/share/man/man3/DSA_dup_DH.3
 file path=usr/share/man/man3/DSA_generate_key.3
 file path=usr/share/man/man3/DSA_generate_parameters.3
 file path=usr/share/man/man3/DSA_get_ex_new_index.3
+file path=usr/share/man/man3/DSA_get0_pqg.3
+file path=usr/share/man/man3/DSA_meth_new.3
 file path=usr/share/man/man3/DSA_new.3
 file path=usr/share/man/man3/DSA_set_method.3
 file path=usr/share/man/man3/DSA_sign.3
@@ -232,6 +237,8 @@ file path=usr/share/man/man3/EVP_EncryptInit.3
 file path=usr/share/man/man3/EVP_OpenInit.3
 file path=usr/share/man/man3/EVP_PKEY_CTX_ctrl.3
 file path=usr/share/man/man3/EVP_PKEY_CTX_new.3
+file path=usr/share/man/man3/EVP_PKEY_asn1_get_count.3
+file path=usr/share/man/man3/EVP_PKEY_asn1_new.3
 file path=usr/share/man/man3/EVP_PKEY_cmp.3
 file path=usr/share/man/man3/EVP_PKEY_decrypt.3
 file path=usr/share/man/man3/EVP_PKEY_derive.3
@@ -239,6 +246,7 @@ file path=usr/share/man/man3/EVP_PKEY_encrypt.3
 file path=usr/share/man/man3/EVP_PKEY_get_default_digest_nid.3
 file path=usr/share/man/man3/EVP_PKEY_keygen.3
 file path=usr/share/man/man3/EVP_PKEY_meth_get0_info.3
+file path=usr/share/man/man3/EVP_PKEY_meth_new.3
 file path=usr/share/man/man3/EVP_PKEY_new.3
 file path=usr/share/man/man3/EVP_PKEY_print_private.3
 file path=usr/share/man/man3/EVP_PKEY_set1_RSA.3
@@ -265,8 +273,11 @@ file path=usr/share/man/man3/OCSP_sendreq_new.3
 file path=usr/share/man/man3/OPENSSL_VERSION_NUMBER.3
 file path=usr/share/man/man3/OPENSSL_cleanse.3
 file path=usr/share/man/man3/OPENSSL_config.3
+file path=usr/share/man/man3/OPENSSL_init_crypto.3
+file path=usr/share/man/man3/OPENSSL_init_ssl.3
 file path=usr/share/man/man3/OPENSSL_load_builtin_modules.3
 file path=usr/share/man/man3/OPENSSL_malloc.3
+file path=usr/share/man/man3/OPENSSL_sk_new.3
 file path=usr/share/man/man3/OpenSSL_add_all_algorithms.3
 file path=usr/share/man/man3/PEM_bytes_read_bio.3
 file path=usr/share/man/man3/PEM_read.3
@@ -300,6 +311,8 @@ file path=usr/share/man/man3/RSA_blinding_on.3
 file path=usr/share/man/man3/RSA_check_key.3
 file path=usr/share/man/man3/RSA_generate_key.3
 file path=usr/share/man/man3/RSA_get_ex_new_index.3
+file path=usr/share/man/man3/RSA_get0_key.3
+file path=usr/share/man/man3/RSA_meth_new.3
 file path=usr/share/man/man3/RSA_new.3
 file path=usr/share/man/man3/RSA_padding_add_PKCS1_type_1.3
 file path=usr/share/man/man3/RSA_print.3
@@ -321,6 +334,7 @@ file path=usr/share/man/man3/SSL_CTX_flush_sessions.3
 file path=usr/share/man/man3/SSL_CTX_free.3
 file path=usr/share/man/man3/SSL_CTX_get_ex_new_index.3
 file path=usr/share/man/man3/SSL_CTX_get_verify_mode.3
+file path=usr/share/man/man3/SSL_CTX_get0_certificate.3
 file path=usr/share/man/man3/SSL_CTX_load_verify_locations.3
 file path=usr/share/man/man3/SSL_CTX_new.3
 file path=usr/share/man/man3/SSL_CTX_sess_number.3
@@ -351,6 +365,7 @@ file path=usr/share/man/man3/SSL_CTX_set_timeout.3
 file path=usr/share/man/man3/SSL_CTX_set_tlsext_servername_callback.3
 file path=usr/share/man/man3/SSL_CTX_set_tlsext_status_cb.3
 file path=usr/share/man/man3/SSL_CTX_set_tlsext_ticket_key_cb.3
+file path=usr/share/man/man3/SSL_CTX_set_tlsext_use_srtp.3
 file path=usr/share/man/man3/SSL_CTX_set_tmp_dh_callback.3
 file path=usr/share/man/man3/SSL_CTX_set_tmp_rsa_callback.3
 file path=usr/share/man/man3/SSL_CTX_set_verify.3
@@ -360,7 +375,9 @@ file path=usr/share/man/man3/SSL_SESSION_get0_peer.3
 file path=usr/share/man/man3/SSL_SESSION_get_compress_id.3
 file path=usr/share/man/man3/SSL_SESSION_get_ex_new_index.3
 file path=usr/share/man/man3/SSL_SESSION_get_id.3
+file path=usr/share/man/man3/SSL_SESSION_get_protocol_version.3
 file path=usr/share/man/man3/SSL_SESSION_get_time.3
+file path=usr/share/man/man3/SSL_SESSION_has_ticket.3
 file path=usr/share/man/man3/SSL_SESSION_new.3
 file path=usr/share/man/man3/SSL_SESSION_print.3
 file path=usr/share/man/man3/SSL_SESSION_set1_id_context.3
@@ -378,6 +395,7 @@ file path=usr/share/man/man3/SSL_get_SSL_CTX.3
 file path=usr/share/man/man3/SSL_get_certificate.3
 file path=usr/share/man/man3/SSL_get_ciphers.3
 file path=usr/share/man/man3/SSL_get_client_CA_list.3
+file path=usr/share/man/man3/SSL_get_client_random.3
 file path=usr/share/man/man3/SSL_get_current_cipher.3
 file path=usr/share/man/man3/SSL_get_default_timeout.3
 file path=usr/share/man/man3/SSL_get_error.3
@@ -415,6 +433,7 @@ file path=usr/share/man/man3/SSL_shutdown.3
 file path=usr/share/man/man3/SSL_state_string.3
 file path=usr/share/man/man3/SSL_want.3
 file path=usr/share/man/man3/SSL_write.3
+file path=usr/share/man/man3/STACK_OF.3
 file path=usr/share/man/man3/SXNET_new.3
 file path=usr/share/man/man3/TS_REQ_new.3
 file path=usr/share/man/man3/UI_UTIL_read_pw.3
@@ -435,6 +454,7 @@ file path=usr/share/man/man3/X509_NAME_add_entry_by_txt.3
 file path=usr/share/man/man3/X509_NAME_get_index_by_NID.3
 file path=usr/share/man/man3/X509_NAME_new.3
 file path=usr/share/man/man3/X509_NAME_print_ex.3
+file path=usr/share/man/man3/X509_OBJECT_get0_X509.3
 file path=usr/share/man/man3/X509_PUBKEY_new.3
 file path=usr/share/man/man3/X509_REQ_new.3
 file path=usr/share/man/man3/X509_REVOKED_new.3
@@ -444,6 +464,7 @@ file path=usr/share/man/man3/X509_STORE_CTX_get_ex_new_index.3
 file path=usr/share/man/man3/X509_STORE_CTX_new.3
 file path=usr/share/man/man3/X509_STORE_CTX_set_verify_cb.3
 file path=usr/share/man/man3/X509_STORE_load_locations.3
+file path=usr/share/man/man3/X509_STORE_new.3
 file path=usr/share/man/man3/X509_STORE_set1_param.3
 file path=usr/share/man/man3/X509_STORE_set_verify_cb_func.3
 file path=usr/share/man/man3/X509_VERIFY_PARAM_set_flags.3
@@ -457,6 +478,8 @@ file path=usr/share/man/man3/X509_get_pubkey.3
 file path=usr/share/man/man3/X509_get_serialNumber.3
 file path=usr/share/man/man3/X509_get_subject_name.3
 file path=usr/share/man/man3/X509_get_version.3
+file path=usr/share/man/man3/X509_get0_notBefore.3
+file path=usr/share/man/man3/X509_get0_signature.3
 file path=usr/share/man/man3/X509_new.3
 file path=usr/share/man/man3/X509_sign.3
 file path=usr/share/man/man3/X509_verify_cert.3
@@ -517,15 +540,15 @@ file path=usr/share/man/man3/tls_ocsp_process_response.3
 file path=usr/share/man/man3/tls_read.3
 file path=usr/share/man/man5/openssl.cnf.5
 file path=usr/share/man/man5/x509v3.cnf.5
-link path=usr/lib/amd64/libcrypto.so target=libcrypto.so.42.0
-link path=usr/lib/amd64/libcrypto.so.42 target=libcrypto.so.42.0
-link path=usr/lib/amd64/libssl.so target=libssl.so.44.1
-link path=usr/lib/amd64/libssl.so.44 target=libssl.so.44.1
-link path=usr/lib/amd64/libtls.so target=libtls.so.16.1
-link path=usr/lib/amd64/libtls.so.16 target=libtls.so.16.1
-link path=usr/lib/libcrypto.so target=libcrypto.so.42.0
-link path=usr/lib/libcrypto.so.42 target=libcrypto.so.42.0
-link path=usr/lib/libssl.so target=libssl.so.44.1
-link path=usr/lib/libssl.so.44 target=libssl.so.44.1
-link path=usr/lib/libtls.so target=libtls.so.16.1
-link path=usr/lib/libtls.so.16 target=libtls.so.16.1
+link path=usr/lib/amd64/libcrypto.so target=libcrypto.so.43.1
+link path=usr/lib/amd64/libcrypto.so.43 target=libcrypto.so.43.1
+link path=usr/lib/amd64/libssl.so target=libssl.so.45.1
+link path=usr/lib/amd64/libssl.so.45 target=libssl.so.45.1
+link path=usr/lib/amd64/libtls.so target=libtls.so.17.1
+link path=usr/lib/amd64/libtls.so.17 target=libtls.so.17.1
+link path=usr/lib/libcrypto.so target=libcrypto.so.43.1
+link path=usr/lib/libcrypto.so.43 target=libcrypto.so.43.1
+link path=usr/lib/libssl.so target=libssl.so.45.1
+link path=usr/lib/libssl.so.45 target=libssl.so.45.1
+link path=usr/lib/libtls.so target=libtls.so.17.1
+link path=usr/lib/libtls.so.17 target=libtls.so.17.1
