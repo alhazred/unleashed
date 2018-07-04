@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+ * Copyright 2011-2018 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -42,10 +42,8 @@ struct cpio_hdr {
 };
 
 /*
- * On mount, we parse the whole archive and instantiate a struct cpio_file
- * for each.  While this may be a bit wasteful, it makes the subsequent
- * operations much faster and the code much simpler.  The list of all files
- * is held by the open_files global.
+ * This structure represents an open file.  The list of all open files is
+ * rooted in the open_files global.
  */
 struct cpio_file {
 	/* pointers into the archive */
