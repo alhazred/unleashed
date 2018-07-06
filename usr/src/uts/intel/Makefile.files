@@ -158,7 +158,6 @@ KRTLD_OBJS +=		\
 	bootrd.o	\
 	bootrd_cpio.o	\
 	ufsops.o	\
-	hsfs.o		\
 	doreloc.o	\
 	kobj_boot.o	\
 	kobj_convrelstr.o \

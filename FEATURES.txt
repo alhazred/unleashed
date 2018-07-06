@@ -7,6 +7,10 @@ A '-' means that the support for that feature was removed, a '+' means that
 the support for that feature was added, and a '*' means that the behavior
 was changed.
 
+<next> release
+--------------
+ - hsfs-formatted boot archive support
+
 1.0 release
 -----------
  - 32-bit x86 kernel support (32-bit x86 applications are still supported)

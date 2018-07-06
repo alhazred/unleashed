@@ -37,13 +37,13 @@
 extern void (*_kobj_printf)(void *, const char *fmt, ...);
 extern int get_weakish_int(int *);
 extern struct bootops *ops;
-extern struct boot_fs_ops bufs_ops, bhsfs_ops, bbootfs_ops, bcpio_ops;
+extern struct boot_fs_ops bufs_ops, bbootfs_ops, bcpio_ops;
 extern int kmem_ready;
 
 static uint64_t rd_start, rd_end;
 struct boot_fs_ops *bfs_ops;
 struct boot_fs_ops *bfs_tab[] = {
-	&bufs_ops, &bhsfs_ops, &bbootfs_ops, &bcpio_ops, NULL,
+	&bufs_ops, &bbootfs_ops, &bcpio_ops, NULL,
 };
 
 static uintptr_t scratch_max = 0;
