@@ -128,28 +128,6 @@ extern	void	delete_itimer_realprof(void);
 	((tvp)->tv_sec - (uvp)->tv_sec):((tvp)->tv_nsec - (uvp)->tv_nsec))
 #define	timerspecclear(tvp)		((tvp)->tv_sec = (tvp)->tv_nsec = 0)
 
-struct oldsigevent {
-	/* structure definition prior to notification attributes member */
-	int		_notify;
-	union {
-		int		_signo;
-		void		(*_notify_function)(union sigval);
-	} _un;
-	union sigval	_value;
-};
-
-#if defined(_SYSCALL32)
-
-struct oldsigevent32 {
-	int32_t		_notify;
-	union {
-		int32_t		_signo;
-		caddr32_t	_notify_function;
-	} _un;
-	union sigval32	_value;
-};
-
-#endif	/* _SYSCALL32 */
 #endif	/* _KERNEL */
 
 #ifdef	__cplusplus

@@ -484,12 +484,8 @@ timer_create(clockid_t clock, struct sigevent *evp, timer_t *tid)
 		return (set_errno(EINVAL));
 
 	if (evp != NULL) {
-		/*
-		 * short copyin() for binary compatibility
-		 * fetch oldsigevent to determine how much to copy in.
-		 */
 		if (get_udatamodel() == DATAMODEL_NATIVE) {
-			if (copyin(evp, &ev, sizeof (struct oldsigevent)))
+			if (copyin(evp, &ev, sizeof (struct sigevent)))
 				return (set_errno(EFAULT));
 
 			if (ev.sigev_notify == SIGEV_PORT ||
@@ -503,7 +499,7 @@ timer_create(clockid_t clock, struct sigevent *evp, timer_t *tid)
 			struct sigevent32 ev32;
 			port_notify32_t tim_pnevp32;
 
-			if (copyin(evp, &ev32, sizeof (struct oldsigevent32)))
+			if (copyin(evp, &ev32, sizeof (struct sigevent32)))
 				return (set_errno(EFAULT));
 			ev.sigev_notify = ev32.sigev_notify;
 			ev.sigev_signo = ev32.sigev_signo;
