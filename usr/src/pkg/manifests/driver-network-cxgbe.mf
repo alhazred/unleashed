@@ -23,7 +23,7 @@ set name=info.classification \
 set name=variant.arch value=i386
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
-driver name=cxgbe alias=cxgbe clone_perms="cxgbe 0666 root sys" \
+driver name=cxgbe clone_perms="cxgbe 0666 root sys" \
     perms="* 0666 root sys"
 driver name=t4nex clone_perms="t4nex 0666 root sys" \
     devlink=type=ddi_ctl:devctl;minor1=t4nex\tt4nex\M2 \
