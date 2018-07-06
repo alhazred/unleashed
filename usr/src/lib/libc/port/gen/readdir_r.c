@@ -182,11 +182,4 @@ readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
 	return (0);
 }
 
-/*
- * Compatibility alias.  Solaris and illumos default to non-POSIX readdir_r,
- * and the posix version gets a mangled name.  We keep this symbol here to
- * allow for a smoother transition.
- */
-#pragma weak __posix_readdir_r = readdir_r
-
 #endif	/* _LP64 */

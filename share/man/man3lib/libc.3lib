@@ -844,7 +844,7 @@ The following interfaces are unique to the 32-bit version of this library:
 l l
 l l .
 \fB__div64\fR	\fB__mul64\fR
-\fB__posix_readdir_r\fR	\fB__rem64\fR
+\fB__rem64\fR
 \fB__udiv64\fR	\fB__urem64\fR
 \fB_bufendtab\fR	\fB_lastbuf\fR
 \fB_s_fcntl\fR	\fB_sys_nsig\fR

@@ -1563,7 +1563,6 @@ $if lf64
 	nftw64;
 	_nftw64;
 	open64;
-	__posix_readdir_r;
 	pread64;
 	pwrite64;
 	readdir64;
