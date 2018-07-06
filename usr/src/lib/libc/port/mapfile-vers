@@ -2622,7 +2622,6 @@ $endif
 $if i386
 	_fxstat;
 	_lxstat;
-	_nuname;
 	_xmknod;
 	_xstat;
 $endif

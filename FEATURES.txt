@@ -10,6 +10,7 @@ was changed.
 <next> release
 --------------
  - hsfs-formatted boot archive support
+ - libc compat symbols: _nuname
 
 1.0 release
 -----------

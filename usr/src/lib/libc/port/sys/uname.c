@@ -36,5 +36,3 @@ uname(struct utsname *name)
 	errno = serr;
 	return ret;
 }
-/* binary compat alias */
-#pragma weak _nuname = uname
