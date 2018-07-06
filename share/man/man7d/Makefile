@@ -1,4 +1,4 @@
-.include <../../../Makefile.cfgparam>
+.include <../../../cfgparam.mk>
 
 MAN_sparc = audiocs.7d \
       bbc_beep.7d \

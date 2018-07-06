@@ -5,7 +5,7 @@ SUBDIR = bin \
 	 lib \
 	 share
 
-.-include "Makefile.cfgparam"
+.-include "cfgparam.mk"
 
 .ifdef CONFIG_MACH64
 build:
@@ -42,6 +42,6 @@ gen-config:
 	${.MAKE} -C tools
 	${.CURDIR}/tools/mkconfig/obj/mkconfig -I _SYS_CFGPARAM_H -H -o include/sys/cfgparam.h ${CFGFILE}
 	${.CURDIR}/tools/mkconfig/obj/mkconfig -m -o usr/src/Makefile.cfgparam ${CFGFILE}
-	${.CURDIR}/tools/mkconfig/obj/mkconfig -M -o Makefile.cfgparam ${CFGFILE}
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -M -o cfgparam.mk ${CFGFILE}
 
 .PHONY: gen-config build

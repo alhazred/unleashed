@@ -26,8 +26,8 @@ cscope.po.out
 obj
 
 #
-# generate config files
+# generated config files
 #
-/Makefile.cfgparam
+/cfgparam.mk
 /usr/src/Makefile.cfgparam
 /include/sys/cfgparam.h

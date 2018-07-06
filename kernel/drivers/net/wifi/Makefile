@@ -1,4 +1,4 @@
-.include <../../../../Makefile.cfgparam>
+.include <../../../../cfgparam.mk>
 
 SUBDIR_${CONFIG_IWH}		=  iwh
 SUBDIR_${CONFIG_IWI}		+= iwi

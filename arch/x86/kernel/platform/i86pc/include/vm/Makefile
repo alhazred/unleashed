@@ -9,4 +9,4 @@ INCS=	hat_i86.h \
 .include <prog.mk>
 .include <inc.mk>
 
-.include <${SRCTOP}/Makefile.cfgparam>
+.include <${SRCTOP}/cfgparam.mk>

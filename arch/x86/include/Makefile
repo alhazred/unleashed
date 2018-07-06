@@ -4,4 +4,4 @@ SUBDIR=	../kernel/platform/${CONFIG_PLATFORM}/include \
 .include <subdir.mk>
 
 .include <unleashed.mk>
-.include <${SRCTOP}/Makefile.cfgparam>
+.include <${SRCTOP}/cfgparam.mk>

@@ -1,4 +1,4 @@
-.include <../../../Makefile.cfgparam>
+.include <../../../cfgparam.mk>
 
 MAN_i386 = agpgart_io.7i
 

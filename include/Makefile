@@ -203,4 +203,4 @@ NOOBJ=
 .include <prog.mk>
 .include <inc.mk>
 
-.include <../Makefile.cfgparam>
+.include <../cfgparam.mk>

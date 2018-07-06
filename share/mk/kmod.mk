@@ -34,7 +34,7 @@
 .if empty(_KMOD_BUILD)
 
 .include <unleashed.mk>
-.include <${SRCTOP}/Makefile.cfgparam>
+.include <${SRCTOP}/cfgparam.mk>
 
 all:
 	@mkdir -p obj${CONFIG_KERNEL_BITS}

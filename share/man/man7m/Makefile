@@ -1,4 +1,4 @@
-.include <../../../Makefile.cfgparam>
+.include <../../../cfgparam.mk>
 
 MAN_sparc = kb.7m
 

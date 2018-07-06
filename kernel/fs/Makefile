@@ -1,4 +1,4 @@
-.include <../../Makefile.cfgparam>
+.include <../../cfgparam.mk>
 
 SUBDIR_${CONFIG_FS_AUTOFS}	=  autofs
 SUBDIR_${CONFIG_FS_HSFS}	+= hsfs

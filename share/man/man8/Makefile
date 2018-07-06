@@ -1,4 +1,4 @@
-.include <../../../Makefile.cfgparam>
+.include <../../../cfgparam.mk>
 
 MAN_i386 = acpidump.8 \
       acpixtract.8

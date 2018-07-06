@@ -1,4 +1,4 @@
-.include <../../../Makefile.cfgparam>
+.include <../../../cfgparam.mk>
 
 MAN_sparc = sbus.4
 

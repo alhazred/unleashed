@@ -27,7 +27,7 @@
 .include <unleashed.mk>
 .include <init.mk>
 
-.include <${SRCTOP}/Makefile.cfgparam>
+.include <${SRCTOP}/cfgparam.mk>
 
 # prevent kmod.mk inclusion in user's Makefile from setting up confusing targets
 _KMOD_BUILD=yes

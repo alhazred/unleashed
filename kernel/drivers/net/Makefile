@@ -1,4 +1,4 @@
-.include <../../../Makefile.cfgparam>
+.include <../../../cfgparam.mk>
 
 SUBDIR_${CONFIG_BGE}		=  bge
 SUBDIR_${CONFIG_BNXE}		+= bnxe

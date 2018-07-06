@@ -1,4 +1,4 @@
-.include <../../Makefile.cfgparam>
+.include <../../cfgparam.mk>
 
 SUBDIR_${CONFIG_LOFI}		=  lofi
 SUBDIR_${CONFIG_RAMDISK}	+= ramdisk
