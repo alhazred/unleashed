@@ -2787,7 +2787,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	__strdupa_str		{ FLAGS = NODIRECT };
 	__strdupa_len		{ FLAGS = NODIRECT };
 	_tdb_bootstrap;
-	__threaded;
 	thr_probe_getfunc_addr;
 	__trans_lower;
 	__trans_upper;

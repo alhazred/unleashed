@@ -42,7 +42,7 @@
 ###############################################################################
 ALT_USAGE:libsocket_strong_symbols:libsocket.so weak/strong pairs:libsocket.so.1:_socket|_connect|_recv|_setsockopt|_getsockopt|_getsockname|_getpeername|_bind|_accept|_send|_socketpair|_shutdown|_sendto|_sendmsg|_recvmsg|_recvfrom|_listen|_setpeername|_socketpair_bsd|_socket_bsd:
 ###############################################################################
-ALT_USAGE:inadvertant_static_linking:static linking inadevertantly brings in private symbols:*:__getcontext|__sigaction|__threaded|_bufsync|_cerror|_dgettext|_doprnt|_doscan|_ecvt|_fcvt|_findbuf|_findiop|_getsp|_memcmp|_memmove|_memset|_mutex_unlock|_psignal|_realbufend|_setbufend|_siguhandler|_smbuf|_thr_getspecific|_thr_keycreate|_thr_main|_thr_setspecific|_xflsbuf|gtty|stty:
+ALT_USAGE:inadvertant_static_linking:static linking inadevertantly brings in private symbols:*:__getcontext|__sigaction|_bufsync|_cerror|_dgettext|_doprnt|_doscan|_ecvt|_fcvt|_findbuf|_findiop|_getsp|_memcmp|_memmove|_memset|_mutex_unlock|_psignal|_realbufend|_setbufend|_siguhandler|_smbuf|_thr_getspecific|_thr_keycreate|_thr_main|_thr_setspecific|_xflsbuf|gtty|stty:
 ###############################################################################
 ALT_USAGE:getdomainname:possible getdomainname() replacements:libnsl.so.1:getdomainname:
 ###############################################################################

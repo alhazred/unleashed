@@ -48,12 +48,9 @@
  */
 
 /*
- * __libc_threaded is a private symbol exported from libc in Solaris 10.
- * It is used to tell if we are running in a threaded world or not.
- * Between Solaris 2.5 and Solaris 9, this was named __threaded.
- * The name had to be changed because the Sun Workshop 6 update 1
- * compilation system used it to mean "we are linked with libthread"
- * rather than its true meaning in Solaris 10, "more than one thread exists".
+ * __libc_threaded is a private symbol exported from libc.  It is used to
+ * tell if we are running in a threaded world or not.  That is, "more than
+ * one thread exists".
  */
 #pragma weak		__libc_threaded
 extern int		__libc_threaded;

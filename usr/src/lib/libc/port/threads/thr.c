@@ -51,15 +51,8 @@
 extern int errno;
 
 /*
- * Between Solaris 2.5 and Solaris 9, __threaded was used to indicate
- * "we are linked with libthread".  The Sun Workshop 6 update 1 compilation
- * system used it illegally (it is a consolidation private symbol).
- * To accommodate this and possibly other abusers of the symbol,
- * we make it always equal to 1 now that libthread has been folded
- * into libc.  The new __libc_threaded symbol is used to indicate
- * the new meaning, "more than one thread exists".
+ * __libc_threaded symbol indicates that "more than one thread exists".
  */
-int __threaded = 1;		/* always equal to 1 */
 int __libc_threaded = 0;	/* zero until first thr_create() */
 
 /*
@@ -1502,13 +1495,6 @@ libc_init(void)
 
 	init_sigev_thread();
 	init_aio();
-
-	/*
-	 * We need to reset __threaded dynamically at runtime, so that
-	 * __threaded can be bound to __threaded outside libc which may not
-	 * have initial value of 1 (without a copy relocation in a.out).
-	 */
-	__threaded = 1;
 }
 
 #pragma fini(libc_fini)
