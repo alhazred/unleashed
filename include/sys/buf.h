@@ -333,17 +333,6 @@ struct	dwbuf {
 		bdwrite(bp); \
 	} while (0)
 
-/*
- * Same as bwrite() except write failures are retried.
- */
-#define	brwrite(bp) \
-	do { \
-		(bp)->b_flags |= B_RETRYWRI; \
-		bwrite_common((bp), /* force_wait */ 0, /* do_relse */ 1, \
-			/* clear_flags */ \
-			(B_READ | B_DONE | B_ERROR | B_DELWRI)); \
-	} while (0)
-
 extern struct hbuf	*hbuf;		/* Hash table */
 extern struct dwbuf	*dwbuf;		/* delayed write hash table */
 extern struct buf	*buf;		/* The buffer pool itself */
