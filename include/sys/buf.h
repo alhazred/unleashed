@@ -295,44 +295,6 @@ struct	dwbuf {
 }
 
 #if defined(_KERNEL)
-/*
- * Macros to avoid the extra function call needed for binary compat.
- *
- * B_RETRYWRI is not included in clear_flags for BWRITE(), BWRITE2(),
- * or brwrite() so that the retry operation is persistent until the
- * write either succeeds or the buffer is bfinval()'d.
- *
- */
-#define	BREAD(dev, blkno, bsize) \
-	bread_common(/* ufsvfsp */ NULL, dev, blkno, bsize)
-
-#define	BWRITE(bp) \
-	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 0, \
-		/* do_relse */ 1, \
-		/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI))
-
-#define	BWRITE2(bp) \
-	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 1, \
-		/* do_relse */ 0, \
-		/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI))
-
-#define	GETBLK(dev, blkno, bsize) \
-	getblk_common(/* ufsvfsp */ NULL, dev, blkno, bsize, /* errflg */ 0)
-
-
-/*
- * Macros for new retry write interfaces.
- */
-
-/*
- * Same as bdwrite() except write failures are retried.
- */
-#define	bdrwrite(bp) \
-	do { \
-		(bp)->b_flags |= B_RETRYWRI; \
-		bdwrite(bp); \
-	} while (0)
-
 extern struct hbuf	*hbuf;		/* Hash table */
 extern struct dwbuf	*dwbuf;		/* delayed write hash table */
 extern struct buf	*buf;		/* The buffer pool itself */
@@ -387,6 +349,60 @@ void bioreset(struct buf *bp);
 struct buf *bioclone(struct buf *, off_t, size_t, dev_t, daddr_t,
 	int (*)(struct buf *), struct buf *, int);
 size_t	biosize(void);
+
+/*
+ * B_RETRYWRI is not included in clear_flags for BWRITE(), BWRITE2(),
+ * or brwrite() so that the retry operation is persistent until the
+ * write either succeeds or the buffer is bfinval()'d.
+ */
+
+/* Read in (if necessary) the block and return a buffer pointer. */
+static inline struct buf *BREAD(dev_t dev, daddr_t blkno, long bsize)
+{
+	return bread_common(NULL, dev, blkno, bsize);
+}
+
+/*
+ * Write the buffer, waiting for completion (unless B_ASYNC is set).
+ * Then release the buffer.
+ */
+static inline void BWRITE(struct buf *bp)
+{
+	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 0,
+		      /* do_relse */ 1,
+		      (B_READ | B_DONE | B_ERROR | B_DELWRI));
+}
+
+/*
+ * Write the buffer, waiting for completion.
+ * But don't release the buffer afterwards.
+ */
+static inline void BWRITE2(struct buf *bp)
+{
+	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 1,
+		      /* do_relse */ 0,
+		      (B_READ | B_DONE | B_ERROR | B_DELWRI));
+}
+
+/*
+ * Assign a buffer for the given block.  If the appropriate
+ * block is already associated, return it; otherwise search
+ * for the oldest non-busy buffer and reassign it.
+ */
+static inline struct buf *GETBLK(dev_t dev, daddr_t blkno, long bsize)
+{
+	return getblk_common(/* ufsvfsp */ NULL, dev, blkno, bsize,
+			     /* errflg */ 0);
+}
+
+/*
+ * Same as bdwrite() except write failures are retried.
+ */
+static inline void bdrwrite(struct buf *bp)
+{
+	bp->b_flags |= B_RETRYWRI;
+	bdwrite(bp);
+}
 #endif	/* defined(_KERNEL) */
 
 #ifdef	__cplusplus
