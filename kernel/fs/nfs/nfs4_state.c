@@ -499,7 +499,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 	}
 
 	if (vp->v_type != VREG) {
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		return (NULL);
 	}
@@ -509,7 +509,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 		/*
 		 * We don't have read access? better get the heck out.
 		 */
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		return (NULL);
 	}
@@ -526,7 +526,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 
 	if (err || kill_file) {
 		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		if (kill_file) {
 			(void) fop_remove(dvp, ss_pn->leaf, CRED(), NULL, 0);
@@ -554,7 +554,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 
 	if (err = fop_read(vp, &uio, FREAD, CRED(), NULL)) {
 		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		kmem_free(cl_ss, sizeof (rfs4_oldstate_t));
 		return (NULL);
@@ -571,7 +571,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 
 	if (err || kill_file) {
 		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		kmem_free(cl_ss, sizeof (rfs4_oldstate_t));
 		if (kill_file) {
@@ -594,7 +594,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 
 	if (err = fop_read(vp, &uio, FREAD, CRED(), NULL)) {
 		fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		kmem_free(cl_ss->cl_id4.id_val, id_len);
 		kmem_free(cl_ss, sizeof (rfs4_oldstate_t));
@@ -602,7 +602,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 	}
 
 	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
-	(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 	VN_RELE(vp);
 	return (cl_ss);
 }
@@ -696,7 +696,7 @@ rfs4_ss_oldstate(rfs4_oldstate_t *oldstate, char *statedir, char *destdir)
 	}
 
 out:
-	(void) fop_close(dvp, FREAD, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(dvp, FREAD, 1, 0, CRED(), NULL);
 	VN_RELE(dvp);
 	if (dirt)
 		kmem_free((caddr_t)dirt, RFS4_SS_DIRSIZE);
@@ -1040,7 +1040,7 @@ rfs4_ss_clid_write_one(rfs4_client_t *cp, char *dss_path, char *leaf)
 	(void) fop_write(vp, &uio, ioflag, CRED(), NULL);
 	fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 
-	(void) fop_close(vp, FWRITE, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(vp, FWRITE, 1, 0, CRED(), NULL);
 	VN_RELE(vp);
 }
 

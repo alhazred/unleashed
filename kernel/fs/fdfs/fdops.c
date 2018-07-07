@@ -126,7 +126,7 @@ fdread(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr, caller_context_t *ct)
 	/*
 	 * Fake up ".", "..", and the /dev/fd directory entries.
 	 */
-	if (uiop->uio_loffset < (offset_t)0 ||
+	if (uiop->uio_loffset < 0 ||
 	    uiop->uio_loffset >= (offset_t)endoff ||
 	    uiop->uio_resid <= 0)
 		return (0);

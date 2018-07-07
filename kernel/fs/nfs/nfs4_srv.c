@@ -8257,7 +8257,7 @@ rfs4_release_share_lock_state(rfs4_state_t *sp, cred_t *cr,
 				fp->rf_share_deny &= ~OPEN4_SHARE_DENY_WRITE;
 		}
 
-		(void) fop_close(fp->rf_vp, fflags, 1, (offset_t)0, cr, NULL);
+		(void) fop_close(fp->rf_vp, fflags, 1, 0, cr, NULL);
 
 		rfs4_dbe_unlock(fp->rf_dbe);
 

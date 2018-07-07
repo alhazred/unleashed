@@ -1374,7 +1374,7 @@ out:
 			kmem_free(nsip, sizeof (*nsip));
 		}
 		mutex_enter(&swap_lock);
-		(void) fop_close(cvp, FREAD|FWRITE, 1, (offset_t)0, CRED(),
+		(void) fop_close(cvp, FREAD|FWRITE, 1, 0, CRED(),
 		    NULL);
 		mutex_exit(&swap_lock);
 	}
@@ -1572,7 +1572,7 @@ top:
 	/* Release the vnode */
 
 	mutex_enter(&swap_lock);
-	(void) fop_close(cvp, FREAD|FWRITE, 1, (offset_t)0, CRED(), NULL);
+	(void) fop_close(cvp, FREAD|FWRITE, 1, 0, CRED(), NULL);
 	mutex_enter(&cvp->v_lock);
 	cvp->v_flag &= ~VISSWAP;
 	mutex_exit(&cvp->v_lock);

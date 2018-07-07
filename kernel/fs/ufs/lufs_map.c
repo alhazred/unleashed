@@ -1506,7 +1506,7 @@ logmap_commit(ml_unit_t *ul, uint32_t tid)
 		me.me_nb = 0;
 		me.me_hash = NULL;
 		logmap_wait_space(mtm, ul, &me);
-		ldl_write(ul, NULL, (offset_t)0, &me);
+		ldl_write(ul, NULL, 0, &me);
 		ldl_round_commit(ul);
 
 		/*
@@ -1674,7 +1674,7 @@ logmap_cancel_delta(ml_unit_t *ul, offset_t mof, int32_t nb, int metadata)
 	mutex_enter(&ul->un_log_mutex);
 	if (metadata) {
 		logmap_wait_space(mtm, ul, me);
-		ldl_write(ul, NULL, (offset_t)0, me);
+		ldl_write(ul, NULL, 0, me);
 		if (ul->un_flags & LDL_ERROR) {
 			kmem_cache_free(mapentry_cache, me);
 			mutex_exit(&ul->un_log_mutex);

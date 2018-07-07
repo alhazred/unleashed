@@ -521,7 +521,7 @@ smb_opipe_transceive(smb_request_t *sr, smb_fsctl_t *fsctl)
 	vdb.vdb_uio.uio_iovcnt = MAX_IOVEC;
 	vdb.vdb_uio.uio_segflg = UIO_SYSSPACE;
 	vdb.vdb_uio.uio_extflg = UIO_COPY_DEFAULT;
-	vdb.vdb_uio.uio_loffset = (offset_t)0;
+	vdb.vdb_uio.uio_loffset = 0;
 	vdb.vdb_uio.uio_resid = fsctl->MaxOutputResp;
 	mb = smb_mbuf_allocate(&vdb.vdb_uio);
 

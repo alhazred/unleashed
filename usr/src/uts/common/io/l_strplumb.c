@@ -135,7 +135,7 @@ kstr_close(vnode_t *vp, int fd)
 			return (EINVAL);
 		}
 	} else {
-		ret = fop_close(vp, FREAD|FWRITE, 1, (offset_t)0, CRED(), NULL);
+		ret = fop_close(vp, FREAD|FWRITE, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 		return (ret);
 	}

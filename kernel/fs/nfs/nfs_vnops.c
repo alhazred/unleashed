@@ -375,12 +375,12 @@ nfs_close(vnode_t *vp, int flag, int count, offset_t offset, cred_t *cr,
 	 */
 	if ((flag & FWRITE) && vn_has_cached_data(vp)) {
 		if ((VTOMI(vp)->mi_flags & MI_NOCTO)) {
-			error = nfs_putpage(vp, (offset_t)0, 0, B_ASYNC,
+			error = nfs_putpage(vp, 0, 0, B_ASYNC,
 			    cr, ct);
 			if (error == EAGAIN)
 				error = 0;
 		} else
-			error = nfs_putpage(vp, (offset_t)0, 0, 0, cr, ct);
+			error = nfs_putpage(vp, 0, 0, 0, cr, ct);
 		if (!error) {
 			mutex_enter(&rp->r_statelock);
 			error = rp->r_error;
@@ -1120,7 +1120,7 @@ nfs_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 			mutex_enter(&rp->r_statelock);
 			rp->r_gcount++;
 			mutex_exit(&rp->r_statelock);
-			error = nfs_putpage(vp, (offset_t)0, 0, 0, cr, ct);
+			error = nfs_putpage(vp, 0, 0, 0, cr, ct);
 			mutex_enter(&rp->r_statelock);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				if (!rp->r_error)
@@ -1214,7 +1214,7 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	    rp->r_count > 0 ||
 	    rp->r_mapcnt > 0)) {
 		ASSERT(vp->v_type != VCHR);
-		error = nfs_putpage(vp, (offset_t)0, 0, 0, cr, NULL);
+		error = nfs_putpage(vp, 0, 0, 0, cr, NULL);
 		if (error && (error == ENOSPC || error == EDQUOT)) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -1567,7 +1567,7 @@ nfs_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 	if (nfs_zone() != VTOMI(vp)->mi_zone)
 		return (EIO);
 
-	error = nfs_putpage(vp, (offset_t)0, 0, 0, cr, ct);
+	error = nfs_putpage(vp, 0, 0, 0, cr, ct);
 	if (!error)
 		error = VTOR(vp)->r_error;
 	return (error);
@@ -1640,7 +1640,7 @@ redo:
 			if (vn_has_cached_data(vp) &&
 			    ((rp->r_flags & RDIRTY) || rp->r_count > 0)) {
 				ASSERT(vp->v_type != VCHR);
-				error = nfs_putpage(vp, (offset_t)0, 0, 0,
+				error = nfs_putpage(vp, 0, 0, 0,
 				    cr, ct);
 				if (error) {
 					mutex_enter(&rp->r_statelock);
@@ -2296,7 +2296,7 @@ nfs_remove(vnode_t *dvp, char *nm, cred_t *cr, caller_context_t *ct, int flags)
 		 */
 		if (vn_has_cached_data(vp) &&
 		    ((rp->r_flags & RDIRTY) || rp->r_count > 0)) {
-			error = nfs_putpage(vp, (offset_t)0, 0, 0, cr, ct);
+			error = nfs_putpage(vp, 0, 0, 0, cr, ct);
 			if (error && (error == ENOSPC || error == EDQUOT)) {
 				mutex_enter(&rp->r_statelock);
 				if (!rp->r_error)
@@ -4536,7 +4536,7 @@ nfs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 		mutex_exit(&rp->r_statelock);
 		if (rc != 0)
 			goto done;
-		error = nfs_putpage(vp, (offset_t)0, 0, B_INVAL, cr, ct);
+		error = nfs_putpage(vp, 0, 0, B_INVAL, cr, ct);
 		if (error) {
 			if (error == ENOSPC || error == EDQUOT) {
 				mutex_enter(&rp->r_statelock);

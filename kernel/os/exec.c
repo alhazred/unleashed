@@ -600,7 +600,7 @@ gexec(
 	 * magic number is in bytes 2-3.
 	 */
 	if (error = vn_rdwr(UIO_READ, vp, magbuf, sizeof (magbuf),
-	    (offset_t)0, UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
+	    0, UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
 		goto bad;
 	if (resid != 0)
 		goto bad;
@@ -792,7 +792,7 @@ gexec(
 			 * Close the previous executable only if we are
 			 * at level 0.
 			 */
-			(void) fop_close(execvp, FREAD, 1, (offset_t)0,
+			(void) fop_close(execvp, FREAD, 1, 0,
 			    cred, NULL);
 		}
 
@@ -880,7 +880,7 @@ gexec(
 	return (0);
 
 bad:
-	(void) fop_close(vp, FREAD, 1, (offset_t)0, cred, NULL);
+	(void) fop_close(vp, FREAD, 1, 0, cred, NULL);
 
 bad_noclose:
 	if (newcred != NULL)

@@ -3878,7 +3878,7 @@ di_cache_write(struct di_cache *cache)
 		CACHE_DEBUG((DI_ERR, "FSYNC failed: %d", error));
 	}
 
-	if (error = fop_close(vp, oflags, 1, (offset_t)0, kcred, NULL)) {
+	if (error = fop_close(vp, oflags, 1, 0, kcred, NULL)) {
 		CACHE_DEBUG((DI_ERR, "close() failed: %d", error));
 		VN_RELE(vp);
 		return;
@@ -3899,7 +3899,7 @@ di_cache_write(struct di_cache *cache)
 	return;
 
 fail:
-	(void) fop_close(vp, oflags, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(vp, oflags, 1, 0, kcred, NULL);
 	VN_RELE(vp);
 }
 

@@ -2362,7 +2362,7 @@ ufs_dirmakedirect(
 	 * lock on (ip).
 	 *
 	 */
-	err = fbread(ITOV(ip), (offset_t)0, (uint_t)ip->i_fs->fs_fsize,
+	err = fbread(ITOV(ip), 0, (uint_t)ip->i_fs->fs_fsize,
 	    S_READ, &fbp);
 
 	if (err) {

@@ -833,7 +833,7 @@ asyattach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 
 	if (regnum < 0 ||
 	    ddi_regs_map_setup(devi, regnum, (caddr_t *)&asy->asy_ioaddr,
-	    (offset_t)0, (offset_t)0, &ioattr, &asy->asy_iohandle)
+	    0, 0, &ioattr, &asy->asy_iohandle)
 	    != DDI_SUCCESS) {
 		cmn_err(CE_WARN, "asy%d: could not map UART registers @ %p",
 		    instance, (void *)asy->asy_ioaddr);

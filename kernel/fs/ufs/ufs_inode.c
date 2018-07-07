@@ -1202,7 +1202,7 @@ ufs_itrunc(struct inode *oip, uoff_t length, int flags, cred_t *cr)
 	if (mode == IFIFO)
 		return (0);
 	if (mode != IFREG && mode != IFDIR && mode != IFATTRDIR &&
-	    !(mode == IFLNK && length == (offset_t)0) && mode != IFSHAD)
+	    !(mode == IFLNK && length == 0) && mode != IFSHAD)
 		return (EINVAL);
 	if (length > maxoffset)
 		return (EFBIG);

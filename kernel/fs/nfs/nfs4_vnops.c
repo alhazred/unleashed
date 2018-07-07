@@ -2787,7 +2787,7 @@ nfs4_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 
 	offset = uiop->uio_loffset + uiop->uio_resid;
 
-	if (uiop->uio_loffset < (offset_t)0 || offset < 0)
+	if (uiop->uio_loffset < 0 || offset < 0)
 		return (EINVAL);
 
 	if (limit == RLIM64_INFINITY || limit > MAXOFFSET_T)
@@ -3811,7 +3811,7 @@ nfs4setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	    rp->r_count > 0 ||
 	    rp->r_mapcnt > 0)) {
 		ASSERT(vp->v_type != VCHR);
-		e.error = nfs4_putpage(vp, (offset_t)0, 0, 0, cr, NULL);
+		e.error = nfs4_putpage(vp, 0, 0, 0, cr, NULL);
 		if (e.error && (e.error == ENOSPC || e.error == EDQUOT)) {
 			mutex_enter(&rp->r_statelock);
 			if (!rp->r_error)
@@ -4643,7 +4643,7 @@ nfs4_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 		return (0);
 	if (nfs_zone() != VTOMI4(vp)->mi_zone)
 		return (EIO);
-	error = nfs4_putpage_commit(vp, (offset_t)0, 0, cr);
+	error = nfs4_putpage_commit(vp, 0, 0, cr);
 	if (!error)
 		error = VTOR4(vp)->r_error;
 	return (error);
@@ -6637,7 +6637,7 @@ top:
 					    rp->r_count > 0 ||
 					    rp->r_mapcnt > 0)) {
 						error = nfs4_putpage(vp,
-						    (offset_t)0, 0, 0, cr, ct);
+						    0, 0, 0, cr, ct);
 						if (error && (error == ENOSPC ||
 						    error == EDQUOT)) {
 							mutex_enter(
@@ -10929,7 +10929,7 @@ nfs4_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 		mutex_exit(&rp->r_statelock);
 		if (rc != 0)
 			goto done;
-		error = nfs4_putpage(vp, (offset_t)0, 0, B_INVAL, cr, ct);
+		error = nfs4_putpage(vp, 0, 0, B_INVAL, cr, ct);
 		if (error) {
 			if (error == ENOSPC || error == EDQUOT) {
 				mutex_enter(&rp->r_statelock);

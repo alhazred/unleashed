@@ -357,7 +357,7 @@ setup_regs(immu_t *immu)
 	 * map the register address space
 	 */
 	error = ddi_regs_map_setup(immu->immu_dip, 0,
-	    (caddr_t *)&(immu->immu_regs_addr), (offset_t)0,
+	    (caddr_t *)&(immu->immu_regs_addr), 0,
 	    (offset_t)IMMU_REGSZ, &immu_regs_attr,
 	    &(immu->immu_regs_handle));
 
@@ -469,7 +469,7 @@ immu_regs_resume(immu_t *immu)
 	 * remap the register address space
 	 */
 	error = ddi_regs_map_setup(immu->immu_dip, 0,
-	    (caddr_t *)&(immu->immu_regs_addr), (offset_t)0,
+	    (caddr_t *)&(immu->immu_regs_addr), 0,
 	    (offset_t)IMMU_REGSZ, &immu_regs_attr,
 	    &(immu->immu_regs_handle));
 	if (error != DDI_SUCCESS) {

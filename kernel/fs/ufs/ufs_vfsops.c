@@ -472,7 +472,7 @@ ufs_mountroot(struct vfs *vfsp, enum whymountroot why)
 		vp = ((struct ufsvfs *)vfsp->vfs_data)->vfs_devvp;
 		(void) dnlc_purge_vfsp(vfsp, 0);
 		vp = common_specvp(vp);
-		(void) fop_putpage(vp, (offset_t)0, (size_t)0, B_INVAL,
+		(void) fop_putpage(vp, 0, (size_t)0, B_INVAL,
 		    CRED(), NULL);
 		(void) bfinval(vfsp->vfs_dev, 0);
 		fsp = getfs(vfsp);
@@ -508,7 +508,7 @@ ufs_mountroot(struct vfs *vfsp, enum whymountroot why)
 
 		vp = ((struct ufsvfs *)vfsp->vfs_data)->vfs_devvp;
 		(void) fop_close(vp, FREAD|FWRITE, 1,
-		    (offset_t)0, CRED(), NULL);
+		    0, CRED(), NULL);
 		return (0);
 	}
 	error = vfs_lock(vfsp);
@@ -523,7 +523,7 @@ ufs_mountroot(struct vfs *vfsp, enum whymountroot why)
 		error = fop_open(&devvp, FREAD|FWRITE, CRED(), NULL);
 		if (error == 0) {
 			(void) fop_close(devvp, FREAD|FWRITE, 1,
-			    (offset_t)0, CRED(), NULL);
+			    0, CRED(), NULL);
 		} else {
 			doclkset = 0;
 		}
@@ -847,7 +847,7 @@ mountfs(struct vfs *vfsp, enum whymountroot why, struct vnode *devvp,
 	 * cache if someone is trying to use block devices when
 	 * they really should be using the raw device.
 	 */
-	(void) fop_putpage(common_specvp(devvp), (offset_t)0,
+	(void) fop_putpage(common_specvp(devvp), 0,
 	    (size_t)0, B_INVAL, cr, NULL);
 
 	/*
@@ -1347,7 +1347,7 @@ out:
 	}
 	if (needclose) {
 		(void) fop_close(devvp, (vfsp->vfs_flag & VFS_RDONLY) ?
-		    FREAD : FREAD|FWRITE, 1, (offset_t)0, cr, NULL);
+		    FREAD : FREAD|FWRITE, 1, 0, cr, NULL);
 		bflush(dev);
 		(void) bfinval(dev, 1);
 	}
@@ -1653,9 +1653,9 @@ ufs_unmount(struct vfs *vfsp, int fflag, struct cred *cr)
 	ufsvfsp->vfs_bufp = NULL;	/* don't point at freed buf */
 	brelse(bp);			/* free the superblock buf */
 
-	(void) fop_putpage(common_specvp(bvp), (offset_t)0, (size_t)0,
+	(void) fop_putpage(common_specvp(bvp), 0, (size_t)0,
 	    B_INVAL, cr, NULL);
-	(void) fop_close(bvp, flag, 1, (offset_t)0, cr, NULL);
+	(void) fop_close(bvp, flag, 1, 0, cr, NULL);
 	bflush(dev);
 	(void) bfinval(dev, 1);
 	VN_RELE(bvp);

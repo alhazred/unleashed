@@ -109,7 +109,7 @@ getintphead(struct vnode *vp, struct intpdata *idatap)
 	/*
 	 * Read the entire line and confirm that it starts with '#!'.
 	 */
-	if (error = vn_rdwr(UIO_READ, vp, linep, INTPSZ, (offset_t)0,
+	if (error = vn_rdwr(UIO_READ, vp, linep, INTPSZ, 0,
 	    UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
 		return (error);
 	if (resid > INTPSZ-2 || linep[0] != '#' || linep[1] != '!')
@@ -288,7 +288,7 @@ intpexec(
 		 * Close this executable as the interpreter
 		 * will open and close it later on.
 		 */
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, cred, NULL);
+		(void) fop_close(vp, FREAD, 1, 0, cred, NULL);
 	}
 done:
 	VN_RELE(nvp);

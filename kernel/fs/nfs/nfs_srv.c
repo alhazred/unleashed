@@ -561,7 +561,7 @@ rfs_readlink(fhandle_t *fhp, struct nfsrdlnres *rl, struct exportinfo *exi,
 		uio.uio_iovcnt = 1;
 		uio.uio_segflg = UIO_SYSSPACE;
 		uio.uio_extflg = UIO_COPY_CACHED;
-		uio.uio_loffset = (offset_t)0;
+		uio.uio_loffset = 0;
 		uio.uio_resid = NFS_MAXPATHLEN;
 
 		/*

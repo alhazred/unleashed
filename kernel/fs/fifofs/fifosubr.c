@@ -1022,7 +1022,7 @@ out:
 	crhold(c);
 	(void) closef(filep);
 	VTOF(vp2)->fn_flag &= ~FIFOOPEN;
-	(void) fifo_close(vp2, flag, 1, (offset_t)0, c, NULL);
+	(void) fifo_close(vp2, flag, 1, 0, c, NULL);
 	crfree(c);
 	VN_RELE(vp2);
 	return (error);

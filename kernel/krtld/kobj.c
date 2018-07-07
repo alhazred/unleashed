@@ -3569,7 +3569,7 @@ kobj_close(intptr_t descr)
 
 	if (_modrootloaded) {
 		struct vnode *vp = (struct vnode *)descr;
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 	} else
 		(void) kobj_boot_close((int)descr);

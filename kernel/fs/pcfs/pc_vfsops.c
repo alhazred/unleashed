@@ -607,7 +607,7 @@ pcfs_mount(
 errout:
 	(void) fop_close(devvp,
 	    vfsp->vfs_flag & VFS_RDONLY ? FREAD : FREAD | FWRITE,
-	    1, (offset_t)0, cr, NULL);
+	    1, 0, cr, NULL);
 	VN_RELE(devvp);
 	mutex_destroy(&fsp->pcfs_lock);
 	kmem_free(fsp, sizeof (*fsp));
@@ -937,7 +937,7 @@ pc_invalfat(struct pcfs *fsp)
 	 */
 	(void) fop_close(fsp->pcfs_devvp,
 	    (PCFSTOVFS(fsp)->vfs_flag & VFS_RDONLY) ? FREAD : FREAD|FWRITE,
-	    1, (offset_t)0, CRED(), NULL);
+	    1, 0, CRED(), NULL);
 }
 
 void

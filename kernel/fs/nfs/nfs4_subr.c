@@ -2902,7 +2902,7 @@ nfs4_directio(vnode_t *vp, int cmd, cred_t *cr)
 
 		if (nfs4_has_pages(vp) &&
 		    ((rp->r_flags & R4DIRTY) || rp->r_awcount > 0)) {
-			error = fop_putpage(vp, (offset_t)0, (uint_t)0,
+			error = fop_putpage(vp, 0, (uint_t)0,
 			    B_INVAL, cr, NULL);
 			if (error) {
 				if (error == ENOSPC || error == EDQUOT) {

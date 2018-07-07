@@ -529,7 +529,7 @@ xattr_file_read(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 	/*
 	 * Validate file offset and fasttrack empty reads
 	 */
-	if (uiop->uio_loffset < (offset_t)0)
+	if (uiop->uio_loffset < 0)
 		return (EINVAL);
 
 	if (uiop->uio_resid == 0)
@@ -582,7 +582,7 @@ xattr_file_write(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 	/*
 	 * Validate file offset and size.
 	 */
-	if (uiop->uio_loffset < (offset_t)0)
+	if (uiop->uio_loffset < 0)
 		return (EINVAL);
 
 	if (size == 0)

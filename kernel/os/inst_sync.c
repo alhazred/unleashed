@@ -234,7 +234,7 @@ in_fclose(File *fp)
 {
 	int error;
 
-	error = fop_close(fp->vp, FCREAT, 1, (offset_t)0, CRED(), NULL);
+	error = fop_close(fp->vp, FCREAT, 1, 0, CRED(), NULL);
 	VN_RELE(fp->vp);
 	kmem_free(fp, sizeof (File));
 	return (error);

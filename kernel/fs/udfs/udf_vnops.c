@@ -1356,7 +1356,7 @@ udf_symlink(
 			}
 			error = ud_rdwri(UIO_WRITE, ioflag, ip,
 			    uname, ((int8_t *)pc) - uname,
-			    (offset_t)0, UIO_SYSSPACE, (int32_t *)0, cr);
+			    0, UIO_SYSSPACE, (int32_t *)0, cr);
 		}
 		if (error) {
 			ud_idrop(ip);
@@ -2048,8 +2048,8 @@ udf_map(
 		goto end;
 	}
 
-	if ((off < (offset_t)0) ||
-	    ((off + len) < (offset_t)0)) {
+	if ((off < 0) ||
+	    ((off + len) < 0)) {
 		error = EINVAL;
 		goto end;
 	}
@@ -3013,7 +3013,7 @@ ud_rdip(struct ud_inode *ip, struct uio *uio, int32_t ioflag, cred_t *cr)
 		return (0);
 	}
 
-	if ((uio->uio_loffset < (offset_t)0) ||
+	if ((uio->uio_loffset < 0) ||
 	    ((uio->uio_loffset + uio->uio_resid) < 0)) {
 		return (EINVAL);
 	}
@@ -3039,7 +3039,7 @@ ud_rdip(struct ud_inode *ip, struct uio *uio, int32_t ioflag, cred_t *cr)
 
 		diff = ip->i_size - uoff;
 
-		if (diff <= (offset_t)0) {
+		if (diff <= 0) {
 			error = 0;
 			goto out;
 		}
@@ -3161,7 +3161,7 @@ ud_wrip(struct ud_inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 		mutex_exit(&p->p_lock);
 		return (EFBIG);
 	}
-	if ((uio->uio_loffset < (offset_t)0) ||
+	if ((uio->uio_loffset < 0) ||
 	    ((uio->uio_loffset + uio->uio_resid) < 0)) {
 		return (EINVAL);
 	}

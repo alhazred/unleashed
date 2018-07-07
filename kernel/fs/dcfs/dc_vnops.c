@@ -682,7 +682,7 @@ dc_map(struct vnode *vp, offset_t off, struct as *as, caddr_t *addrp,
 	if (vp->v_flag & VNOMAP)
 		return (ENOSYS);
 
-	if (off < (offset_t)0 || (offset_t)(off + len) < (offset_t)0)
+	if (off < 0 || (offset_t)(off + len) < 0)
 		return (ENXIO);
 
 	/*

@@ -486,7 +486,7 @@ ufs_syncip(struct inode *ip, int flags, int waitfor, top_t topid)
 			TRANS_BEGIN_ASYNC(ufsvfsp, TOP_PUTPAGE,
 			    TOP_PUTPAGE_SIZE(ip));
 		}
-		error = fop_putpage(vp, (offset_t)0, (size_t)0,
+		error = fop_putpage(vp, 0, (size_t)0,
 		    flags, CRED(), NULL);
 		if (dotrans) {
 			TRANS_END_ASYNC(ufsvfsp, TOP_PUTPAGE,

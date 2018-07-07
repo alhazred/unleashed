@@ -764,7 +764,7 @@ reparse_vnode_parse(vnode_t *vp, nvlist_t *nvl)
 	uio.uio_iovcnt = 1;
 	uio.uio_segflg = UIO_SYSSPACE;
 	uio.uio_extflg = UIO_COPY_CACHED;
-	uio.uio_loffset = (offset_t)0;
+	uio.uio_loffset = 0;
 	uio.uio_resid = MAXREPARSELEN;
 
 	if ((err = fop_readlink(vp, &uio, kcred, NULL)) == 0) {

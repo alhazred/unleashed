@@ -390,7 +390,7 @@ hsfs_unmount(
 	mutex_exit(&hs_mounttab_lock);
 
 	hsfs_fini_kstats(fsp);
-	(void) fop_close(fsp->hsfs_devvp, FREAD, 1, (offset_t)0, cr, NULL);
+	(void) fop_close(fsp->hsfs_devvp, FREAD, 1, 0, cr, NULL);
 	VN_RELE(fsp->hsfs_devvp);
 	/* free path table space */
 	if (fsp->hsfs_ptbl != NULL)
@@ -920,7 +920,7 @@ hs_mountfs(
 	return (0);
 
 cleanup:
-	(void) fop_close(devvp, FREAD, 1, (offset_t)0, cr, NULL);
+	(void) fop_close(devvp, FREAD, 1, 0, cr, NULL);
 	VN_RELE(devvp);
 	if (fsp)
 		kmem_free(fsp, sizeof (*fsp));

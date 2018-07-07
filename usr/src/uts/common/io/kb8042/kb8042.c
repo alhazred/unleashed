@@ -312,7 +312,7 @@ kb8042_attach(dev_info_t *devi, ddi_attach_cmd_t cmd)
 	kb8042->init_state |= KB8042_MINOR_NODE_CREATED;
 
 	rc = ddi_regs_map_setup(devi, 0, (caddr_t *)&kb8042->addr,
-	    (offset_t)0, (offset_t)0, &attr, &kb8042->handle);
+	    0, 0, &attr, &kb8042->handle);
 	if (rc != DDI_SUCCESS) {
 #ifdef DEBUG
 		cmn_err(CE_WARN, "kb8042_attach:  can't map registers");

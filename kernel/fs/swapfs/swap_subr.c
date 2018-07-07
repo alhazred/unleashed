@@ -245,7 +245,7 @@ swap_sync(struct vfs *vfsp, short flag, struct cred *cr)
 		vp = swap_vnodes[i];
 		if (vp) {
 			VN_HOLD(vp);
-			(void) fop_putpage(vp, (offset_t)0, 0,
+			(void) fop_putpage(vp, 0, 0,
 			    (B_ASYNC | B_FREE), kcred, NULL);
 			VN_RELE(vp);
 		}

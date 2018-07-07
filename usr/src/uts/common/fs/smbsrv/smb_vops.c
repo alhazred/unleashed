@@ -222,7 +222,7 @@ smb_vop_open(vnode_t **vpp, int mode, cred_t *cred)
 void
 smb_vop_close(vnode_t *vp, int mode, cred_t *cred)
 {
-	(void) fop_close(vp, mode, 1, (offset_t)0, cred, &smb_ct);
+	(void) fop_close(vp, mode, 1, 0, cred, &smb_ct);
 }
 
 int

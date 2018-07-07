@@ -241,7 +241,7 @@ static void
 closefile()
 {
 	if (!silent && create) {
-		(void) fseeko(outfile, (offset_t)0, SEEK_END);
+		(void) fseeko(outfile, 0, SEEK_END);
 		(void) fprintf(stdout, "%lld\n", (offset_t)ftello(outfile));
 	}
 	if (create)

@@ -349,7 +349,7 @@ dev_lclose(dev_t dev, int flag, int otype, struct cred *cred)
 	ulong_t		offset;
 
 	vp = makespecvp(dev, (otype == OTYP_BLK) ? VBLK : VCHR);
-	error = fop_close(vp, flag | FKLYR, 1, (offset_t)0, cred, NULL);
+	error = fop_close(vp, flag | FKLYR, 1, 0, cred, NULL);
 
 	/*
 	 * Release the extra dev_lopen hold on the common vnode. We inline a

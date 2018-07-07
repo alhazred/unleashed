@@ -256,7 +256,7 @@ loop:
 	 */
 	resid = 0;
 	if (((err = ufs_rdwri(UIO_WRITE, FWRITE|FSYNC, sip, acldata,
-	    acldatalen, (offset_t)0, UIO_SYSSPACE, &resid, cr)) != 0) ||
+	    acldatalen, 0, UIO_SYSSPACE, &resid, cr)) != 0) ||
 	    (resid != 0)) {
 		kmem_free(acldata, acldatalen);
 		if ((resid != 0) && (err == 0))
@@ -482,7 +482,7 @@ ufs_si_load(struct inode *ip, cred_t *cr)
 	acldata	 = kmem_zalloc((size_t)sip->i_size, KM_SLEEP);
 	acldatalen = sip->i_size;
 
-	err = ufs_rdwri(UIO_READ, FREAD, sip, acldata, acldatalen, (offset_t)0,
+	err = ufs_rdwri(UIO_READ, FREAD, sip, acldata, acldatalen, 0,
 	    UIO_SYSSPACE, (int *)0, cr);
 
 	rw_exit(&sip->i_contents);

@@ -584,7 +584,7 @@ proc_exit(int why, int what)
 		 * Close this executable which has been opened when the process
 		 * was created by getproc().
 		 */
-		(void) fop_close(exec_vp, FREAD, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(exec_vp, FREAD, 1, 0, CRED(), NULL);
 		VN_RELE(exec_vp);
 	}
 	if (execdir_vp)

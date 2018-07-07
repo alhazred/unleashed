@@ -512,7 +512,7 @@ iwscnopen(dev_t *devp, int flag, int state, cred_t *cred)
 			 * In this case there must already be a copy of
 			 * this vnode on the list, so we can free up this one.
 			 */
-			(void) fop_close(vp, flag, 1, (offset_t)0, cred, NULL);
+			(void) fop_close(vp, flag, 1, 0, cred, NULL);
 		}
 	}
 
@@ -587,7 +587,7 @@ iwscnclose(dev_t dev, int flag, int state, cred_t *cred)
 
 		if (lp->wl_is_console == B_TRUE)
 			/* Close the underlying console device. */
-			(void) fop_close(lp->wl_vp, 0, 1, (offset_t)0, kcred,
+			(void) fop_close(lp->wl_vp, 0, 1, 0, kcred,
 			    NULL);
 
 		kmem_free(lp, sizeof (*lp));

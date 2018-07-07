@@ -127,7 +127,7 @@ acct_shutdown(zoneid_t zoneid, void *arg)
 		 * held vnode may cause filesystems to be busy, and the zone
 		 * shutdown operation to fail.
 		 */
-		(void) fop_close(ag->acctvp, FWRITE, 1, (offset_t)0, kcred,
+		(void) fop_close(ag->acctvp, FWRITE, 1, 0, kcred,
 		    NULL);
 		VN_RELE(ag->acctvp);
 	}
@@ -279,7 +279,7 @@ sysacct(char *fname)
 		ag->acctvp = NULL;
 		mutex_exit(&ag->aclock);
 		if (vp) {
-			error = fop_close(vp, FWRITE, 1, (offset_t)0, CRED(),
+			error = fop_close(vp, FWRITE, 1, 0, CRED(),
 			    NULL);
 			VN_RELE(vp);
 		}
@@ -332,7 +332,7 @@ sysacct(char *fname)
 	}
 
 	if (vp) {
-		(void) fop_close(vp, FWRITE, 1, (offset_t)0, CRED(), NULL);
+		(void) fop_close(vp, FWRITE, 1, 0, CRED(), NULL);
 		VN_RELE(vp);
 	}
 	return (error == 0 ? 0 : set_errno(error));

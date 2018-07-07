@@ -1713,7 +1713,7 @@ ldi_close(ldi_handle_t lh, int flag, cred_t *cr)
 #endif
 
 	/* do a layered close on the device */
-	err = fop_close(handlep->lh_vp, flag | FKLYR, 1, (offset_t)0, cr, NULL);
+	err = fop_close(handlep->lh_vp, flag | FKLYR, 1, 0, cr, NULL);
 
 	LDI_OPENCLOSE((CE_WARN, "%s: lh=0x%p", "ldi close", (void *)lh));
 

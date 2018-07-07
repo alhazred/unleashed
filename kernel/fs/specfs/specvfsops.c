@@ -154,7 +154,7 @@ spec_sync(struct vfs *vfsp,
 	for (sp = sync_list; sp != NULL; sp = spnext) {
 		spnext = sp->s_list;
 		vp = STOV(sp);
-		(void) fop_putpage(vp, (offset_t)0, (uint_t)0, B_ASYNC, cr,
+		(void) fop_putpage(vp, 0, (uint_t)0, B_ASYNC, cr,
 		    NULL);
 		VN_RELE(vp);		/* Release our hold on vnode */
 	}

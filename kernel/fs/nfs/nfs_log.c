@@ -507,7 +507,7 @@ log_file_create(caddr_t origname, struct log_file **lfpp)
 out:
 	if (vp != NULL) {
 		int error1;
-		error1 = fop_close(vp, FCREAT|FWRITE|FOFFMAX, 1, (offset_t)0,
+		error1 = fop_close(vp, FCREAT|FWRITE|FOFFMAX, 1, 0,
 		    CRED(), NULL);
 		if (error1) {
 			nfs_cmn_err(error1, CE_WARN,
@@ -559,7 +559,7 @@ log_file_rele(struct log_file *lfp)
 	ASSERT(lfp->lf_flags == 0);
 	ASSERT(lfp->lf_writers == 0);
 
-	if (error = fop_close(lfp->lf_vp, FCREAT|FWRITE|FOFFMAX, 1, (offset_t)0,
+	if (error = fop_close(lfp->lf_vp, FCREAT|FWRITE|FOFFMAX, 1, 0,
 	    CRED(), NULL)) {
 		nfs_cmn_err(error, CE_WARN,
 		    "NFS: Could not close log buffer %s - error = %m",

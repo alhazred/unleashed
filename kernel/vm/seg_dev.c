@@ -2433,7 +2433,7 @@ devmap_device(devmap_handle_t *dhp, struct as *as, caddr_t *addr,
 		 * use 0 which is as good as any other.
 		 */
 		if (maxdhp->dh_flags & DEVMAP_MAPPING_INVALID) {
-			aligned_off = (offset_t)0;
+			aligned_off = 0;
 		} else if (dhp_is_devmem(maxdhp)) {
 			aligned_off = (offset_t)ptob(maxdhp->dh_pfn) - offset;
 		} else if (dhp_is_pmem(maxdhp)) {

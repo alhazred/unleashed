@@ -454,7 +454,7 @@ rtls_attach(dev_info_t *devinfo, ddi_attach_cmd_t cmd)
 	 * Map operating register
 	 */
 	err = ddi_regs_map_setup(devinfo, 1, &rtlsp->io_reg,
-	    (offset_t)0, 0, &rtls_reg_accattr, &rtlsp->io_handle);
+	    0, 0, &rtls_reg_accattr, &rtlsp->io_handle);
 	if (err != DDI_SUCCESS) {
 		kmem_free((caddr_t)rtlsp, sizeof (rtls_t));
 		cmn_err(CE_WARN, "ddi_regs_map_setup fail.");

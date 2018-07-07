@@ -567,7 +567,7 @@ rst_closedir(RST_DIR *cdirp)
 static offset_t
 rst_telldir(RST_DIR *tdirp)
 {
-	offset_t pos = llseek(tdirp->dd_fd, (offset_t)0, SEEK_CUR);
+	offset_t pos = llseek(tdirp->dd_fd, 0, SEEK_CUR);
 
 	if (pos == (offset_t)-1) {
 		perror("Could not determine position in directory file");

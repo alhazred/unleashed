@@ -2029,7 +2029,7 @@ main(int argc, char *argv[])
 		{0},		/* driver name */
 		-1,		/* monitor all instances */
 		-1,		/* monitor all register sets and DMA handles */
-		(offset_t)0,	/* monitor from start of reg. set or DMA hd */
+		0,	/* monitor from start of reg. set or DMA hd */
 		myLLMAX,	/* monitor whole reg set or DMA hdl(no LLMAX) */
 		0,		/* qualify all */
 		DFLTLOGSZ,	/* default no. of accesses before corrupting */

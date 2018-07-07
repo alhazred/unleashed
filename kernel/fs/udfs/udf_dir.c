@@ -1405,7 +1405,7 @@ ud_dirmakedirect(struct ud_inode *ip,
 	 * lock on (ip).
 	 */
 	rw_exit(&ip->i_contents);
-	if ((err = fbread(ITOV(ip), (offset_t)0,
+	if ((err = fbread(ITOV(ip), 0,
 	    ip->i_udf->udf_lbsize, S_WRITE, &fbp)) != 0) {
 		rw_enter(&ip->i_contents, RW_WRITER);
 		return (err);
@@ -1785,7 +1785,7 @@ ud_dirfixdotdot(struct ud_inode *dp,
 
 	ASSERT(RW_WRITE_HELD(&npdp->i_rwlock));
 
-	err = fbread(ITOV(dp), (offset_t)0,
+	err = fbread(ITOV(dp), 0,
 	    dp->i_udf->udf_lbsize, S_WRITE, &fbp);
 
 	if (err || dp->i_nlink == 0 ||

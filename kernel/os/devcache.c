@@ -625,7 +625,7 @@ kfclose(kfile_t *fp)
 	}
 
 	rval = fop_close(fp->kf_vp, fp->kf_vnflags, 1,
-	    (offset_t)0, kcred, NULL);
+	    0, kcred, NULL);
 	if (rval != 0) {
 		if (fp->kf_state == 0) {
 			nvf_error("%s: close error %d\n",

@@ -850,7 +850,7 @@ device_close(struct vnode *vp, int flag, struct cred *cr)
 		 * invalidate any in-core blocks so that we
 		 * can, for example, change floppy disks.
 		 */
-		(void) spec_putpage(cvp, (offset_t)0,
+		(void) spec_putpage(cvp, 0,
 		    (size_t)0, B_INVAL|B_FORCE, cr, NULL);
 		bflush(dev);
 		binval(dev);

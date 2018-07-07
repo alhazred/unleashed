@@ -1110,7 +1110,7 @@ getelfhead(vnode_t *vp, cred_t *credp, Ehdr *ehdr, int *nshdrs, int *shstrndx,
 	 * now read the entire ELF header.
 	 */
 	if ((error = vn_rdwr(UIO_READ, vp, (caddr_t)ehdr,
-	    sizeof (Ehdr), (offset_t)0, UIO_SYSSPACE, 0,
+	    sizeof (Ehdr), 0, UIO_SYSSPACE, 0,
 	    (rlim64_t)0, credp, &resid)) != 0)
 		return (error);
 
@@ -1342,7 +1342,7 @@ mapelfexec(
 		if (primary)
 			flags |= _MAP_STARTLOW;
 
-		map_addr(&addr, len, (offset_t)0, 1, flags);
+		map_addr(&addr, len, 0, 1, flags);
 		if (addr == NULL)
 			return (ENOMEM);
 		*voffset = (intptr_t)addr;
@@ -2027,7 +2027,7 @@ top:
 		ehdr->e_shentsize = sizeof (Shdr);
 	}
 
-	if (error = core_write(vp, UIO_SYSSPACE, (offset_t)0, ehdr,
+	if (error = core_write(vp, UIO_SYSSPACE, 0, ehdr,
 	    sizeof (Ehdr), rlimit, credp))
 		goto done;
 

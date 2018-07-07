@@ -5889,7 +5889,7 @@ myri10ge_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		printf("%s at %ld:%ld:%ld attaching\n", mgp->name,
 		    bus_number, dev_number, func_number);
 	status = ddi_regs_map_setup(dip, mgp->reg_set, (caddr_t *)&mgp->sram,
-	    (offset_t)0, (offset_t)span,  &myri10ge_dev_access_attr,
+	    0, (offset_t)span,  &myri10ge_dev_access_attr,
 	    &mgp->io_handle);
 	if (status != DDI_SUCCESS) {
 		cmn_err(CE_WARN, "%s: couldn't map memory space", mgp->name);

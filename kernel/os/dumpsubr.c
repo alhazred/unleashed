@@ -440,7 +440,7 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 		error = ENOSPC;
 
 	if (error || justchecking) {
-		(void) fop_close(cvp, FREAD | FWRITE, 1, (offset_t)0,
+		(void) fop_close(cvp, FREAD | FWRITE, 1, 0,
 		    kcred, NULL);
 		return (error);
 	}
@@ -543,7 +543,7 @@ dumpfini(void)
 		VN_RELE(cdev_vp);
 	}
 
-	(void) fop_close(dumpvp, FREAD | FWRITE, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(dumpvp, FREAD | FWRITE, 1, 0, kcred, NULL);
 
 	VN_RELE(dumpvp);
 

@@ -335,7 +335,7 @@ cnopen(dev_t *dev, int flag, int state, struct cred *cred)
 		 * whilst we were in the middle of the open.
 		 */
 		if (rconsvp == NULL) {
-			(void) fop_close(vp, flag, 1, (offset_t)0, cred, NULL);
+			(void) fop_close(vp, flag, 1, 0, cred, NULL);
 			return (0);
 		}
 		cmn_err(CE_PANIC, "cnopen: cloned open");
@@ -366,7 +366,7 @@ cnclose(dev_t dev, int flag, int state, struct cred *cred)
 		return (0);
 
 	while ((rconsopen != 0) && ((vp = rconsvp) != NULL)) {
-		err = fop_close(vp, flag, 1, (offset_t)0, cred, NULL);
+		err = fop_close(vp, flag, 1, 0, cred, NULL);
 		if (!err) {
 			rconsopen--;
 		}

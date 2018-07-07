@@ -1284,7 +1284,7 @@ ud_freesp(struct vnode *vp,
 	int32_t error;
 
 	ASSERT(vp->v_type == VREG);
-	ASSERT(lp->l_start >= (offset_t)0);	/* checked by convoff */
+	ASSERT(lp->l_start >= 0);	/* checked by convoff */
 
 	ud_printf("udf_freesp\n");
 

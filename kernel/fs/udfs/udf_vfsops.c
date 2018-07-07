@@ -376,8 +376,8 @@ udf_unmount(struct vfs *vfsp, int fflag, struct cred *cr)
 
 	ud_destroy_fsp(udf_vfsp);
 
-	(void) fop_putpage(bvp, (offset_t)0, (uint32_t)0, B_INVAL, cr, NULL);
-	(void) fop_close(bvp, flag, 1, (offset_t)0, cr, NULL);
+	(void) fop_putpage(bvp, 0, (uint32_t)0, B_INVAL, cr, NULL);
+	(void) fop_close(bvp, flag, 1, 0, cr, NULL);
 
 	(void) bfinval(vfsp->vfs_dev, 1);
 	VN_RELE(bvp);
@@ -563,7 +563,7 @@ udf_mountroot(struct vfs *vfsp, enum whymountroot why)
 		vp = ((struct udf_vfs *)vfsp->vfs_data)->udf_devvp;
 		(void) dnlc_purge_vfsp(vfsp, 0);
 		vp = common_specvp(vp);
-		(void) fop_putpage(vp, (offset_t)0,
+		(void) fop_putpage(vp, 0,
 		    (uint32_t)0, B_INVAL, CRED(), NULL);
 		binval(vfsp->vfs_dev);
 
@@ -575,7 +575,7 @@ udf_mountroot(struct vfs *vfsp, enum whymountroot why)
 		ud_update(0);
 		vp = ((struct udf_vfs *)vfsp->vfs_data)->udf_devvp;
 		(void) fop_close(vp, FREAD|FWRITE, 1,
-		    (offset_t)0, CRED(), NULL);
+		    0, CRED(), NULL);
 		return (0);
 	}
 
@@ -686,7 +686,7 @@ ud_mountfs(struct vfs *vfsp,
 		 */
 		if (udf_vfsp->udf_flags & UDF_FL_RDONLY) {
 			(void) dnlc_purge_vfsp(vfsp, 0);
-			(void) fop_putpage(devvp, (offset_t)0, (uint_t)0,
+			(void) fop_putpage(devvp, 0, (uint_t)0,
 			    B_INVAL, CRED(), NULL);
 			(void) ud_iflush(vfsp);
 			bflush(dev);
@@ -778,7 +778,7 @@ remountout:
 	 * cache if someone is trying to use block devices when
 	 * they really should be using the raw device.
 	 */
-	(void) fop_putpage(common_specvp(devvp), (offset_t)0,
+	(void) fop_putpage(common_specvp(devvp), 0,
 	    (uint32_t)0, B_INVAL, cr, NULL);
 
 
@@ -942,7 +942,7 @@ out:
 	ud_destroy_fsp(udf_vfsp);
 	if (needclose) {
 		(void) fop_close(devvp, (vfsp->vfs_flag & VFS_RDONLY) ?
-		    FREAD : FREAD|FWRITE, 1, (offset_t)0, cr, NULL);
+		    FREAD : FREAD|FWRITE, 1, 0, cr, NULL);
 		bflush(dev);
 		binval(dev);
 	}

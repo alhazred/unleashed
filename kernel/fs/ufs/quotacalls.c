@@ -270,7 +270,7 @@ opendq(
 				cmn_err(CE_WARN, "opendq failed to remove frags"
 				    " from quota file\n");
 			rw_exit(&qip->i_contents);
-			(void) fop_putpage(vp, (offset_t)0, (size_t)qip->i_size,
+			(void) fop_putpage(vp, 0, (size_t)qip->i_size,
 			    B_INVAL, kcred, NULL);
 		} else {
 			rw_exit(&qip->i_contents);

@@ -348,7 +348,7 @@ bind_consadm_conf(char *path)
 	    CNSADM_BYTES_MAX : (ssize_t)vattr.va_size;
 	buf = kmem_alloc(size, KM_SLEEP);
 
-	if ((err = vn_rdwr(UIO_READ, vp, buf, size, (offset_t)0,
+	if ((err = vn_rdwr(UIO_READ, vp, buf, size, 0,
 	    UIO_SYSSPACE, 0, (rlim64_t)0, kcred, &resid)) != 0)
 		cmn_err(CE_WARN, "sysmsg: vn_rdwr: '%s': error %d",
 		    path, err);
@@ -357,7 +357,7 @@ bind_consadm_conf(char *path)
 
 	kmem_free(buf, size);
 closevp:
-	(void) fop_close(vp, FREAD, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(vp, FREAD, 1, 0, kcred, NULL);
 	VN_RELE(vp);
 }
 
@@ -445,7 +445,7 @@ sysmclose(dev_t dev, int flag, int state, cred_t *cred)
 		return (0);
 	}
 
-	(void) fop_close(dcvp, FWRITE, 1, (offset_t)0, kcred, NULL);
+	(void) fop_close(dcvp, FWRITE, 1, 0, kcred, NULL);
 	VN_RELE(dcvp);
 	dcvp = NULL;
 	mutex_exit(&dcvp_mutex);
@@ -458,7 +458,7 @@ sysmclose(dev_t dev, int flag, int state, cred_t *cred)
 		rw_enter(&sysmcache[i].dca_lock, RW_WRITER);
 		if (sysmcache[i].dca_vp != NULL) {
 			(void) fop_close(sysmcache[i].dca_vp, flag,
-			    1, (offset_t)0, cred, NULL);
+			    1, 0, cred, NULL);
 			VN_RELE(sysmcache[i].dca_vp);
 			sysmcache[i].dca_vp = NULL;
 		}

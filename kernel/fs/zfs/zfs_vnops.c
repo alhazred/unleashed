@@ -525,7 +525,7 @@ zfs_read(vnode_t *vp, uio_t *uio, int ioflag, cred_t *cr, caller_context_t *ct)
 	/*
 	 * Validate file offset
 	 */
-	if (uio->uio_loffset < (offset_t)0) {
+	if (uio->uio_loffset < 0) {
 		ZFS_EXIT(zfsvfs);
 		return (SET_ERROR(EINVAL));
 	}
@@ -2471,7 +2471,7 @@ zfs_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
 	 */
 	if (vn_has_cached_data(vp) && !(syncflag & FNODSYNC) &&
 	    (vp->v_type == VREG) && !(IS_SWAPVP(vp)))
-		(void) fop_putpage(vp, (offset_t)0, (size_t)0, B_ASYNC, cr, ct);
+		(void) fop_putpage(vp, 0, (size_t)0, B_ASYNC, cr, ct);
 
 	(void) tsd_set(zfs_fsyncer_key, (void *)zfs_fsync_sync_cnt);
 

@@ -1112,7 +1112,7 @@ xge_attach(dev_info_t *dev_info, ddi_attach_cmd_t cmd)
 
 	/* map BAR0 */
 	ret = ddi_regs_map_setup(dev_info, 1, (caddr_t *)&attr.bar0,
-	    (offset_t)0, (offset_t)0, &xge_dev_attr, &attr.regh0);
+	    0, 0, &xge_dev_attr, &attr.regh0);
 	if (ret != DDI_SUCCESS) {
 		xge_debug_osdep(XGE_ERR, "unable to map bar0: [%d]", ret);
 		goto _exit0a;
@@ -1120,7 +1120,7 @@ xge_attach(dev_info_t *dev_info, ddi_attach_cmd_t cmd)
 
 	/* map BAR1 */
 	ret = ddi_regs_map_setup(dev_info, 2, (caddr_t *)&attr.bar1,
-	    (offset_t)0, (offset_t)0, &xge_dev_attr, &attr.regh1);
+	    0, 0, &xge_dev_attr, &attr.regh1);
 	if (ret != DDI_SUCCESS) {
 		xge_debug_osdep(XGE_ERR, "unable to map bar1: [%d]", ret);
 		goto _exit1;
@@ -1128,7 +1128,7 @@ xge_attach(dev_info_t *dev_info, ddi_attach_cmd_t cmd)
 
 	/* map BAR2 MSI(X) */
 	ret = ddi_regs_map_setup(dev_info, 2, (caddr_t *)&attr.bar2,
-	    (offset_t)0, (offset_t)0, &xge_dev_attr, &attr.regh2);
+	    0, 0, &xge_dev_attr, &attr.regh2);
 	if (ret != DDI_SUCCESS) {
 		xge_debug_osdep(XGE_ERR, "unable to map bar2: [%d]", ret);
 		goto _exit1a;

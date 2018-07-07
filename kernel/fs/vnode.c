@@ -1049,7 +1049,7 @@ out:
 	}
 	if (error) {
 		if (open_done) {
-			(void) fop_close(vp, filemode, 1, (offset_t)0, CRED(),
+			(void) fop_close(vp, filemode, 1, 0, CRED(),
 			    NULL);
 			open_done = 0;
 			shrlock_done = 0;

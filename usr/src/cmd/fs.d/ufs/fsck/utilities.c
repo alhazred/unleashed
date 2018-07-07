@@ -2506,7 +2506,7 @@ brute_force_get_device_size(int fd)
 	 * device's size.
 	 */
 
-	if (((llseek(fd, (offset_t)0, SEEK_SET)) == -1) ||
+	if (((llseek(fd, 0, SEEK_SET)) == -1) ||
 	    ((read(fd, buf, DEV_BSIZE)) == -1))
 		return (0);  /* can't determine size */
 

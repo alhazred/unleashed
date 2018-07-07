@@ -268,7 +268,7 @@ create_core_file(char *fp, enum core_types core_type, vnode_t **vpp)
 	if (error == 0 &&
 	    (fop_getattr(vp, &vattr, 0, credp, NULL) != 0 ||
 	    vattr.va_uid != crgetuid(credp))) {
-		(void) fop_close(vp, FWRITE, 1, (offset_t)0,
+		(void) fop_close(vp, FWRITE, 1, 0,
 		    credp, NULL);
 		VN_RELE(vp);
 		(void) remove_core_file(fp, core_type);
@@ -443,7 +443,7 @@ do_core(char *fp, int sig, enum core_types core_type, struct core_globals *cg)
 			rw_exit(eswp->exec_lock);
 		}
 
-		closerr = fop_close(vp, FWRITE, 1, (offset_t)0, credp, NULL);
+		closerr = fop_close(vp, FWRITE, 1, 0, credp, NULL);
 		VN_RELE(vp);
 		if (error == 0)
 			error = closerr;

@@ -420,7 +420,7 @@ ufs_check_rewrite(struct inode *ip, struct uio *uiop, int ioflag)
 	 * checked for sanity, so assume nothing.
 	 */
 	return (((ip->i_mode & IFMT) == IFREG) && !(ioflag & FAPPEND) &&
-	    (uiop->uio_loffset >= (offset_t)0) &&
+	    (uiop->uio_loffset >= 0) &&
 	    (uiop->uio_loffset < ip->i_size) && (uiop->uio_resid > 0) &&
 	    ((ip->i_size - uiop->uio_loffset) >= uiop->uio_resid) &&
 	    !(ioflag & FSYNC) && !bmap_has_holes(ip) &&
@@ -807,7 +807,7 @@ wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 	else
 		limit = MIN(MAXOFF32_T, limit);
 
-	if (uio->uio_loffset < (offset_t)0) {
+	if (uio->uio_loffset < 0) {
 		return (EINVAL);
 	}
 	if (uio->uio_resid == 0) {
@@ -1376,7 +1376,7 @@ rdip(struct inode *ip, struct uio *uio, int ioflag, cred_t *cr)
 		error = 0;
 		goto out;
 	}
-	if (uio->uio_loffset < (offset_t)0) {
+	if (uio->uio_loffset < 0) {
 		return (EINVAL);
 	}
 	if (uio->uio_resid == 0) {
@@ -1411,7 +1411,7 @@ rdip(struct inode *ip, struct uio *uio, int ioflag, cred_t *cr)
 
 		diff = ip->i_size - uoff;
 
-		if (diff <= (offset_t)0) {
+		if (diff <= 0) {
 			error = 0;
 			goto out;
 		}
@@ -2586,7 +2586,7 @@ again:
 				 * free page
 				 */
 				(void) fop_putpage(ITOV(ip),
-				    (offset_t)0, PAGESIZE,
+				    0, PAGESIZE,
 				    (B_DONTNEED | B_FREE | B_FORCE | B_ASYNC),
 				    cr, ct);
 			} else {
@@ -2635,7 +2635,7 @@ ufs_fsync(struct vnode *vp, int syncflag, struct cred *cr,
 		 */
 		if (vn_has_cached_data(vp) && !(syncflag & FNODSYNC) &&
 		    (vp->v_type != VCHR) && !(IS_SWAPVP(vp))) {
-			error = fop_putpage(vp, (offset_t)0, (size_t)0,
+			error = fop_putpage(vp, 0, (size_t)0,
 			    0, CRED(), ct);
 			if (error)
 				goto out;
@@ -4221,7 +4221,7 @@ again:
 		ip->i_flag |= IQUIET;
 
 	error = ufs_rdwri(UIO_WRITE, ioflag, ip, target, strlen(target),
-	    (offset_t)0, UIO_SYSSPACE, &residual, cr);
+	    0, UIO_SYSSPACE, &residual, cr);
 
 	ip->i_flag &= ~IQUIET;
 
@@ -5643,7 +5643,7 @@ ufs_map(struct vnode *vp,
 		goto out;
 	}
 
-	if (off < (offset_t)0 || (offset_t)(off + len) < (offset_t)0) {
+	if (off < 0 || (offset_t)(off + len) < 0) {
 		error = ENXIO;
 		goto out;
 	}

@@ -1503,7 +1503,7 @@ spec_fsync(
 
 	if (vp->v_type == VBLK && cvp != vp && vn_has_cached_data(cvp) &&
 	    (cvp->v_flag & VISSWAP) == 0)
-		(void) fop_putpage(cvp, (offset_t)0, 0, 0, cr, ct);
+		(void) fop_putpage(cvp, 0, 0, 0, cr, ct);
 
 	/*
 	 * For devices that support it, force write cache to stable storage.

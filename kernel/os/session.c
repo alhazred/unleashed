@@ -643,7 +643,7 @@ freectty(boolean_t at_exit)
 	mutex_exit(&stp->sd_lock);
 
 	/* This is the only remaining thread with access to this vnode */
-	(void) fop_close(vp, 0, 1, (offset_t)0, cred, NULL);
+	(void) fop_close(vp, 0, 1, 0, cred, NULL);
 	VN_RELE(vp);
 	crfree(cred);
 

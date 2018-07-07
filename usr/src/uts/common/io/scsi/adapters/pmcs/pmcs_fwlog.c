@@ -1230,7 +1230,7 @@ pmcs_write_fwlog(pmcs_hw_t *pwp, pmcs_fw_event_hdr_t *fwlogp)
 		data_len = (ssize_t)resid;
 	}
 
-	if (error = fop_close(vnp, FWRITE, 1, (offset_t)0, kcred, NULL)) {
+	if (error = fop_close(vnp, FWRITE, 1, 0, kcred, NULL)) {
 		if (!error) {
 			pmcs_prt(pwp, PMCS_PRT_DEBUG, NULL, NULL,
 			    "%s: Error on close %s, error %d", __func__,

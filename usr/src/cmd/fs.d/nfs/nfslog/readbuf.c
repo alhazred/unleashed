@@ -177,7 +177,7 @@ nfslog_init_buf(char *bufpath, struct nfslog_buf *lbp, int *error)
 	 */
 	lbp->fl.l_type = F_WRLCK;
 	lbp->fl.l_whence = SEEK_SET;		/* beginning of file */
-	lbp->fl.l_start = (offset_t)0;
+	lbp->fl.l_start = 0;
 	lbp->fl.l_len = 0;			/* entire file */
 	lbp->fl.l_sysid = 0;
 	lbp->fl.l_pid = 0;

@@ -42,7 +42,7 @@ comm_page_mapin()
 	uint_t prot = PROT_USER | PROT_READ;
 	segumap_crargs_t suarg;
 
-	map_addr(&addr, len, (offset_t)0, 1, 0);
+	map_addr(&addr, len, 0, 1, 0);
 	if (addr == NULL || valid_usr_range(addr, len, prot, p->p_as,
 	    p->p_as->a_userlimit) != RANGE_OKAY) {
 		return (NULL);

@@ -334,7 +334,7 @@ mouse8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	}
 
 	rc = ddi_regs_map_setup(dip, 0, (caddr_t *)&state->ms_addr,
-	    (offset_t)0, (offset_t)0, &attr, &state->ms_handle);
+	    0, 0, &attr, &state->ms_handle);
 	if (rc != DDI_SUCCESS) {
 		goto fail_2;
 	}

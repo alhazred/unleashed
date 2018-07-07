@@ -858,7 +858,7 @@ pc_dirfixdotdot(struct pcnode *dp,	/* child directory being moved */
 	 * point to the new parent's starting cluster
 	 */
 	ASSERT(opdp != npdp);
-	error = pc_blkatoff(dp, (offset_t)0, &bp, &ep);
+	error = pc_blkatoff(dp, 0, &bp, &ep);
 	if (error) {
 		PC_DPRINTF0(1, "pc_dirfixdotdot: error in blkatoff\n");
 		return (error);

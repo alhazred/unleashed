@@ -555,7 +555,7 @@ i8042_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 	global->init_state |= I8042_INIT_BASIC;
 
 	if (ddi_regs_map_setup(dip, 0, (caddr_t *)&global->io_addr,
-	    (offset_t)0, (offset_t)0, &attr, &global->io_handle)
+	    0, 0, &attr, &global->io_handle)
 	    != DDI_SUCCESS)
 		goto fail;
 

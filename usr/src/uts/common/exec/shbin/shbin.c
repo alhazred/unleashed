@@ -141,7 +141,7 @@ checkshbinmagic(struct vnode *vp)
 	 * Read the entire line and confirm that it starts with the magic
 	 * sequence for compiled ksh93 shell scripts.
 	 */
-	if (error = vn_rdwr(UIO_READ, vp, linep, sizeof (linep), (offset_t)0,
+	if (error = vn_rdwr(UIO_READ, vp, linep, sizeof (linep), 0,
 	    UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
 		return (error);
 
@@ -253,7 +253,7 @@ shbinexec(
 		 * Close this script as the sh interpreter
 		 * will open and close it later on.
 		 */
-		(void) fop_close(vp, FREAD, 1, (offset_t)0, cred, NULL);
+		(void) fop_close(vp, FREAD, 1, 0, cred, NULL);
 	}
 done:
 	VN_RELE(nvp);
