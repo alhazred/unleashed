@@ -194,19 +194,6 @@ extern	int bufhwm_pct;		/* ditto - given in % of physmem  */
  */
 
 /*
- * Read in (if necessary) the block and return a buffer pointer.
- *
- * This interface is provided for binary compatibility.  Using
- * BREAD() directly avoids the extra function call overhead invoked
- * by calling this routine.
- */
-struct buf *
-bread(dev_t dev, daddr_t blkno, long bsize)
-{
-	return (BREAD(dev, blkno, bsize));
-}
-
-/*
  * Common code for reading a buffer with various options
  *
  * Read in (if necessary) the block and return a buffer pointer.
@@ -335,31 +322,6 @@ bwrite_common(void *arg, struct buf *bp, int force_wait,
 			brelse(bp);
 		}
 	}
-}
-
-/*
- * Write the buffer, waiting for completion (unless B_ASYNC is set).
- * Then release the buffer.
- * This interface is provided for binary compatibility.  Using
- * BWRITE() directly avoids the extra function call overhead invoked
- * by calling this routine.
- */
-void
-bwrite(struct buf *bp)
-{
-	BWRITE(bp);
-}
-
-/*
- * Write the buffer, waiting for completion.
- * But don't release the buffer afterwards.
- * This interface is provided for binary compatibility.  Using
- * BWRITE2() directly avoids the extra function call overhead.
- */
-void
-bwrite2(struct buf *bp)
-{
-	BWRITE2(bp);
 }
 
 /*
@@ -547,20 +509,6 @@ bio_busy(int cleanit)
 	}
 
 	return (busy);
-}
-
-/*
- * this interface is provided for binary compatibility.
- *
- * Assign a buffer for the given block.  If the appropriate
- * block is already associated, return it; otherwise search
- * for the oldest non-busy buffer and reassign it.
- */
-struct buf *
-getblk(dev_t dev, daddr_t blkno, long bsize)
-{
-	return (getblk_common(/* ufsvfsp */ NULL, dev,
-	    blkno, bsize, /* errflg */ 0));
 }
 
 /*

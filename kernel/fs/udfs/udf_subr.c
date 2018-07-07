@@ -81,6 +81,10 @@
 #include <sys/fs/udf_volume.h>
 #include <sys/fs/udf_inode.h>
 
+#define bread(a, b, c)	BREAD((a), (b), (c))
+#define bwrite(a)	BWRITE(a)
+#define bwrite2(a)	BWRITE2(a)
+
 int32_t ud_trace;
 
 /*

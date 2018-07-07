@@ -84,6 +84,8 @@
 #include <sys/fs/udf_volume.h>
 #include <sys/fs/udf_inode.h>
 
+#define bwrite(a)	BWRITE(a)
+
 static int32_t udf_open(struct vnode **,
 	int32_t, struct cred *, caller_context_t *);
 static int32_t udf_close(struct vnode *,

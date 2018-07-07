@@ -63,6 +63,8 @@
 #include "sys/fs_subr.h"
 #include <sys/cmn_err.h>
 
+#define bread(a, b, c)	BREAD((a), (b), (c))
+
 /* static declarations */
 static void free_cont_area(uchar_t *);
 static int get_cont_area(struct hsfs *, uchar_t **, cont_info_t *);

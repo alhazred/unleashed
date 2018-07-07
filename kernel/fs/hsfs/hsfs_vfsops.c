@@ -80,6 +80,8 @@
 
 #include <sys/modctl.h>
 
+#define bread(a, b, c)	BREAD((a), (b), (c))
+
 /*
  * Options for mount.
  */

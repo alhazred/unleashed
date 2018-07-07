@@ -366,8 +366,6 @@ void	minphys(struct buf *);
  */
 void	bwrite_common(void *ufsvfsp, struct buf *, int force_wait,
 	int do_relse, int clear_flags);
-void	bwrite(struct buf *);
-void	bwrite2(struct buf *);
 void	bdwrite(struct buf *);
 void	bawrite(struct buf *);
 void	brelse(struct buf *);
@@ -389,10 +387,8 @@ int	bp_copyout(void *, struct buf *, offset_t, size_t);
 void	bp_init(size_t, uint_t);
 int	bp_color(struct buf *);
 void	pageio_done(struct buf *);
-struct buf *bread(dev_t, daddr_t, long);
 struct buf *bread_common(void *, dev_t, daddr_t, long);
 struct buf *breada(dev_t, daddr_t, daddr_t, long);
-struct buf *getblk(dev_t, daddr_t, long);
 struct buf *getblk_common(void *, dev_t, daddr_t, long, int);
 struct buf *ngeteblk(long);
 struct buf *geteblk(void);
