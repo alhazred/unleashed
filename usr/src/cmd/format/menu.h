@@ -59,7 +59,7 @@ char	**create_menu_list(struct menu_item *menu);
 void	display_menu_list(char **list);
 void	redisplay_menu_list(char **list);
 void	run_menu(struct menu_item *, char *, char *, int);
-int	true(void);
+int	truefxn(void);
 int	embedded_scsi(void);
 int	not_embedded_scsi(void);
 int	not_scsi(void);

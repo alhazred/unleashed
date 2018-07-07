@@ -198,7 +198,7 @@ c_scsi()
 	for (i = 0; i < N_SCSI_STRINGS; i++) {
 		scsi_menu[i].menu_cmd = scsi_menu_strings[i];
 		scsi_menu[i].menu_func = NULL;
-		scsi_menu[i].menu_state = true;
+		scsi_menu[i].menu_state = truefxn;
 	}
 	scsi_menu[i].menu_cmd = NULL;
 	menu = create_menu_list(scsi_menu);

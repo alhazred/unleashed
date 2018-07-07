@@ -51,43 +51,43 @@
  */
 struct	menu_item menu_command[] = {
 	{ "disk       - select a disk",
-		c_disk, true },
+		c_disk, truefxn },
 
 	{ "type       - select (define) a disk type",
-		c_type, true },
+		c_type, truefxn },
 
 	{ "partition  - select (define) a partition table",
-		c_partition, true },
+		c_partition, truefxn },
 
 	{ "current    - describe the current disk",
-		c_current, true },
+		c_current, truefxn },
 
 	{ "format     - format and analyze the disk",
-		c_format, true },
+		c_format, truefxn },
 
 	{ "fdisk      - run the fdisk program",
 		c_fdisk, support_fdisk_on_sparc },
 
 	{ "repair     - repair a defective sector",
-		c_repair, true },
+		c_repair, truefxn },
 
 	{ "show       - translate a disk address",
 		c_show,	 not_scsi },
 
 	{ "label      - write label to the disk",
-		c_label, true },
+		c_label, truefxn },
 
 	{ "analyze    - surface analysis",
-		c_analyze, true },
+		c_analyze, truefxn },
 
 	{ "defect     - defect list management",
-		c_defect, true },
+		c_defect, truefxn },
 
 	{ "backup     - search for backup labels",
-		c_backup, true },
+		c_backup, truefxn },
 
 	{ "verify     - read and display labels",
-		c_verify, true },
+		c_verify, truefxn },
 
 	{ "save       - save new disk/partition definitions",
 		add_definition, not_efi },
@@ -102,13 +102,13 @@ struct	menu_item menu_command[] = {
 		c_cache, scsi_expert },
 
 	{ "volname    - set 8-character volume name",
-		c_volname, true },
+		c_volname, truefxn },
 
 	{ "developer  - dump developer things",
 		c_developer, developer },
 
 	{ "!<cmd>     - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 
 	{ NULL }
 };
@@ -120,19 +120,19 @@ struct	menu_item menu_command[] = {
  */
 struct	menu_item menu_partition[] = {
 	{ "0      - change `0' partition",
-		p_apart, true },
+		p_apart, truefxn },
 	{ "1      - change `1' partition",
-		p_bpart, true },
+		p_bpart, truefxn },
 	{ "2      - change `2' partition",
-		p_cpart, true },
+		p_cpart, truefxn },
 	{ "3      - change `3' partition",
-		p_dpart, true },
+		p_dpart, truefxn },
 	{ "4      - change `4' partition",
-		p_epart, true },
+		p_epart, truefxn },
 	{ "5      - change `5' partition",
-		p_fpart, true },
+		p_fpart, truefxn },
 	{ "6      - change `6' partition",
-		p_gpart, true },
+		p_gpart, truefxn },
 	{ "7      - change `7' partition",
 		p_hpart, disp_expert_change_expert_efi },
 	{ "8      - change '8' partition",
@@ -144,17 +144,17 @@ struct	menu_item menu_partition[] = {
 	{ "expand - expand label to use whole disk",
 		p_expand, disp_expand_efi },
 	{ "select - select a predefined table",
-		p_select, true },
+		p_select, truefxn },
 	{ "modify - modify a predefined partition table",
-		p_modify, true },
+		p_modify, truefxn },
 	{ "name   - name the current table",
-		p_name, true },
+		p_name, truefxn },
 	{ "print  - display the current table",
-		p_print, true },
+		p_print, truefxn },
 	{ "label  - write partition map and label to the disk",
-		c_label, true },
+		c_label, truefxn },
 	{ "!<cmd> - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 
 	{ NULL }
 };
@@ -167,27 +167,27 @@ struct	menu_item menu_partition[] = {
  */
 struct menu_item menu_analyze[] = {
 	{ "read     - read only test   (doesn't harm SunOS)",
-		a_read,	 true },
+		a_read,	 truefxn },
 	{ "refresh  - read then write  (doesn't harm data)",
-		a_refresh, true },
+		a_refresh, truefxn },
 	{ "test     - pattern testing  (doesn't harm data)",
-		a_test,	 true },
+		a_test,	 truefxn },
 	{ "write    - write then read      (corrupts data)",
-		a_write, true },
+		a_write, truefxn },
 	{ "compare  - write, read, compare (corrupts data)",
-		a_compare, true },
+		a_compare, truefxn },
 	{ "purge    - write, read, write   (corrupts data)",
-		a_purge, true },
+		a_purge, truefxn },
 	{ "verify   - write entire disk, then verify (corrupts data)",
-		a_verify, true },
+		a_verify, truefxn },
 	{ "print    - display data buffer",
-		a_print, true },
+		a_print, truefxn },
 	{ "setup    - set analysis parameters",
-		a_setup, true },
+		a_setup, truefxn },
 	{ "config   - show analysis parameters",
-		a_config, true },
+		a_config, truefxn },
 	{ "!<cmd>   - execute <cmd> , then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 	{ NULL }
 };
 
@@ -229,7 +229,7 @@ struct menu_item menu_defect[] = {
 	{ "create   - recreates maufacturer's defect list on disk",
 		d_create, not_embedded_scsi },
 	{ "!<cmd>   - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 
 	{ NULL }
 };
@@ -239,15 +239,15 @@ struct menu_item menu_defect[] = {
  */
 struct menu_item menu_developer[] = {
 	{ "dump_disk  - dump disk entries",
-		dv_disk, true },
+		dv_disk, truefxn },
 	{ "dump_cont  - dump controller entries",
-		dv_cont, true },
+		dv_cont, truefxn },
 	{ "dump_c_chain - dump controller chain entries",
-		dv_cont_chain, true },
+		dv_cont_chain, truefxn },
 	{ "dev_params - dump device parameters",
-		dv_params, true },
+		dv_params, truefxn },
 	{ "!<cmd>     - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 	{ NULL }
 };
 
@@ -260,7 +260,7 @@ struct menu_item menu_cache[] = {
 	{ "read_cache  - display or modify read cache settings",
 		ca_read_cache,  scsi_expert },
 	{ "!<cmd>      - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 	{ NULL }
 };
 
@@ -275,7 +275,7 @@ struct menu_item menu_write_cache[] = {
 	{ "disable     - disable write cache",
 		ca_write_disable, scsi_expert },
 	{ "!<cmd>      - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 	{ NULL }
 };
 
@@ -290,6 +290,6 @@ struct menu_item menu_read_cache[] = {
 	{ "disable     - disable read cache",
 		ca_read_disable, scsi_expert },
 	{ "!<cmd>      - execute <cmd>, then return",
-		execute_shell, true},
+		execute_shell, truefxn},
 	{ NULL }
 };

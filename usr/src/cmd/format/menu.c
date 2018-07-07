@@ -229,7 +229,7 @@ char **list;
  * are always enabled.
  */
 int
-true()
+truefxn()
 {
 	return (1);
 }
