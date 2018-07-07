@@ -592,7 +592,7 @@ nfs_directio(vnode_t *vp, int cmd, cred_t *cr)
 
 		if (vn_has_cached_data(vp) &&
 		    ((rp->r_flags & RDIRTY) || rp->r_awcount > 0)) {
-			error = fop_putpage(vp, 0, (uint_t)0,
+			error = fop_putpage(vp, 0, 0,
 			    B_INVAL, cr, NULL);
 			if (error) {
 				if (error == ENOSPC || error == EDQUOT) {

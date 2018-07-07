@@ -1406,7 +1406,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	 */
 	rp = nlp->list;
 	off = rp->wa->wa_offset;
-	len = (uint_t)0;
+	len = 0;
 	do {
 		if (rdonly(rp->ro, vp)) {
 			rp->ns->ns_status = NFSERR_ROFS;

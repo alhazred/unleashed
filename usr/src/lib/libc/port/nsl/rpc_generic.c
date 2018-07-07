@@ -123,7 +123,7 @@ __rpc_get_t_size(
 	t_scalar_t bufsize)	/* Supported by the transport */
 {
 	if (bufsize == -2)	/* transfer of data unsupported */
-		return ((uint_t)0);
+		return (0);
 	if (size == 0) {
 		if ((bufsize == -1) || (bufsize == 0)) {
 			/*
@@ -151,7 +151,7 @@ __rpc_get_a_size(
 	if (size >= 0)
 		return ((uint_t)size);
 	if (size <= -2)
-		return ((uint_t)0);
+		return (0);
 	/*
 	 * (size == -1) No limit on the size. we impose a limit here.
 	 */

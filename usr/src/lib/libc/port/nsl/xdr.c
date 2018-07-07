@@ -73,9 +73,9 @@
 /*
  * constants specific to the xdr "protocol"
  */
-#define	XDR_FALSE	((uint_t)0)
-#define	XDR_TRUE	((uint_t)1)
-#define	LASTUNSIGNED	((uint_t)0-1)
+#define	XDR_FALSE	(0u)
+#define	XDR_TRUE	(1u)
+#define	LASTUNSIGNED	(~0u)
 
 /* fragment size to use when doing an xdr_string() */
 #define	FRAGMENT	65536

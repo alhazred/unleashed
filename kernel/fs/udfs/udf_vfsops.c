@@ -686,7 +686,7 @@ ud_mountfs(struct vfs *vfsp,
 		 */
 		if (udf_vfsp->udf_flags & UDF_FL_RDONLY) {
 			(void) dnlc_purge_vfsp(vfsp, 0);
-			(void) fop_putpage(devvp, 0, (uint_t)0,
+			(void) fop_putpage(devvp, 0, 0,
 			    B_INVAL, CRED(), NULL);
 			(void) ud_iflush(vfsp);
 			bflush(dev);

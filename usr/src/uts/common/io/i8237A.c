@@ -130,7 +130,7 @@ d37A_init(dev_info_t *dip)
 	ddi_iblock_cookie_t iblk_cookie = 0;
 	int	error;
 
-	if ((error = ddi_add_intr(dip, (uint_t)0, &iblk_cookie,
+	if ((error = ddi_add_intr(dip, 0, &iblk_cookie,
 	    (ddi_idevice_cookie_t *)0, d37A_intr, NULL)) !=
 	    DDI_SUCCESS) {
 		if (error != DDI_INTR_NOTFOUND)

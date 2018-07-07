@@ -161,7 +161,7 @@ static ddi_dma_attr_t pcn_buff_dma_attr_t = {
 	(uint64_t)0xFFFFFFFF,	/* dma_attr_seg */
 	(int)1,			/* dma_attr_sgllen */
 	(uint32_t)1,		/* granularity */
-	(uint_t)0		/* dma_attr_flags */
+	0		/* dma_attr_flags */
 };
 
 static ddi_dma_attr_t pcn_desc_dma_attr_t = {
@@ -176,7 +176,7 @@ static ddi_dma_attr_t pcn_desc_dma_attr_t = {
 	(uint64_t)0xFFFFFFFF,	/* dma_attr_seg */
 	(int)1,			/* dma_attr_sgllen */
 	(uint32_t)1,		/* granularity */
-	(uint_t)0		/* dma_attr_flags */
+	0		/* dma_attr_flags */
 };
 
 /* PIO access attributes for registers */

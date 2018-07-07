@@ -16805,7 +16805,7 @@ ql_legacy_intr(ql_adapter_state_t *ha)
 	}
 
 	/* Setup standard/legacy interrupt handler */
-	if (ddi_add_intr(ha->dip, (uint_t)0, &ha->iblock_cookie,
+	if (ddi_add_intr(ha->dip, 0, &ha->iblock_cookie,
 	    (ddi_idevice_cookie_t *)0, ql_isr, (caddr_t)ha) != DDI_SUCCESS) {
 		cmn_err(CE_WARN, "%s(%d): Failed to add legacy interrupt",
 		    QL_NAME, ha->instance);

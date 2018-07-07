@@ -355,7 +355,7 @@ ddi_dma_attr_t hxge_rx_dma_attr = {
 };
 
 ddi_dma_lim_t hxge_dma_limits = {
-	(uint_t)0,		/* dlim_addr_lo */
+	0,		/* dlim_addr_lo */
 	(uint_t)0xffffffff,	/* dlim_addr_hi */
 	(uint_t)0xffffffff,	/* dlim_cntr_max */
 	(uint_t)0xfc00fc,	/* dlim_burstsizes for 32 and 64 bit xfers */

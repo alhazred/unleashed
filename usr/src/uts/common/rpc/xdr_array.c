@@ -45,7 +45,7 @@
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 
-#define	LASTUNSIGNED	((uint_t)0-1)
+#define	LASTUNSIGNED	(~0u)
 
 /*
  * XDR an array of arbitrary elements

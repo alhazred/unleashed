@@ -202,7 +202,7 @@ drm_install_irq_handle(drm_device_t *dev)
 		return (DDI_FAILURE);
 	}
 
-	if (ddi_get_iblock_cookie(dip, (uint_t)0,
+	if (ddi_get_iblock_cookie(dip, 0,
 	    &dev->intr_block) != DDI_SUCCESS) {
 		DRM_ERROR("drm_install_irq_handle: cannot get iblock cookie");
 		return (DDI_FAILURE);

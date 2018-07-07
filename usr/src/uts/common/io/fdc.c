@@ -531,7 +531,7 @@ fdc_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 			goto no_attach;
 
 		/* get iblock cookie to initialize mutex used in the ISR */
-		if (ddi_get_iblock_cookie(dip, (uint_t)0, &fcp->c_iblock) !=
+		if (ddi_get_iblock_cookie(dip, 0, &fcp->c_iblock) !=
 		    DDI_SUCCESS) {
 			cmn_err(CE_WARN,
 			    "fdc_attach: cannot get iblock cookie");
@@ -541,7 +541,7 @@ fdc_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		intr_set = 1;
 
 		/* setup interrupt handler */
-		if (ddi_add_intr(dip, (uint_t)0, NULL,
+		if (ddi_add_intr(dip, 0, NULL,
 		    (ddi_idevice_cookie_t *)0, fdc_intr, (caddr_t)fcp) !=
 		    DDI_SUCCESS) {
 			cmn_err(CE_WARN, "fdc: cannot add intr");

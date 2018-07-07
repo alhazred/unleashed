@@ -1641,7 +1641,7 @@ const struct ioc {
 		"pm_searchargs_t" },
 #endif /* _SYSCALL */
 
-	{ (uint_t)0, NULL, NULL	}
+	{ 0, NULL, NULL	}
 };
 
 void

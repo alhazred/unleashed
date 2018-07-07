@@ -440,7 +440,7 @@ nfs4init(char *path, uint16_t nfs_port)
 	roothandle.version = NFS_V4;
 	roothandle.ftype.type4 = NF4DIR;
 	roothandle.fh.fh4.len = 0;		/* Force a PUTROOTFH */
-	roothandle.offset = (uint_t)0;		/* it's a directory! */
+	roothandle.offset = 0;		/* it's a directory! */
 	error = lookup(path, &rootpath, TRUE);
 
 	if (error) {
@@ -761,7 +761,7 @@ domount:
 	/*
 	 * Only v2 and v3 go on from here.
 	 */
-	roothandle.offset = (uint_t)0;		/* it's a directory! */
+	roothandle.offset = 0;		/* it's a directory! */
 	root_to.sin_port = htons(nfs_port);	/* NFS is next after mount */
 
 	/*

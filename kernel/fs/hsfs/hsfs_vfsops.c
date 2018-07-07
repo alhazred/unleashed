@@ -953,7 +953,7 @@ hs_getrootvp(
 	if (!hsfs_valid_dir(&fsp->hsfs_vol.root_dir)) {
 		hs_log_bogus_disk_warning(fsp, HSFS_ERR_BAD_ROOT_DIR, 0);
 		if (hs_remakenode(fsp->hsfs_vol.root_dir.ext_lbn,
-		    (uint_t)0, vfsp, &fsp->hsfs_rootvp)) {
+		    0, vfsp, &fsp->hsfs_rootvp)) {
 			hs_mounttab = hs_mounttab->hsfs_next;
 			mutex_destroy(&fsp->hsfs_free_lock);
 			rw_destroy(&fsp->hsfs_hash_lock);

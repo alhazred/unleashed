@@ -63,7 +63,7 @@
  */
 #define	XDR_FALSE	((int32_t)0)
 #define	XDR_TRUE	((int32_t)1)
-#define	LASTUNSIGNED	((uint_t)0-1)
+#define	LASTUNSIGNED	(~0u)
 
 /*
  * for unit alignment

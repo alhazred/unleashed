@@ -7121,7 +7121,7 @@ ddi_dma_addr_bind_handle(ddi_dma_handle_t handle, struct as *as,
 	struct ddi_dma_req dmareq;
 	int (*funcp)();
 
-	if (len == (uint_t)0) {
+	if (len == 0) {
 		return (DDI_DMA_NOMAPPING);
 	}
 	dmareq.dmar_flags = flags;

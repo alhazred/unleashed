@@ -731,7 +731,7 @@ fail_iob:
 fail_minor:
 	ddi_remove_softintr(pp->softintr_id);
 fail_softintr:
-	ddi_remove_intr(dip, (uint_t)0, pp->ecpp_trap_cookie);
+	ddi_remove_intr(dip, 0, pp->ecpp_trap_cookie);
 fail_intr:
 	mutex_destroy(&pp->umutex);
 	cv_destroy(&pp->pport_cv);
@@ -806,7 +806,7 @@ ecpp_detach(dev_info_t *dip, ddi_detach_cmd_t cmd)
 
 	ddi_remove_softintr(pp->softintr_id);
 
-	ddi_remove_intr(dip, (uint_t)0, pp->ecpp_trap_cookie);
+	ddi_remove_intr(dip, 0, pp->ecpp_trap_cookie);
 
 	if (pp->ksp) {
 		kstat_delete(pp->ksp);

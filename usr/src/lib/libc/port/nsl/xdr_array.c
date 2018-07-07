@@ -50,7 +50,7 @@
 #include <rpc/xdr.h>
 #include <memory.h>
 
-#define	LASTUNSIGNED	((uint_t)0-1)
+#define	LASTUNSIGNED	(~0u)
 
 char mem_err_msg_arr[] = "xdr_array: out of memory";
 

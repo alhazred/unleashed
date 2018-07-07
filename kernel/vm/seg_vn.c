@@ -7299,7 +7299,7 @@ segvn_incore(struct seg *seg, caddr_t addr, size_t len, char *vec)
 			/*
 			 * If page is mapped and writable
 			 */
-			attr = (uint_t)0;
+			attr = 0;
 			if ((hat_getattr(seg->s_as->a_hat, addr,
 			    &attr) != -1) && (attr & PROT_WRITE)) {
 				ret |= SEG_PAGE_ANON;
@@ -9181,7 +9181,7 @@ segvn_pagelock(struct seg *seg, caddr_t addr, size_t len, struct page ***ppp,
 
 	pplist = pl;
 	np = ((uintptr_t)(a - addr)) >> PAGESHIFT;
-	while (np > (uint_t)0) {
+	while (np > 0) {
 		ASSERT(PAGE_LOCKED(*pplist));
 		page_unlock(*pplist);
 		np--;
@@ -9250,7 +9250,7 @@ segvn_reclaim(void *ptag, caddr_t addr, size_t len, struct page **pplist,
 	ASSERT(pl[np] == NOPCACHE_SHWLIST || pl[np] == PCACHE_SHWLIST);
 	ASSERT(!async || pl[np] == PCACHE_SHWLIST);
 
-	while (np > (uint_t)0) {
+	while (np > 0) {
 		if (rw == S_WRITE) {
 			hat_setrefmod(*pplist);
 		} else {
@@ -9323,7 +9323,7 @@ shamp_reclaim(void *ptag, caddr_t addr, size_t len, struct page **pplist,
 	ASSERT(pl[np] == NOPCACHE_SHWLIST || pl[np] == PCACHE_SHWLIST);
 	ASSERT(!async || pl[np] == PCACHE_SHWLIST);
 
-	while (np > (uint_t)0) {
+	while (np > 0) {
 		if (rw == S_WRITE) {
 			hat_setrefmod(*pplist);
 		} else {
