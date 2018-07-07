@@ -533,7 +533,7 @@ kfread(kfile_t *fp, char *buf, ssize_t bufsiz, ssize_t *ret_n)
 		return (fp->kf_state);
 
 	err = vn_rdwr(UIO_READ, fp->kf_vp, buf, bufsiz, fp->kf_fpos,
-	    UIO_SYSSPACE, 0, (rlim64_t)0, kcred, &resid);
+	    UIO_SYSSPACE, 0, 0, kcred, &resid);
 	if (err != 0) {
 		KFDEBUG((CE_CONT, "%s: read error %d\n",
 		    fp->kf_fname, err));

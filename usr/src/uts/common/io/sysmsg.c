@@ -349,7 +349,7 @@ bind_consadm_conf(char *path)
 	buf = kmem_alloc(size, KM_SLEEP);
 
 	if ((err = vn_rdwr(UIO_READ, vp, buf, size, 0,
-	    UIO_SYSSPACE, 0, (rlim64_t)0, kcred, &resid)) != 0)
+	    UIO_SYSSPACE, 0, 0, kcred, &resid)) != 0)
 		cmn_err(CE_WARN, "sysmsg: vn_rdwr: '%s': error %d",
 		    path, err);
 	else

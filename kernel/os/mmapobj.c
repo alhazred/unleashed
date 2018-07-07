@@ -1112,7 +1112,7 @@ mmapobj_map_ptload(struct vnode *vp, caddr_t addr, size_t len, size_t zfodlen,
 
 			/* Now read in the data from disk */
 			error = vn_rdwr(UIO_READ, vp, oldaddr, oldlen, offset,
-			    UIO_USERSPACE, 0, (rlim64_t)0, fcred, NULL);
+			    UIO_USERSPACE, 0, 0, fcred, NULL);
 			if (error) {
 				MOBJ_STAT_ADD(map_ptload_unaligned_read_fail);
 				return (error);
@@ -2029,7 +2029,7 @@ doelfwork(Ehdr *ehdrp, vnode_t *vp, mmapobj_result_t *mrp,
 	}
 
 	if ((error = vn_rdwr(UIO_READ, vp, phbasep, phsizep,
-	    (offset_t)phoff, UIO_SYSSPACE, 0, (rlim64_t)0,
+	    (offset_t)phoff, UIO_SYSSPACE, 0, 0,
 	    fcred, NULL)) != 0) {
 		kmem_free(phbasep, phsizep);
 		return (error);
@@ -2150,7 +2150,7 @@ mmapobj_map_interpret(vnode_t *vp, mmapobj_result_t *mrp,
 	}
 
 	if ((error = vn_rdwr(UIO_READ, vp, header, MAX_HEADER_SIZE, 0,
-	    UIO_SYSSPACE, 0, (rlim64_t)0, fcred, NULL)) != 0) {
+	    UIO_SYSSPACE, 0, 0, fcred, NULL)) != 0) {
 		MOBJ_STAT_ADD(read_error);
 		return (error);
 	}

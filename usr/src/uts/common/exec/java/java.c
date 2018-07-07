@@ -105,7 +105,7 @@ javaexec(vnode_t *vp, struct execa *uap, struct uarg *args,
 	 * the initial signature.
 	 */
 	if ((error = vn_rdwr(UIO_READ, vp, lochdr, sizeof (lochdr),
-	    0, UIO_SYSSPACE, 0, (rlim64_t)0, cred, &resid)) != 0)
+	    0, UIO_SYSSPACE, 0, 0, cred, &resid)) != 0)
 		return (error);
 	if (resid != 0 || strncmp(lochdr, LOCSIG, SIGSIZ) != 0)
 		return (ENOEXEC);
@@ -121,7 +121,7 @@ javaexec(vnode_t *vp, struct execa *uap, struct uarg *args,
 		char xfhdr[XFHSIZ];
 
 		if ((error = vn_rdwr(UIO_READ, vp, xfhdr, sizeof (xfhdr),
-		    xoff, UIO_SYSSPACE, 0, (rlim64_t)0, cred, &resid)) != 0)
+		    xoff, UIO_SYSSPACE, 0, 0, cred, &resid)) != 0)
 			return (error);
 		if (resid != 0)
 			return (ENOEXEC);

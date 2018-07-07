@@ -600,7 +600,7 @@ gexec(
 	 * magic number is in bytes 2-3.
 	 */
 	if (error = vn_rdwr(UIO_READ, vp, magbuf, sizeof (magbuf),
-	    0, UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
+	    0, UIO_SYSSPACE, 0, 0, CRED(), &resid))
 		goto bad;
 	if (resid != 0)
 		goto bad;
@@ -1245,7 +1245,7 @@ execmap(struct vnode *vp, caddr_t addr, size_t len, size_t zfodlen,
 			 */
 			if (error = vn_rdwr(UIO_READ, vp, (caddr_t)oldaddr,
 			    oldlen, (offset_t)oldoffset, UIO_USERSPACE, 0,
-			    (rlim64_t)0, CRED(), (ssize_t *)0))
+			    0, CRED(), (ssize_t *)0))
 				goto bad;
 			/*
 			 * Now set protections.

@@ -1111,7 +1111,7 @@ gfs_vop_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	 * Fill with data from read()
 	 */
 	rv = vn_rdwr(UIO_READ, vp, *addrp, len, off, UIO_USERSPACE,
-	    0, (rlim64_t)0, cred, &resid);
+	    0, 0, cred, &resid);
 
 	if (rv == 0 && resid != 0)
 		rv = ENXIO;

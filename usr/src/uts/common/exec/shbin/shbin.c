@@ -142,7 +142,7 @@ checkshbinmagic(struct vnode *vp)
 	 * sequence for compiled ksh93 shell scripts.
 	 */
 	if (error = vn_rdwr(UIO_READ, vp, linep, sizeof (linep), 0,
-	    UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
+	    UIO_SYSSPACE, 0, 0, CRED(), &resid))
 		return (error);
 
 	if (memcmp(linep, shbinmagicstr, SHBINMAGIC_LEN) != 0)

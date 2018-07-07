@@ -3533,7 +3533,7 @@ kobj_read(intptr_t descr, char *buf, uint_t size, uint_t offset)
 
 	if (_modrootloaded) {
 		if ((stat = vn_rdwr(UIO_READ, (struct vnode *)descr, buf, size,
-		    (offset_t)offset, UIO_SYSSPACE, 0, (rlim64_t)0, CRED(),
+		    (offset_t)offset, UIO_SYSSPACE, 0, 0, CRED(),
 		    &resid)) != 0) {
 			_kobj_printf(ops,
 			    "vn_rdwr failed with error 0x%x\n", stat);
@@ -3739,7 +3739,7 @@ kobj_read_file(struct _buf *file, char *buf, uint_t size, uint_t off)
 
 		/* Read the compressed file into memory */
 		if ((err = vn_rdwr(UIO_READ, vp, file->_dbuf, vattr.va_size,
-		    (offset_t)(0), UIO_SYSSPACE, 0, (rlim64_t)0, CRED(),
+		    (offset_t)(0), UIO_SYSSPACE, 0, 0, CRED(),
 		    &resid)) != 0) {
 
 			_kobj_printf(ops, "kobj_read_file :vn_rdwr() failed, "
@@ -4087,7 +4087,7 @@ kobj_get_filesize(struct _buf *file, uint64_t *size)
 			 */
 			if ((err = vn_rdwr(UIO_READ, (struct vnode *)file->_fd,
 			    (char *)(&buf), 4, (offset_t)(*size - 4),
-			    UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid))
+			    UIO_SYSSPACE, 0, 0, CRED(), &resid))
 			    != 0) {
 				_kobj_printf(ops, "kobj_get_filesize: "
 				    "vn_rdwr() failed with error 0x%x\n", err);
@@ -4546,7 +4546,7 @@ kobj_is_compressed(intptr_t fd)
 
 	if ((err = vn_rdwr(UIO_READ, vp, (caddr_t)((intptr_t)&magic_buf),
 	    sizeof (magic_buf), (offset_t)(0),
-	    UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid)) != 0) {
+	    UIO_SYSSPACE, 0, 0, CRED(), &resid)) != 0) {
 
 		_kobj_printf(ops, "kobj_is_compressed: vn_rdwr() failed, "
 		    "error code 0x%x\n", err);

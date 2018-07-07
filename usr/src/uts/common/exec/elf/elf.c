@@ -556,7 +556,7 @@ elfexec(vnode_t *vp, execa_t *uap, uarg_t *args, intpdata_t *idatap,
 
 			if ((error = vn_rdwr(UIO_READ, vp, (caddr_t)dyn,
 			    dynsize, (offset_t)(dynamicphdr->p_offset + i),
-			    UIO_SYSSPACE, 0, (rlim64_t)0,
+			    UIO_SYSSPACE, 0, 0,
 			    CRED(), &resid)) != 0) {
 				uprintf("%s: cannot read .dynamic section\n",
 				    exec_file);
@@ -591,7 +591,7 @@ elfexec(vnode_t *vp, execa_t *uap, uarg_t *args, intpdata_t *idatap,
 		cap = kmem_alloc(capsize, KM_SLEEP);
 		if ((error = vn_rdwr(UIO_READ, vp, (caddr_t)cap,
 		    capsize, (offset_t)capphdr->p_offset,
-		    UIO_SYSSPACE, 0, (rlim64_t)0, CRED(), &resid)) != 0) {
+		    UIO_SYSSPACE, 0, 0, CRED(), &resid)) != 0) {
 			uprintf("%s: Cannot read capabilities section\n",
 			    exec_file);
 			goto out;
@@ -659,7 +659,7 @@ elfexec(vnode_t *vp, execa_t *uap, uarg_t *args, intpdata_t *idatap,
 		 * Read in "interpreter" pathname.
 		 */
 		if ((error = vn_rdwr(UIO_READ, vp, dlnp, intphdr->p_filesz,
-		    (offset_t)intphdr->p_offset, UIO_SYSSPACE, 0, (rlim64_t)0,
+		    (offset_t)intphdr->p_offset, UIO_SYSSPACE, 0, 0,
 		    CRED(), &resid)) != 0) {
 			uprintf("%s: Cannot obtain interpreter pathname\n",
 			    exec_file);
@@ -1111,7 +1111,7 @@ getelfhead(vnode_t *vp, cred_t *credp, Ehdr *ehdr, int *nshdrs, int *shstrndx,
 	 */
 	if ((error = vn_rdwr(UIO_READ, vp, (caddr_t)ehdr,
 	    sizeof (Ehdr), 0, UIO_SYSSPACE, 0,
-	    (rlim64_t)0, credp, &resid)) != 0)
+	    0, credp, &resid)) != 0)
 		return (error);
 
 	/*
@@ -1152,7 +1152,7 @@ getelfhead(vnode_t *vp, cred_t *credp, Ehdr *ehdr, int *nshdrs, int *shstrndx,
 
 		if ((error = vn_rdwr(UIO_READ, vp, (caddr_t)&shdr,
 		    sizeof (shdr), (offset_t)ehdr->e_shoff, UIO_SYSSPACE, 0,
-		    (rlim64_t)0, credp, &resid)) != 0)
+		    0, credp, &resid)) != 0)
 			return (error);
 
 		if (*nshdrs == 0)
@@ -1205,7 +1205,7 @@ getelfphdr(vnode_t *vp, cred_t *credp, const Ehdr *ehdr, int nphdrs,
 	}
 
 	if ((err = vn_rdwr(UIO_READ, vp, *phbasep, *phsizep,
-	    (offset_t)ehdr->e_phoff, UIO_SYSSPACE, 0, (rlim64_t)0,
+	    (offset_t)ehdr->e_phoff, UIO_SYSSPACE, 0, 0,
 	    credp, &resid)) != 0) {
 		kmem_free(*phbasep, *phsizep);
 		*phbasep = NULL;
@@ -1256,7 +1256,7 @@ getelfshdr(vnode_t *vp, cred_t *credp, const Ehdr *ehdr,
 	}
 
 	if ((err = vn_rdwr(UIO_READ, vp, *shbasep, *shsizep,
-	    (offset_t)ehdr->e_shoff, UIO_SYSSPACE, 0, (rlim64_t)0,
+	    (offset_t)ehdr->e_shoff, UIO_SYSSPACE, 0, 0,
 	    credp, &resid)) != 0) {
 		kmem_free(*shbasep, *shsizep);
 		return (err);
@@ -1283,7 +1283,7 @@ getelfshdr(vnode_t *vp, cred_t *credp, const Ehdr *ehdr,
 	}
 
 	if ((err = vn_rdwr(UIO_READ, vp, *shstrbasep, *shstrsizep,
-	    (offset_t)shdr->sh_offset, UIO_SYSSPACE, 0, (rlim64_t)0,
+	    (offset_t)shdr->sh_offset, UIO_SYSSPACE, 0, 0,
 	    credp, &resid)) != 0) {
 		kmem_free(*shbasep, *shsizep);
 		kmem_free(*shstrbasep, *shstrsizep);
@@ -1580,7 +1580,7 @@ copy_scn(Shdr *src, vnode_t *src_vp, Shdr *dst, vnode_t *dst_vp, Off *doffset,
 	while (n != 0) {
 		len = MIN(size, n);
 		if (vn_rdwr(UIO_READ, src_vp, buf, len, src->sh_offset + off,
-		    UIO_SYSSPACE, 0, (rlim64_t)0, credp, &resid) != 0 ||
+		    UIO_SYSSPACE, 0, 0, credp, &resid) != 0 ||
 		    resid >= len ||
 		    core_write(dst_vp, UIO_SYSSPACE, *doffset + off,
 		    buf, len - resid, rlimit, credp) != 0) {
