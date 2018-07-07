@@ -62,22 +62,22 @@ extern struct ufsbiostats ub;
  */
 extern struct buf *bread_common(void *arg, dev_t dev,
 					daddr_t blkno, long bsize);
-extern void bwrite_common(void *arg, struct buf *bp, int force_wait,
-					int do_relse, int clear_flags);
+extern void bwrite_common(void *arg, struct buf *bp, bool force_wait,
+					bool do_relse, int clear_flags);
 extern struct buf *getblk_common(void * arg, dev_t dev,
 					daddr_t blkno, long bsize, int flag);
 
 #define	UFS_BREAD(ufsvfsp, dev, blkno, bsize)	\
 	bread_common(ufsvfsp, dev, blkno, bsize)
 #define	UFS_BWRITE(ufsvfsp, bp)	\
-	bwrite_common(ufsvfsp, bp, /* force_wait */ 0, /* do_relse */ 1, \
+	bwrite_common(ufsvfsp, bp, false, true, \
 	/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI))
 #define	UFS_BRWRITE(ufsvfsp, bp)	\
 	(bp)->b_flags |= B_RETRYWRI; \
-	bwrite_common(ufsvfsp, bp, /* force_wait */ 0, /* do_relse */ 1, \
+	bwrite_common(ufsvfsp, bp, false, true, \
 	/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI))
 #define	UFS_BWRITE2(ufsvfsp, bp) \
-	bwrite_common(ufsvfsp, bp, /* force_wait */ 1, /* do_relse */ 0, \
+	bwrite_common(ufsvfsp, bp, true, false, \
 	/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI))
 #define	UFS_GETBLK(ufsvfsp, dev, blkno, bsize)	\
 	getblk_common(ufsvfsp, dev, blkno, bsize, /* errflg */ 0)

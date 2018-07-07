@@ -282,8 +282,8 @@ breada(dev_t dev, daddr_t blkno, daddr_t rablkno, long bsize)
  * clear_flags - flags to clear from the buffer
  */
 void
-bwrite_common(void *arg, struct buf *bp, int force_wait,
-    int do_relse, int clear_flags)
+bwrite_common(void *arg, struct buf *bp, bool force_wait, bool do_relse,
+	      int clear_flags)
 {
 	register int do_wait;
 	struct ufsvfs *ufsvfsp = (struct ufsvfs *)arg;

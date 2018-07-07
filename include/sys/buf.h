@@ -42,6 +42,7 @@
 #include <sys/types32.h>
 #include <sys/t_lock.h>
 #include <sys/kstat.h>
+#include <sys/stdbool.h>
 
 #ifdef	__cplusplus
 extern "C" {
@@ -315,8 +316,8 @@ void	minphys(struct buf *);
  * ufsvfsp is declared as a void * to avoid having everyone that uses
  * this header file include sys/fs/ufs_inode.h.
  */
-void	bwrite_common(void *ufsvfsp, struct buf *, int force_wait,
-	int do_relse, int clear_flags);
+void	bwrite_common(void *ufsvfsp, struct buf *, bool force_wait,
+	bool do_relse, int clear_flags);
 void	bdwrite(struct buf *);
 void	bawrite(struct buf *);
 void	brelse(struct buf *);
@@ -368,8 +369,7 @@ static inline struct buf *bread(dev_t dev, daddr_t blkno, long bsize)
  */
 static inline void bwrite(struct buf *bp)
 {
-	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 0,
-		      /* do_relse */ 1,
+	bwrite_common(NULL, bp, false, true,
 		      (B_READ | B_DONE | B_ERROR | B_DELWRI));
 }
 
@@ -379,8 +379,7 @@ static inline void bwrite(struct buf *bp)
  */
 static inline void bwrite2(struct buf *bp)
 {
-	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 1,
-		      /* do_relse */ 0,
+	bwrite_common(NULL, bp, true, false,
 		      (B_READ | B_DONE | B_ERROR | B_DELWRI));
 }
 
