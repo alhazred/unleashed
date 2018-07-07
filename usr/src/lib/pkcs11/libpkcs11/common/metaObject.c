@@ -1160,7 +1160,7 @@ meta_FindObjectsInit(CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate,
 
 			if ((slot_num != keystore_slotnum) &&
 			    (!have_token_attr)) {
-				CK_BBOOL false = FALSE;
+				CK_BBOOL f = FALSE;
 				CK_ATTRIBUTE_PTR newTemplate;
 
 				newTemplate = malloc((ulCount + 1) *
@@ -1172,8 +1172,8 @@ meta_FindObjectsInit(CK_SESSION_HANDLE hSession, CK_ATTRIBUTE_PTR pTemplate,
 				(void) memcpy(newTemplate + 1, pTemplate,
 				    ulCount * sizeof (CK_ATTRIBUTE));
 				newTemplate[0].type = CKA_TOKEN;
-				newTemplate[0].pValue = &false;
-				newTemplate[0].ulValueLen = sizeof (false);
+				newTemplate[0].pValue = &f;
+				newTemplate[0].ulValueLen = sizeof (f);
 
 				rv = meta_search_for_objects(session,
 				    &(session->find_objs_info),
