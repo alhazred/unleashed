@@ -8383,7 +8383,7 @@ emlxs_mem_alloc(emlxs_hba_t *hba, MBUF_INFO *buf_info)
 		buf_info->data_handle = 0;
 		buf_info->dma_handle = 0;
 
-		if (buf_info->virt == (uint32_t *)0) {
+		if (buf_info->virt == NULL) {
 			EMLXS_MSGF(EMLXS_CONTEXT, &emlxs_mem_alloc_failed_msg,
 			    "size=%x flags=%x", buf_info->size,
 			    buf_info->flags);
