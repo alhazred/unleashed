@@ -1245,7 +1245,7 @@ execmap(struct vnode *vp, caddr_t addr, size_t len, size_t zfodlen,
 			 */
 			if (error = vn_rdwr(UIO_READ, vp, (caddr_t)oldaddr,
 			    oldlen, (offset_t)oldoffset, UIO_USERSPACE, 0,
-			    0, CRED(), (ssize_t *)0))
+			    0, CRED(), NULL))
 				goto bad;
 			/*
 			 * Now set protections.
