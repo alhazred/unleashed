@@ -65,7 +65,7 @@ extern struct buf *bread_common(void *arg, dev_t dev,
 extern void bwrite_common(void *arg, struct buf *bp, bool force_wait,
 					bool do_relse, int clear_flags);
 extern struct buf *getblk_common(void * arg, dev_t dev,
-					daddr_t blkno, long bsize, int flag);
+					daddr_t blkno, long bsize, bool flag);
 
 #define	UFS_BREAD(ufsvfsp, dev, blkno, bsize)	\
 	bread_common(ufsvfsp, dev, blkno, bsize)
@@ -80,7 +80,7 @@ extern struct buf *getblk_common(void * arg, dev_t dev,
 	bwrite_common(ufsvfsp, bp, true, false, \
 	/* clear_flags */ (B_READ | B_DONE | B_ERROR | B_DELWRI))
 #define	UFS_GETBLK(ufsvfsp, dev, blkno, bsize)	\
-	getblk_common(ufsvfsp, dev, blkno, bsize, /* errflg */ 0)
+	getblk_common(ufsvfsp, dev, blkno, bsize, false)
 
 #endif	/* defined(_KERNEL) */
 

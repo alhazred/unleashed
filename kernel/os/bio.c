@@ -206,7 +206,7 @@ bread_common(void *arg, dev_t dev, daddr_t blkno, long bsize)
 	klwp_t *lwp = ttolwp(curthread);
 
 	CPU_STATS_ADD_K(sys, lread, 1);
-	bp = getblk_common(ufsvfsp, dev, blkno, bsize, /* errflg */ 1);
+	bp = getblk_common(ufsvfsp, dev, blkno, bsize, true);
 	if (bp->b_flags & B_DONE)
 		return (bp);
 	bp->b_flags |= B_READ;
@@ -517,7 +517,7 @@ bio_busy(int cleanit)
  * for the oldest non-busy buffer and reassign it.
  */
 struct buf *
-getblk_common(void * arg, dev_t dev, daddr_t blkno, long bsize, int errflg)
+getblk_common(void * arg, dev_t dev, daddr_t blkno, long bsize, bool errflg)
 {
 	ufsvfs_t *ufsvfsp = (struct ufsvfs *)arg;
 	struct buf *bp;

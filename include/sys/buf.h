@@ -341,7 +341,7 @@ int	bp_color(struct buf *);
 void	pageio_done(struct buf *);
 struct buf *bread_common(void *, dev_t, daddr_t, long);
 struct buf *breada(dev_t, daddr_t, daddr_t, long);
-struct buf *getblk_common(void *, dev_t, daddr_t, long, int);
+struct buf *getblk_common(void *, dev_t, daddr_t, long, bool);
 struct buf *ngeteblk(long);
 struct buf *geteblk(void);
 struct buf *pageio_setup(struct page *, size_t, struct vnode *, int);
@@ -390,8 +390,7 @@ static inline void bwrite2(struct buf *bp)
  */
 static inline struct buf *getblk(dev_t dev, daddr_t blkno, long bsize)
 {
-	return getblk_common(/* ufsvfsp */ NULL, dev, blkno, bsize,
-			     /* errflg */ 0);
+	return getblk_common(NULL, dev, blkno, bsize, false);
 }
 
 /*
