@@ -351,13 +351,13 @@ struct buf *bioclone(struct buf *, off_t, size_t, dev_t, daddr_t,
 size_t	biosize(void);
 
 /*
- * B_RETRYWRI is not included in clear_flags for BWRITE(), BWRITE2(),
+ * B_RETRYWRI is not included in clear_flags for bwrite(), bwrite2(),
  * or brwrite() so that the retry operation is persistent until the
  * write either succeeds or the buffer is bfinval()'d.
  */
 
 /* Read in (if necessary) the block and return a buffer pointer. */
-static inline struct buf *BREAD(dev_t dev, daddr_t blkno, long bsize)
+static inline struct buf *bread(dev_t dev, daddr_t blkno, long bsize)
 {
 	return bread_common(NULL, dev, blkno, bsize);
 }
@@ -366,7 +366,7 @@ static inline struct buf *BREAD(dev_t dev, daddr_t blkno, long bsize)
  * Write the buffer, waiting for completion (unless B_ASYNC is set).
  * Then release the buffer.
  */
-static inline void BWRITE(struct buf *bp)
+static inline void bwrite(struct buf *bp)
 {
 	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 0,
 		      /* do_relse */ 1,
@@ -377,7 +377,7 @@ static inline void BWRITE(struct buf *bp)
  * Write the buffer, waiting for completion.
  * But don't release the buffer afterwards.
  */
-static inline void BWRITE2(struct buf *bp)
+static inline void bwrite2(struct buf *bp)
 {
 	bwrite_common(/* ufsvfsp */ NULL, bp, /* force_wait */ 1,
 		      /* do_relse */ 0,
@@ -389,7 +389,7 @@ static inline void BWRITE2(struct buf *bp)
  * block is already associated, return it; otherwise search
  * for the oldest non-busy buffer and reassign it.
  */
-static inline struct buf *GETBLK(dev_t dev, daddr_t blkno, long bsize)
+static inline struct buf *getblk(dev_t dev, daddr_t blkno, long bsize)
 {
 	return getblk_common(/* ufsvfsp */ NULL, dev, blkno, bsize,
 			     /* errflg */ 0);

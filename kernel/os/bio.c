@@ -244,7 +244,7 @@ breada(dev_t dev, daddr_t blkno, daddr_t rablkno, long bsize)
 	bp = NULL;
 	if (!bio_incore(dev, blkno)) {
 		CPU_STATS_ADD_K(sys, lread, 1);
-		bp = GETBLK(dev, blkno, bsize);
+		bp = getblk(dev, blkno, bsize);
 		if ((bp->b_flags & B_DONE) == 0) {
 			bp->b_flags |= B_READ;
 			bp->b_bcount = bsize;
@@ -256,7 +256,7 @@ breada(dev_t dev, daddr_t blkno, daddr_t rablkno, long bsize)
 	}
 	if (rablkno && bfreelist.b_bcount > 1 &&
 	    !bio_incore(dev, rablkno)) {
-		rabp = GETBLK(dev, rablkno, bsize);
+		rabp = getblk(dev, rablkno, bsize);
 		if (rabp->b_flags & B_DONE)
 			brelse(rabp);
 		else {
@@ -269,7 +269,7 @@ breada(dev_t dev, daddr_t blkno, daddr_t rablkno, long bsize)
 		}
 	}
 	if (bp == NULL)
-		return (BREAD(dev, blkno, bsize));
+		return (bread(dev, blkno, bsize));
 	(void) biowait(bp);
 	return (bp);
 }
@@ -360,7 +360,7 @@ bawrite(struct buf *bp)
 	/* Use bfreelist.b_bcount as a weird-ass heuristic */
 	if (bfreelist.b_bcount > 4)
 		bp->b_flags |= B_ASYNC;
-	BWRITE(bp);
+	bwrite(bp);
 }
 
 /*
@@ -879,7 +879,7 @@ bflush(dev_t dev)
 			notavail(bp);
 			mutex_exit(hmp);
 			if (bp->b_vp == NULL) {		/* !ufs */
-				BWRITE(bp);
+				bwrite(bp);
 			} else {			/* ufs */
 				UFS_BWRITE(VTOI(bp->b_vp)->i_ufsvfs, bp);
 			}
@@ -947,7 +947,7 @@ blkflush(dev_t dev, daddr_t blkno)
 		 * some investigation.
 		 */
 		if (sbp->b_vp == NULL) {		/* !ufs */
-			BWRITE(sbp);	/* synchronous write */
+			bwrite(sbp);	/* synchronous write */
 		} else {				/* ufs */
 			UFS_BWRITE(VTOI(sbp->b_vp)->i_ufsvfs, sbp);
 		}
@@ -1619,7 +1619,7 @@ bio_flushlist(struct buf *delwri_list)
 		bp = delwri_list;
 		bp->b_flags |= B_AGE | B_ASYNC;
 		if (bp->b_vp == NULL) {		/* !ufs */
-			BWRITE(bp);
+			bwrite(bp);
 		} else {			/* ufs */
 			UFS_BWRITE(VTOI(bp->b_vp)->i_ufsvfs, bp);
 		}

@@ -41,8 +41,6 @@
 #include <sys/fs/pc_dir.h>
 #include <sys/fs/pc_node.h>
 
-#define bwrite2(a)	BWRITE2(a)
-
 static pc_cluster32_t pc_getcluster(struct pcfs *fsp, pc_cluster32_t cn);
 
 /*

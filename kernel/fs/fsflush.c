@@ -429,7 +429,7 @@ loop:
 				notavail(bp);
 				mutex_exit(hmp);
 				if (bp->b_vp == NULL) {
-					BWRITE(bp);
+					bwrite(bp);
 				} else {
 					UFS_BWRITE(VTOI(bp->b_vp)->i_ufsvfs,
 					    bp);

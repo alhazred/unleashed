@@ -64,8 +64,6 @@
 #include <sys/debug.h>
 #include <sys/fs_subr.h>
 
-#define bread(a, b, c)	BREAD((a), (b), (c))
-
 /*
  * This macro expects a name that ends in '.' and returns TRUE if the
  * name is not "." or ".."

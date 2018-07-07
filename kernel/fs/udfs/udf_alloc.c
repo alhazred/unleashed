@@ -1181,7 +1181,7 @@ ud_ialloc(struct ud_inode *pip,
 	    offsetof(struct file_entry, fe_spec) +
 	    SWAP_32(fe->fe_len_ear) + SWAP_32(fe->fe_len_adesc));
 
-	BWRITE2(bp);
+	bwrite2(bp);
 
 	mutex_enter(&udf_vfsp->udf_lock);
 	if (vap->va_type == VDIR) {
@@ -1241,7 +1241,7 @@ ud_ifree(struct ud_inode *ip, vtype_t type)
 		 * Just trash the inode
 		 */
 		bzero(bp->b_un.b_addr, 0x10);
-		BWRITE(bp);
+		bwrite(bp);
 	}
 	ud_free_space(ip->i_vfs, ip->i_icb_prn, ip->i_icb_block, 1);
 	mutex_enter(&udf_vfsp->udf_lock);

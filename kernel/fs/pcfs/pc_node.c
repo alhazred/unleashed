@@ -49,9 +49,6 @@
 #include <sys/file.h>
 #include <sys/conf.h>
 
-#define bread(a, b, c)	BREAD((a), (b), (c))
-#define bwrite2(a)	BWRITE2(a)
-
 struct pchead pcfhead[NPCHASH];
 struct pchead pcdhead[NPCHASH];
 

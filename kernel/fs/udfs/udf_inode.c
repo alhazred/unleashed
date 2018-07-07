@@ -1270,7 +1270,7 @@ ud_iupdat(struct ud_inode *ip, int32_t waitfor)
 
 
 		if (waitfor) {
-			BWRITE(bp);
+			bwrite(bp);
 
 			/*
 			 * Synchronous write has guaranteed that inode
@@ -1460,7 +1460,7 @@ ud_updat_ext4(struct ud_inode *ip, struct file_entry *fe)
 			 * Write back to disk
 			 */
 			if (bp != NULL) {
-				BWRITE(bp);
+				bwrite(bp);
 			}
 			index += count;
 		}

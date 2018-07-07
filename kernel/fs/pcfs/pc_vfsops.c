@@ -63,9 +63,6 @@
 #include <sys/atomic.h>
 #include <sys/sdt.h>
 
-#define bread(a, b, c)	BREAD((a), (b), (c))
-#define bwrite2(a)	BWRITE2(a)
-
 /*
  * The majority of PC media use a 512 sector size, but
  * occasionally you will run across a 1k sector size.

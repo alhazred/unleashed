@@ -41,9 +41,6 @@
 #include <sys/fs/pc_dir.h>
 #include <sys/fs/pc_node.h>
 
-#define bread(a, b, c)	BREAD((a), (b), (c))
-#define bwrite2(a)	BWRITE2(a)
-
 static int pc_makedirentry(struct pcnode *dp, struct pcdir *direntries,
     int	ndirentries, struct vattr *vap, offset_t offset);
 static int pc_dirempty(struct pcnode *);

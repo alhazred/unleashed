@@ -299,7 +299,7 @@ ufs_snap_find_candidates(void *snapid, struct ufsvfs *ufsvfsp, int chunksize)
 	cgbase = 0LL;
 	for (cg = 0; cg < fs->fs_ncg; cg++) {
 		/* read the cylinder group in */
-		cgbp = BREAD(ufsvfsp->vfs_dev,
+		cgbp = bread(ufsvfsp->vfs_dev,
 		    (daddr_t)fsbtodb(fs, cgtod(fs, cg)), (int)fs->fs_cgsize);
 		if ((error = geterror(cgbp)) != 0) {
 			brelse(cgbp);

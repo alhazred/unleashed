@@ -1212,7 +1212,7 @@ ldl_savestate(ml_unit_t *ul)
 	if (ul->un_ufsvfs->vfs_snapshot)
 		UFS_BWRITE2(ul->un_ufsvfs, bp);
 	else
-		BWRITE2(bp);
+		bwrite2(bp);
 	logstats.ls_ldlwrites.value.ui64++;
 	error = bp->b_flags & B_ERROR;
 	mutex_exit(&ul->un_state_mutex);
