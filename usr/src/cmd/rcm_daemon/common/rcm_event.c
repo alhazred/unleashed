@@ -119,7 +119,7 @@ process_event(int cmd, int seq_num, nvlist_t *nvl, nvlist_t **ret)
 	int error;
 	uint_t nvl_nrsrcs = 0;
 	pid_t pid;
-	uint32_t flag = (uint32_t)0;
+	uint32_t flag = 0;
 	uint64_t pid64 = (uint64_t)0;
 	size_t buflen = 0;
 	size_t interval_size = 0;

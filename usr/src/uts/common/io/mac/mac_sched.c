@@ -1855,7 +1855,7 @@ mac_rx_srs_long_fanout(mac_soft_ring_set_t *mac_srs, mblk_t *mp,
 	return (0);
 
 src_dst_based_fanout:
-	hash = HASH_ADDR(src_val, dst_val, (uint32_t)0);
+	hash = HASH_ADDR(src_val, dst_val, 0);
 	*indx = COMPUTE_INDEX(hash, mac_srs->srs_oth_ring_count);
 	*type = OTH;
 	return (0);

@@ -1791,7 +1791,7 @@ nss_pack_ent(void *buffer, size_t bufsize, nss_db_root_t *rootp,
 	off = sizeof (nss_pheader_t);
 
 	/* setup getXXXent operation - database and sub function */
-	pbuf->nss_dbop = (uint32_t)0;	/* iterators have no dbop */
+	pbuf->nss_dbop = 0;	/* iterators have no dbop */
 	ret = nss_pack_dbd(buffer, bufsize, &contextp->param, &off);
 	if (ret != NSS_SUCCESS) {
 		errno = ERANGE;			/* actually EINVAL */

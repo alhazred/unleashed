@@ -756,7 +756,7 @@ aus_acct(struct t_audit_data *tad)
 	fname = (uintptr_t)uap->fname;
 
 	if (fname == 0)
-		au_uwrite(au_to_arg32(1, "accounting off", (uint32_t)0));
+		au_uwrite(au_to_arg32(1, "accounting off", 0));
 }
 
 /* chown start function */
@@ -2584,7 +2584,7 @@ aus_setgroups(struct t_audit_data *tad)
 				    (uint32_t)gidlist[i]));
 		kmem_free(gidlist, gidsetsize * sizeof (gid_t));
 	} else
-		au_uwrite(au_to_arg32(1, "setgroups", (uint32_t)0));
+		au_uwrite(au_to_arg32(1, "setgroups", 0));
 
 }	/* AUS_SETGROUPS */
 
@@ -3849,7 +3849,7 @@ aus_sockconfig(struct t_audit_data *tad)
 		au_uwrite(au_to_arg32(4, "protocol", (uint32_t)uap->arg3));
 
 		if (uap->arg4 == 0) {
-			au_uwrite(au_to_arg32(5, "devpath", (uint32_t)0));
+			au_uwrite(au_to_arg32(5, "devpath", 0));
 		} else {
 			buflen = MAXPATHLEN + 1;
 			buf = kmem_alloc(buflen, KM_SLEEP);

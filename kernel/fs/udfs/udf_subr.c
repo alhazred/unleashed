@@ -492,7 +492,7 @@ ud_syncip(struct ud_inode *ip, int32_t flags, int32_t waitfor)
 	} else {
 		rw_exit(&ip->i_contents);
 		error = fop_putpage(vp, 0,
-		    (uint32_t)0, flags, CRED(), NULL);
+		    0, flags, CRED(), NULL);
 		rw_enter(&ip->i_contents, RW_WRITER);
 	}
 

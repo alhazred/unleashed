@@ -773,7 +773,7 @@ whoami(void)
 		bcopy(&res.router_address.bp_address.ip_addr, &ipaddr,
 		    sizeof (struct in_addr));
 
-		if (ipaddr.s_addr != (uint32_t)0) {
+		if (ipaddr.s_addr != 0) {
 			sin = (struct sockaddr_in *)&rtentry.rt_dst;
 			bzero(sin, sizeof (*sin));
 			sin->sin_family = AF_INET;

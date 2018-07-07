@@ -17392,7 +17392,7 @@ ql_isp_els_request_ctor(els_descriptor_t *els_desc,
 	    els_desc->n_port_handle);
 	ddi_put8(els_desc->els_handle, &els_entry->sof_type, (uint8_t)BIT_4);
 	ddi_put32(els_desc->els_handle, &els_entry->rcv_exch_address,
-	    (uint32_t)0);
+	    0);
 	ddi_put8(els_desc->els_handle, &els_entry->els_cmd_opcode,
 	    els_desc->els);
 	ddi_put8(els_desc->els_handle, &els_entry->d_id_7_0,

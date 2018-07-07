@@ -36,7 +36,7 @@ static char rge_ident[] = "Realtek 1Gb Ethernet";
  */
 static ddi_dma_attr_t dma_attr_buf = {
 	DMA_ATTR_V0,		/* dma_attr version */
-	(uint32_t)0,		/* dma_attr_addr_lo */
+	0,		/* dma_attr_addr_lo */
 	(uint32_t)0xFFFFFFFF,	/* dma_attr_addr_hi */
 	(uint32_t)0xFFFFFFFF,	/* dma_attr_count_max */
 	(uint32_t)16,		/* dma_attr_align */
@@ -54,7 +54,7 @@ static ddi_dma_attr_t dma_attr_buf = {
  */
 static ddi_dma_attr_t dma_attr_desc = {
 	DMA_ATTR_V0,		/* dma_attr version */
-	(uint32_t)0,		/* dma_attr_addr_lo */
+	0,		/* dma_attr_addr_lo */
 	(uint32_t)0xFFFFFFFF,	/* dma_attr_addr_hi */
 	(uint32_t)0xFFFFFFFF,	/* dma_attr_count_max */
 	(uint32_t)256,		/* dma_attr_align */

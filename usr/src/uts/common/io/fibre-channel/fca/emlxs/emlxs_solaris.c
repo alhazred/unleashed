@@ -141,7 +141,7 @@ char *emlxs_pm_components[] = {
  * Default emlx dma limits
  */
 ddi_dma_lim_t emlxs_dma_lim = {
-	(uint32_t)0,				/* dlim_addr_lo */
+	0,				/* dlim_addr_lo */
 	(uint32_t)0xffffffff,			/* dlim_addr_hi */
 	(uint_t)0x00ffffff,			/* dlim_cntr_max */
 	DEFAULT_BURSTSIZE | BURST32 | BURST64,	/* dlim_burstsizes */

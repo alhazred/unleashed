@@ -376,7 +376,7 @@ udf_unmount(struct vfs *vfsp, int fflag, struct cred *cr)
 
 	ud_destroy_fsp(udf_vfsp);
 
-	(void) fop_putpage(bvp, 0, (uint32_t)0, B_INVAL, cr, NULL);
+	(void) fop_putpage(bvp, 0, 0, B_INVAL, cr, NULL);
 	(void) fop_close(bvp, flag, 1, 0, cr, NULL);
 
 	(void) bfinval(vfsp->vfs_dev, 1);
@@ -564,7 +564,7 @@ udf_mountroot(struct vfs *vfsp, enum whymountroot why)
 		(void) dnlc_purge_vfsp(vfsp, 0);
 		vp = common_specvp(vp);
 		(void) fop_putpage(vp, 0,
-		    (uint32_t)0, B_INVAL, CRED(), NULL);
+		    0, B_INVAL, CRED(), NULL);
 		binval(vfsp->vfs_dev);
 
 		ovflags = vfsp->vfs_flag;
@@ -779,7 +779,7 @@ remountout:
 	 * they really should be using the raw device.
 	 */
 	(void) fop_putpage(common_specvp(devvp), 0,
-	    (uint32_t)0, B_INVAL, cr, NULL);
+	    0, B_INVAL, cr, NULL);
 
 
 	/*

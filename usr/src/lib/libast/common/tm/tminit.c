@@ -440,7 +440,7 @@ tmlocal(void)
 void
 tminit(register Tm_zone_t* zp)
 {
-	static uint32_t		serial = ~(uint32_t)0;
+	static uint32_t		serial = ~0u;
 
 	if (serial != ast.env_serial)
 	{

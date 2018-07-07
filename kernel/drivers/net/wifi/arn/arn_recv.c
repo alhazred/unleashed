@@ -169,8 +169,8 @@ arn_opmode_init(struct arn_softc *sc)
 	(void) ath9k_hw_setmac(ah, sc->sc_myaddr);
 
 	/* calculate and install multicast filter */
-	mfilt[0] = ~((uint32_t)0); /* LINT */
-	mfilt[1] = ~((uint32_t)0); /* LINT */
+	mfilt[0] = ~0u;
+	mfilt[1] = ~0u;
 
 	ath9k_hw_setmcastfilter(ah, mfilt[0], mfilt[1]);
 

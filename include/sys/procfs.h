@@ -557,7 +557,7 @@ typedef struct prheader {
 /* turn off all flags in set */
 #define	premptyset(sp) \
 	{ register int _i_ = sizeof (*(sp))/sizeof (uint32_t); \
-		while (_i_) ((uint32_t *)(sp))[--_i_] = (uint32_t)0; }
+		while (_i_) ((uint32_t *)(sp))[--_i_] = 0; }
 
 /* turn on specified flag in set */
 #define	praddset(sp, flag) \

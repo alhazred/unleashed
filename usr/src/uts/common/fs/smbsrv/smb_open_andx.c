@@ -541,7 +541,7 @@ smb_com_trans2_open2(smb_request_t *sr, smb_xa_t *xa)
 	(void) smb_mbc_encodef(&xa->rep_param_mb, "wwllwwwwlwl",
 	    sr->smb_fid,
 	    file_attr,
-	    (uint32_t)0,	/* creation time */
+	    0,	/* creation time */
 	    (uint32_t)op->dsize,
 	    op->omode,
 	    op->ftype,
@@ -549,7 +549,7 @@ smb_com_trans2_open2(smb_request_t *sr, smb_xa_t *xa)
 	    op->action_taken,
 	    op->fileid,
 	    (uint16_t)0,	/* EA error offset */
-	    (uint32_t)0);	/* EA list length */
+	    0);	/* EA list length */
 
 	return (SDRC_SUCCESS);
 }

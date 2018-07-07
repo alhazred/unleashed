@@ -3327,7 +3327,7 @@ bge_chip_disable_engine(bge_t *bgep, bge_regno_t regno, uint32_t morebits)
 		 * have an <enable> bit, but instead we
 		 * have to set and then clear all the bits
 		 */
-		bge_reg_put32(bgep, regno, ~(uint32_t)0);
+		bge_reg_put32(bgep, regno, ~0u);
 		drv_usecwait(100);
 		bge_reg_put32(bgep, regno, 0);
 		return (B_TRUE);
@@ -3391,7 +3391,7 @@ bge_chip_enable_engine(bge_t *bgep, bge_regno_t regno, uint32_t morebits)
 		 * have an <enable> bit, but instead we
 		 * have to set and then clear all the bits
 		 */
-		bge_reg_put32(bgep, regno, ~(uint32_t)0);
+		bge_reg_put32(bgep, regno, ~0u);
 		drv_usecwait(100);
 		bge_reg_put32(bgep, regno, 0);
 		return (B_TRUE);
@@ -3520,12 +3520,12 @@ bge_chip_sync(bge_t *bgep)
 	ASSERT(mutex_owned(bgep->genlock));
 
 	promisc = B_FALSE;
-	fill = ~(uint32_t)0;
+	fill = ~0u;
 
 	if (bgep->promisc)
 		promisc = B_TRUE;
 	else
-		fill = (uint32_t)0;
+		fill = 0;
 
 	/*
 	 * If the TX/RX MAC engines are already running, we should stop

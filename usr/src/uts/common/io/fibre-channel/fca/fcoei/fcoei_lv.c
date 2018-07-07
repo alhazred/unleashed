@@ -299,7 +299,7 @@ fcoei_get_cap(void * fca_handle, char *cap, void *ptr)
 	} else if (strcmp(cap, FC_LOGIN_PARAMS) == 0) {
 		bcopy((void *)&ss->ss_els_logi, ptr, sizeof (la_els_logi_t));
 	} else if (strcmp(cap, FC_CAP_UNSOL_BUF) == 0) {
-		*rptr = (uint32_t)0;
+		*rptr = 0;
 	} else if (strcmp(cap, FC_CAP_NOSTREAM_ON_UNALIGN_BUF) == 0) {
 		*rptr = (uint32_t)FC_ALLOW_STREAMING;
 	} else if (strcmp(cap, FC_CAP_PAYLOAD_SIZE) == 0) {

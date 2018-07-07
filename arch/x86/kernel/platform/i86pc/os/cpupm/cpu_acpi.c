@@ -793,7 +793,7 @@ cpu_acpi_cache_cst(cpu_acpi_handle_t handle)
 		    "CPU %d", count, handle->cs_id);
 		kmem_free(CPU_ACPI_CSTATES(handle), alloc_size);
 		CPU_ACPI_CSTATES(handle) = NULL;
-		CPU_ACPI_CSTATES_COUNT(handle) = (uint32_t)0;
+		CPU_ACPI_CSTATES_COUNT(handle) = 0;
 		goto out;
 	}
 	cstate = (cpu_acpi_cstate_t *)CPU_ACPI_CSTATES(handle);
@@ -802,7 +802,7 @@ cpu_acpi_cache_cst(cpu_acpi_handle_t handle)
 		    "C1: %d for CPU %d", (int)cstate->cs_type, handle->cs_id);
 		kmem_free(CPU_ACPI_CSTATES(handle), alloc_size);
 		CPU_ACPI_CSTATES(handle) = NULL;
-		CPU_ACPI_CSTATES_COUNT(handle) = (uint32_t)0;
+		CPU_ACPI_CSTATES_COUNT(handle) = 0;
 		goto out;
 	}
 

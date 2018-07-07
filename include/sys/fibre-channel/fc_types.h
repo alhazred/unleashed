@@ -152,7 +152,7 @@ typedef	struct		fc_ulp_rscn_info {
  * of the fc_ulp_rscn_info_t struct are invalid. Note that some parts of the
  * code assume that this value is zero, i.e., they use kmem_zalloc().
  */
-#define	FC_INVALID_RSCN_COUNT		((uint32_t)0)
+#define	FC_INVALID_RSCN_COUNT		(0u)
 
 /*
  * FC Transport exported header files to all Consumers

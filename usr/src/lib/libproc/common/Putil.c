@@ -93,7 +93,7 @@ prset_empty(void *sp, size_t size)
 	size_t i = size / sizeof (uint32_t);
 
 	while (i != 0)
-		((uint32_t *)sp)[--i] = (uint32_t)0;
+		((uint32_t *)sp)[--i] = 0;
 }
 
 void
