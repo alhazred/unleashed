@@ -146,5 +146,5 @@ driver name=mega_sas class=scsi \
 file path=kernel/drv/mega_sas group=sys
 file path=kernel/drv/mega_sas.conf group=sys
 file path=usr/share/man/man7d/mega_sas.7d
-license usr/src/uts/common/io/mega_sas/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/mega_sas/THIRDPARTYLICENSE
+license kernel/drivers/scsi/mega_sas/THIRDPARTYLICENSE \
+    license=kernel/drivers/scsi/mega_sas/THIRDPARTYLICENSE
