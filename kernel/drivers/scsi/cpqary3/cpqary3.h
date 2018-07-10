@@ -31,8 +31,8 @@
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
 
-#include <cpqary3_ciss.h>
-#include <cpqary3_bd.h>
+#include "cpqary3_ciss.h"
+#include "cpqary3_bd.h"
 
 #ifdef	__cplusplus
 extern "C" {
