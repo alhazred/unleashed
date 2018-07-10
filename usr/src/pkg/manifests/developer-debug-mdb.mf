@@ -184,5 +184,5 @@ license cr_Sun license=cr_Sun
 license kernel/zmod/THIRDPARTYLICENSE license=kernel/zmod/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
 license usr/src/common/bzip2/LICENSE license=usr/src/common/bzip2/LICENSE
-license usr/src/uts/common/io/mr_sas/THIRDPARTYLICENSE \
-    license=usr/src/uts/common/io/mr_sas/THIRDPARTYLICENSE
+license kernel/drivers/scsi/mr_sas/THIRDPARTYLICENSE \
+    license=kernel/drivers/scsi/mr_sas/THIRDPARTYLICENSE

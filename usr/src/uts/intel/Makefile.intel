@@ -256,7 +256,6 @@ DRV_KMODS	+= mc-amd
 DRV_KMODS	+= mm
 DRV_KMODS	+= mouse8042
 DRV_KMODS	+= mpt_sas
-DRV_KMODS	+= mr_sas
 DRV_KMODS	+= nsmb
 DRV_KMODS	+= nulldriver
 DRV_KMODS	+= nv_sata

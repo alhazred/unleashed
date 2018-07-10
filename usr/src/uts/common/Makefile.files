@@ -1717,11 +1717,6 @@ SDA_OBJS =	sda_cmd.o sda_host.o sda_init.o sda_mem.o sda_mod.o sda_slot.o
 SDHOST_OBJS =	sdhost.o
 
 #
-#	MR_SAS module
-#
-MR_SAS_OBJS = ld_pd_map.o mr_sas.o mr_sas_tbolt.o mr_sas_list.o
-
-#
 #	CPQARY3 module
 #
 CPQARY3_OBJS =	cpqary3.o cpqary3_noe.o cpqary3_talk2ctlr.o	\

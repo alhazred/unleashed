@@ -28,7 +28,7 @@ MDBTGT = kvm
 
 MODSRCS = mr_sas.c
 
-MRSASBASE = ../../../../../uts/common/io/mr_sas
+MRSASBASE = $(SRCTOP)/kernel/drivers/scsi/mr_sas
 
 include ../../../../Makefile.cmd
 include ../../../../Makefile.cmd.64
