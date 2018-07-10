@@ -491,9 +491,6 @@ PTSL_OBJS +=	tty_pts.o
 
 PTM_OBJS +=	ptm.o
 
-MII_OBJS +=	mii.o mii_cicada.o mii_natsemi.o mii_intel.o mii_qualsemi.o \
-		mii_marvell.o mii_realtek.o mii_other.o
-
 PTS_OBJS +=	pts.o
 
 PTY_OBJS +=	ptms_conf.o

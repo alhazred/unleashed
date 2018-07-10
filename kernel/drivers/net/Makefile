@@ -17,6 +17,7 @@ SUBDIR_${CONFIG_VIRTIO_NET}	+= vioif
 SUBDIR_${CONFIG_YGE}		+= yge
 
 SUBDIR = ${SUBDIR_y} \
+         mii \
 	 wifi
 
 .include <bsd.subdir.mk>
