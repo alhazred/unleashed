@@ -341,7 +341,6 @@ DRV_KMODS	+= rtls
 DRV_KMODS	+= amd8111s
 DRV_KMODS	+= ipmi
 DRV_KMODS	+= iprb
-DRV_KMODS	+= vr
 
 #
 # Virtio drivers

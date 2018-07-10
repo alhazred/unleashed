@@ -18,6 +18,7 @@ SUBDIR_${CONFIG_YGE}		+= yge
 
 SUBDIR = ${SUBDIR_y} \
          mii \
+         vr \
 	 wifi
 
 .include <bsd.subdir.mk>
