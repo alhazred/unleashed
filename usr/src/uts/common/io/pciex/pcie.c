@@ -21,6 +21,7 @@
 
 /*
  * Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, Joyent, Inc.
  */
 
 #include <sys/sysmacros.h>
@@ -461,6 +462,52 @@ pcie_fini_cfghdl(dev_info_t *cdip)
 	pci_config_teardown(&bus_p->bus_cfg_hdl);
 }
 
+void
+pcie_determine_serial(dev_info_t *dip)
+{
+	pcie_bus_t		*bus_p = PCIE_DIP2BUS(dip);
+	ddi_acc_handle_t	h;
+	uint16_t		cap;
+	uchar_t			serial[8];
+	uint32_t		low, high;
+
+	if (!PCIE_IS_PCIE(bus_p))
+		return;
+
+	h = bus_p->bus_cfg_hdl;
+
+	if ((PCI_CAP_LOCATE(h, PCI_CAP_XCFG_SPC(PCIE_EXT_CAP_ID_SER), &cap)) ==
+	    DDI_FAILURE)
+		return;
+
+	high = PCI_XCAP_GET32(h, 0, cap, PCIE_SER_SID_UPPER_DW);
+	low = PCI_XCAP_GET32(h, 0, cap, PCIE_SER_SID_LOWER_DW);
+
+	/*
+	 * Here, we're trying to figure out if we had an invalid PCIe read. From
+	 * looking at the contents of the value, it can be hard to tell the
+	 * difference between a value that has all 1s correctly versus if we had
+	 * an error. In this case, we only assume it's invalid if both register
+	 * reads are invalid. We also only use 32-bit reads as we're not sure if
+	 * all devices will support these as 64-bit reads, while we know that
+	 * they'll support these as 32-bit reads.
+	 */
+	if (high == PCI_EINVAL32 && low == PCI_EINVAL32)
+		return;
+
+	serial[0] = low & 0xff;
+	serial[1] = (low >> 8) & 0xff;
+	serial[2] = (low >> 16) & 0xff;
+	serial[3] = (low >> 24) & 0xff;
+	serial[4] = high & 0xff;
+	serial[5] = (high >> 8) & 0xff;
+	serial[6] = (high >> 16) & 0xff;
+	serial[7] = (high >> 24) & 0xff;
+
+	(void) ndi_prop_update_byte_array(DDI_DEV_T_NONE, dip, "pcie-serial",
+	    serial, sizeof (serial));
+}
+
 /*
  * PCI-Express child device initialization.
  * This function enables generic pci-express interrupts and error
@@ -603,6 +650,8 @@ pcie_initchild(dev_info_t *cdip)
 
 		/* Enable PCIe errors */
 		pcie_enable_errors(cdip);
+
+		pcie_determine_serial(cdip);
 	}
 
 	bus_p->bus_ari = B_FALSE;

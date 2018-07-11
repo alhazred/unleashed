@@ -514,10 +514,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/audio/drv/audiovia823x/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/audio/drv/audiovia97/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/bfe/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
