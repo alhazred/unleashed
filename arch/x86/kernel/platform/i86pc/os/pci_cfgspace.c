@@ -220,6 +220,19 @@ pci_check_bios(void)
 	uint32_t	carryflag;
 	uint16_t	ax, dx;
 
+	/*
+	 * This mechanism uses a legacy BIOS call to detect PCI configuration,
+	 * but such calls are not available on systems with UEFI firmware.
+	 * For UEFI systems we must assume some reasonable defaults and scan
+	 * all possible buses.
+	 */
+	if (BOP_GETPROPLEN(bootops, "efi-systab") > 0) {
+		pci_bios_mech = 1;
+		pci_bios_vers = 0;
+		pci_bios_maxbus = 0xFF;
+		return (PCI_MECHANISM_1);
+	}
+
 	bzero(&regs, sizeof (regs));
 	regs.eax.word.ax = (PCI_FUNCTION_ID << 8) | PCI_BIOS_PRESENT;
 

@@ -514,10 +514,10 @@ ath_desc_alloc(dev_info_t *devinfo, ath_t *asc)
  * declare ath_print* as possibly unused for non-DEBUG builds
  */
 static void
-ath_printrxbuf(struct ath_buf *bf, int32_t done) __GNU_UNUSED;
+ath_printrxbuf(struct ath_buf *bf, int32_t done) __unused;
 
 static void
-ath_printtxbuf(struct ath_buf *bf, int done) __GNU_UNUSED;
+ath_printtxbuf(struct ath_buf *bf, int done) __unused;
 
 
 static void

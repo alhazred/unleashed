@@ -190,7 +190,7 @@ static uint8_t bscv_read_env_name(bscv_soft_state_t *, uint8_t,
 static void bscv_setup_events(bscv_soft_state_t *);
 
 static void bscv_trace(bscv_soft_state_t *, char, const char *,
-    const char *, ...) __GNU_UNUSED;
+    const char *, ...) __unused;
 
 
 static void bscv_setup_watchdog(bscv_soft_state_t *ssp);
