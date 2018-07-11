@@ -713,7 +713,6 @@ build_pcimemlists(void)
 	DBG(bi->bi_pcimem);
 }
 
-
 static void
 dboot_multiboot1_xboot_consinfo(void)
 {
@@ -825,10 +824,10 @@ dboot_find_env(void)
 
 		mod_start = dboot_multiboot_modstart(i);
 		mod_end = dboot_multiboot_modend(i);
-		modules[0].bm_addr = mod_start;
+		modules[0].bm_addr = (native_ptr_t)(uintptr_t)mod_start;
 		modules[0].bm_size = mod_end - mod_start;
-		modules[0].bm_name = (uintptr_t)NULL;
-		modules[0].bm_hash = (uintptr_t)NULL;
+		modules[0].bm_name = (native_ptr_t)(uintptr_t)NULL;
+		modules[0].bm_hash = (native_ptr_t)(uintptr_t)NULL;
 		modules[0].bm_type = BMT_ENV;
 		bi->bi_modules = (native_ptr_t)(uintptr_t)modules;
 		bi->bi_module_cnt = 1;
@@ -956,7 +955,7 @@ check_images(void)
 		}
 
 		if (modules[i].bm_type == BMT_HASH ||
-		    modules[i].bm_hash == (uintptr_t)NULL) {
+		    modules[i].bm_hash == (native_ptr_t)(uintptr_t)NULL) {
 			DBG_MSG("module has no hash; skipping check\n");
 			continue;
 		}
@@ -1019,10 +1018,10 @@ process_module(int midx)
 	 * correct number of bytes in each module, achieving exactly this.
 	 */
 
-	modules[midx].bm_addr = mod_start;
+	modules[midx].bm_addr = (native_ptr_t)(uintptr_t)mod_start;
 	modules[midx].bm_size = mod_end - mod_start;
 	modules[midx].bm_name = (native_ptr_t)(uintptr_t)cmdline;
-	modules[midx].bm_hash = (uintptr_t)NULL;
+	modules[midx].bm_hash = (native_ptr_t)(uintptr_t)NULL;
 	modules[midx].bm_type = BMT_FILE;
 
 	if (cmdline == NULL) {
@@ -1094,8 +1093,9 @@ fixup_modules(void)
 		return;
 	}
 
-	if (modules[0].bm_hash != (uintptr_t)NULL ||
-	    modules_used > 1 && modules[1].bm_hash != (uintptr_t)NULL) {
+	if (modules[0].bm_hash != (native_ptr_t)(uintptr_t)NULL ||
+	    modules_used > 1 &&
+	    modules[1].bm_hash != (native_ptr_t)(uintptr_t)NULL) {
 		return;
 	}
 
@@ -1119,7 +1119,7 @@ assign_module_hashes(void)
 
 	for (i = 0; i < modules_used; i++) {
 		if (modules[i].bm_type == BMT_HASH ||
-		    modules[i].bm_hash != (uintptr_t)NULL) {
+		    modules[i].bm_hash != (native_ptr_t)(uintptr_t)NULL) {
 			continue;
 		}
 
@@ -1296,7 +1296,7 @@ dboot_process_mmap(void)
 static paddr_t
 dboot_multiboot1_highest_addr(void)
 {
-	paddr_t addr = (uintptr_t)NULL;
+	paddr_t addr = (paddr_t)(uintptr_t)NULL;
 	char *cmdl = (char *)mb_info->cmdline;
 
 	if (mb_info->flags & MB_INFO_CMDLINE)
@@ -1316,12 +1316,12 @@ dboot_multiboot_highest_addr(void)
 	switch (multiboot_version) {
 	case 1:
 		addr = dboot_multiboot1_highest_addr();
-		if (addr != (uintptr_t)NULL)
+		if (addr != (paddr_t)(uintptr_t)NULL)
 			check_higher(addr);
 		break;
 	case 2:
 		addr = dboot_multiboot2_highest_addr(mb2_info);
-		if (addr != (uintptr_t)NULL)
+		if (addr != (paddr_t)(uintptr_t)NULL)
 			check_higher(addr);
 		break;
 	default:
@@ -1354,7 +1354,7 @@ dboot_multiboot_get_fwtables(void)
 		return;
 
 	/* only provide SMBIOS pointer in case of UEFI */
-	bi->bi_smbios = (uintptr_t)NULL;
+	bi->bi_smbios = (native_ptr_t)(uintptr_t)NULL;
 
 	nacpitagp = (multiboot_tag_new_acpi_t *)
 	    dboot_multiboot2_find_tag(mb2_info,
@@ -1370,7 +1370,7 @@ dboot_multiboot_get_fwtables(void)
 		bi->bi_acpi_rsdp = (native_ptr_t)(uintptr_t)
 		    &oacpitagp->mb_rsdp[0];
 	} else {
-		bi->bi_acpi_rsdp = (uintptr_t)NULL;
+		bi->bi_acpi_rsdp = (native_ptr_t)(uintptr_t)NULL;
 	}
 }
 
@@ -1479,10 +1479,10 @@ build_page_tables(void)
 	/*
 	 * The kernel will need a 1 page window to work with page tables
 	 */
-	bi->bi_pt_window = (uintptr_t)mem_alloc(MMU_PAGESIZE);
+	bi->bi_pt_window = (native_ptr_t)(uintptr_t)mem_alloc(MMU_PAGESIZE);
 	DBG(bi->bi_pt_window);
 	bi->bi_pte_to_pt_window =
-	    (uintptr_t)find_pte(bi->bi_pt_window, NULL, 0, 0);
+	    (native_ptr_t)(uintptr_t)find_pte(bi->bi_pt_window, NULL, 0, 0);
 	DBG(bi->bi_pte_to_pt_window);
 
 
@@ -1832,19 +1832,18 @@ startup_kernel(void)
 	bi->bi_use_pge = pge_support;
 	bi->bi_use_nx = NX_support;
 
-
 	bi->bi_next_paddr = next_avail_addr;
 	DBG(bi->bi_next_paddr);
-	bi->bi_next_vaddr = (uintptr_t)next_avail_addr;
+	bi->bi_next_vaddr = (native_ptr_t)(uintptr_t)next_avail_addr;
 	DBG(bi->bi_next_vaddr);
 	bi->bi_mb_version = multiboot_version;
 
 	switch (multiboot_version) {
 	case 1:
-		bi->bi_mb_info = (uintptr_t)mb_info;
+		bi->bi_mb_info = (native_ptr_t)(uintptr_t)mb_info;
 		break;
 	case 2:
-		bi->bi_mb_info = (uintptr_t)mb2_info;
+		bi->bi_mb_info = (native_ptr_t)(uintptr_t)mb2_info;
 		break;
 	default:
 		dboot_panic("Unknown multiboot version: %d\n",
