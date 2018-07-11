@@ -2518,7 +2518,7 @@ impl_setup_ddi(void)
 	 */
 	check_driver_disable();
 
-	if (!post_fastreboot)
+	if (!post_fastreboot && BOP_GETPROPLEN(bootops, "efi-systab") < 0)
 		startup_bios_disk();
 	/* do bus dependent probes. */
 	impl_bus_initialprobe();
