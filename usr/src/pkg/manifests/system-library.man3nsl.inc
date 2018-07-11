@@ -11,7 +11,7 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+# Copyright 2017 Nexenta Systems, Inc. All rights reserved.
 #
 
 file path=usr/share/man/man3nsl/doconfig.3nsl

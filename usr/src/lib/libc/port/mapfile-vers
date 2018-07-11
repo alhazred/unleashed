@@ -3671,6 +3671,7 @@ $endif
 	svc_sendreply;
 	svc_tli_create;
 	svc_tp_create;
+	svc_tp_create_addr;
 	svc_unreg;
 	svc_vc_create;
 	t_accept;

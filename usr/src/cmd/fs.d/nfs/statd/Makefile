@@ -28,6 +28,8 @@
 # Copyright 1990-2003 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2016 by Delphix. All rights reserved.
+#
 
 FSTYPE=		nfs
 TYPEPROG=	statd
@@ -37,15 +39,18 @@ include		../../Makefile.fstype
 CPPFLAGS +=     -DSUN_THREADS
 
 CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
 LOCAL=		sm_svc.o sm_proc.o sm_statd.o
-OBJS= 		$(LOCAL) selfcheck.o daemon.o
+OBJS=		$(LOCAL) selfcheck.o daemon.o smfcfg.o
 
-SRCS=		$(LOCAL:%.o=%.c) ../lib/selfcheck.c ../lib/daemon.c
+SRCS=		$(LOCAL:%.o=%.c) ../lib/selfcheck.c ../lib/daemon.c \
+		../lib/smfcfg.c
 
-LDLIBS +=	 -lrpcsvc
+LDLIBS +=	-lrpcsvc -lscf
+CPPFLAGS +=     -I../lib
 
 $(TYPEPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
@@ -57,6 +62,8 @@ selfcheck.o:	../lib/selfcheck.c
 daemon.o:	../lib/daemon.c
 		$(COMPILE.c) ../lib/daemon.c
 
+smfcfg.o:	../lib/smfcfg.c
+		$(COMPILE.c) ../lib/smfcfg.c
 
 clean:
 		$(RM) $(OBJS) $(TYPEPROG)

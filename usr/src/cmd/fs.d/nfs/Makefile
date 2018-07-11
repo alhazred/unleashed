@@ -33,7 +33,7 @@ include $(SRC)/Makefile.master
 
 SUBDIR1=	nfsd rquotad \
 		statd nfsstat mountd dfshares \
-		nfsfind nfs4cbd share
+		nfsfind nfs4cbd share tests
 
 # These do "make catalog"
 SUBDIR2=	clear_locks lockd umount showmount \
