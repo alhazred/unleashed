@@ -456,4 +456,5 @@ include/sys/scsi/adapters/mpt_sas/mpi/mpi2_sas.h
 include/sys/scsi/adapters/mpt_sas/mpi/mpi2_targ.h
 include/sys/scsi/adapters/mpt_sas/mpi/mpi2_tool.h
 include/sys/scsi/adapters/mpt_sas/mpi/mpi2_type.h
+usr/src/uts/common/io/cxgbe/*
 usr/src/uts/sparc/nsmb/ioc_check.ref

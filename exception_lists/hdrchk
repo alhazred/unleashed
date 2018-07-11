@@ -359,6 +359,9 @@ kernel/drivers/net/ixgbe/core/ixgbe_common.h
 kernel/drivers/net/ixgbe/core/ixgbe_dcb_82598.h
 kernel/drivers/net/ixgbe/core/ixgbe_dcb_82599.h
 kernel/drivers/net/i40e/core/i40e_adminq_cmd.h
+usr/src/uts/common/io/cxgbe/firmware/*
+usr/src/uts/common/io/cxgbe/common/t4_msg.h
+usr/src/uts/common/io/cxgbe/common/t4_regs.h
 usr/src/uts/common/io/udmf/dm9601reg.h
 usr/src/uts/common/io/upf/adm8511reg.h
 usr/src/uts/common/io/urf/rtl8150reg.h
