@@ -35,7 +35,7 @@
 #include <sys/ddi.h>
 #include <sys/sunddi.h>
 /*LINTED E_STATIC_UNUSED*/
-static long rseq_random() __GNU_UNUSED;
+static long rseq_random() __unused;
 #define	random	rseq_random
 #else
 #include <assert.h>

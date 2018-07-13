@@ -3300,7 +3300,7 @@ usbser_release_port_act(usbser_port_t *pp, int act)
  * associative arrays in the kernel, anyone?
  */
 static char *
-usbser_msgtype2str(int type) __GNU_UNUSED;
+usbser_msgtype2str(int type) __unused;
 
 static char *
 usbser_msgtype2str(int type)
@@ -3327,7 +3327,7 @@ usbser_msgtype2str(int type)
 }
 
 static char *
-usbser_ioctl2str(int ioctl) __GNU_UNUSED;
+usbser_ioctl2str(int ioctl) __unused;
 
 static char *
 usbser_ioctl2str(int ioctl)
