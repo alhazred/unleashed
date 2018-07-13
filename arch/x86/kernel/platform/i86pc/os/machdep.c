@@ -22,6 +22,7 @@
 /*
  * Copyright (c) 1992, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2016 PALO, Richard.
+ * Copyright 2017, Joyent, Inc.
  */
 /*
  * Copyright (c) 2010, Intel Corporation.
@@ -851,10 +852,20 @@ lwp_stk_init(klwp_t *lwp, caddr_t stk)
 	return (stk);
 }
 
-/*ARGSUSED*/
+/*
+ * Use this opportunity to free any dynamically allocated fp storage.
+ */
 void
 lwp_stk_fini(klwp_t *lwp)
-{}
+{
+	fp_lwp_cleanup(lwp);
+}
+
+void
+lwp_fp_init(klwp_t *lwp)
+{
+	fp_lwp_init(lwp);
+}
 
 /*
  * If we're not the panic CPU, we wait in panic_idle for reboot.
