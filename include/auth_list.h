@@ -65,7 +65,6 @@ extern "C" {
 
 #define	ZONE_AUTH_PREFIX	"solaris.zone."
 
-
 #ifdef	__cplusplus
 }
 #endif
