@@ -374,8 +374,10 @@ zvol_create_cb(objset_t *os, void *arg, cred_t *cr, dmu_tx_t *tx)
  * implement DKIOCFREE/free-long-range.
  */
 static int
-zvol_replay_truncate(zvol_state_t *zv, lr_truncate_t *lr, boolean_t byteswap)
+zvol_replay_truncate(void *arg1, void *arg2, boolean_t byteswap)
 {
+	zvol_state_t *zv = arg1;
+	lr_truncate_t *lr = arg2;
 	uint64_t offset, length;
 
 	if (byteswap)
@@ -392,8 +394,10 @@ zvol_replay_truncate(zvol_state_t *zv, lr_truncate_t *lr, boolean_t byteswap)
  * after a system failure
  */
 static int
-zvol_replay_write(zvol_state_t *zv, lr_write_t *lr, boolean_t byteswap)
+zvol_replay_write(void *arg1, void *arg2, boolean_t byteswap)
 {
+	zvol_state_t *zv = arg1;
+	lr_write_t *lr = arg2;
 	objset_t *os = zv->zv_objset;
 	char *data = (char *)(lr + 1);	/* data follows lr_write_t */
 	uint64_t offset, length;
@@ -430,7 +434,7 @@ zvol_replay_write(zvol_state_t *zv, lr_write_t *lr, boolean_t byteswap)
 
 /* ARGSUSED */
 static int
-zvol_replay_err(zvol_state_t *zv, lr_t *lr, boolean_t byteswap)
+zvol_replay_err(void *arg1, void *arg2, boolean_t byteswap)
 {
 	return (SET_ERROR(ENOTSUP));
 }
@@ -1003,7 +1007,6 @@ zvol_get_data(void *arg, lr_write_t *lr, char *buf, struct lwb *lwb, zio_t *zio)
 
 	zgd = kmem_zalloc(sizeof (zgd_t), KM_SLEEP);
 	zgd->zgd_lwb = lwb;
-	zgd->zgd_rl = zfs_range_lock(&zv->zv_znode, offset, size, RL_READER);
 
 	/*
 	 * Write records come in two flavors: immediate and indirect.
@@ -1012,12 +1015,22 @@ zvol_get_data(void *arg, lr_write_t *lr, char *buf, struct lwb *lwb, zio_t *zio)
 	 * sync the data and get a pointer to it (indirect) so that
 	 * we don't have to write the data twice.
 	 */
-	if (buf != NULL) {	/* immediate write */
+	if (buf != NULL) { /* immediate write */
+		zgd->zgd_rl = zfs_range_lock(&zv->zv_znode, offset, size,
+		    RL_READER);
 		error = dmu_read(os, object, offset, size, buf,
 		    DMU_READ_NO_PREFETCH);
-	} else {
+	} else { /* indirect write */
+		/*
+		 * Have to lock the whole block to ensure when it's written out
+		 * and its checksum is being calculated that no one can change
+		 * the data. Contrarily to zfs_get_data we need not re-check
+		 * blocksize after we get the lock because it cannot be changed.
+		 */
 		size = zv->zv_volblocksize;
 		offset = P2ALIGN(offset, size);
+		zgd->zgd_rl = zfs_range_lock(&zv->zv_znode, offset, size,
+		    RL_READER);
 		error = dmu_buf_hold(os, object, offset, zgd, &db,
 		    DMU_READ_NO_PREFETCH);
 		if (error == 0) {

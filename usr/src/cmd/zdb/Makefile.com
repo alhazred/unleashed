@@ -43,7 +43,11 @@ C99MODE=	$(C99_ENABLE)
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS) -DDEBUG
 
-CERRWARN += -Wno-uninitialized
+# re-enable warnings that we can tolerate, which are disabled by default
+# in Makefile.master
+CERRWARN += -Wmissing-braces
+CERRWARN += -Wsign-compare
+CERRWARN += -Wmissing-field-initializers
 
 .KEEP_STATE:
 
