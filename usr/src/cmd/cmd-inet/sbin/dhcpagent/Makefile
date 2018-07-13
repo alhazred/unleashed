@@ -21,6 +21,7 @@
 #
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
+# Copyright (c) 2016, Chris Fraire <cfraire@me.com>.
 #
 
 PROG    = dhcpagent
@@ -47,7 +48,8 @@ CERRWARN += -Wno-parentheses
 #
 
 CPPFLAGS  += -D_XOPEN_SOURCE=500 -D__EXTENSIONS__
-LDLIBS    += -lnvpair -ldhcpagent -ldhcputil -linetutil -ldevinfo -ldlpi
+LDLIBS    += -lnvpair -ldhcpagent -ldhcputil -linetutil -ldevinfo \
+	-ldlpi -lresolv -lipadm
 
 # Disable warnings that affect all XPG applications.
 

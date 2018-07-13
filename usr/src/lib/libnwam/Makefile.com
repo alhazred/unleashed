@@ -21,6 +21,7 @@
 #
 # Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
+# Copyright (c) 2016, Chris Fraire <cfraire@me.com>.
 #
 
 LIBRARY=	libnwam.a
@@ -43,7 +44,7 @@ include ../../Makefile.lib
 include ../../Makefile.rootfs
 
 LIBS =		$(DYNLIB)
-LDLIBS +=	-lbsm -lc -ldladm -lnvpair -lscf -lsecdb
+LDLIBS +=	-lbsm -lc -ldladm -lnvpair -lscf -lsecdb -lipadm
 
 SRCDIR =	../common
 
