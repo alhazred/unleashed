@@ -24,7 +24,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# Copyright 2016, Joyent, Inc.
+# Copyright 2017, Joyent, Inc.
 #
 
 #
@@ -64,15 +64,6 @@ $(NOT_RELEASE_BUILD)DEBUG_DEFS	+= $(DEBUG_FLGS)
 # Depends on ACPI CA interpreter
 #
 LDFLAGS		+= -dy -N misc/acpica
-
-#
-# For now, disable these compiler warnings; maintainers should endeavor to
-# investigate and remove these for maximum coverage.  Please do not carry
-# these forward to new Makefiles.
-#
-
-CERRWARN	+= -Wno-uninitialized
-CERRWARN	+= -Wno-unused-function
 
 #
 #	Default build targets.
