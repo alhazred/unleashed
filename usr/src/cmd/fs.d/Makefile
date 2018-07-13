@@ -80,6 +80,7 @@ CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-function
 
+$(DFPROG) :=	LDLIBS += -lcmdutils
 $(SPPROG) :=	LDLIBS += -lkstat
 
 $(ROOTETCMNTTAB) := FILEMODE = 444

@@ -31,6 +31,7 @@ POFILE=		beadm.po
 include ../Makefile.cmd
 
 LDLIBS += -lnvpair -lbe
+LDLIBS += -lnvpair -lbe -lcmdutils
 CERRWARN += -Wno-parentheses
 
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
