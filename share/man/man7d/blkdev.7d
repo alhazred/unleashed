@@ -71,10 +71,10 @@ See
 .El
 .
 .Sh SEE ALSO
+.Xr rmformat 1 ,
 .Xr devinfo 8 ,
 .Xr fdisk 8 ,
 .Xr mount 8 ,
-.Xr rmformat 8 ,
 .Xr umount 8 ,
 .Xr sd 7D ,
 .Xr pcfs 7FS ,
