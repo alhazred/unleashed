@@ -1054,8 +1054,7 @@ struct ip_msfilter {
 	+ (numsrc) * sizeof (struct in_addr))
 
 /*
- * Multicast source filter manipulation functions in libsocket;
- * defined in RFC 3678.
+ * Multicast source filter manipulation functions: defined in RFC 3678.
  */
 int setsourcefilter(int, uint32_t, struct sockaddr *, socklen_t, uint32_t,
 			uint_t, struct sockaddr_storage *);

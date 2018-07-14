@@ -30,8 +30,8 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 /*
- * Exported interfaces for standalone's subset of libsocket's <arpa/inet.h>.
- * All standalone code *must* use this header rather than libsockets's.
+ * Exported interfaces for standalone's subset of <arpa/inet.h>.
+ * All standalone code *must* use this header rather than libc's.
  *
  * Since all the sources that #include this file do it spuriously, we provide
  * no definitions.  Note that we do this rather than removing the errant

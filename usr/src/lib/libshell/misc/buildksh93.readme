@@ -39,7 +39,7 @@ THIS SCRIPT IS NOT INTENDED FOR NORMAL USAGE.
 
 * Note that buildksh93.sh modifies the build behaviour of the AST build
 system, including enforcing C99/XPG6 semantics (which is MANDATORY!!)
-and feeding additional libraries (like libnsl, libsocket, librt etc.)
+and feeding additional libraries (like libnsl, librt etc.)
 to the feature look system (called "iffe" (="if feature exists")) to
 ensure all features needed for the Solaris version of ksh93 are
 properly found.

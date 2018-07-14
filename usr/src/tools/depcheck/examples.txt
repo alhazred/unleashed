@@ -161,7 +161,6 @@ Input file is a directory
 
 
 Analyzing /usr/bin/aliasadm:
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libdl.so.1:SUNWcsl
@@ -178,7 +177,6 @@ Analyzing /usr/bin/chkey:
 /usr/lib/libdl.so.1:SUNWcsl
 /usr/lib/libldap.so.4:SUNWcsl
 /usr/lib/libdoor.so.1:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libresolv.so.2:SUNWcsl
 /etc/nsswitch.conf:SUNWcsr
 /etc/publickey:SUNWnisr
@@ -186,7 +184,6 @@ Analyzing /usr/bin/chkey:
 
 
 Analyzing /usr/bin/getent:
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libdl.so.1:SUNWcsl
@@ -195,7 +192,6 @@ Analyzing /usr/bin/getent:
 
 Analyzing /usr/bin/ldaplist:
 /usr/lib/libldap.so.4:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libsldap.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
@@ -207,7 +203,6 @@ Analyzing /usr/bin/ldaplist:
 
 Analyzing /usr/bin/newaliases:
 /usr/lib/libresolv.so.2:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libldap.so.4:SUNWcsl
 /usr/lib/libsldap.so.1:SUNWcsl
@@ -264,7 +259,6 @@ Analyzing /usr/lib/ldap/ldap_cachemgr:
 /usr/lib/libdl.so.1:SUNWcsl
 /usr/lib/libmp.so.2:SUNWcsl
 /usr/lib/libldap.so.4:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libresolv.so.2:SUNWcsl
 /dev/null:SUNWcsd
 
@@ -331,7 +325,6 @@ Input file is a directory
 
 
 Analyzing /usr/sbin/gettable:
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libdl.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
@@ -339,7 +332,6 @@ Analyzing /usr/sbin/gettable:
 
 
 Analyzing /usr/sbin/htable:
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libdl.so.1:SUNWcsl
@@ -348,7 +340,6 @@ Analyzing /usr/sbin/htable:
 
 Analyzing /usr/sbin/ldap_gen_profile:
 /usr/lib/libldap.so.4:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libsldap.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
@@ -362,7 +353,6 @@ Analyzing /usr/sbin/ldap_gen_profile:
 
 Analyzing /usr/sbin/ldapclient:
 /usr/lib/libldap.so.4:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libsldap.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
@@ -379,7 +369,6 @@ Analyzing /usr/sbin/newkey:
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libmp.so.2:SUNWcsl
 /usr/lib/libsldap.so.1:SUNWcsl
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/libc.so.1:SUNWcsl
 /usr/lib/libdl.so.1:SUNWcsl
 /usr/lib/libldap.so.4:SUNWcsl
@@ -391,7 +380,6 @@ Analyzing /usr/sbin/newkey:
 
 
 Analyzing /usr/sbin/rpc.rexd:
-/usr/lib/libsocket.so.1:SUNWcsl
 /usr/lib/librpcsvc.so.1:SUNWcsl
 /usr/lib/libnsl.so.1:SUNWcsl
 /usr/lib/libbsm.so.1:SUNWcsl

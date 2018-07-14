@@ -68,11 +68,7 @@ family of structures are designed to represent network addresses for
 different networking protocols. The structure
 .Sy struct sockaddr
 is a generic structure that is used across calls to various socket
-library routines
-.Po
-.Xr libsocket 3LIB
-.Pc
-such as
+routines such as
 .Xr accept 3SOCKET
 and
 .Xr bind 3SOCKET .

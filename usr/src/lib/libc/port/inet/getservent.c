@@ -24,8 +24,6 @@
  * All rights reserved.
  *
  * Ye olde non-reentrant interface (MT-unsafe, caveat utor)
- *
- * lib/libsocket/inet/getservent.c
  */
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"

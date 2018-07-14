@@ -151,7 +151,7 @@ static struct mnttab *resolve_lofs_mnts, *resolve_lofs_mnt_max;
 
 static const char *DFLT_FS_ALLOWED = "hsfs,smbfs,nfs,nfs3,nfs4,nfsdyn";
 
-/* from libsocket, not in any header file */
+/* from libc, not in any header file */
 extern int getnetmaskbyaddr(struct in_addr, struct in_addr *);
 
 /* from zoneadmd */

@@ -643,8 +643,6 @@ $(ROOT)/usr/lib/libsecdb.so.1:=		REALPATH=../../lib/libsecdb.so.1
 $(ROOT)/usr/lib/libsecdb.so:=		REALPATH=../../lib/libsecdb.so.1
 $(ROOT)/usr/lib/libsendfile.so.1:=	REALPATH=../../lib/libsendfile.so.1
 $(ROOT)/usr/lib/libsendfile.so:=	REALPATH=../../lib/libsendfile.so.1
-$(ROOT)/usr/lib/libsocket.so.1:=	REALPATH=../../lib/libsocket.so.1
-$(ROOT)/usr/lib/libsocket.so:=		REALPATH=../../lib/libsocket.so.1
 $(ROOT)/usr/lib/libsysevent.so.1:=	REALPATH=../../lib/libsysevent.so.1
 $(ROOT)/usr/lib/libsysevent.so:=	REALPATH=../../lib/libsysevent.so.1
 $(ROOT)/usr/lib/libthread.so.1:=	REALPATH=../../lib/libthread.so.1
@@ -863,10 +861,6 @@ $(ROOT)/usr/lib/$(MACH64)/libsendfile.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libsendfile.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsendfile.so:= \
 	REALPATH=../../../lib/$(MACH64)/libsendfile.so.1
-$(ROOT)/usr/lib/$(MACH64)/libsocket.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libsocket.so.1
-$(ROOT)/usr/lib/$(MACH64)/libsocket.so:= \
-	REALPATH=../../../lib/$(MACH64)/libsocket.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsysevent.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libsysevent.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsysevent.so:= \
@@ -1028,8 +1022,6 @@ SYM.USRLIB= \
 	/usr/lib/libsecdb.so.1 \
 	/usr/lib/libsendfile.so \
 	/usr/lib/libsendfile.so.1 \
-	/usr/lib/libsocket.so \
-	/usr/lib/libsocket.so.1 \
 	/usr/lib/libsysevent.so \
 	/usr/lib/libsysevent.so.1 \
 	/usr/lib/libthread.so \
@@ -1159,8 +1151,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libsecdb.so.1 \
 	/usr/lib/$(MACH64)/libsendfile.so \
 	/usr/lib/$(MACH64)/libsendfile.so.1 \
-	/usr/lib/$(MACH64)/libsocket.so \
-	/usr/lib/$(MACH64)/libsocket.so.1 \
 	/usr/lib/$(MACH64)/libsysevent.so \
 	/usr/lib/$(MACH64)/libsysevent.so.1 \
 	/usr/lib/$(MACH64)/libthread.so \

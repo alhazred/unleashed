@@ -57,7 +57,6 @@ SUBDIRS +=		\
 	libmp		\
 	libnsl		\
 	libnvpair	\
-	libsocket	\
 	.WAIT
 
 # Build everything else. Aside from explicit dependencies, all libraries
@@ -497,9 +496,8 @@ libmd:		libc
 libmp:		libc
 libnsl:		libc libmd libmp
 libnvpair:	libc libnsl
-libsocket:	libc libnsl
 
-basedeps:	libc libm libmd libmp libnsl libnvpair libsocket
+basedeps:	libc libm libmd libmp libnsl libnvpair
 basedeps :=	TARGET=install
 
 # The following dependencies are currently required by libdbus-1 and should
@@ -508,7 +506,7 @@ dbusdeps:	libsecdb libinetutil libscf libuutil libgen libsmbios
 
 # The following dependencies don't need to be listed below as they are built
 # before everything else:
-# libc libm libmd libmp libnsl libnvpair libsocket
+# libc libm libmd libmp libnsl libnvpair
 abi:		libctf libmapmalloc libproc
 auditd_plugins: libbsm libsecdb libgss libmtmalloc
 brand:		libzonecfg libmapmalloc

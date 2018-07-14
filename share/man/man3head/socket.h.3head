@@ -311,7 +311,6 @@ Disables further send and receive operations.
 .Xr CMSG_DATA 3 ,
 .Xr getpeerucred 3C ,
 .Xr ucred_get 3C ,
-.Xr libsocket 3LIB ,
 .Xr accept 3SOCKET ,
 .Xr bind 3SOCKET ,
 .Xr connect 3SOCKET ,

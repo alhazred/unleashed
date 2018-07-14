@@ -214,7 +214,6 @@ file path=lib/$(ARCH64)/libscf.so.1
 file path=lib/$(ARCH64)/libsec.so.1
 file path=lib/$(ARCH64)/libsecdb.so.1
 file path=lib/$(ARCH64)/libsendfile.so.1
-file path=lib/$(ARCH64)/libsocket.so.1
 file path=lib/$(ARCH64)/libsysevent.so.1
 file path=lib/$(ARCH64)/libthread.so.1
 file path=lib/$(ARCH64)/libumem.so.1
@@ -293,7 +292,6 @@ file path=lib/libscf.so.1
 file path=lib/libsec.so.1
 file path=lib/libsecdb.so.1
 file path=lib/libsendfile.so.1
-file path=lib/libsocket.so.1
 file path=lib/libsqlite-sys.so.2.8.15
 file path=lib/libsysevent.so.1
 file path=lib/libthread.so.1
@@ -574,7 +572,6 @@ link path=lib/$(ARCH64)/libscf.so target=libscf.so.1
 link path=lib/$(ARCH64)/libsec.so target=libsec.so.1
 link path=lib/$(ARCH64)/libsecdb.so target=libsecdb.so.1
 link path=lib/$(ARCH64)/libsendfile.so target=libsendfile.so.1
-link path=lib/$(ARCH64)/libsocket.so target=libsocket.so.1
 link path=lib/$(ARCH64)/libsysevent.so target=libsysevent.so.1
 link path=lib/$(ARCH64)/libthread.so target=libthread.so.1
 link path=lib/$(ARCH64)/libthread_db.so target=libc_db.so.1
@@ -634,7 +631,6 @@ link path=lib/libscf.so target=libscf.so.1
 link path=lib/libsec.so target=libsec.so.1
 link path=lib/libsecdb.so target=libsecdb.so.1
 link path=lib/libsendfile.so target=libsendfile.so.1
-link path=lib/libsocket.so target=libsocket.so.1
 link path=lib/libsysevent.so target=./libsysevent.so.1
 link path=lib/libthread.so target=libthread.so.1
 link path=lib/libthread_db.so target=libc_db.so.1
@@ -841,10 +837,6 @@ link path=usr/lib/$(ARCH64)/libsendfile.so.1 \
 link path=usr/lib/$(ARCH64)/libsip.so target=./libsip.so.1
 link path=usr/lib/$(ARCH64)/libsldap.so target=libsldap.so.1
 link path=usr/lib/$(ARCH64)/libsmbios.so target=libsmbios.so.1
-link path=usr/lib/$(ARCH64)/libsocket.so \
-    target=../../../lib/$(ARCH64)/libsocket.so.1
-link path=usr/lib/$(ARCH64)/libsocket.so.1 \
-    target=../../../lib/$(ARCH64)/libsocket.so.1
 link path=usr/lib/$(ARCH64)/libsoftcrypto.so target=./libsoftcrypto.so.1
 link path=usr/lib/$(ARCH64)/libsysevent.so \
     target=../../../lib/$(ARCH64)/libsysevent.so.1
@@ -1021,8 +1013,6 @@ link path=usr/lib/libsendfile.so.1 target=../../lib/libsendfile.so.1
 link path=usr/lib/libsip.so target=./libsip.so.1
 link path=usr/lib/libsldap.so target=libsldap.so.1
 link path=usr/lib/libsmbios.so target=libsmbios.so.1
-link path=usr/lib/libsocket.so target=../../lib/libsocket.so.1
-link path=usr/lib/libsocket.so.1 target=../../lib/libsocket.so.1
 link path=usr/lib/libsoftcrypto.so target=./libsoftcrypto.so.1
 link path=usr/lib/libsys.so target=./libsys.so.1
 link path=usr/lib/libsysevent.so target=../../lib/libsysevent.so.1

@@ -1092,7 +1092,7 @@ sub get_dynamic_profile
 				# First look for standard dependency
 				# resolution lines:
 				#
-				#      libsocket.so.1 => /usr/lib/libsocket.so.1
+				#      libnsl.so.1 => /usr/lib/libnsl.so.1
 				#
 				# Note that these are *all* of the
 				# needed shared objects, not just the

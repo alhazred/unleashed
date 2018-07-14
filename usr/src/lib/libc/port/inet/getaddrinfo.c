@@ -59,8 +59,7 @@
  * in6addr_loopback.  The extern declarations for these
  * variables are defined in <netinet/in.h>.  These two
  * variables could have been defined in any of the "C" files
- * in libsocket. They are defined here with other IPv6
- * related interfaces.
+ * in libc. They are defined here with other IPv6 related interfaces.
  */
 const struct in6_addr in6addr_any = IN6ADDR_ANY_INIT;
 const struct in6_addr in6addr_loopback = IN6ADDR_LOOPBACK_INIT;
