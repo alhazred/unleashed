@@ -214,11 +214,11 @@ struct itimerval32 {
 #define	MICROSEC	1000000
 #define	NANOSEC		1000000000LL
 
-#define	NSEC2USEC(n)	((n) / (NANOSEC / MICROSEC))
-#define	USEC2NSEC(u)	((hrtime_t)(u) * (NANOSEC / MICROSEC))
-
 #define	MSEC2NSEC(m)	((hrtime_t)(m) * (NANOSEC / MILLISEC))
 #define	NSEC2MSEC(n)	((n) / (NANOSEC / MILLISEC))
+
+#define	USEC2NSEC(u)    ((hrtime_t)(u) * (NANOSEC / MICROSEC))
+#define	NSEC2USEC(n)    ((n) / (NANOSEC / MICROSEC))
 
 #define	NSEC2SEC(n)	((n) / (NANOSEC / SEC))
 #define	SEC2NSEC(m)	((hrtime_t)(m) * (NANOSEC / SEC))

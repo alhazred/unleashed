@@ -66,7 +66,6 @@ solaris.jobs.admin:::Manage All Jobs::help=AuthJobsAdmin.html
 solaris.jobs.grant:::Delegate Cron & At Administration::help=JobsGrant.html
 solaris.jobs.user:::Manage Owned Jobs::help=AuthJobsUser.html
 #
-#
 solaris.login.:::Login Control::help=LoginHeader.html
 solaris.login.enable:::Enable Logins::help=LoginEnable.html
 solaris.login.remote:::Remote Login::help=LoginRemote.html

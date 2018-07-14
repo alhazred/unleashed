@@ -10,6 +10,7 @@
 #
 
 # Copyright (c) 2012, Igor Kozhukhov <ikozhukhov@gmail.com>
+# Copyright (c) 2017, Chris Fraire <cfraire@me.com>.
 
 file path=usr/share/man/man3m/acos.3m
 file path=usr/share/man/man3m/acosh.3m

@@ -23,6 +23,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 # Copyright (c) 2012 by Delphix. All rights reserved.
+# Copyright 2017 Joyent, Inc.
 #
 
 PROG:sh=	cd ..; basename `pwd`
@@ -36,13 +37,17 @@ INCS += -I../../../lib/libzpool/common
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs
 INCS +=	-I$(SRCTOP)/kernel/fs/zfs/common
 
-LDLIBS += -lzpool -lumem -lnvpair -lzfs -lavl
+LDLIBS += -lzpool -lumem -lnvpair -lzfs -lavl -lcmdutils
 
 C99MODE=	$(C99_ENABLE)
 
 CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS) -DDEBUG
 
-CERRWARN += -Wno-uninitialized
+# re-enable warnings that we can tolerate, which are disabled by default
+# in Makefile.master
+CERRWARN += -Wmissing-braces
+CERRWARN += -Wsign-compare
+CERRWARN += -Wmissing-field-initializers
 
 .KEEP_STATE:
 

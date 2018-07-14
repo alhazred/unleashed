@@ -58,8 +58,6 @@ static const char auth[] = "authorization";
 static const char type[] = "user type";
 static const char lock[] = "lock_after_retries value";
 static const char label[] = "label";
-static const char idlecmd[] = "idlecmd value";
-static const char idletime[] = "idletime value";
 static const char auditflags[] = "audit mask";
 static char	  auditerr[256];
 

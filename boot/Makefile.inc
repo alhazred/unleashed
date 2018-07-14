@@ -1,0 +1,1 @@
+BOOTDIR=	/boot

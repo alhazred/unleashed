@@ -36,6 +36,7 @@
 #include <sys/pci_cfgspace_impl.h>
 #include <sys/pci_cfgacc.h>
 
+int pci_max_nbus = 0xFF;
 int pci_bios_cfg_type = PCI_MECHANISM_UNKNOWN;
 int pci_bios_maxbus;
 int pci_bios_mech;
@@ -229,7 +230,7 @@ pci_check_bios(void)
 	if (BOP_GETPROPLEN(bootops, "efi-systab") > 0) {
 		pci_bios_mech = 1;
 		pci_bios_vers = 0;
-		pci_bios_maxbus = 0xFF;
+		pci_bios_maxbus = pci_max_nbus;
 		return (PCI_MECHANISM_1);
 	}
 
