@@ -35,7 +35,7 @@ SRCS=		$(LIBPROG).c
 
 CFLAGS += $(CCVERBOSE)
 
-LDLIBS +=	-lnsl -lsocket
+LDLIBS +=	-lnsl
 
 # message catalog
 catalog:
