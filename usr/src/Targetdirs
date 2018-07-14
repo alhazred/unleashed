@@ -659,8 +659,6 @@ $(ROOT)/usr/lib/libuutil.so.1:=		REALPATH=../../lib/libuutil.so.1
 $(ROOT)/usr/lib/libuutil.so:=		REALPATH=../../lib/libuutil.so.1
 $(ROOT)/usr/lib/libw.so.1:=		REALPATH=../../lib/libw.so.1
 $(ROOT)/usr/lib/libw.so:=		REALPATH=../../lib/libw.so.1
-$(ROOT)/usr/lib/libxnet.so.1:=		REALPATH=../../lib/libxnet.so.1
-$(ROOT)/usr/lib/libxnet.so:=		REALPATH=../../lib/libxnet.so.1
 $(ROOT)/usr/lib/libzfs.so.1:=		REALPATH=../../lib/libzfs.so.1
 $(ROOT)/usr/lib/libzfs.so:=		REALPATH=../../lib/libzfs.so.1
 $(ROOT)/usr/lib/libzfs_core.so.1:=	REALPATH=../../lib/libzfs_core.so.1
@@ -897,10 +895,6 @@ $(ROOT)/usr/lib/$(MACH64)/libw.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libw.so.1
 $(ROOT)/usr/lib/$(MACH64)/libw.so:= \
 	REALPATH=../../../lib/$(MACH64)/libw.so.1
-$(ROOT)/usr/lib/$(MACH64)/libxnet.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libxnet.so.1
-$(ROOT)/usr/lib/$(MACH64)/libxnet.so:= \
-	REALPATH=../../../lib/$(MACH64)/libxnet.so.1
 $(ROOT)/usr/lib/$(MACH64)/libzfs.so:= \
 	REALPATH=../../../lib/$(MACH64)/libzfs.so.1
 $(ROOT)/usr/lib/$(MACH64)/libzfs.so.1:= \
@@ -1050,8 +1044,6 @@ SYM.USRLIB= \
 	/usr/lib/libuutil.so.1 \
 	/usr/lib/libw.so \
 	/usr/lib/libw.so.1 \
-	/usr/lib/libxnet.so \
-	/usr/lib/libxnet.so.1 \
 	/usr/lib/libzfs.so \
 	/usr/lib/libzfs.so.1 \
 	/usr/lib/libzfs_core.so \
@@ -1183,8 +1175,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libuutil.so.1 \
 	/usr/lib/$(MACH64)/libw.so \
 	/usr/lib/$(MACH64)/libw.so.1 \
-	/usr/lib/$(MACH64)/libxnet.so \
-	/usr/lib/$(MACH64)/libxnet.so.1 \
 	/usr/lib/$(MACH64)/libzfs.so \
 	/usr/lib/$(MACH64)/libzfs.so.1 \
 	/usr/lib/$(MACH64)/libzfs_core.so \

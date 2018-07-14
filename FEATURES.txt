@@ -12,6 +12,7 @@ was changed.
  - hsfs-formatted boot archive support
  - libc compat symbols: _nuname, __posix_readdir_r, __threaded
  - binary compatibility bread/bwrite/bwrite2/getblk kernel symbols
+ - libxnet filter library
  * convert BREAD/BWRITE/BWRITE2/GETBLK macros to bread/bwrite/bwrite2/getblk
    static inlines
 

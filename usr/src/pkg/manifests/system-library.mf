@@ -221,7 +221,6 @@ file path=lib/$(ARCH64)/libumem.so.1
 file path=lib/$(ARCH64)/libuuid.so.1
 file path=lib/$(ARCH64)/libuutil.so.1
 file path=lib/$(ARCH64)/libw.so.1
-file path=lib/$(ARCH64)/libxnet.so.1
 file path=lib/$(ARCH64)/nss_compat.so.1
 file path=lib/$(ARCH64)/nss_dns.so.1
 file path=lib/$(ARCH64)/nss_files.so.1
@@ -302,7 +301,6 @@ file path=lib/libumem.so.1
 file path=lib/libuuid.so.1
 file path=lib/libuutil.so.1
 file path=lib/libw.so.1
-file path=lib/libxnet.so.1
 file path=lib/mpxio/stmsboot_util mode=0555
 file path=lib/nss_compat.so.1
 file path=lib/nss_dns.so.1
@@ -585,7 +583,6 @@ link path=lib/$(ARCH64)/libumem.so target=libumem.so.1
 link path=lib/$(ARCH64)/libuuid.so target=libuuid.so.1
 link path=lib/$(ARCH64)/libuutil.so target=libuutil.so.1
 link path=lib/$(ARCH64)/libw.so target=libw.so.1
-link path=lib/$(ARCH64)/libxnet.so target=libxnet.so.1
 link path=lib/32 target=.
 link path=lib/64 target=$(ARCH64)
 link path=lib/crypto/32 target=.
@@ -645,7 +642,6 @@ link path=lib/libthread_db.so.1 target=libc_db.so.1
 link path=lib/libumem.so target=libumem.so.1
 link path=lib/libuuid.so target=libuuid.so.1
 link path=lib/libw.so target=libw.so.1
-link path=lib/libxnet.so target=libxnet.so.1
 link path=lib/secure/32 target=.
 link path=lib/secure/64 target=$(ARCH64)
 link path=usr/lib/$(ARCH64)/libadm.so \
@@ -879,10 +875,6 @@ link path=usr/lib/$(ARCH64)/libw.so target=../../../lib/$(ARCH64)/libw.so.1
 link path=usr/lib/$(ARCH64)/libw.so.1 target=../../../lib/$(ARCH64)/libw.so.1
 link path=usr/lib/$(ARCH64)/libwrap.so target=libwrap.so.1.0
 link path=usr/lib/$(ARCH64)/libwrap.so.1 target=libwrap.so.1.0
-link path=usr/lib/$(ARCH64)/libxnet.so \
-    target=../../../lib/$(ARCH64)/libxnet.so.1
-link path=usr/lib/$(ARCH64)/libxnet.so.1 \
-    target=../../../lib/$(ARCH64)/libxnet.so.1
 link path=usr/lib/$(ARCH64)/nss_compat.so.1 \
     target=../../../lib/$(ARCH64)/nss_compat.so.1
 link path=usr/lib/$(ARCH64)/nss_dns.so.1 \
@@ -1049,8 +1041,6 @@ link path=usr/lib/libw.so target=../../lib/libw.so.1
 link path=usr/lib/libw.so.1 target=../../lib/libw.so.1
 link path=usr/lib/libwrap.so target=libwrap.so.1.0
 link path=usr/lib/libwrap.so.1 target=libwrap.so.1.0
-link path=usr/lib/libxnet.so target=../../lib/libxnet.so.1
-link path=usr/lib/libxnet.so.1 target=../../lib/libxnet.so.1
 link path=usr/lib/lwp/$(ARCH64)/libthread.so.1 \
     target=../../$(ARCH64)/libthread.so.1
 link path=usr/lib/lwp/$(ARCH64)/libthread_db.so.1 \

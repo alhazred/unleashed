@@ -213,7 +213,6 @@ SUBDIRS +=				\
 	libvscan	\
 	libw		\
 	libwrap		\
-	libxnet		\
 	libzfs		\
 	libzfs_core	\
 	libzonecfg	\
@@ -618,7 +617,7 @@ raidcfg_plugins: libraidcfg librcm libcfgadm libpicl libpicltree
 rpcsec_gss:	libgss
 sasl_plugins:	pkcs11 libgss libsasl
 scsi:		libfru libumem libdevid libdevinfo
-smbsrv:		libxnet libpthread librt libshare libidmap pkcs11 libsqlite \
+smbsrv:		libpthread librt libshare libidmap pkcs11 libsqlite \
 		libcryptoutil libreparse libcmdutils libresolv2 libsmbfs \
 		libuuid libads libgss libldap5 krb5
 storage:	libdevice libdevinfo libdevid
