@@ -96,7 +96,7 @@ CLEANFILES +=	machine x86
 include ../Makefile.inc
 
 # For multiboot2.h, must be last, to avoid conflicts
-CPPFLAGS +=	-I$(SRC)/uts/common
+CPPFLAGS +=	-I$(SRCTOP)/include
 
 machine:
 	$(RM) machine
