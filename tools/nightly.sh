@@ -27,6 +27,7 @@
 # Copyright 2011 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2012 Joshua M. Clulow <josh@sysmgr.org>
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2018 Joyent, Inc.
 #
 # Based on the nightly script from the integration folks,
 # Mostly modified and owned by mike_s.
@@ -675,6 +676,8 @@ function logshuffle {
 	if [ -f $LLOG -o -d $LLOG ]; then
 	    	LLOG=$LLOG.$$
 	fi
+
+	rm -f "$ATLOG/latest" 2>/dev/null
 	mkdir $LLOG
 	export LLOG
 
@@ -726,6 +729,8 @@ function logshuffle {
 	fi
 
 	mv $LOGFILE $LLOG
+
+	ln -s "$LLOG" "$ATLOG/latest"
 }
 
 #
