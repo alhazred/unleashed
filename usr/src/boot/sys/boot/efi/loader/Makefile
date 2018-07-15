@@ -84,7 +84,7 @@ include	./Makefile.common
 CPPFLAGS +=	-I../../common
 
 # For multiboot2.h, must be last, to avoid conflicts
-CPPFLAGS +=	-I$(SRC)/uts/common
+CPPFLAGS +=	-I$(SRCTOP)/include
 
 FILES=	loader.efi
 FILEMODE=	0555
