@@ -159,7 +159,6 @@ testshell: $(PROG)
 		        	    LANG="$${test_lang}" \
 		        	    LC_ALL="$${test_lang}" \
 				    VMALLOC_OPTIONS=abort \
-				    SHCOMP="$(ROOTBIN)/shcomp" \
 		        	      "$${test_item}" \
 		            ) 2>&1 | while read ; do \
 			                 printf "#\t%s\n" "$${REPLY}" ; \

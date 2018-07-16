@@ -28,7 +28,7 @@
 # AST tools (including ksh93).
 C99MODE= $(C99_ENABLE) -D_XOPEN_SOURCE=600 -D__EXTENSIONS__=1
 
-# common CPP flags for libshell consumers (ksh, shcomp etc.)
+# common CPP flags for libshell consumers (ksh etc.)
 LIBSHELLCPPFLAGS = \
 	-I$(LIBSHELLBASE)/$(LIBSHELLMACH)/src/cmd/ksh93 \
 	-I$(LIBSHELLBASE)/common/include \

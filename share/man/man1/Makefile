@@ -237,7 +237,6 @@ MAN = acctcom.1 \
       set.1 \
       setfacl.1 \
       setpgrp.1 \
-      shcomp.1 \
       shell_builtins.1 \
       shift.1 \
       size.1 \

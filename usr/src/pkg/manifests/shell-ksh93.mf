@@ -33,7 +33,6 @@ file path=etc/skel/.kshrc group=other preserve=true
 file path=usr/bin/$(ARCH32)/ksh93 mode=0555
 file path=usr/bin/$(ARCH64)/ksh93 mode=0555
 file path=usr/bin/alias mode=0555
-file path=usr/bin/shcomp mode=0555
 file path=usr/include/ast/align.h
 file path=usr/include/ast/ast.h
 file path=usr/include/ast/ast_botch.h
@@ -174,7 +173,6 @@ file path=usr/share/doc/ksh/images/tag_perf.png
 file path=usr/share/doc/ksh/shell_styleguide.docbook
 file path=usr/share/man/man1/alias.1
 file path=usr/share/man/man1/ksh93.1
-file path=usr/share/man/man1/shcomp.1
 hardlink path=usr/bin/$(ARCH32)/ksh target=ksh93
 hardlink path=usr/bin/$(ARCH32)/rksh target=ksh93
 hardlink path=usr/bin/$(ARCH32)/rksh93 target=ksh93

@@ -190,10 +190,6 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/intp/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
-$(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/shbin/%.c
-	$(COMPILE.c) -o $@ $<
-	$(CTFCONVERT_O)
-
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/exec/java/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
