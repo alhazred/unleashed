@@ -31,7 +31,9 @@ clobber:=	TARGET= clobber
 
 all clean clobber: $(SUBDIRS)
 
-install: all $(INSTDIRS)
+install: all .WAIT $(INSTDIRS)
+
+pxeldr: loader
 
 FRC:
 
