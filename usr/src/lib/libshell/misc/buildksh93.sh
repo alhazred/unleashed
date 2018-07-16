@@ -426,7 +426,6 @@ function build_shell
           fi
           
 	  file ksh
-	  file shcomp
 	  
 	  export LD_LIBRARY_PATH="${root}/lib:${LD_LIBRARY_PATH}"
 	  export LD_LIBRARY_PATH_32="${root}/lib:${LD_LIBRARY_PATH_32}"
@@ -510,7 +509,6 @@ function test_shell
                                 LD_LIBRARY_PATH_32="$LD_LIBRARY_PATH_32" \
                                 LC_ALL="${lang}" LANG="${lang}" \
                                 VMALLOC_OPTIONS=abort \
-				SHCOMP=$PWD/arch/*/bin/shcomp \
                                 "$i"
                         done
                     )

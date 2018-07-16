@@ -338,14 +338,9 @@ short nomagic = 0;
 #define	AOUT_ZMAGIC_STRING	"\x1""\x0b"	/* 0413 */
 #define	NOMAGIC_STRING		""
 
-#define	SHBIN_CNTL(x)	((x)&037)
-#define	SHBINMAGIC_STRING {SHBIN_CNTL('k'), SHBIN_CNTL('s'), SHBIN_CNTL('h'), 0}
-#define	SHBINMAGIC_LEN	4
-
 char elf32magicstr[] = ELF32MAGIC_STRING;
 char elf64magicstr[] = ELF64MAGIC_STRING;
 char intpmagicstr[] = INTPMAGIC_STRING;
-char shbinmagicstr[] = SHBINMAGIC_STRING;
 char javamagicstr[] = JAVAMAGIC_STRING;
 char nomagicstr[] = NOMAGIC_STRING;
 
@@ -355,7 +350,6 @@ char *execswnames[] = {
 	"elfexec",	/* Elf64 */
 #endif
 	"intpexec",
-	"shbinexec",
 	"javaexec",
 	NULL,
 	NULL,
@@ -368,7 +362,6 @@ struct execsw execsw[] = {
 	{ elf64magicstr, 0, 5, NULL, NULL, NULL },
 #endif
 	{ intpmagicstr, 0, 2, NULL, NULL, NULL },
-	{ shbinmagicstr, 0, SHBINMAGIC_LEN, NULL, NULL, NULL },
 	{ javamagicstr, 0, 4, NULL, NULL, NULL },
 	{ nomagicstr, 0, 0, NULL, NULL, NULL },
 	{ nomagicstr, 0, 0, NULL, NULL, NULL },

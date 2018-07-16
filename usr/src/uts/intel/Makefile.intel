@@ -441,7 +441,7 @@ BRAND_KMODS	+= sn1_brand
 #
 #	Exec Class Modules (/kernel/exec):
 #
-EXEC_KMODS	+= elfexec intpexec shbinexec javaexec
+EXEC_KMODS	+= elfexec intpexec javaexec
 
 #
 #	File System Modules (/kernel/fs):

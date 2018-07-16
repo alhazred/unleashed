@@ -325,7 +325,6 @@ COMMON_SUBDIRS=		\
 	setmnt		\
 	setpgrp		\
 	sgs		\
-	shcomp		\
 	smbios		\
 	smbsrv		\
 	smserverd	\
@@ -583,7 +582,6 @@ MSGSUBDIRS=		\
 	sdiff		\
 	sdpadm		\
 	sgs		\
-	shcomp		\
 	smbsrv		\
 	sort		\
 	split		\
@@ -713,7 +711,7 @@ _dc: $(DCSUBDIRS)
 # Dependencies
 #
 fs.d: fstyp
-ksh:	shcomp isaexec
+ksh:	isaexec
 mdb: 	terminfo
 fmt:	mailx
 

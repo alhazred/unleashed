@@ -569,7 +569,6 @@ file path=usr/kernel/drv/signalfd.conf group=sys
 file path=usr/kernel/drv/timerfd group=sys
 file path=usr/kernel/drv/timerfd.conf group=sys
 file path=usr/kernel/exec/javaexec group=sys mode=0755
-file path=usr/kernel/exec/shbinexec group=sys mode=0755
 file path=usr/kernel/strmod/cryptmod group=sys mode=0755
 file path=usr/kernel/strmod/rlmod group=sys mode=0755
 file path=usr/kernel/strmod/telmod group=sys mode=0755

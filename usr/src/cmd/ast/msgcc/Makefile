@@ -54,7 +54,6 @@ CERRWARN += -Wno-uninitialized
 LDLIBS += -last
 msgcpp   := LDLIBS += -lpp
 
-# This target should use "shcomp" in the future
 msgcc:	msgcc.sh
 	rm -f msgcc ; \
 	{ \
