@@ -23,7 +23,7 @@ UTILS_SRC=	$(COMMON_SRC)/boot_utils.c
 EXTRA_SRC=	$(COMMON_SRC)/mboot_extra.c
 
 PROG=		btxld
-MAN1ONBLDFILES=	btxld.1onbld
+MAN1ONBLDFILES=	btxld.1
 SRCS=		btxld.c elfh.c version.c $(UTILS_SRC) $(EINFO_SRC) $(EXTRA_SRC)
 OBJS=		btxld.o elfh.o version.o bblk_einfo.o mboot_extra.o boot_utils.o
 LDLIBS +=	-lmd5

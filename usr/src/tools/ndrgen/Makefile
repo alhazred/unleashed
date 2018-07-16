@@ -25,7 +25,7 @@
 
 PROG=	ndrgen ndrgen1
 
-MAN1ONBLDFILES=	ndrgen.1onbld
+MAN1ONBLDFILES=	ndrgen.1
 
 OBJS=	ndr_main.o ndr_lex.o ndr_anal.o \
 	ndr_gen.o ndr_parse.o ndr_print.o

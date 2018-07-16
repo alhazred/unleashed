@@ -37,7 +37,7 @@
 <service
 	name='system/filesystem/autofs'
 	type='service'
-	version='1'>
+	version='2'>
 
 	<dependency
 		name='fs'
@@ -101,7 +101,7 @@
 
 	<property_group name='application' type='framework'>
 		<stability value='Evolving' />
-		<propval name='auto_enable' type='boolean' value='true' />
+		<propval name='auto_enable' type='boolean' value='false' />
 	</property_group>
 
 	<instance name='default' enabled='false'>
