@@ -22,8 +22,6 @@
 /*
  * 	Copyright (c) 1991-1994  Sun Microsystems, Inc
  *
- * lib/libsocket/inet/getservbyname_r.c
- *
  * getservbyname_r() is defined in this file. It is implemented on top of
  *   _get_hostserv_inetnetdir_byname() which is also used to implement
  *   netdir_getbyname() for inet family transports.  In turn the common code

@@ -409,12 +409,6 @@ sub dynamic_profile
 			# FILTER: /usr/lib/libw.so.1
 			# FILTEE: /usr/lib/libc.so.1
 			#
-			# Here is a more perverse one, libxnet.so.1 has 3
-			# filtees:
-			#
-			# FILTER: /usr/lib/libxnet.so.1
-			# FILTEE: /usr/lib/{libsocket.so.1,libnsl.so.1,libc.so.1}
-			#
 			# The important point to note about standard
 			# filters is that they contain NO CODE AT ALL.
 			# All of the symbols in the filter MUST be found
@@ -1098,7 +1092,7 @@ sub get_dynamic_profile
 				# First look for standard dependency
 				# resolution lines:
 				#
-				#      libsocket.so.1 => /usr/lib/libsocket.so.1
+				#      libnsl.so.1 => /usr/lib/libnsl.so.1
 				#
 				# Note that these are *all* of the
 				# needed shared objects, not just the
@@ -1273,7 +1267,7 @@ sub ldd_filter_line
 	}
 	#
 	# What kind of filter is $filter?
-	#	STANDARD  (contains no "real code", e.g. libxnet.so.1), or
+	#	STANDARD  (contains no "real code"), or
 	#	AUXILIARY (provides "code" if needed, but
 	#	           prefers to pass filtee's "code", e.g. libc.so.1)
 	#

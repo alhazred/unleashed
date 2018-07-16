@@ -58,7 +58,7 @@ CFLAGS=-D_GNU_SOURCE -D_POSIX_C_SOURCE=200112L -D__EXTENSIONS__ \
        -I${CONTRDIR}
 LFLAGS=-P sexpr_reader_
 YFLAGS=-p sexpr_reader_ -d
-LDFLAGS=-lumem -lavl -luuid -lsocket /usr/lib/libcmdutils.so.1
+LDFLAGS=-lumem -lavl -luuid /usr/lib/libcmdutils.so.1
 
 .include <bsd.prog.mk>
 

@@ -22,8 +22,6 @@
  * Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  *
- * lib/libsocket/inet/getservent_r.c
- *
  * This file defines and implements the re-entrant enumeration routines for
  *   services: setservent(), getservent_r(), and endservent(). They consult
  *   the switch policy directly and do not "share" their enumeration state

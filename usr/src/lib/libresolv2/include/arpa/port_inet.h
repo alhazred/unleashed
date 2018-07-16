@@ -17,19 +17,19 @@ extern "C" {
 
 /*
  * these are libresolv2 functions that were made local in previous versions
- * we rename them res_* because they conflict with libnsl or libsocket
+ * we rename them res_* because they conflict with libnsl or libc
  */
 
-#define	inet_lnaof res_inet_lnaof  /* libsocket */
+#define	inet_lnaof res_inet_lnaof  /* libc */
 ulong_t inet_lnaof(struct in_addr in);
 
-#define	inet_makeaddr res_inet_makeaddr  /* libsocket */
+#define	inet_makeaddr res_inet_makeaddr  /* libc */
 struct in_addr inet_makeaddr(ulong_t net, ulong_t host);
 
 #define	inet_netof res_inet_netof  /* libnsl */
 ulong_t inet_netof(struct in_addr in);
 
-#define	inet_network res_inet_network  /* libsocket */
+#define	inet_network res_inet_network  /* libc */
 ulong_t inet_network(register const char *cp);
 
 #ifdef	__cplusplus

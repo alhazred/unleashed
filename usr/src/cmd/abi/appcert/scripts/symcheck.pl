@@ -324,14 +324,6 @@ sub lib_static_check
 		push(@static_libs, "/usr/lib/libc.a");
 	}
 
-	# libsocket.a:
-
-	if (exists($symbols{'socket'}) && exists($symbols{'_socket'}) &&
-	    exists($symbols{'bind'}) && exists($symbols{'_bind'}) &&
-	    exists($symbols{'connect'}) && exists($symbols{'_connect'})) {
-			push(@static_libs, "/usr/lib/libsocket.a");
-	}
-
 	# libnsl.a:
 
 	if (exists($symbols{'_xti_bind'}) && exists($symbols{'_xti_connect'}) &&
@@ -384,12 +376,12 @@ sub dynamic_check_object
 
 	#
 	# profile lines look like:
-	# /bin/ftp|*DIRECT*|libsocket.so.1|socket
+	# /bin/ftp|*DIRECT*|libc.so.1|socket
 	# /bin/ftp|libnsl.so.1|libc.so.1|mutex_lock
 	#
 	# or:
 	#
-	# /bin/ftp|*DIRECT*|/usr/lib/libsocket.so.1|socket
+	# /bin/ftp|*DIRECT*|/usr/lib/libc.so.1|socket
 	# /bin/ftp|/usr/lib/libnsl.so.1|/usr/lib/libc.so.1|mutex_lock
 	#
 
@@ -740,13 +732,13 @@ sub load_model_versioned_lib
 	# This subroutine runs pvs -dos directly on the Solaris shared
 	# object, and parses data that looks like this:
 	#
-	# % pvs -dos /usr/lib/libsocket.so.1
+	# % pvs -dos /usr/lib/libc.so.1
 	# ...
-	# /usr/lib/libsocket.so.1 -       SUNW_1.1: __xnet_sendmsg;
+	# /usr/lib/libc.so.1 -       SUNW_1.1: __xnet_sendmsg;
 	# ...
-	# /usr/lib/libsocket.so.1 -       SISCD_2.3: connect;
+	# /usr/lib/libc.so.1 -       SISCD_2.3: connect;
 	# ...
-	# /usr/lib/libsocket.so.1 -       SUNWprivate_1.2: getnetmaskbyaddr;
+	# /usr/lib/libc.so.1 -       SUNWprivate_1.2: getnetmaskbyaddr;
 	#
 	# Note that data types look like:
 	# /usr/lib/libc.so.1 -    SUNWprivate_1.1: __environ_lock (24);

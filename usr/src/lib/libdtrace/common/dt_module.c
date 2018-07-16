@@ -1424,8 +1424,8 @@ dt_resolve_forward_decl(ctf_file_t **ctfp, ctf_id_t *type)
  * up into the library and the type itself, which will be separated by an '`'
  * character. This is complicated further by the fact that the keyword for a
  * struct, union, or enum, will precede the library. Hence we may have something
- * that looks like "struct libsocket.so.1`msghdr" in name and we need to
- * transform that into "libsocket.so.1" and "struct msghdr".
+ * that looks like "struct libc.so.1`msghdr" in name and we need to
+ * transform that into "libc.so.1" and "struct msghdr".
  */
 int
 dtrace_lookup_fixup_pidtype(const char *name, char **libp, char **typep)

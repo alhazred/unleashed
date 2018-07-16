@@ -368,6 +368,9 @@ libinstall:
 .endif
 .endif
 .endif
+.if defined(SYMLINKS) && !empty(SYMLINKS)
+	@set ${SYMLINKS}; ${_SYMLINKS_SCRIPT}
+.endif
 .if defined(LINKS) && !empty(LINKS)
 	@set ${LINKS}; ${_LINKS_SCRIPT}
 .endif

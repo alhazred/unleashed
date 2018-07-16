@@ -597,7 +597,6 @@ $(ROOT)/usr/lib/libkmfberder.so:=	REALPATH=../../lib/libkmfberder.so.1
 $(ROOT)/usr/lib/libkstat.so.1:=		REALPATH=../../lib/libkstat.so.1
 $(ROOT)/usr/lib/libkstat.so:=		REALPATH=../../lib/libkstat.so.1
 $(ROOT)/usr/lib/liblddbg.so.4:=		REALPATH=../../lib/liblddbg.so.4
-$(ROOT)/usr/lib/libm.so.1:=		REALPATH=../../lib/libm.so.1
 $(ROOT)/usr/lib/libm.so.2:=		REALPATH=../../lib/libm.so.2
 $(ROOT)/usr/lib/libm.so:=		REALPATH=../../lib/libm.so.2
 $(ROOT)/usr/lib/libmd.so.1:=		REALPATH=../../lib/libmd.so.1
@@ -643,8 +642,6 @@ $(ROOT)/usr/lib/libsecdb.so.1:=		REALPATH=../../lib/libsecdb.so.1
 $(ROOT)/usr/lib/libsecdb.so:=		REALPATH=../../lib/libsecdb.so.1
 $(ROOT)/usr/lib/libsendfile.so.1:=	REALPATH=../../lib/libsendfile.so.1
 $(ROOT)/usr/lib/libsendfile.so:=	REALPATH=../../lib/libsendfile.so.1
-$(ROOT)/usr/lib/libsocket.so.1:=	REALPATH=../../lib/libsocket.so.1
-$(ROOT)/usr/lib/libsocket.so:=		REALPATH=../../lib/libsocket.so.1
 $(ROOT)/usr/lib/libsysevent.so.1:=	REALPATH=../../lib/libsysevent.so.1
 $(ROOT)/usr/lib/libsysevent.so:=	REALPATH=../../lib/libsysevent.so.1
 $(ROOT)/usr/lib/libthread.so.1:=	REALPATH=../../lib/libthread.so.1
@@ -659,8 +656,6 @@ $(ROOT)/usr/lib/libuutil.so.1:=		REALPATH=../../lib/libuutil.so.1
 $(ROOT)/usr/lib/libuutil.so:=		REALPATH=../../lib/libuutil.so.1
 $(ROOT)/usr/lib/libw.so.1:=		REALPATH=../../lib/libw.so.1
 $(ROOT)/usr/lib/libw.so:=		REALPATH=../../lib/libw.so.1
-$(ROOT)/usr/lib/libxnet.so.1:=		REALPATH=../../lib/libxnet.so.1
-$(ROOT)/usr/lib/libxnet.so:=		REALPATH=../../lib/libxnet.so.1
 $(ROOT)/usr/lib/libzfs.so.1:=		REALPATH=../../lib/libzfs.so.1
 $(ROOT)/usr/lib/libzfs.so:=		REALPATH=../../lib/libzfs.so.1
 $(ROOT)/usr/lib/libzfs_core.so.1:=	REALPATH=../../lib/libzfs_core.so.1
@@ -777,8 +772,6 @@ $(ROOT)/usr/lib/$(MACH64)/libkstat.so:= \
 	REALPATH=../../../lib/$(MACH64)/libkstat.so.1
 $(ROOT)/usr/lib/$(MACH64)/liblddbg.so.4:= \
 	REALPATH=../../../lib/$(MACH64)/liblddbg.so.4
-$(ROOT)/usr/lib/$(MACH64)/libm.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libm.so.1
 $(ROOT)/usr/lib/$(MACH64)/libm.so.2:= \
 	REALPATH=../../../lib/$(MACH64)/libm.so.2
 $(ROOT)/usr/lib/$(MACH64)/libm.so:= \
@@ -865,10 +858,6 @@ $(ROOT)/usr/lib/$(MACH64)/libsendfile.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libsendfile.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsendfile.so:= \
 	REALPATH=../../../lib/$(MACH64)/libsendfile.so.1
-$(ROOT)/usr/lib/$(MACH64)/libsocket.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libsocket.so.1
-$(ROOT)/usr/lib/$(MACH64)/libsocket.so:= \
-	REALPATH=../../../lib/$(MACH64)/libsocket.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsysevent.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libsysevent.so.1
 $(ROOT)/usr/lib/$(MACH64)/libsysevent.so:= \
@@ -897,10 +886,6 @@ $(ROOT)/usr/lib/$(MACH64)/libw.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libw.so.1
 $(ROOT)/usr/lib/$(MACH64)/libw.so:= \
 	REALPATH=../../../lib/$(MACH64)/libw.so.1
-$(ROOT)/usr/lib/$(MACH64)/libxnet.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libxnet.so.1
-$(ROOT)/usr/lib/$(MACH64)/libxnet.so:= \
-	REALPATH=../../../lib/$(MACH64)/libxnet.so.1
 $(ROOT)/usr/lib/$(MACH64)/libzfs.so:= \
 	REALPATH=../../../lib/$(MACH64)/libzfs.so.1
 $(ROOT)/usr/lib/$(MACH64)/libzfs.so.1:= \
@@ -988,7 +973,6 @@ SYM.USRLIB= \
 	/usr/lib/libkstat.so \
 	/usr/lib/libkstat.so.1 \
 	/usr/lib/liblddbg.so.4 \
-	/usr/lib/libm.so.1 \
 	/usr/lib/libm.so.2 \
 	/usr/lib/libm.so \
 	/usr/lib/libmd.so \
@@ -1034,8 +1018,6 @@ SYM.USRLIB= \
 	/usr/lib/libsecdb.so.1 \
 	/usr/lib/libsendfile.so \
 	/usr/lib/libsendfile.so.1 \
-	/usr/lib/libsocket.so \
-	/usr/lib/libsocket.so.1 \
 	/usr/lib/libsysevent.so \
 	/usr/lib/libsysevent.so.1 \
 	/usr/lib/libthread.so \
@@ -1050,8 +1032,6 @@ SYM.USRLIB= \
 	/usr/lib/libuutil.so.1 \
 	/usr/lib/libw.so \
 	/usr/lib/libw.so.1 \
-	/usr/lib/libxnet.so \
-	/usr/lib/libxnet.so.1 \
 	/usr/lib/libzfs.so \
 	/usr/lib/libzfs.so.1 \
 	/usr/lib/libzfs_core.so \
@@ -1123,7 +1103,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libkstat.so \
 	/usr/lib/$(MACH64)/libkstat.so.1 \
 	/usr/lib/$(MACH64)/liblddbg.so.4 \
-	/usr/lib/$(MACH64)/libm.so.1 \
 	/usr/lib/$(MACH64)/libm.so.2 \
 	/usr/lib/$(MACH64)/libm.so \
 	/usr/lib/$(MACH64)/libmd.so \
@@ -1167,8 +1146,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libsecdb.so.1 \
 	/usr/lib/$(MACH64)/libsendfile.so \
 	/usr/lib/$(MACH64)/libsendfile.so.1 \
-	/usr/lib/$(MACH64)/libsocket.so \
-	/usr/lib/$(MACH64)/libsocket.so.1 \
 	/usr/lib/$(MACH64)/libsysevent.so \
 	/usr/lib/$(MACH64)/libsysevent.so.1 \
 	/usr/lib/$(MACH64)/libthread.so \
@@ -1183,8 +1160,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libuutil.so.1 \
 	/usr/lib/$(MACH64)/libw.so \
 	/usr/lib/$(MACH64)/libw.so.1 \
-	/usr/lib/$(MACH64)/libxnet.so \
-	/usr/lib/$(MACH64)/libxnet.so.1 \
 	/usr/lib/$(MACH64)/libzfs.so \
 	/usr/lib/$(MACH64)/libzfs.so.1 \
 	/usr/lib/$(MACH64)/libzfs_core.so \

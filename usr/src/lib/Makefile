@@ -57,7 +57,6 @@ SUBDIRS +=		\
 	libmp		\
 	libnsl		\
 	libnvpair	\
-	libsocket	\
 	.WAIT
 
 # Build everything else. Aside from explicit dependencies, all libraries
@@ -148,7 +147,6 @@ SUBDIRS +=				\
 	libldap5	\
 	liblgrp		\
 	liblm		\
-	libm1		\
 	libmail		\
 	libmalloc	\
 	libmapid	\
@@ -213,7 +211,6 @@ SUBDIRS +=				\
 	libvscan	\
 	libw		\
 	libwrap		\
-	libxnet		\
 	libzfs		\
 	libzfs_core	\
 	libzonecfg	\
@@ -498,9 +495,8 @@ libmd:		libc
 libmp:		libc
 libnsl:		libc libmd libmp
 libnvpair:	libc libnsl
-libsocket:	libc libnsl
 
-basedeps:	libc libm libmd libmp libnsl libnvpair libsocket
+basedeps:	libc libm libmd libmp libnsl libnvpair
 basedeps :=	TARGET=install
 
 # The following dependencies are currently required by libdbus-1 and should
@@ -509,7 +505,7 @@ dbusdeps:	libsecdb libinetutil libscf libuutil libgen libsmbios
 
 # The following dependencies don't need to be listed below as they are built
 # before everything else:
-# libc libm libmd libmp libnsl libnvpair libsocket
+# libc libm libmd libmp libnsl libnvpair
 abi:		libctf libmapmalloc libproc
 auditd_plugins: libbsm libsecdb libgss libmtmalloc
 brand:		libzonecfg libmapmalloc
@@ -618,7 +614,7 @@ raidcfg_plugins: libraidcfg librcm libcfgadm libpicl libpicltree
 rpcsec_gss:	libgss
 sasl_plugins:	pkcs11 libgss libsasl
 scsi:		libfru libumem libdevid libdevinfo
-smbsrv:		libxnet libpthread librt libshare libidmap pkcs11 libsqlite \
+smbsrv:		libpthread librt libshare libidmap pkcs11 libsqlite \
 		libcryptoutil libreparse libcmdutils libresolv2 libsmbfs \
 		libuuid libads libgss libldap5 krb5
 storage:	libdevice libdevinfo libdevid
