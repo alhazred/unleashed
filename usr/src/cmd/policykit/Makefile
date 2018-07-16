@@ -38,6 +38,7 @@ CPPFLAGS +=	-DPACKAGE_VERSION=\"$(POLICYKIT_VERSION)\"
 C99MODE =	$(C99_ENABLE)
 
 CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-function
 
 ROOTUSRSBINPROG =	$(PROG:%=$(ROOTUSRSBIN)/%)
 

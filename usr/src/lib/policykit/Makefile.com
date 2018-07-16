@@ -29,6 +29,7 @@ include $(SRC)/lib/policykit/Makefile.policykit
 CPPFLAGS =	$(POLICYKIT_DBUS_CPPFLAGS) $(POLICYKIT_GLIB_CPPFLAGS) $(CPPFLAGS.master)
 
 CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-function
 
 C99MODE =	$(C99_ENABLE)
 
