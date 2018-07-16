@@ -133,7 +133,7 @@ example% \fBelfdump -s passgroup.o | egrep "passwd|group"\fR
   [9]  0x00000000 0x00000121  OBJT GLOB  D  0 .group   group_start
  [10]  0x00000121 0x00000000  OBJT GLOB  D  0 .group   group_end
 example% \fBstrings -N.passwd passgroup.o | head -1\fR
-root:x:0:0:Super-User:/:/sbin/sh
+root:x:0:0:Super-User:/:/bin/sh
 example% \fBstrings -N.group passgroup.o | head -1\fR
 root::0:
 .fi
@@ -165,7 +165,7 @@ void main()
 }
 example% \fBcc -o main main.c passgroup.o\fR
 example% \fB\&./main\fR
-root:x:0:0:Super-User:/:/sbin/sh
+root:x:0:0:Super-User:/:/bin/sh
 \&....
 nobody4:x:65534:65534:SunOS 4.x NFS Anonymous Access User:/:
 .fi

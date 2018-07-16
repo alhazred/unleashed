@@ -124,8 +124,8 @@ static boolean_t forced_login = B_FALSE;
 #endif
 
 #define	SUPATH	"/usr/bin/su"
-#define	FAILSAFESHELL	"/sbin/sh"
-#define	DEFAULTSHELL	"/sbin/sh"
+#define	FAILSAFESHELL	"/bin/sh"
+#define	DEFAULTSHELL	"/bin/sh"
 #define	DEF_PATH	"/usr/sbin:/usr/bin"
 
 #define	CLUSTER_BRAND_NAME	"cluster"

@@ -454,7 +454,7 @@ adddisp(struct passwd *pwent)
 		    new->freefield = strdup(pwent->pw_gecos);
 		}
 		if (!pwent->pw_shell || !(*pwent->pw_shell)) {
-			new->shell = "/sbin/sh";
+			new->shell = "/bin/sh";
 		} else {
 			new->shell = strdup(pwent->pw_shell);
 		}

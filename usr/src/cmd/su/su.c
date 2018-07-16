@@ -142,8 +142,8 @@ static void update_audit(struct passwd *pwd);
 static pam_handle_t	*pamh = NULL;	/* Authentication handle */
 struct	passwd pwd;
 char	pwdbuf[1024];			/* buffer for getpwnam_r() */
-char	shell[] = "/usr/bin/sh";	/* default shell */
-char	safe_shell[] = "/sbin/sh";	/* "fallback" shell */
+char	shell[] = "/bin/sh";		/* default shell */
+char	safe_shell[] = "/bin/sh";	/* "fallback" shell */
 char	su[PATH_MAX] = "su";		/* arg0 for exec of shprog */
 char	homedir[PATH_MAX] = "HOME=";
 char	logname[20] = "LOGNAME=";
@@ -669,8 +669,8 @@ ok:
 
 	/*
 	 * Try to clean up after an administrator who has made a mistake
-	 * configuring root's shell; if root's shell is other than /sbin/sh,
-	 * try exec'ing /sbin/sh instead.
+	 * configuring root's shell; if root's shell is other than /bin/sh,
+	 * try exec'ing /bin/sh instead.
 	 */
 	if ((uid == (uid_t)ROOT) && (strcmp(name, "root") == 0) &&
 	    (strcmp(safe_shell, pshell) != 0)) {
