@@ -69,7 +69,7 @@ ROOTDIRS= \
 	$(ROOTONBLD)/etc \
 	$(ROOTONBLD)/etc/exception_lists \
 	$(ROOTONBLD)/man \
-	$(ROOTONBLD)/man/man1onbld
+	$(ROOTONBLD)/man/man1
 
 all :=		TARGET= install
 install :=	TARGET= install

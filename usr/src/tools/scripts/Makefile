@@ -59,21 +59,21 @@ SCRIPTLINKS= \
 	git-nits
 
 MAN1ONBLDFILES= \
-	Install.1onbld \
-	cddlchk.1onbld \
-	checkpaths.1onbld \
-	check_rtime.1onbld \
-	cstyle.1onbld \
-	find_elf.1onbld \
-	git-pbchk.1onbld \
-	hdrchk.1onbld \
-	interface_check.1onbld \
-	interface_cmp.1onbld \
-	mapfilechk.1onbld \
-	wsdiff.1onbld
+	Install.1 \
+	cddlchk.1 \
+	checkpaths.1 \
+	check_rtime.1 \
+	cstyle.1 \
+	find_elf.1 \
+	git-pbchk.1 \
+	hdrchk.1 \
+	interface_check.1 \
+	interface_cmp.1 \
+	mapfilechk.1 \
+	wsdiff.1
 
 MAN1ONBLDLINKS= \
-	git-nits.1onbld
+	git-nits.1
 
 ETCFILES= \
 	hgstyle \
@@ -107,9 +107,9 @@ $(ROOTONBLDBIN)/git-nits:
 	$(RM) $(ROOTONBLDBIN)/git-nits
 	$(SYMLINK) git-pbchk $(ROOTONBLDBIN)/git-nits
 
-$(ROOTONBLDMAN1ONBLD)/git-nits.1onbld:
-	$(RM) $(ROOTONBLDMAN1ONBLD)/git-nits.1onbld
-	$(SYMLINK) git-pbchk.1onbld $(ROOTONBLDMAN1ONBLD)/git-nits.1onbld
+$(ROOTONBLDMAN1ONBLD)/git-nits.1:
+	$(RM) $(ROOTONBLDMAN1ONBLD)/git-nits.1
+	$(SYMLINK) git-pbchk.1 $(ROOTONBLDMAN1ONBLD)/git-nits.1
 
 install: all .WAIT $(ROOTONBLDSHFILES) $(ROOTONBLDPERLFILES)		\
 		$(ROOTONBLDPERLMODULES) $(ROOTONBLDPYFILES)		\
@@ -120,7 +120,7 @@ install: all .WAIT $(ROOTONBLDSHFILES) $(ROOTONBLDPERLFILES)		\
 clean:
 	$(RM) $(CLEANFILES)
 
-bldenv.1onbld: bldenv
+bldenv.1: bldenv
 	$(RM) "$@"
 	(set +o errexit ; ksh93 $? --nroff ; true) 2>&1 | \
 	sed -e 's/\.DS/.nf/g;s/\.DE/.fi/' \

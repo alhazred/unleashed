@@ -34,7 +34,7 @@ include ../Makefile.tools
 
 CERRWARN += -Wno-parentheses
 
-MAN1ONBLDFILES= codereview.1onbld
+MAN1ONBLDFILES= codereview.1
 
 $(ROOTONBLDMAN1ONBLDFILES) := FILEMODE=      644
 

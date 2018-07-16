@@ -32,8 +32,8 @@ ETCFILES= \
 	SamplePkgLinks
 
 MAN1ONBLDFILES= \
-	get_depend_info.1onbld \
-	make_pkg_db.1onbld
+	get_depend_info.1 \
+	make_pkg_db.1
 
 include ../Makefile.tools
 
