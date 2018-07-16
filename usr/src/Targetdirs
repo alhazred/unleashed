@@ -597,7 +597,6 @@ $(ROOT)/usr/lib/libkmfberder.so:=	REALPATH=../../lib/libkmfberder.so.1
 $(ROOT)/usr/lib/libkstat.so.1:=		REALPATH=../../lib/libkstat.so.1
 $(ROOT)/usr/lib/libkstat.so:=		REALPATH=../../lib/libkstat.so.1
 $(ROOT)/usr/lib/liblddbg.so.4:=		REALPATH=../../lib/liblddbg.so.4
-$(ROOT)/usr/lib/libm.so.1:=		REALPATH=../../lib/libm.so.1
 $(ROOT)/usr/lib/libm.so.2:=		REALPATH=../../lib/libm.so.2
 $(ROOT)/usr/lib/libm.so:=		REALPATH=../../lib/libm.so.2
 $(ROOT)/usr/lib/libmd.so.1:=		REALPATH=../../lib/libmd.so.1
@@ -773,8 +772,6 @@ $(ROOT)/usr/lib/$(MACH64)/libkstat.so:= \
 	REALPATH=../../../lib/$(MACH64)/libkstat.so.1
 $(ROOT)/usr/lib/$(MACH64)/liblddbg.so.4:= \
 	REALPATH=../../../lib/$(MACH64)/liblddbg.so.4
-$(ROOT)/usr/lib/$(MACH64)/libm.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libm.so.1
 $(ROOT)/usr/lib/$(MACH64)/libm.so.2:= \
 	REALPATH=../../../lib/$(MACH64)/libm.so.2
 $(ROOT)/usr/lib/$(MACH64)/libm.so:= \
@@ -976,7 +973,6 @@ SYM.USRLIB= \
 	/usr/lib/libkstat.so \
 	/usr/lib/libkstat.so.1 \
 	/usr/lib/liblddbg.so.4 \
-	/usr/lib/libm.so.1 \
 	/usr/lib/libm.so.2 \
 	/usr/lib/libm.so \
 	/usr/lib/libmd.so \
@@ -1107,7 +1103,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libkstat.so \
 	/usr/lib/$(MACH64)/libkstat.so.1 \
 	/usr/lib/$(MACH64)/liblddbg.so.4 \
-	/usr/lib/$(MACH64)/libm.so.1 \
 	/usr/lib/$(MACH64)/libm.so.2 \
 	/usr/lib/$(MACH64)/libm.so \
 	/usr/lib/$(MACH64)/libmd.so \

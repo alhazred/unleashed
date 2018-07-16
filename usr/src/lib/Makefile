@@ -147,7 +147,6 @@ SUBDIRS +=				\
 	libldap5	\
 	liblgrp		\
 	liblm		\
-	libm1		\
 	libmail		\
 	libmalloc	\
 	libmapid	\

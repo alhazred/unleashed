@@ -13,6 +13,7 @@ was changed.
  - libc compat symbols: _nuname, __posix_readdir_r, __threaded
  - binary compatibility bread/bwrite/bwrite2/getblk kernel symbols
  - libxnet and libsocket filter libraries
+ - libm.so.1 (legacy libm)
  * convert BREAD/BWRITE/BWRITE2/GETBLK macros to bread/bwrite/bwrite2/getblk
    static inlines
 
