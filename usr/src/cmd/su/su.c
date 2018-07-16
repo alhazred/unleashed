@@ -74,7 +74,6 @@
 
 #define	PATH	"/usr/bin:"		/* path for users other than root */
 #define	SUPATH	"/usr/sbin:/usr/bin"	/* path for root */
-#define	SUPRMT	"PS1=# "		/* primary prompt for root */
 #define	ELIM 128
 #define	ROOT 0
 #ifdef	DYNAMIC_SU
@@ -147,7 +146,6 @@ char	safe_shell[] = "/bin/sh";	/* "fallback" shell */
 char	su[PATH_MAX] = "su";		/* arg0 for exec of shprog */
 char	homedir[PATH_MAX] = "HOME=";
 char	logname[20] = "LOGNAME=";
-char	*suprmt = SUPRMT;
 char	termtyp[PATH_MAX] = "TERM=";
 char	*term;
 char	shelltyp[PATH_MAX] = "SHELL=";
@@ -720,19 +718,6 @@ envalt(void)
 	 * if either of the above fail, an error message is printed.
 	 */
 	if (putenv(supath) != 0) {
-		message(ERR,
-		    gettext("unable to obtain memory to expand environment"));
-		exit(4);
-	}
-
-	/*
-	 * If user has PROMPT variable in their environment, change its value
-	 *		to # ;
-	 * if user does not have PROMPT variable, add it to the user's
-	 *		environment;
-	 * if either of the above fail, an error message is printed.
-	 */
-	if (putenv(suprmt) != 0) {
 		message(ERR,
 		    gettext("unable to obtain memory to expand environment"));
 		exit(4);
