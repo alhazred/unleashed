@@ -25,9 +25,9 @@
 
 SHELL=/usr/bin/ksh93
 
-PROG= ksh
+PROG= ksh93
 
-USRKSH_ALIAS_LIST=ksh ksh93 rksh rksh93
+USRKSH_ALIAS_LIST=ksh93 rksh93
 
 include ../Makefile.cmd
 
@@ -74,14 +74,7 @@ install:	$(ISAEXEC) $(SUBDIRS)
 	)
 	$(RM) $(ROOTSBIN)/sh
 	$(SYMLINK) ../usr/bin/$(ARCH32)/ksh93 $(ROOTSBIN)/sh
-	$(RM) $(ROOTSBIN)/jsh
-	$(SYMLINK) ../usr/bin/ksh93 $(ROOTSBIN)/jsh
-	$(RM) $(ROOTBIN)/jsh
-	$(SYMLINK) ksh93 $(ROOTBIN)/jsh
-	$(RM) $(ROOTBIN)/sh
-	$(SYMLINK) $(ARCH32)/ksh93 $(ROOTBIN)/sh
-	$(RM) $(ROOTLIB)/rsh
-	$(SYMLINK) ../bin/ksh93 $(ROOTLIB)/rsh
+
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

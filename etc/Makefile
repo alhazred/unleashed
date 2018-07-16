@@ -1,5 +1,4 @@
 FILES=	.login \
-	ksh.kshrc \
 	profile \
 	system
 NOOBJ=
