@@ -455,7 +455,7 @@ else
 fi
 
 # Check if we have sufficient data to continue...
-[[ -v SRCTOP ]] || \
+[[ -n "$SRCTOP" ]] || \
 	fatal_error "Error: Variable SRCTOP not set."
 [[ -d "${SRCTOP}" ]] || \
 	fatal_error "Error: ${SRCTOP} is not a directory."
@@ -813,7 +813,7 @@ if [ "$w_FLAG" = "y" -a -d "$ROOT" ]; then
 fi
 
 # Safeguards
-[[ -v SRCTOP ]] || fatal_error "Error: Variable SRCTOP not set."
+[[ -n "${SRCTOP}" ]] || fatal_error "Error: Variable SRCTOP not set."
 [[ -d "${SRCTOP}" ]] || fatal_error "Error: ${SRCTOP} is not a directory."
 [[ -f "${SRCTOP}/usr/src/Makefile" ]] || fatal_error "Error: ${SRCTOP}/usr/src/Makefile not found."
 
@@ -932,7 +932,7 @@ fi
 #
 # ELF verification: ABI (-A) and runtime (-r) checks
 #
-if [[ ($build_ok = y) && (($A_FLAG = y) || ($r_FLAG = y)) ]]; then
+if [ "$build_ok" = y -a '(' "$A_FLAG" = y -o "$r_FLAG" = y ')' ]; then
 	# Directory ELF-data.$MACH holds the files produced by these tests.
 	elf_ddir=$TMPDIR/ELF-data.$MACH
 	mkdir -p $elf_ddir
@@ -1049,9 +1049,9 @@ typeset -Z2 minutes
 typeset -Z2 seconds
 
 elapsed_time=$SECONDS
-((hours = elapsed_time / 3600 ))
-((minutes = elapsed_time / 60  % 60))
-((seconds = elapsed_time % 60))
+hours=$(( elapsed_time / 3600 ))
+minutes=$(( elapsed_time / 60  % 60 ))
+seconds=$((elapsed_time % 60 ))
 
 echo "Total build time ${hours}:${minutes}:${seconds}" |
     tee -a $build_time_file

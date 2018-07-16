@@ -50,41 +50,29 @@ export SRCTOP="`git rev-parse --show-toplevel`"
 
 # Maximum number of dmake jobs.  The recommended number is 2 + NCPUS,
 # where NCPUS is the number of logical CPUs on your build system.
-function maxjobs
+maxjobs()
 {
-	nameref maxjobs=$1
-	integer ncpu
-	integer -r min_mem_per_job=512 # minimum amount of memory for a job
+	njobs=1
+	min_mem_per_job=512 # minimum amount of memory for a job
 
-	ncpu=$(builtin getconf ; getconf 'NPROCESSORS_ONLN')
-	(( maxjobs=ncpu + 2 ))
+	ncpu=$(/usr/bin/getconf 'NPROCESSORS_ONLN')
+	njobs=$(( ncpu + 2 ))
 	
 	# Throttle number of parallel jobs launched by dmake to a value which
 	# gurantees that all jobs have enough memory. This was added to avoid
 	# excessive paging/swapping in cases of virtual machine installations
 	# which have lots of CPUs but not enough memory assigned to handle
 	# that many parallel jobs
-	if [[ $(/usr/sbin/prtconf 2>'/dev/null') == ~(E)Memory\ size:\ ([[:digit:]]+)\ Megabytes ]] ; then
-		integer max_jobs_per_memory # parallel jobs which fit into physical memory
-		integer physical_memory # physical memory installed
-
-		# The array ".sh.match" contains the contents of capturing
-		# brackets in the last regex, .sh.match[1] will contain
-		# the value matched by ([[:digit:]]+), i.e. the amount of
-		# memory installed
-		physical_memory="10#${.sh.match[1]}"
-		
-		((
-			max_jobs_per_memory=round(physical_memory/min_mem_per_job) ,
-			maxjobs=fmax(2, fmin(maxjobs, max_jobs_per_memory))
-		))
-	fi
-
-	return 0
+        /usr/sbin/prtconf 2>/dev/null | awk "BEGIN { mem_per_job = $min_mem_per_job; njobs = $njobs; } "'
+/^Memory size: .* Megabytes/ {
+	mem = $3;
+        njobs_mem = int(mem/mem_per_job);
+        if (njobs < njobs_mem) print(njobs);
+        else print(njobs_mem);
+}'
 }
 
-maxjobs DMAKE_MAX_JOBS # "DMAKE_MAX_JOBS" passed as ksh(1) name reference
-export DMAKE_MAX_JOBS
+export DMAKE_MAX_JOBS=$(maxjobs)
 
 # Some scripts optionally send mail messages to MAILTO.
 export MAILTO="$LOGNAME"
