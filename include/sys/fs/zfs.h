@@ -601,6 +601,7 @@ typedef struct zpool_rewind_policy {
 #define	VDEV_TYPE_SPARE			"spare"
 #define	VDEV_TYPE_LOG			"log"
 #define	VDEV_TYPE_L2CACHE		"l2cache"
+#define	VDEV_TYPE_INDIRECT		"indirect"
 
 /*
  * This is needed in userland to report the minimum necessary device size.
