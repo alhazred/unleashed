@@ -11,17 +11,23 @@
 
 #
 # Copyright 2016 Toomas Soome <tsoome@me.com>
+# Copyright 2016 RackTop Systems.
 #
 
-include $(SRC)/Makefile.master
+MACHINE=	$(MACH64)
+ASFLAGS=	-m64
+EFIPROG=	loader64.efi
 
-MACHINE=	$(MACH)
+all:		${EFIPROG}
 
-all install: lib
+include ../Makefile.com
 
-include ../Makefile.inc
+EFI_TARGET=	pei-x86-64
+LDFLAGS +=	-znocombreloc
 
-CFLAGS += -m32 -march=i386 -mpreferred-stack-boundary=2
-CFLAGS += -fno-reorder-functions
+efi_main.o := CPPFLAGS += -DLOADER_EFI=L\"loader64.efi\"
+CFLAGS +=	-m64
 
-FRC:
+CLEANFILES +=	machine x86 ${EFIPROG}
+
+$(OBJS):	machine x86

@@ -11,16 +11,19 @@
 
 #
 # Copyright 2016 Toomas Soome <tsoome@me.com>
+# Copyright 2016 RackTop Systems.
 #
 
-include $(SRC)/Makefile.master
-
 MACHINE=	$(MACH64)
+ASFLAGS=	-m64
 
-all install: lib
+all:		libefi.a
 
-include ../Makefile.inc
+SRCS=	time.c
+include ../Makefile.com
 
-CFLAGS += -fPIC -m64 -mno-red-zone
+CFLAGS +=	-m64
 
-FRC:
+CLEANFILES +=	machine x86
+
+$(OBJS): machine x86

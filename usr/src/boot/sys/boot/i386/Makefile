@@ -10,16 +10,16 @@
 #
 
 #
-# Copyright 2015 Toomas Soome <tsoome@me.com>
+# Copyright 2017 Toomas Soome <tsoome@me.com>
 #
 
 include $(SRC)/Makefile.master
 
 
 # likely targets for removal, keeping around just in case...
-# SUBDIRS=	boot0 boot0sio kgzldr libfirewire 
+# SUBDIRS=	boot0 boot0sio kgzldr libfirewire
 # current targets
-SUBDIRS=	pmbr btx cdboot gptzfsboot libi386 loader pxeldr
+SUBDIRS=	libi386 pmbr btx cdboot gptzfsboot loader pxeldr
 INSTDIRS=	pmbr cdboot gptzfsboot loader pxeldr
 
 all:=		TARGET= all

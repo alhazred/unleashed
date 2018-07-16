@@ -74,7 +74,7 @@ CFLAGS += -DTERM_EMU
 # XXX: make alloca() useable
 CFLAGS += -Dalloca=__builtin_alloca
 
-CFLAGS +=	-I$(SRC)/common/ficl -I../../ficl \
+CFLAGS +=	-I$(SRC)/common/ficl -I../../libficl \
 		-I../../common -I../common \
 		-I../btx/lib \
 		-I$(SRCTOP)/arch/x86/include/sys/acpi \

@@ -27,10 +27,9 @@
  */
 
 #include <sys/cdefs.h>
-
+#include <stand.h>
 #include <bootstrap.h>
 #include <sys/endian.h>
-#include <stand.h>
 
 #include <efi.h>
 #include <efilib.h>

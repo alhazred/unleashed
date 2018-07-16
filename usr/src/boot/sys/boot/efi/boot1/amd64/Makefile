@@ -14,13 +14,20 @@
 # Copyright 2016 RackTop Systems.
 #
 
-MACHINE=	$(MACH)
+MACHINE=	$(MACH64)
+ASFLAGS=	-m64
+EFIPROG=	bootx64.efi
 
-all install: libzfsboot.a
+all:		${EFIPROG}
 
 include ../Makefile.com
 
-CLEANFILES +=	x86
-CFLAGS +=	-m32
+EFI_TARGET=	pei-x86-64
+LDFLAGS +=	-znocombreloc
+
+CPPFLAGS +=	-DLOADER_EFI=\"loader64.efi\"
+CFLAGS +=	-m64 -mno-red-zone
+
+CLEANFILES +=	machine x86
 
 $(OBJS): machine x86
