@@ -155,8 +155,7 @@ static int	retry = MAXTRYS;
 /*
  * Various useful files and string constants
  */
-#define	SHELL		"/usr/bin/sh"
-#define	SHELL2		"/sbin/sh"
+#define	SHELL		"/bin/sh"
 #define	SUBLOGIN	"<!sublogin>"
 #define	PROG_NAME	"login"
 #define	HUSHLOGIN	".hushlogin"
@@ -2071,14 +2070,7 @@ establish_user_environment(char **renvp)
 		envinit[basicenv++] = timez;
 
 	if (*pwd->pw_shell == '\0') {
-		/*
-		 * If possible, use the primary default shell,
-		 * otherwise, use the secondary one.
-		 */
-		if (access(SHELL, X_OK) == 0)
-			pwd->pw_shell = SHELL;
-		else
-			pwd->pw_shell = SHELL2;
+		pwd->pw_shell = SHELL;
 	} else if (Altshell != NULL && strcmp(Altshell, "YES") == 0) {
 		envinit[basicenv++] = shell;
 		ENVSTRNCAT(shell, pwd->pw_shell);
@@ -2249,7 +2241,6 @@ exec_the_shell(void)
 
 	if (access(pwd->pw_shell, R_OK|X_OK) == 0) {
 		(void) execl(SHELL, "sh", pwd->pw_shell, (char *)0);
-		(void) execl(SHELL2, "sh", pwd->pw_shell, (char *)0);
 	}
 
 	(void) printf("No shell\n");

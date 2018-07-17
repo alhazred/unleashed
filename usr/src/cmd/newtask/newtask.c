@@ -54,8 +54,7 @@
 #define	ENVSIZE		255
 #define	PATH		"PATH=/usr/bin"
 #define	SUPATH		"PATH=/usr/sbin:/usr/bin"
-#define	SHELL		"/usr/bin/sh"
-#define	SHELL2		"/sbin/sh"
+#define	SHELL		"/bin/sh"
 #define	TIMEZONEFILE	"/etc/default/init"
 #define	LOGINFILE	"/etc/default/login"
 #define	GLOBAL_ERR_SZ	1024
@@ -195,10 +194,7 @@ main(int argc, char *argv[])
 	 * Validate user's shell from passwd database.
 	 */
 	if (strcmp(pw->pw_shell, "") == 0) {
-		if (access(SHELL, X_OK) == 0)
-			pw->pw_shell = SHELL;
-		else
-			pw->pw_shell = SHELL2;
+		pw->pw_shell = SHELL;
 	}
 
 	if (login_flag) {

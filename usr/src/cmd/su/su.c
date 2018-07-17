@@ -74,7 +74,6 @@
 
 #define	PATH	"/usr/bin:"		/* path for users other than root */
 #define	SUPATH	"/usr/sbin:/usr/bin"	/* path for root */
-#define	SUPRMT	"PS1=# "		/* primary prompt for root */
 #define	ELIM 128
 #define	ROOT 0
 #ifdef	DYNAMIC_SU
@@ -142,12 +141,11 @@ static void update_audit(struct passwd *pwd);
 static pam_handle_t	*pamh = NULL;	/* Authentication handle */
 struct	passwd pwd;
 char	pwdbuf[1024];			/* buffer for getpwnam_r() */
-char	shell[] = "/usr/bin/sh";	/* default shell */
-char	safe_shell[] = "/sbin/sh";	/* "fallback" shell */
+char	shell[] = "/bin/sh";		/* default shell */
+char	safe_shell[] = "/bin/sh";	/* "fallback" shell */
 char	su[PATH_MAX] = "su";		/* arg0 for exec of shprog */
 char	homedir[PATH_MAX] = "HOME=";
 char	logname[20] = "LOGNAME=";
-char	*suprmt = SUPRMT;
 char	termtyp[PATH_MAX] = "TERM=";
 char	*term;
 char	shelltyp[PATH_MAX] = "SHELL=";
@@ -669,8 +667,8 @@ ok:
 
 	/*
 	 * Try to clean up after an administrator who has made a mistake
-	 * configuring root's shell; if root's shell is other than /sbin/sh,
-	 * try exec'ing /sbin/sh instead.
+	 * configuring root's shell; if root's shell is other than /bin/sh,
+	 * try exec'ing /bin/sh instead.
 	 */
 	if ((uid == (uid_t)ROOT) && (strcmp(name, "root") == 0) &&
 	    (strcmp(safe_shell, pshell) != 0)) {
@@ -720,19 +718,6 @@ envalt(void)
 	 * if either of the above fail, an error message is printed.
 	 */
 	if (putenv(supath) != 0) {
-		message(ERR,
-		    gettext("unable to obtain memory to expand environment"));
-		exit(4);
-	}
-
-	/*
-	 * If user has PROMPT variable in their environment, change its value
-	 *		to # ;
-	 * if user does not have PROMPT variable, add it to the user's
-	 *		environment;
-	 * if either of the above fail, an error message is printed.
-	 */
-	if (putenv(suprmt) != 0) {
 		message(ERR,
 		    gettext("unable to obtain memory to expand environment"));
 		exit(4);

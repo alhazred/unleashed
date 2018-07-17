@@ -25,9 +25,9 @@
 
 SHELL=/usr/bin/ksh93
 
-PROG= ksh
+PROG= ksh93
 
-USRKSH_ALIAS_LIST=ksh ksh93 rksh rksh93
+USRKSH_ALIAS_LIST=ksh93 rksh93
 
 OBJECTS= \
 	pmain.o
@@ -79,7 +79,6 @@ $(PROG):	$(OBJECTS)
 	$(POST_PROCESS)
 	(set +o errexit ; \
 	[[ ! -x ksh93 ]] && ln $(PROG) ksh93 ; \
-	[[ ! -x ksh   ]] && ln $(PROG) ksh   ; \
 	true \
 	)
 

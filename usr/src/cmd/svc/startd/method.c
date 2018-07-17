@@ -75,7 +75,7 @@
 
 #include "startd.h"
 
-#define	SBIN_SH		"/sbin/sh"
+#define	BIN_SH		"/bin/sh"
 
 /*
  * Used to tell if contracts are in the process of being
@@ -594,7 +594,7 @@ exec_method(const restarter_inst_t *inst, int type, const char *method,
 
 	log_preexec();
 
-	(void) execle(SBIN_SH, SBIN_SH, "-c", cmd, NULL, nenv);
+	(void) execle(BIN_SH, BIN_SH, "-c", cmd, NULL, nenv);
 
 	exit(10);
 }

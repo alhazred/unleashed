@@ -486,7 +486,7 @@ static char *SYSCON	 = "/dev/syscon";	/* Virtual System console */
 static char *IOCTLSYSCON = "/etc/ioctl.syscon";	/* Last syscon modes */
 static char *ENVFILE	 = "/etc/default/init";	/* Default env. */
 static char *SU	= "/etc/sulogin";	/* Super-user program for single user */
-static char *SH	= "/sbin/sh";		/* Standard shell */
+static char *SH	= "/bin/sh";		/* Standard shell */
 
 /*
  * Default Path.  /sbin is included in path only during sysinit phase

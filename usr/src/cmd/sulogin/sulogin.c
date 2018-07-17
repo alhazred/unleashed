@@ -101,7 +101,7 @@
 #define	DEFAULT_SULOGIN	"/etc/default/sulogin"
 #define	DEFAULT_CONSOLE	"/dev/console"
 
-static char	shell[]	= "/sbin/sh";
+static char	shell[]	= "/bin/sh";
 static char	su[]	= "/sbin/su.static";
 static int	sleeptime	= SLEEPTIME;
 static int	nchild = 0;

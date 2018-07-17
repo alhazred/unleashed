@@ -1,5 +1,4 @@
-FILES=	.kshrc \
-	.profile
+FILES=	.profile
 NOOBJ=
 
 NONBINMODE=644

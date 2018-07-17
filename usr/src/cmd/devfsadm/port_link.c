@@ -1035,7 +1035,7 @@ execute(const char *s)
 		fd = open("/dev/null", O_RDWR);
 		(void) dup(fd);
 		(void) dup(fd);
-		(void) execl("/sbin/sh", "sh", "-c", s, 0);
+		(void) execl("/bin/sh", "sh", "-c", s, 0);
 		/*
 		 * return the sacadm exit status (see _exit(2))
 		 */
