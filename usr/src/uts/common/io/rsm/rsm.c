@@ -23,6 +23,7 @@
  * Use is subject to license terms.
  * Copyright 2012 Milan Jurik. All rights reserved.
  * Copyright (c) 2016 by Delphix. All rights reserved.
+ * Copyright 2017 Joyent, Inc.
  */
 
 
@@ -2419,8 +2420,7 @@ rsm_bind(rsmseg_t *seg, rsm_ioctlmsg_t *msg, intptr_t dataptr, int mode)
 
 static void
 rsm_remap_local_importers(rsm_node_id_t src_nodeid,
-    rsm_memseg_id_t ex_segid,
-    ddi_umem_cookie_t cookie)
+    rsm_memseg_id_t ex_segid, ddi_umem_cookie_t cookie)
 {
 	rsmresource_t	*p = NULL;
 	rsmhash_table_t *rhash = &rsm_import_segs;
@@ -3643,8 +3643,7 @@ rsm_intr_segconnect(rsm_node_id_t src, rsmipc_request_t *req)
  *
  */
 static void
-rsm_force_unload(rsm_node_id_t src_nodeid,
-    rsm_memseg_id_t ex_segid,
+rsm_force_unload(rsm_node_id_t src_nodeid, rsm_memseg_id_t ex_segid,
     boolean_t disconnect_flag)
 {
 	rsmresource_t	*p = NULL;
@@ -6760,7 +6759,6 @@ rsm_disconnect(rsmseg_t *seg)
 	return (DDI_SUCCESS);
 }
 
-/*ARGSUSED*/
 static int
 rsm_chpoll(dev_t dev, short events, int anyyet, short *reventsp,
     struct pollhead **phpp)
@@ -6782,8 +6780,6 @@ rsm_chpoll(dev_t dev, short events, int anyyet, short *reventsp,
 		return (ENXIO);
 	}
 
-	*reventsp = 0;
-
 	/*
 	 * An exported segment must be in state RSM_STATE_EXPORT; an
 	 * imported segment must be in state RSM_STATE_ACTIVE.
@@ -6792,7 +6788,11 @@ rsm_chpoll(dev_t dev, short events, int anyyet, short *reventsp,
 
 	if (seg->s_pollevent) {
 		*reventsp = POLLRDNORM;
-	} else if (!anyyet) {
+	} else {
+		*reventsp = 0;
+	}
+
+	if ((*reventsp == 0 && !anyyet) || (events & POLLET)) {
 		/* cannot take segment lock here */
 		*phpp = &seg->s_poll;
 		seg->s_pollflag |= RSM_SEGMENT_POLL;

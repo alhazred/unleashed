@@ -25,7 +25,7 @@
  */
 
 /*
- * Copyright (c) 2014, Joyent, Inc. All rights reserved.
+ * Copyright 2017 Joyent, Inc.
  */
 
 /*
@@ -346,7 +346,6 @@ av1394_async_ioctl(av1394_inst_t *avp, int cmd, intptr_t arg, int mode,
 	return (ret);
 }
 
-/*ARGSUSED*/
 int
 av1394_async_poll(av1394_inst_t *avp, short events, int anyyet, short *reventsp,
     struct pollhead **phpp)
@@ -356,13 +355,15 @@ av1394_async_poll(av1394_inst_t *avp, short events, int anyyet, short *reventsp,
 
 	AV1394_TNF_ENTER(av1394_async_poll);
 
-	if (events & POLLIN) {
-		if (av1394_peekq(rq))
+	if (events & (POLLIN | POLLET)) {
+		if ((events & POLLIN) && av1394_peekq(rq))
 			*reventsp |= POLLIN;
 
 		if ((!*reventsp && !anyyet) || (events & POLLET)) {
 			mutex_enter(&ap->a_mutex);
-			ap->a_pollevents |= POLLIN;
+			if (events & POLLIN)
+				ap->a_pollevents |= POLLIN;
+
 			*phpp = &ap->a_pollhead;
 			mutex_exit(&ap->a_mutex);
 		}
