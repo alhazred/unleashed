@@ -107,8 +107,8 @@ parallel(char **argv)
 	int cnt;
 	char ch, *p;
 	int opencnt, output;
-	char *buf, *lbuf;
-	size_t len;
+	char *line;
+	size_t len, linesize;
 
 	for (cnt = 0; (p = *argv); ++argv, ++cnt) {
 		if (!(lp = malloc(sizeof(struct list))))
@@ -123,17 +123,21 @@ parallel(char **argv)
 		SIMPLEQ_INSERT_TAIL(&head, lp, entries);
 	}
 
+	line = NULL;
+	linesize = 0;
+
 	for (opencnt = cnt; opencnt;) {
 		output = 0;
 		SIMPLEQ_FOREACH(lp, &head, entries) {
-			lbuf = NULL;
 			if (!lp->fp) {
 				if (output && lp->cnt &&
 				    (ch = delim[(lp->cnt - 1) % delimcnt]))
 					putchar(ch);
 				continue;
 			}
-			if (!(buf = fgetln(lp->fp, &len))) {
+			if ((len = getline(&line, &linesize, lp->fp)) == -1) {
+				if (ferror(lp->fp))
+					err(1, "getline");
 				if (!--opencnt)
 					break;
 				if (lp->fp != stdin)
@@ -144,15 +148,8 @@ parallel(char **argv)
 					putchar(ch);
 				continue;
 			}
-			if (buf[len - 1] == '\n')
-				buf[len - 1] = '\0';
-			else {
-				if ((lbuf = malloc(len + 1)) == NULL)
-					err(1, "malloc");
-				memcpy(lbuf, buf, len);
-				lbuf[len] = '\0';
-				buf = lbuf;
-			}
+			if (line[len - 1] == '\n')
+				line[len - 1] = '\0';
 			/*
 			 * make sure that we don't print any delimiters
 			 * unless there's a non-empty file.
@@ -164,13 +161,12 @@ parallel(char **argv)
 						putchar(ch);
 			} else if ((ch = delim[(lp->cnt - 1) % delimcnt]))
 				putchar(ch);
-			(void)printf("%s", buf);
-			if (lbuf)
-				free(lbuf);
+			(void)printf("%s", line);
 		}
 		if (output)
 			putchar('\n');
 	}
+	free(line);
 }
 
 void
@@ -179,30 +175,27 @@ sequential(char **argv)
 	FILE *fp;
 	int cnt;
 	char ch, *p, *dp;
-	char *buf, *lbuf;
-	size_t len;
+	char *line;
+	size_t len, linesize;
 
+	line = NULL;
+	linesize = 0;
 	for (; (p = *argv); ++argv) {
-		lbuf = NULL;
 		if (p[0] == '-' && !p[1])
 			fp = stdin;
 		else if (!(fp = fopen(p, "r"))) {
 			warn("%s", p);
 			continue;
 		}
-		if ((buf = fgetln(fp, &len))) {
+		len = getline(&line, &linesize, fp);
+		if (len == -1 && ferror(fp))
+			err(1, "getline");
+		else if (len != -1) {
 			for (cnt = 0, dp = delim;;) {
-				if (buf[len - 1] == '\n')
-					buf[len - 1] = '\0';
-				else {
-					if ((lbuf = malloc(len + 1)) == NULL)
-						err(1, "malloc");
-					memcpy(lbuf, buf, len);
-					lbuf[len] = '\0';
-					buf = lbuf;
-				}
-				(void)printf("%s", buf);
-				if (!(buf = fgetln(fp, &len)))
+				if (line[len - 1] == '\n')
+					line[len - 1] = '\0';
+				(void)printf("%s", line);
+				if ((len = getline(&line, &linesize, fp)) == -1)
 					break;
 				if ((ch = *dp++))
 					putchar(ch);
@@ -215,8 +208,8 @@ sequential(char **argv)
 		}
 		if (fp != stdin)
 			(void)fclose(fp);
-		free(lbuf);
 	}
+	free(line);
 }
 
 int
