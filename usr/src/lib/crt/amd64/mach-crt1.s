@@ -31,7 +31,7 @@
 	.global	_start_crt
 
 /*
- *   The SVR4/i386 ABI (pages 3-29) says that when the entry
+ *   The SVR4/amd64 ABI (pages 3-29) says that when the entry
  *   point runs registers' %rbp, %rsp, %rdx values are specified
  *   the following:
  *

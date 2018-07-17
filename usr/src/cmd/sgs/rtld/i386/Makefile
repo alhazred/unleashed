@@ -49,7 +49,7 @@ P_ASOBJS=	boot.o		boot_elf.o	caller.o
 
 S_ASOBJS=
 
-CRTSRCS=	../../../../lib/crt/i86
+CRTSRCS=	../../../../lib/crt/i386
 CRTI=		pics/crti.o
 CRTN=		pics/crtn.o
 CRTS=		$(CRTI)		$(CRTN)

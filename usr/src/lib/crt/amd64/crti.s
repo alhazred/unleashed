@@ -53,6 +53,6 @@ _init:
 	.globl	_fini
 	.type	_fini,@function
 	.align	16
-_fini:	
+_fini:
 	pushq	%rbp
 	movq	%rsp, %rbp

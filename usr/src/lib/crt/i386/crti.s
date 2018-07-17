@@ -48,7 +48,7 @@
  *
  *  - lib/libc/i386/threads/machdep.c
  *  - lib/libc/i386/gen/makectxt.c
- *  - lib/crt/i86/mach-crt1.s
+ *  - lib/crt/i386/mach-crt1.s
  */
 
 /*

@@ -55,7 +55,7 @@ ENTRY_NP(_start)
 	 *
 	 *  - lib/libc/i386/threads/machdep.c
 	 *  - lib/libc/i386/gen/makectxt.c
-	 *  - lib/crt/i86/crti.s
+	 *  - lib/crt/i386/crti.s
 	 */
 	andl	$-16,%esp	/* make main() and exit() be called with */
 	subl	$4,%esp		/* a properly aligned stack pointer */
