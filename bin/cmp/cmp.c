@@ -44,8 +44,6 @@
 
 #include "extern.h"
 
-#include "compat.h"
-
 int	lflag, sflag;
 
 static off_t get_skip(const char *, const char *);

@@ -3,4 +3,5 @@
 PROG=	cmp
 SRCS=	cmp.c misc.c regular.c special.c
 
+.include "compat.mk"
 .include <bsd.prog.mk>

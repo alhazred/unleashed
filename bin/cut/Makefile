@@ -2,4 +2,5 @@
 
 PROG=	cut
 
+.include "compat.mk"
 .include <bsd.prog.mk>

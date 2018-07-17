@@ -44,8 +44,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "compat.h"
-
 char	dchar[5];
 int	dlen;
 

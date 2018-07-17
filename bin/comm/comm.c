@@ -41,8 +41,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "compat.h"
-
 #define	MAXLINELEN	(LINE_MAX + 1)
 
 char *tabs[] = { "", "\t", "\t\t" };

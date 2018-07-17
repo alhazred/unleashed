@@ -2,4 +2,5 @@
 
 PROG=	comm
 
+.include "compat.mk"
 .include <bsd.prog.mk>

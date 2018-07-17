@@ -39,8 +39,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define __dead __attribute__((__noreturn__))
-#define pledge(request, paths) 0
 static void __dead usage(void);
 
 #define	PRINT_SYSNAME		0x01
