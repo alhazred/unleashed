@@ -10,6 +10,7 @@ SRCS=		ixgbe_buf.c \
 		ixgbe_osdep.c \
 		ixgbe_rx.c \
 		ixgbe_stat.c \
+		ixgbe_transceiver.c \
 		ixgbe_tx.c
 INCS=		${.CURDIR}
 

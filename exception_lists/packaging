@@ -585,3 +585,10 @@ usr/lib/libdwarf.so
 #
 usr/bin/ctfconvert
 usr/bin/ctfmerge
+
+#
+# libsff is private
+#
+usr/include/libsff.h
+usr/lib/amd64/libsff.so			i386
+usr/lib/libsff.so

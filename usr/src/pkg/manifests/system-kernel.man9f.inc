@@ -270,6 +270,7 @@ file path=usr/share/man/man9f/mac_maxsdu_update.9f
 file path=usr/share/man/man9f/mac_prop_info.9f
 file path=usr/share/man/man9f/mac_register.9f
 file path=usr/share/man/man9f/mac_rx.9f
+file path=usr/share/man/man9f/mac_transceiver_info.9f
 file path=usr/share/man/man9f/mac_tx_update.9f
 file path=usr/share/man/man9f/makecom.9f
 file path=usr/share/man/man9f/makedevice.9f
