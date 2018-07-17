@@ -298,9 +298,9 @@ void
 slurpit(INPUT *F)
 {
 	LINE *lp, *lastlp, tmp;
-	size_t len;
+	size_t len, linesize;
 	u_long cnt;
-	char *bp, *fieldp;
+	char *bp, *fieldp, *line;
 	long fpos;
 	/*
 	 * Read all of the lines from an input file that have the same
@@ -308,6 +308,8 @@ slurpit(INPUT *F)
 	 */
 
 	F->setcnt = 0;
+	line = NULL;
+	linesize = 0;
 	for (lastlp = NULL; ; ++F->setcnt, lastlp = lp) {
 		/*
 		 * If we're out of space to hold line structures, allocate
@@ -343,8 +345,10 @@ slurpit(INPUT *F)
 			F->pushbool = 0;
 			continue;
 		}
-		if ((bp = fgetln(F->fp, &len)) == NULL)
+		if ((len = getline(&line, &linesize, F->fp)) == -1) {
+			free(line);
 			return;
+		}
 		/*
 		 * we depend on knowing on what field we are, one safe way is
 		 * the file position.
@@ -360,17 +364,15 @@ slurpit(INPUT *F)
 			lp->linealloc = newsize;
 		}
 		F->setusedc++;
-		memmove(lp->line, bp, len);
+		memmove(lp->line, line, len);
 		lp->fpos = fpos;
 		/* Replace trailing newline, if it exists. */
-		if (bp[len - 1] == '\n')
+		if (lp->line[len - 1] == '\n')
 			lp->line[len - 1] = '\0';
-		else
-			lp->line[len] = '\0';
-		bp = lp->line;
 
 		/* Split the line into fields, allocate space as necessary. */
 		lp->fieldcnt = 0;
+		bp = lp->line;
 		while ((fieldp = strsep(&bp, tabchar)) != NULL) {
 			if (spans && *fieldp == '\0')
 				continue;
@@ -393,6 +395,7 @@ slurpit(INPUT *F)
 			break;
 		}
 	}
+	free(line);
 }
 
 int
