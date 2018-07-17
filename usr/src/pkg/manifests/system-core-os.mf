@@ -612,6 +612,7 @@ file path=usr/bin/cat mode=0555
 file path=usr/bin/chgrp mode=0555
 file path=usr/bin/chmod mode=0555
 file path=usr/bin/chown mode=0555
+file path=usr/bin/cmp mode=0555
 file path=usr/bin/coreadm mode=0555
 file path=usr/bin/cp mode=0555
 file path=usr/bin/cpio mode=0555

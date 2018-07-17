@@ -27,7 +27,6 @@ MAN = acctcom.1 \
       chown.1 \
       cksum.1 \
       clear.1 \
-      cmp.1 \
       col.1 \
       comm.1 \
       compress.1 \

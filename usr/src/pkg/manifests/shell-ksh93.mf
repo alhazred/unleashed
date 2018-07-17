@@ -174,7 +174,6 @@ file path=usr/share/man/man1/ksh93.1
 hardlink path=usr/bin/$(ARCH32)/rksh93 target=ksh93
 hardlink path=usr/bin/$(ARCH64)/rksh93 target=ksh93
 hardlink path=usr/bin/cksum target=../../usr/bin/alias
-hardlink path=usr/bin/cmp target=../../usr/bin/alias
 hardlink path=usr/bin/comm target=../../usr/bin/alias
 hardlink path=usr/bin/cut target=../../usr/bin/alias
 hardlink path=usr/bin/join target=../../usr/bin/alias

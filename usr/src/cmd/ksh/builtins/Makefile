@@ -31,7 +31,6 @@
 PROG= alias
 ALIASPROG= \
 	cksum \
-	cmp \
 	comm \
 	cut \
 	join \
