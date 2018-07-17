@@ -21,9 +21,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-#define RCSID	"$Id: cbcp.c,v 1.10 1999/08/13 06:46:10 paulus Exp $"
-
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -33,8 +30,6 @@
 #include "cbcp.h"
 #include "fsm.h"
 #include "lcp.h"
-
-static const char rcsid[] = RCSID;
 
 /*
  * Options.

@@ -17,9 +17,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-#define RCSID	"$Id: magic.c,v 1.9 1999/08/13 06:46:15 paulus Exp $"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -28,8 +25,6 @@
 
 #include "pppd.h"
 #include "magic.h"
-
-static const char rcsid[] = RCSID;
 
 #ifdef NO_DRAND48
 long mrand48 __P((void));

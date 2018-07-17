@@ -34,8 +34,6 @@
  * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
-#define RCSID	"$Id: main.c,v 1.97 2000/04/24 02:54:16 masputra Exp $"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -85,8 +83,6 @@
 #ifdef AT_CHANGE
 #include "atcp.h"
 #endif
-
-static const char rcsid[] = RCSID;
 
 /* interface vars */
 char ifname[32];		/* Interface name */
