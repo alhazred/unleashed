@@ -28,7 +28,6 @@ MAN = acctcom.1 \
       cksum.1 \
       clear.1 \
       col.1 \
-      comm.1 \
       compress.1 \
       cp.1 \
       cpio.1 \
@@ -43,7 +42,6 @@ MAN = acctcom.1 \
       ctrun.1 \
       ctstat.1 \
       ctwatch.1 \
-      cut.1 \
       date.1 \
       dc.1 \
       deallocate.1 \
@@ -105,12 +103,10 @@ MAN = acctcom.1 \
       ipcs.1 \
       isainfo.1 \
       isalist.1 \
-      join.1 \
       kbd.1 \
       kdestroy.1 \
       keylogin.1 \
       keylogout.1 \
-      kill.1 \
       kinit.1 \
       klist.1 \
       kmdb.1 \
@@ -143,7 +139,6 @@ MAN = acctcom.1 \
       locale.1 \
       logger.1 \
       login.1 \
-      logname.1 \
       logout.1 \
       look.1 \
       lorder.1 \
@@ -181,7 +176,6 @@ MAN = acctcom.1 \
       pagesize.1 \
       pargs.1 \
       passwd.1 \
-      paste.1 \
       pathchk.1 \
       pfexec.1 \
       pg.1 \
@@ -212,7 +206,6 @@ MAN = acctcom.1 \
       readonly.1 \
       regcmp.1 \
       renice.1 \
-      rev.1 \
       rm.1 \
       rmformat.1 \
       rmmount.1 \
@@ -232,7 +225,6 @@ MAN = acctcom.1 \
       shell_builtins.1 \
       shift.1 \
       size.1 \
-      sleep.1 \
       smbutil.1 \
       sort.1 \
       spell.1 \
@@ -252,9 +244,7 @@ MAN = acctcom.1 \
       tail.1 \
       talk.1 \
       tar.1 \
-      tee.1 \
       telnet.1 \
-      test.1 \
       tftp.1 \
       time.1 \
       times.1 \
@@ -268,7 +258,6 @@ MAN = acctcom.1 \
       tty.1 \
       typeset.1 \
       unifdef.1 \
-      uniq.1 \
       units.1 \
       unix2dos.1 \
       uptime.1 \
@@ -277,7 +266,6 @@ MAN = acctcom.1 \
       volcheck.1 \
       volrmmount.1 \
       w.1 \
-      wc.1 \
       which.1 \
       who.1 \
       whois.1 \

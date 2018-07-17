@@ -31,19 +31,7 @@
 PROG= alias
 ALIASPROG= \
 	cksum \
-	comm \
-	cut \
-	join \
-	kill \
-	logname \
-	paste \
-	rev \
-	sleep \
-	sum \
-	tee \
-	test \
-	uniq \
-	wc
+	sum
 
 ROOTALIASPROG= $(ALIASPROG:%=$(ROOTBIN)/%)
 

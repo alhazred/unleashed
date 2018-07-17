@@ -613,6 +613,7 @@ file path=usr/bin/chgrp mode=0555
 file path=usr/bin/chmod mode=0555
 file path=usr/bin/chown mode=0555
 file path=usr/bin/cmp mode=0555
+file path=usr/bin/comm mode=0555
 file path=usr/bin/coreadm mode=0555
 file path=usr/bin/cp mode=0555
 file path=usr/bin/cpio mode=0555
@@ -623,6 +624,7 @@ file path=usr/bin/csh mode=0555
 file path=usr/bin/ctrun mode=0555
 file path=usr/bin/ctstat mode=0555
 file path=usr/bin/ctwatch mode=0555
+file path=usr/bin/cut mode=0555
 file path=usr/bin/date mode=0555
 file path=usr/bin/dd mode=0555
 file path=usr/bin/devattr mode=0555
@@ -667,9 +669,11 @@ file path=usr/bin/install mode=0555
 file path=usr/bin/iostat mode=0555
 file path=usr/bin/isainfo mode=0555
 file path=usr/bin/isalist mode=0555
+file path=usr/bin/join mode=0555
 file path=usr/bin/kbd mode=0555
 file path=usr/bin/keylogin mode=0555
 file path=usr/bin/keylogout mode=0555
+file path=usr/bin/kill mode=0555
 file path=usr/bin/kmfcfg mode=0555
 file path=usr/bin/ksh mode=0555
 file path=usr/bin/kvmstat mode=0555
@@ -681,6 +685,7 @@ file path=usr/bin/loadkeys mode=0555
 file path=usr/bin/logger mode=0555
 file path=usr/bin/login mode=4555
 file path=usr/bin/logins mode=0750
+file path=usr/bin/logname mode=0555
 file path=usr/bin/ls mode=0555
 file path=usr/bin/m4 mode=0555
 file path=usr/bin/mail group=mail mode=2511
@@ -696,6 +701,7 @@ file path=usr/bin/newgrp group=sys mode=4755
 file path=usr/bin/nice mode=0555
 file path=usr/bin/pagesize mode=0555
 file path=usr/bin/passwd group=sys mode=6555
+file path=usr/bin/paste mode=0555
 file path=usr/bin/pathchk mode=0555
 file path=usr/bin/pax mode=0555
 file path=usr/bin/pfexec mode=0555
@@ -711,6 +717,7 @@ file path=usr/bin/putdev mode=0555
 file path=usr/bin/putdgrp mode=0555
 file path=usr/bin/pwd mode=0555
 file path=usr/bin/renice mode=0555
+file path=usr/bin/rev mode=0555
 file path=usr/bin/rm mode=0555
 file path=usr/bin/rmdir mode=0555
 file path=usr/bin/roles mode=0555
@@ -721,6 +728,7 @@ file path=usr/bin/sed mode=0555
 file path=usr/bin/setfacl mode=0555
 file path=usr/bin/setpgrp group=sys mode=0555
 file path=usr/bin/settime mode=0555
+file path=usr/bin/sleep mode=0555
 file path=usr/bin/strchg group=root mode=0555
 file path=usr/bin/strconf group=root mode=0555
 file path=usr/bin/stty mode=0555
@@ -728,6 +736,7 @@ file path=usr/bin/su group=sys mode=4555
 file path=usr/bin/svcprop mode=0555
 file path=usr/bin/svcs mode=0555
 file path=usr/bin/tail mode=0555
+file path=usr/bin/tee mode=0555
 file path=usr/bin/time mode=0555
 file path=usr/bin/tip mode=4511 owner=uucp
 file path=usr/bin/tr mode=0555
@@ -735,10 +744,12 @@ file path=usr/bin/true mode=0555
 file path=usr/bin/tty mode=0555
 file path=usr/bin/tzselect mode=0555
 file path=usr/bin/uname mode=0555
+file path=usr/bin/uniq mode=0555
 file path=usr/bin/userattr mode=0555
 file path=usr/bin/uuidgen mode=0555
 file path=usr/bin/vmstat mode=0555
 file path=usr/bin/vtfontcvt mode=0555
+file path=usr/bin/wc mode=0555
 file path=usr/bin/which mode=0555
 file path=usr/bin/who mode=0555
 file path=usr/bin/wracct mode=0555

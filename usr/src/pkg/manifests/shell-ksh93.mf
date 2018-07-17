@@ -174,25 +174,13 @@ file path=usr/share/man/man1/ksh93.1
 hardlink path=usr/bin/$(ARCH32)/rksh93 target=ksh93
 hardlink path=usr/bin/$(ARCH64)/rksh93 target=ksh93
 hardlink path=usr/bin/cksum target=../../usr/bin/alias
-hardlink path=usr/bin/comm target=../../usr/bin/alias
-hardlink path=usr/bin/cut target=../../usr/bin/alias
-hardlink path=usr/bin/join target=../../usr/bin/alias
-hardlink path=usr/bin/kill target=../../usr/bin/alias
 hardlink path=usr/bin/ksh93 target=../../usr/lib/isaexec
-hardlink path=usr/bin/logname target=../../usr/bin/alias
-hardlink path=usr/bin/paste target=../../usr/bin/alias
 hardlink path=usr/bin/pfksh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfksh93 target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfrksh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfrksh93 target=../../usr/bin/pfexec
-hardlink path=usr/bin/rev target=../../usr/bin/alias
 hardlink path=usr/bin/rksh93 target=../../usr/lib/isaexec
-hardlink path=usr/bin/sleep target=../../usr/bin/alias
 hardlink path=usr/bin/sum target=../../usr/bin/alias
-hardlink path=usr/bin/tee target=../../usr/bin/alias
-hardlink path=usr/bin/test target=../../usr/bin/alias
-hardlink path=usr/bin/uniq target=../../usr/bin/alias
-hardlink path=usr/bin/wc target=../../usr/bin/alias
 license usr/src/lib/libast/THIRDPARTYLICENSE \
     license=usr/src/lib/libast/THIRDPARTYLICENSE
 license usr/src/lib/libcmd/THIRDPARTYLICENSE \
