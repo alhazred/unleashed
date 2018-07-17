@@ -20,7 +20,6 @@ MAN = acctcom.1 \
       break.1 \
       builtin.1 \
       cal.1 \
-      cd.1 \
       cdrw.1 \
       chgrp.1 \
       chkey.1 \
@@ -31,7 +30,6 @@ MAN = acctcom.1 \
       cmp.1 \
       col.1 \
       comm.1 \
-      command.1 \
       compress.1 \
       cp.1 \
       cpio.1 \
@@ -100,7 +98,6 @@ MAN = acctcom.1 \
       groups.1 \
       hash.1 \
       head.1 \
-      history.1 \
       hostid.1 \
       hostname.1 \
       iconv.1 \
@@ -109,7 +106,6 @@ MAN = acctcom.1 \
       ipcs.1 \
       isainfo.1 \
       isalist.1 \
-      jobs.1 \
       join.1 \
       kbd.1 \
       kdestroy.1 \
@@ -140,7 +136,6 @@ MAN = acctcom.1 \
       let.1 \
       lex.1 \
       lgrpinfo.1 \
-      limit.1 \
       line.1 \
       list_devices.1 \
       listusers.1 \
@@ -202,7 +197,6 @@ MAN = acctcom.1 \
       pr.1 \
       prctl.1 \
       preap.1 \
-      print.1 \
       printenv.1 \
       printf.1 \
       priocntl.1 \
@@ -216,7 +210,6 @@ MAN = acctcom.1 \
       pvs.1 \
       ranlib.1 \
       rcapstat.1 \
-      read.1 \
       readonly.1 \
       regcmp.1 \
       renice.1 \
@@ -274,9 +267,7 @@ MAN = acctcom.1 \
       trap.1 \
       truss.1 \
       tty.1 \
-      type.1 \
       typeset.1 \
-      umask.1 \
       unifdef.1 \
       uniq.1 \
       units.1 \
@@ -287,7 +278,6 @@ MAN = acctcom.1 \
       volcheck.1 \
       volrmmount.1 \
       w.1 \
-      wait.1 \
       wc.1 \
       which.1 \
       who.1 \

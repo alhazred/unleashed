@@ -30,35 +30,20 @@
 
 PROG= alias
 ALIASPROG= \
-	bg \
-	cd \
 	cksum \
 	cmp \
 	comm \
-	command \
 	cut \
-	fc \
-	fg \
-	getopts \
-	hash \
-	jobs \
 	join \
 	kill \
 	logname \
 	paste \
-	print \
-	read \
 	rev \
 	sleep \
 	sum \
 	tee \
 	test \
-	type \
-	ulimit \
-	umask \
-	unalias \
 	uniq \
-	wait \
 	wc
 
 ROOTALIASPROG= $(ALIASPROG:%=$(ROOTBIN)/%)
