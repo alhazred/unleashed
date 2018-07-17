@@ -41,7 +41,7 @@
 .Sh SYNOPSIS
 .Nm wc
 .Op Fl c | m
-.Op Fl hlw
+.Op Fl lw
 .Op Ar
 .Sh DESCRIPTION
 The
@@ -64,10 +64,6 @@ The options are as follows:
 .It Fl c
 The number of bytes in each input file
 is written to the standard output.
-.It Fl h
-Use unit suffixes: Byte, Kilobyte, Megabyte, Gigabyte, Terabyte,
-Petabyte, and Exabyte in order to reduce the number of digits to four or fewer
-using powers of 2 for sizes (K=1024, M=1048576, etc.).
 .It Fl l
 The number of lines in each input file
 is written to the standard output.
@@ -127,10 +123,6 @@ The
 utility is compliant with the
 .St -p1003.1-2008
 specification.
-.Pp
-The flag
-.Op Fl h
-is an extension to that specification.
 .Sh HISTORY
 A
 .Nm

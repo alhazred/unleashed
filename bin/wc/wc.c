@@ -39,12 +39,11 @@
 #include <ctype.h>
 #include <err.h>
 #include <unistd.h>
-#include <util.h>
 #include <wchar.h>
 #include <wctype.h>
 
 int64_t	tlinect, twordct, tcharct;
-int	doline, doword, dochar, humanchar, multibyte;
+int	doline, doword, dochar, multibyte;
 int	rval;
 extern char *__progname;
 
@@ -62,7 +61,7 @@ main(int argc, char *argv[])
 	if (pledge("stdio rpath", NULL) == -1)
 		err(1, "pledge");
 
-	while ((ch = getopt(argc, argv, "lwchm")) != -1)
+	while ((ch = getopt(argc, argv, "lwcm")) != -1)
 		switch(ch) {
 		case 'l':
 			doline = 1;
@@ -77,13 +76,10 @@ main(int argc, char *argv[])
 		case 'c':
 			dochar = 1;
 			break;
-		case 'h':
-			humanchar = 1;
-			break;
 		case '?':
 		default:
 			fprintf(stderr,
-			    "usage: %s [-c | -m] [-hlw] [file ...]\n",
+			    "usage: %s [-c | -m] [-lw] [file ...]\n",
 			    __progname);
 			return 1;
 		}
@@ -266,14 +262,7 @@ cnt(char *file)
 static void
 format_and_print(int64_t v)
 {
-	if (humanchar) {
-		char result[FMT_SCALED_STRSIZE];
-
-		fmt_scaled((long long)v, result);
-		printf("%7s", result);
-	} else {
-		printf(" %7lld", v);
-	}
+	printf(" %7lld", v);
 }
 
 static void
