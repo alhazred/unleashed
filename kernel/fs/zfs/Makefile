@@ -102,11 +102,15 @@ SRCS=		abd.c \
 		vdev_cache.c \
 		vdev_disk.c \
 		vdev_file.c \
+		vdev_indirect.c \
+		vdev_indirect_births.c \
+		vdev_indirect_mapping.c \
 		vdev_label.c \
 		vdev_mirror.c \
 		vdev_missing.c \
 		vdev_queue.c \
 		vdev_raidz.c \
+		vdev_removal.c \
 		vdev_root.c \
 		zap.c \
 		zap_leaf.c \
