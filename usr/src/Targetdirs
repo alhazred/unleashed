@@ -233,7 +233,6 @@ DIRS= \
 	/usr/lib/hal \
 	/usr/lib/inet \
 	/usr/lib/inet/ilb \
-	/usr/lib/inet/$(MACH32) \
 	/usr/lib/krb5 \
 	/usr/lib/link_audit \
 	/usr/lib/lwp \
