@@ -409,7 +409,7 @@ double
 atan2(double oy, double ox) {
 	double	ah, al, t, xh, x, y, z;
 	int	i, k, hx, hy, sx, sy;
-	volatile int	inexact;
+	volatile int	inexact __unused;
 
 	hy = ((int *)&oy)[HIWORD];
 	sy = hy & 0x80000000;
