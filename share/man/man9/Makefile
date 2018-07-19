@@ -1,4 +1,5 @@
 MAN = Intro.9 \
+      iport.9 \
       vmem.9
 
 # We want to just install manpages but there is no manpage-only mk file so

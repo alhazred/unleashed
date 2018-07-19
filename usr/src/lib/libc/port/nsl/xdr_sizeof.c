@@ -127,7 +127,9 @@ xdr_sizeof(xdrproc_t func, void *data)
 	/* to stop ANSI-C compiler from complaining */
 	typedef  bool_t (* dummyfunc1)(XDR *, long *);
 	typedef  bool_t (* dummyfunc2)(XDR *, caddr_t, int);
+#if defined(_LP64)
 	typedef  bool_t (* dummyfunc3)(XDR *, int32_t *);
+#endif
 
 	ops.x_putlong = x_putlong;
 	ops.x_getlong =  (dummyfunc1) harmless;

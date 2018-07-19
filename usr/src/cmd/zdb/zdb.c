@@ -86,6 +86,8 @@ extern int reference_tracking_enable;
 extern boolean_t zfs_recover;
 extern uint64_t zfs_arc_max, zfs_arc_meta_limit;
 extern int zfs_vdev_async_read_max_active;
+extern int aok;
+extern boolean_t spa_load_verify_dryrun;
 
 static const char cmdname[] = "zdb";
 uint8_t dump_opt[256];
@@ -4535,6 +4537,12 @@ main(int argc, char **argv)
 	 * Disable reference tracking for better performance.
 	 */
 	reference_tracking_enable = B_FALSE;
+
+	/*
+	 * Do not fail spa_load when spa_load_verify fails. This is needed
+	 * to load non-idle pools.
+	 */
+	spa_load_verify_dryrun = B_TRUE;
 
 	kernel_init(FREAD);
 	g_zfs = libzfs_init();
