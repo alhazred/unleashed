@@ -51,10 +51,7 @@ Layout of /opt/onbld
 
 /opt/onbld/lib/python/ 
         symlink to the modules directory of the currently preferred
-        python version.  This exists to retain compatibility both for
-        tools expecting only one supported version of python, and for
-        user .hgrc files that expect to find cdm.py in
-        /opt/onbld/lib/python/onbld/hgext.
+        python version.
 
 /opt/onbld/man
 	rudimentary man pages for some of the tools.
@@ -71,10 +68,6 @@ bldenv
 	built by 'nightly'. 'ws' should not be used for this since it
 	sets the environment up differently and may cause everything
 	to rebuild (because of different -I or -L paths).
-
-cdm 
-	A Mercurial extension providing various commands useful for ON
-	development
 
 check_rtime
 	checks ELF attributes used by ELF dynamic objects in the proto area.

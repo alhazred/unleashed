@@ -89,7 +89,6 @@ file path=opt/onbld/bin/wsdiff mode=0555
 file path=opt/onbld/etc/exception_lists/check_rtime
 file path=opt/onbld/etc/exception_lists/interface_check
 file path=opt/onbld/etc/exception_lists/interface_cmp
-file path=opt/onbld/etc/hgstyle
 file path=opt/onbld/etc/its.conf
 file path=opt/onbld/etc/its.reg
 file path=opt/onbld/lib/$(ARCH)/libctf.so.1 mode=0555
@@ -147,17 +146,8 @@ file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/__init__.py \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/__init__.pyc \
     mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Backup.py mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Backup.pyc mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Ignore.py mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Ignore.pyc mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Version.py mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Version.pyc \
-    mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/WorkSpace.py \
-    mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/WorkSpace.pyc \
-    mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/__init__.py \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/__init__.pyc \

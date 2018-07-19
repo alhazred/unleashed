@@ -1353,7 +1353,6 @@ struct dev_ops sd_ops = {
  */
 #include <sys/modctl.h>
 
-#ifndef XPV_HVM_DRIVER
 static struct modldrv modldrv = {
 	&mod_driverops,		/* Type of module. This one is a driver */
 	SD_MODULE_NAME,		/* Module name. */
@@ -1363,18 +1362,6 @@ static struct modldrv modldrv = {
 static struct modlinkage modlinkage = {
 	MODREV_1, &modldrv, NULL
 };
-
-#else /* XPV_HVM_DRIVER */
-static struct modlmisc modlmisc = {
-	&mod_miscops,		/* Type of module. This one is a misc */
-	"HVM " SD_MODULE_NAME,		/* Module name. */
-};
-
-static struct modlinkage modlinkage = {
-	MODREV_1, &modlmisc, NULL
-};
-
-#endif /* XPV_HVM_DRIVER */
 
 static cmlb_tg_ops_t sd_tgops = {
 	TG_DK_OPS_VERSION_1,
@@ -2010,19 +1997,11 @@ _init(void)
 	/* establish driver name from module name */
 	sd_label = (char *)mod_modname(&modlinkage);
 
-#ifndef XPV_HVM_DRIVER
 	err = ddi_soft_state_init(&sd_state, sizeof (struct sd_lun),
 	    SD_MAXUNIT);
 	if (err != 0) {
 		return (err);
 	}
-
-#else /* XPV_HVM_DRIVER */
-	/* Remove the leading "hvm_" from the module name */
-	ASSERT(strncmp(sd_label, "hvm_", strlen("hvm_")) == 0);
-	sd_label += strlen("hvm_");
-
-#endif /* XPV_HVM_DRIVER */
 
 	mutex_init(&sd_detach_mutex, NULL, MUTEX_DRIVER, NULL);
 	mutex_init(&sd_log_mutex,    NULL, MUTEX_DRIVER, NULL);
@@ -2063,9 +2042,8 @@ _init(void)
 
 		sd_scsi_target_lun_fini();
 
-#ifndef XPV_HVM_DRIVER
 		ddi_soft_state_fini(&sd_state);
-#endif /* !XPV_HVM_DRIVER */
+
 		return (err);
 	}
 
@@ -2106,9 +2084,7 @@ _fini(void)
 	cv_destroy(&sd_tr.srq_resv_reclaim_cv);
 	cv_destroy(&sd_tr.srq_inprocess_cv);
 
-#ifndef XPV_HVM_DRIVER
 	ddi_soft_state_fini(&sd_state);
-#endif /* !XPV_HVM_DRIVER */
 
 	return (err);
 }
@@ -2312,9 +2288,7 @@ sdprobe(dev_info_t *devi)
 {
 	struct scsi_device	*devp;
 	int			rval;
-#ifndef XPV_HVM_DRIVER
 	int			instance = ddi_get_instance(devi);
-#endif /* !XPV_HVM_DRIVER */
 
 	if (ddi_dev_is_sid(devi) == DDI_SUCCESS) {
 		return (DDI_PROBE_DONTCARE);
@@ -2327,11 +2301,9 @@ sdprobe(dev_info_t *devi)
 		return (DDI_PROBE_FAILURE);
 	}
 
-#ifndef XPV_HVM_DRIVER
 	if (ddi_get_soft_state(sd_state, instance) != NULL) {
 		return (DDI_PROBE_PARTIAL);
 	}
-#endif /* !XPV_HVM_DRIVER */
 
 	/*
 	 * Call the SCSA utility probe routine to see if we actually
@@ -6884,11 +6856,9 @@ sd_unit_attach(dev_info_t *devi)
 	 * this routine will have a value of zero.
 	 */
 	instance = ddi_get_instance(devp->sd_dev);
-#ifndef XPV_HVM_DRIVER
 	if (ddi_soft_state_zalloc(sd_state, instance) != DDI_SUCCESS) {
 		goto probe_failed;
 	}
-#endif /* !XPV_HVM_DRIVER */
 
 	/*
 	 * Retrieve a pointer to the newly-allocated soft state.
@@ -8136,9 +8106,7 @@ sd_unit_detach(dev_info_t *devi)
 	int			tgt;
 	dev_t			dev;
 	dev_info_t		*pdip = ddi_get_parent(devi);
-#ifndef XPV_HVM_DRIVER
 	int			instance = ddi_get_instance(devi);
-#endif /* !XPV_HVM_DRIVER */
 
 	mutex_enter(&sd_detach_mutex);
 
@@ -8565,9 +8533,8 @@ sd_unit_detach(dev_info_t *devi)
 	devp->sd_private = NULL;
 
 	bzero(un, sizeof (struct sd_lun));
-#ifndef XPV_HVM_DRIVER
+
 	ddi_soft_state_free(sd_state, instance);
-#endif /* !XPV_HVM_DRIVER */
 
 	mutex_exit(&sd_detach_mutex);
 

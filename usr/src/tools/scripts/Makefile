@@ -75,7 +75,6 @@ MAN1ONBLDLINKS= \
 	git-nits.1onbld
 
 ETCFILES= \
-	hgstyle \
 	its.conf \
 	its.reg
 
