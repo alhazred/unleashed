@@ -31,10 +31,8 @@ include ../Makefile.master
 COMMON_SUBDIRS= \
 	codereview \
 	ctf \
-	depcheck \
 	ndrgen \
 	onbld \
-	pmodes \
 	protocmp \
 	protolist \
 	scripts

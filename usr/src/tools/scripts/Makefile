@@ -28,7 +28,6 @@ SHELL=/usr/bin/ksh93
 SHFILES= \
 	Install \
 	checkpaths \
-	checkproto \
 	cstyle \
 	elfcmp \
 	genoffsets \

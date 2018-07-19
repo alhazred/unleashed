@@ -66,32 +66,26 @@ file path=opt/onbld/bin/$(ARCH)/ctfstrip mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/elfextract mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen1 mode=0555
-file path=opt/onbld/bin/$(ARCH)/pmodes mode=0555
 file path=opt/onbld/bin/$(ARCH)/protocmp mode=0555
 file path=opt/onbld/bin/$(ARCH)/protolist mode=0555
 file path=opt/onbld/bin/Install mode=0555
 file path=opt/onbld/bin/cddlchk mode=0555
 file path=opt/onbld/bin/check_rtime mode=0555
 file path=opt/onbld/bin/checkpaths mode=0555
-file path=opt/onbld/bin/checkproto mode=0555
 file path=opt/onbld/bin/copyrightchk mode=0555
 file path=opt/onbld/bin/cstyle mode=0555
 file path=opt/onbld/bin/elfcmp mode=0555
 file path=opt/onbld/bin/find_elf mode=0555
 file path=opt/onbld/bin/genoffsets mode=0555
-file path=opt/onbld/bin/get_depend_info mode=0555
 file path=opt/onbld/bin/git-pbchk mode=0555
 file path=opt/onbld/bin/hdrchk mode=0555
 file path=opt/onbld/bin/interface_check mode=0555
 file path=opt/onbld/bin/interface_cmp mode=0555
-file path=opt/onbld/bin/make_pkg_db mode=0555
 file path=opt/onbld/bin/mapfilechk mode=0555
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
-file path=opt/onbld/etc/SampleLinks
-file path=opt/onbld/etc/SamplePkgLinks
 file path=opt/onbld/etc/exception_lists/check_rtime
 file path=opt/onbld/etc/exception_lists/interface_check
 file path=opt/onbld/etc/exception_lists/interface_cmp
@@ -178,12 +172,10 @@ file path=opt/onbld/man/man1onbld/checkpaths.1onbld
 file path=opt/onbld/man/man1onbld/codereview.1onbld
 file path=opt/onbld/man/man1onbld/cstyle.1onbld
 file path=opt/onbld/man/man1onbld/find_elf.1onbld
-file path=opt/onbld/man/man1onbld/get_depend_info.1onbld
 file path=opt/onbld/man/man1onbld/git-pbchk.1onbld
 file path=opt/onbld/man/man1onbld/hdrchk.1onbld
 file path=opt/onbld/man/man1onbld/interface_check.1onbld
 file path=opt/onbld/man/man1onbld/interface_cmp.1onbld
-file path=opt/onbld/man/man1onbld/make_pkg_db.1onbld
 file path=opt/onbld/man/man1onbld/mapfilechk.1onbld
 file path=opt/onbld/man/man1onbld/ndrgen.1onbld
 file path=opt/onbld/man/man1onbld/wsdiff.1onbld
