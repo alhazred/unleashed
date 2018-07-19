@@ -18,7 +18,7 @@ MACHINE=	$(MACH64)
 ASFLAGS=	-m64
 EFIPROG=	bootx64.efi
 
-all:		${EFIPROG}
+all:		$(EFIPROG)
 
 include ../Makefile.com
 

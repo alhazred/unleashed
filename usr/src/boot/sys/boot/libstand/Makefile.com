@@ -33,7 +33,7 @@ CFLAGS +=	-Wall -Werror
 $(LIBRARY): $(SRCS) $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
-include ${LIBSTAND_SRC}/Makefile.inc
+include $(LIBSTAND_SRC)/Makefile.inc
 
 clean: clobber
 clobber:

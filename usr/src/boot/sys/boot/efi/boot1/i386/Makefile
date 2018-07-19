@@ -18,7 +18,7 @@ MACHINE=	$(MACH)
 ASFLAGS=	-m32
 EFIPROG=	bootia32.efi
 
-all:		${EFIPROG}
+all:		$(EFIPROG)
 
 include ../Makefile.com
 

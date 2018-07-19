@@ -33,7 +33,7 @@ CFLAGS= -O2
 CPPFLAGS=	-nostdinc -D_STANDALONE
 CPPFLAGS +=	-I.
 CPPFLAGS +=	-I../../include
-CPPFLAGS +=	-I../../include/${MACHINE}
+CPPFLAGS +=	-I../../include/$(MACHINE)
 CPPFLAGS +=	-I../../../../../include
 CPPFLAGS +=	-I../../../../sys
 CPPFLAGS +=	-I../../../..
@@ -52,15 +52,15 @@ CPPFLAGS +=	-I$(SRCTOP)/include
 
 include ../../Makefile.inc
 
-FILES=  ${EFIPROG}
+FILES=  $(EFIPROG)
 FILEMODE=	0555
 ROOT_BOOT=	$(ROOT)/boot
 ROOTBOOTFILES=$(FILES:%=$(ROOT_BOOT)/%)
 
-LDSCRIPT=	../../loader/arch/${MACHINE}/ldscript.${MACHINE}
+LDSCRIPT=	../../loader/arch/$(MACHINE)/ldscript.$(MACHINE)
 LDFLAGS=	-nostdlib --eh-frame-hdr
 LDFLAGS +=	-shared --hash-style=both --enable-new-dtags
-LDFLAGS +=	-T${LDSCRIPT} -Bsymbolic
+LDFLAGS +=	-T$(LDSCRIPT) -Bsymbolic
 
 install: all $(ROOTBOOTFILES)
 
@@ -77,29 +77,29 @@ LDADD=		-L../../libefi/$(MACHINE) -lefi
 LDADD +=	-L../../../zfs/$(MACHINE) -lzfsboot
 LDADD +=	-L../../../libstand/$(MACHINE) -lstand
 
-DPADD +=	${LDSCRIPT}
+DPADD +=	$(LDSCRIPT)
 
-${EFIPROG}: ${PROG}
-	if [ `${OBJDUMP} -t ${PROG} | fgrep '*UND*' | wc -l` != 0 ]; then \
-		${OBJDUMP} -t ${PROG} | fgrep '*UND*'; \
+$(EFIPROG): $(PROG)
+	if [ `$(OBJDUMP) -t $(PROG) | fgrep '*UND*' | wc -l` != 0 ]; then \
+		$(OBJDUMP) -t $(PROG) | fgrep '*UND*'; \
 		exit 1; \
 	fi
-	${OBJCOPY} --readonly-text -j .peheader -j .text -j .sdata -j .data \
+	$(OBJCOPY) --readonly-text -j .peheader -j .text -j .sdata -j .data \
 		-j .dynamic -j .dynsym -j .rel.dyn \
 		-j .rela.dyn -j .reloc -j .eh_frame \
-		--output-target=${EFI_TARGET} --subsystem efi-app ${PROG} $@
-	$(BTXLD) -V ${BOOT_VERSION} -o $@ $@
+		--output-target=$(EFI_TARGET) --subsystem efi-app $(PROG) $@
+	$(BTXLD) -V $(BOOT_VERSION) -o $@ $@
 
 boot1.o: ../../../common/ufsread.c
 
-CLEANFILES= ${EFIPROG} ${PROG}
+CLEANFILES= $(EFIPROG) $(PROG)
 
-${PROG}:	$(OBJS) $(DPADD)
+$(PROG):	$(OBJS) $(DPADD)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDADD)
 
 machine:
 	$(RM) machine
-	$(SYMLINK) ../../../../${MACHINE}/include machine
+	$(SYMLINK) ../../../../$(MACHINE)/include machine
 
 x86:
 	$(RM) x86
@@ -116,9 +116,9 @@ clean clobber:
 
 #
 # using -W to silence gas here, as for 32bit build, it will generate warning
-# for start.S
+# for start.S because hand crafted .reloc section does not have group name
 #
-%.o:	../../loader/arch/${MACHINE}/%.S
+%.o:	../../loader/arch/$(MACHINE)/%.S
 	$(COMPILE.S) -Wa,-W $<
 
 %.o:	../../loader/%.c

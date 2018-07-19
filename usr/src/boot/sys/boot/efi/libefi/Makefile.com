@@ -43,7 +43,7 @@ CFLAGS  = -O2
 CPPFLAGS += -nostdinc -I. -I../../../../../include -I../../../..
 CPPFLAGS += -I$(SRC)/common/ficl -I../../../libficl
 CPPFLAGS += -I../../include
-CPPFLAGS += -I../../include/${MACHINE}
+CPPFLAGS += -I../../include/$(MACHINE)
 CPPFLAGS += -I../../../../../lib/libstand
 CPPFLAGS += -I../../../zfs
 CPPFLAGS += -I../../../../cddl/boot/zfs
@@ -51,10 +51,6 @@ CPPFLAGS += -I../../../../cddl/boot/zfs
 # Pick up the bootstrap header for some interface items
 CPPFLAGS += -I../../../common
 CPPFLAGS += -DTERM_EMU
-
-# Handle FreeBSD specific %b and %D printf format specifiers
-# CFLAGS+= ${FORMAT_EXTENSIONS}
-# CFLAGS += -D__printf__=__freebsd_kprintf__
 
 include ../../Makefile.inc
 
@@ -67,7 +63,7 @@ clobber:
 
 machine:
 	$(RM) machine
-	$(SYMLINK) ../../../../${MACHINE}/include machine
+	$(SYMLINK) ../../../../$(MACHINE)/include machine
 
 x86:
 	$(RM) x86

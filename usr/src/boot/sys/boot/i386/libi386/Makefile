@@ -19,7 +19,7 @@ include $(SRC)/Makefile.master
 CFLAGS= -O2 -I../../../../include -I../../..
 CPPFLAGS= -D_STANDALONE -DLOADER_ZFS_SUPPORT
 
-all: libi386.a
+all install: libi386.a
 
 clean: clobber
 clobber:

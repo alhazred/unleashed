@@ -18,17 +18,16 @@
 	.file	"multiboot_tramp.s"
 
 /*
- * The current dboot in illumos kernel is running in 32bit mode
- * and expecting 32bit multiboot execution environment.
+ * dboot expects a 32-bit multiboot environment and to execute in 32-bit mode.
  *
  * EAX: MB magic
- * EBX: 32bit physical address of MBI
- * CS: 32bit read/execute code segment with offset 0 and limit 0xFFFFFFFF
- * DS:
- * ES:
- * FS:
- * GS:
- * SS:  32bit read/write data segment with offset 0 and limit 0xFFFFFFFF
+ * EBX: 32-bit physical address of MBI
+ * CS: 32-bit read/execute code segment with offset 0 and limit 0xFFFFFFFF
+ * DS: 32-bit read/write data segment with offset 0 and limit 0xFFFFFFFF
+ * ES: 32-bit read/write data segment with offset 0 and limit 0xFFFFFFFF
+ * FS: 32-bit read/write data segment with offset 0 and limit 0xFFFFFFFF
+ * GS: 32-bit read/write data segment with offset 0 and limit 0xFFFFFFFF
+ * SS: 32-bit read/write data segment with offset 0 and limit 0xFFFFFFFF
  * A20 enabled
  * CR0: PG cleared, PE set
  * EFLAGS: VM cleared, IF cleared
@@ -44,7 +43,7 @@
 		.type	multiboot_tramp, STT_FUNC
 
 /*
- * Note as we are running in 32bit mode, all pointers are 32bit.
+ * Note as we are running in 32-bit mode, all pointers are 32-bit.
  * void multiboot_tramp(uint32_t magic, struct relocator *relocator,
  *    vm_offset_t entry)
  */
@@ -89,6 +88,14 @@ multiboot_tramp:
  *		.byte	0x0, 0x9a, 0xcf, 0x0
  *		.word	0xffff, 0x0		data segment
  *		.byte	0x0, 0x92, 0xcf, 0x0
+ *
+ * This will create access for 4GB flat memory with
+ * base = 0x00000000, segment limit = 0xffffffff
+ * page granulariy 4k
+ * 32-bit protected mode
+ * ring 0
+ * code segment is executable RW
+ * data segment is not-executable RW
  */
 		movw	$0x0, -0x1c(%ebp)
 		movw	$0x0, -0x1a(%ebp)
@@ -125,6 +132,12 @@ multiboot_tramp:
 		movw	%ax, %fs
 		movw	%ax, %gs
 
+		/*
+		 * We most likely don't need to push SEL_SDATA and esp
+		 * because we do not expect to perform a privilege transition.
+		 * However, it doesn't hurt us to push them as dboot will set
+		 * up its own stack.
+		 */
 		movl	%esp, %eax
 		pushl	$SEL_SDATA
 		pushl	%eax

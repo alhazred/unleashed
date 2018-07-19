@@ -36,11 +36,11 @@ CPPFLAGS += -I../../../../../lib/libstand
 
 include ../../Makefile.inc
 
-include ../arch/${MACHINE}/Makefile.inc
+include ../arch/$(MACHINE)/Makefile.inc
 
 CPPFLAGS +=	-I. -I..
 CPPFLAGS +=	-I../../include
-CPPFLAGS +=	-I../../include/${MACHINE}
+CPPFLAGS +=	-I../../include/$(MACHINE)
 CPPFLAGS +=	-I../../../..
 CPPFLAGS +=	-I../../../i386/libi386
 CPPFLAGS +=	-I../../../zfs
@@ -56,25 +56,16 @@ CPPFLAGS += -DSMBIOS_LITTLE_ENDIAN_UUID
 # Use network-endian UUID format for backward compatibility.
 #CPPFLAGS += -DSMBIOS_NETWORK_ENDIAN_UUID
 
-LIBSTAND=	../../../libstand/${MACHINE}/libstand.a
+LIBSTAND=	../../../libstand/$(MACHINE)/libstand.a
 
 BOOT_FORTH=	yes
 CPPFLAGS +=	-DBOOT_FORTH -D_STANDALONE
 CPPFLAGS +=	-I$(SRC)/common/ficl
 CPPFLAGS +=	-I../../../libficl
-LIBFICL=	../../../libficl/${MACHINE}/libficl.a
+LIBFICL=	../../../libficl/$(MACHINE)/libficl.a
 
 CPPFLAGS +=	-I../../../zfs
-LIBZFSBOOT=	../../../zfs/${MACHINE}/libzfsboot.a
-
-#LOADER_FDT_SUPPORT?=	no
-#.if ${MK_FDT} != "no" && ${LOADER_FDT_SUPPORT} != "no"
-#CFLAGS+=	-I${.CURDIR}/../../fdt
-#CFLAGS+=	-I${.OBJDIR}/../../fdt
-#CFLAGS+=	-DLOADER_FDT_SUPPORT
-#LIBEFI_FDT=	${.OBJDIR}/../../efi/fdt/libefi_fdt.a
-#LIBFDT=		${.OBJDIR}/../../fdt/libfdt.a
-#.endif
+LIBZFSBOOT=	../../../zfs/$(MACHINE)/libzfsboot.a
 
 # Always add MI sources
 include	../Makefile.common
@@ -83,42 +74,40 @@ CPPFLAGS +=	-I../../../common
 # For multiboot2.h, must be last, to avoid conflicts
 CPPFLAGS +=	-I$(SRCTOP)/include
 
-FILES=		${EFIPROG}
+FILES=		$(EFIPROG)
 FILEMODE=	0555
 ROOT_BOOT=	$(ROOT)/boot
 ROOTBOOTFILES=$(FILES:%=$(ROOT_BOOT)/%)
 
-LDSCRIPT=	../arch/${MACHINE}/ldscript.${MACHINE}
+LDSCRIPT=	../arch/$(MACHINE)/ldscript.$(MACHINE)
 LDFLAGS =	-nostdlib --eh-frame-hdr
 LDFLAGS +=	-shared --hash-style=both --enable-new-dtags
-LDFLAGS +=	-T${LDSCRIPT} -Bsymbolic
+LDFLAGS +=	-T$(LDSCRIPT) -Bsymbolic
 
 CLEANFILES=	8x16.c vers.c
 
-NEWVERSWHAT=	"EFI loader" ${MACHINE}
+NEWVERSWHAT=	"EFI loader" $(MACHINE)
 
 install: all $(ROOTBOOTFILES)
 
 vers.c:	../../../common/newvers.sh $(SRC)/boot/Makefile.version
-	$(SH) ../../../common/newvers.sh ${LOADER_VERSION} ${NEWVERSWHAT}
+	$(SH) ../../../common/newvers.sh $(LOADER_VERSION) $(NEWVERSWHAT)
 
-${EFIPROG}: loader.sym
-	if [ `${OBJDUMP} -t loader.sym | fgrep '*UND*' | wc -l` != 0 ]; then \
-		${OBJDUMP} -t loader.sym | fgrep '*UND*'; \
+$(EFIPROG): loader.sym
+	if [ `$(OBJDUMP) -t loader.sym | fgrep '*UND*' | wc -l` != 0 ]; then \
+		$(OBJDUMP) -t loader.sym | fgrep '*UND*'; \
 		exit 1; \
 	fi
-	${OBJCOPY} --readonly-text -j .peheader -j .text -j .sdata -j .data \
+	$(OBJCOPY) --readonly-text -j .peheader -j .text -j .sdata -j .data \
 		-j .dynamic -j .dynsym -j .rel.dyn \
 		-j .rela.dyn -j .reloc -j .eh_frame -j set_Xcommand_set \
 		-j set_Xficl_compile_set \
-		--output-target=${EFI_TARGET} --subsystem efi-app loader.sym $@
+		--output-target=$(EFI_TARGET) --subsystem efi-app loader.sym $@
 
-LIBEFI=		../../libefi/${MACHINE}/libefi.a
+LIBEFI=		../../libefi/$(MACHINE)/libefi.a
 
-DPADD=		${LIBFICL} ${LIBZFSBOOT} ${LIBEFI} ${LIBFDT} ${LIBEFI_FDT} \
-		${LIBSTAND} ${LDSCRIPT}
-LDADD=		${LIBFICL} ${LIBZFSBOOT} ${LIBEFI} ${LIBFDT} ${LIBEFI_FDT} \
-		${LIBSTAND}
+DPADD=		$(LIBFICL) $(LIBZFSBOOT) $(LIBEFI) $(LIBSTAND) $(LDSCRIPT)
+LDADD=		$(LIBFICL) $(LIBZFSBOOT) $(LIBEFI) $(LIBSTAND)
 
 
 loader.sym:	$(OBJS) $(DPADD)
@@ -126,7 +115,7 @@ loader.sym:	$(OBJS) $(DPADD)
 
 machine:
 	$(RM) machine
-	$(SYMLINK) ../../../../${MACHINE}/include machine
+	$(SYMLINK) ../../../../$(MACHINE)/include machine
 
 x86:
 	$(RM) x86
@@ -138,14 +127,14 @@ clean clobber:
 %.o:	../%.c
 	$(COMPILE.c) $<
 
-%.o:	../arch/${MACHINE}/%.c
+%.o:	../arch/$(MACHINE)/%.c
 	$(COMPILE.c) $<
 
 #
 # using -W to silence gas here, as for 32bit build, it will generate warning
-# for start.S
+# for start.S because hand crafted .reloc section does not have group name
 #
-%.o:	../arch/${MACHINE}/%.S
+%.o:	../arch/$(MACHINE)/%.S
 	$(COMPILE.S) -Wa,-W $<
 
 %.o:	../../../common/%.c
