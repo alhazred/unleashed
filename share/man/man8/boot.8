@@ -1,4 +1,5 @@
 '\" te
+.\" Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 .\" Copyright 2015 Nexenta Systems Inc.
 .\" Copyright 2014 Garrett D'Amore <garrett@damore.org>
 .\" Copyright (c) 2008 Sun Microsystems, Inc. All Rights Reserved
@@ -6,7 +7,7 @@
 .\" The contents of this file are subject to the terms of the Common Development and Distribution License (the "License"). You may not use this file except in compliance with the License. You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE or http://www.opensolaris.org/os/licensing.
 .\" See the License for the specific language governing permissions and limitations under the License. When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE. If applicable, add the following below this CDDL HEADER, with the
 .\" fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
-.TH BOOT 8 "Aug 18, 2016"
+.TH BOOT 8 "Feb 07, 2018"
 .SH NAME
 boot \- start the system kernel or a standalone program
 .SH SYNOPSIS
@@ -137,8 +138,7 @@ Next, the PROM downloads
 loads the boot archive, which takes over the machine and releases
 \fBinetboot\fR. Startup scripts then initiate the DHCP agent (see
 \fBdhcpagent\fR(8)), which implements further DHCP activities.
-.sp
-.LP
+
 .SS "iSCSI Boot"
 .LP
 iSCSI boot is currently supported only on x86. The host being booted must be
@@ -675,7 +675,7 @@ exported by the \fBboot\fR program.
 .RS 4n
 Boot using the named object. The object must be either an ELF executable or
 bootable object containing a boot block. The primary use is to boot the
-failsafe.
+failsafe boot archive.
 .RE
 
 .sp
@@ -916,7 +916,7 @@ To boot the default kernel in single-user interactive mode, respond to the
 .sp
 
 .LP
-\fBExample 2 \fRNetwork Booting with WAN Boot-Capable PROMs
+\fBExample 2 \fRNetwork Booting
 .sp
 .LP
 To illustrate some of the subtle repercussions of various boot command line
