@@ -31,6 +31,8 @@ TESTDIR = $(ROOTOPTPKG)/tests/pf_key
 CMDS = $(PROG:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
+kmc-updater := LDLIBS += -lipsecutil
+
 all: $(PROG)
 
 install: all $(CMDS)
