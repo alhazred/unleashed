@@ -144,6 +144,7 @@ SRCS=		abd.c \
 		zio_inject.c \
 		zle.c \
 		zrlock.c \
+		zthr.c \
 		zvol.c
 INCS=		${.CURDIR} \
 		${.CURDIR}/common \
