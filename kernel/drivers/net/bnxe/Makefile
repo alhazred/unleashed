@@ -44,6 +44,7 @@ SRCS=		577xx/common/bnxe_clc.c \
 		bnxe_fcoe.c \
 		bnxe_gld.c \
 		bnxe_hw.c \
+		bnxe_illumos.c \
 		bnxe_intr.c \
 		bnxe_kstat.c \
 		bnxe_lock.c \

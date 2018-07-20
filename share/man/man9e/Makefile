@@ -20,6 +20,7 @@ MAN = _fini.9e \
       ks_snapshot.9e \
       ks_update.9e \
       mac.9e \
+      mac_capab_led.9e \
       mac_capab_transceiver.9e \
       mc_getcapab.9e \
       mc_getprop.9e \
