@@ -281,6 +281,7 @@ MAN = 6to4relay.8 \
       nwamd.8 \
       passmgmt.8 \
       pbind.8 \
+      pcitool.8 \
       picld.8 \
       ping.8 \
       plockstat.8 \

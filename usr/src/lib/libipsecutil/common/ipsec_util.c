@@ -23,7 +23,7 @@
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  * Copyright 2012 Milan Juri. All rights reserved.
- * Copyright 2017 Joyent, Inc.
+ * Copyright 2018 Joyent, Inc.
  */
 
 #include <unistd.h>
@@ -2260,9 +2260,10 @@ print_prop(FILE *file, char *prefix, struct sadb_prop *prop)
 			    "Encryption = "));
 			(void) dump_ealg(combs[i].sadb_comb_encrypt, file);
 			(void) fprintf(file, dgettext(TEXT_DOMAIN,
-			    "  minbits=%u, maxbits=%u.\n%s "),
+			    "  minbits=%u, maxbits=%u, saltbits=%u.\n%s "),
 			    combs[i].sadb_comb_encrypt_minbits,
-			    combs[i].sadb_comb_encrypt_maxbits, prefix);
+			    combs[i].sadb_comb_encrypt_maxbits,
+			    combs[i].sadb_x_comb_encrypt_saltbits, prefix);
 		}
 
 		(void) fprintf(file, dgettext(TEXT_DOMAIN, "HARD: "));
@@ -2393,7 +2394,7 @@ print_eprop(FILE *file, char *prefix, struct sadb_prop *eprop)
 			    "  minbits=%u, maxbits=%u, saltbits=%u\n"),
 			    algdesc->sadb_x_algdesc_minbits,
 			    algdesc->sadb_x_algdesc_maxbits,
-			    algdesc->sadb_x_algdesc_reserved);
+			    algdesc->sadb_x_algdesc_saltbits);
 
 			sofar = (uint64_t *)(++algdesc);
 		}
