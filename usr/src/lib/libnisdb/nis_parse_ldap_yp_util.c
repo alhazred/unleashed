@@ -1096,6 +1096,7 @@ check_domain_specific_order(const char *sd,
 						if (t->e && t->numColumns)
 							match = 1;
 						type = YP_NAME_FIELDS;
+						break;
 					case key_yp_split_field:
 						if (t->e && t->numColumns)
 							match = 1;

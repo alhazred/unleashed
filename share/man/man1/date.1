@@ -44,14 +44,15 @@
 .\" Portions Copyright (c) 1992, X/Open Company Limited  All Rights Reserved
 .\" Copyright (c) 2004, Sun Microsystems, Inc.  All Rights Reserved
 .\" Copyright 2011 Nexenta Systems, Inc.  All rights reserved.
+.\" Copyright (c) 2017 Joyent, Inc.
 .\"
-.TH DATE 1 "Oct 25, 2017"
+.TH DATE 1 "Dec 6, 2017"
 .SH NAME
 date \- write the date and time
 .SH SYNOPSIS
 .LP
 .nf
-\fB/usr/bin/date\fR [\fB-u\fR] [\fB-R\fR] [+\fIformat\fR]
+\fB/usr/bin/date\fR [\fB-u\fR] [\fB-r\fR \fIseconds\fR | \fIfilename\fR] [\fB-R\fR] [+\fIformat\fR]
 .fi
 
 .LP
@@ -66,7 +67,6 @@ date \- write the date and time
 .fi
 
 .SH DESCRIPTION
-.sp
 .LP
 The \fBdate\fR utility writes the date and time to standard output or attempts
 to set the system date and time. By default, the current date and time is
@@ -99,7 +99,6 @@ Fri Dec 23 10:10:42 EST 1988
 .sp
 
 .SH OPTIONS
-.sp
 .LP
 The following options are supported:
 .sp
@@ -117,11 +116,22 @@ seconds specified. Only the super-user may adjust the time.
 .sp
 .ne 2
 .na
-\fB\fB-u\fR \fR
+\fB\fB-r\fR \fIseconds\fR\fR
 .ad
 .RS 24n
-Display (or set) the date in Greenwich Mean Time (GMT\(emuniversal time),
-bypassing the normal conversion to (or from) local time.
+Rather than using the current time, obtain the time based on
+\fIseconds\fR. \fIseconds\fR will be treated as time since the UNIX
+Epoch (00:00:00 UTC, January 1, 1970).
+.RE
+
+.sp
+.ne 2
+.na
+\fB\fB-r\fR \fIfilename\fR\fR
+.ad
+.RS 24n
+Rather than using the current time, obtain the time based on
+the modification time of \fIfilename\fR.
 .RE
 
 .sp
@@ -140,8 +150,17 @@ Change the default format to the format used for mail message headers
 .in -2
 .RE
 
-.SH OPERANDS
 .sp
+.ne 2
+.na
+\fB\fB-u\fR \fR
+.ad
+.RS 24n
+Display (or set) the date in Greenwich Mean Time (GMT\(emuniversal time),
+bypassing the normal conversion to (or from) local time.
+.RE
+
+.SH OPERANDS
 .LP
 The following operands are supported:
 .sp
@@ -332,7 +351,6 @@ Thu Jan 01 00:30:00 GMT 2000
 .sp
 
 .SH ENVIRONMENT VARIABLES
-.sp
 .LP
 See \fBenviron\fR(5) for descriptions of the following environment variables
 that affect the execution of \fBdate\fR: \fBLANG\fR, \fBLC_ALL\fR,
@@ -349,7 +367,6 @@ Determine the timezone in which the time and date are written, unless the
 .RE
 
 .SH EXIT STATUS
-.sp
 .LP
 The following exit values are returned:
 .sp
@@ -371,13 +388,10 @@ An error occurred.
 .RE
 
 .SH ATTRIBUTES
-.sp
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
 .SS "/usr/bin/date"
-.sp
 
-.sp
 .TS
 box;
 c | c
@@ -390,11 +404,9 @@ Interface Stability	Standard
 .TE
 
 .SH SEE ALSO
-.sp
 .LP
 \fBstrftime\fR(3C), \fBattributes\fR(5), \fBenviron\fR(5), \fBstandards\fR(5)
 .SH DIAGNOSTICS
-.sp
 .ne 2
 .na
 \fB\fBno permission\fR \fR
@@ -413,7 +425,6 @@ The date set is syntactically incorrect.
 .RE
 
 .SH NOTES
-.sp
 .LP
 If you attempt to set the current date to one of the dates that the standard
 and alternate time zones change (for example, the date that daylight time is

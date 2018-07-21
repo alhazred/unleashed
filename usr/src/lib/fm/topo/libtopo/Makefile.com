@@ -20,6 +20,7 @@
 #
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 LIBRARY = libtopo.a
@@ -85,7 +86,7 @@ CERRWARN += -Wno-parentheses
 
 $(DYNLIB)  := LDLIBS += \
 	-lnvpair -lelf -lumem -lxml2 -lkstat -luuid -ldevinfo \
-	-lsmbios -lc -ldevid -lipmi -lscf
+	-lsmbios -lc -ldevid -lipmi -lscf -lpcidb
 
 
 .KEEP_STATE:

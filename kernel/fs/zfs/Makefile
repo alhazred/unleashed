@@ -10,12 +10,14 @@ MODULE_DEPS=	fs/specfs \
 		sched/SDC
 MODULE_CONF=	zfs.conf
 SRCS=		abd.c \
+		aggsum.c \
 		arc.c \
 		blkptr.c \
 		bplist.c \
 		bpobj.c \
 		bptree.c \
 		bqueue.c \
+		cityhash.c \
 		common/zfeature_common.c \
 		common/zfs_comutil.c \
 		common/zfs_deleg.c \

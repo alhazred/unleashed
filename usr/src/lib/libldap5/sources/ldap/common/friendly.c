@@ -2,8 +2,6 @@
  * Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  */
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * The contents of this file are subject to the Netscape Public
  * License Version 1.1 (the "License"); you may not use this file
@@ -33,10 +31,6 @@
  *  friendly.c
  */
 
-#if 0
-static char copyright[] = "@(#) Copyright (c) 1993 Regents of the University of Michigan.\nAll rights reserved.\n";
-#endif
-
 #include "ldap-int.h"
 
 char *
@@ -51,10 +45,9 @@ ldap_friendly_name( char *filename, char *name, FriendlyMap *map )
 	if ( map == NULL ) {
 		return( name );
 	}
-    if ( NULL == name)
-    {
-        return (name);
-    }
+	if ( name == NULL ) {
+		return(name);
+	}
 
 	if ( *map == NULL ) {
 		if ( (fp = fopen( filename, "rF" )) == NULL )
@@ -96,7 +89,7 @@ ldap_friendly_name( char *filename, char *name, FriendlyMap *map )
 					case '"':
 						if ( !esc )
 							found = 1;
-						/* FALL */
+						/* FALLTHROUGH */
 					default:
 						esc = 0;
 						break;

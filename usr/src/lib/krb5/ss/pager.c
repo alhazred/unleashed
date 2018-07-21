@@ -3,8 +3,6 @@
  * Use is subject to license terms.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Pager: Routines to create a "more" running out of a particular file
  * descriptor.
@@ -33,10 +31,9 @@ extern char *getenv();
  * handle SIGINT sensibly
  * allow finer control -- put-page-break-here
  */
-void ss_page_stdin();
 
 #ifndef NO_FORK
-int ss_pager_create() 
+int ss_pager_create(void)
 {
 	int filedes[2];
      
@@ -63,7 +60,7 @@ int ss_pager_create()
 	}
 }
 #else /* don't fork */
-int ss_pager_create()
+int ss_pager_create(void)
 {
     int fd;
     fd = open("/dev/tty", O_WRONLY, 0);
@@ -71,7 +68,7 @@ int ss_pager_create()
 }
 #endif
 
-void ss_page_stdin()
+void ss_page_stdin(void)
 {
 	int i;
 #ifdef POSIX_SIGNALS
@@ -95,7 +92,7 @@ void ss_page_stdin()
 #ifdef POSIX_SIGNALS
 		sigemptyset(&mask);
 		sigaddset(&mask, SIGINT);
-		sigprocmask(SIG_UNBLOCK, &mask, (sigset_t *)0);
+		sigprocmask(SIG_UNBLOCK, &mask, NULL);
 #else
 		int mask = sigblock(0);
 		mask &= ~sigmask(SIGINT);
@@ -106,7 +103,7 @@ void ss_page_stdin()
 		if ((_ss_pager_name = getenv("PAGER")) == NULL)
 			_ss_pager_name = MORE;
 	}
-	(void) execlp(_ss_pager_name, _ss_pager_name, (char *) NULL);
+	(void) execlp(_ss_pager_name, _ss_pager_name, NULL);
 	{
 		/* minimal recovery if pager program isn't found */
 		char buf[80];

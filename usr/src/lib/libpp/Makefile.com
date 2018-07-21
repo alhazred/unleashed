@@ -103,6 +103,9 @@ CERRWARN	+= -Wno-empty-body
 CERRWARN	+= -Wno-unused-value
 
 pics/ppsearch.o 	:= CERRWARN += -Wno-sequence-point
+pics/pplex.o		:= CERRWARN += -Wno-implicit-fallthrough
+pics/ppcpp.o		:= CERRWARN += -Wno-implicit-fallthrough
+pics/ppproto.o		:= CERRWARN += -Wno-implicit-fallthrough
 
 .KEEP_STATE:
 
