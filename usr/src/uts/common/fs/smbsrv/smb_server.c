@@ -1387,7 +1387,7 @@ smb_server_legacy_kstat_update(kstat_t *ksp, int rw)
 			rc = 0;
 			break;
 		}
-		_NOTE(FALLTHRU)
+		/* FALLTHROUGH */
 	default:
 		rc = EIO;
 		break;

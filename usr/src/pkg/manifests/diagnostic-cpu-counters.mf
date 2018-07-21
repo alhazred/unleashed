@@ -51,7 +51,6 @@ file path=usr/include/libcpc.h
 file path=usr/include/libpctx.h
 $(i386_ONLY)file path=usr/kernel/pcbe/pcbe.AuthenticAMD group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/pcbe/pcbe.GenuineIntel.15 group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/pcbe/pcbe.GenuineIntel.6 group=sys mode=0755
 $(i386_ONLY)file path=usr/kernel/pcbe/pcbe.GenuineIntel.6.15 group=sys \
     mode=0755
 file path=usr/lib/$(ARCH64)/libcpc.so.1
@@ -86,8 +85,6 @@ file path=usr/share/man/man3cpc/pctx_set_events.3cpc
 file path=usr/share/man/man3lib/libcpc.3lib
 file path=usr/share/man/man3lib/libpctx.3lib
 hardlink path=usr/bin/cputrack target=../lib/isaexec
-$(i386_ONLY)hardlink path=usr/kernel/pcbe/pcbe.GenuineIntel.5 \
-    target=pcbe.GenuineIntel.6
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 $(i386_ONLY)license usr/src/uts/intel/pcbe/THIRDPARTYLICENSE \
