@@ -1,4 +1,4 @@
-/* $OpenBSD: join.c,v 1.27 2015/10/09 01:37:07 deraadt Exp $	*/
+/* $OpenBSD: join.c,v 1.28 2018/07/18 17:20:54 millert Exp $	*/
 
 /*-
  * Copyright (c) 1991, 1993, 1994
@@ -298,7 +298,8 @@ void
 slurpit(INPUT *F)
 {
 	LINE *lp, *lastlp, tmp;
-	size_t len, linesize;
+	ssize_t len;
+	size_t linesize;
 	u_long cnt;
 	char *bp, *fieldp, *line;
 	long fpos;
@@ -345,15 +346,17 @@ slurpit(INPUT *F)
 			F->pushbool = 0;
 			continue;
 		}
-		if ((len = getline(&line, &linesize, F->fp)) == -1) {
-			free(line);
-			return;
-		}
+		if ((len = getline(&line, &linesize, F->fp)) == -1)
+			break;
 		/*
 		 * we depend on knowing on what field we are, one safe way is
 		 * the file position.
 		*/
 		fpos = ftell(F->fp) - len;
+
+		/* Remove trailing newline, if it exists, and copy line. */
+		if (line[len - 1] == '\n')
+			len--;
 		if (lp->linealloc <= len + 1) {
 			char *p;
 			u_long newsize = lp->linealloc +
@@ -364,11 +367,9 @@ slurpit(INPUT *F)
 			lp->linealloc = newsize;
 		}
 		F->setusedc++;
-		memmove(lp->line, line, len);
+		memcpy(lp->line, line, len);
+		lp->line[len] = '\0';
 		lp->fpos = fpos;
-		/* Replace trailing newline, if it exists. */
-		if (lp->line[len - 1] == '\n')
-			lp->line[len - 1] = '\0';
 
 		/* Split the line into fields, allocate space as necessary. */
 		lp->fieldcnt = 0;
