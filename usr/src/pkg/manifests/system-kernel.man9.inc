@@ -15,4 +15,5 @@
 #
 
 file path=usr/share/man/man9/Intro.9
+file path=usr/share/man/man9/iport.9
 file path=usr/share/man/man9/vmem.9

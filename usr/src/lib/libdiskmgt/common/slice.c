@@ -24,6 +24,10 @@
  * Use is subject to license terms.
  */
 
+/*
+ * Copyright 2017 Nexenta Systems, Inc.
+ */
+
 #include <fcntl.h>
 #include <libdevinfo.h>
 #include <stdio.h>

@@ -722,7 +722,7 @@ build_pcimemlists(void)
 static void
 dboot_multiboot1_xboot_consinfo(void)
 {
-	bi->bi_framebuffer = 0;
+	bi->bi_framebuffer = (native_ptr_t)(uintptr_t)NULL;
 }
 
 static void
@@ -1393,7 +1393,7 @@ process_efi32(EFI_SYSTEM_TABLE32 *efi)
 			bi->bi_smbios = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
 		}
-		if (bi->bi_smbios == 0 &&
+		if (bi->bi_smbios == (native_ptr_t)(uintptr_t)NULL &&
 		    dboot_same_guids(&config[i].VendorGuid, &smbios)) {
 			bi->bi_smbios = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
@@ -1402,7 +1402,7 @@ process_efi32(EFI_SYSTEM_TABLE32 *efi)
 			bi->bi_acpi_rsdp = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
 		}
-		if (bi->bi_acpi_rsdp == 0 &&
+		if (bi->bi_acpi_rsdp == (native_ptr_t)(uintptr_t)NULL &&
 		    dboot_same_guids(&config[i].VendorGuid, &acpi1)) {
 			bi->bi_acpi_rsdp = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
@@ -1426,7 +1426,7 @@ process_efi64(EFI_SYSTEM_TABLE64 *efi)
 			bi->bi_smbios = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
 		}
-		if (bi->bi_smbios == 0 &&
+		if (bi->bi_smbios == (native_ptr_t)(uintptr_t)NULL &&
 		    dboot_same_guids(&config[i].VendorGuid, &smbios)) {
 			bi->bi_smbios = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
@@ -1436,7 +1436,7 @@ process_efi64(EFI_SYSTEM_TABLE64 *efi)
 			bi->bi_acpi_rsdp = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
 		}
-		if (bi->bi_acpi_rsdp == 0 &&
+		if (bi->bi_acpi_rsdp == (native_ptr_t)(uintptr_t)NULL &&
 		    dboot_same_guids(&config[i].VendorGuid, &acpi1)) {
 			bi->bi_acpi_rsdp = (native_ptr_t)(uintptr_t)
 			    config[i].VendorTable;
@@ -1742,7 +1742,7 @@ build_page_tables(void)
 	 * Map framebuffer memory as PT_NOCACHE as this is memory from a
 	 * device and therefore must not be cached.
 	 */
-	if (bi->bi_framebuffer != 0) {
+	if (bi->bi_framebuffer != (native_ptr_t)(uintptr_t)NULL) {
 		multiboot_tag_framebuffer_t *fb;
 		fb = (multiboot_tag_framebuffer_t *)(uintptr_t)
 		    bi->bi_framebuffer;
@@ -1951,8 +1951,6 @@ startup_kernel(void)
 	 */
 #if defined(_BOOT_TARGET_amd64)
 	target_kernel_text = KERNEL_TEXT_amd64;
-#elif defined(__xpv)
-	target_kernel_text = KERNEL_TEXT_i386_xpv;
 #else
 	target_kernel_text = KERNEL_TEXT_i386;
 #endif

@@ -251,6 +251,7 @@ MAN = ASSERT.9f \
       mac_prop_info.9f \
       mac_register.9f \
       mac_rx.9f \
+      mac_transceiver_info.9f \
       mac_tx_update.9f \
       makecom.9f \
       makedevice.9f \
@@ -360,7 +361,10 @@ MAN = ASSERT.9f \
       rmvb.9f \
       rmvq.9f \
       rwlock.9f \
+      sas_phymap_create.9f \
+      sas_phymap_lookup_ua.9f \
       scsi_abort.9f \
+      scsi_address_device.9f \
       scsi_alloc_consistent_buf.9f \
       scsi_cname.9f \
       scsi_destroy_pkt.9f \
@@ -373,10 +377,15 @@ MAN = ASSERT.9f \
       scsi_get_device_type_string.9f \
       scsi_hba_attach_setup.9f \
       scsi_hba_init.9f \
+      scsi_hba_iport_exist.9f \
+      scsi_hba_iport_register.9f \
+      scsi_hba_iport_unit_address.9f \
+      scsi_hba_iportmap_create.9f \
       scsi_hba_lookup_capstr.9f \
       scsi_hba_pkt_alloc.9f \
       scsi_hba_pkt_comp.9f \
       scsi_hba_probe.9f \
+      scsi_hba_tgtmap_create.9f \
       scsi_hba_tran_alloc.9f \
       scsi_ifgetcap.9f \
       scsi_init_pkt.9f \
@@ -394,6 +403,7 @@ MAN = ASSERT.9f \
       scsi_unprobe.9f \
       scsi_validate_sense.9f \
       scsi_vu_errmsg.9f \
+      scsi_wwnstr_to_wwn.9f \
       semaphore.9f \
       sprintf.9f \
       stoi.9f \

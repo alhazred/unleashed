@@ -28,7 +28,6 @@ SHELL=/usr/bin/ksh93
 SHFILES= \
 	Install \
 	checkpaths \
-	checkproto \
 	cstyle \
 	elfcmp \
 	genoffsets \
@@ -76,7 +75,6 @@ MAN1ONBLDLINKS= \
 	git-nits.1
 
 ETCFILES= \
-	hgstyle \
 	its.conf \
 	its.reg
 

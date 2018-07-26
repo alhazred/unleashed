@@ -24,7 +24,6 @@
  * Use is subject to license terms.
  */
 
-
 /*
  *	Plugin Library for PCI Hot-Plug Controller
  */
@@ -705,8 +704,7 @@ cfga_change_state(cfga_cmd_t state_change_cmd, const char *ap_id,
 			rv = CFGA_ERROR;
 			cfga_err(errstring, CMD_SLOT_CONFIGURE, 0);
 			if ((rs == AP_RSTATE_DISCONNECTED) &&
-			    (devctl_ap_disconnect(dcp, NULL)
-			    == -1)) {
+			    (devctl_ap_disconnect(dcp, NULL) == -1)) {
 				rv = CFGA_ERROR;
 				cfga_err(errstring,
 				    CMD_SLOT_CONFIGURE, 0);
@@ -1084,7 +1082,6 @@ cfga_private_func(const char *function, const char *ap_id,
 					for (str = (str+(++len)), i = 0;
 					    *str != '\0'; i++, str++) {
 						buf[i] = *str;
-
 					}
 				}
 				buf[i] = '\0';
@@ -1110,6 +1107,7 @@ cfga_private_func(const char *function, const char *ap_id,
 				return (prt_led_mode(ap_id, repeat, errstring,
 				    msgp));
 			}
+			/* FALLTHROUGH */
 		default:
 			DBG(1, ("default\n"));
 			errno = EINVAL;
@@ -1277,8 +1275,7 @@ find_physical_slot_names(const char *devcomp, struct searcharg *slotarg)
 
 	DBG(1, ("find_physical_slot_names\n"));
 
-	if ((root_node = di_init("/", DINFOCPYALL|DINFOPATH))
-	    == DI_NODE_NIL) {
+	if ((root_node = di_init("/", DINFOCPYALL|DINFOPATH)) == DI_NODE_NIL) {
 		DBG(1, ("di_init() failed\n"));
 		return (0);
 	}

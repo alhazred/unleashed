@@ -56,7 +56,7 @@
  * configuration information.  When the module loads, we read this information
  * from /etc/zfs/zpool.cache and populate the SPA namespace.  This namespace is
  * maintained independently in spa.c.  Whenever the namespace is modified, or
- * the configuration of a pool is changed, we call spa_config_sync(), which
+ * the configuration of a pool is changed, we call spa_write_cachefile(), which
  * walks through all the active pools and writes the configuration to disk.
  */
 
@@ -198,11 +198,11 @@ spa_config_write(spa_config_dirent_t *dp, nvlist_t *nvl)
  * the configuration has been synced to the MOS. This exposes a window where
  * the MOS config will have been updated but the cache file has not. If
  * the system were to crash at that instant then the cached config may not
- * contain the correct information to open the pool and an explicity import
+ * contain the correct information to open the pool and an explicit import
  * would be required.
  */
 void
-spa_config_sync(spa_t *target, boolean_t removing, boolean_t postsysevent)
+spa_write_cachefile(spa_t *target, boolean_t removing, boolean_t postsysevent)
 {
 	spa_config_dirent_t *dp, *tdp;
 	nvlist_t *nvl;
@@ -339,7 +339,8 @@ void
 spa_config_set(spa_t *spa, nvlist_t *config)
 {
 	mutex_enter(&spa->spa_props_lock);
-	nvlist_free(spa->spa_config);
+	if (spa->spa_config != NULL && spa->spa_config != config)
+		nvlist_free(spa->spa_config);
 	spa->spa_config = config;
 	mutex_exit(&spa->spa_props_lock);
 }
@@ -386,15 +387,8 @@ spa_config_generate(spa_t *spa, vdev_t *vd, uint64_t txg, int getstats)
 		    spa->spa_comment);
 	}
 
-#ifdef	_KERNEL
 	hostid = zone_get_hostid(NULL);
-#else	/* _KERNEL */
-	/*
-	 * We're emulating the system's hostid in userland, so we can't use
-	 * zone_get_hostid().
-	 */
-	(void) ddi_strtoul(hw_serial, NULL, 10, &hostid);
-#endif	/* _KERNEL */
+
 	if (hostid != 0) {
 		fnvlist_add_uint64(config, ZPOOL_CONFIG_HOSTID, hostid);
 	}
@@ -531,8 +525,10 @@ spa_config_update(spa_t *spa, int what)
 	/*
 	 * Update the global config cache to reflect the new mosconfig.
 	 */
-	if (!spa->spa_is_root)
-		spa_config_sync(spa, B_FALSE, what != SPA_CONFIG_UPDATE_POOL);
+	if (!spa->spa_is_root) {
+		spa_write_cachefile(spa, B_FALSE,
+		    what != SPA_CONFIG_UPDATE_POOL);
+	}
 
 	if (what == SPA_CONFIG_UPDATE_POOL)
 		spa_config_update(spa, SPA_CONFIG_UPDATE_VDEVS);

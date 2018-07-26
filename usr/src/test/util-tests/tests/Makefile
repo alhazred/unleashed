@@ -14,6 +14,6 @@
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
 
-SUBDIRS = dis dladm iconv libnvpair_json printf xargs mergeq workq
+SUBDIRS = date dis dladm iconv libnvpair_json libsff printf xargs mergeq workq
 
 include $(SRC)/test/Makefile.com

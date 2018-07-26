@@ -130,6 +130,14 @@ variable in
 .Pa /boot/loader.conf .
 Valid values range from 1024 to 16384 bytes.
 .Pp
+.Nm
+defaults to a conservative 1024 byte NFS data packet size.
+This may be changed by setting the
+.Va nfs.read_size
+variable in
+.Pa /boot/loader.conf .
+Valid values range from 1024 to 16384 bytes.
+.Pp
 TFTP block size can be controlled by setting the
 .Va tftp.blksize
 variable in

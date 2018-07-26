@@ -10,12 +10,14 @@ MODULE_DEPS=	fs/specfs \
 		sched/SDC
 MODULE_CONF=	zfs.conf
 SRCS=		abd.c \
+		aggsum.c \
 		arc.c \
 		blkptr.c \
 		bplist.c \
 		bpobj.c \
 		bptree.c \
 		bqueue.c \
+		cityhash.c \
 		common/zfeature_common.c \
 		common/zfs_comutil.c \
 		common/zfs_deleg.c \
@@ -102,11 +104,15 @@ SRCS=		abd.c \
 		vdev_cache.c \
 		vdev_disk.c \
 		vdev_file.c \
+		vdev_indirect.c \
+		vdev_indirect_births.c \
+		vdev_indirect_mapping.c \
 		vdev_label.c \
 		vdev_mirror.c \
 		vdev_missing.c \
 		vdev_queue.c \
 		vdev_raidz.c \
+		vdev_removal.c \
 		vdev_root.c \
 		zap.c \
 		zap_leaf.c \
@@ -140,6 +146,7 @@ SRCS=		abd.c \
 		zio_inject.c \
 		zle.c \
 		zrlock.c \
+		zthr.c \
 		zvol.c
 INCS=		${.CURDIR} \
 		${.CURDIR}/common \

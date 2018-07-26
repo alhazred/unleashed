@@ -1076,7 +1076,7 @@ TRACEOBJS=			\
 # Since libc contains no C++ code, linking with the minimal crti.o and
 # crtn.o modules is safe and avoids the problems described above.
 OBJECTS= $(CRTI) $(MOSTOBJS) $(CRTN)
-CRTSRCS= ../../crt/i86
+CRTSRCS= ../../crt/i386
 
 LDPASS_OFF=	$(POUND_SIGN)
 

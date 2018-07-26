@@ -24,7 +24,7 @@
 # Use is subject to license terms.
 #
 
-CRTSRCS= ../../crt/i86
+CRTSRCS= ../../crt/i386
 
 include ../Makefile.com
 

@@ -3179,7 +3179,7 @@ page_geti_contig_pages(int mnode, uint_t bin, uchar_t szc, int flags,
 	pfn_t	randpfn;
 	page_t *pp, *randpp, *endpp;
 	uint_t colors, ceq_mask;
-	uint_t color_mask;
+	uint_t color_mask __unused;
 	pfn_t hi, lo;
 	uint_t skip;
 	MEM_NODE_ITERATOR_DECL(it);

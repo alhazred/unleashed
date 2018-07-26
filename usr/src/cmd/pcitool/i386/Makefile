@@ -17,13 +17,14 @@
 #
 # CDDL HEADER END
 #
+
+#
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# cmd/pcitool/i386/Makefile
 
 include ../Makefile.com
 
 CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
 
-install: all $(ROOTUSRSBINPROG) $(ROOTMAN8FILES)
+install: all $(ROOTUSRSBINPROG)

@@ -31,8 +31,6 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#define RCSID	"$Id: options.c,v 1.74 2000/04/15 01:27:13 masputra Exp $"
-
 #include <ctype.h>
 #include <stdio.h>
 #include <errno.h>
@@ -65,8 +63,6 @@
 #if defined(ultrix) || defined(NeXT)
 char *strdup __P((char *));
 #endif
-
-static const char rcsid[] = RCSID;
 
 /*
  * Option variables and default values.

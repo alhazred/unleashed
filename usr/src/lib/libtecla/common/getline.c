@@ -6428,6 +6428,7 @@ static int _gl_parse_config_line(GetLine *gl, void *stream, GlcGetcFn *getc_fn,
     switch(argc) {
     case 3:
       action = argv[2];
+      /* FALLTHROUGH */
     case 2:              /* Note the intentional fallthrough */
       keyseq = argv[1];
 /*

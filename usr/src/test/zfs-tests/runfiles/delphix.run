@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright (c) 2012, 2016 by Delphix. All rights reserved.
+# Copyright (c) 2012, 2017 by Delphix. All rights reserved.
 # Copyright 2016, OmniTI Computer Consulting, Inc. All rights reserved.
 #
 
@@ -159,7 +159,7 @@ tests = ['zfs_receive_001_pos', 'zfs_receive_002_pos', 'zfs_receive_003_pos',
     'zfs_receive_005_neg', 'zfs_receive_006_pos',
     'zfs_receive_007_neg', 'zfs_receive_008_pos', 'zfs_receive_009_neg',
     'zfs_receive_010_pos', 'zfs_receive_011_pos', 'zfs_receive_012_pos',
-    'zfs_receive_013_pos']
+    'zfs_receive_013_pos', 'zfs_receive_014_pos']
 
 [/opt/zfs-tests/tests/functional/cli_root/zfs_rename]
 tests = ['zfs_rename_001_pos', 'zfs_rename_002_pos', 'zfs_rename_003_pos',
@@ -224,13 +224,15 @@ tests = ['zpool_001_neg', 'zpool_002_pos', 'zpool_003_pos']
 [/opt/zfs-tests/tests/functional/cli_root/zpool_add]
 tests = ['zpool_add_001_pos', 'zpool_add_002_pos', 'zpool_add_003_pos',
     'zpool_add_004_pos', 'zpool_add_005_pos', 'zpool_add_006_pos',
-    'zpool_add_007_neg', 'zpool_add_008_neg', 'zpool_add_009_neg']
+    'zpool_add_007_neg', 'zpool_add_008_neg', 'zpool_add_009_neg',
+    'add_nested_replacing_spare']
 
 [/opt/zfs-tests/tests/functional/cli_root/zpool_attach]
 tests = ['zpool_attach_001_neg']
 
 [/opt/zfs-tests/tests/functional/cli_root/zpool_clear]
-tests = ['zpool_clear_001_pos', 'zpool_clear_002_neg', 'zpool_clear_003_neg']
+tests = ['zpool_clear_001_pos', 'zpool_clear_002_neg', 'zpool_clear_003_neg',
+    'zpool_clear_readonly']
 
 [/opt/zfs-tests/tests/functional/cli_root/zpool_create]
 tests = ['zpool_create_001_pos', 'zpool_create_002_pos',
@@ -277,7 +279,17 @@ tests = ['zpool_import_001_pos', 'zpool_import_002_pos',
     'zpool_import_features_001_pos', 'zpool_import_features_002_neg',
     'zpool_import_features_003_pos', 'zpool_import_missing_001_pos',
     'zpool_import_missing_002_pos', 'zpool_import_missing_003_pos',
-    'zpool_import_rename_001_pos']
+    'zpool_import_rename_001_pos',
+    'import_cachefile_device_added',
+    'import_cachefile_device_removed',
+    'import_cachefile_mirror_attached',
+    'import_cachefile_mirror_detached',
+    'import_cachefile_device_replaced',
+    'import_rewind_config_changed',
+    'import_rewind_device_replaced',
+    'import_cachefile_shared_device',
+    'import_paths_changed',
+    'import_devices_missing']
 
 [/opt/zfs-tests/tests/functional/cli_root/zpool_labelclear]
 tests = ['zpool_labelclear_active', 'zpool_labelclear_exported']
@@ -468,6 +480,19 @@ tests = ['refquota_001_pos', 'refquota_002_pos', 'refquota_003_pos',
 [/opt/zfs-tests/tests/functional/refreserv]
 tests = ['refreserv_001_pos', 'refreserv_002_pos', 'refreserv_003_pos',
     'refreserv_004_pos', 'refreserv_005_pos']
+
+[/opt/zfs-tests/tests/functional/removal]
+pre =
+tests = ['removal_sanity', 'removal_all_vdev', 'removal_check_space',
+    'removal_condense_export',
+    'removal_multiple_indirection', 'removal_remap',
+    'removal_remap_deadlists',
+    'removal_with_add', 'removal_with_create_fs', 'removal_with_dedup',
+    'removal_with_export', 'removal_with_ganging', 'removal_with_remap',
+    'removal_with_remove', 'removal_with_scrub', 'removal_with_send',
+    'removal_with_send_recv', 'removal_with_snapshot', 'removal_with_write',
+    'removal_with_zdb', 'removal_resume_export',
+    'remove_mirror', 'remove_mirror_sanity', 'remove_raidz']
 
 [/opt/zfs-tests/tests/functional/rename_dirs]
 tests = ['rename_dirs_001_pos']

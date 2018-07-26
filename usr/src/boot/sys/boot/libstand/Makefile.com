@@ -22,9 +22,8 @@ CC=	$(GCC_ROOT)/bin/gcc
 LIB_BASE=	$(SRC)/boot/lib
 LIBSTAND_SRC=	$(LIB_BASE)/libstand
 
-ASFLAGS =	-fPIC
-CPPFLAGS =	-nostdinc -I../../../../include -I${LIBSTAND_SRC}
-CPPFLAGS +=	-I../../..  -I../../../sys -I. -I$(SRC)/common/bzip2
+CPPFLAGS =	-nostdinc -I../../../../include -I${LIBSTAND_SRC} -I../../..
+CPPFLAGS +=	-I../../../sys -I. -I$(SRC)/common/bzip2
 CPPFLAGS +=	-D_STANDALONE
 
 CFLAGS =	-O2 -fPIC -ffreestanding -Wformat

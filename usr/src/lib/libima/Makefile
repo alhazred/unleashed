@@ -38,8 +38,6 @@ install :=	TARGET = install
 
 .KEEP_STATE:
 
-install_h: $(ROOTHDRS)
-
 all clean clobber install: $(SUBDIRS)
 
 install_h:      $(ROOTHDRS)

@@ -36,8 +36,8 @@
  * well:
  *
  *  - lib/libc/i386/gen/makectxt.c
- *  - lib/crt/i86/crti.s
- *  - lib/crt/i86/crt1.s
+ *  - lib/crt/i386/crti.s
+ *  - lib/crt/i386/crt1.s
  */
 #undef	STACK_ALIGN
 #define	STACK_ALIGN	16

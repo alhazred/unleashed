@@ -11,7 +11,7 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+# Copyright 2018 Nexenta Systems, Inc.
 #
 
 file path=usr/share/man/man1/Intro.1

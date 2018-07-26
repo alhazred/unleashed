@@ -13,8 +13,14 @@
 
 #
 # Copyright 2010 Chris Love.  All rights reserved.
-# Copyright (c) 2013, Joyent, Inc. All rights reserved.
+# Copyright 2017, Joyent, Inc.
 #
+
+BLOCK=""
+for i in {1..512}; do
+	BLOCK+="."
+done
+
 
 checktest()
 {
@@ -28,6 +34,17 @@ checktest()
 		echo -e "$CMD: test $test: actual output:\n$actual"
 	else
 		echo "$CMD: test $test: pass"
+	fi
+}
+
+checkfail()
+{
+	printf "foobar" | $PROG $* &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+		printf '%s: test "test %s": was supposed to fail\n' "$CMD" "$*"
+	else
+		printf '%s: test "%s": pass\n' "$CMD" "$*"
 	fi
 }
 
@@ -132,17 +149,33 @@ o=`echo -e "y\n"`
 a=`echo -e "x\ny\n" | $PROG +2`
 checktest "$a" "$o" 15
 
-o=`echo -e "yyz"`
-a=`echo -e "xyyyyyyyyyyz" | $PROG +10c`
+o=`printf "yyz\n"`
+a=`printf "xyyyyyyyyyyz\n" | $PROG +10c`
 checktest "$a" "$o" 16
 
-o=`echo -e "y\ny\nz"`
-a=`echo -e "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz" | $PROG +10l`
+o=`printf "y\ny\nz\n"`
+a=`printf "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz\n" | $PROG +10l`
 checktest "$a" "$o" 17
 
-o=`echo -e "y\ny\ny\ny\ny\ny\ny\ny\ny\nz"`
-a=`echo -e "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz" | $PROG -10l`
+o=`printf "y\ny\ny\ny\ny\ny\ny\ny\ny\nz\n"`
+a=`printf "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz\n" | $PROG -10l`
 checktest "$a" "$o" 18
+
+a=`printf "o\nn\nm\nl\nk\nj\ni\nh\ng\n"`
+o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG +10lr`
+checktest "$a" "$o" 19
+
+a=`printf "o\nn\nm\nl\nk\nj\ni\nh\ng\nf\n"`
+o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG -10lr`
+checktest "$a" "$o" 20
+
+a=`printf "o\nn\nm\nl\n"`
+o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG +10cr`
+checktest "$a" "$o" 21
+
+a=`printf "o\nn\nm\nl\nk\n"`
+o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG -10cr`
+checktest "$a" "$o" 22
 
 #
 # For reasons that are presumably as accidental as they are ancient, legacy
@@ -151,22 +184,54 @@ checktest "$a" "$o" 18
 # behavior is functional.
 #
 if [[ `uname -s` == "SunOS" ]]; then
-	o=`echo -e "yyz"`
-	a=`echo -e "xyyyyyyyyyyz" | $PROG +c`
+	o=`printf "yyz\n"`
+	a=`printf "xyyyyyyyyyyz\n" | $PROG +c`
 	checktest "$a" "$o" 16a
 
-	o=`echo -e "y\ny\nz"`
-	a=`echo -e "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz" | $PROG +l`
+	o=`printf "y\ny\nz\n"`
+	a=`printf "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz\n" | $PROG +l`
 	checktest "$a" "$o" 17a
 
-	o=`echo -e "y\ny\ny\ny\ny\ny\ny\ny\ny\nz"`
-	a=`echo -e "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz" | $PROG -l`
+	o=`printf "y\ny\ny\ny\ny\ny\ny\ny\ny\nz\n"`
+	a=`printf "x\ny\ny\ny\ny\ny\ny\ny\ny\ny\ny\nz\n" | $PROG -l`
 	checktest "$a" "$o" 18a
+
+	a=`printf "o\nn\nm\nl\nk\nj\ni\nh\ng\n"`
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG +lr`
+	checktest "$a" "$o" 19a
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG +l -r`
+	checktest "$a" "$o" 19a
+
+	a=`printf "o\nn\nm\nl\nk\nj\ni\nh\ng\nf\n"`
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG -lr`
+	checktest "$a" "$o" 20a
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG -l -r`
+	checktest "$a" "$o" 20b
+
+	a=`printf "o\nn\nm\nl\n"`
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG +cr`
+	checktest "$a" "$o" 21a
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG +c -r`
+	checktest "$a" "$o" 21a
+
+	a=`printf "o\nn\nm\nl\nk\n"`
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG -cr`
+	checktest "$a" "$o" 22a
+
+	o=`printf "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\n" | $PROG -c -r`
+	checktest "$a" "$o" 22b
 fi
 
 o=`echo -e "c\nb\na"`
 a=`echo -e "a\nb\nc" | $PROG -r`
-checktest "$a" "$o" 19
+checktest "$a" "$o" 23
 
 #
 # Now we want to do a series of follow tests.
@@ -196,7 +261,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\n"`
 a=`cat $out`
-checktest "$a" "$o" 20
+checktest "$a" "$o" 24
 rm $follow
 
 #
@@ -215,7 +280,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\n"`
 a=`cat $out`
-checktest "$a" "$o" 21
+checktest "$a" "$o" 25
 rm $moved
 
 #
@@ -234,7 +299,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\ng\nh\ni\n"`
 a=`cat $out`
-checktest "$a" "$o" 22
+checktest "$a" "$o" 26
 rm $follow
 
 #
@@ -254,7 +319,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\no\np\nq"`
 a=`cat $out`
-checktest "$a" "$o" 23
+checktest "$a" "$o" 27
 rm $follow
 
 #
@@ -275,7 +340,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\no\np\nq"`
 a=`cat $out`
-checktest "$a" "$o" 24
+checktest "$a" "$o" 28
 rm $moved
 
 #
@@ -294,7 +359,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\ng\nh\ni\n"`
 a=`cat $out`
-checktest "$a" "$o" 25
+checktest "$a" "$o" 29
 rm $follow
 
 #
@@ -321,7 +386,7 @@ sleep 1
 
 o=`echo -e "a\nb\nc\nd\ne\nf\n"`
 a=`cat $out`
-checktest "$a" "$o" 26
+checktest "$a" "$o" 30
 rm $moved
 
 #
@@ -360,7 +425,7 @@ four
 ==> $follow <==
 five"
 a=`cat $out`
-checktest "$a" "$o" 27
+checktest "$a" "$o" 31
 rm $follow $moved
 
 if [[ `uname -s` == "SunOS" ]]; then
@@ -396,7 +461,7 @@ EOF
 
 	o=`echo -e "0\n1\n2\n3\n5\n6\n7\n8\n9\n"`
 	a=`cat $out`
-	checktest "$a" "$o" 27a
+	checktest "$a" "$o" 31a
 	rm $follow
 
 	cat /dev/null > $follow
@@ -428,7 +493,7 @@ EOF
 
 	o=`echo -e "0\n1\n2\n3\n5\n6\n7\n8\n9\n"`
 	a=`cat $out`
-	checktest "$a" "$o" 27b
+	checktest "$a" "$o" 31b
 	rm $moved
 
 	#
@@ -448,7 +513,7 @@ EOF
 
 	o=`echo -e "a\nb\nc\nd\ne\nf\ng\nh\ni\n"`
 	a=`cat $out`
-	checktest "$a" "$o" 27c
+	checktest "$a" "$o" 31c
 fi
 
 #
@@ -467,7 +532,64 @@ kill $child
 a=`sort $out | uniq -c | sort -n | tail -1 | awk '{ print $1 }'`
 o=1
 
-checktest "$a" "$o" 28
+checktest "$a" "$o" 32
+
+# Test different ways of specifying character offsets
+o=`printf "d\n"`
+
+a=`printf "hello\nworld\n" | $PROG -c2`
+checktest "$a" "$o" 33
+
+a=`printf "hello\nworld\n" | $PROG -c-2`
+checktest "$a" "$o" 34
+
+a=`printf "hello\nworld\n" | $PROG -c 2`
+checktest "$a" "$o" 35
+
+a=`printf "hello\nworld\n" | $PROG -c -2`
+checktest "$a" "$o" 36
+
+a=`printf "hello\nworld\n" | $PROG -2c`
+checktest "$a" "$o" 37
+
+o=`printf "llo\nworld\n"`
+
+a=`printf "hello\nworld\n" | $PROG -c +3`
+checktest "$a" "$o" 38
+
+a=`printf "hello\nworld\n" | $PROG -c+3`
+checktest "$a" "$o" 39
+
+a=`printf "hello\nworld\n" | $PROG +3c`
+checktest "$a" "$o" 40
+
+# Test various ways of specifying block offsets
+o=`printf "$BLOCK"`
+
+a=`printf "${BLOCK//./x}$BLOCK" | $PROG -b1`
+checktest "$a" "$o" 41
+
+a=`printf "${BLOCK//./x}$BLOCK" | $PROG -b 1`
+checktest "$a" "$o" 42
+
+a=`printf "${BLOCK//./x}$BLOCK" | $PROG -b -1`
+checktest "$a" "$o" 43
+
+a=`printf "${BLOCK//./x}$BLOCK" | $PROG -b +2`
+checktest "$a" "$o" 44
+
+# Test that illegal arguments aren't allowed
+
+checkfail +b2
+checkfail +c3
+checkfail -l3
+checkfail -cz
+checkfail -bz
+checkfail -nz
+checkfail -3n
+checkfail +3n
+checkfail +n3
+checkfail -lfoobar
 
 echo "$CMD: completed"
 

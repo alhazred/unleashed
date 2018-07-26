@@ -256,6 +256,7 @@ CERRWARN +=	-Wno-type-limits
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-variable
+CERRWARN +=	-Wno-unused-but-set-variable
 CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-unused-value
 CERRWARN +=	-Wno-empty-body

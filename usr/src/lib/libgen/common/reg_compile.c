@@ -398,6 +398,7 @@ _compile(const char *sp, char *ep, char *endbuf, int viflag)
 					*ep++ = (char)c;
 					continue;
 				}
+				break;
 			}
 
 	/* Drop through to default to use \ to turn off special chars */

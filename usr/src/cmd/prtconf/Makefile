@@ -26,8 +26,7 @@ PROG= 		prtconf
 
 include ../Makefile.cmd
 
-$(64ONLY)SUBDIRS= $(MACH)
-$(BUILD64)SUBDIRS += $(MACH64)
+SUBDIRS += $(MACH64)
 
 all	:=	TARGET = all
 install	:=	TARGET = install
@@ -44,9 +43,9 @@ all:	$(SUBDIRS)
 
 clean clobber:	$(SUBDIRS)
 
-install:	$(SUBDIRS)
-	-$(RM) $(ROOTUSRSBINPROG)
-	-$(LN) $(ISAEXEC) $(ROOTUSRSBINPROG)
+clean clobber lint:	$(SUBDIRS)
+
+install:	$(SUBDIRS) $(ROOTSYMLINK)
 
 $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)

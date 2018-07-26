@@ -13,6 +13,7 @@
 # Copyright 2011, Richard Lowe
 # Copyright 2012 Nexenta Systems, Inc. All rights reserved.
 # Copyright 2013, OmniTI Computer Consulting, Inc.
+# Copyright 2017 Peter Tribble
 #
 
 file path=usr/share/man/man2/Intro.2

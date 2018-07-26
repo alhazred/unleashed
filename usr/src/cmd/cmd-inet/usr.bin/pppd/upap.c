@@ -31,16 +31,11 @@
  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-#define RCSID	"$Id: upap.c,v 1.23 1999/11/20 05:11:47 paulus Exp $"
-
 #include <stdio.h>
 #include <string.h>
 
 #include "pppd.h"
 #include "upap.h"
-
-static const char rcsid[] = RCSID;
 
 static bool hide_password = 1;
 

@@ -12,6 +12,7 @@
 #
 # Copyright (c) 2012 by Delphix. All rights reserved.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2017 Joyent, Inc.
 #
 
 [DEFAULT]
@@ -24,6 +25,8 @@ outputdir = /var/tmp/test_results
 
 [/opt/util-tests/tests/printf_test]
 [/opt/util-tests/tests/allowed-ips]
+[/opt/util-tests/tests/set-linkprop]
+[/opt/util-tests/tests/libsff/libsff]
 
 [/opt/util-tests/tests/xargs_test]
 
@@ -34,3 +37,5 @@ outputdir = /var/tmp/test_results
 tests = ['json_00_blank', 'json_01_boolean', 'json_02_numbers',
     'json_03_empty_arrays', 'json_04_number_arrays', 'json_05_strings',
     'json_06_nested', 'json_07_nested_arrays']
+
+[/opt/util-tests/tests/date_test]

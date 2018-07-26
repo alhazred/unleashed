@@ -20,8 +20,6 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
-static const char rcsid[] = "$Id: ns_newmsg.c,v 1.3 2009/02/26 10:48:57 marka Exp $";
-
 #include <port_before.h>
 
 #include <arpa/nameser.h>

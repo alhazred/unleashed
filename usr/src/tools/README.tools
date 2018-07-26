@@ -25,7 +25,7 @@
 This directory contains the tools used to do a full build of the
 OS/Net workspace.  They usually live in the /opt/onbld directory on build
 machines. From here, 'make install' will build and install the tools
-in $ROOT/opt/onbld. 
+in $ROOT/opt/onbld.
 
 Layout of /opt/onbld
 --------------------
@@ -51,10 +51,7 @@ Layout of /opt/onbld
 
 /opt/onbld/lib/python/ 
         symlink to the modules directory of the currently preferred
-        python version.  This exists to retain compatibility both for
-        tools expecting only one supported version of python, and for
-        user .hgrc files that expect to find cdm.py in
-        /opt/onbld/lib/python/onbld/hgext.
+        python version.
 
 /opt/onbld/man
 	rudimentary man pages for some of the tools.
@@ -72,10 +69,6 @@ bldenv
 	sets the environment up differently and may cause everything
 	to rebuild (because of different -I or -L paths).
 
-cdm 
-	A Mercurial extension providing various commands useful for ON
-	development
-
 check_rtime
 	checks ELF attributes used by ELF dynamic objects in the proto area.
 	Used by 'nightly's -r option, to check a number of ELF runtime
@@ -84,11 +77,6 @@ check_rtime
 	build results.  It also uses the -i option to obtain NEEDED and RUNPATH
 	entries, which help detect changes in software dependencies and makes
 	sure objects don't have any strange runpaths like /opt/SUNWspro/lib.
-
-checkproto
-	Runs protocmp and protolist on a workspace (or uses the environment
-	variable SRCTOP to determine the workspace). Checks the proto area
-	against the packages.
 
 codereview
 	Given two filenames, creates a postscript file with the file 
@@ -110,14 +98,6 @@ ctfdump
 
 ctfmerge
 	Merge the CTF data from one or more object files.
-
-depcheck
-	A tool to try an assess the dependencies of executables.  This tool 
-	is not a definitive dependency check, but it does use "strings" and 
-	"ldd" to gather as much information as it can.  The dependency check
-	tool can handle filenames and pkgnames.  Before using the dependency
-	checker you must build a database which reflects the properties and
-	files in your system.
 
 elfcmp
 	Compares two ELF modules (e.g. .o files, executables) section by
@@ -160,10 +140,6 @@ nightly
 	such things as the workspace, the parent, and what to build. See
 	env/developer and env/gatekeeper for sample, hopefully well-commented
 	env files.
-
-pmodes
-	enforces proper file ownership and permissions in pkgmap and package
-	prototype* files.  converts files if necessary
 
 protocmp
 	compares proto lists and the package definitions. Used by nightly

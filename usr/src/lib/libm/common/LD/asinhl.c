@@ -40,7 +40,7 @@ static const long double
 long double
 asinhl(long double x) {
 	long double t, w;
-	volatile long double dummy;
+	volatile long double dummy __unused;
 
 	w = fabsl(x);
 	if (isnanl(x))

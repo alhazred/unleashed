@@ -28,7 +28,7 @@
 .\" Copyright (c) 2014 Integros [integros.com]
 .\" Copyright 2016 Nexenta Systems, Inc.
 .\"
-.Dd September 16, 2016
+.Dd December 6, 2017
 .Dt ZFS 8
 .Os
 .Sh NAME
@@ -100,6 +100,9 @@
 .Oo Fl S Ar property Oc Ns ...
 .Oo Fl t Ar type Ns Oo , Ns Ar type Oc Ns ... Oc
 .Oo Ar filesystem Ns | Ns Ar volume Ns | Ns Ar snapshot Oc Ns ...
+.Nm
+.Cm remap
+.Ar filesystem Ns | Ns Ar volume
 .Nm
 .Cm set
 .Ar property Ns = Ns Ar value Oo Ar property Ns = Ns Ar value Oc Ns ...
@@ -267,6 +270,7 @@
 .Ar snapshot Ar snapshot Ns | Ns Ar filesystem
 .Nm
 .Cm program
+.Op Fl n
 .Op Fl t Ar timeout
 .Op Fl m Ar memory_limit
 .Ar pool script
@@ -996,6 +1000,10 @@ Please see
 for more information on these algorithms.
 .Pp
 Changing this property affects only newly-written data.
+.Pp
+Salted checksum algorithms
+.Pq Cm edonr , skein
+are currently not supported for any filesystem on the boot pools.
 .It Xo
 .Sy compression Ns = Ns Sy on Ns | Ns Sy off Ns | Ns Sy gzip Ns | Ns
 .Sy gzip- Ns Em N Ns | Ns Sy lz4 Ns | Ns Sy lzjb Ns | Ns Sy zle
@@ -2389,6 +2397,16 @@ option was not specified.
 .El
 .It Xo
 .Nm
+.Cm remap
+.Ar filesystem Ns | Ns Ar volume
+.Xc
+Remap the indirect blocks in the given fileystem or volume so that they no
+longer reference blocks on previously removed vdevs and we can eventually
+shrink the size of the indirect mapping objects for the previously removed
+vdevs. Note that remapping all blocks might not be possible and that
+references from snapshots will still exist and cannot be remapped.
+.It Xo
+.Nm
 .Cm upgrade
 .Xc
 Displays a list of file systems that are not the most recent version.
@@ -3408,6 +3426,7 @@ Display the path's inode change time as the first column of output.
 .It Xo
 .Nm
 .Cm program
+.Op Fl n
 .Op Fl t Ar timeout
 .Op Fl m Ar memory_limit
 .Ar pool script
@@ -3429,6 +3448,14 @@ For full documentation of the ZFS channel program interface, see the manual
 page for
 .Xr zfs-program 8 .
 .Bl -tag -width ""
+.It Fl n
+Executes a read-only channel program, which runs faster.
+The program cannot change on-disk state by calling functions from
+the zfs.sync submodule.
+The program can be used to gather information such as properties and
+determining if changes would succeed (zfs.check.*).
+Without this flag, all pending changes must be synced to disk before
+a channel program can complete.
 .It Fl t Ar timeout
 Execution time limit, in milliseconds.
 If a channel program executes for longer than the provided timeout, it will

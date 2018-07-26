@@ -38,10 +38,6 @@
 #define const
 #endif
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
-static const char rcsid[] = "$Id: pppstats.c,v 1.27 1999/08/13 06:46:23 paulus Exp $";
-
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>

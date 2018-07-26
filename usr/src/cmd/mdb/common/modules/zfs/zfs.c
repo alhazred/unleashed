@@ -22,6 +22,7 @@
  * Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2011 Nexenta Systems, Inc. All rights reserved.
  * Copyright (c) 2011, 2016 by Delphix. All rights reserved.
+ * Copyright (c) 2017, Joyent, Inc.  All rights reserved.
  */
 
 /* Portions Copyright 2010 Robert Milkowski */
@@ -416,6 +417,23 @@ zfs_params(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 			mdb_warn("variable %s not found", params[i]);
 		}
 	}
+
+	return (DCMD_OK);
+}
+
+/* ARGSUSED */
+static int
+dva(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
+{
+	dva_t dva;
+	if (mdb_vread(&dva, sizeof (dva_t), addr) == -1) {
+		mdb_warn("failed to read dva_t");
+		return (DCMD_ERR);
+	}
+	mdb_printf("<%llu:%llx:%llx>\n",
+	    (u_longlong_t)DVA_GET_VDEV(&dva),
+	    (u_longlong_t)DVA_GET_OFFSET(&dva),
+	    (u_longlong_t)DVA_GET_ASIZE(&dva));
 
 	return (DCMD_OK);
 }
@@ -1551,6 +1569,9 @@ do_print_vdev(uintptr_t addr, int flags, int depth, boolean_t recursive,
 		case VDEV_AUX_SPLIT_POOL:
 			aux = "SPLIT_POOL";
 			break;
+		case VDEV_AUX_CHILDREN_OFFLINE:
+			aux = "CHILDREN_OFFLINE";
+			break;
 		default:
 			aux = "UNKNOWN";
 			break;
@@ -2054,10 +2075,12 @@ spa_space(uintptr_t addr, uint_t flags, int argc, const mdb_arg_t *argv)
 	    sd.ms_freeingtree >> shift, suffix);
 	mdb_printf("ms_freedtree = %llu%s\n",
 	    sd.ms_freedtree >> shift, suffix);
-	mdb_printf("ms_tree = %llu%s\n", sd.ms_tree >> shift, suffix);
+	mdb_printf("ms_tree = %llu%s\n",
+	    sd.ms_tree >> shift, suffix);
 	mdb_printf("ms_deferspace = %llu%s\n",
 	    sd.ms_deferspace >> shift, suffix);
-	mdb_printf("last synced avail = %llu%s\n", sd.avail >> shift, suffix);
+	mdb_printf("last synced avail = %llu%s\n",
+	    sd.avail >> shift, suffix);
 	mdb_printf("current syncing avail = %llu%s\n",
 	    sd.nowavail >> shift, suffix);
 
@@ -2461,6 +2484,11 @@ multilist_walk_init(mdb_walk_state_t *wsp)
 	return (WALK_NEXT);
 }
 
+typedef struct mdb_txg_list {
+	size_t		tl_offset;
+	uintptr_t	tl_head[TXG_SIZE];
+} mdb_txg_list_t;
+
 typedef struct txg_list_walk_data {
 	uintptr_t lw_head[TXG_SIZE];
 	int	lw_txgoff;
@@ -2473,17 +2501,18 @@ static int
 txg_list_walk_init_common(mdb_walk_state_t *wsp, int txg, int maxoff)
 {
 	txg_list_walk_data_t *lwd;
-	txg_list_t list;
+	mdb_txg_list_t list;
 	int i;
 
 	lwd = mdb_alloc(sizeof (txg_list_walk_data_t), UM_SLEEP | UM_GC);
-	if (mdb_vread(&list, sizeof (txg_list_t), wsp->walk_addr) == -1) {
+	if (mdb_ctf_vread(&list, "txg_list_t", "mdb_txg_list_t", wsp->walk_addr,
+	    0) == -1) {
 		mdb_warn("failed to read txg_list_t at %#lx", wsp->walk_addr);
 		return (WALK_ERR);
 	}
 
 	for (i = 0; i < TXG_SIZE; i++)
-		lwd->lw_head[i] = (uintptr_t)list.tl_head[i];
+		lwd->lw_head[i] = list.tl_head[i];
 	lwd->lw_offset = list.tl_offset;
 	lwd->lw_obj = mdb_alloc(lwd->lw_offset + sizeof (txg_node_t),
 	    UM_SLEEP | UM_GC);
@@ -3910,6 +3939,7 @@ out:
 static const mdb_dcmd_t dcmds[] = {
 	{ "arc", "[-bkmg]", "print ARC variables", arc_print },
 	{ "blkptr", ":", "print blkptr_t", blkptr },
+	{ "dva", ":", "print dva_t", dva },
 	{ "dbuf", ":", "print dmu_buf_impl_t", dbuf },
 	{ "dbuf_stats", ":", "dbuf stats", dbuf_stats },
 	{ "dbufs",

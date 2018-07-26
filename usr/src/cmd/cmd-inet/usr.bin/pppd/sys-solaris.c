@@ -39,8 +39,6 @@
  * OR MODIFICATIONS.
  */
 
-#define	RCSID	"$Id: sys-solaris.c,v 1.2 2000/04/21 01:27:57 masputra Exp $"
-
 #include <limits.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -88,8 +86,6 @@
 #include "ipv6cp.h"
 #endif /* INET6 */
 #include "ccp.h"
-
-static const char rcsid[] = RCSID;
 
 #define	PPPSTRTIMOUT	1	/* Timeout in seconds for ioctl */
 #define	MAX_POLLFDS	32

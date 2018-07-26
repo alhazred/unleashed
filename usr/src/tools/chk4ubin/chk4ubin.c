@@ -37,7 +37,6 @@
 #include <memory.h>
 #include <libelf.h>
 #include <gelf.h>
-#include <utility.h>
 
 /*
  * Tool to inspect a sun4u bootable module for a symbol table size

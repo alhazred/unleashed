@@ -20,6 +20,7 @@
  */
 /*
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
+ * Copyright 2017 Sebastian Wiedenroth
  * Use is subject to license terms.
  */
 
@@ -46,9 +47,14 @@
 	IN6ADDR_INITIALIZER(0xffffffffu, 0xffffffffu, 0xffffffffu, 0xffffffffu)
 #define	IN6ADDR_MASK96_INIT \
 	IN6ADDR_INITIALIZER(0xffffffffu, 0xffffffffu, 0xffffffffu, 0)
+#define	IN6ADDR_MASK32_INIT \
+	IN6ADDR_INITIALIZER(0xffffffffu, 0, 0, 0)
 #define	IN6ADDR_MASK16_INIT \
 	IN6ADDR_INITIALIZER(0xffff0000u, 0, 0, 0)
-
+#define	IN6ADDR_MASK10_INIT \
+	IN6ADDR_INITIALIZER(0xffc00000u, 0, 0, 0)
+#define	IN6ADDR_MASK7_INIT \
+	IN6ADDR_INITIALIZER(0xfe000000u, 0, 0, 0)
 
 /*
  * This table is ordered such that longest prefix matches are hit first
@@ -59,11 +65,19 @@ static ip6_asp_t default_ip6_asp_table[] = {
 	{ IN6ADDR_LOOPBACK_INIT,			IN6ADDR_MASK128_INIT,
 	    "Loopback", 50 },
 	{ IN6ADDR_ANY_INIT,				IN6ADDR_MASK96_INIT,
-	    "IPv4_Compatible", 20 },
+	    "IPv4_Compatible", 1 },
 	{ IN6ADDR_INITIALIZER(0, 0, 0x0000ffffu, 0),	IN6ADDR_MASK96_INIT,
-	    "IPv4", 10 },
+	    "IPv4", 35 },
+	{ IN6ADDR_INITIALIZER(0x20010000U, 0, 0, 0),	IN6ADDR_MASK32_INIT,
+	    "Teredo", 5 },
 	{ IN6ADDR_INITIALIZER(0x20020000u, 0, 0, 0),	IN6ADDR_MASK16_INIT,
 	    "6to4", 30 },
+	{ IN6ADDR_INITIALIZER(0x3ffe0000U, 0, 0, 0),	IN6ADDR_MASK16_INIT,
+	    "6bone", 1 },
+	{ IN6ADDR_INITIALIZER(0xfec00000U, 0, 0, 0),	IN6ADDR_MASK10_INIT,
+	    "Site_Local", 1 },
+	{ IN6ADDR_INITIALIZER(0xfc000000U, 0, 0, 0),	IN6ADDR_MASK7_INIT,
+	    "ULA", 3 },
 	{ IN6ADDR_ANY_INIT,				IN6ADDR_ANY_INIT,
 	    "Default", 40 }
 };
@@ -188,7 +202,7 @@ ip6_asp_table_refrele(ip_stack_t *ipst)
  * in for the precedence, the precedence value will be set; a
  * pointer to the label will be returned by the function.
  *
- * Since the table is only anticipated to have five or six entries
+ * Since the table is only anticipated to have about 10 entries
  * total, the lookup algorithm hasn't been optimized to anything
  * better than O(n).
  */
@@ -447,10 +461,9 @@ ip6_asp_copy(ip6_asp_t *src_table, ip6_asp_t *dst_table, uint_t count)
 	 * Sort the entries in descending order of prefix lengths.
 	 *
 	 * Note: this should be a small table.  In 99% of cases, we
-	 * expect the table to have 5 entries.  In the remaining 1%
+	 * expect the table to have 9 entries.  In the remaining 1%
 	 * of cases, we expect the table to have one or two more
-	 * entries.  It would be very rare for the table to have
-	 * double-digit entries.
+	 * entries.
 	 */
 	src_limit = src_table + count;
 	dst_limit = dst_table + 1;

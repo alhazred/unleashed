@@ -1,5 +1,3 @@
-static const char rcsid[] = "$Id: res_update.c,v 1.13 2005/04/27 04:56:43 sra Exp $";
-
 /*
  * Copyright (c) 2004 by Internet Systems Consortium, Inc. ("ISC")
  * Copyright (c) 1996-1999 by Internet Software Consortium.

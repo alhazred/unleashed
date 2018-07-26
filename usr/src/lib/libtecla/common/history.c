@@ -2719,6 +2719,7 @@ static int glh_line_matches_glob(GlhLineStream *lstr, GlhLineStream *pstr)
 /*
  * A normal character to be matched explicitly.
  */
+      /* FALLTHROUGH */
     default:
       if(lstr->c == pstr->c) {
 	glh_step_stream(lstr);

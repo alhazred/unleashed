@@ -66,36 +66,29 @@ file path=opt/onbld/bin/$(ARCH)/ctfstrip mode=0555
 $(i386_ONLY)file path=opt/onbld/bin/$(ARCH)/elfextract mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen mode=0555
 file path=opt/onbld/bin/$(ARCH)/ndrgen1 mode=0555
-file path=opt/onbld/bin/$(ARCH)/pmodes mode=0555
 file path=opt/onbld/bin/$(ARCH)/protocmp mode=0555
 file path=opt/onbld/bin/$(ARCH)/protolist mode=0555
 file path=opt/onbld/bin/Install mode=0555
 file path=opt/onbld/bin/cddlchk mode=0555
 file path=opt/onbld/bin/check_rtime mode=0555
 file path=opt/onbld/bin/checkpaths mode=0555
-file path=opt/onbld/bin/checkproto mode=0555
 file path=opt/onbld/bin/copyrightchk mode=0555
 file path=opt/onbld/bin/cstyle mode=0555
 file path=opt/onbld/bin/elfcmp mode=0555
 file path=opt/onbld/bin/find_elf mode=0555
 file path=opt/onbld/bin/genoffsets mode=0555
-file path=opt/onbld/bin/get_depend_info mode=0555
 file path=opt/onbld/bin/git-pbchk mode=0555
 file path=opt/onbld/bin/hdrchk mode=0555
 file path=opt/onbld/bin/interface_check mode=0555
 file path=opt/onbld/bin/interface_cmp mode=0555
-file path=opt/onbld/bin/make_pkg_db mode=0555
 file path=opt/onbld/bin/mapfilechk mode=0555
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
-file path=opt/onbld/etc/SampleLinks
-file path=opt/onbld/etc/SamplePkgLinks
 file path=opt/onbld/etc/exception_lists/check_rtime
 file path=opt/onbld/etc/exception_lists/interface_check
 file path=opt/onbld/etc/exception_lists/interface_cmp
-file path=opt/onbld/etc/hgstyle
 file path=opt/onbld/etc/its.conf
 file path=opt/onbld/etc/its.reg
 file path=opt/onbld/lib/$(ARCH)/libctf.so.1 mode=0555
@@ -153,17 +146,8 @@ file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/__init__.py \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/__init__.pyc \
     mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Backup.py mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Backup.pyc mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Ignore.py mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Ignore.pyc mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Version.py mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/Version.pyc \
-    mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/WorkSpace.py \
-    mode=0444
-file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/WorkSpace.pyc \
-    mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/__init__.py \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/__init__.pyc \
@@ -178,12 +162,10 @@ file path=opt/onbld/man/man1/checkpaths.1
 file path=opt/onbld/man/man1/codereview.1
 file path=opt/onbld/man/man1/cstyle.1
 file path=opt/onbld/man/man1/find_elf.1
-file path=opt/onbld/man/man1/get_depend_info.1
 file path=opt/onbld/man/man1/git-pbchk.1
 file path=opt/onbld/man/man1/hdrchk.1
 file path=opt/onbld/man/man1/interface_check.1
 file path=opt/onbld/man/man1/interface_cmp.1
-file path=opt/onbld/man/man1/make_pkg_db.1
 file path=opt/onbld/man/man1/mapfilechk.1
 file path=opt/onbld/man/man1/ndrgen.1
 file path=opt/onbld/man/man1/wsdiff.1
@@ -191,8 +173,6 @@ license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/lib/libdwarf/THIRDPARTYLICENSE \
     license=usr/src/lib/libdwarf/THIRDPARTYLICENSE
-license usr/src/tools/onbld/THIRDPARTYLICENSE \
-    license=usr/src/tools/onbld/THIRDPARTYLICENSE
 link path=opt/onbld/bin/git-nits target=git-pbchk
 link path=opt/onbld/lib/$(ARCH)/libctf.so target=libctf.so.1
 link path=opt/onbld/lib/python target=python$(PYTHON_VERSION)

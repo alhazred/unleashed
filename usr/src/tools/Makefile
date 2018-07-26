@@ -31,10 +31,8 @@ include ../Makefile.master
 COMMON_SUBDIRS= \
 	codereview \
 	ctf \
-	depcheck \
 	ndrgen \
 	onbld \
-	pmodes \
 	protocmp \
 	protolist \
 	scripts
@@ -105,8 +103,9 @@ _msg: $(MSGSUBDIRS)
 $(BOOT_SUBDIRS) $(SUBDIRS): $$(DOROOTDIRS) $$(DOROOTONBLDLIBPY) FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
+# Assume we don't have the install.bin available yet
 $(ROOTDIRS):
-	$(INS.dir)
+	$(MKDIR) -p -m $(DIRMODE) $@
 
 $(ROOTONBLDLIBPY): $(ROOTDIRS)
 	$(RM) -r $@; $(SYMLINK) python$(PYTHON_VERSION) $@

@@ -1,5 +1,3 @@
-static const char rcsid[] = "$Id: ctl_p.c,v 1.4 2005/04/27 04:56:35 sra Exp $";
-
 /*
  * Copyright (c) 2004 by Internet Systems Consortium, Inc. ("ISC")
  * Copyright (c) 1998,1999 by Internet Software Consortium.
