@@ -736,6 +736,7 @@ file path=usr/bin/svcprop mode=0555
 file path=usr/bin/svcs mode=0555
 file path=usr/bin/tail mode=0555
 file path=usr/bin/tee mode=0555
+file path=usr/bin/test mode=0555
 file path=usr/bin/time mode=0555
 file path=usr/bin/tip mode=4511 owner=uucp
 file path=usr/bin/tr mode=0555
@@ -1216,6 +1217,7 @@ $(i386_ONLY)hardlink path=usr/bin/$(ARCH32)/w target=uptime
 hardlink path=usr/bin/$(ARCH64)/encrypt target=decrypt
 hardlink path=usr/bin/$(ARCH64)/mac target=digest
 hardlink path=usr/bin/$(ARCH64)/w target=uptime
+hardlink path=usr/bin/[ target=../../usr/bin/test
 hardlink path=usr/bin/bzegrep target=../../usr/bin/grep
 hardlink path=usr/bin/bzfgrep target=../../usr/bin/grep
 hardlink path=usr/bin/bzgrep target=../../usr/bin/grep
