@@ -99,7 +99,6 @@ MAN = Intro.5 \
       threads.5 \
       timerfd.5 \
       version.4th.5 \
-      zfsloader.5 \
       zones.5 \
       zpool-features.5
 
