@@ -20,6 +20,7 @@
 #include <sys/filep.h>
 #include <sys/sunddi.h>
 #include <sys/ccompile.h>
+#include <sys/queue.h>
 
 /*
  * A cpio archive is just a sequence of files, each consisting of a header
@@ -55,8 +56,7 @@ struct cpio_file {
 	off_t off;
 	struct bootstat stat;
 
-	struct cpio_file *next;
-	struct cpio_file *prev;
+	SLIST_ENTRY(cpio_file) next;
 };
 
 extern void *bkmem_alloc(size_t);
@@ -65,7 +65,8 @@ extern void bkmem_free(void *, size_t);
 static void cpio_closeall(int flag);
 
 static bool mounted;
-static struct cpio_file *open_files;
+static SLIST_HEAD(cpio_file_list, cpio_file)
+    open_files = SLIST_HEAD_INITIALIZER(open_files);
 
 static int
 cpio_strcmp(const char *a, const char *b)
@@ -153,21 +154,13 @@ get_int32(const uint8_t *str, size_t len, int32_t *out)
 static void
 add_open_file(struct cpio_file *file)
 {
-	file->next = open_files;
-	file->prev = NULL;
-	open_files = file;
+	SLIST_INSERT_HEAD(&open_files, file, next);
 }
 
 static void
 remove_open_file(struct cpio_file *file)
 {
-	if (file == open_files)
-		open_files = file->next;
-	else
-		file->prev->next = file->next;
-
-	if (file->next != NULL)
-		file->next->prev = file->prev;
+	SLIST_REMOVE(&open_files, file, cpio_file, next);
 }
 
 static struct cpio_file *
@@ -178,7 +171,7 @@ find_open_file(int fd)
 	if (fd < 0)
 		return NULL;
 
-	for (file = open_files; file != NULL; file = file->next)
+	SLIST_FOREACH(file, &open_files, next)
 		if (file->fd == fd)
 			return file;
 
@@ -401,19 +394,13 @@ bcpio_close(int fd)
 static void
 bcpio_closeall(int flag)
 {
-	struct cpio_file *file, *next;
+	struct cpio_file *file;
 
-	file = open_files;
+	while (!SLIST_EMPTY(&open_files)) {
+		file = SLIST_FIRST(&open_files);
 
-	while (file != NULL) {
-		int fd = file->fd;
-
-		next = file->next;
-
-		if (bcpio_close(fd) != 0)
-			printf("closeall invoked close(%d) failed\n", fd);
-
-		file = next;
+		if (bcpio_close(file->fd) != 0)
+			printf("closeall invoked close(%d) failed\n", file->fd);
 	}
 }
 
