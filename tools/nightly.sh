@@ -137,7 +137,7 @@ function build {
 	#	Before we build anything via dmake, we need to install
 	#	bmake-ified headers to the proto area
 	#
-	if ! make -C $SRCTOP/include all install DESTDIR=$ROOT; then
+	if ! make -de -C $SRCTOP/include all install DESTDIR=$ROOT; then
 		build_ok=n
 		this_build_ok=n
 		fatal_error "cannot install headers"
@@ -161,7 +161,7 @@ function build {
 	echo "\n==== bmake build ====\n" >&2
 	if ! /bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
 		SRCTOP=$SRCTOP \
-		make -C $SRCTOP -j $DMAKE_MAX_JOBS VERBOSE=yes build DESTDIR=$ROOT; then
+		make -de -C $SRCTOP -j $DMAKE_MAX_JOBS VERBOSE=yes build DESTDIR=$ROOT; then
 	    build_ok=n
 	    this_build_ok=n
 	fi
