@@ -687,6 +687,7 @@ cmd/dtrace/test/tst/common/json/tst.usdt.exe
 cmd/dtrace/test/tst/common/json/usdt.h
 cmd/dtrace/test/tst/common/nfs/tst.call.exe
 cmd/dtrace/test/tst/common/nfs/tst.call3.exe
+cmd/dtrace/test/tst/common/nfs_prot.c
 cmd/dtrace/test/tst/common/pid/tst.args1.exe
 cmd/dtrace/test/tst/common/pid/tst.float.exe
 cmd/dtrace/test/tst/common/pid/tst.fork.exe

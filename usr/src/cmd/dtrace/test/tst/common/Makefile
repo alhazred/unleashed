@@ -46,7 +46,7 @@ CLOBBERFILES += nfs/$(SNOOPOBJS)
 RPCSVCDIR = $(SRCTOP)/include/rpcsvc
 RPCSVCOBJS = nfs_prot.o
 RPCSVCSRCS = ${RPCSVCOBJS:%o=%c}
-CLOBBERFILES += nfs/$(RPCSVCOBJS) $(RPCSVCDIR)/$(RPCSVCSRCS)
+CLOBBERFILES += nfs/$(RPCSVCOBJS) $(RPCSVCSRCS)
 CLOBBERFILES += usdt/forker.h usdt/lazyprobe.h
 
 fasttrap/tst.fasttrap.exe := LDLIBS += -ldtrace
@@ -63,10 +63,10 @@ nfs/%.o: $(SNOOPDIR)/%.c
 nfs/tst.call.exe: nfs/tst.call.o nfs/$(SNOOPOBJS)
 	$(LINK.c) -o $@ nfs/tst.call.o nfs/$(SNOOPOBJS) $(LDLIBS)
 	$(POST_PROCESS) ; $(STRIP_STABS)
-$(RPCSVCDIR)/%.c: $(RPCSVCDIR)/%.x
+%.c: $(RPCSVCDIR)/%.x
 	$(RPCGEN) -Cc $< > $@
-nfs/$(RPCSVCOBJS): $(RPCSVCDIR)/$(RPCSVCSRCS)
-	$(COMPILE.c) -o $@ $(RPCSVCDIR)/$(RPCSVCSRCS)
+nfs/$(RPCSVCOBJS): $(RPCSVCSRCS)
+	$(COMPILE.c) -o $@ $(RPCSVCSRCS)
 	$(POST_PROCESS_O)
 nfs/tst.call3.exe: nfs/tst.call3.o nfs/$(RPCSVCOBJS)
 	$(LINK.c) -o $@ nfs/tst.call3.o nfs/$(RPCSVCOBJS) \
