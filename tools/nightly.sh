@@ -549,13 +549,11 @@ if [ -z "$RELEASE_DATE" ]; then
 fi
 BUILD_DATE=$(LC_ALL=C date +%Y-%b-%d)
 BASEWSDIR=$(basename $SRCTOP)
-DEV_CM="\"@(#)illumos Development: $LOGNAME $BUILD_DATE [$BASEWSDIR]\""
-RELEASE_MICRO=$(( ($(date +%Y) * 12 + $(date +%m) - 1) - (2010 * 12 + 8 - 1) ))
 
-# we export POUND_SIGN, RELEASE_DATE and DEV_CM to speed up the build process
+# we export POUND_SIGN and RELEASE_DATE to speed up the build process
 # by avoiding repeated shell invocations to evaluate Makefile.master
 # definitions.
-export POUND_SIGN RELEASE_DATE DEV_CM RELEASE_MICRO
+export POUND_SIGN RELEASE_DATE
 
 maketype="distributed"
 if [[ -z "$MAKE" ]]; then
