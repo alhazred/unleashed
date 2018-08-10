@@ -4726,3 +4726,4 @@ uts/intel/sha1/sha1-x86_64.s
 uts/intel/sha2/sha256-x86_64.s
 uts/intel/sha2/sha512-x86_64.s
 uts/intel/uathfw/uathbin
+uts/priv_const.c

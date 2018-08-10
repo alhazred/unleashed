@@ -1137,6 +1137,10 @@ $(OBJS_DIR)/%.o:		$(SRCTOP)/kernel/os/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
+$(OBJS_DIR)/priv_const.o:	$(UTSBASE)/priv_const.c
+	$(COMPILE.c) -o $@ $(UTSBASE)/priv_const.c
+	$(CTFCONVERT_O)
+
 $(OBJS_DIR)/%.o:		$(UTSBASE)/common/rpc/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
