@@ -1,2 +1,3 @@
 SHAREDIR=	/usr/share
 BINDIR=		${SHAREDIR}
+UNLEASHED_OBJ?=	/usr/obj/${MACHINE}

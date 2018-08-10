@@ -31,7 +31,7 @@ clobber :=	TARGET = clobber
 
 .KEEP_STATE:
 
-all clean clobber install: 
+all clean clobber install:
 
 check:
 
@@ -39,14 +39,15 @@ lint:
 
 install_h:
 
-all: 	FRC 
-	@cd $(SRCTOP)/share/terminfo; bmake 
+all: 	FRC
+	@make -C $(SRCTOP)/share/terminfo obj
+	@make -C $(SRCTOP)/share/terminfo
 
-install:
-	@cd $(SRCTOP)/share/terminfo; bmake install DESTDIR=$(ROOT) 
+install: all
+	@make -C $(SRCTOP)/share/terminfo install DESTDIR=$(ROOT)
 
-clean: 
-	@cd $(SRCTOP)/share/terminfo; bmake clean 
+clean:
+	@make -C $(SRCTOP)/share/terminfo clean
 
 clobber: clean
 
