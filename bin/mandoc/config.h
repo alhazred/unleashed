@@ -38,6 +38,7 @@
 #define HAVE_STRINGLIST 0
 #define HAVE_STRLCAT 1
 #define HAVE_STRLCPY 1
+#define HAVE_STRNDUP 1
 #define HAVE_STRPTIME 1
 #define HAVE_STRSEP 1
 #define HAVE_STRTONUM 1
@@ -51,3 +52,4 @@
 #define BINM_MAN "man"
 #define BINM_SOELIM "soelim"
 #define BINM_WHATIS "whatis"
+
