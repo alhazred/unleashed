@@ -69,19 +69,19 @@ file path=opt/onbld/bin/$(ARCH)/ndrgen1 mode=0555
 file path=opt/onbld/bin/$(ARCH)/protocmp mode=0555
 file path=opt/onbld/bin/$(ARCH)/protolist mode=0555
 file path=opt/onbld/bin/Install mode=0555
-file path=opt/onbld/bin/cddlchk mode=0555
+file path=opt/onbld/bin/cddlchk mode=0555 pkg.depend.bypass-generate=.*
 file path=opt/onbld/bin/check_rtime mode=0555
 file path=opt/onbld/bin/checkpaths mode=0555
-file path=opt/onbld/bin/copyrightchk mode=0555
+file path=opt/onbld/bin/copyrightchk mode=0555 pkg.depend.bypass-generate=.*
 file path=opt/onbld/bin/cstyle mode=0555
 file path=opt/onbld/bin/elfcmp mode=0555
 file path=opt/onbld/bin/find_elf mode=0555
 file path=opt/onbld/bin/genoffsets mode=0555
-file path=opt/onbld/bin/git-pbchk mode=0555
-file path=opt/onbld/bin/hdrchk mode=0555
+file path=opt/onbld/bin/git-pbchk mode=0555 pkg.depend.bypass-generate=.*
+file path=opt/onbld/bin/hdrchk mode=0555 pkg.depend.bypass-generate=.*
 file path=opt/onbld/bin/interface_check mode=0555
 file path=opt/onbld/bin/interface_cmp mode=0555
-file path=opt/onbld/bin/mapfilechk mode=0555
+file path=opt/onbld/bin/mapfilechk mode=0555 pkg.depend.bypass-generate=.*
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
