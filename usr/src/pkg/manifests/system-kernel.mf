@@ -637,3 +637,14 @@ link path=dev/stderr target=./fd/2
 link path=dev/stdin target=./fd/0
 link path=dev/stdout target=./fd/1
 link path=kernel/misc/des target=../../kernel/crypto/des
+
+# old system/kernel/* packages
+<include system-kernel-cpu-counters.inc>
+<include system-kernel-dtrace-providers.inc>
+<include system-kernel-dynamic-reconfiguration-i86pc.inc>
+<include system-kernel-platform.inc>
+<include system-kernel-power.inc>
+<include system-kernel-rsmops.inc>
+<include system-kernel-secure-rpc.inc>
+<include system-kernel-security-gss.inc>
+<include system-kernel-suspend-resume.inc>
