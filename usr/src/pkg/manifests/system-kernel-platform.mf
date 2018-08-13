@@ -75,7 +75,7 @@ $(i386_ONLY)driver name=xnbo \
 $(i386_ONLY)driver name=xnbu alias=xnb,netfront
 $(i386_ONLY)driver name=xnf
 $(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/unix group=sys \
-    mode=0755
+    mode=0755 pkg.depend.bypass-generate=dtracestubs
 $(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu.generic group=sys \
     mode=0755
 $(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
