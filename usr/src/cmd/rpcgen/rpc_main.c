@@ -88,7 +88,9 @@ static char *cmdname;
 
 static char *svcclosetime = "120";
 static char *CPP = SUNOS_CPP;
-static char CPPFLAGS[] = "-C";
+static char *CPPFLAGS[] = {
+	"-C", NULL,
+};
 static char pathbuf[MAXPATHLEN + 1];
 static char *allv[] = {
 	"rpcgen", "-s", "udp", "-s", "tcp",
@@ -109,7 +111,7 @@ static void checkfiles(char *, char *);	/* check if out file already exists */
 
 
 #define	ARGLISTLEN	20
-#define	FIXEDARGS	2
+#define	FIXEDARGS	1
 
 static char *arglist[ARGLISTLEN];
 static int argcount = FIXEDARGS;
@@ -318,6 +320,7 @@ static void
 open_input(char *infile, char *define)
 {
 	int pd[2];
+	int i;
 
 	infilename = (infile == NULL) ? "<stdin>" : infile;
 	(void) pipe(pd);
@@ -325,7 +328,8 @@ open_input(char *infile, char *define)
 	case 0:
 		find_cpp();
 		putarg(0, CPP);
-		putarg(1, CPPFLAGS);
+		for (i = 0; CPPFLAGS[i] != NULL; i++)
+			addarg(CPPFLAGS[i]);
 		addarg(define);
 		if (infile)
 			addarg(infile);
