@@ -197,7 +197,7 @@ mdb_dem_process(mdb_demangler_t *dmp, const char *name)
 	char *buf = dmp->dm_buf;
 	size_t len = dmp->dm_len;
 
-	char *prefix = strrchr(name, '`');
+	const char *prefix = strrchr(name, '`');
 	size_t prefixlen;
 	int ret;
 
