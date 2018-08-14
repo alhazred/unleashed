@@ -356,7 +356,7 @@ auth_chap_recv_n(iscsit_conn_t *ict, nvpair_t *nvp,
 	char			*chap_name;
 
 	nvrc = nvpair_value_string(nvp, &chap_name);
-	ASSERT(nvrc == 0);
+	VERIFY(nvrc == 0);
 
 	client_set_string_data(&client->recvKeyBlock,
 	    AKT_CHAP_N,
@@ -386,7 +386,7 @@ auth_chap_recv_r(iscsit_conn_t *ict, nvpair_t *nvp,
 	uint_t			len;
 
 	nvrc = nvpair_value_byte_array(nvp, &chap_resp, &len);
-	ASSERT(nvrc == 0);
+	VERIFY(nvrc == 0);
 
 	client_set_binary_data(&client->recvKeyBlock,
 	    AKT_CHAP_R,
@@ -415,7 +415,7 @@ auth_chap_recv_i(iscsit_conn_t *ict, nvpair_t *nvp,
 	uint64_t		chap_id;
 
 	nvrc = nvpair_value_uint64(nvp, &chap_id);
-	ASSERT(nvrc == 0);
+	VERIFY(nvrc == 0);
 
 	client_set_numeric_data(&client->recvKeyBlock,
 	    AKT_CHAP_I,
@@ -445,7 +445,7 @@ auth_chap_recv_c(iscsit_conn_t *ict, nvpair_t *nvp,
 	uint_t			len;
 
 	nvrc = nvpair_value_byte_array(nvp, &chap_challenge, &len);
-	ASSERT(nvrc == 0);
+	VERIFY(nvrc == 0);
 
 	client_set_binary_data(
 	    &client->recvKeyBlock,

@@ -1450,7 +1450,7 @@ login_sm_session_bind(iscsit_conn_t *ict)
 		new_sess = iscsit_sess_create(tgt, ict, lsm->icl_cmdsn,
 		    lsm->icl_isid, lsm->icl_tpgt_tag, lsm->icl_initiator_name,
 		    lsm->icl_target_name, &error_class, &error_detail);
-		ASSERT(new_sess != NULL);
+		VERIFY(new_sess != NULL);
 
 		/* Session create may have failed even if it returned a value */
 		if (error_class != ISCSI_STATUS_CLASS_SUCCESS) {
@@ -2280,7 +2280,7 @@ iscsit_handle_operational_key(iscsit_conn_t *ict, nvpair_t *nvp,
 	case KI_IFMARKER:
 	case KI_OFMARKER:
 		nvrc = nvpair_value_boolean_value(nvp, &bool_val);
-		ASSERT(nvrc == 0); /* We built this nvlist */
+		VERIFY(nvrc == 0); /* We built this nvlist */
 		break;
 		/* Numericals */
 	case KI_MAX_CONNECTIONS:
@@ -2292,7 +2292,7 @@ iscsit_handle_operational_key(iscsit_conn_t *ict, nvpair_t *nvp,
 	case KI_MAX_OUTSTANDING_R2T:
 	case KI_ERROR_RECOVERY_LEVEL:
 		nvrc = nvpair_value_uint64(nvp, &num_val);
-		ASSERT(nvrc == 0);
+		VERIFY(nvrc == 0);
 		break;
 		/* Ranges */
 	case KI_OFMARKERINT:

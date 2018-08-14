@@ -631,7 +631,7 @@ iscsit_init(dev_info_t *dip)
 	int			rc;
 
 	rc = ldi_ident_from_dip(dip, &iscsit_global.global_li);
-	ASSERT(rc == 0);  /* Failure indicates invalid argument */
+	VERIFY(rc == 0);  /* Failure indicates invalid argument */
 
 	iscsit_global.global_svc_state = ISE_DISABLED;
 
