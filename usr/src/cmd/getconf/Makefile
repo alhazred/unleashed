@@ -25,7 +25,7 @@
 #
 
 PROG= getconf
-OBJS= getconf.o values-xpg4.o
+OBJS= getconf.o
 
 include ../Makefile.cmd
 
@@ -41,10 +41,6 @@ $(PROG):	$(OBJS)
 	$(POST_PROCESS)
 
 install: all $(ROOTPROG)
-
-
-values-xpg4.o: ../../lib/crt/common/values-xpg4.c
-	$(COMPILE.c) -o $@ ../../lib/crt/common/values-xpg4.c
 
 clean:
 	-@rm -rf $(OBJS) $(PROG)
