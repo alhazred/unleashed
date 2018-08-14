@@ -20,7 +20,7 @@ beadm \- utility for managing zfs boot environments
 
 .LP
 .nf
-\fBbeadm\fR \fBdestroy\fR [\fB-fFsv\fR] \fIbeName\fR | \fIbeName@snapshot\fR
+\fBbeadm\fR \fBdestroy\fR [\fB-fsv\fR] \fIbeName\fR | \fIbeName@snapshot\fR
 .fi
 
 .LP
@@ -273,7 +273,7 @@ Verbose mode. Displays verbose error messages from \fBbeadm\fR.
 .sp
 .ne 2
 .na
-\fBbeadm\fR \fBdestroy\fR [\fB-fFsv\fR] \fIbeName\fR | \fIbeName@snapshot\fR
+\fBbeadm\fR \fBdestroy\fR [\fB-fsv\fR] \fIbeName\fR | \fIbeName@snapshot\fR
 .ad
 .sp .6
 .RS 4n
@@ -292,16 +292,6 @@ with caution.
 .sp .6
 .RS 4n
 Forcefully unmount the boot environment if it is currently mounted.
-.RE
-.sp
-.ne 2
-.na
-\fB-F\fR
-.ad
-.sp .6
-.RS 4n
-Force the action without prompting to verify the destruction of the boot
-environment.
 .RE
 .sp
 .ne 2

@@ -543,50 +543,6 @@ print_nodes(const char *be_name, boolean_t dsets, boolean_t snaps,
 		print_fmt_nodes(be_name, be_fmt, parsable, &hdr, be_nodes);
 }
 
-static boolean_t
-confirm_destroy(const char *name)
-{
-	boolean_t res = B_FALSE;
-	const char *yesre = nl_langinfo(YESEXPR);
-	const char *nore = nl_langinfo(NOEXPR);
-	regex_t yes_re;
-	regex_t no_re;
-	char buf[128];
-	char *answer;
-	int cflags = REG_EXTENDED;
-
-	if (regcomp(&yes_re, yesre, cflags) != 0) {
-		/* should not happen */
-		(void) fprintf(stderr, _("Failed to compile 'yes' regexp\n"));
-		return (res);
-	}
-	if (regcomp(&no_re, nore, cflags) != 0) {
-		/* should not happen */
-		(void) fprintf(stderr, _("Failed to compile 'no' regexp\n"));
-		regfree(&yes_re);
-		return (res);
-	}
-
-	(void) printf(_("Are you sure you want to destroy %s?\n"
-	    "This action cannot be undone (y/[n]): "), name);
-
-	answer = fgets(buf, sizeof (buf), stdin);
-	if (answer == NULL || *answer == '\0' || *answer == 10)
-		goto out;
-
-	if (regexec(&yes_re, answer, 0, NULL, 0) == 0) {
-		res = B_TRUE;
-	} else if (regexec(&no_re, answer, 0, NULL, 0) != 0) {
-		(void) fprintf(stderr, _("Invalid response. "
-		    "Please enter 'y' or 'n'.\n"));
-	}
-
-out:
-	regfree(&yes_re);
-	regfree(&no_re);
-	return (res);
-}
-
 static int
 be_nvl_alloc(nvlist_t **nvlp)
 {
@@ -929,7 +885,6 @@ be_do_destroy(int argc, char **argv)
 {
 	nvlist_t	*be_attrs;
 	boolean_t	is_snap = B_FALSE;
-	boolean_t	suppress_prompt = B_FALSE;
 	int		err = 1;
 	int		c;
 	int		destroy_flags = 0;
@@ -941,14 +896,13 @@ be_do_destroy(int argc, char **argv)
 		case 'f':
 			destroy_flags |= BE_DESTROY_FLAG_FORCE_UNMOUNT;
 			break;
+		case 'F':
+			break;
 		case 's':
 			destroy_flags |= BE_DESTROY_FLAG_SNAPSHOTS;
 			break;
 		case 'v':
 			libbe_print_errors(B_TRUE);
-			break;
-		case 'F':
-			suppress_prompt = B_TRUE;
 			break;
 		default:
 			usage();
@@ -965,11 +919,6 @@ be_do_destroy(int argc, char **argv)
 	}
 
 	be_name = argv[0];
-	if (!suppress_prompt && !confirm_destroy(be_name)) {
-		(void) printf(_("%s has not been destroyed.\n"), be_name);
-		return (0);
-	}
-
 	if ((snap_name = strrchr(be_name, '@')) != NULL) {
 		if (snap_name[1] == '\0') {
 			usage();
@@ -1004,7 +953,6 @@ be_do_destroy(int argc, char **argv)
 
 	switch (err) {
 	case BE_SUCCESS:
-		(void) printf(_("Destroyed successfully\n"));
 		break;
 	case BE_ERR_MOUNTED:
 		(void) fprintf(stderr, _("Unable to destroy %s.\n"), be_name);
