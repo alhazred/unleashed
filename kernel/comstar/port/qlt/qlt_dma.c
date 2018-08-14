@@ -562,7 +562,7 @@ qlt_dma_free_handles(qlt_state_t *qlt, qlt_dma_handle_t *first_handle)
 		 */
 		if (tmp_handle->num_cookies != 0) {
 			rv = ddi_dma_unbind_handle(tmp_handle->dma_handle);
-			ASSERT(rv == DDI_SUCCESS);
+			VERIFY(rv == DDI_SUCCESS);
 			tmp_handle->num_cookies = 0;
 			tmp_handle->num_cookies_fetched = 0;
 		}
