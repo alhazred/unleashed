@@ -341,7 +341,7 @@ stmf_add_lu_to_active_sessions(stmf_lu_t *lu)
 
 	ASSERT(mutex_owned(&stmf_state.stmf_lock));
 	ilu = (stmf_i_lu_t *)lu->lu_stmf_private;
-	ASSERT(ilu->ilu_state == STMF_STATE_ONLINE);
+	VERIFY(ilu->ilu_state == STMF_STATE_ONLINE);
 
 	luid = ((stmf_i_lu_t *)lu->lu_stmf_private)->ilu_luid;
 
@@ -419,7 +419,7 @@ stmf_add_lu_to_session(stmf_i_local_port_t *ilport,
 	    kmem_zalloc(sizeof (stmf_lun_map_ent_t), KM_SLEEP);
 	lun_map_ent->ent_lu = lu;
 	ret = stmf_add_ent_to_map(sm, (void *)lun_map_ent, lu_nbr);
-	ASSERT(ret == STMF_SUCCESS);
+	VERIFY(ret == STMF_SUCCESS);
 	atomic_inc_32(&ilu->ilu_ref_cnt);
 	/*
 	 * do not set lun inventory flag for standby port
@@ -456,7 +456,7 @@ stmf_remove_lu_from_session(stmf_i_local_port_t *ilport,
 	ilu = (stmf_i_lu_t *)lu->lu_stmf_private;
 
 	ret = stmf_remove_ent_from_map(sm, lu_nbr);
-	ASSERT(ret == STMF_SUCCESS);
+	VERIFY(ret == STMF_SUCCESS);
 	atomic_dec_32(&ilu->ilu_ref_cnt);
 	iss->iss_flags |= ISS_LUN_INVENTORY_CHANGED;
 	if (lun_map_ent->ent_itl_datap) {
@@ -1265,7 +1265,7 @@ stmf_remove_ve_by_id(uint8_t *guid, uint32_t veid, uint32_t *err_detail)
 		}
 		prev_vtg = vtg;
 	}
-	ASSERT(found);
+	VERIFY(found);
 	found = 0;
 	for (vhg = vtg->vert_verh_list; vhg; vhg = vhg->verh_next) {
 		if (vhg->verh_hg_ref == ve->ve_hg) {
