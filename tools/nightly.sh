@@ -896,7 +896,6 @@ fi
 normal_build
 
 ORIG_SRC=$SRC
-BINARCHIVE=${SRCTOP}/bin-${MACH}.cpio.Z
 
 if [ "$build_ok" = "y" ]; then
 	echo "\n==== Creating protolist system file at `date` ====" \
