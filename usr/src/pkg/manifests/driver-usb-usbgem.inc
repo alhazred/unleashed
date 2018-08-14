@@ -18,4 +18,3 @@ dir path=kernel/misc group=sys
 file path=kernel/misc/usbgem group=sys mode=0755
 license usr/src/uts/common/io/usbgem/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/usbgem/THIRDPARTYLICENSE
-depend fmri=driver/usb type=require

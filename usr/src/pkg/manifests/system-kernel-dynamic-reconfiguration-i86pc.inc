@@ -60,4 +60,3 @@ license usr/src/cmd/acpihpd/THIRDPARTYLICENSE \
     license=usr/src/cmd/acpihpd/THIRDPARTYLICENSE
 link path=usr/platform/i86pc/lib/cfgadm/$(ARCH64)/sbd.so target=./sbd.so.1
 link path=usr/platform/i86pc/lib/cfgadm/sbd.so target=./sbd.so.1
-depend fmri=pkg:/system/kernel/power type=require

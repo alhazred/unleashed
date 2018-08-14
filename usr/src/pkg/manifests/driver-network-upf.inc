@@ -92,4 +92,3 @@ driver name=upf clone_perms="upf 0666 root sys" perms="* 0666 root sys" \
 file path=kernel/drv/upf group=sys
 license usr/src/uts/common/io/upf/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/upf/THIRDPARTYLICENSE
-depend fmri=driver/usb/usbgem type=require

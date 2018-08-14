@@ -1117,8 +1117,3 @@ link path=usr/lib/security/pam_unix_session.so target=./pam_unix_session.so.1
 link path=usr/lib/security/pkcs11_kernel.so target=./pkcs11_kernel.so.1
 link path=usr/lib/security/pkcs11_softtoken.so target=./pkcs11_softtoken.so.1
 link path=usr/lib/straddr.so target=./straddr.so.2
-#
-# libses.so needs to dlopen(3C) plugins from usr/lib/scsi/plugins/ses/vendor/,
-# a dependency which cannot be automatically derived
-#
-depend fmri=system/library/storage/scsi-plugins type=require

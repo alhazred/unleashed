@@ -45,9 +45,3 @@ file path=kernel/drv/dnet group=sys
 file path=usr/share/man/man7d/dnet.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-# elxl moved out of this package, so create a dependency for upgraded systems
-depend fmri=driver/network/elxl type=require
-# iprb moved out of this package, so create a dependency for upgraded systems
-depend fmri=driver/network/iprb type=require
-# pcn moved out of this package, so create a dependency for upgraded systems
-depend fmri=driver/network/pcn type=require

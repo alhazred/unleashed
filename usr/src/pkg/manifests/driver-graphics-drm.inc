@@ -70,4 +70,3 @@ file path=usr/share/man/man7d/radeon.7d
 license cr_Sun license=cr_Sun
 license usr/src/uts/common/io/drm/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/drm/THIRDPARTYLICENSE
-depend fmri=pkg:/driver/graphics/agpgart type=require

@@ -43,11 +43,3 @@ file path=usr/share/man/man4/mech.4
 file path=usr/share/man/man5/gss_auth_rules.5
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-#
-# These dependencies can be removed once there is a mechanism in place
-# to configure gss plugins, rather than delivering a fully populated
-# etc/gss/mech file.
-#
-depend fmri=service/security/kerberos-5 type=require
-depend fmri=system/library/security/gss/diffie-hellman type=require
-depend fmri=system/library/security/gss/spnego type=require

@@ -25,4 +25,3 @@ driver name=urf clone_perms="urf 0666 root sys" perms="* 0666 root sys" \
 file path=kernel/drv/urf group=sys
 license usr/src/uts/common/io/urf/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/urf/THIRDPARTYLICENSE
-depend fmri=driver/usb/usbgem type=require

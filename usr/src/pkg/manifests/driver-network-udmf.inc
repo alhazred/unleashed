@@ -24,4 +24,3 @@ driver name=udmf clone_perms="udmf 0666 root sys" perms="* 0666 root sys" \
 file path=kernel/drv/udmf group=sys
 license usr/src/uts/common/io/udmf/THIRDPARTYLICENSE \
     license=usr/src/uts/common/io/udmf/THIRDPARTYLICENSE
-depend fmri=driver/usb/usbgem type=require

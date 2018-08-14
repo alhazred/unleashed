@@ -1416,12 +1416,6 @@ link path=usr/spool target=../var/spool
 link path=usr/tmp target=../var/tmp
 link path=var/ld/32 target=.
 link path=var/ld/64 target=$(ARCH64)
-depend fmri=library/libedit type=require
-depend fmri=library/libressl type=require
-#
-# Depend on terminfo data.
-#
-depend fmri=library/ncurses type=require
 #
 # Depend on kernel
 #
@@ -1431,29 +1425,9 @@ depend fmri=pkg:/system/kernel type=require
 #
 depend fmri=runtime/perl$(PERL_PKGVERS) type=require
 #
-# intrd uses sun-solaris Perl modules
-#
-depend fmri=runtime/perl$(PERL_PKGVERS)/module/sun-solaris type=require
-#
-# Depend on ksh93
-#
-depend fmri=shell/ksh93 type=require
-#
 # The boot loader package
 #
 depend fmri=system/boot/loader type=require
-#
-# The loadkeys binary needs the keytables.
-#
-depend fmri=system/data/keyboard/keytables type=require
-#
-# Depend on zoneinfo data.
-#
-depend fmri=system/data/zoneinfo type=require
-#
-# The mailx binary calls /usr/lib/sendmail provided by mailwrapper
-#
-depend fmri=system/network/mailwrapper type=require
 #
 # The base system should contain /usr/bin/file.  There is probably a better
 # place for this dependency.

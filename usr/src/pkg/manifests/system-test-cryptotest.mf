@@ -48,5 +48,4 @@ file path=opt/crypto-tests/tests/pkcs/aes/aes_ecb mode=0555
 file path=opt/crypto-tests/tests/pkcs/aes/aes_gcm mode=0555
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-depend fmri=driver/crypto/dprov type=require
 depend fmri=system/test/testrunner type=require
