@@ -783,7 +783,7 @@ onesec_time_adjustments(void)
 				    time_constant;
 		}
 		if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
-		lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
+			lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
 		time_offset += lltemp;
 		time_adj = -(lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
 	} else {
@@ -798,8 +798,8 @@ onesec_time_adjustments(void)
 		}
 		if (lltemp > (MAXPHASE / MINSEC) * SCALE_UPDATE)
 			lltemp = (MAXPHASE / MINSEC) * SCALE_UPDATE;
-			time_offset -= lltemp;
-			time_adj = (lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
+		time_offset -= lltemp;
+		time_adj = (lltemp * SCALE_PHASE) / hz / SCALE_UPDATE;
 	}
 
 	/*
