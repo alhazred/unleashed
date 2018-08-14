@@ -11580,7 +11580,7 @@ sd_ssc_print(sd_ssc_t *ssc, int sd_severity)
 	devinfo = SD_DEVINFO(ssc->ssc_un);
 	ASSERT(ucmdp != NULL);
 	ASSERT(devp != NULL);
-	ASSERT(devinfo != NULL);
+	VERIFY(devinfo != NULL);
 	sensep = (uint8_t *)ucmdp->uscsi_rqbuf;
 	senlen = ucmdp->uscsi_rqlen - ucmdp->uscsi_rqresid;
 	cdbp = (union scsi_cdb *)ucmdp->uscsi_cdb;
@@ -11865,7 +11865,7 @@ sd_buf_iodone(int index, struct sd_lun *un, struct buf *bp)
 	SD_TRACE(SD_LOG_IO_CORE, un, "sd_buf_iodone: entry.\n");
 
 	xp = SD_GET_XBUF(bp);
-	ASSERT(xp != NULL);
+	VERIFY(xp != NULL);
 
 	/* xbuf is gone after this */
 	if (ddi_xbuf_done(bp, un->un_xbuf_attr)) {
@@ -12583,7 +12583,7 @@ sd_mapblocksize_iodone(int index, struct sd_lun *un, struct buf *bp)
 	orig_bp = bsp->mbs_orig_bp;
 	ASSERT(orig_bp != NULL);
 	orig_xp = SD_GET_XBUF(orig_bp);
-	ASSERT(orig_xp != NULL);
+	VERIFY(orig_xp != NULL);
 	ASSERT(!mutex_owned(SD_MUTEX(un)));
 
 	if (!is_write && has_wmap) {
@@ -13846,7 +13846,7 @@ sd_shadow_buf_alloc(struct buf *bp, size_t datalen, uint_t bflags,
 	xp = SD_GET_XBUF(bp);
 	ASSERT(xp != NULL);
 	un = SD_GET_UN(bp);
-	ASSERT(un != NULL);
+	VERIFY(un != NULL);
 	ASSERT(!mutex_owned(SD_MUTEX(un)));
 
 	if (bp->b_flags & (B_PAGEIO | B_PHYS)) {
@@ -19174,7 +19174,7 @@ sd_media_change_task(void *arg)
 	bp = (struct buf *)pktp->pkt_private;
 	ASSERT(bp != NULL);
 	xp = SD_GET_XBUF(bp);
-	ASSERT(xp != NULL);
+	VERIFY(xp != NULL);
 	un = SD_GET_UN(bp);
 	ASSERT(un != NULL);
 	ASSERT(!mutex_owned(SD_MUTEX(un)));
