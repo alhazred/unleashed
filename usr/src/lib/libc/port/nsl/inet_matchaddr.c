@@ -160,7 +160,7 @@ inet_matchaddr(const void *sa, const char *name)
 				errno = EINVAL;
 				break;
 			}
-			mask4 = mb ? ~0 << ((sizeof (struct in_addr) * NBBY)
+			mask4 = mb ? ~0UL << ((sizeof (struct in_addr) * NBBY)
 			    - mb) : 0;
 			hcaddr4 &= mask4;
 		} else {
