@@ -54,11 +54,7 @@ static char *compilation = "compilation.cfg";
 const char *compilers[] = {
 	"cc",
 	"gcc",
-	"/opt/SUNWspro/bin/cc",
 	"/opt/gcc/4.4.4/bin/gcc",
-	"/opt/sunstudio12.1/bin/cc",
-	"/opt/sfw/bin/gcc",
-	"/usr/local/bin/gcc",
 	NULL
 };
 
