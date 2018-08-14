@@ -4,5 +4,4 @@ set name=pkg.summary value="SVr4 packaging commands"
 set name=info.classification \
     value=org.opensolaris.category.2008:System/Packaging
 set name=variant.arch value=$(ARCH)
-# TODO: mark this package as obsolete
-# We didn't do that because I (Jeff) don't feel like rebuilding slim_source right now.
+set name=pkg.obsolete value=true
