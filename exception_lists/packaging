@@ -293,15 +293,9 @@ usr/lib/libuutil.so
 #
 usr/include/sys/multidata_impl.h
 #
-# The following files are installed in the proto area
-# by the build of libcmdutils (Command Utilities Library).
 # libcmdutils contains interfaces which are all private interfaces.
 #
-lib/libcmdutils.so
-lib/amd64/libcmdutils.so		i386
 usr/include/libcmdutils.h
-usr/lib/libcmdutils.so
-usr/lib/amd64/libcmdutils.so		i386
 #
 # Private interfaces in libsec
 #

@@ -529,6 +529,7 @@ link path=lib/$(ARCH64)/libavl.so target=libavl.so.1
 link path=lib/$(ARCH64)/libbsm.so target=libbsm.so.1
 link path=lib/$(ARCH64)/libc.so reboot-needed=true target=libc.so.1
 link path=lib/$(ARCH64)/libc_db.so target=libc_db.so.1
+link path=lib/$(ARCH64)/libcmdutils.so target=libcmdutils.so.1
 link path=lib/$(ARCH64)/libcontract.so target=libcontract.so.1
 link path=lib/$(ARCH64)/libcryptoutil.so target=libcryptoutil.so.1
 link path=lib/$(ARCH64)/libctf.so target=libctf.so.1
@@ -586,6 +587,7 @@ link path=lib/libavl.so target=libavl.so.1
 link path=lib/libbsm.so target=libbsm.so.1
 link path=lib/libc.so target=libc.so.1
 link path=lib/libc_db.so target=libc_db.so.1
+link path=lib/libcmdutils.so target=libcmdutils.so.1
 link path=lib/libcontract.so target=libcontract.so.1
 link path=lib/libcryptoutil.so target=./libcryptoutil.so.1
 link path=lib/libctf.so target=libctf.so.1
@@ -662,6 +664,8 @@ link path=usr/lib/$(ARCH64)/libc_db.so \
 link path=usr/lib/$(ARCH64)/libc_db.so.1 \
     target=../../../lib/$(ARCH64)/libc_db.so.1
 link path=usr/lib/$(ARCH64)/libcfgadm.so target=libcfgadm.so.1
+link path=usr/lib/$(ARCH64)/libcmdutils.so \
+    target=../../../lib/$(ARCH64)/libcmdutils.so.1
 link path=usr/lib/$(ARCH64)/libcmdutils.so.1 \
     target=../../../lib/$(ARCH64)/libcmdutils.so.1
 link path=usr/lib/$(ARCH64)/libcommputil.so target=libcommputil.so.1
@@ -904,6 +908,7 @@ link path=usr/lib/libc.so.1 target=../../lib/libc.so.1
 link path=usr/lib/libc_db.so target=../../lib/libc_db.so.1
 link path=usr/lib/libc_db.so.1 target=../../lib/libc_db.so.1
 link path=usr/lib/libcfgadm.so target=./libcfgadm.so.1
+link path=usr/lib/libcmdutils.so target=../../lib/libcmdutils.so.1
 link path=usr/lib/libcmdutils.so.1 target=../../lib/libcmdutils.so.1
 link path=usr/lib/libcommputil.so target=./libcommputil.so.1
 link path=usr/lib/libcontract.so target=../../lib/libcontract.so.1
