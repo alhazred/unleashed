@@ -215,7 +215,7 @@ typedef struct kmutex {
 #define	MUTEX_DEFAULT	USYNC_THREAD
 #undef	MUTEX_HELD
 #undef	MUTEX_NOT_HELD
-#define	MUTEX_HELD(m) _mutex_held(&(m)->m_lock)
+#define	MUTEX_HELD(m) _mutex_held(m)
 #define	MUTEX_NOT_HELD(m) (!MUTEX_HELD(m))
 
 /*
