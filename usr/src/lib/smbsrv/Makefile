@@ -33,8 +33,8 @@ SUBDIRS = \
 	libsmbns \
 	libsmbrp
 
+include ./Makefile.subdirs
+
 libmlrpc: libsmb
 libsmbns: libsmb
 libmlsvc: libsmb libmlrpc libsmbns
-
-include ./Makefile.subdirs

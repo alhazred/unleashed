@@ -259,6 +259,16 @@ symcheck $(SYM_DEPS)		:= TARGET = symcheck
 
 ALL_TARGS	= def all clean clobber install symcheck
 
+ALL_OBJ32	= $(ALL_TARGS:%=%.obj32)
+
+$(ALL_OBJ32):	FRC
+	@BUILD_TYPE=OBJ32 VERSION='$(VERSION)' $(MAKE) $(NO_STATE) $(TARGET).targ
+
+ALL_DEBUG32	= $(ALL_TARGS:%=%.debug32)
+
+$(ALL_DEBUG32):	FRC
+	@BUILD_TYPE=DBG32 VERSION='$(VERSION)' $(MAKE) $(NO_STATE) $(TARGET).targ
+
 ALL_OBJ64	= $(ALL_TARGS:%=%.obj64)
 
 $(ALL_OBJ64):	FRC
