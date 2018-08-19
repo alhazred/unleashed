@@ -4238,6 +4238,7 @@ get_netconfig_info(enum type_of_stuff type_of_stuff, char *hostname,
 		break;
 	case SERVER_PING:
 		ping_server = 1;
+		/* FALLTHROUGH */
 	case SERVER_ADDR:
 		nb = get_server_addrorping(hostname, prog, vers,
 		    nconf, port, tinfo, tbind, fhp, direct_to_server,

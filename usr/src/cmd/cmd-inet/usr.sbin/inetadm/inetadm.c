@@ -1024,6 +1024,7 @@ main(int argc, char *argv[])
 			} else {
 				usage(B_FALSE);
 			}
+			break;
 		default:
 			usage(B_FALSE);
 		}

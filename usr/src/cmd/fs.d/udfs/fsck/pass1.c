@@ -166,6 +166,7 @@ pass1()
 		case FTYPE_FILE:
 		case FTYPE_SYMLINK:
 			ckinode(fp);
+			/* FALLTHROUGH */
 		default:
 			n_files++;
 			break;
