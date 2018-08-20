@@ -19,38 +19,47 @@
 # CDDL HEADER END
 #
 #
-# Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
+# Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
+#
 
-LIBRARY =	libmlrpc.a
-VERS =		.1
+include $(SRC)/lib/Makefile.lib
 
-OBJS_COMMON = 			\
-	ndr_client.o		\
-	ndr_heap.o		\
-	ndr_marshal.o		\
-	ndr_ops.o		\
-	ndr_process.o		\
-	ndr_server.o		\
-	ndr_svc.o
+HDRS=		libmlrpc.h ndr.h ndrtypes.ndl rpcpdu.ndl
+HDRDIR=		common
 
-NDLLIST = rpcpdu
+ROOTHDRDIR=	$(ROOT)/usr/include/libmlrpc
+ROOTHDRS= $(HDRS:%=$(ROOTHDRDIR)/%)
 
-OBJECTS=	$(OBJS_COMMON) $(OBJS_SHARED) $(NDLLIST:%=%_ndr.o)
+# ISA targets
+SUBDIRS = $(MACH)
+$(BUILD64)SUBDIRS += $(MACH64)
 
-include ../../../Makefile.lib
-include ../../Makefile.lib
+all :=		TARGET = all
+install :=	TARGET = install
+clean :=	TARGET = clean
+clobber :=	TARGET = clobber
+lint :=		TARGET = lint
 
-INCS += -I$(SRC)/common/smbsrv
+.KEEP_STATE:
 
-LDLIBS +=	$(MACH_LDLIBS)
-LDLIBS +=	-lsmb -luuid -lc
+all install clean clobber lint: $(SUBDIRS)
 
-CPPFLAGS += $(INCS)
+install_h: $(ROOTHDRDIR) $(ROOTHDRS)
 
-SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)		\
-	$(OBJS_SHARED:%.o=$(SRC)/common/smbsrv/%.c)
+check: $(CHECKHDRS)
 
-include ../../Makefile.targ
-include ../../../Makefile.targ
+$(ROOTHDRDIR)/%: %
+	$(INS.file)
+
+$(ROOTHDRDIR):
+	$(INS.dir)
+
+$(SUBDIRS): FRC
+	@cd $@; pwd; VERSION='$(VERSION)' $(MAKE) $(TARGET)
+
+FRC:
+
+include $(SRC)/lib/Makefile.targ

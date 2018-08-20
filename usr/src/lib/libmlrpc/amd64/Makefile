@@ -22,9 +22,10 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
-#
 
-HDRS=	libmlrpc.h
+MACH_LDLIBS +=	-L$(ROOT)/usr/lib/smbsrv/$(MACH64)
 
-include ../Makefile.smbsrv
+include ../Makefile.com
+include ../../Makefile.lib.64
+
+install: all $(ROOTLIBS64) $(ROOTLINKS64)

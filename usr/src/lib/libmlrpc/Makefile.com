@@ -18,15 +18,54 @@
 #
 # CDDL HEADER END
 #
+
 #
-# Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
+# Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
+# Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
 #
 
-include ../Makefile.com
+LIBRARY =	libmlrpc.a
+VERS =		.2
 
-DYNFLAGS +=	-R/usr/lib/smbsrv
+OBJS_COMMON =			\
+	mlrpc_clh.o		\
+	ndr_client.o		\
+	ndr_heap.o		\
+	ndr_marshal.o		\
+	ndr_ops.o		\
+	ndr_process.o		\
+	ndr_server.o		\
+	ndr_svc.o		\
+	ndr_wchar.o
 
-install: all $(ROOTLIBS) $(ROOTLINKS)
+NDLLIST = rpcpdu
+
+OBJECTS=	$(OBJS_COMMON) $(NDLLIST:%=%_ndr.o)
+CLEANFILES += $(NDLLIST:%=%_ndr.c)
+
+include ../../Makefile.lib
+
+LIBS=		$(DYNLIB)
+
+LDLIBS +=	-lsmbfs -luuid -lc
+
+SRCDIR=		../common
+SRCS=   $(OBJS_COMMON:%.o=$(SRCDIR)/%.c)
+
+NDLDIR =	$(SRCDIR)
+
+INCS = -I. -I$(SRCDIR)
+CPPFLAGS += $(INCS)
+
+all:	$(LIBS)
+
+include ../../Makefile.targ
+
+objs/%_ndr.o pics/%_ndr.o : %_ndr.c
+
+%_ndr.c : $(NDLDIR)/%.ndl
+	$(NDRGEN) -Y $(ANSI_CPP) $(CPPFLAGS) $<
+
+.KEEP_STATE:

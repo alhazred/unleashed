@@ -424,6 +424,9 @@ usr/include/smbsrv
 # Private/Internal libraries of smbsrv. Do not ship.
 #
 usr/lib/smbsrv/bind-helper
+usr/lib/smbsrv/libmlsvc.so
+usr/lib/smbsrv/libsmb.so
+usr/lib/smbsrv/libsmbns.so
 #
 #
 # Private/Internal 64-bit libraries of smbsrv. Do not ship.
@@ -446,7 +449,14 @@ usr/include/sys/vscan.h
 #
 usr/include/sys/sdcard
 #
-# libsmbfs is private
+# libmlrpc is private (SMB client and server)
+#
+usr/include/libmlrpc
+usr/lib/libmlrpc.so
+usr/lib/amd64/libmlrpc.so		i386
+usr/lib/amd64/libmlrpc.so.2		i386
+#
+# libsmbfs is private (SMB client and server)
 #
 usr/include/netsmb
 usr/lib/libsmbfs.so

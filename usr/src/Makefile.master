@@ -121,6 +121,7 @@ LFLAGS=		-n
 FLEX=		/usr/bin/flex
 YACC=		/usr/bin/yacc
 CPP=		$(GCC_ROOT)/cpp
+ANSI_CPP=	$(GCC_ROOT)/bin/cpp
 CTFCONVERT=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfconvert
 CTFDIFF=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfdiff
 CTFMERGE=	$(ONBLD_TOOLS)/bin/$(MACH)/ctfmerge

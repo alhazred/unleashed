@@ -23,6 +23,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
+#
 
 #
 # cmd/fs.d/smbclnt/smbutil/Makefile
@@ -30,18 +32,22 @@
 
 PROG=		smbutil
 
-include		$(SRC)/cmd/Makefile.cmd
-
-OBJS=   smbutil.o login.o lookup.o print.o status.o view.o
+OBJS=   smbutil.o info.o login.o lookup.o print.o status.o view.o \
+	shares_rap.o shares_rpc.o srvsvc1_clnt.o srvsvc1_ndr.o
 
 SRCS=	$(OBJS:%.o=%.c)
+
+include		$(SRC)/cmd/Makefile.cmd
+
 POFILE=	smbutil_all.po
 POFILES= $(OBJS:%.o=%.po)
+
+CLEANFILES +=  srvsvc1_ndr.c
 CLOBBERFILES+=  $(POFILE) $(POFILES)
 
 C99MODE= $(C99_ENABLE)
 
-LDLIBS += -lsmbfs
+LDLIBS += -lmlrpc -lsmbfs
 
 CPPFLAGS += -I$(SRC)/lib/libsmbfs \
 	-I$(SRC)/uts/common/smbclnt -I$(SRC)/uts/common
@@ -73,9 +79,12 @@ $(POFILE): $(POFILES)
 	$(CAT) $(POFILES) > $@
 
 
-clean :
-	$(RM) $(OBJS)
-
-.KEEP_STATE:
+clean:
+	$(RM) $(OBJS) $(CLEANFILES)
 
 include ../../../Makefile.targ
+
+srvsvc1_ndr.c : srvsvc1.ndl
+	$(NDRGEN) -Y $(ANSI_CPP) $(CPPFLAGS) srvsvc1.ndl
+
+.KEEP_STATE:
