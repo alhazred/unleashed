@@ -356,6 +356,7 @@ nxge_zcp_inject_err(p_nxge_t nxgep, uint32_t err_id)
 				break;
 			}
 		}
+		/* FALLTHROUGH */
 
 	default:
 		if (err_id == NXGE_FM_EREPORT_ZCP_RRFIFO_OVERRUN)
