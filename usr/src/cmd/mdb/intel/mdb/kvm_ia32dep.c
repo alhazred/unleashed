@@ -21,6 +21,8 @@
 /*
  * Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2018 Joyent, Inc.
  */
 
 /*
@@ -136,7 +138,6 @@ const mdb_tgt_ops_t kt_ia32_ops = {
 	(int (*)()) mdb_tgt_notsup,		/* t_run */
 	(int (*)()) mdb_tgt_notsup,		/* t_step */
 	(int (*)()) mdb_tgt_notsup,		/* t_step_out */
-	(int (*)()) mdb_tgt_notsup,		/* t_step_branch */
 	(int (*)()) mdb_tgt_notsup,		/* t_next */
 	(int (*)()) mdb_tgt_notsup,		/* t_cont */
 	(int (*)()) mdb_tgt_notsup,		/* t_signal */
