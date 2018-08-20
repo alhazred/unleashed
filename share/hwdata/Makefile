@@ -1,6 +1,7 @@
 HWDATADIR=	${SHAREDIR}/hwdata
 
-FILES=  	pci.ids \
+FILES=  	efi.fixes \
+		pci.ids \
 		usb.ids
 
 # URLs for PCI IDs and USB IDs
