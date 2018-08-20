@@ -58,6 +58,7 @@ include $(UTSBASE)/intel/Makefile.intel
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-switch
+CERRWARN	+= -Wno-uninitialized
 
 #
 #	Default build targets.

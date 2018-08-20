@@ -63,10 +63,29 @@ driver name=mpt_sas class=scsi-self-identifying \
     alias=pciex1000,95 \
     alias=pciex1000,96 \
     alias=pciex1000,97 \
+    alias=pciex1000,aa \
+    alias=pciex1000,ab \
+    alias=pciex1000,ac \
+    alias=pciex1000,ad \
+    alias=pciex1000,ae \
+    alias=pciex1000,af \
+    alias=pciex1000,c0 \
+    alias=pciex1000,c1 \
+    alias=pciex1000,c2 \
+    alias=pciex1000,c3 \
     alias=pciex1000,c4 \
-    alias=pciex1000,c9
+    alias=pciex1000,c5 \
+    alias=pciex1000,c6 \
+    alias=pciex1000,c7 \
+    alias=pciex1000,c8 \
+    alias=pciex1000,c9 \
+    alias=pciex1000,d0 \
+    alias=pciex1000,d1 \
+    alias=pciex1000,d2
 file path=kernel/drv/mpt_sas group=sys
 file path=kernel/drv/mpt_sas.conf group=sys preserve=true
 file path=usr/share/man/man7d/mpt_sas.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
+license include/sys/scsi/adapters/mpt_sas/mpi/THIRDPARTYLICENSE \
+    license=include/sys/scsi/adapters/mpt_sas/mpi/THIRDPARTYLICENSE

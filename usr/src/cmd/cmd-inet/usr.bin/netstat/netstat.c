@@ -23,7 +23,7 @@
  * Copyright (c) 1990  Mentat Inc.
  * netstat.c 2.2, last change 9/9/91
  * MROUTING Revision 3.5
- * Copyright (c) 2017, Joyent, Inc.
+ * Copyright 2018, Joyent, Inc.
  */
 
 /*
@@ -231,6 +231,7 @@ static void 		fatal(int errcode, char *str1, ...);
 
 
 static	boolean_t	Aflag = B_FALSE;	/* All sockets/ifs/rtng-tbls */
+static	boolean_t	CIDRflag = B_FALSE;	/* CIDR for IPv4 -i/-r addrs */
 static	boolean_t	Dflag = B_FALSE;	/* DCE info */
 static	boolean_t	Iflag = B_FALSE;	/* IP Traffic Interfaces */
 static	boolean_t	Mflag = B_FALSE;	/* STREAMS Memory Statistics */
@@ -435,10 +436,14 @@ main(int argc, char **argv)
 	(void) setlocale(LC_ALL, "");
 	(void) textdomain(TEXT_DOMAIN);
 
-	while ((c = getopt(argc, argv, "adimnrspMgvxf:P:I:DT:")) != -1) {
+	while ((c = getopt(argc, argv, "acdimnrspMgvxf:P:I:DT:")) != -1) {
 		switch ((char)c) {
 		case 'a':		/* all connections */
 			Aflag = B_TRUE;
+			break;
+
+		case 'c':
+			CIDRflag = B_TRUE;
 			break;
 
 		case 'd':		/* DCE info */
@@ -3268,7 +3273,7 @@ if_report_ip4(mib2_ipAddrEntry_t *ap,
     boolean_t ksp_not_null)
 {
 
-	char abuf[MAXHOSTNAMELEN + 1];
+	char abuf[MAXHOSTNAMELEN + 4];	/* Include /<num> for CIDR-printing. */
 	char dstbuf[MAXHOSTNAMELEN + 1];
 
 	if (ksp_not_null) {
@@ -4272,7 +4277,7 @@ static const char ire_hdr_v4_normal[] =
 static boolean_t
 ire_report_item_v4(const mib2_ipRouteEntry_t *rp, boolean_t first)
 {
-	char			dstbuf[MAXHOSTNAMELEN + 1];
+	char			dstbuf[MAXHOSTNAMELEN + 4]; /* + "/<num>" */
 	char			maskbuf[MAXHOSTNAMELEN + 1];
 	char			gwbuf[MAXHOSTNAMELEN + 1];
 	char			ifname[LIFNAMSIZ + 1];
@@ -5233,7 +5238,7 @@ mrt_report(mib_item_t *item)
 	struct mfcctl	*mfccp;
 	int		numvifs = 0;
 	int		nmfc = 0;
-	char		abuf[MAXHOSTNAMELEN + 1];
+	char		abuf[MAXHOSTNAMELEN + 4]; /* Include CIDR /<num>. */
 
 	if (!(family_selected(AF_INET)))
 		return;
@@ -5652,6 +5657,57 @@ pr_ap6(const in6_addr_t *addr, uint_t port, char *proto,
 }
 
 /*
+ * Returns -2 to indicate a discontiguous mask.  Otherwise returns between
+ * 0 and 32.
+ */
+static int
+v4_cidr_len(uint_t mask)
+{
+	int rc = 0;
+	int i;
+
+	for (i = 0; i < 32; i++) {
+		if (mask & 0x1)
+			rc++;
+		else if (rc > 0)
+			return (-2);	/* Discontiguous IPv4 netmask. */
+
+		mask >>= 1;
+	}
+
+	return (rc);
+}
+
+static void
+append_v4_cidr_len(char *dst, uint_t dstlen, int prefixlen)
+{
+	char *prefixptr;
+
+	/* 4 bytes leaves room for '/' 'N' 'N' '\0' */
+	if (strlen(dst) <= dstlen - 4) {
+		prefixptr = dst + strlen(dst);
+	} else {
+		/*
+		 * Cut off last 3 chars of very-long DNS name.  All callers
+		 * should give us enough room, but name services COULD give us
+		 * a way-too-big name (see above).
+		 */
+		prefixptr = dst + strlen(dst) - 3;
+	}
+	/* At this point "prefixptr" is guaranteed to point to 4 bytes. */
+
+	if (prefixlen >= 0) {
+		if (prefixlen > 32)	/* Shouldn't happen, but... */
+			prefixlen = 32;
+		(void) snprintf(prefixptr, 4, "/%d", prefixlen);
+	} else if (prefixlen == -2) {
+		/* "/NM" == Noncontiguous Mask. */
+		(void) strcat(prefixptr, "/NM");
+	}
+	/* Else print nothing extra. */
+}
+
+/*
  * Return the name of the network whose address is given. The address is
  * assumed to be that of a net or subnet, not a host.
  */
@@ -5664,12 +5720,16 @@ pr_net(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 	uint_t		net;
 	int		subnetshift;
 	int		error_num;
+	int		prefixlen = -1;	/* -1 == Don't print prefix! */
+					/* -2 == Noncontiguous mask... */
 
 	if (addr == INADDR_ANY && mask == INADDR_ANY) {
-		(void) strncpy(dst, "default", dstlen);
-		dst[dstlen - 1] = 0;
+		(void) strlcpy(dst, "default", dstlen);
 		return (dst);
 	}
+
+	if (CIDRflag)
+		prefixlen = v4_cidr_len(ntohl(mask));
 
 	if (!Nflag && addr) {
 		if (mask == 0) {
@@ -5692,6 +5752,8 @@ pr_net(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 			while (addr & ~mask)
 				/* compiler doesn't sign extend! */
 				mask = (mask | ((int)mask >> subnetshift));
+			if (CIDRflag)
+				prefixlen = v4_cidr_len(mask);
 		}
 		net = addr & mask;
 		while ((mask & 1) == 0)
@@ -5714,11 +5776,13 @@ pr_net(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 		}
 	}
 	if (cp != NULL) {
-		(void) strncpy(dst, cp, dstlen);
-		dst[dstlen - 1] = 0;
+		(void) strlcpy(dst, cp, dstlen);
 	} else {
 		(void) inet_ntop(AF_INET, (char *)&addr, dst, dstlen);
 	}
+
+	append_v4_cidr_len(dst, dstlen, prefixlen);
+
 	if (hp != NULL)
 		freehostent(hp);
 	return (dst);
@@ -5740,14 +5804,18 @@ pr_netaddr(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 	struct in_addr in;
 	int		error_num;
 	uint_t		nbo_addr = addr;	/* network byte order */
+	int		prefixlen = -1;	/* -1 == Don't print prefix! */
+					/* -2 == Noncontiguous mask... */
 
 	addr = ntohl(addr);
 	mask = ntohl(mask);
 	if (addr == INADDR_ANY && mask == INADDR_ANY) {
-		(void) strncpy(dst, "default", dstlen);
-		dst[dstlen - 1] = 0;
+		(void) strlcpy(dst, "default", dstlen);
 		return (dst);
 	}
+
+	if (CIDRflag)
+		prefixlen = v4_cidr_len(mask);
 
 	/* Figure out network portion of address (with host portion = 0) */
 	if (addr) {
@@ -5772,6 +5840,8 @@ pr_netaddr(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 			while (addr & ~mask)
 				/* compiler doesn't sign extend! */
 				mask = (mask | ((int)mask >> subnetshift));
+			if (CIDRflag)
+				prefixlen = v4_cidr_len(mask);
 		}
 		net = netshifted = addr & mask;
 		while ((mask & 1) == 0)
@@ -5800,8 +5870,8 @@ pr_netaddr(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 		}
 
 		if (cp != NULL) {
-			(void) strncpy(dst, cp, dstlen);
-			dst[dstlen - 1] = 0;
+			(void) strlcpy(dst, cp, dstlen);
+			append_v4_cidr_len(dst, dstlen, prefixlen);
 			if (hp != NULL)
 				freehostent(hp);
 			return (dst);
@@ -5814,6 +5884,7 @@ pr_netaddr(uint_t addr, uint_t mask, char *dst, uint_t dstlen)
 
 	in.s_addr = htonl(net);
 	(void) inet_ntop(AF_INET, (char *)&in, dst, dstlen);
+	append_v4_cidr_len(dst, dstlen, prefixlen);
 	if (hp != NULL)
 		freehostent(hp);
 	return (dst);

@@ -155,7 +155,7 @@ file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Scm/__init__.pyc \
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/__init__.py mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/__init__.pyc mode=0444
 file path=opt/onbld/man/man1/Install.1
-file path=opt/onbld/man/man1/btxld.1
+$(i386_ONLY)file path=opt/onbld/man/man1/btxld.1
 file path=opt/onbld/man/man1/cddlchk.1
 file path=opt/onbld/man/man1/check_rtime.1
 file path=opt/onbld/man/man1/checkpaths.1
