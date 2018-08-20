@@ -22,6 +22,8 @@
 /*
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2018 Joyent, Inc.
  */
 
 #ifndef _ASM_HTABLE_H
@@ -34,8 +36,6 @@
 extern "C" {
 #endif
 
-
-#if defined(__i386) || defined(__amd64)
 
 /*
  * This set of atomic operations are designed primarily
@@ -81,18 +81,6 @@ atomic_dec16(uint16_t *addr)
 	    : "m" (*addr)
 	    : "cc");
 }
-
-extern __GNU_INLINE void
-mmu_tlbflush_entry(caddr_t addr)
-{
-	__asm__ __volatile__(
-	    "invlpg %0"
-	    : "=m" (*addr)
-	    : "m" (*addr));
-}
-
-#endif	/* __i386 || __amd64 */
-
 
 #ifdef	__cplusplus
 }

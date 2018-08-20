@@ -23,7 +23,7 @@
  * Copyright (c) 1992, 2010, Oracle and/or its affiliates. All rights reserved.
  */
 /*
- * Copyright (c) 2016, Joyent, Inc. All rights reserved.
+ * Copyright (c) 2018 Joyent, Inc.
  */
 
 /*	Copyright (c) 1990, 1991 UNIX System Laboratories, Inc.	*/
@@ -305,7 +305,7 @@ __return_from_main:
 	addq	%rax, %r12
 	movq	%r12, REGOFF_RIP(%rbp)
 	INTR_POP
-	IRET
+	jmp	tr_iret_auto
 	/*NOTREACHED*/
 3:
 	leaq	dtrace_badflags(%rip), %rdi
@@ -489,7 +489,7 @@ _no_pending_updates:
 	 */
 	ALTENTRY(sys_rtt_syscall32)
 	USER32_POP
-	IRET
+	jmp	tr_iret_user
 	/*NOTREACHED*/
 
 	ALTENTRY(sys_rtt_syscall)
@@ -498,7 +498,7 @@ _no_pending_updates:
 	 */
 	USER_POP
 	ALTENTRY(nopop_sys_rtt_syscall)
-	IRET
+	jmp	tr_iret_user
 	/*NOTREACHED*/
 	SET_SIZE(nopop_sys_rtt_syscall)
 
@@ -513,7 +513,7 @@ _no_pending_updates:
 	 * Restore regs before doing iretq to kernel mode
 	 */
 	INTR_POP
-	IRET
+	jmp	tr_iret_kernel
 	.globl	_sys_rtt_end
 _sys_rtt_end:
 	/*NOTREACHED*/

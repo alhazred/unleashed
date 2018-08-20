@@ -24,7 +24,7 @@
  */
 
 /*
- * Copyright (c) 2013, Joyent, Inc. All rights reserved.
+ * Copyright (c) 2018 Joyent, Inc.
  */
 
 /*
@@ -58,7 +58,7 @@
  * The MMU context, therefore, only changes when resuming a thread in
  * a process different from curproc.
  *
- * resume_from_intr() is called when the thread being resumed was not 
+ * resume_from_intr() is called when the thread being resumed was not
  * passivated by resume (e.g. was interrupted).  This means that the
  * resume lock is already held and that a restore context is not needed.
  * Also, the MMU context is not changed on the resume in this case.
@@ -219,6 +219,8 @@
 
 #if defined(__amd64)
 
+	.global	kpti_enable
+
 	ENTRY(resume)
 	movq	%gs:CPU_THREAD, %rax
 	leaq	resume_return(%rip), %r11
@@ -289,7 +291,7 @@
 	 */
 	movq	CPU_IDLE_THREAD(%r15), %rax 	/* idle thread pointer */
 
-	/* 
+	/*
 	 * Set the idle thread as the current thread
 	 */
 	movq	T_SP(%rax), %rsp	/* It is safe to set rsp */
@@ -302,7 +304,7 @@
 	GET_THREAD_HATP(%rdi, %r12, %r11)
 	call	hat_switch
 
-	/* 
+	/*
 	 * Clear and unlock previous thread's t_lock
 	 * to allow it to be dispatched by another processor.
 	 */
@@ -346,20 +348,30 @@
 
 .setup_cpu:
 	/*
-	 * Setup rsp0 (kernel stack) in TSS to curthread's stack.
-	 * (Note: Since we don't have saved 'regs' structure for all
-	 *	  the threads we can't easily determine if we need to
-	 *	  change rsp0. So, we simply change the rsp0 to bottom 
-	 *	  of the thread stack and it will work for all cases.)
+	 * Setup rsp0 (kernel stack) in TSS to curthread's saved regs
+	 * structure.  If this thread doesn't have a regs structure above
+	 * the stack -- that is, if lwp_stk_init() was never called for the
+	 * thread -- this will set rsp0 to the wrong value, but it's harmless
+	 * as it's a kernel thread, and it won't actually attempt to implicitly
+	 * use the rsp0 via a privilege change.
 	 *
-	 * XX64 - Is this correct?
+	 * Note that when we have KPTI enabled on amd64, we never use this
+	 * value at all (since all the interrupts have an IST set).
 	 */
 	movq	CPU_TSS(%r13), %r14
+#if !defined(__xpv)
+	cmpq	$1, kpti_enable
+	jne	1f
+	leaq	CPU_KPTI_TR_RSP(%r13), %rax
+	jmp	2f
+1:
 	movq	T_STACK(%r12), %rax
 	addq	$REGSIZE+MINFRAME, %rax	/* to the bottom of thread stack */
-#if !defined(__xpv)
+2:
 	movq	%rax, TSS_RSP0(%r14)
 #else
+	movq	T_STACK(%r12), %rax
+	addq	$REGSIZE+MINFRAME, %rax	/* to the bottom of thread stack */
 	movl	$KDS_SEL, %edi
 	movq	%rax, %rsi
 	call	HYPERVISOR_stack_switch
@@ -392,7 +404,7 @@
 	movq	%rcx, %rdi
 	call	restorepctx
 .norestorepctx:
-	
+
 	STORE_INTR_START(%r12)
 
 	/*
@@ -413,7 +425,7 @@
 	 * resuming thread's PC after first setting the priority as low as
 	 * possible and blocking all interrupt threads that may be active.
 	 */
-	movq	%r13, %rax	/* save return address */	
+	movq	%r13, %rax	/* save return address */
 	RESTORE_REGS(%r11)
 	pushq	%rax		/* push return address for spl0() */
 	call	__dtrace_probe___sched_on__cpu
@@ -475,12 +487,12 @@ resume_return:
 	addl	$4, %esp
 .nosavepctx:
 
-	/* 
+	/*
 	 * Temporarily switch to the idle thread's stack
 	 */
 	movl	CPU_IDLE_THREAD(%ebx), %eax 	/* idle thread pointer */
 
-	/* 
+	/*
 	 * Set the idle thread as the current thread
 	 */
 	movl	T_SP(%eax), %esp	/* It is safe to set esp */
@@ -491,8 +503,8 @@ resume_return:
 	pushl	%ecx
 	call	hat_switch
 	addl	$4, %esp
-	
-	/* 
+
+	/*
 	 * Clear and unlock previous thread's t_lock
 	 * to allow it to be dispatched by another processor.
 	 */
@@ -648,7 +660,7 @@ resume_return:
 
 #endif	/* __xpv */
 
-	/* 
+	/*
 	 * Temporarily switch to the idle thread's stack so that the zombie
 	 * thread's stack can be reclaimed by the reaper.
 	 */
@@ -661,7 +673,7 @@ resume_return:
 	 */
 	andq	$_BITNOT(STACK_ALIGN-1), %rsp
 
-	/* 
+	/*
 	 * Set the idle thread as the current thread.
 	 */
 	movq	%rax, %gs:CPU_THREAD
@@ -670,7 +682,7 @@ resume_return:
 	GET_THREAD_HATP(%rdi, %r12, %r11)
 	call	hat_switch
 
-	/* 
+	/*
 	 * Put the zombie on death-row.
 	 */
 	movq	%r13, %rdi
@@ -718,14 +730,14 @@ resume_from_zombie_return:
 	movl	%eax, %cr0
 .zfpu_disabled:
 
-	/* 
+	/*
 	 * Temporarily switch to the idle thread's stack so that the zombie
 	 * thread's stack can be reclaimed by the reaper.
 	 */
 	movl	%gs:CPU_IDLE_THREAD, %eax /* idle thread pointer */
 	movl	T_SP(%eax), %esp	/* get onto idle thread stack */
 
-	/* 
+	/*
 	 * Set the idle thread as the current thread.
 	 */
 	movl	%eax, %gs:CPU_THREAD
@@ -738,7 +750,7 @@ resume_from_zombie_return:
 	call	hat_switch
 	addl	$4, %esp
 
-	/* 
+	/*
 	 * Put the zombie on death-row.
 	 */
 	pushl	%esi
@@ -780,7 +792,7 @@ resume_from_zombie_return:
 	movq	T_SP(%r12), %rsp	/* restore resuming thread's sp */
 	xorl	%ebp, %ebp		/* make $<threadlist behave better */
 
-	/* 
+	/*
 	 * Unlock outgoing thread's mutex dispatched by another processor.
 	 */
 	xorl	%eax, %eax
@@ -830,7 +842,7 @@ resume_from_intr_return:
 	movl	T_SP(%edi), %esp	/* restore resuming thread's sp */
 	xorl	%ebp, %ebp		/* make $<threadlist behave better */
 
-	/* 
+	/*
 	 * Unlock outgoing thread's mutex dispatched by another processor.
 	 */
 	xorl	%eax,%eax

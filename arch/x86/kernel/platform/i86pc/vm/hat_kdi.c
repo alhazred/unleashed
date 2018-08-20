@@ -22,6 +22,8 @@
 /*
  * Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2018 Joyent, Inc.
  */
 
 /*
@@ -132,7 +134,7 @@ kdi_vtop(uintptr_t va, uint64_t *pap)
 	 * We can't go through normal hat routines, so we'll use
 	 * kdi_pread() to walk the page tables
 	 */
-	*pap = getcr3() & MMU_PAGEMASK;
+	*pap = getcr3_pa();
 	for (level = mmu.max_level; ; --level) {
 		index = (va >> LEVEL_SHIFT(level)) & (mmu.ptes_per_table - 1);
 		*pap += index << mmu.pte_size_shift;
@@ -198,7 +200,7 @@ kdi_prw(caddr_t buf, size_t nbytes, uint64_t pa, size_t *ncopiedp, int doread)
 			*hat_kdi_pte = pte;
 		else
 			*(x86pte32_t *)hat_kdi_pte = pte;
-		mmu_tlbflush_entry((caddr_t)hat_kdi_page);
+		mmu_flush_tlb_kpage(hat_kdi_page);
 
 		bcopy(from, to, sz);
 
@@ -211,7 +213,7 @@ kdi_prw(caddr_t buf, size_t nbytes, uint64_t pa, size_t *ncopiedp, int doread)
 			*hat_kdi_pte = 0;
 		else
 			*(x86pte32_t *)hat_kdi_pte = 0;
-		mmu_tlbflush_entry((caddr_t)hat_kdi_page);
+		mmu_flush_tlb_kpage(hat_kdi_page);
 
 		buf += sz;
 		pa += sz;
@@ -238,6 +240,19 @@ kdi_pwrite(caddr_t buf, size_t nbytes, uint64_t addr, size_t *ncopiedp)
 	return (kdi_prw(buf, nbytes, addr, ncopiedp, 0));
 }
 
+#if !defined(__xpv)
+/*
+ * This gets used for flushing the TLB on all the slaves just prior to doing a
+ * kdi_prw().  It's unclear why this was originally done, since kdi_prw() itself
+ * will flush any lingering hat_kdi_page mappings, but let's presume it was a
+ * good idea.
+ */
+void
+kdi_flush_caches(void)
+{
+	mmu_flush_tlb(FLUSH_TLB_ALL, NULL);
+}
+#endif
 
 /*
  * Return the number of bytes, relative to the beginning of a given range, that

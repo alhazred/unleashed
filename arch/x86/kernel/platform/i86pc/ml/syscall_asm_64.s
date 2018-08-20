@@ -20,7 +20,7 @@
  */
 /*
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
- * Copyright 2015 Joyent, Inc.
+ * Copyright 2018 Joyent, Inc.
  * Copyright (c) 2016 by Delphix. All rights reserved.
  */
 
@@ -457,6 +457,20 @@ noprod_sys_syscall:
 	movq	%rbx, REGOFF_GS(%rsp)
 
 	/*
+	 * If we're trying to use TRAPTRACE though, I take that back: we're
+	 * probably debugging some problem in the SWAPGS logic and want to know
+	 * what the incoming gsbase was.
+	 *
+	 * Since we already did SWAPGS, record the KGSBASE.
+	 */
+#if defined(DEBUG) && defined(TRAPTRACE) && !defined(__xpv)
+	movl	$MSR_AMD_KGSBASE, %ecx
+	rdmsr
+	movl	%eax, REGOFF_GSBASE(%rsp)
+	movl	%edx, REGOFF_GSBASE+4(%rsp)
+#endif
+
+	/*
 	 * Machine state saved in the regs structure on the stack
 	 * First six args in %rdi, %rsi, %rdx, %rcx, %r8, %r9
 	 * %eax is the syscall number
@@ -601,8 +615,7 @@ _syscall_invoke:
          */
 	ASSERT_UPCALL_MASK_IS_SET
         ALTENTRY(nopop_sys_syscall_swapgs_sysretq)
-	SWAPGS				/* user gsbase */
-	SYSRETQ
+	jmp	tr_sysretq
         /*NOTREACHED*/
         SET_SIZE(nopop_sys_syscall_swapgs_sysretq)
 
@@ -691,6 +704,20 @@ _syscall32_save:
 	movq	%rbx, REGOFF_FS(%rsp)
 	movw	%gs, %bx
 	movq	%rbx, REGOFF_GS(%rsp)
+
+	/*
+	 * If we're trying to use TRAPTRACE though, I take that back: we're
+	 * probably debugging some problem in the SWAPGS logic and want to know
+	 * what the incoming gsbase was.
+	 *
+	 * Since we already did SWAPGS, record the KGSBASE.
+	 */
+#if defined(DEBUG) && defined(TRAPTRACE) && !defined(__xpv)
+	movl	$MSR_AMD_KGSBASE, %ecx
+	rdmsr
+	movl	%eax, REGOFF_GSBASE(%rsp)
+	movl	%edx, REGOFF_GSBASE+4(%rsp)
+#endif
 
 	/*
 	 * Application state saved in the regs structure on the stack
@@ -809,8 +836,7 @@ _syscall32_save:
 
 	ASSERT_UPCALL_MASK_IS_SET
         ALTENTRY(nopop_sys_syscall32_swapgs_sysretl)
-	SWAPGS				/* user gsbase */
-	SYSRETL
+	jmp	tr_sysretl
         SET_SIZE(nopop_sys_syscall32_swapgs_sysretl)
 	/*NOTREACHED*/
 
@@ -854,28 +880,28 @@ _full_syscall_postsys32:
  * this call, as %edx is used by the sysexit instruction.
  *
  * One final complication in this routine is its interaction with
- * single-stepping in a debugger.  For most of the system call mechanisms,
- * the CPU automatically clears the single-step flag before we enter the
- * kernel.  The sysenter mechanism does not clear the flag, so a user
- * single-stepping through a libc routine may suddenly find themself
- * single-stepping through the kernel.  To detect this, kmdb compares the
- * trap %pc to the [brand_]sys_enter addresses on each single-step trap.
- * If it finds that we have single-stepped to a sysenter entry point, it
- * explicitly clears the flag and executes the sys_sysenter routine.
+ * single-stepping in a debugger.  For most of the system call mechanisms, the
+ * CPU automatically clears the single-step flag before we enter the kernel.
+ * The sysenter mechanism does not clear the flag, so a user single-stepping
+ * through a libc routine may suddenly find themself single-stepping through the
+ * kernel.  To detect this, kmdb and trap() both compare the trap %pc to the
+ * [brand_]sys_enter addresses on each single-step trap.  If it finds that we
+ * have single-stepped to a sysenter entry point, it explicitly clears the flag
+ * and executes the sys_sysenter routine.
  *
- * One final complication in this final complication is the fact that we
- * have two different entry points for sysenter: brand_sys_sysenter and
- * sys_sysenter.  If we enter at brand_sys_sysenter and start single-stepping
- * through the kernel with kmdb, we will eventually hit the instruction at
- * sys_sysenter.  kmdb cannot distinguish between that valid single-step
- * and the undesirable one mentioned above.  To avoid this situation, we
- * simply add a jump over the instruction at sys_sysenter to make it
- * impossible to single-step to it.
+ * One final complication in this final complication is the fact that we have
+ * two different entry points for sysenter: brand_sys_sysenter and sys_sysenter.
+ * If we enter at brand_sys_sysenter and start single-stepping through the
+ * kernel with kmdb, we will eventually hit the instruction at sys_sysenter.
+ * kmdb cannot distinguish between that valid single-step and the undesirable
+ * one mentioned above.  To avoid this situation, we simply add a jump over the
+ * instruction at sys_sysenter to make it impossible to single-step to it.
  */
 
 	ENTRY_NP(brand_sys_sysenter)
 	SWAPGS				/* kernel gsbase */
 	ALTENTRY(_brand_sys_sysenter_post_swapgs)
+
 	BRAND_CALLBACK(BRAND_CB_SYSENTER, BRAND_URET_FROM_REG(%rdx))
 	/*
 	 * Jump over sys_sysenter to allow single-stepping as described
@@ -885,13 +911,17 @@ _full_syscall_postsys32:
 
 	ALTENTRY(sys_sysenter)
 	SWAPGS				/* kernel gsbase */
-
 	ALTENTRY(_sys_sysenter_post_swapgs)
+
 	movq	%gs:CPU_THREAD, %r15
 
 	movl	$U32CS_SEL, REGOFF_CS(%rsp)
 	movl	%ecx, REGOFF_RSP(%rsp)		/* wrapper: %esp -> %ecx */
 	movl	%edx, REGOFF_RIP(%rsp)		/* wrapper: %eip -> %edx */
+	/*
+	 * NOTE: none of the instructions that run before we get here should
+	 * clobber bits in (R)FLAGS! This includes the kpti trampoline.
+	 */
 	pushfq
 	popq	%r10
 	movl	$UDS_SEL, REGOFF_SS(%rsp)
@@ -931,6 +961,20 @@ _full_syscall_postsys32:
 	movq	%rbx, REGOFF_FS(%rsp)
 	movw	%gs, %bx
 	movq	%rbx, REGOFF_GS(%rsp)
+
+	/*
+	 * If we're trying to use TRAPTRACE though, I take that back: we're
+	 * probably debugging some problem in the SWAPGS logic and want to know
+	 * what the incoming gsbase was.
+	 *
+	 * Since we already did SWAPGS, record the KGSBASE.
+	 */
+#if defined(DEBUG) && defined(TRAPTRACE) && !defined(__xpv)
+	movl	$MSR_AMD_KGSBASE, %ecx
+	rdmsr
+	movl	%eax, REGOFF_GSBASE(%rsp)
+	movl	%edx, REGOFF_GSBASE+4(%rsp)
+#endif
 
 	/*
 	 * Application state saved in the regs structure on the stack
@@ -1030,6 +1074,8 @@ _full_syscall_postsys32:
 	 * If we were, and we ended up on another cpu, or another
 	 * lwp got int ahead of us, it could change the segment
 	 * registers without us noticing before we return to userland.
+	 *
+	 * This cli is undone in the tr_sysexit trampoline code.
 	 */
 	cli
 	CHECK_POSTSYS_NE(%r15, %r14, %ebx)
@@ -1063,9 +1109,7 @@ _full_syscall_postsys32:
 	popfq
 	movl	REGOFF_RSP(%rsp), %ecx	/* sysexit: %ecx -> %esp */
         ALTENTRY(sys_sysenter_swapgs_sysexit)
-	swapgs
-	sti
-	sysexit
+	jmp	tr_sysexit
 	SET_SIZE(sys_sysenter_swapgs_sysexit)
 	SET_SIZE(sys_sysenter)
 	SET_SIZE(_sys_sysenter_post_swapgs)
@@ -1107,10 +1151,13 @@ nopop_syscall_int:
 	 * or we could end up breaking branded zone support. See the usage of
 	 * this label in lx_brand_int80_callback and sn1_brand_int91_callback
 	 * for examples.
+	 *
+	 * We want to swapgs to maintain the invariant that all entries into
+	 * tr_iret_user are done on the user gsbase.
 	 */
-        ALTENTRY(sys_sysint_swapgs_iret)
-	SWAPGS				/* user gsbase */
-	IRET
+	ALTENTRY(sys_sysint_swapgs_iret)
+	SWAPGS
+	jmp	tr_iret_user
 	/*NOTREACHED*/
 	SET_SIZE(sys_sysint_swapgs_iret)
 	SET_SIZE(sys_syscall_int)

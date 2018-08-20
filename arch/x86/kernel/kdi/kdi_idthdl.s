@@ -26,7 +26,7 @@
  */
 
 /*
- * Companion to kdi_idt.c - the implementation of the trap and interrupt
+ * Companion to kdi_asm.s - the implementation of the trap and interrupt
  * handlers.  For the most part, these handlers do the same thing - they
  * push a trap number onto the stack, followed by a jump to kdi_cmnint.
  * Each trap and interrupt has its own handler because each one pushes a
@@ -34,13 +34,18 @@
  */
 
 #include <sys/asm_linkage.h>
+#include <sys/asm_misc.h>
+#include <sys/machprivregs.h>
+#include <sys/privregs.h>
 #include <sys/kdi_regs.h>
+#include <sys/trap.h>
+#include <sys/param.h>
 
-/* Nothing in this file is of interest to lint. */
+#include <kdi_assym.h>
+#include <assym.h>
 
 /*
- * The default ASM_ENTRY_ALIGN (16) wastes far too much space.  Pay no
- * attention to the fleet of nop's we're adding to each handler.
+ * The default ASM_ENTRY_ALIGN (16) wastes far too much space.
  */
 #undef	ASM_ENTRY_ALIGN
 #define	ASM_ENTRY_ALIGN	8
@@ -49,64 +54,143 @@
  * Generic trap and interrupt handlers.
  */
 
-#if defined(__xpv) && defined(__amd64)
-
 /*
- * The hypervisor places r11 and rcx on the stack.
+ * If we're !xpv, then we will need to support KPTI (kernel page table
+ * isolation), where we have separate page tables for user and kernel modes.
+ * There's more detail about this in kpti_trampolines.s and hat_i86.c
  */
 
-#define	TRAP_NOERR(trapno) \
-	popq	%rcx;		\
-	popq	%r11;		\
-	pushq	$trapno
-
-#define	TRAP_ERR(trapno) 	\
-	popq	%rcx;		\
-	popq	%r11;		\
-	pushq	$0;		\
-	pushq	$trapno
-
-#else
-
-#define	TRAP_NOERR(trapno) 	\
-	push	$trapno
-
-#define	TRAP_ERR(trapno) 	\
-	push	$0;		\
-	push	$trapno
-
-#endif	/* __xpv && __amd64 */
+#define	INTERRUPT_TRAMPOLINE			\
+	pushq	%r13;				\
+	pushq	%r14;				\
+	subq	$KPTI_R14, %rsp;		\
+	/* Check for clobbering */		\
+	cmp	$0, KPTI_FLAG(%rsp);		\
+	je	1f;				\
+	/* Don't worry, this totally works */	\
+	int	$8;				\
+1:						\
+	movq	$1, KPTI_FLAG(%rsp);		\
+	/* Save current %cr3. */		\
+	mov	%cr3, %r14;			\
+	mov	%r14, KPTI_TR_CR3(%rsp);	\
+	/* Switch to paranoid %cr3. */		\
+	mov	kpti_safe_cr3, %r14;		\
+	mov	%r14, %cr3;			\
+						\
+	cmpw	$KCS_SEL, KPTI_CS(%rsp);	\
+	je	3f;				\
+2:						\
+	/* Get our cpu_t in %r13 */		\
+	mov	%rsp, %r13;			\
+	and	$(~(MMU_PAGESIZE - 1)), %r13;	\
+	subq	$CPU_KPTI_START, %r13;		\
+	/* Use top of the kthread stk */	\
+	mov	CPU_THREAD(%r13), %r14;		\
+	mov	T_STACK(%r14), %r14;		\
+	addq	$REGSIZE+MINFRAME, %r14;	\
+	jmp	5f;				\
+3:						\
+	/* Check the %rsp in the frame. */	\
+	/* Is it above kernel base? */		\
+	mov	kpti_kbase, %r14;		\
+	cmp	%r14, KPTI_RSP(%rsp);		\
+	jb	2b;				\
+	/* Is it within the kpti_frame page? */	\
+	mov	%rsp, %r13;			\
+	and	$(~(MMU_PAGESIZE - 1)), %r13;	\
+	mov	KPTI_RSP(%rsp), %r14;		\
+	and	$(~(MMU_PAGESIZE - 1)), %r14;	\
+	cmp	%r13, %r14;			\
+	je	2b;				\
+	/* Use the %rsp from the trap frame. */	\
+	/* We already did %cr3. */		\
+	mov	KPTI_RSP(%rsp), %r14;		\
+	and	$(~0xf), %r14;			\
+5:						\
+	mov	%rsp, %r13;			\
+	/* %r14 contains our destination stk */	\
+	mov	%r14, %rsp;			\
+	pushq	KPTI_SS(%r13);			\
+	pushq	KPTI_RSP(%r13);			\
+	pushq	KPTI_RFLAGS(%r13);		\
+	pushq	KPTI_CS(%r13);			\
+	pushq	KPTI_RIP(%r13);			\
+	pushq	KPTI_ERR(%r13);			\
+	mov	KPTI_R14(%r13), %r14;		\
+	movq	$0, KPTI_FLAG(%r13);		\
+	mov	KPTI_R13(%r13), %r13
 
 
 #define	MKIVCT(n) \
 	ENTRY_NP(kdi_ivct##n##);	\
-	TRAP_ERR(n);			\
+	push	$0; /* err */		\
+	INTERRUPT_TRAMPOLINE;		\
+	push	$n;			\
 	jmp	kdi_cmnint;		\
 	SET_SIZE(kdi_ivct##n##)
 
 #define	MKTRAPHDLR(n) \
 	ENTRY_NP(kdi_trap##n);	\
-	TRAP_ERR(n);			\
+	push	$0; /* err */		\
+	INTERRUPT_TRAMPOLINE;		\
+	push	$n;			\
 	jmp	kdi_cmnint;		\
 	SET_SIZE(kdi_trap##n##)
 
 #define	MKTRAPERRHDLR(n) \
 	ENTRY_NP(kdi_traperr##n);	\
-	TRAP_NOERR(n);			\
+	INTERRUPT_TRAMPOLINE;		\
+	push	$n;			\
 	jmp	kdi_cmnint;		\
 	SET_SIZE(kdi_traperr##n)
 
 #define	MKNMIHDLR \
 	ENTRY_NP(kdi_int2);		\
-	TRAP_NOERR(2);			\
+	push	$0;			\
+	push	$2;			\
+	pushq	%r13;			\
+	mov	kpti_safe_cr3, %r13;	\
+	mov	%r13, %cr3;		\
+	popq	%r13;			\
 	jmp	kdi_nmiint;		\
 	SET_SIZE(kdi_int2)
 
+#define	MKMCEHDLR \
+	ENTRY_NP(kdi_trap18);		\
+	push	$0;			\
+	push	$18;			\
+	pushq	%r13;			\
+	mov	kpti_safe_cr3, %r13;	\
+	mov	%r13, %cr3;		\
+	popq	%r13;			\
+	jmp	kdi_cmnint;		\
+	SET_SIZE(kdi_trap18)
+
+/*
+ * The only way we should reach here is by an explicit "int 0x.." which is
+ * defined not to push an error code.
+ */
 #define	MKINVALHDLR \
 	ENTRY_NP(kdi_invaltrap);	\
-	TRAP_NOERR(255);		\
+	push	$0; /* err */		\
+	INTERRUPT_TRAMPOLINE;		\
+	push	$255;			\
 	jmp	kdi_cmnint;		\
 	SET_SIZE(kdi_invaltrap)
+
+	.data
+	DGDEF3(kdi_idt, 16 * NIDT, MMU_PAGESIZE)
+	.fill	MMU_PAGESIZE, 1, 0
+
+.section ".text"
+.align MMU_PAGESIZE
+.global kdi_isr_start
+kdi_isr_start:
+	nop
+
+.global kpti_safe_cr3
+.global kpti_kbase
 
 /*
  * The handlers themselves
@@ -124,8 +208,7 @@
 	MKTRAPHDLR(9)
 	MKTRAPHDLR(15)
 	MKTRAPHDLR(16)
-	MKTRAPHDLR(17)
-	MKTRAPHDLR(18)
+	MKMCEHDLR/*18*/
 	MKTRAPHDLR(19)
 	MKTRAPHDLR(20)
 
@@ -135,11 +218,12 @@
 	MKTRAPERRHDLR(12)
 	MKTRAPERRHDLR(13)
 	MKTRAPERRHDLR(14)
+	MKTRAPERRHDLR(17)
 
 	.globl	kdi_ivct_size
 kdi_ivct_size:
 	.NWORD [kdi_ivct33-kdi_ivct32]
-	
+
 	/* 10 billion and one interrupt handlers */
 kdi_ivct_base:
 	MKIVCT(32);	MKIVCT(33);	MKIVCT(34);	MKIVCT(35);
@@ -199,3 +283,8 @@ kdi_ivct_base:
 	MKIVCT(248);	MKIVCT(249);	MKIVCT(250);	MKIVCT(251);
 	MKIVCT(252);	MKIVCT(253);	MKIVCT(254);	MKIVCT(255);
 
+.section ".text"
+.align MMU_PAGESIZE
+.global kdi_isr_end
+kdi_isr_end:
+	nop

@@ -23,7 +23,7 @@
  * Copyright (c) 1992, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2014 Nexenta Systems, Inc.  All rights reserved.
  * Copyright (c) 2014 by Delphix. All rights reserved.
- * Copyright 2016 Joyent, Inc.
+ * Copyright 2018 Joyent, Inc.
  */
 
 /*
@@ -354,23 +354,10 @@ catch_fault:
  * Invalidate a single page table entry in the TLB
  */
 
-
-#if defined(__amd64)
-
-	ENTRY(mmu_tlbflush_entry)
+	ENTRY(mmu_invlpg)
 	invlpg	(%rdi)
 	ret
-	SET_SIZE(mmu_tlbflush_entry)
-
-#elif defined(__i386)
-
-	ENTRY(mmu_tlbflush_entry)
-	movl	4(%esp), %eax
-	invlpg	(%eax)
-	ret
-	SET_SIZE(mmu_tlbflush_entry)
-
-#endif	/* __i386 */
+	SET_SIZE(mmu_invlpg)
 
 
 /*

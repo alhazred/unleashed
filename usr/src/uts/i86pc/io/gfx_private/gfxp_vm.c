@@ -22,6 +22,8 @@
 /*
  * Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2018 Joyent, Inc.
  */
 
 #include <sys/debug.h>
@@ -90,7 +92,6 @@ gfxp_map_kernel_space(uint64_t start, size_t size, uint32_t mode)
 
 	if (size == 0)
 		return (0);
-
 
 	if (mode == GFXP_MEMORY_CACHED)
 		hat_attr = HAT_STORECACHING_OK;
@@ -286,7 +287,6 @@ gfxp_load_kernel_space(uint64_t start, size_t size,
 
 	if (size == 0)
 		return;
-
 
 	if (mode == GFXP_MEMORY_CACHED)
 		hat_attr = HAT_STORECACHING_OK;

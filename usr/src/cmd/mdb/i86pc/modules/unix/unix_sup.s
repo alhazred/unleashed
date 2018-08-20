@@ -21,7 +21,6 @@
 
 #include <sys/asm_linkage.h>
 
-
 #if defined(__amd64)
 	ENTRY(kmdb_unix_getcr0)
 	movq %cr0, %rax
