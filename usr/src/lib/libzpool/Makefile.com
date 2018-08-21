@@ -49,6 +49,7 @@ SRCDIR=		../common
 MAPFILES =
 
 LIBS +=		$(DYNLIB)
+
 INCS += -I../common
 INCS += -I$(SRCTOP)/kernel/fs/zfs
 INCS += -I$(SRCTOP)/kernel/fs/zfs/lua
@@ -59,6 +60,8 @@ CLEANFILES += ../common/zfs.h
 CLEANFILES += $(EXTPICS)
 
 C99MODE=	$(C99_ENABLE)
+
+$(LIBS): ../common/zfs.h
 
 CFLAGS +=	-g
 CFLAGS64 +=	-g
