@@ -31,6 +31,7 @@ include ../Makefile.master
 COMMON_SUBDIRS= \
 	codereview \
 	ctf \
+	makesoftcore \
 	ndrgen \
 	onbld \
 	protocmp \

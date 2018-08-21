@@ -515,6 +515,11 @@ usr/include/libvrrpadm.h
 usr/lib/libvrrpadm.so
 usr/lib/amd64/libvrrpadm.so		i386
 #
+# Tools
+#
+opt/onbld/bin/i386/makesoftcore	i386
+
+#
 # Private libdwarf
 #
 opt/onbld/lib/i386/libdwarf.so	i386
