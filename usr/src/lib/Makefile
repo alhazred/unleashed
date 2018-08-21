@@ -546,7 +546,7 @@ libdll:		libast
 libdlpi:	libinetutil libdladm
 libds:		libsysevent
 libdtrace:	libproc libgen libctf libmapmalloc
-libefi:		libuuid
+libefi:		libuuid libsmbios
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
 libexacct/demo:	libexacct libproject
 libfcoe:	libdladm
