@@ -15,6 +15,8 @@
 
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
+dir path=usr group=sys
+dir path=usr/sbin
 driver name=cxgbe clone_perms="cxgbe 0666 root sys" \
     perms="* 0666 root sys"
 driver name=t4nex clone_perms="t4nex 0666 root sys" \
@@ -102,5 +104,6 @@ driver name=t4nex clone_perms="t4nex 0666 root sys" \
     alias=pciex1425,6481
 file path=kernel/drv/cxgbe group=sys
 file path=kernel/drv/t4nex group=sys
+file path=usr/sbin/cxgbetool mode=0555
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

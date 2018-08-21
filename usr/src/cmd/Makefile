@@ -27,6 +27,7 @@
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 # Copyright 2016 Nexenta Systems, Inc.
+# Copyright 2018 Gary Mills
 #
 
 include ../Makefile.master
@@ -91,6 +92,7 @@ COMMON_SUBDIRS=		\
 	ctrun		\
 	ctstat		\
 	ctwatch		\
+	cxgbetool	\
 	datadm		\
 	date		\
 	dc		\
@@ -384,7 +386,6 @@ COMMON_SUBDIRS=		\
 	wracct		\
 	write		\
 	xargs		\
-	xhci		\
 	xstr		\
 	ypcmd		\
 	yppasswd	\
@@ -412,6 +413,7 @@ i386_SUBDIRS=		\
 	nvmeadm		\
 	rtc		\
 	ucodeadm	\
+	xhci
 
 sparc_SUBDIRS=		\
 	cvcd		\
