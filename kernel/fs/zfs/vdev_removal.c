@@ -44,6 +44,7 @@
 #include <sys/vdev_indirect_births.h>
 #include <sys/vdev_indirect_mapping.h>
 #include <sys/abd.h>
+#include <sys/vdev_initialize.h>
 
 /*
  * This file contains the necessary logic to remove vdevs from a
@@ -363,6 +364,7 @@ spa_remove_init(spa_t *spa)
 		spa->spa_removing_phys.sr_state = DSS_NONE;
 		spa->spa_removing_phys.sr_removing_vdev = -1;
 		spa->spa_removing_phys.sr_prev_indirect_vdev = -1;
+		spa->spa_indirect_vdevs_loaded = B_TRUE;
 		return (0);
 	} else if (error != 0) {
 		return (error);
@@ -1021,6 +1023,7 @@ vdev_remove_complete(spa_t *spa)
 	txg_wait_synced(spa->spa_dsl_pool, 0);
 	txg = spa_vdev_enter(spa);
 	vdev_t *vd = vdev_lookup_top(spa, spa->spa_vdev_removal->svr_vdev_id);
+	ASSERT3P(vd->vdev_initialize_thread, ==, NULL);
 
 	sysevent_t *ev = spa_event_create(spa, vd, NULL,
 	    ESC_ZFS_VDEV_REMOVE_DEV);
@@ -1659,6 +1662,9 @@ spa_vdev_remove_log(vdev_t *vd, uint64_t *txg)
 	/* Make sure these changes are sync'ed */
 	spa_vdev_config_exit(spa, NULL, *txg, 0, FTAG);
 
+	/* Stop initializing */
+	(void) vdev_initialize_stop_all(vd, VDEV_INITIALIZE_CANCELED);
+
 	*txg = spa_vdev_config_enter(spa);
 
 	sysevent_t *ev = spa_event_create(spa, vd, NULL,
@@ -1819,6 +1825,13 @@ spa_vdev_remove_top(vdev_t *vd, uint64_t *txg)
 	 */
 	error = spa_reset_logs(spa);
 
+	/*
+	 * We stop any initializing that is currently in progress but leave
+	 * the state as "active". This will allow the initializing to resume
+	 * if the removal is canceled sometime later.
+	 */
+	vdev_initialize_stop_all(vd, VDEV_INITIALIZE_ACTIVE);
+
 	*txg = spa_vdev_config_enter(spa);
 
 	/*
@@ -1830,6 +1843,7 @@ spa_vdev_remove_top(vdev_t *vd, uint64_t *txg)
 
 	if (error != 0) {
 		metaslab_group_activate(mg);
+		spa_async_request(spa, SPA_ASYNC_INITIALIZE_RESTART);
 		return (error);
 	}
 

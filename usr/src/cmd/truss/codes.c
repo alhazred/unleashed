@@ -1287,6 +1287,8 @@ const struct ioc {
 		"zfs_cmd_t" },
 	{ (uint_t)ZFS_IOC_CHANNEL_PROGRAM,	"ZFS_IOC_CHANNEL_PROGRAM",
 		"zfs_cmd_t" },
+	{ (uint_t)ZFS_IOC_POOL_INITIALIZE,	"ZFS_IOC_POOL_INITIALIZE",
+		"zfs_cmd_t" },
 
 	/* disk ioctls - (0x04 << 8) - dkio.h */
 	{ (uint_t)DKIOCGGEOM,		"DKIOCGGEOM",
