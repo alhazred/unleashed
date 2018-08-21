@@ -850,7 +850,7 @@ getfilename(char *name, int *aedit)
 			nstrcpy(origname, PATHSIZE, cp);
 			return(cp);
 		}
-		/* Fall into . . . */
+		/* FALLTHROUGH */
 
 	default:
 regular:

@@ -374,6 +374,8 @@ iprop_full_resync_1(
 					error_message(errno));
 			goto out;
 		}
+		/* NOTREACHED */
+		break;
 
 	default: /* parent */
 		ret.ret = UPDATE_OK;
