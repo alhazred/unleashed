@@ -28,6 +28,10 @@ SHLIB_LDADD+= -z textoff
 # specified since the mk files set -isysroot in that case
 .ifdef DESTDIR
 beforebuild: includes prereq
+# 'includes' assumes usr/include exists
+includes: mkincdir
+mkincdir:
+	${INSTALL} -d ${DESTDIR}/usr/include
 .endif
 # install config files as well
 afterinstall: distribution

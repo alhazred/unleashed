@@ -26,4 +26,8 @@ BUILDFIRST+=	mapfile
 # specified since the mk files set -isysroot in that case
 .ifdef DESTDIR
 beforebuild: includes
+# 'includes' assumes usr/include exists
+includes: mkincdir
+mkincdir:
+	${INSTALL} -d ${DESTDIR}/usr/include
 .endif

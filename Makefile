@@ -8,14 +8,12 @@ SUBDIR = bin \
 
 .-include "cfgparam.mk"
 
-.ifdef CONFIG_MACH64
+.ifdef CONFIG_MACH64 && DESTDIR
 build:
+	${.MAKE} -C lib build
 	${.MAKE} obj
 	${.MAKE}
 	${.MAKE} install
-	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} obj
-	${.MAKE} -C lib MACHINE=${CONFIG_MACH64}
-	${.MAKE} -C lib MACHINE=${CONFIG_MACH64} install
 
 .include <unleashed.mk>
 .endif
