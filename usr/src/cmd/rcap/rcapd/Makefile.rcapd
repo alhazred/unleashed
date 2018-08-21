@@ -22,15 +22,16 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
-#
 
 .KEEP_STATE:
 .SUFFIXES:
 
-# 
+#
 # subdirs must define COMMON_DIR and include Makefile.com
 #
+
+# For PROG and ROOT* variables
+include	../Makefile.ins
 
 SRCS =	rcapd_main.c \
 	rcapd_collection.c \
@@ -42,14 +43,13 @@ SRCS =	rcapd_main.c \
 	rcapd_stat.c \
 	utils.c
 
-$(NOT_RELEASE_BUILD)CPPFLAGS 	+= -DDEBUG
+$(NOT_RELEASE_BUILD)CPPFLAGS	+= -DDEBUG
 CPPFLAGS			+= -DDEBUG_MSG
-CPPFLAGS 			+= -I$(COMMON_DIR)
-LDLIBS 				+= -lkstat -lproc -lproject -lzonecfg -lumem -lscf
+CPPFLAGS			+= -I$(COMMON_DIR)
+LDLIBS				+= -lkstat -lproc -lproject -lzonecfg -lumem -lscf
 LDLIBS				+= $(EXTRA_LDLIBS)
 
 
-PROG =			rcapd
 OBJS =			$(SRCS:%.c=%.o) rcapd_conf.o
 
 POFILES =		$(OBJS:%.o=%.po)
@@ -81,13 +81,6 @@ $(POFILE): $(POFILES)
 	$(RM) $@
 	$(CAT) $(POFILES) > $@
 
-
-ROOTUSRLIBRCAP			= $(ROOT)/usr/lib/rcap
-ROOTUSRLIBRCAP32		= $(ROOTUSRLIBRCAP)/$(MACH32)
-ROOTUSRLIBRCAP64		= $(ROOTUSRLIBRCAP)/$(MACH64)
-ROOTUSRLIBRCAPPROG		= $(ROOTUSRLIBRCAP)/$(PROG)
-ROOTUSRLIBRCAPPROG32		= $(ROOTUSRLIBRCAP32)/$(PROG)
-ROOTUSRLIBRCAPPROG64		= $(ROOTUSRLIBRCAP64)/$(PROG)
 $(ROOTUSRLIBRCAP)/%: $(ROOTUSRLIBRCAP) %
 	$(INS.file)
 $(ROOTUSRLIBRCAP32)/%: $(ROOTUSRLIBRCAP32) %
