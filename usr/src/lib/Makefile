@@ -206,7 +206,6 @@ SUBDIRS +=				\
 	libthread	\
 	libumem		\
 	libuuid		\
-	libuutil	\
 	libvolmgt	\
 	libvrrpadm	\
 	libvscan	\
@@ -308,7 +307,6 @@ MSGSUBDIRS=		\
 	libsmbfs	\
 	libsmedia	\
 	libsum		\
-	libuutil	\
 	libvrrpadm	\
 	libvscan	\
 	libzfs		\
@@ -418,7 +416,6 @@ HDRSUBDIRS=				\
 	libsysevent	\
 	libtecla	\
 	libumem		\
-	libuutil	\
 	libvolmgt	\
 	libvrrpadm	\
 	libvscan	\
@@ -624,6 +621,12 @@ storage:	libdevice libdevinfo libdevid
 sun_fc:		libdevinfo libsysevent
 sun_sas:	libdevinfo libsysevent libkstat libdevid
 udapl:		libdevinfo libdladm
+
+# XXX this ugly thing is here only until we do bmake lib build before dmake
+libuutil:
+	cd $(SRCTOP)/lib/libuutil && \
+	    make obj && make && make install DESTDIR=$(ROOT) && \
+	    make MACHINE=$(MACH64) obj && make MACHINE=$(MACH64) && make install MACHINE=$(MACH64) DESTDIR=$(ROOT)
 
 #
 # The reason this rule checks for the existence of the

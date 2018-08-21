@@ -92,7 +92,6 @@ $(NOT_NATIVE)SVCCFG_EXTRA_LIBS += -ltecla
 
 LIBSCF		= $(SRC)/lib/libscf
 LIBTECLA	= $(SRC)/lib/libtecla		# just for the header
-LIBUUTIL	= $(SRC)/lib/libuutil
 
 debug := COPTFLAG = -g
 
@@ -106,11 +105,9 @@ $(NATIVE_BUILD)CPPFLAGS = \
 	-DNATIVE_BUILD \
 	$(MYCPPFLAGS) \
 	-I$(LIBSCF)/inc \
-	-I$(LIBTECLA) \
-	-I$(LIBUUTIL)/common
+	-I$(LIBTECLA)
 $(NATIVE_BUILD)LDFLAGS =
 $(NATIVE_BUILD)LDLIBS = \
-	-L$(LIBUUTIL)/native -R $(LIBUUTIL)/native \
 	-L$(LIBSCF)/native -R $(LIBSCF)/native \
 	-L$(ADJUNCT_PROTO)/usr/lib -R$(ADJUNCT_PROTO)/usr/lib \
 	$(SVCCFG_EXTRA_LIBS)
@@ -123,7 +120,6 @@ svccfg_help.po := XGETFLAGS =	-a
 all debug: $(PROG)
 
 native: FRC
-	@cd $(LIBUUTIL)/native; pwd; $(MAKE) $(MFLAGS) install
 	@cd $(LIBSCF)/native; pwd; $(MAKE) $(MFLAGS) install
 	@NATIVE_BUILD= $(MAKE) $(MFLAGS) all
 

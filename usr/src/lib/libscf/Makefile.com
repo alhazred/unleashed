@@ -61,16 +61,10 @@ CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 
-#
-# For native builds, we compile and link against the native version
-# of libuutil.
-#
-LIBUUTIL =	$(SRC)/lib/libuutil
 MY_NATIVE_CPPFLAGS =\
 		-DNATIVE_BUILD $(DTEXTDOM) \
-		-I../inc -I$(COMDIR) -I$(LIBUUTIL)/common -I$(ROOTHDRDIR)
-MY_NATIVE_LDLIBS = -L$(LIBUUTIL)/native -R$(LIBUUTIL)/native -luutil -lc -lgen \
-		 -lnvpair
+		-I../inc -I$(COMDIR) -I$(ROOTHDRDIR)
+MY_NATIVE_LDLIBS = -luutil -lc -lgen -lnvpair
 MY_NATIVE_LDLIBS_i386 = -lsmbios
 MY_NATIVE_LDLIBS += $(MY_NATIVE_LDLIBS_$(MACH))
 

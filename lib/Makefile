@@ -1,4 +1,4 @@
-SUBDIR=	libc libcrypto libedit libncurses libpcap libssl libtls
+SUBDIR=	libc libcrypto libedit libncurses libpcap libssl libtls libuutil
 
 .ifdef DESTDIR
 # hack to build both 32/64 bit libs

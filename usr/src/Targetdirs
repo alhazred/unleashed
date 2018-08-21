@@ -651,8 +651,6 @@ $(ROOT)/usr/lib/libumem.so.1:=		REALPATH=../../lib/libumem.so.1
 $(ROOT)/usr/lib/libumem.so:=		REALPATH=../../lib/libumem.so.1
 $(ROOT)/usr/lib/libuuid.so.1:=		REALPATH=../../lib/libuuid.so.1
 $(ROOT)/usr/lib/libuuid.so:=		REALPATH=../../lib/libuuid.so.1
-$(ROOT)/usr/lib/libuutil.so.1:=		REALPATH=../../lib/libuutil.so.1
-$(ROOT)/usr/lib/libuutil.so:=		REALPATH=../../lib/libuutil.so.1
 $(ROOT)/usr/lib/libw.so.1:=		REALPATH=../../lib/libw.so.1
 $(ROOT)/usr/lib/libw.so:=		REALPATH=../../lib/libw.so.1
 $(ROOT)/usr/lib/libzfs.so.1:=		REALPATH=../../lib/libzfs.so.1
@@ -877,10 +875,6 @@ $(ROOT)/usr/lib/$(MACH64)/libuuid.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libuuid.so.1
 $(ROOT)/usr/lib/$(MACH64)/libuuid.so:= \
 	REALPATH=../../../lib/$(MACH64)/libuuid.so.1
-$(ROOT)/usr/lib/$(MACH64)/libuutil.so.1:= \
-	REALPATH=../../../lib/$(MACH64)/libuutil.so.1
-$(ROOT)/usr/lib/$(MACH64)/libuutil.so:= \
-	REALPATH=../../../lib/$(MACH64)/libuutil.so.1
 $(ROOT)/usr/lib/$(MACH64)/libw.so.1:= \
 	REALPATH=../../../lib/$(MACH64)/libw.so.1
 $(ROOT)/usr/lib/$(MACH64)/libw.so:= \
@@ -1027,8 +1021,6 @@ SYM.USRLIB= \
 	/usr/lib/libumem.so.1 \
 	/usr/lib/libuuid.so \
 	/usr/lib/libuuid.so.1 \
-	/usr/lib/libuutil.so \
-	/usr/lib/libuutil.so.1 \
 	/usr/lib/libw.so \
 	/usr/lib/libw.so.1 \
 	/usr/lib/libzfs.so \
@@ -1155,8 +1147,6 @@ SYM.USRLIB64= \
 	/usr/lib/$(MACH64)/libumem.so.1 \
 	/usr/lib/$(MACH64)/libuuid.so \
 	/usr/lib/$(MACH64)/libuuid.so.1 \
-	/usr/lib/$(MACH64)/libuutil.so \
-	/usr/lib/$(MACH64)/libuutil.so.1 \
 	/usr/lib/$(MACH64)/libw.so \
 	/usr/lib/$(MACH64)/libw.so.1 \
 	/usr/lib/$(MACH64)/libzfs.so \

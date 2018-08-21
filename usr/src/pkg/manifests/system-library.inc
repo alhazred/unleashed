@@ -212,7 +212,6 @@ file path=lib/$(ARCH64)/libsysevent.so.1
 file path=lib/$(ARCH64)/libthread.so.1
 file path=lib/$(ARCH64)/libumem.so.1
 file path=lib/$(ARCH64)/libuuid.so.1
-file path=lib/$(ARCH64)/libuutil.so.1
 file path=lib/$(ARCH64)/libw.so.1
 file path=lib/$(ARCH64)/nss_compat.so.1
 file path=lib/$(ARCH64)/nss_dns.so.1
@@ -291,7 +290,6 @@ file path=lib/libsysevent.so.1
 file path=lib/libthread.so.1
 file path=lib/libumem.so.1
 file path=lib/libuuid.so.1
-file path=lib/libuutil.so.1
 file path=lib/libw.so.1
 file path=lib/mpxio/stmsboot_util mode=0555
 file path=lib/nss_compat.so.1
@@ -338,6 +336,7 @@ file path=usr/lib/$(ARCH64)/libsip.so.1
 file path=usr/lib/$(ARCH64)/libsldap.so.1
 file path=usr/lib/$(ARCH64)/libsmbios.so.1
 file path=usr/lib/$(ARCH64)/libsoftcrypto.so.1
+file path=usr/lib/$(ARCH64)/libuutil.so.1 mode=0555
 file path=usr/lib/$(ARCH64)/libvolmgt.so.1
 file path=usr/lib/$(ARCH64)/libwrap.so.1.0
 file path=usr/lib/$(ARCH64)/nss_ad.so.1
@@ -399,6 +398,7 @@ file path=usr/lib/libsldap.so.1
 file path=usr/lib/libsmbios.so.1
 file path=usr/lib/libsoftcrypto.so.1
 file path=usr/lib/libsys.so.1
+file path=usr/lib/libuutil.so.1 mode=0555
 file path=usr/lib/libvolmgt.so.1
 file path=usr/lib/libwrap.so.1.0
 file path=usr/lib/nss_ad.so.1
@@ -575,7 +575,6 @@ link path=lib/$(ARCH64)/libthread_db.so target=libc_db.so.1
 link path=lib/$(ARCH64)/libthread_db.so.1 target=libc_db.so.1
 link path=lib/$(ARCH64)/libumem.so target=libumem.so.1
 link path=lib/$(ARCH64)/libuuid.so target=libuuid.so.1
-link path=lib/$(ARCH64)/libuutil.so target=libuutil.so.1
 link path=lib/$(ARCH64)/libw.so target=libw.so.1
 link path=lib/32 target=.
 link path=lib/64 target=$(ARCH64)
@@ -635,7 +634,6 @@ link path=lib/libthread_db.so target=libc_db.so.1
 link path=lib/libthread_db.so.1 target=libc_db.so.1
 link path=lib/libumem.so target=libumem.so.1
 link path=lib/libuuid.so target=libuuid.so.1
-link path=lib/libuutil.so target=libuutil.so.1
 link path=lib/libw.so target=libw.so.1
 link path=lib/secure/32 target=.
 link path=lib/secure/64 target=$(ARCH64)
@@ -859,10 +857,8 @@ link path=usr/lib/$(ARCH64)/libuuid.so \
     target=../../../lib/$(ARCH64)/libuuid.so.1
 link path=usr/lib/$(ARCH64)/libuuid.so.1 \
     target=../../../lib/$(ARCH64)/libuuid.so.1
-$(i386_ONLY)link path=usr/lib/$(ARCH64)/libuutil.so \
-    target=../../../lib/$(ARCH64)/libuutil.so.1
-link path=usr/lib/$(ARCH64)/libuutil.so.1 \
-    target=../../../lib/$(ARCH64)/libuutil.so.1
+link path=usr/lib/$(ARCH64)/libuutil.so \
+    target=libuutil.so.1
 link path=usr/lib/$(ARCH64)/libvolmgt.so target=libvolmgt.so.1
 link path=usr/lib/$(ARCH64)/libw.so target=../../../lib/$(ARCH64)/libw.so.1
 link path=usr/lib/$(ARCH64)/libw.so.1 target=../../../lib/$(ARCH64)/libw.so.1
@@ -1027,8 +1023,7 @@ link path=usr/lib/libumem.so target=../../lib/libumem.so.1
 link path=usr/lib/libumem.so.1 target=../../lib/libumem.so.1
 link path=usr/lib/libuuid.so target=../../lib/libuuid.so.1
 link path=usr/lib/libuuid.so.1 target=../../lib/libuuid.so.1
-link path=usr/lib/libuutil.so target=../../lib/libuutil.so.1
-link path=usr/lib/libuutil.so.1 target=../../lib/libuutil.so.1
+link path=usr/lib/libuutil.so target=libuutil.so.1
 link path=usr/lib/libvolmgt.so target=./libvolmgt.so.1
 link path=usr/lib/libw.so target=../../lib/libw.so.1
 link path=usr/lib/libw.so.1 target=../../lib/libw.so.1
