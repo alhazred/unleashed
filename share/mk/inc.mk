@@ -27,6 +27,6 @@ realinstall:	incinstall
 incinstall:
 .if !empty(INCS)
 	${INSTALL} -d ${INC_INSTALL_OWN} -m 755 ${DESTDIR}${INCSDIR}
-	${INSTALL} ${INC_COPY} ${INC_INSTALL_OWN} -m ${INCMODE} ${INCS} ${DESTDIR}${INCSDIR}
+	cd ${.CURDIR} && ${INSTALL} ${INC_COPY} ${INC_INSTALL_OWN} -m ${INCMODE} ${INCS} ${DESTDIR}${INCSDIR}
 .endif
 .endif

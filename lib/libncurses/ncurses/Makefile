@@ -28,7 +28,7 @@ BUILDFIRST = ${GENHDRS} init_keytry.h
 COPTS.init_keytry.c += -I.
 .NOPATH: curses.h
 
-INCS=	curses.h \
+INCS=	${.OBJDIR}/curses.h \
 	${NCURSES_INC}/termcap.h \
 	${NCURSES_INC}/unctrl.h \
 	${NCURSES_INC}/ncurses_dll.h \
