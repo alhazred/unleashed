@@ -515,7 +515,8 @@ auditd_plugins: libbsm libsecdb libgss libmtmalloc
 brand:		libzonecfg libmapmalloc
 cfgadm_plugins:	libdevice libdevinfo libhotplug librcm hbaapi libkstat libscf
 fm:		libexacct libipmi libzfs scsi libdevinfo libdevid libcfgadm \
-		libcontract libsysevent ../cmd/sgs/libelf libdladm libsff
+		libcontract libsysevent ../cmd/sgs/libelf libdladm libsff \
+		libpcidb
 hal:		libbsm
 $(SPARC_BLD)fm:	libpri
 gss_mechs/mech_dh: libgss

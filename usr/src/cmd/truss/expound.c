@@ -1103,8 +1103,8 @@ static const struct audio_stuff audio_sw_features[] = {
 
 void
 show_audio_features(const private_t *pri,
-	const struct audio_stuff *audio_porttab, uint_t features,
-	const char *name)
+    const struct audio_stuff *audio_porttab, uint_t features,
+    const char *name)
 {
 	(void) printf("%s\t%s=", pri->pname, name);
 	if (features == 0) {
@@ -1127,7 +1127,7 @@ show_audio_features(const private_t *pri,
 
 void
 show_audio_ports(private_t *pri, const char *mode,
-	const char *field, uint_t ports)
+    const char *field, uint_t ports)
 {
 	const struct audio_stuff *audio_porttab;
 
@@ -3427,7 +3427,7 @@ show_adjtime(private_t *pri, long off1, long off2)
 
 void
 show_sockaddr(private_t *pri,
-	const char *str, long addroff, long lenoff, long len)
+    const char *str, long addroff, long lenoff, long len)
 {
 	/*
 	 * A buffer large enough for PATH_MAX size AF_UNIX address, which is
@@ -5147,11 +5147,11 @@ expound(private_t *pri, long r0, int raw)
 			show_dents32(pri, (long)pri->sys_args[1], r0);
 			break;
 		}
-		/* FALLTHROUGH */
 #else
 		show_dents32(pri, (long)pri->sys_args[1], r0);
 		break;
 #endif
+		/* FALLTHROUGH */
 	case SYS_getdents64:
 		if (err || pri->sys_nargs <= 1 || r0 <= 0)
 			break;

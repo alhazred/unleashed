@@ -52,6 +52,7 @@ PYFILES= \
 	hdrchk \
 	mapfilechk \
 	validate_pkg \
+	wscheck \
 	wsdiff
 
 SCRIPTLINKS= \

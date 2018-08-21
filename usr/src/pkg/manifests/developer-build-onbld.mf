@@ -85,6 +85,7 @@ file path=opt/onbld/bin/mapfilechk mode=0555 pkg.depend.bypass-generate=.*
 file path=opt/onbld/bin/protocmp.terse mode=0555
 file path=opt/onbld/bin/validate_paths mode=0555
 file path=opt/onbld/bin/validate_pkg mode=0555
+file path=opt/onbld/bin/wscheck mode=0555
 file path=opt/onbld/bin/wsdiff mode=0555
 file path=opt/onbld/etc/exception_lists/check_rtime
 file path=opt/onbld/etc/exception_lists/interface_check
@@ -141,6 +142,10 @@ file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/ProcessCheck.pyc \
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/SpellCheck.py \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/SpellCheck.pyc \
+    mode=0444
+file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/WsCheck.py \
+    mode=0444
+file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/WsCheck.pyc \
     mode=0444
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/__init__.py \
     mode=0444
