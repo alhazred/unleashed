@@ -117,7 +117,7 @@ ${PROG}: ${LIBCRT0} ${OBJS} ${LIBC} ${DPADD}
 
 .else
 
-${PROG}: ${LIBCRT0} ${OBJS} ${LIBC} ${DPADD}
+${PROG}: ${OBJS} ${LIBC} ${DPADD}
 	${_CCLINK} ${LDFLAGS} ${LDSTATIC} -o ${.TARGET} ${_PROGLDOPTS} ${OBJS} ${LDADD}
 .if !empty(BUILDVERSION)
 	mcs -d -a 'Unleashed ${BUILDVERSION}' ${PROG}
