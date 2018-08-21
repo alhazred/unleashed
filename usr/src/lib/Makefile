@@ -542,7 +542,7 @@ libdiskmgt:	libdevid libdevinfo libadm libefi libkstat libsysevent
 $(INTEL_BLD)libdiskmgt: libfdisk
 libdladm:	libdevinfo libinetutil libscf librcm libexacct libkstat \
 		libpool
-libdll: 	libast
+libdll:		libast
 libdlpi:	libinetutil libdladm
 libds:		libsysevent
 libdtrace:	libproc libgen libctf libmapmalloc
@@ -591,7 +591,7 @@ libsmbfs:	libkrb5 libsec libidmap pkcs11
 libsmbios:	libdevinfo
 libsrpt:	libstmf
 libstmf:	libscf
-libsum: 	libast
+libsum:		libast
 libsun_ima:	libdevinfo libsysevent
 libsysevent:	libsecdb
 libtsalarm:	libpcp
@@ -601,7 +601,7 @@ libvolmgt:	libadm
 libvrrpadm:	libdladm libscf
 libvscan:	libscf libsecdb
 libzfs:		libdevid libgen libuutil libadm libavl libefi libidmap \
-		libumem libzfs_core libcmdutils
+		libumem libzfs_core
 libzonecfg:	libuuid libsysevent libsec libbrand libpool libscf libproc \
 		libuutil libbsm libsecdb
 libzonestat:	libcmdutils libumem
@@ -614,7 +614,7 @@ pam_modules:	libproject passwdutil smbsrv libpam libbsm libsecdb
 passwdutil:	libsldap
 pkcs11:		libcryptoutil libgen libuuid
 policykit:	dbusdeps
-pylibbe: 	libbe libzfs
+pylibbe:	libbe libzfs
 pysolaris:	libsec libidmap
 pyzfs:		libzfs
 raidcfg_plugins: libraidcfg librcm libcfgadm libpicl libpicltree
