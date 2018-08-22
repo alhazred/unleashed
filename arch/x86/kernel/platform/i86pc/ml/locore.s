@@ -206,6 +206,10 @@
 __return_from_main:
 	.string	"main() returned"
 
+#if defined(DEBUG)
+_no_pending_updates:
+	.string "locore.s:%d lwp_rtt(lwp %p) but pcb_rupdate != 1"
+#endif
 
 /*
  *  For stack layout, see privregs.h
@@ -439,8 +443,6 @@ _lwp_rtt:
 	movq	%r14, %rdx
 	xorl	%eax, %eax
 	call	panic
-_no_pending_updates:
-	.string	"locore.s:%d lwp_rtt(lwp %p) but pcb_rupdate != 1"
 1:
 #endif
 
@@ -459,11 +461,6 @@ _no_pending_updates:
 	movq	REGOFF_RDX(%rsp), %rsi
 	movq	REGOFF_RAX(%rsp), %rdi
 	call	post_syscall		/* post_syscall(rval1, rval2) */
-
-	/*
-	 * set up to take fault on first use of fp
-	 */
-	STTS(%rdi)
 
 	/*
 	 * XXX - may want a fast path that avoids sys_rtt_common in the

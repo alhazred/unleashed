@@ -253,19 +253,6 @@
 	ret
 	SET_SIZE(_elf_rtbndr_fp_xrestore)
 
-#endif
-
-#if	defined(lint)
-
-/* ARGSUSED0 */
-int
-elf_plt_trace()
-{
-	return (0);
-}
-
-#else
-
 /*
  * On entry the 'glue code' has already  done the following:
  *

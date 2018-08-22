@@ -51,11 +51,6 @@
 #include <sys/traptrace.h>
 #include <sys/machparam.h>
 
-/*
- * only one routine in this file is interesting to lint
- */
-
-
 #include "assym.h"
 
 /*
@@ -70,26 +65,6 @@
  * it get saved as is running native.
  */
 
-#if defined(__xpv) && defined(__amd64)
-
-#define	NPTRAP_NOERR(trapno)	\
-	pushq	$0;		\
-	pushq	$trapno
-
-#define	TRAP_NOERR(trapno)	\
-	XPV_TRAP_POP;		\
-	NPTRAP_NOERR(trapno)
-
-/*
- * error code already pushed by hw
- * onto stack.
- */
-#define	TRAP_ERR(trapno)	\
-	XPV_TRAP_POP;		\
-	pushq	$trapno
-
-#else /* __xpv && __amd64 */
-
 #define	TRAP_NOERR(trapno)	\
 	push	$0;		\
 	push	$trapno
@@ -102,8 +77,6 @@
  */
 #define	TRAP_ERR(trapno)	\
 	push	$trapno
-
-#endif	/* __xpv && __amd64 */
 
 	/*
 	 * These are the stacks used on cpu0 for taking double faults,
@@ -138,7 +111,6 @@
 	TRAP_NOERR(T_SGLSTP)	/* $1 */
 
 #if defined(__amd64)
-#if !defined(__xpv)		/* no sysenter support yet */
 	/*
 	 * If we get here as a result of single-stepping a sysenter
 	 * instruction, we suddenly find ourselves taking a #db
@@ -179,46 +151,24 @@
 	jne	2f
 1:	SWAPGS
 2:	popq	%r11
-#endif	/* !__xpv */
 
 	INTR_PUSH
-#if defined(__xpv)
-	movl	$6, %edi
-	call	kdi_dreg_get
-	movq	%rax, %r15		/* %db6 -> %r15 */
-	movl	$6, %edi
-	movl	$0, %esi
-	call	kdi_dreg_set		/* 0 -> %db6 */
-#else
 	movq	%db6, %r15
 	xorl	%eax, %eax
 	movq	%rax, %db6
-#endif
 
 #elif defined(__i386)
 
 	INTR_PUSH
-#if defined(__xpv)
-	pushl	$6
-	call	kdi_dreg_get
-	addl	$4, %esp
-	movl	%eax, %esi		/* %dr6 -> %esi */
-	pushl	$0
-	pushl	$6
-	call	kdi_dreg_set		/* 0 -> %dr6 */
-	addl	$8, %esp
-#else
 	movl	%db6, %esi
 	xorl	%eax, %eax
 	movl	%eax, %db6
-#endif
 #endif	/* __i386 */
 
 	jmp	cmntrap_pushed
 	SET_SIZE(dbgtrap)
 
 #if defined(__amd64)
-#if !defined(__xpv)
 
 /*
  * Macro to set the gsbase or kgsbase to the address of the struct cpu
@@ -274,11 +224,6 @@
 	movq	REGOFF_RBP(%rsp), %rbp;					\
 	addq	$REGOFF_TRAPNO, %rsp	/* pop stack */
 
-#else	/* __xpv */
-
-#define	SET_CPU_GSBASE	/* noop on the hypervisor */
-
-#endif	/* __xpv */
 #endif	/* __amd64 */
 
 
@@ -401,9 +346,6 @@ bp_user:
 	cmpw	$KCS_SEL, 8(%rsp)
 	jne	ud_user
 
-#if defined(__xpv)
-	movb	$0, 12(%rsp)		/* clear saved upcall_mask from %cs */
-#endif
 	push	$0			/* error code -- zero for #UD */
 ud_kernel:
 	push	$0xdddd			/* a dummy trap number */
@@ -531,9 +473,6 @@ ud_user:
 	jne	8f
 
 	addl	$4, %esp
-#if defined(__xpv)
-	movb	$0, 6(%esp)		/* clear saved upcall_mask from %cs */
-#endif	/* __xpv */
 	pusha
 	pushl	%eax			/* push %eax -- may be return value */
 	pushl	%esp			/* push stack pointer */
@@ -636,219 +575,15 @@ _emul_done:
 
 #endif	/* __i386 */
 
-#if defined(__amd64)
-
 	/*
 	 * #NM
 	 */
-#if defined(__xpv)
 
 	ENTRY_NP(ndptrap)
-	/*
-	 * (On the hypervisor we must make a hypercall so we might as well
-	 * save everything and handle as in a normal trap.)
-	 */
-	TRAP_NOERR(T_NOEXTFLT)	/* $7 */
-	INTR_PUSH
-
-	/*
-	 * We want to do this quickly as every lwp using fp will take this
-	 * after a context switch -- we do the frequent path in ndptrap_frstor
-	 * below; for all other cases, we let the trap code handle it
-	 */
-	LOADCPU(%rax)			/* swapgs handled in hypervisor */
-	cmpl	$0, fpu_exists(%rip)
-	je	.handle_in_trap		/* let trap handle no fp case */
-	movq	CPU_THREAD(%rax), %rbx	/* %rbx = curthread */
-	movl	$FPU_EN, %eax
-	movq	T_LWP(%rbx), %rbx	/* %rbx = lwp */
-	testq	%rbx, %rbx
-	jz	.handle_in_trap		/* should not happen? */
-#if LWP_PCB_FPU	!= 0
-	addq	$LWP_PCB_FPU, %rbx	/* &lwp->lwp_pcb.pcb_fpu */
-#endif
-	testl	%eax, PCB_FPU_FLAGS(%rbx)
-	jz	.handle_in_trap		/* must be the first fault */
-	CLTS
-	andl	$_BITNOT(FPU_VALID), PCB_FPU_FLAGS(%rbx)
-#if FPU_CTX_FPU_REGS != 0
-	addq	$FPU_CTX_FPU_REGS, %rbx
-#endif
-
-	movl	FPU_CTX_FPU_XSAVE_MASK(%rbx), %eax	/* for xrstor */
-	movl	FPU_CTX_FPU_XSAVE_MASK+4(%rbx), %edx	/* for xrstor */
-
-	/*
-	 * the label below is used in trap.c to detect FP faults in
-	 * kernel due to user fault.
-	 */
-	ALTENTRY(ndptrap_frstor)
-	movq (%rbx), %rbx		/* fpu_regs.kfpu_u.kfpu_XX pointer */
-	.globl  _patch_xrstorq_rbx
-_patch_xrstorq_rbx:
-	fxrstorq (%rbx)
-	cmpw	$KCS_SEL, REGOFF_CS(%rsp)
-	je	.return_to_kernel
-
-	ASSERT_UPCALL_MASK_IS_SET
-	USER_POP
-	IRET				/* return to user mode */
-	/*NOTREACHED*/
-
-.return_to_kernel:
-	INTR_POP
-	IRET
-	/*NOTREACHED*/
-
-.handle_in_trap:
-	INTR_POP
-	pushq	$0			/* can not use TRAP_NOERR */
-	pushq	$T_NOEXTFLT
-	jmp	cmninttrap
-	SET_SIZE(ndptrap_frstor)
+	TRAP_NOERR(T_NOEXTFLT)	/* $0 */
+	SET_CPU_GSBASE
+	jmp	cmntrap
 	SET_SIZE(ndptrap)
-
-#else	/* __xpv */
-
-	ENTRY_NP(ndptrap)
-	/*
-	 * We want to do this quickly as every lwp using fp will take this
-	 * after a context switch -- we do the frequent path in ndptrap_frstor
-	 * below; for all other cases, we let the trap code handle it
-	 */
-	pushq	%rax
-	pushq	%rbx
-	cmpw    $KCS_SEL, 24(%rsp)	/* did we come from kernel mode? */
-	jne     1f
-	LOADCPU(%rax)			/* if yes, don't swapgs */
-	jmp	2f
-1:
-	SWAPGS				/* if from user, need swapgs */
-	LOADCPU(%rax)
-	SWAPGS
-2:
-	/*
-	 * Xrstor needs to use edx as part of its flag.
-	 * NOTE: have to push rdx after "cmpw ...24(%rsp)", otherwise rsp+$24
-	 * will not point to CS.
-	 */
-	pushq	%rdx
-	cmpl	$0, fpu_exists(%rip)
-	je	.handle_in_trap		/* let trap handle no fp case */
-	movq	CPU_THREAD(%rax), %rbx	/* %rbx = curthread */
-	movl	$FPU_EN, %eax
-	movq	T_LWP(%rbx), %rbx	/* %rbx = lwp */
-	testq	%rbx, %rbx
-	jz	.handle_in_trap		/* should not happen? */
-#if LWP_PCB_FPU	!= 0
-	addq	$LWP_PCB_FPU, %rbx	/* &lwp->lwp_pcb.pcb_fpu */
-#endif
-	testl	%eax, PCB_FPU_FLAGS(%rbx)
-	jz	.handle_in_trap		/* must be the first fault */
-	clts
-	andl	$_BITNOT(FPU_VALID), PCB_FPU_FLAGS(%rbx)
-#if FPU_CTX_FPU_REGS != 0
-	addq	$FPU_CTX_FPU_REGS, %rbx
-#endif
-
-	movl	FPU_CTX_FPU_XSAVE_MASK(%rbx), %eax	/* for xrstor */
-	movl	FPU_CTX_FPU_XSAVE_MASK+4(%rbx), %edx	/* for xrstor */
-
-	/*
-	 * the label below is used in trap.c to detect FP faults in
-	 * kernel due to user fault.
-	 */
-	ALTENTRY(ndptrap_frstor)
-	movq (%rbx), %rbx		/* fpu_regs.kfpu_u.kfpu_XX pointer */
-	.globl  _patch_xrstorq_rbx
-_patch_xrstorq_rbx:
-	fxrstorq (%rbx)
-	popq	%rdx
-	popq	%rbx
-	popq	%rax
-	jmp	tr_iret_auto
-	/*NOTREACHED*/
-
-.handle_in_trap:
-	popq	%rdx
-	popq	%rbx
-	popq	%rax
-	TRAP_NOERR(T_NOEXTFLT)	/* $7 */
-	jmp	cmninttrap
-	SET_SIZE(ndptrap_frstor)
-	SET_SIZE(ndptrap)
-
-#endif	/* __xpv */
-
-#elif defined(__i386)
-
-	ENTRY_NP(ndptrap)
-	/*
-	 * We want to do this quickly as every lwp using fp will take this
-	 * after a context switch -- we do the frequent path in fpnoextflt
-	 * below; for all other cases, we let the trap code handle it
-	 */
-	pushl	%eax
-	pushl	%ebx
-	pushl	%edx			/* for xrstor */
-	pushl	%ds
-	pushl	%gs
-	movl	$KDS_SEL, %ebx
-	movw	%bx, %ds
-	movl	$KGS_SEL, %eax
-	movw	%ax, %gs
-	LOADCPU(%eax)
-	cmpl	$0, fpu_exists
-	je	.handle_in_trap		/* let trap handle no fp case */
-	movl	CPU_THREAD(%eax), %ebx	/* %ebx = curthread */
-	movl	$FPU_EN, %eax
-	movl	T_LWP(%ebx), %ebx	/* %ebx = lwp */
-	testl	%ebx, %ebx
-	jz	.handle_in_trap		/* should not happen? */
-#if LWP_PCB_FPU != 0
-	addl	$LWP_PCB_FPU, %ebx 	/* &lwp->lwp_pcb.pcb_fpu */
-#endif
-	testl	%eax, PCB_FPU_FLAGS(%ebx)
-	jz	.handle_in_trap		/* must be the first fault */
-	CLTS
-	andl	$_BITNOT(FPU_VALID), PCB_FPU_FLAGS(%ebx)
-#if FPU_CTX_FPU_REGS != 0
-	addl	$FPU_CTX_FPU_REGS, %ebx
-#endif
-
-	movl	FPU_CTX_FPU_XSAVE_MASK(%ebx), %eax	/* for xrstor */
-	movl	FPU_CTX_FPU_XSAVE_MASK+4(%ebx), %edx	/* for xrstor */
-
-	/*
-	 * the label below is used in trap.c to detect FP faults in kernel
-	 * due to user fault.
-	 */
-	ALTENTRY(ndptrap_frstor)
-	movl	(%ebx), %ebx		/* fpu_regs.kfpu_u.kfpu_XX pointer */
-	.globl  _patch_fxrstor_ebx
-_patch_fxrstor_ebx:
-	.globl  _patch_xrstor_ebx
-_patch_xrstor_ebx:
-	frstor	(%ebx)		/* may be patched to fxrstor or xrstor */
-	popl	%gs
-	popl	%ds
-	popl	%edx
-	popl	%ebx
-	popl	%eax
-	IRET
-
-.handle_in_trap:
-	popl	%gs
-	popl	%ds
-	popl	%edx
-	popl	%ebx
-	popl	%eax
-	TRAP_NOERR(T_NOEXTFLT)	/* $7 */
-	jmp	cmninttrap
-	SET_SIZE(ndptrap_frstor)
-	SET_SIZE(ndptrap)
-
-#endif	/* __i386 */
 
 #if defined(__amd64)
 
@@ -1026,12 +761,6 @@ make_frame:
 	SET_SIZE(syserrtrap)
 
 #endif	/* __i386 */
-
-	ENTRY_NP(overrun)
-	push	$0
-	TRAP_NOERR(T_EXTOVRFLT)	/* $9 i386 only - not generated */
-	jmp	cmninttrap
-	SET_SIZE(overrun)
 
 	/*
 	 * #TS
@@ -1240,10 +969,6 @@ check_for_user_address:
 	subq	$2, (%rsp)	/* XXX int insn 2-bytes */
 	pushq	$_CONST(_MUL(T_FASTTRAP, GATE_DESC_SIZE) + 2)
 
-#if defined(__xpv)
-	pushq	%r11
-	pushq	%rcx
-#endif
 	jmp	gptrap
 	SET_SIZE(fasttrap)
 
