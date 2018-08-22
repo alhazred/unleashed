@@ -135,12 +135,17 @@ function build {
 
 	#
 	#	Before we build anything via dmake, we need to install
-	#	bmake-ified headers to the proto area
+	#	bmake-ified headers and libs to the proto area
 	#
 	if ! make -de -C $SRCTOP/include all install DESTDIR=$ROOT; then
 		build_ok=n
 		this_build_ok=n
 		fatal_error "cannot install headers"
+	fi
+	if ! make -C $SRCTOP/lib build DESTDIR=$ROOT; then
+		build_ok=n
+		this_build_ok=n
+		fatal_error "cannot install libraries"
 	fi
 
 	#

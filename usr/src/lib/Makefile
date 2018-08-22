@@ -500,7 +500,7 @@ basedeps :=	TARGET=install
 
 # The following dependencies are currently required by libdbus-1 and should
 # be used for anything linking against it.
-dbusdeps:	libsecdb libinetutil libscf libuutil libgen libsmbios
+dbusdeps:	libsecdb libinetutil libscf libgen libsmbios
 
 # The following dependencies don't need to be listed below as they are built
 # before everything else:
@@ -547,7 +547,7 @@ libfcoe:	libdladm
 libficl:	libuuid libumem
 libfru:		libfruutils
 libfsmgt:	libkstat
-libidmap:	libavl libuutil
+libidmap:	libavl
 libinetsvc:	libscf
 libipadm:	libinetutil libdlpi libdhcpagent libdladm libsecdb libdhcputil
 libipmp:	libinetutil
@@ -570,10 +570,10 @@ libproject:	libpool libproc libsecdb
 libprtdiag:	libkstat
 libprtdiag_psr:	libprtdiag
 libraidcfg:	libdevinfo
-librestart:	libuutil libscf libpool libproject libsecdb libsysevent
+librestart:	libscf libpool libproject libsecdb libsysevent
 libsasl:	libgss pkcs11
 libsaveargs:	libdisasm
-libscf:		libuutil libgen libsmbios
+libscf:		libgen libsmbios
 libsec:		libavl libidmap
 libsff:		libnvpair
 libshare:	libscf libzfs libuuid libfsmgt libsecdb libumem libsmbfs
@@ -593,10 +593,10 @@ libv12n:	libds libuuid
 libvolmgt:	libadm
 libvrrpadm:	libdladm libscf
 libvscan:	libscf libsecdb
-libzfs:		libdevid libgen libuutil libadm libavl libefi libidmap \
+libzfs:		libdevid libgen libadm libavl libefi libidmap \
 		libumem libzfs_core libcmdutils
 libzonecfg:	libuuid libsysevent libsec libbrand libpool libscf libproc \
-		libuutil libbsm libsecdb
+		libbsm libsecdb
 libzonestat:	libcmdutils libumem
 libzpool:	libavl libumem libcmdutils libsysevent
 madv:		libgen
@@ -621,12 +621,6 @@ storage:	libdevice libdevinfo libdevid
 sun_fc:		libdevinfo libsysevent
 sun_sas:	libdevinfo libsysevent libkstat libdevid
 udapl:		libdevinfo libdladm
-
-# XXX this ugly thing is here only until we do bmake lib build before dmake
-libuutil:
-	cd $(SRCTOP)/lib/libuutil && \
-	    make obj && make && make install DESTDIR=$(ROOT) && \
-	    make MACHINE=$(MACH64) obj && make MACHINE=$(MACH64) && make install MACHINE=$(MACH64) DESTDIR=$(ROOT)
 
 #
 # The reason this rule checks for the existence of the

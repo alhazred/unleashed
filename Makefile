@@ -10,7 +10,6 @@ SUBDIR = bin \
 
 .ifdef CONFIG_MACH64 && DESTDIR
 build:
-	${.MAKE} -C lib build
 	${.MAKE} obj
 	${.MAKE}
 	${.MAKE} install
