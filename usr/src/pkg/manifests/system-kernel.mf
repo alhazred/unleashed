@@ -725,6 +725,7 @@ link path=kernel/misc/des target=../../kernel/crypto/des
 <include driver-network-ofk.inc>
 <include driver-network-pcn.inc>
 <include driver-network-platform.inc>
+<include driver-network-qede.inc>
 <include driver-network-qlc.inc>
 <include driver-network-ral.inc>
 <include driver-network-rds.inc>

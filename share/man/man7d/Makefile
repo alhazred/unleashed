@@ -170,6 +170,7 @@ MAN = aac.7d \
       ptm.7d \
       pts.7d \
       pty.7d \
+      qede.7d \
       qlc.7d \
       ramdisk.7d \
       random.7d \
