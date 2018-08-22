@@ -285,9 +285,7 @@ usr/lib/librestart.so
 #
 # Private libuutil files
 #
-lib/libuutil.so
 usr/include/libuutil_impl.h
-usr/lib/libuutil.so
 #
 # Private Multidata file.
 #

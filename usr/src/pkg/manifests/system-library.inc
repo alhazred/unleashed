@@ -635,6 +635,7 @@ link path=lib/libthread_db.so target=libc_db.so.1
 link path=lib/libthread_db.so.1 target=libc_db.so.1
 link path=lib/libumem.so target=libumem.so.1
 link path=lib/libuuid.so target=libuuid.so.1
+link path=lib/libuutil.so target=libuutil.so.1
 link path=lib/libw.so target=libw.so.1
 link path=lib/secure/32 target=.
 link path=lib/secure/64 target=$(ARCH64)
@@ -1026,6 +1027,7 @@ link path=usr/lib/libumem.so target=../../lib/libumem.so.1
 link path=usr/lib/libumem.so.1 target=../../lib/libumem.so.1
 link path=usr/lib/libuuid.so target=../../lib/libuuid.so.1
 link path=usr/lib/libuuid.so.1 target=../../lib/libuuid.so.1
+link path=usr/lib/libuutil.so target=../../lib/libuutil.so.1
 link path=usr/lib/libuutil.so.1 target=../../lib/libuutil.so.1
 link path=usr/lib/libvolmgt.so target=./libvolmgt.so.1
 link path=usr/lib/libw.so target=../../lib/libw.so.1
