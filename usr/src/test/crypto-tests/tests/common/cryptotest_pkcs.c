@@ -11,10 +11,12 @@
 
 /*
  * Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2018, Joyent, Inc.
  */
 
 #include <stdio.h>
 #include <cryptoutil.h>
+#include <security/cryptoki.h>
 
 #include "cryptotest.h"
 
@@ -64,7 +66,7 @@ cryptotest_init(cryptotest_t *arg, size_t fg)
 
 	op->mechname = arg->mechname;
 
-	op->hsession = CRYPTO_INVALID_SESSION;
+	op->hsession = CK_INVALID_HANDLE;
 	op->fg = fg;
 
 	if (op->out == NULL)
@@ -87,7 +89,7 @@ int
 cryptotest_close(crypto_op_t *op)
 {
 	(void) C_DestroyObject(op->hsession, op->keyt);
-	if (op->hsession != CRYPTO_INVALID_SESSION)
+	if (op->hsession != CK_INVALID_HANDLE)
 		(void) cryptotest_close_session(op->hsession);
 	free(op);
 	return (C_Finalize(NULL));
@@ -102,7 +104,6 @@ get_mech_info(crypto_op_t *op)
 		cryptotest_error("get_mech_info", rv);
 		(void) fprintf(stderr, "failed to resolve mechanism name %s\n",
 		    op->mechname);
-		(void) cryptotest_close(op);
 		return (CTEST_NAME_RESOLVE_FAILED);
 	}
 	return (rv);
@@ -119,7 +120,6 @@ get_hsession_by_mech(crypto_op_t *op)
 		(void) fprintf(stderr,
 		    "could not find provider for mechanism %lu\n",
 		    op->mech);
-		(void) cryptotest_close(op);
 		return (CTEST_MECH_NO_PROVIDER);
 	}
 	return (rv);
