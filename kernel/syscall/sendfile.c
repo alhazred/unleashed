@@ -951,12 +951,26 @@ sendvec_chunk(file_t *fp, uoff_t *fileoff, struct sendfilevec *sfv,
 					if (socket_setsockopt(VTOSO(vp),
 					    SOL_SOCKET, SO_SND_COPYAVOID,
 					    &on, sizeof (on), CRED()) == 0)
-					segmapit = 1;
+						segmapit = 1;
 				}
 			}
 
 			if (segmapit) {
+				struct vattr va;
 				boolean_t nowait;
+
+				va.va_mask = AT_SIZE;
+				error = fop_getattr(readvp, &va, 0, kcred,
+				    NULL);
+				if (error != 0 || sfv_off >= va.va_size) {
+					fop_rwunlock(readvp, V_WRITELOCK_FALSE,
+					    NULL);
+					releasef(sfv->sfv_fd);
+					return (error);
+				}
+				/* Read as much as possible. */
+				if (sfv_off + sfv_len > va.va_size)
+					sfv_len = va.va_size - sfv_off;
 
 				nowait = (sfv->sfv_flag & SFV_NOWAIT) != 0;
 				error = snf_segmap(fp, readvp, sfv_off,

@@ -78,7 +78,7 @@ int do_useracc = 1;		/* Controlled by setting SO_DEBUG to 4 */
 #define	do_useracc	1
 #endif /* SOCK_TEST */
 
-extern int 	xnet_truncate_print;
+extern int	xnet_truncate_print;
 
 /*
  * Kernel component of socket creation.
@@ -208,7 +208,7 @@ getsonode(int sock, int *errorp, file_t **fpp)
  */
 static struct sockaddr *
 copyin_name(struct sonode *so, struct sockaddr *name, socklen_t *namelenp,
-	    int *errorp)
+    int *errorp)
 {
 	char	*faddr;
 	size_t	namelen = (size_t)*namelenp;
@@ -266,8 +266,8 @@ copyin_name(struct sonode *so, struct sockaddr *name, socklen_t *namelenp,
  * Copy from kaddr/klen to uaddr/ulen. Updates ulenp if non-NULL.
  */
 static int
-copyout_arg(void *uaddr, socklen_t ulen, void *ulenp,
-		void *kaddr, socklen_t klen)
+copyout_arg(void *uaddr, socklen_t ulen, void *ulenp, void *kaddr,
+    socklen_t klen)
 {
 	if (uaddr != NULL) {
 		if (ulen > klen)
@@ -293,8 +293,8 @@ copyout_arg(void *uaddr, socklen_t ulen, void *ulenp,
  * klen to update ulenp.
  */
 static int
-copyout_name(void *uaddr, socklen_t ulen, void *ulenp,
-		void *kaddr, socklen_t klen)
+copyout_name(void *uaddr, socklen_t ulen, void *ulenp, void *kaddr,
+    socklen_t klen)
 {
 	if (uaddr != NULL) {
 		if (ulen >= klen)
@@ -802,13 +802,8 @@ shutdown(int sock, int how)
  * Common receive routine.
  */
 static ssize_t
-recvit(int sock,
-	struct msghdr *msg,
-	struct uio *uiop,
-	int flags,
-	socklen_t *namelenp,
-	socklen_t *controllenp,
-	int *flagsp)
+recvit(int sock, struct msghdr *msg, struct uio *uiop, int flags,
+    socklen_t *namelenp, socklen_t *controllenp, int *flagsp)
 {
 	struct sonode *so;
 	file_t *fp;
@@ -937,8 +932,8 @@ recv(int sock, void *buffer, size_t len, int flags)
 }
 
 ssize_t
-recvfrom(int sock, void *buffer, size_t len, int flags,
-	struct sockaddr *name, socklen_t *namelenp)
+recvfrom(int sock, void *buffer, size_t len, int flags, struct sockaddr *name,
+    socklen_t *namelenp)
 {
 	struct msghdr lmsg;
 	struct uio auio;
@@ -1425,8 +1420,7 @@ bad:	return (error != 0 ? set_errno(error) : 0);
 }
 
 int
-getsockname(int sock, struct sockaddr *name,
-		socklen_t *namelenp)
+getsockname(int sock, struct sockaddr *name, socklen_t *namelenp)
 {
 	struct sonode *so;
 	int error;
@@ -1462,11 +1456,8 @@ bad:	return (error != 0 ? set_errno(error) : 0);
 }
 
 int
-getsockopt(int sock,
-	int level,
-	int option_name,
-	void *option_value,
-	socklen_t *option_lenp)
+getsockopt(int sock, int level, int option_name, void *option_value,
+    socklen_t *option_lenp)
 {
 	struct sonode *so;
 	socklen_t optlen, optlen_res;
@@ -1511,11 +1502,8 @@ getsockopt(int sock,
 }
 
 int
-setsockopt(int sock,
-	int level,
-	int option_name,
-	void *option_value,
-	socklen_t option_len)
+setsockopt(int sock, int level, int option_name, void *option_value,
+    socklen_t option_len)
 {
 	struct sonode *so;
 	intptr_t buffer[2];
@@ -1882,7 +1870,7 @@ sockconfig(int cmd, void *arg1, void *arg2, void *arg3, void *arg4)
  * the application as that's what would have happened if the operations
  * were done sequentially. With this in mind, following should work :
  *
- * 	- Check for errors before read or write.
+ *	- Check for errors before read or write.
  *	- If the reader encounters error, set the error in sr_read_error.
  *	  Check sr_write_error, if it is set, send cv_signal as it is
  *	  waiting for reader to complete. If it is not set, the writer
@@ -2391,6 +2379,9 @@ snf_smap_desbfree(snf_smap_desbinfo *snfi)
  * At the end of the whole sendfile() operation, we wait till the data from
  * the last mblk is ack'ed by the transport before returning so that the
  * caller of sendfile() can safely modify the file content.
+ *
+ * The caller of this function should make sure that total_size does not exceed
+ * the actual file size of fvp.
  */
 int
 snf_segmap(file_t *fp, vnode_t *fvp, uoff_t fileoff, uoff_t total_size,
@@ -2902,7 +2893,7 @@ recv32(int32_t sock, caddr32_t buffer, size32_t len, int32_t flags)
 
 ssize_t
 recvfrom32(int32_t sock, caddr32_t buffer, size32_t len, int32_t flags,
-	caddr32_t name, caddr32_t namelenp)
+    caddr32_t name, caddr32_t namelenp)
 {
 	return (recvfrom(sock, (void *)(uintptr_t)buffer, (ssize32_t)len, flags,
 	    (void *)(uintptr_t)name, (void *)(uintptr_t)namelenp));
@@ -2916,7 +2907,7 @@ send32(int32_t sock, caddr32_t buffer, size32_t len, int32_t flags)
 
 ssize_t
 sendto32(int32_t sock, caddr32_t buffer, size32_t len, int32_t flags,
-	caddr32_t name, socklen_t namelen)
+    caddr32_t name, socklen_t namelen)
 {
 	return (sendto(sock, (void *)(uintptr_t)buffer, (ssize32_t)len, flags,
 	    (void *)(uintptr_t)name, namelen));
