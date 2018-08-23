@@ -21,6 +21,7 @@
 
 /*
  * Copyright (c) 2003, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2018, Joyent, Inc.
  */
 
 #include <strings.h>
@@ -337,7 +338,7 @@ C_GetTokenInfo(CK_SLOT_ID slotID, CK_TOKEN_INFO_PTR pInfo)
 			pInfo->flags |= CKF_USER_PIN_TO_BE_CHANGED;
 	}
 
-	free(ks_cryptpin);
+	freezero(ks_cryptpin, ks_cryptpin ? (strlen(ks_cryptpin) + 1) : 0);
 
 	/* Provide information about a token in the provided buffer */
 	(void) strncpy((char *)pInfo->label, SOFT_TOKEN_LABEL, 32);

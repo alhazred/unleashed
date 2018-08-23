@@ -20,6 +20,7 @@
  */
 /*
  * Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2018, Joyent, Inc.
  */
 
 #include <crypt.h>
@@ -98,8 +99,11 @@ soft_gen_hashed_pin(CK_UTF8CHAR_PTR pPin, char **result, char **salt)
 	}
 
 	if ((*result = crypt((char *)pPin, *salt)) == NULL) {
-		if (new_salt)
-			free(*salt);
+		if (new_salt) {
+			size_t saltlen = strlen(*salt) + 1;
+
+			freezero(*salt, saltlen);
+		}
 		return (-1);
 	}
 
@@ -189,10 +193,9 @@ soft_verify_pin(CK_UTF8CHAR_PTR pPin, CK_ULONG ulPinLen)
 	}
 
 cleanup:
-	free(salt);
-	free(tmp_pin);
-	free(ks_cryptpin);
-
+	freezero(salt, salt ? (strlen(salt) + 1) : 0);
+	freezero(tmp_pin, tmp_pin ? (strlen((char *)tmp_pin) + 1) : 0);
+	freezero(ks_cryptpin, ks_cryptpin ? (strlen(ks_cryptpin) + 1) : 0);
 	return (rv);
 }
 
@@ -210,6 +213,7 @@ soft_setpin(CK_UTF8CHAR_PTR pOldPin, CK_ULONG ulOldPinLen,
 	boolean_t pin_initialized = B_FALSE;
 	uchar_t	*tmp_old_pin = NULL, *tmp_new_pin = NULL;
 	CK_RV	rv = CKR_OK;
+	size_t	len = 0;
 
 	/*
 	 * Check to see if keystore is initialized.
@@ -287,10 +291,10 @@ soft_setpin(CK_UTF8CHAR_PTR pOldPin, CK_ULONG ulOldPinLen,
 	}
 
 cleanup:
-	free(salt);
-	free(ks_cryptpin);
-	free(tmp_old_pin);
-	free(tmp_new_pin);
+	freezero(salt, salt ? (strlen(salt) + 1) : 0);
+	freezero(ks_cryptpin, ks_cryptpin ? (strlen(ks_cryptpin) + 1) : 0);
+	freezero(tmp_old_pin, tmp_old_pin ? (strlen((char *)tmp_old_pin) + 1) : 0);
+	freezero(tmp_new_pin, tmp_new_pin ? (strlen((char *)tmp_new_pin) + 1) : 0);
 
 	return (rv);
 }
@@ -468,9 +472,7 @@ soft_keystore_unpack_obj(soft_object_t *obj, ks_obj_t *ks_obj)
 		}
 
 		rv = soft_add_extra_attr(&template, obj);
-		if (template.pValue) {
-			free(template.pValue);
-		}
+		freezero(template.pValue, template.ulValueLen);
 
 		if (rv != CKR_OK) {
 			return (rv);
@@ -536,7 +538,7 @@ soft_unpack_obj_attribute(uchar_t *buf, biginteger_t *key_dest,
 		rv = get_bigint_attr_from_template(key_dest, &template);
 	}
 
-	free(template.pValue);
+	freezero(template.pValue, template.ulValueLen);
 	if (rv != CKR_OK) {
 		return (rv);
 	}
@@ -1335,7 +1337,7 @@ soft_unpack_object(soft_object_t *objp, uchar_t *buf)
 	biginteger_t	expo1;
 	biginteger_t	expo2;
 	biginteger_t	coef;
-	CK_RV 		rv = CKR_OK;
+	CK_RV		rv = CKR_OK;
 	ulong_t offset = 0;
 	uint64_t tmp_val;
 
@@ -1850,25 +1852,15 @@ soft_put_object_to_keystore(soft_object_t *objp)
 		return (rv);
 
 	(void) pthread_mutex_lock(&soft_slot.slot_mutex);
-	if (objp->object_type == TOKEN_PUBLIC) {
-		if ((soft_keystore_put_new_obj(buf, len, B_TRUE,
-		    B_FALSE, &objp->ks_handle)) == -1) {
-			(void) pthread_mutex_unlock(&soft_slot.slot_mutex);
-			free(buf);
-			return (CKR_FUNCTION_FAILED);
-		}
-	} else {
-		if ((soft_keystore_put_new_obj(buf, len, B_FALSE,
-		    B_FALSE, &objp->ks_handle)) == -1) {
-			(void) pthread_mutex_unlock(&soft_slot.slot_mutex);
-			free(buf);
-			return (CKR_FUNCTION_FAILED);
-		}
+	if (soft_keystore_put_new_obj(buf, len,
+	    !!(objp->object_type == TOKEN_PUBLIC), B_FALSE,
+	    &objp->ks_handle) == -1) {
+		rv = CKR_FUNCTION_FAILED;
 	}
 	(void) pthread_mutex_unlock(&soft_slot.slot_mutex);
-	free(buf);
-	return (CKR_OK);
 
+	freezero(buf, len);
+	return (rv);
 }
 
 /*
@@ -1890,11 +1882,11 @@ soft_modify_object_to_keystore(soft_object_t *objp)
 	/* B_TRUE: caller has held a writelock on the keystore */
 	if (soft_keystore_modify_obj(&objp->ks_handle, buf, len,
 	    B_TRUE) < 0) {
-		return (CKR_FUNCTION_FAILED);
+		rv = CKR_FUNCTION_FAILED;
 	}
 
-	free(buf);
-	return (CKR_OK);
+	freezero(buf, len);
+	return (rv);
 
 }
 
@@ -1935,7 +1927,7 @@ soft_get_token_objects_from_keystore(ks_search_type_t type)
 
 		/* Free the ks_obj list */
 		ks_obj_next = ks_obj->next;
-		free(ks_obj->buf);
+		freezero(ks_obj->buf, ks_obj->size);
 		free(ks_obj);
 		ks_obj = ks_obj_next;
 	}
@@ -1945,7 +1937,7 @@ soft_get_token_objects_from_keystore(ks_search_type_t type)
 cleanup:
 	while (ks_obj) {
 		ks_obj_next = ks_obj->next;
-		free(ks_obj->buf);
+		freezero(ks_obj->buf, ks_obj->size);
 		free(ks_obj);
 		ks_obj = ks_obj_next;
 	}
@@ -2250,7 +2242,7 @@ soft_destroy_token_session(void)
  */
 CK_RV
 soft_keystore_crypt(soft_object_t *key_p, uchar_t *ivec, boolean_t encrypt,
-	CK_BYTE_PTR in, CK_ULONG in_len, CK_BYTE_PTR out, CK_ULONG_PTR out_len)
+    CK_BYTE_PTR in, CK_ULONG in_len, CK_BYTE_PTR out, CK_ULONG_PTR out_len)
 {
 	CK_MECHANISM	mech;
 	soft_aes_ctx_t *soft_aes_ctx;
@@ -2296,9 +2288,8 @@ soft_keystore_crypt(soft_object_t *key_p, uchar_t *ivec, boolean_t encrypt,
 		    soft_aes_ctx->ivec);
 
 		if (soft_aes_ctx->aes_cbc == NULL) {
-			bzero(soft_aes_ctx->key_sched,
+			freezero(soft_aes_ctx->key_sched,
 			    soft_aes_ctx->keysched_len);
-			free(soft_aes_ctx->key_sched);
 			if (encrypt) {
 				free(token_session.encrypt.context);
 				token_session.encrypt.context = NULL;
@@ -2363,7 +2354,7 @@ soft_keystore_crypt(soft_object_t *key_p, uchar_t *ivec, boolean_t encrypt,
  */
 CK_RV
 soft_keystore_hmac(soft_object_t *key_p, boolean_t sign,
-	CK_BYTE_PTR in, CK_ULONG in_len, CK_BYTE_PTR out, CK_ULONG_PTR out_len)
+    CK_BYTE_PTR in, CK_ULONG in_len, CK_BYTE_PTR out, CK_ULONG_PTR out_len)
 {
 	CK_MECHANISM mech;
 	CK_RV rv;

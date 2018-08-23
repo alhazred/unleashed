@@ -22,7 +22,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
+# Copyright 2018, Joyent, Inc.
 #
 
 include		../Makefile.lib
@@ -41,7 +41,7 @@ MSGFILES =	common/libvscan.c
 
 .KEEP_STATE:
 
-all clean clobber install _msg : $(SUBDIRS)
+all clean clobber install: $(SUBDIRS)
 
 $(POFILE):	$(MSGFILES)
 	$(BUILDPO.msgfiles)
