@@ -768,13 +768,30 @@ PORTI18N_COND=			\
 	wcstol_longlong.o	\
 	wcstoul_longlong.o
 
-PORTINET= bindresvport.o bootparams_getbyname.o ether_addr.o \
-	  getaddrinfo.o getnameinfo.o getnetent.o getnetent_r.o \
-	  getprotoent.o getprotoent_r.o getservbyname_r.o getservent.o \
-	  getservent_r.o inet_lnaof.o inet_mkaddr.o inet_network.o \
-	  inet6_opt.o inet6_rthdr.o interface_id.o link_addr.o \
-	  netmasks.o ruserpass.o sourcefilter.o \
-	  getifaddrs.o
+PORTINET=			\
+	bindresvport.o		\
+	bootparams_getbyname.o	\
+	ether_addr.o		\
+	getaddrinfo.o		\
+	getifaddrs.o		\
+	getnameinfo.o		\
+	getnetent.o		\
+	getnetent_r.o		\
+	getprotoent.o		\
+	getprotoent_r.o		\
+	getservbyname_r.o	\
+	getservent.o		\
+	getservent_r.o		\
+	inet6_opt.o		\
+	inet6_rthdr.o		\
+	inet_lnaof.o		\
+	inet_mkaddr.o		\
+	inet_network.o		\
+	interface_id.o		\
+	link_addr.o		\
+	netmasks.o		\
+	ruserpass.o		\
+	sourcefilter.o
 
 PORTLOCALE=			\
 	big5.o			\
