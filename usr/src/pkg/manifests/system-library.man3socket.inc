@@ -15,7 +15,6 @@
 # Copyright 2013, OmniTI Computer Consulting, Inc.
 #
 
-file path=usr/share/man/man3socket/byteorder.3socket
 file path=usr/share/man/man3socket/ethers.3socket
 file path=usr/share/man/man3socket/getaddrinfo.3socket
 file path=usr/share/man/man3socket/getifaddrs.3socket

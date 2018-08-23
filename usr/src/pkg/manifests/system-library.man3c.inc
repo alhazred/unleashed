@@ -108,7 +108,6 @@ file path=usr/share/man/man3c/ecvt.3c
 file path=usr/share/man/man3c/enable_extended_FILE_stdio.3c
 file path=usr/share/man/man3c/encrypt.3c
 file path=usr/share/man/man3c/end.3c
-file path=usr/share/man/man3c/endian.3c
 file path=usr/share/man/man3c/epoll_create.3c
 file path=usr/share/man/man3c/epoll_ctl.3c
 file path=usr/share/man/man3c/epoll_wait.3c

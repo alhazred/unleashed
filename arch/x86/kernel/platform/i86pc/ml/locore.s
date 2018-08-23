@@ -134,7 +134,7 @@
 	 * %rdi = boot services (should die someday)
 	 * %rdx = bootops
 	 * end
-	 */	
+	 */
 
 	leaq	edata(%rip), %rbp	/* reference edata for ksyms */
 	movq	$0, (%rbp)		/* limit stack back trace */
@@ -153,7 +153,7 @@
 #endif
 	/*
 	 * Save call back for special x86 boot services vector
-	 */	
+	 */
 	movq	%rdi, sysp(%rip)
 
 	movq	%rdx, bootops(%rip)		/* save bootops */
@@ -181,7 +181,7 @@
 	movq	%rax, %cr0
 
 	/*
-	 * (We just assert this works by virtue of being here) 
+	 * (We just assert this works by virtue of being here)
 	 */
 	bts	$X86FSET_CPUID, x86_featureset(%rip)
 
@@ -319,6 +319,7 @@ _no_pending_updates:
 	leaq	dtrace_badtrap(%rip), %rdi
 	xorl	%eax, %eax
 	call	panic
+	SET_SIZE(cmntrap_pushed)
 	SET_SIZE(cmntrap)
 	SET_SIZE(_cmntrap)
 

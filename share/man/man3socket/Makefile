@@ -1,5 +1,4 @@
-MAN = byteorder.3socket \
-      ethers.3socket \
+MAN = ethers.3socket \
       getaddrinfo.3socket \
       getifaddrs.3socket \
       getipnodebyname.3socket \

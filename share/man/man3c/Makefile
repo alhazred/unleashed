@@ -90,7 +90,6 @@ MAN = __fbufsize.3c \
       enable_extended_FILE_stdio.3c \
       encrypt.3c \
       end.3c \
-      endian.3c \
       epoll_create.3c \
       epoll_ctl.3c \
       epoll_wait.3c \

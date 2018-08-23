@@ -1,4 +1,6 @@
 MAN = Intro.3 \
+      byteorder.3 \
+      endian.3 \
       hosts_access.3
 
 
