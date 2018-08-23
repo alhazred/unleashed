@@ -1384,6 +1384,10 @@ prnsegs(struct as *as, int reserved)
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
 
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
+
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			(void) pr_getprot(seg, reserved, &tmp,
 			    &saddr, &naddr, eaddr);
@@ -1639,6 +1643,10 @@ prgetmap(proc_t *p, int reserved, list_t *iolhead)
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
 
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
+
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			prot = pr_getprot(seg, reserved, &tmp,
 			    &saddr, &naddr, eaddr);
@@ -1750,6 +1758,10 @@ prgetmap32(proc_t *p, int reserved, list_t *iolhead)
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
 
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
+
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			prot = pr_getprot(seg, reserved, &tmp,
 			    &saddr, &naddr, eaddr);
@@ -1853,6 +1865,10 @@ prpdsize(struct as *as)
 		void *tmp = NULL;
 		size_t npage;
 
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
+
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			(void) pr_getprot(seg, 0, &tmp, &saddr, &naddr, eaddr);
 			if ((npage = (naddr - saddr) / PAGESIZE) != 0)
@@ -1882,6 +1898,10 @@ prpdsize32(struct as *as)
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
 		size_t npage;
+
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
 
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			(void) pr_getprot(seg, 0, &tmp, &saddr, &naddr, eaddr);
@@ -1933,6 +1953,10 @@ again:
 		caddr_t eaddr = seg->s_base + pr_getsegsize(seg, 0);
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
+
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
 
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			struct vnode *vp;
@@ -2080,6 +2104,10 @@ again:
 		caddr_t eaddr = seg->s_base + pr_getsegsize(seg, 0);
 		caddr_t saddr, naddr;
 		void *tmp = NULL;
+
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
 
 		for (saddr = seg->s_base; saddr < eaddr; saddr = naddr) {
 			struct vnode *vp;
@@ -4033,6 +4061,9 @@ prgetxmap(proc_t *p, list_t *iolhead)
 		uint64_t npages;
 		uint64_t pagenum;
 
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
 		/*
 		 * Segment loop part one: iterate from the base of the segment
 		 * to its end, pausing at each address boundary (baddr) between
@@ -4229,6 +4260,10 @@ prgetxmap32(proc_t *p, list_t *iolhead)
 		char *parr;
 		uint64_t npages;
 		uint64_t pagenum;
+
+		if ((seg->s_flags & S_HOLE) != 0) {
+			continue;
+		}
 
 		/*
 		 * Segment loop part one: iterate from the base of the segment

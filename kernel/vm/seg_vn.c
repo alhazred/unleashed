@@ -20,7 +20,7 @@
  */
 /*
  * Copyright (c) 1986, 2010, Oracle and/or its affiliates. All rights reserved.
- * Copyright 2015, Joyent, Inc. All rights reserved.
+ * Copyright 2018 Joyent, Inc.
  * Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
  */
 
@@ -523,8 +523,9 @@ segvn_setvnode_mpss(vnode_t *vp)
 }
 
 int
-segvn_create(struct seg *seg, void *argsp)
+segvn_create(struct seg **segpp, void *argsp)
 {
+	struct seg *seg = *segpp;
 	extern lgrp_mem_policy_t lgrp_mem_default_policy;
 	struct segvn_crargs *a = (struct segvn_crargs *)argsp;
 	struct segvn_data *svd;
@@ -739,6 +740,11 @@ segvn_create(struct seg *seg, void *argsp)
 				    (a->szc == pseg->s_szc &&
 				    IS_P2ALIGNED(pseg->s_base, pgsz) &&
 				    IS_P2ALIGNED(pseg->s_size, pgsz)));
+				/*
+				 * Communicate out the newly concatenated
+				 * segment as part of the result.
+				 */
+				*segpp = pseg;
 				return (0);
 			}
 		}
@@ -778,6 +784,11 @@ segvn_create(struct seg *seg, void *argsp)
 				    (a->szc == nseg->s_szc &&
 				    IS_P2ALIGNED(nseg->s_base, pgsz) &&
 				    IS_P2ALIGNED(nseg->s_size, pgsz)));
+				/*
+				 * Communicate out the newly concatenated
+				 * segment as part of the result.
+				 */
+				*segpp = nseg;
 				return (0);
 			}
 		}
@@ -1234,10 +1245,8 @@ segvn_concat(struct seg *seg1, struct seg *seg2, int amp_cat)
  * Return 0 on success.
  */
 static int
-segvn_extend_prev(seg1, seg2, a, swresv)
-	struct seg *seg1, *seg2;
-	struct segvn_crargs *a;
-	size_t swresv;
+segvn_extend_prev(struct seg *seg1, struct seg *seg2, struct segvn_crargs *a,
+    size_t swresv)
 {
 	struct segvn_data *svd1 = (struct segvn_data *)seg1->s_data;
 	size_t size;
@@ -1314,7 +1323,7 @@ segvn_extend_prev(seg1, seg2, a, swresv)
 		struct vpage *vp, *evp;
 		new_vpage =
 		    kmem_zalloc(vpgtob(seg_pages(seg1) + seg_pages(seg2)),
-			KM_NOSLEEP);
+		    KM_NOSLEEP);
 		if (new_vpage == NULL)
 			return (-1);
 		bcopy(svd1->vpage, new_vpage, vpgtob(seg_pages(seg1)));
@@ -1354,11 +1363,8 @@ segvn_extend_prev(seg1, seg2, a, swresv)
  * Return 0 on success.
  */
 static int
-segvn_extend_next(
-	struct seg *seg1,
-	struct seg *seg2,
-	struct segvn_crargs *a,
-	size_t swresv)
+segvn_extend_next(struct seg *seg1, struct seg *seg2, struct segvn_crargs *a,
+    size_t swresv)
 {
 	struct segvn_data *svd2 = (struct segvn_data *)seg2->s_data;
 	size_t size;
@@ -3321,7 +3327,6 @@ static int
 segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
     uint_t szc, page_t **ppa, page_t **ppplist, uint_t *ret_pszc,
     int *downsize)
-
 {
 	page_t *pplist = *ppplist;
 	size_t pgsz = page_get_pagesize(szc);
@@ -3464,7 +3469,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 				goto out;
 			}
 			io_err = fop_pageio(vp, io_pplist, io_off, io_len,
-				B_READ, svd->cred, NULL);
+			    B_READ, svd->cred, NULL);
 			if (io_err) {
 				VM_STAT_ADD(segvnvmstats.fill_vp_pages[8]);
 				page_unlock(targpp);
@@ -9231,7 +9236,7 @@ segvn_purge(struct seg *seg)
 /*ARGSUSED*/
 static int
 segvn_reclaim(void *ptag, caddr_t addr, size_t len, struct page **pplist,
-	enum seg_rw rw, int async)
+    enum seg_rw rw, int async)
 {
 	struct seg *seg = (struct seg *)ptag;
 	struct segvn_data *svd = (struct segvn_data *)seg->s_data;
@@ -9308,7 +9313,7 @@ segvn_reclaim(void *ptag, caddr_t addr, size_t len, struct page **pplist,
 /*ARGSUSED*/
 static int
 shamp_reclaim(void *ptag, caddr_t addr, size_t len, struct page **pplist,
-	enum seg_rw rw, int async)
+    enum seg_rw rw, int async)
 {
 	amp_t *amp = (amp_t *)ptag;
 	pgcnt_t np, npages;
@@ -9974,10 +9979,8 @@ segvn_trupdate(void)
 }
 
 static void
-segvn_trupdate_seg(struct seg *seg,
-	segvn_data_t *svd,
-	svntr_t *svntrp,
-	ulong_t hash)
+segvn_trupdate_seg(struct seg *seg, segvn_data_t *svd, svntr_t *svntrp,
+    ulong_t hash)
 {
 	proc_t			*p;
 	lgrp_id_t		lgrp_id;
