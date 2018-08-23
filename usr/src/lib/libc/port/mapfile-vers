@@ -20,10 +20,7 @@
 #
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
-#
-# Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
-# Use is subject to license terms.
-#
+# Copyright 2018 Nexenta Systems, Inc.
 # Copyright (c) 2012 by Delphix. All rights reserved.
 # Copyright 2016 Joyent, Inc.
 # Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved.
@@ -52,21 +49,6 @@ $mapfile_version 2
 # The 'global:' designation is used *only* for data
 # items and for the members of the malloc() family.
 #
-
-#
-# README README README README README README: how to update this file
-#   1) each version of Solaris/OpenSolaris gets a version number.
-#      (Actually since Solaris is actually a series of OpenSolaris releases
-#	we'll just use OpenSolaris for this exercise.)
-#	OpenSolaris 2008.11 gets 1.23
-#	OpenSolaris 2009.04 gets 1.24
-#	etc.
-#   2) each project integration uses a unique version number.
-#	PSARC/2008/123 gets 1.24.1
-#	PSARC/2008/456 gets 1.24.2
-#	etc.
-#
-
 
 # Mnemonic conditional input identifiers:
 #

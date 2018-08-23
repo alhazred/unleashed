@@ -47,7 +47,7 @@
  * internet address; handles class a/b/c network
  * number formats.
  */
-int
+in_addr_t
 inet_lnaof(struct in_addr in)
 {
 	uint32_t i = ntohl(in.s_addr);

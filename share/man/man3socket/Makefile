@@ -9,7 +9,6 @@ MAN = byteorder.3socket \
       getsourcefilter.3socket \
       icmp6_filter.3socket \
       if_nametoindex.3socket \
-      inet.3socket \
       inet6_opt.3socket \
       inet6_rth.3socket \
       sctp_bindx.3socket \

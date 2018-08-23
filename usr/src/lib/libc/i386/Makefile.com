@@ -23,9 +23,7 @@
 # Copyright 2016 Joyent, Inc.
 # Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved.
 # Copyright 2013 Garrett D'Amore <garrett@damore.org>
-#
-# Copyright 2011 Nexenta Systems, Inc.  All rights reserved.
-# Use is subject to license terms.
+# Copyright 2018 Nexenta Systems, Inc.
 #
 
 LIBCDIR=	$(SRC)/lib/libc
@@ -785,8 +783,11 @@ PORTINET=			\
 	inet6_opt.o		\
 	inet6_rthdr.o		\
 	inet_lnaof.o		\
-	inet_mkaddr.o		\
+	inet_makeaddr.o		\
 	inet_network.o		\
+	inet_ntoa.o		\
+	inet_ntop.o		\
+	inet_pton.o		\
 	interface_id.o		\
 	link_addr.o		\
 	netmasks.o		\
@@ -873,8 +874,8 @@ PORTNSL= _conn_util.o _data2.o _errlst.o _utility.o algs.o auth_des.o \
          getauuser.o getdname.o getexecattr.o gethostby_door.o \
          gethostbyname_r.o gethostent.o gethostent6.o gethostent_r.o \
          getipnodeby.o getipnodeby_door.o getprofattr.o getrpcent.o \
-         getrpcent_r.o getuserattr.o inet_matchaddr.o inet_ntoa.o inet_ntop.o \
-         inet_pton.o key_call.o key_prot.o mt_misc.o netdir.o netdir_inet.o \
+         getrpcent_r.o getuserattr.o inet_matchaddr.o \
+         key_call.o key_prot.o mt_misc.o netdir.o netdir_inet.o \
          netdir_inet_sundry.o netname.o netnamer.o netselect.o nis_misc.o \
          nis_misc_proc.o nis_sec_mechs.o nis_subr.o nis_xdr.o parse.o \
          pmap_clnt.o pmap_prot.o publickey.o rpc_callmsg.o rpc_comdata.o \

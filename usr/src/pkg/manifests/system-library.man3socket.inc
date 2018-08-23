@@ -11,7 +11,7 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+# Copyright 2018 Nexenta Systems, Inc.
 # Copyright 2013, OmniTI Computer Consulting, Inc.
 #
 
@@ -26,7 +26,6 @@ file path=usr/share/man/man3socket/getservbyname.3socket
 file path=usr/share/man/man3socket/getsourcefilter.3socket
 file path=usr/share/man/man3socket/icmp6_filter.3socket
 file path=usr/share/man/man3socket/if_nametoindex.3socket
-file path=usr/share/man/man3socket/inet.3socket
 file path=usr/share/man/man3socket/inet6_opt.3socket
 file path=usr/share/man/man3socket/inet6_rth.3socket
 file path=usr/share/man/man3socket/sctp_bindx.3socket

@@ -41,12 +41,8 @@
 #include <netinet/tcp.h>
 #include <netinet/udp.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
-
-#ifdef SYSV
-#define	bzero(s, len)	(void) memset((s), 0, (len))
-#endif
-
 
 /*
  * Bind a socket to a privileged IP port

@@ -11,7 +11,7 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+# Copyright 2018 Nexenta Systems, Inc. All rights reserved.
 #
 
 file path=usr/share/man/man3/Intro.3
@@ -21,6 +21,7 @@ file path=usr/share/man/man3/readdir.3
 file path=usr/share/man/man3/err.3
 file path=usr/share/man/man3/fts.3
 file path=usr/share/man/man3/alloca.3
+file path=usr/share/man/man3/inet.3
 file path=usr/share/man/man3/malloc.3
 file path=usr/share/man/man3/posix_memalign.3
 file path=usr/share/man/man3/setmode.3

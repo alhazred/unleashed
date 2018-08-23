@@ -185,7 +185,7 @@ pics/%.o %.o: $(LIBCBASE)/../port/gen/%.c
 
 # inet rules
 pics/%.o: $(LIBCBASE)/../port/inet/%.c
-	$(COMPILE.c) -DSYSV -o $@ $<
+	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
 # locale rules
