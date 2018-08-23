@@ -1709,7 +1709,7 @@ noasync:
 
 void
 nfs_async_readdir(vnode_t *vp, rddir_cache *rdc, cred_t *cr,
-	int (*readdir)(vnode_t *, rddir_cache *, cred_t *))
+    int (*readdir)(vnode_t *, rddir_cache *, cred_t *))
 {
 	rnode_t *rp;
 	mntinfo_t *mi;
@@ -1806,8 +1806,7 @@ noasync:
 
 void
 nfs_async_commit(vnode_t *vp, page_t *plist, offset3 offset, count3 count,
-	cred_t *cr, void (*commit)(vnode_t *, page_t *, offset3, count3,
-	cred_t *))
+    cred_t *cr, void (*commit)(vnode_t *, page_t *, offset3, count3, cred_t *))
 {
 	rnode_t *rp;
 	mntinfo_t *mi;
@@ -3220,11 +3219,13 @@ nfs_free_mi(mntinfo_t *mi)
 	mutex_destroy(&mi->mi_lock);
 	mutex_destroy(&mi->mi_remap_lock);
 	mutex_destroy(&mi->mi_async_lock);
+	mutex_destroy(&mi->mi_rnodes_lock);
 	cv_destroy(&mi->mi_failover_cv);
 	cv_destroy(&mi->mi_async_work_cv[NFS_ASYNC_QUEUE]);
 	cv_destroy(&mi->mi_async_work_cv[NFS_ASYNC_PGOPS_QUEUE]);
 	cv_destroy(&mi->mi_async_reqs_cv);
 	cv_destroy(&mi->mi_async_cv);
+	list_destroy(&mi->mi_rnodes);
 	zone_rele_ref(&mi->mi_zone_ref, ZONE_REF_NFS);
 	kmem_free(mi, sizeof (*mi));
 }
