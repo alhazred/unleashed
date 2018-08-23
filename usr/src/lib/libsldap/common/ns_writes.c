@@ -2027,7 +2027,7 @@ __s_cvt_hosts(const void *data, char **rdn,
 	ptr = (struct hostent *)data;
 
 	if (ptr->h_name == NULL ||
-	    ptr->h_addr_list == NULL || ptr->h_addr_list[0] == '\0') {
+	    ptr->h_addr_list == NULL || ptr->h_addr_list[0] == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2339,7 +2339,7 @@ __s_cvt_services(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct servent *)data;
 
-	if (ptr->s_name == NULL || ptr->s_port < 0 || ptr->s_proto == '\0') {
+	if (ptr->s_name == NULL || ptr->s_port < 0 || ptr->s_proto == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2553,7 +2553,7 @@ __s_cvt_netmasks(const void *data, char **rdn,
 			return (rc);
 		}
 
-	if (ptr->netmask != '\0') {
+	if (ptr->netmask != NULL) {
 		rc = __s_add_attr(e, "ipNetmaskNumber", ptr->netmask);
 		if (rc != NS_LDAP_SUCCESS) {
 			__s_cvt_freeEntryRdn(entry, rdn);
@@ -2611,7 +2611,7 @@ __s_cvt_netgroups(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->name != '\0') {
+	if (ptr->name != NULL) {
 		rc = __s_add_attr(e, "cn", ptr->name);
 		if (rc != NS_LDAP_SUCCESS) {
 			__s_cvt_freeEntryRdn(entry, rdn);
@@ -2710,7 +2710,7 @@ __s_cvt_bootparams(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->name != '\0') {
+	if (ptr->name != NULL) {
 		rc = __s_add_attr(e, "cn", ptr->name);
 		if (rc != NS_LDAP_SUCCESS) {
 			__s_cvt_freeEntryRdn(entry, rdn);
@@ -2774,7 +2774,7 @@ __s_cvt_ethers(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_ethers *)data;
 
-	if (ptr->name == NULL || ptr->ether == '\0') {
+	if (ptr->name == NULL || ptr->ether == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2945,7 +2945,7 @@ __s_cvt_publickey(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_pubkey *)data;
 
-	if (ptr->name == NULL || ptr->pubkey == '\0' || ptr->privkey == '\0') {
+	if (ptr->name == NULL || ptr->pubkey == NULL || ptr->privkey == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -3026,7 +3026,7 @@ __s_cvt_aliases(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->alias != '\0') {
+	if (ptr->alias != NULL) {
 		rc = __s_add_attr(e, "mail", (char *)ptr->alias);
 		if (rc != NS_LDAP_SUCCESS) {
 			__s_cvt_freeEntryRdn(entry, rdn);
@@ -3109,7 +3109,7 @@ __s_cvt_auto_mount(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_automount *)data;
 
-	if (ptr->key == NULL || ptr->value == '\0' || ptr->mapname == '\0') {
+	if (ptr->key == NULL || ptr->value == NULL || ptr->mapname == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -3125,7 +3125,7 @@ __s_cvt_auto_mount(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->key != '\0') {
+	if (ptr->key != NULL) {
 		rc = __s_add_attr(e, version1 ? "cn" : "automountKey",
 		    (char *)ptr->key);
 		if (rc != NS_LDAP_SUCCESS) {
