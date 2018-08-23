@@ -75,6 +75,25 @@ $if _x86 && _ELF64
 $add amd64
 $endif
 
+SYMBOL_VERSION ILLUMOS_0.27 {	# memset_s(3C) and set_constraint_handler_s(3C)
+    protected:
+	abort_handler_s;
+	ignore_handler_s;
+	memset_s;
+	set_constraint_handler_s;
+} ILLUMOS_0.26;
+
+SYMBOL_VERSION ILLUMOS_0.26 {	# fts(3) LFS
+$if lf64
+    protected:
+	fts_children64;
+	fts_close64;
+	fts_open64;
+	fts_read64;
+	fts_set64;
+$endif
+} ILLUMOS_0.22;
+
 SYMBOL_VERSION ILLUMOS_0.22 {	# endian(3C)
     protected:
 	htobe16;

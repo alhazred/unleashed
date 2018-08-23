@@ -346,6 +346,7 @@ SYSOBJS=			\
 PORTGEN64=			\
 	_xftw64.o		\
 	attropen64.o		\
+	fts64.o			\
 	ftw64.o			\
 	mkstemp64.o		\
 	nftw64.o		\
@@ -507,6 +508,7 @@ PORTGEN=			\
 	malloc.o		\
 	memalign.o		\
 	memmem.o		\
+	memset_s.o		\
 	mkdev.o			\
 	mkdtemp.o		\
 	mkfifo.o		\
@@ -563,6 +565,7 @@ PORTGEN=			\
 	scandir.o		\
 	seekdir.o		\
 	select.o		\
+	set_constraint_handler_s.o \
 	setlabel.o		\
 	setmode.o		\
 	setpriority.o		\

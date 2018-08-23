@@ -608,6 +608,7 @@ boot_prop_finish(void)
 	char *consoledev;
 	uint64_t lvalue;
 	int use_xencons = 0;
+	extern int bootrd_debug;
 
 
 	DBG_MSG("Opening /boot/solaris/bootenv.rc\n");
@@ -719,6 +720,12 @@ done:
 		}
 	}
 	early_allocation = 0;
+
+	/*
+	 * Check for bootrd_debug.
+	 */
+	if (find_boot_prop("bootrd_debug"))
+		bootrd_debug = 1;
 
 	/*
 	 * check to see if we have to override the default value of the console
@@ -2222,7 +2229,7 @@ process_msct(ACPI_TABLE_MSCT *tp)
 	    item = (void *)(item->Length + (uintptr_t)item)) {
 		/*
 		 * Sanity check according to section 5.2.19.1 of ACPI 4.0.
-		 * Revision 	1
+		 * Revision	1
 		 * Length	22
 		 */
 		if (item->Revision != 1 || item->Length != 22) {

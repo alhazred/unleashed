@@ -42,7 +42,23 @@
 #include <unistd.h>
 #include <stddef.h>
 
-#define MAXIMUM(a, b)	(((a) > (b)) ? (a) : (b))
+#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
+#define	fts_alloc		fts_alloc64
+#define	fts_build		fts_build64
+#define	fts_lfree		fts_lfree64
+#define	fts_load		fts_load64
+#define	fts_maxarglen		fts_maxarglen64
+#define	fts_padjust		fts_padjust64
+#define	fts_palloc		fts_palloc64
+#define	fts_sort		fts_sort64
+#define	fts_stat		fts_stat64
+#define	fts_safe_changedir	fts_safe_changedir64
+#endif
+
+#define	MAXIMUM(a, b)	(((a) > (b)) ? (a) : (b))
+
+#define	ALIGNBYTES	_POINTER_ALIGNMENT
+#define	ALIGN(p)	(((unsigned long)(p) + ALIGNBYTES) & ~ALIGNBYTES)
 
 static FTSENT	*fts_alloc(FTS *, char *, size_t);
 static FTSENT	*fts_build(FTS *, int);
@@ -62,9 +78,6 @@ static int	 fts_safe_changedir(FTS *, FTSENT *, int, char *);
 #define	SET(opt)	(sp->fts_options |= (opt))
 
 #define	FCHDIR(sp, fd)	(!ISSET(FTS_NOCHDIR) && fchdir(fd))
-
-#define	ALIGNBYTES	(_MAX_ALIGNMENT - 1)
-#define	ALIGN(p)	(((unsigned long)(p) + ALIGNBYTES) &~ALIGNBYTES)
 
 /* fts_build flags */
 #define	BCHILD		1		/* fts_children */

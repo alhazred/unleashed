@@ -1,7 +1,9 @@
 MAN = Intro.3 \
       byteorder.3 \
       endian.3 \
-      hosts_access.3
+      hosts_access.3 \
+      memset_s.3 \
+      set_constraint_handler_s.3
 
 
 # We want to just install manpages but there is no manpage-only mk file so
