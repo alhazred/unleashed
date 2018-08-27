@@ -37,10 +37,7 @@ CPPFLAGS =	$(MY_NATIVE_CPPFLAGS)
 LDFLAGS =
 LDLIBS =	$(MY_NATIVE_LDLIBS)
 
-all: libuutil .WAIT $(LIBS)
-
-libuutil: FRC
-	@cd $(LIBUUTIL)/native; pwd; $(MAKE) install
+all: $(LIBS)
 
 install: all
 

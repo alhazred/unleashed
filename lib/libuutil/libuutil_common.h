@@ -29,7 +29,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#include <libuutil.h>
-#include <libuutil_impl.h>
+#include "libuutil.h"
+#include "libuutil_impl.h"
 
 #endif	/* _LIBUUTIL_COMMON_H */

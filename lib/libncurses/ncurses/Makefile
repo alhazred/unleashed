@@ -28,7 +28,7 @@ BUILDFIRST = ${GENHDRS} init_keytry.h
 COPTS.init_keytry.c += -I.
 .NOPATH: curses.h
 
-INCS=	curses.h \
+INCS=	${.OBJDIR}/curses.h \
 	${NCURSES_INC}/termcap.h \
 	${NCURSES_INC}/unctrl.h \
 	${NCURSES_INC}/ncurses_dll.h \
@@ -300,10 +300,10 @@ pc_files:
 tabset= std stdcrt vt100 vt300
 
 misc_files:
+	@${INSTALL} -d ${DESTDIR}/usr/bin
 	${INSTALL} ${INSTALL_COPY} -o ${BINOWN} -g ${BINGRP} \
 		-m 555 ${NCURSES_DIR}/misc/ncurses-config ${DESTDIR}/usr/bin/
-	@test -d ${DESTDIR}/usr/share/tabset || \
-		mkdir -p ${DESTDIR}/usr/share/tabset
+	@${INSTALL} -d ${DESTDIR}/usr/share/tabset
 	@for i in ${tabset}; do \
 	j="${INSTALL} ${INSTALL_COPY} ${INC_INSTALL_OWN} -m 0644 ${NCURSES_DIR}/misc/tabset/$$i \
 		${DESTDIR}/usr/share/tabset"; \

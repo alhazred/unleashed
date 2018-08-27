@@ -245,8 +245,7 @@ uu_release_child(void)
 	uu_release();
 }
 
-#pragma init(uu_init)
-static void
+static void __attribute__((constructor))
 uu_init(void)
 {
 	(void) pthread_atfork(uu_lockup, uu_release, uu_release_child);
