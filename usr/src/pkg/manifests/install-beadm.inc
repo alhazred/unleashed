@@ -48,4 +48,3 @@ license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libbe.so target=./libbe.so.1
 link path=usr/lib/libbe.so target=./libbe.so.1
-link path=usr/sbin/beadm target=../../sbin/beadm

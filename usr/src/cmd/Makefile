@@ -63,7 +63,6 @@ COMMON_SUBDIRS=		\
 	bart		\
 	basename	\
 	bc		\
-	beadm		\
 	boot		\
 	busstat		\
 	cal		\
@@ -449,7 +448,6 @@ MSGSUBDIRS=		\
 	backup		\
 	bart		\
 	basename	\
-	beadm		\
 	busstat		\
 	cal		\
 	cdrw		\
