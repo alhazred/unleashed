@@ -164,8 +164,8 @@ main(int argc, char **argv)
 	(void) textdomain(TEXT_DOMAIN);
 
 	if (argc < 2) {
-		usage();
-		return (1);
+		char *arg = "list";
+		return (be_do_list(1, &arg));
 	}
 
 	cmdname = argv[1];
