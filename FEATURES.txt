@@ -15,8 +15,18 @@ was changed.
  - libxnet and libsocket filter libraries
  - libm.so.1 (legacy libm)
  - shcomp(1) and the ability to run "compiled" ksh93 shell scripts (shbinexec)
+ - useless ksh93 /usr/bin builtins: cd, command, history, jobs, limit,
+   print, read, type, umask, wait
+ - jsh & jsh93
+ + ship libcmdutils.so & libuutil.so compilation symlinks
+ * ship openbsd ksh as /bin/sh (/bin/ksh93, /bin/rksh93, and /sbin/sh remain
+   ksh93)
  * convert BREAD/BWRITE/BWRITE2/GETBLK macros to bread/bwrite/bwrite2/getblk
    static inlines
+ * collapse driver packages into system/kernel
+ * replace ksh93 /usr/bin builtins with real programs imported from OpenBSD:
+   comm, cut, join, kill, logname, paste, rev, sleep, tee, test, uniq, wc
+ * autofs is disabled by default
 
 1.0 release
 -----------
