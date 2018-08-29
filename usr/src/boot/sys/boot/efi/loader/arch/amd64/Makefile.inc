@@ -1,13 +1,13 @@
 
 SRCS +=	multiboot_tramp.S \
 	start.S \
-	bootinfo64.c \
+	cpuid.c \
 	trap.c \
 	exc.S
 
 OBJS += multiboot_tramp.o \
 	start.o \
-	bootinfo64.o \
+	cpuid.o \
 	trap.o \
 	exc.o
 
