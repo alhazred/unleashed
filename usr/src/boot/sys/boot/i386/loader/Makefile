@@ -30,7 +30,7 @@ LIBZFSBOOT=	../../zfs/$(MACH)/libzfsboot.a
 LIBI386=        ../libi386/libi386.a
 
 LD=		$(GNU_ROOT)/bin/gld
-CC=		$(GCC_ROOT)/bin/gcc
+CC=		$(GNUC_ROOT)/bin/gcc
 OBJCOPY=	$(GNU_ROOT)/bin/gobjcopy
 GSTRIP=		$(GNU_ROOT)/bin/gstrip
 ROOT_BOOT=	$(ROOT)/boot

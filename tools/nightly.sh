@@ -166,7 +166,7 @@ function build {
 	#	Build the new part of the source
 	#
 	echo "\n==== bmake build ====\n" >&2
-	if ! /bin/time env -i PATH=${GCC_ROOT}/bin:/usr/bin \
+	if ! /bin/time env -i PATH=${GNUC_ROOT}/bin:/usr/bin \
 		SRCTOP=$SRCTOP \
 		make -C $SRCTOP -j $DMAKE_MAX_JOBS VERBOSE=yes build DESTDIR=$ROOT; then
 	    build_ok=n
