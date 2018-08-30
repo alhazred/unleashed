@@ -34,17 +34,14 @@ SUBDIR :sh= basename `pwd`
 TSTDIR = $(ROOTTST)/$(SUBDIR)
 DSTYLE = $(ROOTOPTPKG)/bin/dstyle
 
-CSRCS :sh= find . -name SCCS -prune -o -name *.c -print | cut -b3-
-SSRCS :sh= find . -name SCCS -prune -o -name *.s -print | cut -b3-
-DSRCS :sh= find . -name SCCS -prune -o -name *.d -print | cut -b3-
+CSRCS :sh= git ls-files '*.c'
+SSRCS :sh= git ls-files '*.s'
+DSRCS :sh= git ls-files '*.d'
 
-TSTS :sh= find . -name tst.*.d -o -name err.*.d -o \
-	-name tst.*.d.out -o -name err.*.d.out -o -name tst.*.ksh \
-	-o -name err.*.ksh -o -name tst.*.ksh.out -o -name drp.*.d \
-	-o -name get.*.pl
+TSTS :sh= git ls-files '*/tst.*.d' '*/err.*.d' '*/tst.*.d.out' '*/err.*.d.out' \
+    '*/tst.*.ksh' '*/err.*.ksh' '*/tst.*.ksh.out' '*/drp.*.d' '*/get.*.pl'
 
-EXES :sh= find . -name SCCS -prune -o \( -name *.exe -o -name \*.pl \) -print \
-    | cut -b3-
+EXES :sh= git ls-files '*.exe' '*.pl'
 EXES += $(CSRCS:%.c=%.exe)
 EXES += $(SSRCS:%.s=%.exe)
 
