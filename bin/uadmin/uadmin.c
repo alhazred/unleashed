@@ -35,9 +35,7 @@
 #include <strings.h>
 #include <signal.h>
 #include <unistd.h>
-#ifdef	__i386
 #include <libscf_priv.h>
-#endif /* __i386 */
 
 #include <bsm/adt.h>
 #include <bsm/adt_event.h>
@@ -150,13 +148,8 @@ main(int argc, char *argv[])
 		fcn_id = ADT_UADMIN_FCN_AD_NOSYNC;
 		break;
 	case AD_FASTREBOOT:
-#ifdef __i386
 		fcn_id = ADT_UADMIN_FCN_AD_FASTREBOOT;
 		mdep = (uintptr_t)NULL;	/* Ignore all arguments */
-#else /* __i386 */
-		fcn = AD_BOOT;
-		fcn_id = ADT_UADMIN_FCN_AD_BOOT;
-#endif /* __i386 */
 		break;
 	case AD_FASTREBOOT_DRYRUN:
 		fcn_id = ADT_UADMIN_FCN_AD_FASTREBOOT_DRYRUN;
@@ -198,7 +191,6 @@ main(int argc, char *argv[])
 			fcn_id = ADT_UADMIN_FCN_AD_FTRACE_STOP;
 			break;
 		}
-#ifdef	__i386
 	} else if (cmd == A_CONFIG) {
 		uint8_t boot_config = 0;
 		uint8_t boot_config_ovr = 0;
@@ -213,7 +205,6 @@ main(int argc, char *argv[])
 			mdep = (uintptr_t)(&boot_config);
 			break;
 		}
-#endif /* __i386 */
 	}
 
 	if (geteuid() == 0) {
