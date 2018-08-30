@@ -1,4 +1,4 @@
-#!/bin/ksh93 -p
+#!/bin/ksh
 #
 # CDDL HEADER START
 #
@@ -1531,10 +1531,10 @@ EOF
 	#
 	salt=host/${locase_nodename}.${domain}@${realm}
 
-	skeys=(host/${fqdn}@${realm} nfs/${fqdn}@${realm} HTTP/${fqdn}@${realm})
-	skeys+=(root/${fqdn}@${realm} cifs/${fqdn}@${realm})
-	skeys+=(${netbios_nodename}@${realm} host/${upcase_nodename}@${realm})
-	skeys+=(cifs/${upcase_nodename}@${realm})
+	set -A skeys -- host/${fqdn}@${realm} nfs/${fqdn}@${realm} HTTP/${fqdn}@${realm} \
+	    root/${fqdn}@${realm} cifs/${fqdn}@${realm} \
+	    ${netbios_nodename}@${realm} host/${upcase_nodename}@${realm} \
+	    cifs/${upcase_nodename}@${realm}
 
 	ks_args="-n -s $salt -v $kvno -k $new_keytab ${args[@]}" 
 
