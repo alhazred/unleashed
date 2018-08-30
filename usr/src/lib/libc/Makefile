@@ -65,8 +65,6 @@ BASEHDRS=	getxby_door.h
 CHECKHDRS=	$(BASEHDRS:%.h=port/gen/%.check)
 HDRS=		$(BASEHDRS)
 
-CLOBBERFILES += THIRDPARTYLICENSE extract-copyright
-
 # install rules for install_h target
 $(ROOTHDRDIR)/%: port/gen/%
 	$(INS.file)
@@ -78,11 +76,7 @@ $(ROOTFS_LIBDIR64)/$(DYNLIB)	:=	FILEMODE = 755
 
 .KEEP_STATE:
 
-all:	all_h lib32 $(BUILD64) .WAIT lib64 .WAIT etc THIRDPARTYLICENSE
-
-THIRDPARTYLICENSE: extract-copyright
-	$(RM) $@
-	./extract-copyright . > $@
+all:	all_h lib32 $(BUILD64) .WAIT lib64 .WAIT etc
 
 etc:	$($(MACH)_ETC)
 
