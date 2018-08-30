@@ -164,7 +164,7 @@ get_cpr_info(void)
 	else if (estar_vers == ESTAR_V3)
 		new_cc.is_autopm_default = 1;
 
-	if (uadmin(A_FREEZE, AD_CHECK, 0) == 0)
+	if (uadmin(A_FREEZE, AD_CHECK_SUSPEND_TO_DISK, 0) == 0)
 		new_cc.is_cpr_capable = 1;
 	else
 		ua_err = errno;

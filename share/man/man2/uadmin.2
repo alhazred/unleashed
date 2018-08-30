@@ -172,37 +172,12 @@ removed in a subsequent release:
 .sp
 .ne 2
 .na
-\fB\fBAD_COMPRESS\fR\fR
-.ad
-.sp .6
-.RS 4n
-Save the system state to the state file with compression of data. This
-subcommand has been replaced by \fBAD_SUSPEND_TO_DISK\fR, which should be used
-instead.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBAD_CHECK\fR\fR
-.ad
-.sp .6
-.RS 4n
-Check if your system supports suspend and resume.  Without performing a  system
-suspend/resume, this command checks if this feature is currently available on
-your system. This subcommand has been replaced by
-\fBAD_CHECK_SUSPEND_TO_DISK\fR, which should be used instead.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBAD_FORCE\fR\fR
 .ad
 .sp .6
 .RS 4n
-Force \fBAD_COMPRESS\fR even when threads of user applications are not
-suspendable. This subcommand should never be used, as it might result in
+Force \fBAD_SUSPEND_TO_DISK\fR even when threads of user applications are
+not suspendable. This subcommand should never be used, as it might result in
 undefined behavior.
 .RE
 

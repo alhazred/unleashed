@@ -333,14 +333,14 @@ closeout_audit(int cmd, int fcn)
 		return (0);
 	case A_FREEZE:
 		switch (fcn) {
-		case AD_CHECK_SUSPEND_TO_DISK:	/* AD_CHECK */
+		case AD_CHECK_SUSPEND_TO_DISK:
 		case AD_CHECK_SUSPEND_TO_RAM:
 		case AD_REUSEINIT:
 		case AD_REUSEFINI:
 			/* No system discontinuity, don't turn off auditd */
 			return (0);
 		case AD_REUSABLE:
-		case AD_SUSPEND_TO_DISK:	/* AD_COMPRESS */
+		case AD_SUSPEND_TO_DISK:
 		case AD_SUSPEND_TO_RAM:
 		case AD_FORCE:
 			/* suspend the system, change audit files */

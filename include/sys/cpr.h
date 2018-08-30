@@ -393,9 +393,9 @@ typedef struct cpr_terminator ctrm_t;
 /*
  * redefinitions of uadmin subcommands for A_FREEZE
  */
-#define	AD_CPR_COMPRESS		AD_COMPRESS /* store state file compressed */
+#define	AD_CPR_COMPRESS		AD_SUSPEND_TO_DISK /* store state file compressed */
 #define	AD_CPR_FORCE		AD_FORCE /* force to do AD_CPR_COMPRESS */
-#define	AD_CPR_CHECK		AD_CHECK /* test if CPR module is there */
+#define	AD_CPR_CHECK		AD_CHECK_SUSPEND_TO_DISK /* test if CPR module is there */
 #define	AD_CPR_REUSEINIT	AD_REUSEINIT /* write cprinfo file */
 #define	AD_CPR_REUSABLE		AD_REUSABLE /* create reusable statefile */
 #define	AD_CPR_REUSEFINI	AD_REUSEFINI /* revert to non-reusable CPR */
