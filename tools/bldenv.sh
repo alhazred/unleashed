@@ -1,4 +1,4 @@
-#!/usr/bin/ksh93
+#!/bin/ksh
 #
 # CDDL HEADER START
 #
@@ -38,111 +38,34 @@ function fatal_error
 
 function usage
 {
-    OPTIND=0
-    getopts -a "${progname}" "${USAGE}" OPT '-?'
+    print -u2 "usage: ${progname} [-cfd] env_file"
     exit 2
 }
 
-typeset -r USAGE=$'+
-[-?\n@(#)\$Id: bldenv (OS/Net) 2008-04-06 \$\n]
-[-author?OS/Net community <tools-discuss@opensolaris.org>]
-[+NAME?bldenv - spawn shell for interactive incremental OS-Net
-    consolidation builds]
-[+DESCRIPTION?bldenv is a useful companion to the nightly(1) script for
-    doing interactive and incremental builds in a workspace
-    already built with nightly(1). bldenv spawns a shell set up
-    with the same environment variables taken from an env_file,
-    as prepared for use with nightly(1).]
-[+?In addition to running a shell for interactive use, bldenv
-    can optionally run a single command in the given environment,
-    in the vein of sh -c or su -c. This is useful for
-    scripting, when an interactive shell would not be. If the
-    command is composed of multiple shell words or contains
-    other shell metacharacters, it must be quoted appropriately.]
-[+?bldenv is particularly useful for testing Makefile targets
-    like clobber, install and _msg, which otherwise require digging
-    through large build logs to figure out what is being
-    done.]
-[+?By default, bldenv will invoke the shell specified in
-    $SHELL. If $SHELL is not set or is invalid, csh will be
-    used.]
-[c?force the use of csh, regardless of the  value  of $SHELL.]
-[f?invoke csh with the -f (fast-start) option. This option is valid
-    only if $SHELL is unset or if it points to csh.]
-[d?set up environment for doing DEBUG builds (default is non-DEBUG)]
-
-<env_file> [command]
-
-[+EXAMPLES]{
-    [+?Example 1: Interactive use]{
-        [+?Use bldenv to spawn a shell to perform  a  DEBUG  build  and
-            testing of the  Makefile  targets  clobber and install for
-            usr/src/cmd/true.]
-        [+\n% rlogin wopr-2 -l gk
-{root::wopr-2::49} bldenv -d /export0/jg/on10-se.env
-Build type   is  DEBUG
-RELEASE      is  5.10
-VERSION      is  wopr-2::on10-se::11/01/2001
-RELEASE_DATE is  May 2004
-Using /usr/bin/tcsh as shell.
-{root::wopr-2::49}
-{root::wopr-2::49} cd $SRC/cmd/true
-{root::wopr-2::50} make
-{root::wopr-2::51} make clobber
-/usr/bin/rm -f true true.po
-{root::wopr-2::52} make
-/usr/bin/rm -f true
-cat true.sh > true
-chmod +x true
-{root::wopr-2::53} make install
-install -s -m 0555 -u root -g bin -f /export0/jg/on10-se/proto/root_sparc/usr/bin true
-`install\' is up to date.]
-    }
-    [+?Example 2: Non-interactive use]{
-        [+?Invoke bldenv to create SUNWonbld with a single command:]
-        [+\nexample% bldenv onnv_06 \'cd $SRC/tools && make pkg\']
-        }
-}
-[+SEE ALSO?\bnightly\b(1)]
-'
-
-# main
-builtin basename
-
 # boolean flags (true/false)
-typeset flags=(
-	typeset c=false
-	typeset f=false
-	typeset d=false
-	typeset O=false
-	typeset o=false
-	typeset s=(
-		typeset e=false
-		typeset h=false
-		typeset d=false
-		typeset o=false
-	)
-)
+flags_c=false
+flags_f=false
+flags_d=false
 
-typeset progname="$(basename -- "${0}")"
+progname="$(basename -- "${0}")"
 
 OPTIND=1
 
-while getopts -a "${progname}" "${USAGE}" OPT ; do 
+while getopts cfd OPT ; do 
     case ${OPT} in
-	  c)	flags.c=true  ;;
-	  +c)	flags.c=false ;;
-	  f)	flags.f=true  ;;
-	  +f)	flags.f=false ;;
-	  d)	flags.d=true  ;;
-	  +d)	flags.d=false ;;
+	  c)	flags_c=true  ;;
+	  +c)	flags_c=false ;;
+	  f)	flags_f=true  ;;
+	  +f)	flags_f=false ;;
+	  d)	flags_d=true  ;;
+	  +d)	flags_d=false ;;
 	  \?)	usage ;;
     esac
 done
 shift $((OPTIND-1))
 
 # test that the path to the environment-setting file was given
-if (( $# < 1 )) ; then
+if [ -z "$1" ] ; then
 	usage
 fi
 
@@ -191,19 +114,19 @@ unset \
 
 if [[ -f "$1" ]]; then
 	if [[ "$1" == */* ]]; then
-		source "$1"
+		. "$1"
 	else
-		source "./$1"
+		. "./$1"
 	fi
 else
 	printf \
-	    'Cannot find env file as either %s\n' "$1"
+	    'Cannot find env file "%s"\n' "$1"
 	exit 1
 fi
 shift
 
 # Check if we have sufficient data to continue...
-[[ -v SRCTOP ]] || fatal_error "Error: Variable SRCTOP not set."
+[[ -n "${SRCTOP}" ]] || fatal_error "Error: Variable SRCTOP not set."
 [[ -d "${SRCTOP}" ]] || fatal_error "Error: ${SRCTOP} is not a directory."
 [[ -f "${SRCTOP}/usr/src/Makefile" ]] || fatal_error "Error: ${SRCTOP}/usr/src/Makefile not found."
 
@@ -217,7 +140,7 @@ BASEWSDIR=$(basename -- "${SRCTOP}")
 export RELEASE_DATE POUND_SIGN
 
 print 'Build type   is  \c'
-if ${flags.d} ; then
+if ${flags_d} ; then
 	print 'DEBUG'
 	unset RELEASE_BUILD
 	unset EXTRA_OPTIONS
@@ -311,18 +234,18 @@ print ""
 
 SHELL=/bin/sh
 
-if [[ "${flags.c}" == "false" && -x "$SHELL" && \
+if [[ "${flags_c}" == "false" && -x "$SHELL" && \
     "$(basename -- "${SHELL}")" != "csh" ]]; then
 	# $SHELL is set, and it's not csh.
 
-	if "${flags.f}" ; then
+	if "${flags_f}" ; then
 		print 'WARNING: -f is ignored when $SHELL is not csh'
 	fi
 
 	printf 'Using %s as shell.\n' "$SHELL"
 	exec "$SHELL" ${@:+-c "$@"}
 
-elif "${flags.f}" ; then
+elif "${flags_f}" ; then
 	print 'Using csh -f as shell.'
 	exec csh -f ${@:+-c "$@"}
 
