@@ -173,9 +173,6 @@ main(int argc, char *argv[])
 		case AD_CHECK_SUSPEND_TO_DISK:
 			fcn_id = ADT_UADMIN_FCN_AD_CHECK_SUSPEND_TO_DISK;
 			break;
-		case AD_FORCE:
-			fcn_id = ADT_UADMIN_FCN_AD_FORCE;
-			break;
 		case AD_SUSPEND_TO_RAM:
 			fcn_id = ADT_UADMIN_FCN_AD_SUSPEND_TO_RAM;
 			break;
@@ -284,8 +281,7 @@ main(int argc, char *argv[])
 
 	/* If returning from a suspend, audit thaw */
 	if ((cmd == A_FREEZE) &&
-	    ((fcn == AD_FORCE) ||
-	    (fcn == AD_REUSABLE) ||
+	    ((fcn == AD_REUSABLE) ||
 	    (fcn == AD_SUSPEND_TO_DISK) ||
 	    (fcn == AD_SUSPEND_TO_RAM))) {
 		if ((event = adt_alloc_event(ah, ADT_uadmin_thaw)) == NULL) {
@@ -342,7 +338,6 @@ closeout_audit(int cmd, int fcn)
 		case AD_REUSABLE:
 		case AD_SUSPEND_TO_DISK:
 		case AD_SUSPEND_TO_RAM:
-		case AD_FORCE:
 			/* suspend the system, change audit files */
 			return (change_audit_file());
 		default:

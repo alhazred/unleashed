@@ -139,7 +139,6 @@ cpr(int fcn, void *mdep)
 	case AD_SUSPEND_TO_DISK:
 	case AD_CPR_REUSEINIT:
 	case AD_CPR_NOCOMPRESS:
-	case AD_CPR_FORCE:
 	case AD_CPR_REUSABLE:
 	case AD_CPR_REUSEFINI:
 	case AD_CPR_TESTZ:

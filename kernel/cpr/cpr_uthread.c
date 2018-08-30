@@ -86,8 +86,7 @@ cpr_stop_user_threads()
 		if (++count > CPR_UTSTOP_RETRY)
 			return (ESRCH);
 		cpr_stop_user(count * count * CPR_UTSTOP_WAIT);
-	} while (cpr_check_user_threads() &&
-	    (count < CPR_UTSTOP_RETRY || CPR->c_fcn != AD_CPR_FORCE));
+	} while (cpr_check_user_threads());
 
 	return (0);
 }

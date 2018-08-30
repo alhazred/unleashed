@@ -2683,8 +2683,6 @@ Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 	<msg id="AD_IBOOT">Interactive reboot</msg>
 	<msg id="AD_SUSPEND_TO_DISK">Save the system state to the state file</msg>
 	<msg id="AD_CHECK_SUSPEND_TO_DISK">Check if system supports suspend to disk</msg>
-	<msg id="AD_FORCE">Force suspend to disk even when threads of user
-	applications are not suspendable</msg>
 	<msg id="AD_SUSPEND_TO_RAM">Save the system state to memory</msg>
 	<msg id="AD_CHECK_SUSPEND_TO_RAM">Check if system supports suspend to memory</msg>
 	<msg id="AD_SBOOT">Single-user reboot</msg>

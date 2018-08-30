@@ -66,11 +66,9 @@ extern "C" {
 
 /*
  * Functions reserved for A_FREEZE (may not be available on all platforms)
- * Note: AD_FORCE should not be used by any new application
  */
 
 #define	AD_SUSPEND_TO_DISK	   0		/* A_FREEZE, CPR or ACPI S4 */
-#define	AD_FORCE		   1		/* force to do AD_SUSPEND_TO_DISK */
 #define	AD_CHECK_SUSPEND_TO_DISK   2		/* A_FREEZE, CPR/S4 capable? */
 #define	AD_SUSPEND_TO_RAM	   20		/* A_FREEZE, S3 */
 #define	AD_CHECK_SUSPEND_TO_RAM	   21		/* A_FREEZE, S3 capable? */
