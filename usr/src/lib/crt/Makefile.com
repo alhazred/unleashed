@@ -36,7 +36,7 @@ include ../../Makefile.lib
 
 SRCS = $(VALUES:%.o=../common/%.c) $(COMMON_CRT:%.o=../common/%.c)
 
-POST_PROCESS_O = $(PROCESS_COMMENT) $@ ; $(STRIP) -x $@
+POST_PROCESS_O = $(STRIP) -x $@
 
 OBJECTS = $(VALUES) $(CRT1) $(CRTI) $(CRTN)
 

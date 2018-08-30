@@ -47,7 +47,6 @@ $(OLIBRARY):	pics/pics_mp.o libmp.so.2 $(OMAPFILE)
 
 pics/pics_mp.o:
 	$(COMPILE.c) -o $@ $(C_PICFLAGS) ../common/old_mp.c
-	$(PROCESS_COMMENT) $@
 
 all: $(LIBS) $(OLIBRARY)
 

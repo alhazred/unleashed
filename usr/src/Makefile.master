@@ -778,16 +778,13 @@ PATCH_DATE=	$(RELEASE_DATE)
 RELEASE_CM=	"$(SYSNAME) $(RELEASE) $(PATCHID) $(PATCH_DATE)"
 DEV_CM=		"$(SYSNAME) Development: non-nightly build"
 
-PROCESS_COMMENT=  @?${MCS} -d -a $(RELEASE_CM) -a $(DEV_CM)
-$(RELEASE_BUILD)PROCESS_COMMENT=   @?${MCS} -d -a $(RELEASE_CM)
-
 STRIP_STABS=			   $(STRIP) -x $@
 $(SRCDBGBLD)STRIP_STABS=	   :
 
 POST_PROCESS_O=         :
 POST_PROCESS_A=         :
-POST_PROCESS_SO=	$(PROCESS_COMMENT) $@ ; $(STRIP_STABS)
-POST_PROCESS=		$(PROCESS_COMMENT) $@ ; $(STRIP_STABS)
+POST_PROCESS_SO=	$(STRIP_STABS)
+POST_PROCESS=		$(STRIP_STABS)
 
 #
 # chk4ubin is a tool that inspects a module for a symbol table
@@ -821,7 +818,6 @@ PKGPUBLISHER=	unleashed
 	$(POST_PROCESS_O)
 .c.a:
 	$(COMPILE.c) -o $% $<
-	$(PROCESS_COMMENT) $%
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%
 .s.o:
@@ -829,7 +825,6 @@ PKGPUBLISHER=	unleashed
 	$(POST_PROCESS_O)
 .s.a:
 	$(COMPILE.s) -o $% $<
-	$(PROCESS_COMMENT) $%
 	$(AR) $(ARFLAGS) $@ $%
 	$(RM) $%
 .cc:
@@ -841,7 +836,6 @@ PKGPUBLISHER=	unleashed
 .cc.a:
 	$(COMPILE.cc) -o $% $<
 	$(AR) $(ARFLAGS) $@ $%
-	$(PROCESS_COMMENT) $%
 	$(RM) $%
 .y:
 	$(YACC.y) $<
