@@ -46,18 +46,18 @@ LINK.s?=	${CC} ${AFLAGS} ${LDFLAGS}
 COMPILE.S?=	${CC} ${AFLAGS} ${CPPFLAGS} -c
 LINK.S?=	${CC} ${AFLAGS} ${CPPFLAGS} ${LDFLAGS}
 
-CC?=		gcc
-CPP?=		gcpp
+CC?=		/usr/gcc/4.9/bin/gcc
+CPP?=		/usr/gcc/4.9/bin/cpp
 CFLAGS?=	-O2 ${PIPE} ${DBG}
 COMPILE.c?=	${CC} ${CFLAGS} ${CPPFLAGS} -c
 LINK.c?=	${CC} ${CFLAGS} ${CPPFLAGS} ${LDFLAGS}
 
-CXX?=		g++
+CXX?=		/usr/gcc/4.9/bin/g++
 CXXFLAGS?=	${CFLAGS}
 COMPILE.cc?=	${CXX} ${CXXFLAGS} ${CPPFLAGS} -c
 LINK.cc?=	${CXX} ${CXXFLAGS} ${CPPFLAGS} ${LDFLAGS}
 
-FC?=		gfortran
+FC?=		/usr/gcc/4.9/bin/gfortran
 FFLAGS?=	-O
 RFLAGS?=
 COMPILE.f?=	${FC} ${FFLAGS} -c

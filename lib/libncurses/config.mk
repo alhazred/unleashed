@@ -20,8 +20,8 @@ SHLIB_MAJOR=	6
 SHLIB_MINOR=	0
 
 AWK		= awk
-CC		= gcc
-CPP		= gcc -E
+CC		= /usr/gcc/4.9/bin/gcc
+CPP		= /usr/gcc/4.9/bin/gcc -E
 SHELL		= /bin/sh
 
 USE_BIG_STRINGS = 1
