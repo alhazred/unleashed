@@ -95,7 +95,7 @@ shift $(($OPTIND - 1))
 
 termlist=$*
 for term in $termlist; do
-	tput -T $term init >/dev/null 2>&1
+	tput -T $term longname >/dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		echo "`basename $0`: invalid terminal -- $term" >& 2
 		exit 1
