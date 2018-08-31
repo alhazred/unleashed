@@ -364,6 +364,11 @@ strmode(/* mode_t */ int mode, char *p)
 		*p++ = 'w';
 		break;
 #endif
+#ifdef S_IFDOOR
+	case S_IFDOOR:			/* door */
+		*p++ = 'D';
+		break;
+#endif
 	default:			/* unknown */
 		*p++ = '?';
 		break;
