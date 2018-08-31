@@ -503,8 +503,6 @@ license usr/src/common/mpi/THIRDPARTYLICENSE \
     license=usr/src/common/mpi/THIRDPARTYLICENSE
 license usr/src/lib/libbsdmalloc/THIRDPARTYLICENSE \
     license=usr/src/lib/libbsdmalloc/THIRDPARTYLICENSE
-license usr/src/lib/libc/THIRDPARTYLICENSE \
-    license=usr/src/lib/libc/THIRDPARTYLICENSE
 license usr/src/lib/libdwarf/THIRDPARTYLICENSE \
     license=usr/src/lib/libdwarf/THIRDPARTYLICENSE
 license usr/src/lib/libinetutil/common/THIRDPARTYLICENSE \

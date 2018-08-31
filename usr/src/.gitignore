@@ -3371,7 +3371,6 @@ lib/libbsm/common/adt_xlate.c
 lib/libbsm/i386/libbsm.so.1
 lib/libbsm/i386/pics/
 lib/libbsm/libbsm.po
-lib/libc/THIRDPARTYLICENSE
 lib/libc/amd64/assym.h
 lib/libc/amd64/cp_offsets.h
 lib/libc/amd64/genassym
