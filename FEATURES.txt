@@ -27,6 +27,7 @@ was changed.
  * replace ksh93 /usr/bin builtins with real programs imported from OpenBSD:
    comm, cut, join, kill, logname, paste, rev, sleep, tee, test, uniq, wc
  * autofs is disabled by default
+ * zoneinfo data moved from /usr/share/lib/zoneinfo to /usr/share/zoneinfo
 
 1.0 release
 -----------

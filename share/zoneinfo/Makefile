@@ -5,7 +5,7 @@ MAN=	tzfile.5
 CONTRIB_PATH=	${SRCTOP}/contrib/tzcode
 CONTRIBDIR=	${SRCTOP}/contrib/tzdata
 
-ZONEINFODIR=	${SHAREDIR}/lib/zoneinfo
+ZONEINFODIR=	${SHAREDIR}/zoneinfo
 
 # "etcetera" must come before "backward" because "backward" depends on
 # "etcetera"'s files

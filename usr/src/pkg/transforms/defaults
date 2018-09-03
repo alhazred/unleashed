@@ -76,7 +76,7 @@
 <transform file path=usr/share/lib/tabset/.+ -> default mode 0644>
 <transform file path=usr/share/lib/t.+ -> default mode 0644>
 <transform file path=usr/share/lib/unittab/.+ -> default mode 0644>
-<transform file path=usr/share/lib/zoneinfo/.+ -> default mode 0644>
+<transform file path=usr/share/zoneinfo/.+ -> default mode 0644>
 <transform file path=usr/share/.+ -> default mode 0444>
 
 <transform dir path=usr/share$ -> default group sys>

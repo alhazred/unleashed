@@ -14,7 +14,7 @@ tzselect: tzselect.ksh
 		-e 's|AWK=[^}]*|AWK=/usr/bin/awk|g' \
 		-e 's|\(PKGVERSION\)=.*|\1='\''(tzcode) '\''|' \
 		-e 's|\(REPORT_BUGS_TO\)=.*|\1=tz@iana.org|' \
-		-e 's|TZDIR=[^}]*|TZDIR=/usr/share/lib/zoneinfo|' \
+		-e 's|TZDIR=[^}]*|TZDIR=/usr/share/zoneinfo|' \
 		-e 's|\(TZVERSION\)=.*|\1='"$$VERSION"'|' \
 		< ${.ALLSRC} >$@
 

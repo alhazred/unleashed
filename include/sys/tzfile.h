@@ -38,7 +38,7 @@ extern "C" {
  * Information about time zone files.
  */
 
-#define	TZDIR	"/usr/share/lib/zoneinfo" /* Time zone object file directory */
+#define	TZDIR	"/usr/share/zoneinfo" /* Time zone object file directory */
 
 #define	TZDEFAULT	(getenv("TZ"))
 

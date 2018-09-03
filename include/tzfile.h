@@ -78,7 +78,7 @@ extern "C" {
  */
 
 #ifndef TZDIR
-#define	TZDIR	"/usr/share/lib/zoneinfo" /* Time zone object file directory */
+#define	TZDIR	"/usr/share/zoneinfo" /* Time zone object file directory */
 #endif /* !defined TZDIR */
 
 #ifndef TZDEFAULT

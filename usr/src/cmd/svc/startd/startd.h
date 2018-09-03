@@ -197,7 +197,7 @@ extern mode_t dmask;
 
 extern const char *log_directory;	/* Current log directory path */
 
-#define	FS_TIMEZONE_DIR		"/usr/share/lib/zoneinfo"
+#define	FS_TIMEZONE_DIR		"/usr/share/zoneinfo"
 #define	FS_LOCALE_DIR		"/usr/lib/locale"
 
 /*

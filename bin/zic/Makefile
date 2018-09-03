@@ -12,7 +12,7 @@ VERSION!=cat ${CONTRIB_PATH}/version
 
 CPPFLAGS+=	-I${CONTRIB_PATH}
 CPPFLAGS+=	-I.
-CPPFLAGS+=	-DTZDIR='"/usr/share/lib/zoneinfo"'
+CPPFLAGS+=	-DTZDIR='"/usr/share/zoneinfo"'
 
 version.h:
 	printf '%s\n' \
