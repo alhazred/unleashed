@@ -191,7 +191,7 @@ OLDDEP		libw\.so\.1			# on297 build 7
 NOSYMSORT	opt/SUNWdtrt/tst/common/pid/tst.weak2.exe	# DTrace test
 NOSYMSORT	ld\.so\.1					# libc_pic.a user
 NOSYMSORT	usr/bin/audioconvert				# C++
-NOSYMSORT	usr/bin/make					# C++
+NOSYMSORT	usr/bin/dmake					# C++
 NOSYMSORT	usr/MACH(lib)/libsun_fc\.so\.1			# C++
 NOSYMSORT	usr/MACH(lib)/libfru\.so\.1			# C++
 NOSYMSORT	usr/lib/libnisdb\.so\.2				# C++
