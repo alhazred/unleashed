@@ -7,6 +7,10 @@ typedef uint16_t u_int16_t;
 char	*group_from_gid(gid_t, int);
 char	*user_from_uid(uid_t, int);
 
+int	dprintf(int fd, const char *fmt, ...);
+
+void	strmode(int mode, char *p);
+
 #include <utmpx.h>
 #define	UT_NAMESIZE	(sizeof (((struct utmpx *)0)->ut_name))
 #define	_PW_NAME_LEN	(UT_NAMESIZE - 1)
