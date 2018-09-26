@@ -9,6 +9,9 @@ was changed.
 
 <next> release
 --------------
+
+1.1 release
+-----------
  - hsfs-formatted boot archive support
  - libc compat symbols: _nuname, __posix_readdir_r, __threaded
  - binary compatibility bread/bwrite/bwrite2/getblk kernel symbols
