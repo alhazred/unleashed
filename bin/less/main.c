@@ -136,9 +136,6 @@ main(int argc, char *argv[])
 
 		/* do not set init strings to terminal */
 		no_init = OPT_ON;
-
-		/* repaint from top of screen */
-		top_scroll = OPT_OFF;
 	}
 
 	s = lgetenv(less_is_more ? "MORE" : "LESS");
