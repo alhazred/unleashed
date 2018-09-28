@@ -26,7 +26,7 @@
 set name=pkg.fmri value=pkg:/system/library/storage/ima@$(PKGVERS)
 set name=pkg.description \
     value="SNIA iSCSI Managment API plugin library for iSCSI adapters"
-set name=pkg.summary value="Solaris IMA Software Initiator Plugin"
+set name=pkg.summary value="IMA Software Initiator Plugin"
 set name=info.classification \
     value="org.opensolaris.category.2008:Applications/Plug-ins and Run-times"
 set name=variant.arch value=$(ARCH)

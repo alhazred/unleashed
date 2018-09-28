@@ -24,8 +24,8 @@
 #
 
 set name=pkg.fmri value=pkg:/system/network/routing/vrrp@$(PKGVERS)
-set name=pkg.description value="Solaris VRRP protocol service"
-set name=pkg.summary value="Solaris VRRP protocol"
+set name=pkg.description value="VRRP protocol service"
+set name=pkg.summary value="VRRP protocol"
 set name=info.classification \
     value="org.opensolaris.category.2008:System/Administration and Configuration"
 set name=variant.arch value=$(ARCH)

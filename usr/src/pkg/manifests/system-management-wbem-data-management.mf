@@ -25,7 +25,7 @@
 
 set name=pkg.fmri value=pkg:/system/management/wbem/data-management@$(PKGVERS)
 set name=pkg.description value="software for WBEM/CIM data device management"
-set name=pkg.summary value="Solaris Data Management WBEM/CIM API"
+set name=pkg.summary value="Data Management WBEM/CIM API"
 set name=info.classification \
     value="org.opensolaris.category.2008:System/Administration and Configuration"
 set name=variant.arch value=$(ARCH)

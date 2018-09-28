@@ -25,8 +25,8 @@
 
 set name=pkg.fmri value=pkg:/service/network/load-balancer/ilb@$(PKGVERS)
 set name=pkg.description \
-    value="Integrated IP layer 3/4 load balancer for Solaris"
-set name=pkg.summary value="Integrated IP layer 3/4 load balancer for Solaris"
+    value="Integrated IP layer 3/4 load balancer"
+set name=pkg.summary value="Integrated IP layer 3/4 load balancer"
 set name=info.classification \
     value="org.opensolaris.category.2008:System/Administration and Configuration"
 set name=variant.arch value=$(ARCH)

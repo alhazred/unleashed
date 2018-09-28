@@ -31,8 +31,8 @@
 <include global_zone_only_component>
 set name=pkg.fmri value=pkg:/storage/mpathadm@$(PKGVERS)
 set name=pkg.description \
-    value="Path Administration Utility for a Solaris Multipathing device"
-set name=pkg.summary value="Solaris Multipathing CLI"
+    value="Path Administration Utility for a Multipathing device"
+set name=pkg.summary value="Multipathing CLI"
 set name=info.classification \
     value="org.opensolaris.category.2008:Applications/System Utilities"
 set name=variant.arch value=$(ARCH)

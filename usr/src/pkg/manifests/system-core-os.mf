@@ -34,7 +34,7 @@
 set name=pkg.fmri value=pkg:/system/core-os@$(PKGVERS)
 set name=pkg.description \
     value="core software for a specific instruction-set architecture"
-set name=pkg.summary value="Core Solaris"
+set name=pkg.summary value="Core OS"
 set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=dev group=sys

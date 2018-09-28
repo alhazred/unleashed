@@ -25,8 +25,8 @@
 
 set name=pkg.fmri value=pkg:/service/storage/isns@$(PKGVERS)
 set name=pkg.description \
-    value="Solaris internet Storage Name Service(iSNS) Server"
-set name=pkg.summary value="Solaris iSNS Server"
+    value="internet Storage Name Service(iSNS) Server"
+set name=pkg.summary value="iSNS Server"
 set name=info.classification \
     value=org.opensolaris.category.2008:System/Hardware
 set name=variant.arch value=$(ARCH)

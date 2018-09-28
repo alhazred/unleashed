@@ -24,8 +24,8 @@
 #
 
 set name=pkg.fmri value=pkg:/service/resource-cap@$(PKGVERS)
-set name=pkg.description value="Solaris Resource Capping Daemon"
-set name=pkg.summary value="Solaris Resource Capping Daemon"
+set name=pkg.description value="Resource Capping Daemon"
+set name=pkg.summary value="Resource Capping Daemon"
 set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=lib

@@ -26,7 +26,7 @@
 set name=pkg.fmri value=pkg:/system/network@$(PKGVERS)
 set name=pkg.description \
     value="core software for network infrastructure configuration"
-set name=pkg.summary value="Core Solaris Network Infrastructure"
+set name=pkg.summary value="Core Network Infrastructure"
 set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=etc group=sys

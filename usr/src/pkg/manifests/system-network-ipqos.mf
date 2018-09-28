@@ -30,7 +30,7 @@
 #
 <include global_zone_only_component>
 set name=pkg.fmri value=pkg:/system/network/ipqos@$(PKGVERS)
-set name=pkg.description value="Solaris IP Quality of Service"
+set name=pkg.description value="IP Quality of Service"
 set name=pkg.summary value="IP QoS"
 set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
