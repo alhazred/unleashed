@@ -47,5 +47,3 @@ file path=kernel/drv/sdp.conf group=sys
 file path=usr/share/man/man7d/sdp.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble

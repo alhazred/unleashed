@@ -480,8 +480,6 @@ license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode
 license lic_CDDL license=lic_CDDL
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble
 license share/man/man3c/THIRDPARTYLICENSE.arc4random \
     license=share/man/man3c/THIRDPARTYLICENSE.arc4random
 license share/man/man3c/THIRDPARTYLICENSE.getentropy \

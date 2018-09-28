@@ -96,8 +96,6 @@ hardlink path=kernel/sys/nfs target=../../kernel/fs/nfs
 license cr_ATT license=cr_ATT
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble
 link path=usr/lib/fs/nfs/mount target=../../../../etc/fs/nfs/mount
 link path=usr/lib/nfs/libmapid.so target=libmapid.so.1
 link path=usr/sbin/showmount target=../lib/fs/nfs/showmount

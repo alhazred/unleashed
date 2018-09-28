@@ -40,5 +40,3 @@ driver name=tavor perms="* 0666 root sys" \
 file path=kernel/drv/tavor group=sys
 file path=kernel/drv/tavor.conf group=sys
 license cr_Sun license=cr_Sun
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble

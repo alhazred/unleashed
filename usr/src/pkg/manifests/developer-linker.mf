@@ -101,8 +101,6 @@ hardlink path=usr/bin/truss target=../../usr/lib/isaexec
 license cr_ATT license=cr_ATT
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble
 link path=usr/lib/ld/$(ARCH64)/map.above4G target=../map.above4G
 link path=usr/lib/ld/$(ARCH64)/map.below4G target=../map.below4G
 link path=usr/lib/ld/$(ARCH64)/map.default target=../map.default

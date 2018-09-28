@@ -50,5 +50,3 @@ file path=usr/share/man/man7d/ibdm.7d
 file path=usr/share/man/man7d/ibtl.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble

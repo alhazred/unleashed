@@ -55,5 +55,3 @@ file path=usr/share/dat/SUNWudaplt.conf group=sys mode=0644
 hardlink path=etc/rc2.d/S81dodatadm.udaplt \
     target=../../etc/init.d/dodatadm.udaplt
 license cr_Sun license=cr_Sun
-license lic_OSBL license=lic_OSBL
-license lic_OSBL_preamble license=lic_OSBL_preamble
