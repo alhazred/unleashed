@@ -136,14 +136,11 @@ main(int argc, char *argv[])
 
 		/* do not set init strings to terminal */
 		no_init = OPT_ON;
-
-		/* repaint from top of screen */
-		top_scroll = OPT_OFF;
 	}
 
 	s = lgetenv(less_is_more ? "MORE" : "LESS");
 	if (s != NULL)
-		scan_option(estrdup(s));
+		scan_option(estrdup(s), 1);
 
 #define	isoptstring(s)	(((s)[0] == '-' || (s)[0] == '+') && (s)[1] != '\0')
 	while (argc > 0 && (isoptstring(*argv) || isoptpending())) {
@@ -151,7 +148,7 @@ main(int argc, char *argv[])
 		argc--;
 		if (strcmp(s, "--") == 0)
 			break;
-		scan_option(s);
+		scan_option(s, 0);
 	}
 #undef isoptstring
 
