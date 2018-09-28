@@ -4343,9 +4343,6 @@ lib/pylibbe/amd64/libbe_py.so
 lib/pylibbe/amd64/pics/
 lib/pylibbe/i386/libbe_py.so
 lib/pylibbe/i386/pics/
-lib/pysolaris/common/__init__.pyc
-lib/pysolaris/i386/misc.so
-lib/pysolaris/i386/pics/
 lib/rpcsec_gss/amd64/pics/
 lib/rpcsec_gss/amd64/rpcsec.so.1
 lib/rpcsec_gss/generic.po

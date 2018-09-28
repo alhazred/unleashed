@@ -9,7 +9,7 @@ was changed.
 
 <next> release
 --------------
- - pyzfs
+ - pyzfs & pysolaris
 
 1.1 release
 -----------
