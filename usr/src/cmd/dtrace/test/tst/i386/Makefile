@@ -26,6 +26,51 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
+CSRCS = ustack/tst.annotated.c \
+	ustack/tst.helper.c
+
+DSRCS = arrays/tst.uregsarray.d \
+	error/tst.DTRACEFLT_DIVZERO.d \
+	funcs/tst.badcopyin.d \
+	funcs/tst.badcopyinstr.d \
+	funcs/tst.badcopyout.d \
+	funcs/tst.badcopyoutstr.d \
+	pid/tst.badinstr.d \
+	pid/tst.branch.d \
+	pid/tst.embedded.d \
+	pid/tst.ret.d \
+	ustack/annotated_helper.d \
+	ustack/helper_helper.d \
+	ustack/tst.annotated.d \
+	ustack/tst.circstack.d \
+	ustack/tst.helper.d
+
+SSRCS = pid/tst.badinstr.s \
+	pid/tst.branch.s \
+	pid/tst.embedded.s \
+	pid/tst.ret.s \
+	pid/tst.retlist.s \
+	ustack/tst.circstack.s
+
+TSTS =	arrays/tst.uregsarray.d \
+	error/tst.DTRACEFLT_DIVZERO.d \
+	funcs/tst.badcopyin.d \
+	funcs/tst.badcopyinstr.d \
+	funcs/tst.badcopyout.d \
+	funcs/tst.badcopyoutstr.d \
+	pid/tst.badinstr.d \
+	pid/tst.branch.d \
+	pid/tst.embedded.d \
+	pid/tst.ret.d \
+	pid/tst.retlist.ksh \
+	ustack/tst.annotated.d \
+	ustack/tst.annotated.d.out \
+	ustack/tst.circstack.d \
+	ustack/tst.helper.d \
+	ustack/tst.helper.d.out
+
+EXES =
+
 include ../Makefile.com
 
 ASFLAGS += -D_ASM $(CPPFLAGS)

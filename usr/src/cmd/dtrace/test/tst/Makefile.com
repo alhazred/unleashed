@@ -34,14 +34,6 @@ SUBDIR :sh= basename `pwd`
 TSTDIR = $(ROOTTST)/$(SUBDIR)
 DSTYLE = $(ROOTOPTPKG)/bin/dstyle
 
-CSRCS :sh= git ls-files '*.c'
-SSRCS :sh= git ls-files '*.s'
-DSRCS :sh= git ls-files '*.d'
-
-TSTS :sh= git ls-files '*/tst.*.d' '*/err.*.d' '*/tst.*.d.out' '*/err.*.d.out' \
-    '*/tst.*.ksh' '*/err.*.ksh' '*/tst.*.ksh.out' '*/drp.*.d' '*/get.*.pl'
-
-EXES :sh= git ls-files '*.exe' '*.pl'
 EXES += $(CSRCS:%.c=%.exe)
 EXES += $(SSRCS:%.s=%.exe)
 
