@@ -2118,7 +2118,6 @@ cmd/ptools/pwait/i386/
 cmd/ptools/pwdx/amd64/
 cmd/ptools/pwdx/i386/
 cmd/pwck/pwck
-cmd/pyzfs/pyzfs.pyc
 cmd/raidctl/raidctl
 cmd/raidctl/raidctl.po
 cmd/ramdiskadm/main.po
@@ -4347,17 +4346,6 @@ lib/pylibbe/i386/pics/
 lib/pysolaris/common/__init__.pyc
 lib/pysolaris/i386/misc.so
 lib/pysolaris/i386/pics/
-lib/pyzfs/common/__init__.pyc
-lib/pyzfs/common/allow.pyc
-lib/pyzfs/common/dataset.pyc
-lib/pyzfs/common/groupspace.pyc
-lib/pyzfs/common/holds.pyc
-lib/pyzfs/common/table.pyc
-lib/pyzfs/common/unallow.pyc
-lib/pyzfs/common/userspace.pyc
-lib/pyzfs/common/util.pyc
-lib/pyzfs/i386/ioctl.so
-lib/pyzfs/i386/pics/
 lib/rpcsec_gss/amd64/pics/
 lib/rpcsec_gss/amd64/rpcsec.so.1
 lib/rpcsec_gss/generic.po

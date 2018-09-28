@@ -246,7 +246,6 @@ DIRS= \
 	/usr/lib/python$(PYTHON_VERSION)/vendor-packages \
 	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/64 \
 	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/solaris \
-	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/zfs \
 	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/beadm \
 	/usr/lib/rcap \
 	/usr/lib/rcap/$(MACH32) \

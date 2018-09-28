@@ -228,7 +228,6 @@ SUBDIRS +=				\
 	policykit	\
 	pylibbe		\
 	pysolaris	\
-	pyzfs		\
 	raidcfg_plugins	\
 	rpcsec_gss	\
 	sasl_plugins	\
@@ -611,7 +610,6 @@ pkcs11:		libcryptoutil libgen libuuid
 policykit:	dbusdeps
 pylibbe:	libbe libzfs
 pysolaris:	libsec libidmap
-pyzfs:		libzfs
 raidcfg_plugins: libraidcfg librcm libcfgadm libpicl libpicltree
 rpcsec_gss:	libgss
 sasl_plugins:	pkcs11 libgss libsasl

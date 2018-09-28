@@ -294,7 +294,6 @@ COMMON_SUBDIRS=		\
 	psrset		\
 	ptools		\
 	pwck		\
-	pyzfs		\
 	raidctl		\
 	ramdiskadm	\
 	rcap		\
