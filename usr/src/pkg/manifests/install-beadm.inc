@@ -32,7 +32,6 @@ dir path=usr/lib/$(ARCH64)
 dir path=usr/lib/python$(PYTHON_VERSION)
 dir path=usr/lib/python$(PYTHON_VERSION)/vendor-packages
 dir path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/64
-dir path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/beadm
 dir path=usr/sbin
 dir path=usr/share
 dir path=usr/share/man
