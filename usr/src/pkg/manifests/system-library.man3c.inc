@@ -11,9 +11,11 @@
 
 #
 # Copyright 2011, Richard Lowe
-# Copyright 2013 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2018 Nexenta Systems, Inc.
 # Copyright 2013 OmniTI Computer Consulting, Inc. All rights reserved.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2018 Jason King
+# Copyright 2018, Joyent, Inc.
 #
 
 file path=usr/share/man/man3c/__fbufsize.3c
@@ -168,6 +170,7 @@ file path=usr/share/man/man3c/getlogin.3c
 file path=usr/share/man/man3c/getmntent.3c
 file path=usr/share/man/man3c/getnetgrent.3c
 file path=usr/share/man/man3c/getopt.3c
+file path=usr/share/man/man3c/getopt_long.3c
 file path=usr/share/man/man3c/getpagesize.3c
 file path=usr/share/man/man3c/getpagesizes.3c
 file path=usr/share/man/man3c/getpass.3c

@@ -150,6 +150,7 @@ MAN = __fbufsize.3c \
       getnetgrent.3c \
       get_nprocs.3c \
       getopt.3c \
+      getopt_long.3c \
       getpagesize.3c \
       getpagesizes.3c \
       getpass.3c \
