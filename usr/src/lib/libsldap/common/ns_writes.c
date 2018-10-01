@@ -67,9 +67,9 @@ static int escape_str(char *, char *);
 
 /*
  * If the rdn is a mapped attr:
- * 	return NS_LDAP_SUCCESS and a new_dn.
+ *	return NS_LDAP_SUCCESS and a new_dn.
  * If no mapped attr is found in the rdn:
- * 	return NS_LDAP_SUCCESS and *new_dn == NULL
+ *	return NS_LDAP_SUCCESS and *new_dn == NULL
  * For example:
  *  service = abc
  *  dn =  cn=foo,dc=bar,dc=com
@@ -160,7 +160,7 @@ init_bval_mod(
 	int	mop,
 	char	*mtype,
 	char	*mvptr,
-	int 	mvlen)
+	int	mvlen)
 {
 
 	struct berval	**bmodval;
@@ -654,16 +654,16 @@ __s_cvt_freeEntryRdn(ns_ldap_entry_t **entry, char **rdn)
  */
 static int
 write_state_machine(
-	int 		ldap_op,
-	char 		*dn,
+	int		ldap_op,
+	char		*dn,
 	LDAPMod		**mods,
 	const ns_cred_t *cred,
-	const int 	flags,
+	const int	flags,
 	ns_ldap_error_t ** errorp)
 {
 	ConnectionID    connectionId = -1;
 	Connection	*conp = NULL;
-	LDAPMessage 	*res;
+	LDAPMessage	*res;
 	char		*target_dn = NULL;
 	char		errstr[MAXERROR];
 	int		rc = NS_LDAP_SUCCESS;
@@ -1518,7 +1518,7 @@ __s_mk_entry(char **objclass, int max_attr)
  */
 static int
 __s_cvt_passwd(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -1660,7 +1660,7 @@ static int escape_str(char *escstr, char *str)
  */
 static int
 __s_cvt_project(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -1670,7 +1670,7 @@ __s_cvt_project(const void *data, char **rdn,
 	struct project	*ptr;
 	int		max_attr = 9;
 	char		ibuf[11];
-	static char 	*oclist[] = {
+	static char	*oclist[] = {
 			"SolarisProject",
 			"top",
 			NULL
@@ -1772,7 +1772,7 @@ __s_cvt_project(const void *data, char **rdn,
  */
 static int
 __s_cvt_shadow(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -1896,7 +1896,7 @@ __s_cvt_shadow(const void *data, char **rdn,
  */
 static int
 __s_cvt_group(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2000,7 +2000,7 @@ __s_cvt_group(const void *data, char **rdn,
  */
 static int
 __s_cvt_hosts(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2134,7 +2134,7 @@ __s_cvt_hosts(const void *data, char **rdn,
  */
 static int
 __s_cvt_rpc(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2224,7 +2224,7 @@ __s_cvt_rpc(const void *data, char **rdn,
  */
 static int
 __s_cvt_protocols(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2312,7 +2312,7 @@ __s_cvt_protocols(const void *data, char **rdn,
  */
 static int
 __s_cvt_services(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2416,7 +2416,7 @@ __s_cvt_services(const void *data, char **rdn,
  */
 static int
 __s_cvt_networks(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2508,7 +2508,7 @@ __s_cvt_networks(const void *data, char **rdn,
  */
 static int
 __s_cvt_netmasks(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2547,11 +2547,11 @@ __s_cvt_netmasks(const void *data, char **rdn,
 	}
 
 	/* Error check the data and add the attributes */
-		rc = __s_add_attr(e, "ipNetworkNumber", ptr->netnumber);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
+	rc = __s_add_attr(e, "ipNetworkNumber", ptr->netnumber);
+	if (rc != NS_LDAP_SUCCESS) {
+		__s_cvt_freeEntryRdn(entry, rdn);
+		return (rc);
+	}
 
 	if (ptr->netmask != NULL) {
 		rc = __s_add_attr(e, "ipNetmaskNumber", ptr->netmask);
@@ -2571,7 +2571,7 @@ __s_cvt_netmasks(const void *data, char **rdn,
  */
 static int
 __s_cvt_netgroups(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2596,7 +2596,7 @@ __s_cvt_netgroups(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_netgroups *)data;
 
-	if (ptr->name == NULL) {
+	if (ptr->name == NULL || *ptr->name == '\0') {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2611,12 +2611,10 @@ __s_cvt_netgroups(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->name != NULL) {
-		rc = __s_add_attr(e, "cn", ptr->name);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
+	rc = __s_add_attr(e, "cn", ptr->name);
+	if (rc != NS_LDAP_SUCCESS) {
+		__s_cvt_freeEntryRdn(entry, rdn);
+		return (rc);
 	}
 
 	/* Error check the data and add the attributes */
@@ -2669,7 +2667,7 @@ __s_cvt_netgroups(const void *data, char **rdn,
  */
 static int
 __s_cvt_bootparams(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2695,7 +2693,7 @@ __s_cvt_bootparams(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_bootp *)data;
 
-	if (ptr->name == NULL) {
+	if (ptr->name == NULL || *ptr->name == '\0') {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2710,12 +2708,10 @@ __s_cvt_bootparams(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->name != NULL) {
-		rc = __s_add_attr(e, "cn", ptr->name);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
+	rc = __s_add_attr(e, "cn", ptr->name);
+	if (rc != NS_LDAP_SUCCESS) {
+		__s_cvt_freeEntryRdn(entry, rdn);
+		return (rc);
 	}
 
 	/* Error check the data and add the attributes */
@@ -2750,7 +2746,7 @@ __s_cvt_bootparams(const void *data, char **rdn,
  */
 static int
 __s_cvt_ethers(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2774,7 +2770,7 @@ __s_cvt_ethers(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_ethers *)data;
 
-	if (ptr->name == NULL || ptr->ether == NULL) {
+	if (ptr->name == NULL || *ptr->name == '\0' || ptr->ether == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2923,7 +2919,7 @@ modify_ethers_bootp(
  */
 static int
 __s_cvt_publickey(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -2945,7 +2941,8 @@ __s_cvt_publickey(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_pubkey *)data;
 
-	if (ptr->name == NULL || ptr->pubkey == NULL || ptr->privkey == NULL) {
+	if (ptr->name == NULL || *ptr->name == '\0' || ptr->pubkey == NULL ||
+	    ptr->privkey == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -2986,7 +2983,7 @@ __s_cvt_publickey(const void *data, char **rdn,
  */
 static int
 __s_cvt_aliases(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3011,7 +3008,7 @@ __s_cvt_aliases(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_alias *)data;
 
-	if (ptr->alias == NULL) {
+	if (ptr->alias == NULL || *ptr->alias == '\0') {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -3026,12 +3023,10 @@ __s_cvt_aliases(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->alias != NULL) {
-		rc = __s_add_attr(e, "mail", (char *)ptr->alias);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
+	rc = __s_add_attr(e, "mail", (char *)ptr->alias);
+	if (rc != NS_LDAP_SUCCESS) {
+		__s_cvt_freeEntryRdn(entry, rdn);
+		return (rc);
 	}
 
 	/* Error check the data and add the attributes */
@@ -3066,7 +3061,7 @@ __s_cvt_aliases(const void *data, char **rdn,
  */
 static int
 __s_cvt_auto_mount(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3109,7 +3104,8 @@ __s_cvt_auto_mount(const void *data, char **rdn,
 	/* Convert the structure */
 	ptr = (struct _ns_automount *)data;
 
-	if (ptr->key == NULL || ptr->value == NULL || ptr->mapname == NULL) {
+	if (ptr->key == NULL || *ptr->key == '\0' || ptr->value == NULL ||
+	    ptr->mapname == NULL) {
 		__ns_ldap_freeEntry(e);
 		*entry = NULL;
 		return (NS_LDAP_INVALID_PARAM);
@@ -3125,13 +3121,11 @@ __s_cvt_auto_mount(const void *data, char **rdn,
 		return (NS_LDAP_MEMORY);
 	}
 
-	if (ptr->key != NULL) {
-		rc = __s_add_attr(e, version1 ? "cn" : "automountKey",
-		    (char *)ptr->key);
-		if (rc != NS_LDAP_SUCCESS) {
-			__s_cvt_freeEntryRdn(entry, rdn);
-			return (rc);
-		}
+	rc = __s_add_attr(e, version1 ? "cn" : "automountKey",
+	    (char *)ptr->key);
+	if (rc != NS_LDAP_SUCCESS) {
+		__s_cvt_freeEntryRdn(entry, rdn);
+		return (rc);
 	}
 
 	rc = __s_add_attr(e, version1 ? "nisMapEntry" : "automountInformation",
@@ -3169,7 +3163,7 @@ __s_cvt_auto_mount(const void *data, char **rdn,
  */
 static int
 __s_cvt_authattr(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3261,7 +3255,7 @@ __s_cvt_authattr(const void *data, char **rdn,
  */
 static int
 __s_cvt_execattr(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3372,7 +3366,7 @@ __s_cvt_execattr(const void *data, char **rdn,
  */
 static int
 __s_cvt_profattr(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3456,7 +3450,7 @@ __s_cvt_profattr(const void *data, char **rdn,
  */
 static int
 __s_cvt_userattr(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3538,7 +3532,7 @@ __s_cvt_userattr(const void *data, char **rdn,
  */
 static int
 __s_cvt_audituser(const void *data, char **rdn,
-	ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
+    ns_ldap_entry_t **entry, ns_ldap_error_t **errorp)
 {
 	ns_ldap_entry_t	*e;
 	int		rc;
@@ -3598,7 +3592,6 @@ __s_cvt_audituser(const void *data, char **rdn,
 
 	return (NS_LDAP_SUCCESS);
 }
-
 /*
  * Add Typed Entry Conversion data structures
  */
@@ -3655,7 +3648,7 @@ int  __ns_ldap_addTypedEntry(
 {
 	char			*rdn = NULL, *fulldn = NULL;
 	void			**paramVal = NULL;
-	ns_ldap_entry_t 	*entry = NULL;
+	ns_ldap_entry_t		*entry = NULL;
 	const ns_ldap_attr_t	*const *modattrlist;
 	ns_ldap_search_desc_t	**sdlist;
 	char			**dns = NULL;
@@ -3834,11 +3827,9 @@ int  __ns_ldap_addTypedEntry(
  * SSD = service:ou=foo,
  */
 int
-__s_api_append_default_basedn(
-	const char *dn,
-	char **new_dn,
-	int *allocated,
-	ns_ldap_error_t **errp) {
+__s_api_append_default_basedn(const char *dn, char **new_dn, int *allocated,
+    ns_ldap_error_t **errp)
+{
 
 	int		rc = NS_LDAP_SUCCESS, len = 0;
 	void		**param = NULL;
@@ -3851,7 +3842,7 @@ __s_api_append_default_basedn(
 		return (NS_LDAP_INVALID_PARAM);
 
 	rc = __ns_ldap_getParam(NS_LDAP_SEARCH_BASEDN_P,
-		(void ***)&param, errp);
+	    (void ***)&param, errp);
 
 	if (rc != NS_LDAP_SUCCESS) {
 		if (param)

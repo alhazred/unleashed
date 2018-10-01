@@ -25,6 +25,7 @@
 /*
  * Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
  * Copyright 2016 Argo Technologies SA
+ * Copyright (c) 2018, Joyent, Inc.
  */
 
 /*
@@ -1288,7 +1289,8 @@ sata_hba_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 	}
 
 	/* read devctl ioctl data */
-	if (cmd != DEVCTL_AP_CONTROL) {
+	if (cmd != DEVCTL_AP_CONTROL && cmd >= DEVCTL_IOC &&
+	    cmd <= DEVCTL_IOC_MAX) {
 		if (ndi_dc_allochdl((void *)arg, &dcp) != NDI_SUCCESS)
 			return (EFAULT);
 
@@ -1616,9 +1618,13 @@ sata_hba_ioctl(dev_t dev, int cmd, intptr_t arg, int mode, cred_t *credp,
 	if (dcp) {
 		ndi_dc_freehdl(dcp);
 	}
-	mutex_enter(&SATA_CPORT_INFO(sata_hba_inst, cport)->cport_mutex);
-	cportinfo->cport_event_flags &= ~SATA_APCTL_LOCK_PORT_BUSY;
-	mutex_exit(&SATA_CPORT_INFO(sata_hba_inst, cport)->cport_mutex);
+
+	if (cmd >= DEVCTL_IOC && cmd <= DEVCTL_IOC_MAX) {
+		mutex_enter(&SATA_CPORT_INFO(sata_hba_inst,
+		    cport)->cport_mutex);
+		cportinfo->cport_event_flags &= ~SATA_APCTL_LOCK_PORT_BUSY;
+		mutex_exit(&SATA_CPORT_INFO(sata_hba_inst, cport)->cport_mutex);
+	}
 
 	return (rv);
 }

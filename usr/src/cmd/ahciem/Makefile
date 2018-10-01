@@ -10,37 +10,24 @@
 #
 
 #
-# Copyright 2015 Nexenta Systems, Inc.
 # Copyright (c) 2018, Joyent, Inc.
 #
 
-
-PROG= nvmeadm
-
-OBJS= nvmeadm.o nvmeadm_dev.o nvmeadm_print.o
-SRCS= $(OBJS:%.o=%.c)
+PROG= ahciem
 
 include ../Makefile.cmd
-include ../Makefile.ctf
+
+ROOTCMDDIR = $(ROOTLIB)/ahci
+CPPFLAGS += -I$(SRCTOP)/include
+CFLAGS += $(CCVERBOSE)
+LDLIBS += -ldevinfo
 
 .KEEP_STATE:
 
-LDLIBS +=	-ldevinfo
-C99MODE=	$(C99_ENABLE)
-
 all: $(PROG)
 
-$(PROG): $(OBJS)
-	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
-	$(POST_PROCESS)
-
-%.o: %.c
-	$(COMPILE.c) $<
-	$(POST_PROCESS_O)
-
-install: all $(ROOTUSRSBINPROG)
+install: all $(ROOTCMD)
 
 clean:
-	$(RM) $(OBJS) $(PROG)
 
 include ../Makefile.targ

@@ -21,6 +21,7 @@
 
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -30,11 +31,13 @@
 #
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
+dir path=usr/lib/ahci
 dir path=usr/share/man
 dir path=usr/share/man/man7d
 driver name=ahci alias=pciclass,010601 class=scsi-self-identifying \
     perms="* 0644 root sys"
 file path=kernel/drv/ahci group=sys
+file path=usr/lib/ahci/ahciem mode=0555
 file path=usr/share/man/man7d/ahci.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
