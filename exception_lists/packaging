@@ -28,6 +28,7 @@
 # Copyright 2018 Nexenta Systems, Inc.
 # Copyright 2017 Toomas Soome <tsoome@me.com>
 # Copyright 2017 RackTop Systems.
+# Copyright 2018, Joyent, Inc.
 #
 
 #
@@ -537,8 +538,8 @@ usr/include/libbe_priv.h
 #
 # libsaveargs is private
 #
-usr/include/saveargs.h            	i386
-usr/lib/amd64/libsaveargs.so      	i386
+usr/include/saveargs.h			i386
+usr/lib/amd64/libsaveargs.so		i386
 usr/lib/amd64/libstandsaveargs.so	i386
 
 #
@@ -601,3 +602,10 @@ usr/bin/ctfmerge
 usr/include/libsff.h
 usr/lib/amd64/libsff.so			i386
 usr/lib/libsff.so
+
+#
+# libcustr is private
+#
+usr/include/libcustr.h
+lib/amd64/libcustr.so		i386
+lib/libcustr.so

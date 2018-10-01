@@ -24,6 +24,8 @@
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright (c) 2013 Gary Mills
 # Copyright 2017 Nexenta Systems, Inc.
+# Copyright 2017 RackTop Systems.
+# Copyright 2018, Joyent, Inc.
 #
 
 <include system-library.man3.inc>
@@ -165,6 +167,7 @@ file path=lib/$(ARCH64)/libcmdutils.so.1
 file path=lib/$(ARCH64)/libcontract.so.1
 file path=lib/$(ARCH64)/libcryptoutil.so.1
 file path=lib/$(ARCH64)/libctf.so.1
+file path=lib/$(ARCH64)/libcustr.so.1
 file path=lib/$(ARCH64)/libdevice.so.1
 file path=lib/$(ARCH64)/libdevid.so.1
 file path=lib/$(ARCH64)/libdevinfo.so.1
@@ -234,6 +237,7 @@ file path=lib/libcmdutils.so.1
 file path=lib/libcontract.so.1
 file path=lib/libcryptoutil.so.1
 file path=lib/libctf.so.1
+file path=lib/libcustr.so.1
 file path=lib/libdevice.so.1
 file path=lib/libdevid.so.1
 file path=lib/libdevinfo.so.1

@@ -22,7 +22,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# Copyright 2014 Joyent, Inc.
+# Copyright 2018 Joyent, Inc.
 #
 # cmd/mailx/Makefile
 
@@ -63,7 +63,7 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-clobbered
-LDLIBS +=	-lmail -lcmdutils
+LDLIBS +=	-lmail -lcustr
 LDFLAGS +=	$(MAPFILE.NGB:%=-Wl,-M%)
 
 CLOBBERFILES += $(MAILXHELP)

@@ -99,6 +99,7 @@ SUBDIRS +=				\
 	libcrypt	\
 	libcryptoutil	\
 	libctf		\
+	libcustr	\
 	libdevice	\
 	libdevid	\
 	libdevinfo	\
@@ -338,6 +339,7 @@ HDRSUBDIRS=				\
 	libcpc		\
 	libcryptoutil	\
 	libctf		\
+	libcustr	\
 	libdevice	\
 	libdevid	\
 	libdevinfo	\
