@@ -26,7 +26,8 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-CSRCS = ustack/tst.annotated.c \
+CSRCS = pid/tst.uregswrite.c \
+	ustack/tst.annotated.c \
 	ustack/tst.helper.c
 
 DSRCS = arrays/tst.uregsarray.d \
@@ -39,6 +40,7 @@ DSRCS = arrays/tst.uregsarray.d \
 	pid/tst.branch.d \
 	pid/tst.embedded.d \
 	pid/tst.ret.d \
+	pid/tst.uregswrite.d \
 	ustack/annotated_helper.d \
 	ustack/helper_helper.d \
 	ustack/tst.annotated.d \
@@ -63,6 +65,7 @@ TSTS =	arrays/tst.uregsarray.d \
 	pid/tst.embedded.d \
 	pid/tst.ret.d \
 	pid/tst.retlist.ksh \
+	pid/tst.uregswrite.d \
 	ustack/tst.annotated.d \
 	ustack/tst.annotated.d.out \
 	ustack/tst.circstack.d \

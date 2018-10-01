@@ -24,6 +24,7 @@
  * Use is subject to license terms.
  *
  * Copyright 2012 Nexenta Systems, Inc. All rights reserved.
+ * Copyright (c) 2018, Joyent, Inc.
  */
 
 #include <sys/asm_linkage.h>
@@ -654,8 +655,15 @@ ucode_write(xc_arg_t arg1, xc_arg_t unused2, xc_arg_t unused3)
 			return (0);
 	}
 
-	if (!on_trap(&otd, OT_DATA_ACCESS))
+	if (!on_trap(&otd, OT_DATA_ACCESS)) {
+		/*
+		 * On some platforms a cache invalidation is required for the
+		 * ucode update to be successful due to the parts of the
+		 * processor that the microcode is updating.
+		 */
+		invalidate_cache();
 		wrmsr(ucode->write_msr, (uintptr_t)uusp->ucodep);
+	}
 
 	no_trap();
 	ucode->read_rev(uinfop);
@@ -697,6 +705,12 @@ ucode_load_intel(ucode_file_t *ufp, cpu_ucode_info_t *uinfop, cpu_t *cp)
 	ASSERT(ucode);
 
 	kpreempt_disable();
+	/*
+	 * On some platforms a cache invalidation is required for the
+	 * ucode update to be successful due to the parts of the
+	 * processor that the microcode is updating.
+	 */
+	invalidate_cache();
 	wrmsr(ucode->write_msr, (uintptr_t)ucodefp->uf_body);
 	ucode->read_rev(uinfop);
 	kpreempt_enable();
@@ -927,8 +941,11 @@ ucode_update(uint8_t *ucodep, int size)
 
 	mutex_exit(&cpu_lock);
 
-	if (!found)
+	if (!found) {
 		rc = search_rc;
+	} else if (rc == EM_OK) {
+		cpuid_post_ucodeadm();
+	}
 
 	return (rc);
 }

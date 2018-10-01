@@ -13,8 +13,7 @@
 # Copyright (c) 2017, Joyent, Inc.
 #
 
-PROG= dltraninfo dlled
-LINTPROGS= $(PROG:%=%.ln)
+PROG= dltraninfo dlsend dlrecv dlled
 
 include ../Makefile.cmd
 
@@ -23,8 +22,13 @@ CFLAGS += $(CCVERBOSE)
 
 dltraninfo :=   LDLIBS += -ldladm -lsff -lnvpair
 dlled :=	LDLIBS += -ldladm
+dlsend :=	LDLIBS += -ldlpi
+dlrecv :=	LDLIBS += -ldlpi
+
 dltraninfo.ln :=   LDLIBS += -ldladm -lsff -lnvpair
 dlled.ln :=	LDLIBS += -ldladm
+dlsend.ln :=	LDLIBS += -ldlpi
+dlrecv.ln :=	LDLIBS += -ldlpi
 
 ROOTLIBDLFILES = $(PROG:%=$(ROOTLIB)/dl/%)
 
@@ -35,10 +39,5 @@ all: $(PROG)
 install: all $(ROOTCMD)
 
 clean:
-
-%.ln: %.c
-	$(LINT.c) $< $(LDLIBS)
-
-lint:	$(LINTPROGS)
 
 include ../Makefile.targ
