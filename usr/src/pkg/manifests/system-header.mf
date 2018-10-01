@@ -1480,6 +1480,7 @@ file path=usr/share/man/man3head/nl_types.h.3head
 file path=usr/share/man/man3head/poll.h.3head
 file path=usr/share/man/man3head/pthread.h.3head
 file path=usr/share/man/man3head/pwd.h.3head
+file path=usr/share/man/man3head/queue.h.3head
 file path=usr/share/man/man3head/regex.h.3head
 file path=usr/share/man/man3head/resource.h.3head
 file path=usr/share/man/man3head/sched.h.3head
