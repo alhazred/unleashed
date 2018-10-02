@@ -29,10 +29,6 @@
 #
 COMMON_SUBDIRS=	lib .WAIT common .WAIT
 
-sparc_SUBDIRS=	sun4u sun4v .WAIT
-
-sparc_MSGSUBDIRS=	sun4u .WAIT
-
 i86_SUBDIRS=
 
 i86_MSGSUBDIRS=
