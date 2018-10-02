@@ -31,81 +31,81 @@
 # information about overriding the defaults.
 #
 dir path=platform group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM) group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/$(ARCH64) group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/cpu group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/dacf group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/mach group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/kernel/misc group=sys
-$(i386_ONLY)dir path=platform/$(CONFIG_PLATFORM)/ucode group=sys
+dir path=platform/$(CONFIG_PLATFORM) group=sys
+dir path=platform/$(CONFIG_PLATFORM)/$(ARCH64) group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/cpu group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/dacf group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/mach group=sys
+dir path=platform/$(CONFIG_PLATFORM)/kernel/misc group=sys
+dir path=platform/$(CONFIG_PLATFORM)/ucode group=sys
 dir path=usr/share/man/man4
-$(i386_ONLY)driver name=acpinex alias=acpivirtnex
-$(i386_ONLY)driver name=acpippm
-$(i386_ONLY)driver name=amd_iommu perms="* 0644 root sys" \
+driver name=acpinex alias=acpivirtnex
+driver name=acpippm
+driver name=amd_iommu perms="* 0644 root sys" \
     alias=pci1002,5a23 \
     alias=pci1022,11ff
-$(i386_ONLY)driver name=balloon perms="* 0444 root sys"
-$(i386_ONLY)driver name=cpudrv alias=cpu
-$(i386_ONLY)driver name=domcaps perms="* 0444 root sys"
-$(i386_ONLY)driver name=evtchn perms="* 0666 root sys"
-$(i386_ONLY)driver name=isa alias=pciclass,060100 class=sysbus
-$(i386_ONLY)driver name=npe alias=pciex_root_complex
-$(i386_ONLY)driver name=pci class=pci
-$(i386_ONLY)driver name=pit_beep alias=SUNW,pit_beep
+driver name=balloon perms="* 0444 root sys"
+driver name=cpudrv alias=cpu
+driver name=domcaps perms="* 0444 root sys"
+driver name=evtchn perms="* 0666 root sys"
+driver name=isa alias=pciclass,060100 class=sysbus
+driver name=npe alias=pciex_root_complex
+driver name=pci class=pci
+driver name=pit_beep alias=SUNW,pit_beep
 driver name=ppm
-$(i386_ONLY)driver name=privcmd perms="* 0666 root sys"
-$(i386_ONLY)driver name=rootnex
-$(i386_ONLY)driver name=xdb
-$(i386_ONLY)driver name=xdf
-$(i386_ONLY)driver name=xenbus perms="* 0666 root sys"
-$(i386_ONLY)driver name=xencons
-$(i386_ONLY)driver name=xnbe alias=xnb,ioemu
-$(i386_ONLY)driver name=xnbo \
+driver name=privcmd perms="* 0666 root sys"
+driver name=rootnex
+driver name=xdb
+driver name=xdf
+driver name=xenbus perms="* 0666 root sys"
+driver name=xencons
+driver name=xnbe alias=xnb,ioemu
+driver name=xnbo \
     alias=xnb \
     alias=xnb,SUNW_mac
-$(i386_ONLY)driver name=xnbu alias=xnb,netfront
-$(i386_ONLY)driver name=xnf
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/unix group=sys \
+driver name=xnbu alias=xnb,netfront
+driver name=xnf
+file path=platform/$(CONFIG_PLATFORM)/kernel/unix group=sys \
     mode=0755 pkg.depend.bypass-generate=dtracestubs
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu.generic group=sys \
+file path=platform/i86pc/kernel/cpu/cpu.generic group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
+file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD.15 \
+file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD.15 \
     group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel group=sys \
+file path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/dacf/consconfig_dacf group=sys \
+file path=platform/i86pc/kernel/dacf/consconfig_dacf group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/acpinex group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/acpippm group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/acpippm.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/amd_iommu group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/amd_iommu.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/cpudrv group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/isa group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/npe group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/pci group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/pit_beep group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/pit_beep.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/ppm group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/ppm.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/rootnex group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/drv/rootnex.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/mach/apix group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/mach/pcplusmp group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/mach/uppc group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/misc/acpidev group=sys mode=0755
-$(i386_ONLY)file path=platform/i86pc/kernel/misc/gfx_private group=sys \
+file path=platform/i86pc/kernel/drv/acpinex group=sys
+file path=platform/i86pc/kernel/drv/acpippm group=sys
+file path=platform/i86pc/kernel/drv/acpippm.conf group=sys
+file path=platform/i86pc/kernel/drv/amd_iommu group=sys
+file path=platform/i86pc/kernel/drv/amd_iommu.conf group=sys
+file path=platform/i86pc/kernel/drv/cpudrv group=sys
+file path=platform/i86pc/kernel/drv/isa group=sys
+file path=platform/i86pc/kernel/drv/npe group=sys
+file path=platform/i86pc/kernel/drv/pci group=sys
+file path=platform/i86pc/kernel/drv/pit_beep group=sys
+file path=platform/i86pc/kernel/drv/pit_beep.conf group=sys
+file path=platform/i86pc/kernel/drv/ppm group=sys
+file path=platform/i86pc/kernel/drv/ppm.conf group=sys
+file path=platform/i86pc/kernel/drv/rootnex group=sys
+file path=platform/i86pc/kernel/drv/rootnex.conf group=sys
+file path=platform/i86pc/kernel/mach/apix group=sys mode=0755
+file path=platform/i86pc/kernel/mach/pcplusmp group=sys mode=0755
+file path=platform/i86pc/kernel/mach/uppc group=sys mode=0755
+file path=platform/i86pc/kernel/misc/acpidev group=sys mode=0755
+file path=platform/i86pc/kernel/misc/gfx_private group=sys \
     mode=0755
-$(i386_ONLY)file path=platform/i86pc/ucode/amd-ucode.bin group=sys mode=0444 \
+file path=platform/i86pc/ucode/amd-ucode.bin group=sys mode=0444 \
     preserve=true reboot-needed=true
-$(i386_ONLY)file path=platform/i86pc/ucode/intel-ucode.txt group=sys mode=0444 \
+file path=platform/i86pc/ucode/intel-ucode.txt group=sys mode=0444 \
     preserve=true reboot-needed=true
-$(i386_ONLY)file path=usr/share/man/man4/sysbus.4
-$(i386_ONLY)file path=usr/share/man/man7d/npe.7d
+file path=usr/share/man/man4/sysbus.4
+file path=usr/share/man/man7d/npe.7d
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode
@@ -114,5 +114,5 @@ license lic_CDDL license=lic_CDDL
 license usr/src/cmd/mdb/common/libstand/THIRDPARTYLICENSE \
     license=usr/src/cmd/mdb/common/libstand/THIRDPARTYLICENSE
 license usr/src/common/bzip2/LICENSE license=usr/src/common/bzip2/LICENSE
-$(i386_ONLY)license usr/src/uts/intel/THIRDPARTYLICENSE \
+license usr/src/uts/intel/THIRDPARTYLICENSE \
     license=usr/src/uts/intel/THIRDPARTYLICENSE

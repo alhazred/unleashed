@@ -174,7 +174,6 @@ PM_TRANSFORMS= common_actions publish restart_fmri facets defaults \
 PM_INC= transforms manifests
 
 PKGMOG_DEFINES= \
-	i386_ONLY=$(POUND_SIGN) \
 	i86pc_ONLY=$(POUND_SIGN) \
 	$(PKGMACH)_ONLY= \
 	$(CONFIG_PLATFORM)_ONLY= \

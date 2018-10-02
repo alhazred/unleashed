@@ -33,7 +33,7 @@ set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=usr group=sys
 dir path=usr/bin
-$(i386_ONLY)dir path=usr/bin/$(ARCH32)
+dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
@@ -50,27 +50,27 @@ dir path=usr/share/lib/dict
 dir path=usr/share/man/man1
 dir path=usr/share/man/man5
 dir path=usr/share/man/man8
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pargs mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pcred mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pfiles mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pflags mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pldd mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/plgrp mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pmadvise mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pmap mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/ppgsz mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/ppriv mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/preap mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/prun mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/psecflags mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/psig mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pstack mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pstop mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/ptime mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/ptree mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pwait mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/pwdx mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/sort mode=0555
+file path=usr/bin/$(ARCH32)/pargs mode=0555
+file path=usr/bin/$(ARCH32)/pcred mode=0555
+file path=usr/bin/$(ARCH32)/pfiles mode=0555
+file path=usr/bin/$(ARCH32)/pflags mode=0555
+file path=usr/bin/$(ARCH32)/pldd mode=0555
+file path=usr/bin/$(ARCH32)/plgrp mode=0555
+file path=usr/bin/$(ARCH32)/pmadvise mode=0555
+file path=usr/bin/$(ARCH32)/pmap mode=0555
+file path=usr/bin/$(ARCH32)/ppgsz mode=0555
+file path=usr/bin/$(ARCH32)/ppriv mode=0555
+file path=usr/bin/$(ARCH32)/preap mode=0555
+file path=usr/bin/$(ARCH32)/prun mode=0555
+file path=usr/bin/$(ARCH32)/psecflags mode=0555
+file path=usr/bin/$(ARCH32)/psig mode=0555
+file path=usr/bin/$(ARCH32)/pstack mode=0555
+file path=usr/bin/$(ARCH32)/pstop mode=0555
+file path=usr/bin/$(ARCH32)/ptime mode=0555
+file path=usr/bin/$(ARCH32)/ptree mode=0555
+file path=usr/bin/$(ARCH32)/pwait mode=0555
+file path=usr/bin/$(ARCH32)/pwdx mode=0555
+file path=usr/bin/$(ARCH32)/sort mode=0555
 file path=usr/bin/$(ARCH64)/pargs mode=0555
 file path=usr/bin/$(ARCH64)/pcred mode=0555
 file path=usr/bin/$(ARCH64)/pfiles mode=0555

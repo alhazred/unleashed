@@ -28,15 +28,15 @@
 # global zone only.  See the include file for greater detail, as well as
 # information about overriding the defaults.
 #
-$(i386_ONLY)dir path=kernel group=sys
-$(i386_ONLY)dir path=kernel/drv group=sys
+dir path=kernel group=sys
+dir path=kernel/drv group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
-$(i386_ONLY)driver name=nxge perms="* 0600 root sys" \
+driver name=nxge perms="* 0600 root sys" \
     alias=SUNW,niusl \
     alias=pciex108e,abcd
-$(i386_ONLY)file path=kernel/drv/nxge group=sys
-$(i386_ONLY)file path=kernel/drv/nxge.conf group=sys preserve=renamenew
+file path=kernel/drv/nxge group=sys
+file path=kernel/drv/nxge.conf group=sys preserve=renamenew
 file path=usr/share/man/man7d/nxge.7d
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

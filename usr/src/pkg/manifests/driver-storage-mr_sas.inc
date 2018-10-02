@@ -35,7 +35,7 @@ dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
-$(i386_ONLY)driver name=mr_sas class=scsi-self-identifying \
+driver name=mr_sas class=scsi-self-identifying \
     alias=pciex1000,52 \
     alias=pciex1000,53 \
     alias=pciex1000,5b \

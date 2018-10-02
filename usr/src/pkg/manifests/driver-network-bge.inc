@@ -32,7 +32,7 @@ dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
-$(i386_ONLY)driver name=bge clone_perms="bge 0666 root sys" \
+driver name=bge clone_perms="bge 0666 root sys" \
     perms="* 0666 root sys" \
     alias=SUNW,bge \
     alias=pci108e,1647 \

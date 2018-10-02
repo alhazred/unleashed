@@ -17,7 +17,7 @@
 <include system-library-math.man3mvec.inc>
 dir path=lib
 dir path=lib/$(ARCH64)
-$(i386_ONLY)dir path=lib/libmvec
+dir path=lib/libmvec
 dir path=usr group=sys
 dir path=usr/include
 dir path=usr/include/iso
@@ -30,7 +30,7 @@ file path=lib/$(ARCH64)/libm.so.2
 file path=lib/$(ARCH64)/libmvec.so.1
 file path=lib/libm.so.2
 file path=lib/libmvec.so.1
-$(i386_ONLY)file path=lib/libmvec/libmvec_hwcap1.so.1
+file path=lib/libmvec/libmvec_hwcap1.so.1
 file path=usr/include/complex.h
 file path=usr/include/fenv.h
 file path=usr/include/floatingpoint.h

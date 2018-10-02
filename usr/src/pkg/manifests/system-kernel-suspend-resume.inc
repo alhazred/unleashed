@@ -28,18 +28,18 @@
 # global zone only.  See the include file for greater detail, as well as
 # information about overriding the defaults.
 #
-$(i386_ONLY)dir path=kernel group=sys
-$(i386_ONLY)dir path=kernel/drv group=sys
+dir path=kernel group=sys
+dir path=kernel/drv group=sys
 dir path=platform group=sys
-$(i386_ONLY)dir path=platform/i86pc group=sys
-$(i386_ONLY)dir path=platform/i86pc/kernel group=sys
-$(i386_ONLY)dir path=platform/i86pc/kernel/misc group=sys
+dir path=platform/i86pc group=sys
+dir path=platform/i86pc/kernel group=sys
+dir path=platform/i86pc/kernel/misc group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7
-$(i386_ONLY)driver name=srn
-$(i386_ONLY)file path=kernel/drv/srn group=sys
-$(i386_ONLY)file path=kernel/drv/srn.conf group=sys
-$(i386_ONLY)file path=platform/i86pc/kernel/misc/cpr group=sys mode=0755
+driver name=srn
+file path=kernel/drv/srn group=sys
+file path=kernel/drv/srn.conf group=sys
+file path=platform/i86pc/kernel/misc/cpr group=sys mode=0755
 file path=usr/share/man/man7/cpr.7
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

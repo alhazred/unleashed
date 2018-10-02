@@ -37,8 +37,8 @@ dir path=opt/SUNWdtrt/bin/$(ARCH64)
 dir path=opt/SUNWdtrt/tst
 dir path=opt/SUNWdtrt/tst/$(ARCH)
 dir path=opt/SUNWdtrt/tst/$(ARCH)/arrays
-$(i386_ONLY)dir path=opt/SUNWdtrt/tst/$(ARCH)/error
-$(i386_ONLY)dir path=opt/SUNWdtrt/tst/$(ARCH)/funcs
+dir path=opt/SUNWdtrt/tst/$(ARCH)/error
+dir path=opt/SUNWdtrt/tst/$(ARCH)/funcs
 dir path=opt/SUNWdtrt/tst/$(ARCH)/pid
 dir path=opt/SUNWdtrt/tst/$(ARCH)/ustack
 dir path=opt/SUNWdtrt/tst/common
@@ -133,28 +133,23 @@ file path=opt/SUNWdtrt/bin/dstyle mode=0555
 file path=opt/SUNWdtrt/bin/dtest mode=0555
 file path=opt/SUNWdtrt/bin/dtfailures mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/arrays/tst.uregsarray.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/error/tst.DTRACEFLT_DIVZERO.d \
-    mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyin.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyinstr.d \
-    mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyout.d \
-    mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyoutstr.d \
-    mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.badinstr.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.badinstr.exe mode=0555
+file path=opt/SUNWdtrt/tst/$(ARCH)/error/tst.DTRACEFLT_DIVZERO.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyin.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyinstr.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyout.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/funcs/tst.badcopyoutstr.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.badinstr.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.badinstr.exe mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.branch.d mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.branch.exe mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.embedded.d mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.embedded.exe mode=0555
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.ret.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.ret.exe mode=0555
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.retlist.exe mode=0555
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.retlist.ksh mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.uregswrite.d mode=0444
-$(i386_ONLY)file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.uregswrite.exe \
-    mode=0555
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.ret.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.ret.exe mode=0555
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.retlist.exe mode=0555
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.retlist.ksh mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.uregswrite.d mode=0444
+file path=opt/SUNWdtrt/tst/$(ARCH)/pid/tst.uregswrite.exe mode=0555
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.annotated.d mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.annotated.d.out mode=0444
 file path=opt/SUNWdtrt/tst/$(ARCH)/ustack/tst.annotated.exe mode=0555

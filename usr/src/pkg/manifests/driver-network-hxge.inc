@@ -32,7 +32,7 @@ dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
-$(i386_ONLY)driver name=hxge alias=pci108e,aaaa perms="* 0600 root sys"
+driver name=hxge alias=pci108e,aaaa perms="* 0600 root sys"
 file path=kernel/drv/hxge group=sys
 file path=kernel/drv/hxge.conf group=sys preserve=renamenew
 file path=usr/share/man/man7d/hxge.7d

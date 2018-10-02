@@ -31,8 +31,8 @@ set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=usr group=sys
 dir path=usr/platform group=sys
-$(i386_ONLY)dir path=usr/platform/i86pc group=sys
-$(i386_ONLY)dir path=usr/platform/i86pc/lib
+dir path=usr/platform/i86pc group=sys
+dir path=usr/platform/i86pc/lib
 dir path=usr/share/man/man3lib
 dir path=usr/share/man/man8
 file path=usr/share/man/man3lib/libtsalarm.3lib

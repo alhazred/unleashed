@@ -32,7 +32,7 @@ set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=usr group=sys
 dir path=usr/bin
-$(i386_ONLY)dir path=usr/bin/$(ARCH32)
+dir path=usr/bin/$(ARCH32)
 dir path=usr/bin/$(ARCH64)
 dir path=usr/include
 dir path=usr/include/sys
@@ -45,14 +45,13 @@ dir path=usr/share/man/man1
 dir path=usr/share/man/man3cpc
 dir path=usr/share/man/man3lib
 dir path=usr/share/man/man8
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/cputrack mode=0555
+file path=usr/bin/$(ARCH32)/cputrack mode=0555
 file path=usr/bin/$(ARCH64)/cputrack mode=0555
 file path=usr/include/libcpc.h
 file path=usr/include/libpctx.h
-$(i386_ONLY)file path=usr/kernel/pcbe/pcbe.AuthenticAMD group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/pcbe/pcbe.GenuineIntel.15 group=sys mode=0755
-$(i386_ONLY)file path=usr/kernel/pcbe/pcbe.GenuineIntel.6.15 group=sys \
-    mode=0755
+file path=usr/kernel/pcbe/pcbe.AuthenticAMD group=sys mode=0755
+file path=usr/kernel/pcbe/pcbe.GenuineIntel.15 group=sys mode=0755
+file path=usr/kernel/pcbe/pcbe.GenuineIntel.6.15 group=sys mode=0755
 file path=usr/lib/$(ARCH64)/libcpc.so.1
 file path=usr/lib/$(ARCH64)/libpctx.so.1
 file path=usr/lib/libcpc.so.1
@@ -87,28 +86,18 @@ file path=usr/share/man/man8/cpustat.8
 hardlink path=usr/bin/cputrack target=../lib/isaexec
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-$(i386_ONLY)license usr/src/uts/intel/pcbe/THIRDPARTYLICENSE \
+license usr/src/uts/intel/pcbe/THIRDPARTYLICENSE \
     license=usr/src/uts/intel/pcbe/THIRDPARTYLICENSE
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.23 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.26 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.28 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.29 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.30 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.31 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.37 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.44 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.46 \
-    target=pcbe.GenuineIntel.6.15
-$(i386_ONLY)link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.47 \
-    target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.23 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.26 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.28 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.29 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.30 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.31 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.37 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.44 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.46 target=pcbe.GenuineIntel.6.15
+link path=usr/kernel/pcbe/pcbe.GenuineIntel.6.47 target=pcbe.GenuineIntel.6.15
 link path=usr/lib/$(ARCH64)/libcpc.so target=./libcpc.so.1
 link path=usr/lib/$(ARCH64)/libpctx.so target=./libpctx.so.1
 link path=usr/lib/libcpc.so target=./libcpc.so.1

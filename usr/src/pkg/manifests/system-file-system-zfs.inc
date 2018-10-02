@@ -53,12 +53,12 @@ dir path=usr/lib/mdb group=sys
 dir path=usr/lib/mdb/kvm group=sys
 dir path=usr/lib/mdb/kvm/$(ARCH64) group=sys
 dir path=usr/lib/mdb/proc group=sys
-$(i386_ONLY)dir path=usr/lib/mdb/proc/$(ARCH64)
+dir path=usr/lib/mdb/proc/$(ARCH64)
 dir path=usr/lib/sysevent
 dir path=usr/lib/sysevent/modules
 dir path=usr/lib/zfs
 dir path=usr/sbin
-$(i386_ONLY)dir path=usr/sbin/$(ARCH32)
+dir path=usr/sbin/$(ARCH32)
 dir path=usr/sbin/$(ARCH64)
 dir path=usr/share/man/man8
 driver name=zfs perms="* 0600 root sys" perms="zfs 0666 root sys"
@@ -78,12 +78,12 @@ file path=usr/lib/$(ARCH64)/libzpool.so.1
 file path=usr/lib/devfsadm/linkmod/SUNW_zfs_link.so group=sys
 file path=usr/lib/fs/zfs/bootinstall mode=0555
 file path=usr/lib/fs/zfs/fstyp.so.1 mode=0555
-$(i386_ONLY)file path=usr/lib/libzpool.so.1
+file path=usr/lib/libzpool.so.1
 file path=usr/lib/mdb/kvm/$(ARCH64)/zfs.so group=sys mode=0555
 file path=usr/lib/mdb/proc/$(ARCH64)/libzpool.so group=sys mode=0555
 file path=usr/lib/mdb/proc/libzpool.so group=sys mode=0555
 file path=usr/lib/sysevent/modules/zfs_mod.so group=sys
-$(i386_ONLY)file path=usr/sbin/$(ARCH32)/zdb mode=0555
+file path=usr/sbin/$(ARCH32)/zdb mode=0555
 file path=usr/sbin/$(ARCH64)/zdb mode=0555
 file path=usr/sbin/zstreamdump mode=0555
 file path=usr/share/man/man8/zdb.8
@@ -122,6 +122,6 @@ link path=usr/lib/libzfs.so target=../../lib/libzfs.so.1
 link path=usr/lib/libzfs.so.1 target=../../lib/libzfs.so.1
 link path=usr/lib/libzfs_core.so target=../../lib/libzfs_core.so.1
 link path=usr/lib/libzfs_core.so.1 target=../../lib/libzfs_core.so.1
-$(i386_ONLY)link path=usr/lib/libzpool.so target=libzpool.so.1
+link path=usr/lib/libzpool.so target=libzpool.so.1
 link path=usr/sbin/zfs target=../../sbin/zfs
 link path=usr/sbin/zpool target=../../sbin/zpool

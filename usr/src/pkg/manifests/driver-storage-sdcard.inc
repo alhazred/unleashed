@@ -28,17 +28,17 @@
 # global zone only.  See the include file for greater detail, as well as
 # information about overriding the defaults.
 #
-$(i386_ONLY)dir path=kernel group=sys
-$(i386_ONLY)dir path=kernel/drv group=sys
-$(i386_ONLY)dir path=kernel/misc group=sys
-$(i386_ONLY)dir path=usr/share/man
-$(i386_ONLY)dir path=usr/share/man/man7d
-$(i386_ONLY)driver name=sdhost perms="* 0644 root root" \
+dir path=kernel group=sys
+dir path=kernel/drv group=sys
+dir path=kernel/misc group=sys
+dir path=usr/share/man
+dir path=usr/share/man/man7d
+driver name=sdhost perms="* 0644 root root" \
     alias=pciclass,080500 \
     alias=pciclass,080501
-$(i386_ONLY)file path=kernel/drv/sdhost group=sys
-$(i386_ONLY)file path=kernel/misc/sda group=sys mode=0755
-$(i386_ONLY)file path=usr/share/man/man7d/sda.7d
-$(i386_ONLY)file path=usr/share/man/man7d/sdhost.7d
-$(i386_ONLY)license cr_Sun license=cr_Sun
-$(i386_ONLY)license lic_CDDL license=lic_CDDL
+file path=kernel/drv/sdhost group=sys
+file path=kernel/misc/sda group=sys mode=0755
+file path=usr/share/man/man7d/sda.7d
+file path=usr/share/man/man7d/sdhost.7d
+license cr_Sun license=cr_Sun
+license lic_CDDL license=lic_CDDL

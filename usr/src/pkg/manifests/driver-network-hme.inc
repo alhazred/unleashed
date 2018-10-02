@@ -32,7 +32,7 @@ dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7d
-$(i386_ONLY)driver name=hme alias=pci108e,1001
+driver name=hme alias=pci108e,1001
 file path=kernel/drv/hme group=sys
 file path=usr/share/man/man7d/hme.7d
 license cr_Sun license=cr_Sun

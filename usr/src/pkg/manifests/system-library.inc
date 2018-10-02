@@ -72,11 +72,11 @@
 <include system-library.man4.inc>
 <include system-library.man5.inc>
 <include system-library.man7p.inc>
-$(i386_ONLY)dir path=etc group=sys
-$(i386_ONLY)dir path=etc/flash group=sys
-$(i386_ONLY)dir path=etc/flash/postcreation group=sys mode=0700
-$(i386_ONLY)dir path=etc/flash/precreation group=sys mode=0700
-$(i386_ONLY)dir path=etc/flash/preexit group=sys mode=0700
+dir path=etc group=sys
+dir path=etc/flash group=sys
+dir path=etc/flash/postcreation group=sys mode=0700
+dir path=etc/flash/precreation group=sys mode=0700
+dir path=etc/flash/preexit group=sys mode=0700
 dir path=lib
 dir path=lib/$(ARCH64)
 dir path=lib/crypto
@@ -155,7 +155,7 @@ dir path=usr/share/man/man3volmgt
 dir path=usr/share/man/man3xnet
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7p
-$(i386_ONLY)file path=etc/flash/precreation/caplib group=sys mode=0500
+file path=etc/flash/precreation/caplib group=sys mode=0500
 file path=lib/$(ARCH64)/ld.so.1
 file path=lib/$(ARCH64)/libadm.so.1
 file path=lib/$(ARCH64)/libaio.so.1
@@ -179,7 +179,7 @@ file path=lib/$(ARCH64)/libdoor.so.1
 file path=lib/$(ARCH64)/libdwarf.so.1
 file path=lib/$(ARCH64)/libefi.so.1
 file path=lib/$(ARCH64)/libelf.so.1
-$(i386_ONLY)file path=lib/$(ARCH64)/libfdisk.so.1
+file path=lib/$(ARCH64)/libfdisk.so.1
 file path=lib/$(ARCH64)/libgen.so.1
 file path=lib/$(ARCH64)/libinetutil.so.1
 file path=lib/$(ARCH64)/libintl.so.1
@@ -251,7 +251,7 @@ file path=lib/libdwarf.so.1
 file path=lib/libefi.so.1
 file path=lib/libelf.so.1
 file path=lib/libelfsign.so.1
-$(i386_ONLY)file path=lib/libfdisk.so.1
+file path=lib/libfdisk.so.1
 file path=lib/libgen.so.1
 file path=lib/libinetutil.so.1
 file path=lib/libintl.so.1
@@ -329,7 +329,7 @@ file path=usr/lib/$(ARCH64)/libpkcs11.so.1
 file path=usr/lib/$(ARCH64)/libproject.so.1
 file path=usr/lib/$(ARCH64)/libraidcfg.so.1
 file path=usr/lib/$(ARCH64)/libreparse.so.1
-$(i386_ONLY)file path=usr/lib/$(ARCH64)/libsaveargs.so.1
+file path=usr/lib/$(ARCH64)/libsaveargs.so.1
 file path=usr/lib/$(ARCH64)/libsched.so.1
 file path=usr/lib/$(ARCH64)/libsctp.so.1
 file path=usr/lib/$(ARCH64)/libsff.so.1
@@ -347,13 +347,13 @@ file path=usr/lib/$(ARCH64)/straddr.so.2
 file path=usr/lib/$(ARCH64)/watchmalloc.so.1
 file path=usr/lib/cfgadm/$(ARCH64)/ib.so.1
 file path=usr/lib/cfgadm/$(ARCH64)/pci.so.1
-$(i386_ONLY)file path=usr/lib/cfgadm/$(ARCH64)/sata.so.1
+file path=usr/lib/cfgadm/$(ARCH64)/sata.so.1
 file path=usr/lib/cfgadm/$(ARCH64)/scsi.so.1
 file path=usr/lib/cfgadm/$(ARCH64)/shp.so.1
 file path=usr/lib/cfgadm/$(ARCH64)/usb.so.1
 file path=usr/lib/cfgadm/ib.so.1
 file path=usr/lib/cfgadm/pci.so.1
-$(i386_ONLY)file path=usr/lib/cfgadm/sata.so.1
+file path=usr/lib/cfgadm/sata.so.1
 file path=usr/lib/cfgadm/scsi.so.1
 file path=usr/lib/cfgadm/shp.so.1
 file path=usr/lib/cfgadm/usb.so.1
@@ -536,7 +536,7 @@ link path=lib/$(ARCH64)/libdlpi.so target=libdlpi.so.1
 link path=lib/$(ARCH64)/libdoor.so target=libdoor.so.1
 link path=lib/$(ARCH64)/libefi.so target=libefi.so.1
 link path=lib/$(ARCH64)/libelf.so target=libelf.so.1
-$(i386_ONLY)link path=lib/$(ARCH64)/libfdisk.so target=libfdisk.so.1
+link path=lib/$(ARCH64)/libfdisk.so target=libfdisk.so.1
 link path=lib/$(ARCH64)/libgen.so target=libgen.so.1
 link path=lib/$(ARCH64)/libintl.so target=libintl.so.1
 link path=lib/$(ARCH64)/libkmf.so target=libkmf.so.1
@@ -594,7 +594,7 @@ link path=lib/libdoor.so target=libdoor.so.1
 link path=lib/libefi.so target=libefi.so.1
 link path=lib/libelf.so target=libelf.so.1
 link path=lib/libelfsign.so target=libelfsign.so.1
-$(i386_ONLY)link path=lib/libfdisk.so target=libfdisk.so.1
+link path=lib/libfdisk.so target=libfdisk.so.1
 link path=lib/libgen.so target=libgen.so.1
 link path=lib/libintl.so target=libintl.so.1
 link path=lib/libipmp.so target=./libipmp.so.1
@@ -712,9 +712,9 @@ link path=usr/lib/$(ARCH64)/libelf.so \
 link path=usr/lib/$(ARCH64)/libelf.so.1 \
     target=../../../lib/$(ARCH64)/libelf.so.1
 link path=usr/lib/$(ARCH64)/libexacct.so target=libexacct.so.1
-$(i386_ONLY)link path=usr/lib/$(ARCH64)/libfdisk.so \
+link path=usr/lib/$(ARCH64)/libfdisk.so \
     target=../../../lib/$(ARCH64)/libfdisk.so.1
-$(i386_ONLY)link path=usr/lib/$(ARCH64)/libfdisk.so.1 \
+link path=usr/lib/$(ARCH64)/libfdisk.so.1 \
     target=../../../lib/$(ARCH64)/libfdisk.so.1
 link path=usr/lib/$(ARCH64)/libfstyp.so target=./libfstyp.so.1
 link path=usr/lib/$(ARCH64)/libgen.so \
@@ -792,7 +792,7 @@ link path=usr/lib/$(ARCH64)/libresolv.so \
     target=../../../lib/$(ARCH64)/libresolv.so.2
 link path=usr/lib/$(ARCH64)/libresolv.so.2 \
     target=../../../lib/$(ARCH64)/libresolv.so.2
-$(i386_ONLY)link path=usr/lib/$(ARCH64)/librestart.so \
+link path=usr/lib/$(ARCH64)/librestart.so \
     target=../../../lib/$(ARCH64)/librestart.so.1
 link path=usr/lib/$(ARCH64)/librestart.so.1 \
     target=../../../lib/$(ARCH64)/librestart.so.1
@@ -873,13 +873,13 @@ link path=usr/lib/32 target=.
 link path=usr/lib/64 target=$(ARCH64)
 link path=usr/lib/cfgadm/$(ARCH64)/ib.so target=./ib.so.1
 link path=usr/lib/cfgadm/$(ARCH64)/pci.so target=./pci.so.1
-$(i386_ONLY)link path=usr/lib/cfgadm/$(ARCH64)/sata.so target=./sata.so.1
+link path=usr/lib/cfgadm/$(ARCH64)/sata.so target=./sata.so.1
 link path=usr/lib/cfgadm/$(ARCH64)/scsi.so target=./scsi.so.1
 link path=usr/lib/cfgadm/$(ARCH64)/shp.so target=./shp.so.1
 link path=usr/lib/cfgadm/$(ARCH64)/usb.so target=./usb.so.1
 link path=usr/lib/cfgadm/ib.so target=./ib.so.1
 link path=usr/lib/cfgadm/pci.so target=./pci.so.1
-$(i386_ONLY)link path=usr/lib/cfgadm/sata.so target=./sata.so.1
+link path=usr/lib/cfgadm/sata.so target=./sata.so.1
 link path=usr/lib/cfgadm/scsi.so target=./scsi.so.1
 link path=usr/lib/cfgadm/shp.so target=./shp.so.1
 link path=usr/lib/cfgadm/usb.so target=./usb.so.1
@@ -932,8 +932,8 @@ link path=usr/lib/libefi.so.1 target=../../lib/libefi.so.1
 link path=usr/lib/libelf.so target=../../lib/libelf.so.1
 link path=usr/lib/libelf.so.1 target=../../lib/libelf.so.1
 link path=usr/lib/libexacct.so target=./libexacct.so.1
-$(i386_ONLY)link path=usr/lib/libfdisk.so target=../../lib/libfdisk.so.1
-$(i386_ONLY)link path=usr/lib/libfdisk.so.1 target=../../lib/libfdisk.so.1
+link path=usr/lib/libfdisk.so target=../../lib/libfdisk.so.1
+link path=usr/lib/libfdisk.so.1 target=../../lib/libfdisk.so.1
 link path=usr/lib/libfstyp.so target=./libfstyp.so.1
 link path=usr/lib/libgen.so target=../../lib/libgen.so.1
 link path=usr/lib/libgen.so.1 target=../../lib/libgen.so.1

@@ -31,72 +31,72 @@
 <include global_zone_only_component>
 set name=pkg.fmri \
     value=pkg:/system/boot/loader@1.1,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
-$(i386_ONLY)set name=pkg.description value="Boot Loader"
-$(i386_ONLY)set name=pkg.summary value="BootForth Boot Loader"
+set name=pkg.description value="Boot Loader"
+set name=pkg.summary value="BootForth Boot Loader"
 set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
-$(i386_ONLY)dir path=boot group=sys
-$(i386_ONLY)dir path=boot/conf.d group=sys
-$(i386_ONLY)dir path=boot/defaults group=sys
-$(i386_ONLY)dir path=boot/forth group=sys
-$(i386_ONLY)dir path=usr/share/man
-$(i386_ONLY)dir path=usr/share/man/man3
-$(i386_ONLY)dir path=usr/share/man/man4
-$(i386_ONLY)dir path=usr/share/man/man5
-$(i386_ONLY)file path=boot/bootia32.efi group=sys mode=0555
-$(i386_ONLY)file path=boot/bootx64.efi group=sys mode=0555
-$(i386_ONLY)file path=boot/cdboot group=sys mode=0444
-$(i386_ONLY)file path=boot/defaults/loader.conf group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/beadm.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/beastie.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/brand-dilos.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/brand-hipster.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/brand-illumos.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/brand-omnios.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/brand-unleashed.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/brand.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/check-password.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/color.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/delay.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/efi.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/frames.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/loader.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-beastie.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-beastiebw.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-fbsdbw.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-illumos.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-orb.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-orbbw.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/logo-unleashed.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/menu-commands.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/menu.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/menu.rc group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/menusets.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/pcibios.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/screen.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/shortcuts.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/support.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/forth/version.4th group=sys mode=0444
-$(i386_ONLY)file path=boot/gptzfsboot group=sys mode=0444
-$(i386_ONLY)file path=boot/loader group=sys mode=0444
-$(i386_ONLY)file path=boot/loader.help group=sys mode=0444
-$(i386_ONLY)file path=boot/loader.rc group=sys mode=0444
-$(i386_ONLY)file path=boot/loader32.efi group=sys mode=0555
-$(i386_ONLY)file path=boot/loader64.efi group=sys mode=0555
-$(i386_ONLY)file path=boot/pmbr group=sys mode=0444
-$(i386_ONLY)file path=boot/pxeboot group=sys mode=0444
-$(i386_ONLY)file path=usr/share/man/man4/loader.conf.4
-$(i386_ONLY)file path=usr/share/man/man5/brand.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/check-password.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/color.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/delay.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/gptzfsboot.5
-$(i386_ONLY)file path=usr/share/man/man5/loader.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/loader.5
-$(i386_ONLY)file path=usr/share/man/man5/menu.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/menusets.4th.5
-$(i386_ONLY)file path=usr/share/man/man5/pxeboot.5
-$(i386_ONLY)file path=usr/share/man/man5/version.4th.5
+dir path=boot group=sys
+dir path=boot/conf.d group=sys
+dir path=boot/defaults group=sys
+dir path=boot/forth group=sys
+dir path=usr/share/man
+dir path=usr/share/man/man3
+dir path=usr/share/man/man4
+dir path=usr/share/man/man5
+file path=boot/bootia32.efi group=sys mode=0555
+file path=boot/bootx64.efi group=sys mode=0555
+file path=boot/cdboot group=sys mode=0444
+file path=boot/defaults/loader.conf group=sys mode=0444
+file path=boot/forth/beadm.4th group=sys mode=0444
+file path=boot/forth/beastie.4th group=sys mode=0444
+file path=boot/forth/brand-dilos.4th group=sys mode=0444
+file path=boot/forth/brand-hipster.4th group=sys mode=0444
+file path=boot/forth/brand-illumos.4th group=sys mode=0444
+file path=boot/forth/brand-omnios.4th group=sys mode=0444
+file path=boot/forth/brand-unleashed.4th group=sys mode=0444
+file path=boot/forth/brand.4th group=sys mode=0444
+file path=boot/forth/check-password.4th group=sys mode=0444
+file path=boot/forth/color.4th group=sys mode=0444
+file path=boot/forth/delay.4th group=sys mode=0444
+file path=boot/forth/efi.4th group=sys mode=0444
+file path=boot/forth/frames.4th group=sys mode=0444
+file path=boot/forth/loader.4th group=sys mode=0444
+file path=boot/forth/logo-beastie.4th group=sys mode=0444
+file path=boot/forth/logo-beastiebw.4th group=sys mode=0444
+file path=boot/forth/logo-fbsdbw.4th group=sys mode=0444
+file path=boot/forth/logo-illumos.4th group=sys mode=0444
+file path=boot/forth/logo-orb.4th group=sys mode=0444
+file path=boot/forth/logo-orbbw.4th group=sys mode=0444
+file path=boot/forth/logo-unleashed.4th group=sys mode=0444
+file path=boot/forth/menu-commands.4th group=sys mode=0444
+file path=boot/forth/menu.4th group=sys mode=0444
+file path=boot/forth/menu.rc group=sys mode=0444
+file path=boot/forth/menusets.4th group=sys mode=0444
+file path=boot/forth/pcibios.4th group=sys mode=0444
+file path=boot/forth/screen.4th group=sys mode=0444
+file path=boot/forth/shortcuts.4th group=sys mode=0444
+file path=boot/forth/support.4th group=sys mode=0444
+file path=boot/forth/version.4th group=sys mode=0444
+file path=boot/gptzfsboot group=sys mode=0444
+file path=boot/loader group=sys mode=0444
+file path=boot/loader.help group=sys mode=0444
+file path=boot/loader.rc group=sys mode=0444
+file path=boot/loader32.efi group=sys mode=0555
+file path=boot/loader64.efi group=sys mode=0555
+file path=boot/pmbr group=sys mode=0444
+file path=boot/pxeboot group=sys mode=0444
+file path=usr/share/man/man4/loader.conf.4
+file path=usr/share/man/man5/brand.4th.5
+file path=usr/share/man/man5/check-password.4th.5
+file path=usr/share/man/man5/color.4th.5
+file path=usr/share/man/man5/delay.4th.5
+file path=usr/share/man/man5/gptzfsboot.5
+file path=usr/share/man/man5/loader.4th.5
+file path=usr/share/man/man5/loader.5
+file path=usr/share/man/man5/menu.4th.5
+file path=usr/share/man/man5/menusets.4th.5
+file path=usr/share/man/man5/pxeboot.5
+file path=usr/share/man/man5/version.4th.5
 license lic_CDDL license=lic_CDDL
 license usr/src/boot/COPYRIGHT license=usr/src/boot/COPYRIGHT
 license usr/src/boot/sys/boot/common/linenoise/LICENSE \

@@ -49,7 +49,7 @@ dir path=usr group=sys
 dir path=usr/lib
 dir path=usr/lib/mdb group=sys
 dir path=usr/lib/mdb/kvm group=sys
-$(i386_ONLY)dir path=usr/lib/xhci group=sys
+dir path=usr/lib/xhci group=sys
 dir path=usr/share
 dir path=usr/share/man
 dir path=usr/share/man/man7m
@@ -69,7 +69,7 @@ driver name=usb_as alias=usbif,class1.2 perms="* 0600 root sys"
 driver name=usb_ia alias=usb,ia
 driver name=usb_mid alias=usb,device
 driver name=usbprn alias=usbif,class7.1 perms="* 0666 root sys"
-$(i386_ONLY)driver name=xhci alias=pciclass,0c0330 perms="* 0644 root sys"
+driver name=xhci alias=pciclass,0c0330 perms="* 0644 root sys"
 file path=etc/usb/config_map.conf group=sys preserve=true
 file path=kernel/drv/ehci group=sys
 file path=kernel/drv/ehci.conf group=sys
@@ -87,9 +87,9 @@ file path=kernel/drv/usb_as group=sys
 file path=kernel/drv/usb_ia group=sys
 file path=kernel/drv/usb_mid group=sys
 file path=kernel/drv/usbprn group=sys
-$(i386_ONLY)file path=kernel/drv/xhci group=sys
-$(i386_ONLY)file path=kernel/drv/xhci.conf group=sys
-$(i386_ONLY)file path=kernel/kmdb/xhci group=sys mode=0555
+file path=kernel/drv/xhci group=sys
+file path=kernel/drv/xhci.conf group=sys
+file path=kernel/kmdb/xhci group=sys mode=0555
 file path=kernel/misc/hidparser group=sys mode=0755
 file path=kernel/misc/usba group=sys mode=0755
 file path=kernel/misc/usba10 group=sys mode=0755
@@ -97,8 +97,8 @@ file path=kernel/strmod/usb_ah group=sys mode=0755
 file path=kernel/strmod/usbkbm group=sys mode=0755
 file path=kernel/strmod/usbms group=sys mode=0755
 file path=kernel/strmod/usbwcm group=sys mode=0755
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/xhci.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/xhci/xhci_portsc group=sys mode=0555
+file path=usr/lib/mdb/kvm/$(ARCH64)/xhci.so group=sys mode=0555
+file path=usr/lib/xhci/xhci_portsc group=sys mode=0555
 file path=usr/share/man/man7d/ehci.7d
 file path=usr/share/man/man7d/hid.7d
 file path=usr/share/man/man7d/hubd.7d
@@ -111,7 +111,7 @@ file path=usr/share/man/man7d/usb_ia.7d
 file path=usr/share/man/man7d/usb_mid.7d
 file path=usr/share/man/man7d/usba.7d
 file path=usr/share/man/man7d/usbprn.7d
-$(i386_ONLY)file path=usr/share/man/man7d/xhci.7d
+file path=usr/share/man/man7d/xhci.7d
 file path=usr/share/man/man7m/usb_ah.7m
 file path=usr/share/man/man7m/usbkbm.7m
 file path=usr/share/man/man7m/usbms.7m

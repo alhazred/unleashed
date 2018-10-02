@@ -47,7 +47,7 @@ dir path=usr/lib/mdb group=sys
 dir path=usr/lib/mdb/kvm group=sys
 dir path=usr/lib/mdb/kvm/$(ARCH64) group=sys
 dir path=usr/lib/mdb/proc group=sys
-$(i386_ONLY)dir path=usr/lib/mdb/proc/$(ARCH64)
+dir path=usr/lib/mdb/proc/$(ARCH64)
 dir path=usr/lib/mdb/raw group=sys
 dir path=usr/platform group=sys
 dir path=usr/platform/$(CONFIG_PLATFORM) group=sys
@@ -59,12 +59,12 @@ dir path=usr/share/man
 dir path=usr/share/man/man1
 file path=kernel/kmdb/arp group=sys mode=0555
 file path=kernel/kmdb/cpc group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/cpu.generic group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/cpu_ms.AuthenticAMD.15 group=sys mode=0555
+file path=kernel/kmdb/cpu.generic group=sys mode=0555
+file path=kernel/kmdb/cpu_ms.AuthenticAMD.15 group=sys mode=0555
 file path=kernel/kmdb/crypto group=sys mode=0555
 file path=kernel/kmdb/genunix group=sys mode=0555
 file path=kernel/kmdb/hook group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/i40e group=sys mode=0555
+file path=kernel/kmdb/i40e group=sys mode=0555
 file path=kernel/kmdb/ip group=sys mode=0555
 file path=kernel/kmdb/ipc group=sys mode=0555
 file path=kernel/kmdb/ipp group=sys mode=0555
@@ -80,7 +80,7 @@ file path=kernel/kmdb/neti group=sys mode=0555
 file path=kernel/kmdb/ptm group=sys mode=0555
 file path=kernel/kmdb/random group=sys mode=0555
 file path=kernel/kmdb/s1394 group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/sata group=sys mode=0555
+file path=kernel/kmdb/sata group=sys mode=0555
 file path=kernel/kmdb/scsi_vhci group=sys mode=0555
 file path=kernel/kmdb/sctp group=sys mode=0555
 file path=kernel/kmdb/sd group=sys mode=0555
@@ -88,29 +88,24 @@ file path=kernel/kmdb/sockfs group=sys mode=0555
 file path=kernel/kmdb/specfs group=sys mode=0555
 file path=kernel/kmdb/sppp group=sys mode=0555
 file path=kernel/kmdb/ufs group=sys mode=0555
-$(i386_ONLY)file path=kernel/kmdb/uhci group=sys mode=0555
+file path=kernel/kmdb/uhci group=sys mode=0555
 file path=kernel/kmdb/usba group=sys mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/apix group=sys \
-    mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/pcplusmp \
-    group=sys mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/unix group=sys \
-    mode=0555
-$(i386_ONLY)file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/uppc group=sys \
-    mode=0555
+file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/apix group=sys mode=0555
+file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/pcplusmp group=sys mode=0555
+file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/unix group=sys mode=0555
+file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/uppc group=sys mode=0555
 file path=usr/bin/$(ARCH32)/mdb mode=0555
 file path=usr/bin/$(ARCH64)/mdb mode=0555
 file path=usr/include/sys/mdb_modapi.h mode=0644
 file path=usr/lib/mdb/kvm/$(ARCH64)/arp.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/cpc.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/cpu.generic.so group=sys \
+file path=usr/lib/mdb/kvm/$(ARCH64)/cpu.generic.so group=sys mode=0555
+file path=usr/lib/mdb/kvm/$(ARCH64)/cpu_ms.AuthenticAMD.15.so group=sys \
     mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/cpu_ms.AuthenticAMD.15.so \
-    group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/crypto.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/genunix.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/hook.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/i40e.so group=sys mode=0555
+file path=usr/lib/mdb/kvm/$(ARCH64)/i40e.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/ip.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/ipc.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/ipp.so group=sys mode=0555
@@ -126,7 +121,7 @@ file path=usr/lib/mdb/kvm/$(ARCH64)/neti.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/ptm.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/random.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/s1394.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/sata.so group=sys mode=0555
+file path=usr/lib/mdb/kvm/$(ARCH64)/sata.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/scsi_vhci.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/sctp.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/sd.so group=sys mode=0555
@@ -134,7 +129,7 @@ file path=usr/lib/mdb/kvm/$(ARCH64)/sockfs.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/specfs.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/sppp.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/ufs.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/kvm/$(ARCH64)/uhci.so group=sys mode=0555
+file path=usr/lib/mdb/kvm/$(ARCH64)/uhci.so group=sys mode=0555
 file path=usr/lib/mdb/kvm/$(ARCH64)/usba.so group=sys mode=0555
 file path=usr/lib/mdb/proc/$(ARCH64)/ld.so group=sys mode=0555
 file path=usr/lib/mdb/proc/$(ARCH64)/libavl.so group=sys mode=0555
@@ -149,8 +144,7 @@ file path=usr/lib/mdb/proc/$(ARCH64)/libtopo.so group=sys mode=0555
 file path=usr/lib/mdb/proc/$(ARCH64)/libumem.so group=sys mode=0555
 file path=usr/lib/mdb/proc/$(ARCH64)/libuutil.so group=sys mode=0555
 file path=usr/lib/mdb/proc/$(ARCH64)/mdb_ds.so group=sys mode=0555
-$(i386_ONLY)file path=usr/lib/mdb/proc/$(ARCH64)/mdb_test.so group=sys \
-    mode=0555
+file path=usr/lib/mdb/proc/$(ARCH64)/mdb_test.so group=sys mode=0555
 file path=usr/lib/mdb/proc/ld.so group=sys mode=0555
 file path=usr/lib/mdb/proc/libavl.so group=sys mode=0555
 file path=usr/lib/mdb/proc/libc.so group=sys mode=0555
@@ -165,14 +159,11 @@ file path=usr/lib/mdb/proc/libuutil.so group=sys mode=0555
 file path=usr/lib/mdb/proc/mdb_ds.so group=sys mode=0555
 file path=usr/lib/mdb/proc/svc.configd.so group=sys mode=0555
 file path=usr/lib/mdb/proc/svc.startd.so group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/apix.so \
-    group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/pcplusmp.so \
-    group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/unix.so \
-    group=sys mode=0555
-$(i386_ONLY)file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/uppc.so \
-    group=sys mode=0555
+file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/apix.so group=sys mode=0555
+file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/pcplusmp.so group=sys \
+    mode=0555
+file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/unix.so group=sys mode=0555
+file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/uppc.so group=sys mode=0555
 file path=usr/share/man/man1/adb.1
 file path=usr/share/man/man1/kmdb.1
 file path=usr/share/man/man1/mdb.1

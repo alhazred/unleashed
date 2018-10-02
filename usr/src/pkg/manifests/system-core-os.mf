@@ -224,7 +224,7 @@ dir path=usr/net/servers group=sys
 dir path=usr/old
 dir path=usr/platform group=sys
 dir path=usr/sbin
-$(i386_ONLY)dir path=usr/sbin/$(ARCH32)
+dir path=usr/sbin/$(ARCH32)
 dir path=usr/sbin/$(ARCH64)
 dir path=usr/share
 dir path=usr/share/lib
@@ -496,7 +496,7 @@ file path=lib/svc/manifest/system/filesystem/minimal-fs.xml group=sys \
     mode=0444
 file path=lib/svc/manifest/system/filesystem/root-fs.xml group=sys mode=0444
 file path=lib/svc/manifest/system/filesystem/usr-fs.xml group=sys mode=0444
-$(i386_ONLY)file path=lib/svc/manifest/system/hostid.xml group=sys mode=0444
+file path=lib/svc/manifest/system/hostid.xml group=sys mode=0444
 file path=lib/svc/manifest/system/hotplug.xml group=sys mode=0444
 file path=lib/svc/manifest/system/identity.xml group=sys mode=0444
 file path=lib/svc/manifest/system/idmap.xml group=sys mode=0444
@@ -552,7 +552,7 @@ file path=lib/svc/method/svc-boot-config mode=0555
 file path=lib/svc/method/svc-consadm mode=0555
 file path=lib/svc/method/svc-cron mode=0555
 file path=lib/svc/method/svc-dlmgmtd mode=0555
-$(i386_ONLY)file path=lib/svc/method/svc-hostid mode=0555
+file path=lib/svc/method/svc-hostid mode=0555
 file path=lib/svc/method/svc-hotplug mode=0555
 file path=lib/svc/method/svc-nscd mode=0555
 file path=lib/svc/method/svc-sockfilter mode=0555
@@ -575,7 +575,7 @@ file path=lib/svc/share/smf_include.sh mode=0444
 file path=root/.bashrc group=root preserve=true
 file path=root/.profile group=root preserve=true
 file path=sbin/autopush mode=0555
-$(i386_ONLY)file path=sbin/biosdev mode=0555
+file path=sbin/biosdev mode=0555
 file path=sbin/bootadm mode=0555
 file path=sbin/cryptoadm mode=0555
 file path=sbin/devprop mode=0555
@@ -608,16 +608,16 @@ file path=sbin/uadmin group=sys mode=0555
 file path=sbin/umount mode=0555
 file path=sbin/umountall group=sys mode=0555
 file path=sbin/zonename mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/amt mode=0555
+file path=usr/bin/$(ARCH32)/amt mode=0555
 file path=usr/bin/$(ARCH32)/decrypt mode=0555
 file path=usr/bin/$(ARCH32)/digest mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/newtask group=sys mode=4555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/nohup mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/prctl mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/prstat mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/ps mode=0555
+file path=usr/bin/$(ARCH32)/newtask group=sys mode=4555
+file path=usr/bin/$(ARCH32)/nohup mode=0555
+file path=usr/bin/$(ARCH32)/prctl mode=0555
+file path=usr/bin/$(ARCH32)/prstat mode=0555
+file path=usr/bin/$(ARCH32)/ps mode=0555
 file path=usr/bin/$(ARCH32)/savecore mode=0555
-$(i386_ONLY)file path=usr/bin/$(ARCH32)/uptime mode=4555
+file path=usr/bin/$(ARCH32)/uptime mode=4555
 file path=usr/bin/$(ARCH64)/amt mode=0555
 file path=usr/bin/$(ARCH64)/crle mode=0555
 file path=usr/bin/$(ARCH64)/decrypt mode=0555
@@ -660,7 +660,7 @@ file path=usr/bin/devattr mode=0555
 file path=usr/bin/devfree mode=0555
 file path=usr/bin/devreserv mode=0555
 file path=usr/bin/dirname mode=0555
-$(i386_ONLY)file path=usr/bin/diskscan mode=0555
+file path=usr/bin/diskscan mode=0555
 file path=usr/bin/domainname mode=0555
 file path=usr/bin/du mode=0555
 file path=usr/bin/dumpcs mode=0555
@@ -1169,7 +1169,7 @@ file path=usr/sbin/ping mode=4555
 file path=usr/sbin/pmadm group=sys mode=0555
 file path=usr/sbin/praudit mode=0555
 file path=usr/sbin/prtconf group=sys mode=2555
-$(i386_ONLY)file path=usr/sbin/prtdiag group=sys mode=2755
+file path=usr/sbin/prtdiag group=sys mode=2755
 file path=usr/sbin/prtvtoc group=sys mode=0555
 file path=usr/sbin/psradm group=sys mode=0555
 file path=usr/sbin/psrinfo group=sys mode=0555
@@ -1181,7 +1181,7 @@ file path=usr/sbin/rctladm mode=0555
 file path=usr/sbin/rem_drv group=sys mode=0555
 file path=usr/sbin/root_archive group=sys mode=0555
 file path=usr/sbin/rpcbind mode=0555
-$(i386_ONLY)file path=usr/sbin/rtc mode=0555
+file path=usr/sbin/rtc mode=0555
 file path=usr/sbin/sacadm group=sys mode=4755
 file path=usr/sbin/setmnt mode=0555
 file path=usr/sbin/shareall mode=0555
@@ -1207,7 +1207,7 @@ file path=usr/sbin/tar mode=0555
 file path=usr/sbin/traceroute mode=4555
 file path=usr/sbin/trapstat mode=0555
 file path=usr/sbin/ttyadm group=sys mode=0755
-$(i386_ONLY)file path=usr/sbin/ucodeadm mode=0555
+file path=usr/sbin/ucodeadm mode=0555
 file path=usr/sbin/umountall group=sys mode=0555
 file path=usr/sbin/unlink mode=0555
 file path=usr/sbin/unshareall mode=0555
@@ -1243,7 +1243,7 @@ hardlink path=sbin/rc5 target=../sbin/rc0
 hardlink path=sbin/rc6 target=../sbin/rc0
 hardlink path=usr/bin/$(ARCH32)/encrypt target=decrypt
 hardlink path=usr/bin/$(ARCH32)/mac target=digest
-$(i386_ONLY)hardlink path=usr/bin/$(ARCH32)/w target=uptime
+hardlink path=usr/bin/$(ARCH32)/w target=uptime
 hardlink path=usr/bin/$(ARCH64)/encrypt target=decrypt
 hardlink path=usr/bin/$(ARCH64)/mac target=digest
 hardlink path=usr/bin/$(ARCH64)/w target=uptime

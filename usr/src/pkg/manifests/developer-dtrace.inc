@@ -85,9 +85,9 @@ file path=usr/lib/mdb/kvm/$(ARCH64)/dtrace.so group=sys mode=0555
 file path=usr/lib/mdb/raw/$(ARCH64)/dof.so group=sys mode=0555
 file path=usr/lib/mdb/raw/dof.so group=sys mode=0555
 file path=usr/sbin/$(ARCH32)/dtrace mode=0555
-$(i386_ONLY)file path=usr/sbin/$(ARCH32)/intrstat mode=0555
-$(i386_ONLY)file path=usr/sbin/$(ARCH32)/lockstat mode=0555
-$(i386_ONLY)file path=usr/sbin/$(ARCH32)/plockstat mode=0555
+file path=usr/sbin/$(ARCH32)/intrstat mode=0555
+file path=usr/sbin/$(ARCH32)/lockstat mode=0555
+file path=usr/sbin/$(ARCH32)/plockstat mode=0555
 file path=usr/sbin/$(ARCH64)/dtrace mode=0555
 file path=usr/sbin/$(ARCH64)/intrstat mode=0555
 file path=usr/sbin/$(ARCH64)/lockstat mode=0555
