@@ -1,2 +1,0 @@
-set name=pkg.fmri value=pkg:/source/demo/system@$(PKGVERS)
-set name=pkg.obsolete value=true

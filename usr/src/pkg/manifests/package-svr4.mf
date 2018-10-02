@@ -1,7 +1,0 @@
-set name=pkg.fmri value=pkg:/package/svr4@$(PKGVERS)
-set name=pkg.description value="Solaris System V Release 4 Packaging Commands"
-set name=pkg.summary value="SVr4 packaging commands"
-set name=info.classification \
-    value=org.opensolaris.category.2008:System/Packaging
-set name=variant.arch value=$(ARCH)
-set name=pkg.obsolete value=true
