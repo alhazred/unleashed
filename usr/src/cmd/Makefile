@@ -417,8 +417,7 @@ sparc_SUBDIRS=		\
 	device_remap	\
 	drd		\
 	fruadm		\
-	prtfru		\
-	virtinfo
+	prtfru
 
 #
 # Commands that are messaged.
@@ -616,8 +615,7 @@ MSGSUBDIRS=		\
 
 sparc_MSGSUBDIRS=	\
 	fruadm		\
-	prtfru		\
-	virtinfo
+	prtfru
 
 i386_MSGSUBDIRS=	\
 	ucodeadm
