@@ -30,14 +30,12 @@ include ../Makefile.master
 #
 # List of architectures to build as part of the standard build.
 #
-# Some of these architectures are built in parallel (see i386_PARALLEL and
-# sparc_PARALLEL). This requires building some parts first before parallel build
-# can start. Platform make files know what should be built as a prerequisite for
-# the parallel build to work. The i386_PREREQ and sparc_PREREQ variables tell
+# Some of these architectures are built in parallel (see i386_PARALLEL).
+# This requires building some parts first before parallel build can start.
+# Platform make files know what should be built as a prerequisite for the
+# parallel build to work. The i386_PREREQ and sparc_PREREQ variables tell
 # which platform directory to enter to start making prerequisite dependencies.
 #
-sparc_ARCHITECTURES = $(CONFIG_PLATFORM) sparc
-
 i386_ARCHITECTURES = $(CONFIG_PLATFORM) intel
 
 #
@@ -47,15 +45,6 @@ i386_ARCHITECTURES = $(CONFIG_PLATFORM) intel
 #
 i386_PREREQ = intel
 i386_PARALLEL = $(i386_ARCHITECTURES)
-
-#
-# For sparc all architectures can be compiled in parallel.
-#
-# sun4/Makefile knows how to build prerequisites needed for parallel build.
-# can start.
-#
-sparc_PREREQ = sun4
-sparc_PARALLEL = $(sparc_ARCHITECTURES)
 
 #
 # Platforms defined in $(MACH)_PARALLEL are built in parallel. DUMMY is placed
@@ -153,7 +142,6 @@ DYNHDRDIRS =	common/gssapi \
 		common/rpc \
 		common/rpcsvc
 
-sparc_HDRDIRS= sun/sys
 i386_HDRDIRS=
 
 HDRDIRS= $(COMMON_HDRDIRS) $($(MACH)_HDRDIRS)
