@@ -27,7 +27,7 @@
 
 include ../Makefile.lib
 
-SUBDIRS = engine fcdriver extend packages pci gp2 upa interpreter efdaemon \
+SUBDIRS = engine fcdriver extend packages pci gp2 upa interpreter \
 	jupiter etc
 TESTDIRS = fcode_test
 
@@ -60,7 +60,7 @@ FRC:
 # Interdependencies between shared objects follow.
 #
 
-extend fcdriver packages pci gp2 upa interpreter efdaemon jupiter: engine
+extend fcdriver packages pci gp2 upa interpreter jupiter: engine
 
 fcdriver: packages
 

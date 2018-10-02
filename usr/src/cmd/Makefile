@@ -414,20 +414,12 @@ i386_SUBDIRS=		\
 	xhci
 
 sparc_SUBDIRS=		\
-	cvcd		\
-	dcs		\
 	device_remap	\
 	drd		\
 	fruadm		\
-	ldmad		\
-	oplhpd		\
-	prtdscp		\
 	prtfru		\
 	scadm		\
-	sckmd		\
-	sf880drd	\
-	virtinfo	\
-	vntsd
+	virtinfo
 
 #
 # Commands that are messaged.
@@ -471,7 +463,6 @@ MSGSUBDIRS=		\
 	datadm		\
 	date		\
 	dc		\
-	dcs		\
 	dd		\
 	devfsadm	\
 	dfs.cmds	\
@@ -627,10 +618,8 @@ MSGSUBDIRS=		\
 
 sparc_MSGSUBDIRS=	\
 	fruadm		\
-	prtdscp		\
 	prtfru		\
-	virtinfo	\
-	vntsd
+	virtinfo
 
 i386_MSGSUBDIRS=	\
 	ucodeadm

@@ -3,19 +3,6 @@
 MAN_i386 = acpidump.8 \
       acpixtract.8
 
-MAN_sparc = cvcd.8 \
-      dcs.8 \
-      drd.8 \
-      efdaemon.8 \
-      ldmad.8 \
-      monitor.8 \
-      obpsym.8 \
-      oplhpd.8 \
-      prtdscp.8 \
-      sckmd.8 \
-      sf880drd.8 \
-      vntsd.8
-
 MAN = 6to4relay.8 \
       Intro.8 \
       acct.8 \

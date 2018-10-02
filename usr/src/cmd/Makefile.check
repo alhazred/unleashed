@@ -37,7 +37,6 @@ MANIFEST_TOPDIRS=			\
 	consadm				\
 	coreadm				\
 	cron				\
-	cvcd				\
 	dispadmin			\
 	drd				\
 	dumpadm				\
@@ -51,11 +50,9 @@ MANIFEST_TOPDIRS=			\
 	kbd				\
 	keyserv				\
 	ldapcachemgr			\
-	ldmad				\
 	dlmgmtd				\
 	ndmpd				\
 	nscd				\
-	oplhpd				\
 	pools				\
 	power				\
 	rmvolmgr			\
@@ -63,15 +60,12 @@ MANIFEST_TOPDIRS=			\
 	rpcsvc				\
 	sa				\
 	saf				\
-	sckmd				\
-	sf880drd			\
 	smserverd			\
 	stmfsvc				\
 	stmsboot			\
 	syseventd			\
 	syslogd				\
 	utmpd				\
-	vntsd				\
 	ypcmd				\
 	zoneadm				\
 	zoneadmd
