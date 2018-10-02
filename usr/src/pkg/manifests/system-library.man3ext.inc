@@ -31,5 +31,4 @@ file path=usr/share/man/man3ext/sendfilev.3ext
 file path=usr/share/man/man3ext/sha1.3ext
 file path=usr/share/man/man3ext/sha2.3ext
 file path=usr/share/man/man3ext/stdarg.3ext
-file path=usr/share/man/man3ext/tsalarm_get.3ext
 file path=usr/share/man/man3ext/varargs.3ext

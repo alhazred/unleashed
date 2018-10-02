@@ -73,7 +73,6 @@ MAN = libMPAPI.3lib \
       libsysevent.3lib \
       libtecla.3lib \
       libthread.3lib \
-      libtsalarm.3lib \
       libumem.3lib \
       libuuid.3lib \
       libvolmgt.3lib \

@@ -15,7 +15,6 @@ MAN = NOTE.3ext \
       sha1.3ext \
       sha2.3ext \
       stdarg.3ext \
-      tsalarm_get.3ext \
       varargs.3ext
 
 

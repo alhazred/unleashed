@@ -30,7 +30,6 @@ MAN_sparc = audiocs.7d \
       ssd.7d \
       su.7d \
       todopl.7d \
-      tsalarm.7d \
       zs.7d \
       zsh.7d
 

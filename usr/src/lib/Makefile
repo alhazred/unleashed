@@ -244,18 +244,6 @@ i386_SUBDIRS=		\
 	libfdisk	\
 	libsaveargs
 
-sparc_SUBDIRS=		\
-	efcode		\
-	libds		\
-	libprtdiag	\
-	libprtdiag_psr	\
-	libpri		\
-	librsc		\
-	storage		\
-	libpcp		\
-	libtsalarm	\
-	libv12n
-
 #
 # Create a special version of $(SUBDIRS) with no .WAIT's, for use with the
 # clean and clobber targets (for more information, see those targets, below).
@@ -314,10 +302,6 @@ MSGSUBDIRS=		\
 	pam_modules	\
 	rpcsec_gss	\
 	$($(MACH)_MSGSUBDIRS)
-
-sparc_MSGSUBDIRS=	\
-	libprtdiag	\
-	libprtdiag_psr
 
 i386_MSGSUBDIRS= libfdisk
 
@@ -436,12 +420,6 @@ i386_HDRSUBDIRS=	\
 	libfdisk	\
 	libsaveargs
 
-sparc_HDRSUBDIRS=	\
-	libds		\
-	libpri		\
-	libv12n		\
-	storage
-
 all :=		TARGET= all
 check :=	TARGET= check
 clean :=	TARGET= clean
@@ -511,7 +489,6 @@ fm:		libexacct libipmi libzfs scsi libdevinfo libdevid libcfgadm \
 		libcontract libsysevent ../cmd/sgs/libelf libdladm libsff \
 		libpcidb
 hal:		libbsm
-$(SPARC_BLD)fm:	libpri
 gss_mechs/mech_dh: libgss
 gss_mechs/mech_dummy: libgss
 gss_mechs/mech_krb5: libgss libresolv2 pkcs11 libkstat
@@ -537,7 +514,6 @@ libdladm:	libdevinfo libinetutil libscf librcm libexacct libkstat \
 		libpool
 libdll:		libast
 libdlpi:	libinetutil libdladm
-libds:		libsysevent
 libdtrace:	libproc libgen libctf libmapmalloc
 libefi:		libuuid libsmbios
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
@@ -560,15 +536,12 @@ libmlrpc:	libsmbfs libuuid
 libndmp:	libscf
 libnisdb:	libldap5
 libnwam:	libscf libbsm libdladm libipadm
-libpcp:		libumem libdevinfo
 libpctx:	libproc
 libpool:	libscf libexacct
 libpp:		libast
 libproc:	../cmd/sgs/librtld_db ../cmd/sgs/libelf libctf
 $(INTEL_BLD)libproc: libsaveargs
 libproject:	libpool libproc libsecdb
-libprtdiag:	libkstat
-libprtdiag_psr:	libprtdiag
 libraidcfg:	libdevinfo
 librestart:	libscf libpool libproject libsecdb libsysevent
 libsasl:	libgss pkcs11
@@ -587,9 +560,7 @@ libstmf:	libscf
 libsum:		libast
 libsun_ima:	libdevinfo libsysevent
 libsysevent:	libsecdb
-libtsalarm:	libpcp
 libuuid:	libdlpi
-libv12n:	libds libuuid
 libvolmgt:	libadm
 libvrrpadm:	libdladm libscf
 libvscan:	libscf libsecdb
@@ -615,7 +586,6 @@ scsi:		libfru libumem libdevid libdevinfo
 smbsrv:		libpthread librt libshare libidmap pkcs11 libsqlite \
 		libcryptoutil libreparse libcmdutils libresolv2 libsmbfs \
 		libuuid libads libgss libldap5 krb5 libmlrpc
-storage:	libdevice libdevinfo libdevid
 sun_fc:		libdevinfo libsysevent
 sun_sas:	libdevinfo libsysevent libkstat libdevid
 udapl:		libdevinfo libdladm

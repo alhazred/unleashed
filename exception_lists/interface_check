@@ -44,7 +44,6 @@
 # to be internally versioned.
 #
 PLUGIN		^usr/lib/devfsadm
-PLUGIN		^usr/lib/efcode/.*\.so$
 PLUGIN		^usr/lib/elfedit
 PLUGIN		^usr/lib/fm/fmd/plugins
 PLUGIN		^usr/lib/fm/fmd/schemes

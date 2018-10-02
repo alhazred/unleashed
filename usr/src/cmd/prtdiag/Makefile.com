@@ -39,8 +39,6 @@ DIRMODE		= 755
 POFILE		= prtdiag.po
 POFILES		= $(OBJS:%.o=%.po)
 
-LIBPRTDIAG	= $(SRC)/lib/libprtdiag
-
 .PARALLEL: $(OBJS)
 
 %.o: %.c
