@@ -1,3 +1,0 @@
-set name=pkg.fmri value=pkg:/text/less@481.1,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
-set name=pkg.renamed value=true
-depend fmri=pkg:/system/core-os@$(PKGVERS) type=require

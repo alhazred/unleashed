@@ -1,4 +1,0 @@
-set name=pkg.fmri \
-    value=pkg:/system/library/security/gss/diffie-hellman@$(PKGVERS)
-set name=pkg.renamed value=true
-depend fmri=pkg:/system/core-os@$(PKGVERS) type=require
