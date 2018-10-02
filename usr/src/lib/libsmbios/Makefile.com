@@ -27,14 +27,14 @@ LIBRARY = libsmbios.a
 VERS = .1
 
 COMMON_OBJS = \
-	smb_error.o \
-	smb_info.o \
-	smb_open.o
+	smbios_error.o \
+	smbios_info.o \
+	smbios_open.o
 
 LIB_OBJS = \
-	smb_lib.o \
-	smb_subr.o \
-	smb_tables.o
+	smbios_lib.o \
+	smbios_subr.o \
+	smbios_tables.o
 
 OBJECTS = $(COMMON_OBJS) $(LIB_OBJS)
 
@@ -48,7 +48,7 @@ LIBS = $(DYNLIB)
 
 SRCDIR = ../common
 
-CLEANFILES += ../common/smb_tables.c
+CLEANFILES += ../common/smbios_tables.c
 
 CPPFLAGS += -I../common -I$(COMMON_SRCDIR)
 LDLIBS += -ldevinfo -lc
@@ -63,5 +63,5 @@ objs/%.o pics/%.o: ../../../common/smbios/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
 
-../common/smb_tables.c: $(COMMON_SRCDIR)/mktables.sh $(COMMON_HDR)
+../common/smbios_tables.c: $(COMMON_SRCDIR)/mktables.sh $(COMMON_HDR)
 	sh $(COMMON_SRCDIR)/mktables.sh $(COMMON_HDR) > $@

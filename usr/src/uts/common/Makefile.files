@@ -1595,7 +1595,7 @@ SDP_OBJS +=	sdpddi.o
 
 TRILL_OBJS +=   trill.o
 
-SMBIOS_OBJS += smb_error.o smb_info.o smb_open.o smb_subr.o smb_dev.o
+SMBIOS_OBJS += smbios_error.o smbios_info.o smbios_open.o smbios_subr.o smbios_dev.o
 
 RPCIB_OBJS += rpcib.o
 

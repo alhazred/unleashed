@@ -4015,7 +4015,7 @@ lib/libsmbfs/i386/pics/
 lib/libsmbfs/libsmbfs.po
 lib/libsmbios/amd64/libsmbios.so.1
 lib/libsmbios/amd64/pics/
-lib/libsmbios/common/smb_tables.c
+lib/libsmbios/common/smbios_tables.c
 lib/libsmbios/i386/libsmbios.so.1
 lib/libsmbios/i386/pics/
 lib/libsmedia/library/amd64/libsmedia.so.1
