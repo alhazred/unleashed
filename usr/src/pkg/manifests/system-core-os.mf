@@ -31,6 +31,36 @@
 <include SUNWcs.man4.inc>
 <include SUNWcs.man5.inc>
 <include SUNWcs.man8.inc>
+
+# unsorted contents from obsoleted packages
+<include developer-dtrace.inc>
+<include install-beadm.inc>
+<include library-libedit.inc>
+<include library-libressl.inc>
+<include library-libtecla.inc>
+<include library-ncurses.inc>
+<include runtime-perl-module-sun-solaris.inc>
+<include service-file-system-smb.inc>
+<include service-picl.inc>
+<include service-resource-pools.inc>
+<include service-security-gss.inc>
+<include service-security-kerberos-5.inc>
+<include shell-ksh93.inc>
+<include system-data-keyboard-keytables.inc>
+<include system-data-zoneinfo.inc>
+<include system-ficl.inc>
+<include system-file-system-smb.inc>
+<include system-file-system-zfs.inc>
+<include system-library.inc>
+<include system-library-libdiskmgt.inc>
+<include system-library-math.inc>
+<include system-library-security-gss.inc>
+<include system-library-security-gss-diffie-hellman.inc>
+<include system-library-security-gss-spnego.inc>
+<include system-library-security-libsasl.inc>
+<include system-library-storage-scsi-plugins.inc>
+<include system-network-mailwrapper.inc>
+<include system-zones.inc>
 set name=pkg.fmri value=pkg:/system/core-os@$(PKGVERS)
 set name=pkg.description \
     value="core software for a specific instruction-set architecture"
@@ -204,11 +234,11 @@ dir path=usr/share/lib/xml/dtd group=sys
 dir path=usr/share/lib/xml/style group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1
-dir path=usr/share/man/man8
 dir path=usr/share/man/man4
 dir path=usr/share/man/man5
 dir path=usr/share/man/man7d
 dir path=usr/share/man/man7fs
+dir path=usr/share/man/man8
 dir path=usr/share/man/man8
 dir path=usr/share/misc
 dir path=var group=sys
@@ -1433,33 +1463,3 @@ depend fmri=system/boot/loader type=require
 # place for this dependency.
 #
 depend fmri=text/file type=require
-
-# unsorted contents from obsoleted packages
-<include developer-dtrace.inc>
-<include install-beadm.inc>
-<include library-libedit.inc>
-<include library-libressl.inc>
-<include library-libtecla.inc>
-<include library-ncurses.inc>
-<include runtime-perl-module-sun-solaris.inc>
-<include service-file-system-smb.inc>
-<include service-picl.inc>
-<include service-resource-pools.inc>
-<include service-security-gss.inc>
-<include service-security-kerberos-5.inc>
-<include shell-ksh93.inc>
-<include system-data-keyboard-keytables.inc>
-<include system-data-zoneinfo.inc>
-<include system-ficl.inc>
-<include system-file-system-smb.inc>
-<include system-file-system-zfs.inc>
-<include system-library.inc>
-<include system-library-libdiskmgt.inc>
-<include system-library-math.inc>
-<include system-library-security-gss.inc>
-<include system-library-security-gss-diffie-hellman.inc>
-<include system-library-security-gss-spnego.inc>
-<include system-library-security-libsasl.inc>
-<include system-library-storage-scsi-plugins.inc>
-<include system-network-mailwrapper.inc>
-<include system-zones.inc>

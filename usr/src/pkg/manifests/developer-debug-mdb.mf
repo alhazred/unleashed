@@ -181,8 +181,8 @@ hardlink path=usr/bin/$(ARCH64)/adb target=../../../usr/bin/$(ARCH64)/mdb
 hardlink path=usr/bin/adb target=../../usr/lib/isaexec
 hardlink path=usr/bin/mdb target=../../usr/lib/isaexec
 license cr_Sun license=cr_Sun
+license kernel/drivers/scsi/mr_sas/THIRDPARTYLICENSE \
+    license=kernel/drivers/scsi/mr_sas/THIRDPARTYLICENSE
 license kernel/zmod/THIRDPARTYLICENSE license=kernel/zmod/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
 license usr/src/common/bzip2/LICENSE license=usr/src/common/bzip2/LICENSE
-license kernel/drivers/scsi/mr_sas/THIRDPARTYLICENSE \
-    license=kernel/drivers/scsi/mr_sas/THIRDPARTYLICENSE

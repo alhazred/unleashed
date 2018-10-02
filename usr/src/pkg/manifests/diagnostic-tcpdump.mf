@@ -14,7 +14,8 @@
 #
 set name=pkg.fmri \
     value=pkg:/diagnostic/tcpdump@4.9.2,$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
-set name=pkg.summary value="A tool for network monitoring and data acquisition"
 set name=pkg.descr value="A tool for network monitoring and data acquisition"
+set name=pkg.summary \
+    value="A tool for network monitoring and data acquisition"
 file path=usr/sbin/tcpdump mode=0555
 file path=usr/share/man/man1/tcpdump.1 mode=0444

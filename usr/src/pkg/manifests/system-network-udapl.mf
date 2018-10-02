@@ -42,15 +42,14 @@ dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 dir path=usr/sbin
 dir path=usr/share/man
-dir path=usr/share/man/man8
 dir path=usr/share/man/man3dat
 dir path=usr/share/man/man3lib
 dir path=usr/share/man/man4
+dir path=usr/share/man/man8
 file path=etc/dat/dat.conf group=sys preserve=true
 file path=usr/lib/$(ARCH64)/libdat.so.1
 file path=usr/lib/libdat.so.1
 file path=usr/sbin/datadm mode=0555
-file path=usr/share/man/man8/datadm.8
 file path=usr/share/man/man3dat/dat_cno_create.3dat
 file path=usr/share/man/man3dat/dat_cno_free.3dat
 file path=usr/share/man/man3dat/dat_cno_modify_agent.3dat
@@ -126,6 +125,7 @@ file path=usr/share/man/man3dat/dat_srq_set_lw.3dat
 file path=usr/share/man/man3dat/dat_strerror.3dat
 file path=usr/share/man/man3lib/libdat.3lib
 file path=usr/share/man/man4/dat.conf.4
+file path=usr/share/man/man8/datadm.8
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libdat.so target=libdat.so.1

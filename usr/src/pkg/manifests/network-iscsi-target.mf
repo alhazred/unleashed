@@ -46,9 +46,9 @@ dir path=usr/include/sys/iscsit
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
 dir path=usr/sbin
-dir path=usr/share/man/man8
 dir path=usr/share/man/man3iscsit
 dir path=usr/share/man/man3lib
+dir path=usr/share/man/man8
 driver name=iscsit perms="* 0600 root sys"
 file path=kernel/drv/iscsit group=sys
 file path=kernel/drv/iscsit.conf group=sys
@@ -61,13 +61,13 @@ file path=usr/include/sys/iscsit/iscsit_common.h
 file path=usr/lib/$(ARCH64)/libiscsit.so.1
 file path=usr/lib/libiscsit.so.1
 file path=usr/sbin/itadm mode=0555
-file path=usr/share/man/man8/itadm.8
 file path=usr/share/man/man3iscsit/it_config_load.3iscsit
 file path=usr/share/man/man3iscsit/it_ini_create.3iscsit
 file path=usr/share/man/man3iscsit/it_portal_create.3iscsit
 file path=usr/share/man/man3iscsit/it_tgt_create.3iscsit
 file path=usr/share/man/man3iscsit/it_tpg_create.3iscsit
 file path=usr/share/man/man3lib/libiscsit.3lib
+file path=usr/share/man/man8/itadm.8
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libiscsit.so target=libiscsit.so.1
