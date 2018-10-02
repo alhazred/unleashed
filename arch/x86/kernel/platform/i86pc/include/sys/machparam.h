@@ -33,11 +33,6 @@
 
 #if !defined(_ASM)
 #include <sys/types.h>
-
-#if defined(__xpv)
-#include <sys/xpv_impl.h>
-#endif
-
 #endif
 
 #ifdef	__cplusplus
@@ -147,13 +142,6 @@ extern "C" {
 
 #define	KERNEL_TEXT_i386	ADDRESS_C(0xfe800000)
 
-/*
- * We don't use HYPERVISOR_VIRT_START, as we need both the PAE and non-PAE
- * versions in our code. We always compile based on the lower PAE address.
- */
-#define	KERNEL_TEXT_i386_xpv	\
-	(HYPERVISOR_VIRT_START_PAE - 3 * ADDRESS_C(0x400000))
-
 #endif /* __i386 */
 
 #if defined(__amd64)
@@ -224,15 +212,8 @@ extern "C" {
  * limit give dtrace the red zone it needs below kernelbase.  The 32-bit
  * limit gives us a small red zone to detect address-space overruns in a
  * user program.
- *
- * On the hypervisor, we limit the user to memory below the VA hole.
- * Subtract 1 large page for a red zone.
  */
-#if defined(__xpv)
-#define	USERLIMIT	ADDRESS_C(0x00007fffffe00000)
-#else
 #define	USERLIMIT	ADDRESS_C(0xfffffd7fffe00000)
-#endif
 
 #ifdef bug_5074717_is_fixed
 #define	USERLIMIT32	ADDRESS_C(0xfffff000)
@@ -270,11 +251,7 @@ extern "C" {
  * The top 64MB of the address space is reserved for the hypervisor.
  */
 #define	PROMSTART	ADDRESS_C(0xffc00000)
-#ifdef __xpv
-#define	KERNEL_TEXT	KERNEL_TEXT_i386_xpv
-#else
 #define	KERNEL_TEXT	KERNEL_TEXT_i386
-#endif
 
 /*
  * Virtual address range available to the debugger
