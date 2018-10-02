@@ -168,9 +168,9 @@ $(UNIX_O):	$(OBJECTS) $(CTFEXTRAOBJS)
 	$(LD) -r -o $@ $(OBJECTS) $(OBJS_DIR)/vers.o
 
 $(DBOOT_BIN):	$(DBOOT_OBJS_DIR) $(DBOOT_OBJECTS) \
-		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot
+		$(SRCTOP)/arch/x86/kernel/dboot/mapfile-dboot
 	$(LD) -dn -e _start -M \
-		$(SRCTOP)/arch/x86/kernel/platform/i86pc/dboot/mapfile-dboot \
+		$(SRCTOP)/arch/x86/kernel/dboot/mapfile-dboot \
 		-o $(DBOOT_BIN) $(DBOOT_OBJECTS)
 
 $(DBOOT_O):	$(DBOOT_BIN)

@@ -54,7 +54,7 @@ CORE_OBJS +=			\
 	cpu_acpi.o		\
 	dis_tables.o		\
 	ddi_impl.o		\
-	dtrace_subr.o		\
+	dtrace_subr_arch.o	\
 	dvma.o			\
 	fpu_subr.o		\
 	fakebop.o		\
@@ -240,7 +240,7 @@ AMD_IOMMU_OBJS +=	amd_iommu.o amd_iommu_impl.o amd_iommu_acpi.o \
 #
 ALL_DEFS	+= -Di86pc
 INC_PATH	+= -I$(SRCTOP)/include
-INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/include
 INC_PATH	+= -I$(UTSBASE)/i86pc -I$(SRC)/common
 
 #

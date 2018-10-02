@@ -1,7 +1,4 @@
-SUBDIR=	../kernel/platform/${CONFIG_PLATFORM}/include \
+SUBDIR=	../kernel/include \
 	sys
 
 .include <subdir.mk>
-
-.include <unleashed.mk>
-.include <${SRCTOP}/cfgparam.mk>

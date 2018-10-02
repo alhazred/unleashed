@@ -2249,7 +2249,8 @@ extern int dtrace_meta_unregister(dtrace_meta_provider_id_t);
  * The following functions are implemented by the base kernel and form a set of
  * hooks used by the DTrace framework.  DTrace hooks are implemented in either
  * kernel/os/dtrace_subr.c, an ISA-specific assembly file, or in a
- * uts/<platform>/os/dtrace_subr.c corresponding to each hardware platform.
+ * arch/<arch>/kernel/os/dtrace_subr_arch.c corresponding to each hardware
+ * platform.
  */
 
 typedef enum dtrace_vtime_state {

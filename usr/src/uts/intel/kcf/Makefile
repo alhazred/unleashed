@@ -60,7 +60,7 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 
 CFLAGS		+= -I$(COM_DIR)
-AS_CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/platform/$(PLATFORM)/include
+AS_CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/include
 
 
 CERRWARN	+= -Wno-switch

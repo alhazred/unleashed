@@ -117,7 +117,7 @@ AS_INC_PATH		+= -I$(DSF_DIR)/$(OBJS_DIR)
 #	MODSTUBS:	Module stubs source file.
 #	GENASSYM_SRC:	genassym.c
 #
-MAPFILE		 = $(SRCTOP)/arch/x86/kernel/platform/i86pc/mapfile-$(CLASS)
+MAPFILE		 = $(SRCTOP)/arch/x86/kernel/mapfile-$(CLASS)
 MODSTUBS	 = $(SRCTOP)/arch/x86/kernel/ml/modstubs.s
 GENASSYM_SRC	 = $(UTSBASE)/$(PLATFORM)/ml/genassym.c
 OFFSETS_SRC	 = $(SRCTOP)/arch/x86/kernel/offsets.in

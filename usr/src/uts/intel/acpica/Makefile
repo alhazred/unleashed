@@ -23,7 +23,7 @@ MODULE		= acpica
 OBJECTS		= $(ACPICA_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 INC_PATH        += -I$(SRCTOP)/arch/x86/include/sys/acpi
-INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/include
 INC_PATH	+= -I$(SRC)/common
 
 #

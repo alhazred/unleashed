@@ -38,7 +38,7 @@ include ../../../../Makefile.module
 
 CPPFLAGS += -DMP -D_MACHDEP
 CPPFLAGS += -I../../../../common
-CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/include
 CPPFLAGS += -I$(SRCTOP)/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 

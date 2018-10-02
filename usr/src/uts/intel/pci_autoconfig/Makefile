@@ -42,7 +42,7 @@ UTSBASE	= ../..
 MODULE		= pci_autoconfig
 OBJECTS		= $(PCI_AUTOCONFIG_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
-INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+INC_PATH	+= -I$(SRCTOP)/arch/x86/kernel/include
 
 #
 #	Include common rules.

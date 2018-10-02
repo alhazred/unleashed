@@ -32,7 +32,7 @@ OBJS= biosdev.o
 
 include ../Makefile.cmd
 
-CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/include
 
 SRCS= $(OBJS:.o=.c)
 

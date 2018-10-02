@@ -72,8 +72,7 @@ CPPFLAGS	+= -I$(SRCTOP)/include
 CPPFLAGS	+= -I$(SRC)/common
 CPPFLAGS	+= -I$(SRCTOP)/kernel/fs
 CPPFLAGS	+= -I$(SRCTOP)/kernel/fs/zfs
-
-CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/platform/i86pc/include
+CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/include
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

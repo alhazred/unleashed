@@ -62,7 +62,7 @@ LDFLAGS += -dy -Nmisc/kcf
 
 CPPFLAGS	+= -I$(COM_DIR) -I$(COM_DIR)/..
 CPPFLAGS	+= -DCRYPTO_PROVIDER_NAME=\"$(MODULE)\"
-AS_CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/platform/$(PLATFORM)/include
+AS_CPPFLAGS	+= -I$(SRCTOP)/arch/x86/kernel/include
 
 #
 #	Default build targets.
