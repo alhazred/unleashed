@@ -247,7 +247,6 @@ i386_SUBDIRS=		\
 sparc_SUBDIRS=		\
 	efcode		\
 	libds		\
-	libdscp		\
 	libprtdiag	\
 	libprtdiag_psr	\
 	libpri		\
@@ -439,7 +438,6 @@ i386_HDRSUBDIRS=	\
 
 sparc_HDRSUBDIRS=	\
 	libds		\
-	libdscp		\
 	libpri		\
 	libv12n		\
 	storage
