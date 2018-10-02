@@ -418,7 +418,6 @@ sparc_SUBDIRS=		\
 	drd		\
 	fruadm		\
 	prtfru		\
-	scadm		\
 	virtinfo
 
 #
@@ -567,7 +566,6 @@ MSGSUBDIRS=		\
 	rmvolmgr	\
 	sasinfo		\
 	sbdadm		\
-	scadm		\
 	script		\
 	scsi		\
 	sdiff		\

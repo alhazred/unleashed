@@ -345,7 +345,6 @@ MAN = 6to4relay.8 \
       sasinfo.8 \
       savecore.8 \
       sbdadm.8 \
-      scadm.8 \
       sdpadm.8 \
       share.8 \
       share_nfs.8 \
