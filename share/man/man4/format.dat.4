@@ -401,8 +401,7 @@ bytes per sector (SMD)
 bytes per track (SMD)
 .RE
 
-Note: under SunOS 5.x, bpt is only required for SMD disks. Under SunOS 4.x, bpt
-was required for all disk types, even though it was only used for SMD disks.
+Note: bpt is only required for SMD disks.
 .sp
 And this identifier is for XY450 SMD Controllers Only
 .sp
@@ -429,13 +428,8 @@ for several kinds of disk drives. Add a partition definition if you
 repartitioned any of the disks on your system. Add as many partition
 definitions to the data file as you need.
 .sp
-Partition naming conventions differ in SunOS 4.x and in SunOS 5.x.
-.sp
-4.x: the partitions are named as \fBa\fR, \fBb\fR, \fBc\fR, \fBd\fR, \fBe\fR,
-\fBf\fR, \fBg\fR, \fBh\fR.
-.sp
-5.x: the partitions are referred to by numbers \fB0\fR, \fB1\fR, \fB2\fR,
-\fB3\fR, \fB4\fR, \fB5\fR, \fB6\fR, \fB7\fR.
+Partitions are referred to by numbers \fB0\fR, \fB1\fR, \fB2\fR, \fB3\fR,
+\fB4\fR, \fB5\fR, \fB6\fR, \fB7\fR.
 .RE
 
 .SH EXAMPLES

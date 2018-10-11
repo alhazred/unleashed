@@ -800,15 +800,6 @@ If the directory on which a file system is to be mounted is a symbolic link,
 the file system is mounted on the directory to which the symbolic link refers,
 rather than being mounted on top of the symbolic link itself.
 .Pp
-SunOS 4.x used the
-.Sy biod
-maintenance procedure to perform parallel read-ahead and write-behind on NFS
-clients.
-SunOS 5.x made
-.Sy biod
-obsolete with multi-threaded processing, which transparently performs parallel
-read-ahead and write-behind.
-.Pp
 Since the root
 .Pq Pa /
 file system is mounted read-only by the kernel during the boot process, only the
