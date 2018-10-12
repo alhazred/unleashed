@@ -24,6 +24,7 @@
  * Copyright 2013 Nexenta Systems, Inc. All rights reserved.
  * Copyright 2016 Toomas Soome <tsoome@me.com>
  * Copyright (c) 2015 by Delphix. All rights reserved.
+ * Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
  */
 
 
@@ -131,7 +132,7 @@ be_get_boot_args(char **fbarg, int entry)
 		return (ret);
 	}
 
-	ret = _be_list(NULL, &be_nodes);
+	ret = _be_list(NULL, &be_nodes, BE_LIST_DEFAULT);
 	if (ret != BE_SUCCESS)
 		goto done;
 
@@ -2043,7 +2044,7 @@ be_print_err(char *prnt_str, ...)
 /*
  * Function:	be_find_current_be
  * Description:	Find the currently "active" BE. Fill in the
- * 		passed in be_transaction_data_t reference with the
+ *		passed in be_transaction_data_t reference with the
  *		active BE's data.
  * Paramters:
  *		none
@@ -3071,7 +3072,7 @@ be_get_auto_name(char *obe_name, char *be_container_ds, boolean_t zone_be)
 			    "be_get_zone_be_list failed\n"));
 			return (NULL);
 		}
-	} else if (_be_list(NULL, &be_nodes) != BE_SUCCESS) {
+	} else if (_be_list(NULL, &be_nodes, BE_LIST_DEFAULT) != BE_SUCCESS) {
 		be_print_err(gettext("be_get_auto_name: be_list failed\n"));
 		return (NULL);
 	}
@@ -3273,7 +3274,7 @@ be_create_menu(
 	/*
 	 * Now we need to add all the BE's back into the the file.
 	 */
-	if (_be_list(NULL, &be_nodes) == BE_SUCCESS) {
+	if (_be_list(NULL, &be_nodes, BE_LIST_DEFAULT) == BE_SUCCESS) {
 		while (be_nodes != NULL) {
 			if (strcmp(pool, be_nodes->be_rpool) == 0) {
 				(void) be_append_menu(be_nodes->be_node_name,
