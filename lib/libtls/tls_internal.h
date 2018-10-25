@@ -1,4 +1,4 @@
-/* $OpenBSD: tls_internal.h,v 1.71.2.1 2018/04/18 16:29:11 jsing Exp $ */
+/* $OpenBSD: tls_internal.h,v 1.72 2018/04/07 16:35:34 jsing Exp $ */
 /*
  * Copyright (c) 2014 Jeremie Courreges-Anglas <jca@openbsd.org>
  * Copyright (c) 2014 Joel Sing <jsing@openbsd.org>
@@ -200,7 +200,6 @@ int tls_set_string(const char **_dest, const char *_src);
 
 struct tls_keypair *tls_keypair_new(void);
 void tls_keypair_clear_key(struct tls_keypair *_keypair);
-void tls_keypair_clear(struct tls_keypair *_keypair);
 void tls_keypair_free(struct tls_keypair *_keypair);
 int tls_keypair_set_cert_file(struct tls_keypair *_keypair,
     struct tls_error *_error, const char *_cert_file);

@@ -1,4 +1,4 @@
-/* $OpenBSD: tls_config.c,v 1.51.2.1 2018/04/18 16:29:11 jsing Exp $ */
+/* $OpenBSD: tls_config.c,v 1.52 2018/04/07 16:35:34 jsing Exp $ */
 /*
  * Copyright (c) 2014 Joel Sing <jsing@openbsd.org>
  *

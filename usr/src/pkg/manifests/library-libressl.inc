@@ -102,18 +102,19 @@ file path=usr/include/openssl/x509.h
 file path=usr/include/openssl/x509_vfy.h
 file path=usr/include/openssl/x509v3.h
 file path=usr/include/tls.h
-file path=usr/lib/amd64/libcrypto.so.43.1 mode=0555
-file path=usr/lib/amd64/libssl.so.45.1 mode=0555
-file path=usr/lib/amd64/libtls.so.17.1 mode=0555
-file path=usr/lib/libcrypto.so.43.1 mode=0555
-file path=usr/lib/libssl.so.45.1 mode=0555
-file path=usr/lib/libtls.so.17.1 mode=0555
+file path=usr/lib/amd64/libcrypto.so.44.1 mode=0555
+file path=usr/lib/amd64/libssl.so.46.1 mode=0555
+file path=usr/lib/amd64/libtls.so.18.1 mode=0555
+file path=usr/lib/libcrypto.so.44.1 mode=0555
+file path=usr/lib/libssl.so.46.1 mode=0555
+file path=usr/lib/libtls.so.18.1 mode=0555
 file path=usr/lib/pkgconfig/libcrypto.pc mode=0444
 file path=usr/lib/pkgconfig/libssl.pc mode=0444
 file path=usr/lib/pkgconfig/openssl.pc mode=0444
 file path=usr/share/man/man1/nc.1
 file path=usr/share/man/man1/openssl.1
 file path=usr/share/man/man3/ACCESS_DESCRIPTION_new.3
+file path=usr/share/man/man3/ASN1_INTEGER_get.3
 file path=usr/share/man/man3/ASN1_OBJECT_new.3
 file path=usr/share/man/man3/ASN1_STRING_TABLE_add.3
 file path=usr/share/man/man3/ASN1_STRING_length.3
@@ -209,6 +210,17 @@ file path=usr/share/man/man3/EC_GROUP_new.3
 file path=usr/share/man/man3/EC_KEY_new.3
 file path=usr/share/man/man3/EC_POINT_add.3
 file path=usr/share/man/man3/EC_POINT_new.3
+file path=usr/share/man/man3/ENGINE_add.3
+file path=usr/share/man/man3/ENGINE_ctrl.3
+file path=usr/share/man/man3/ENGINE_get_default_RSA.3
+file path=usr/share/man/man3/ENGINE_init.3
+file path=usr/share/man/man3/ENGINE_new.3
+file path=usr/share/man/man3/ENGINE_register_RSA.3
+file path=usr/share/man/man3/ENGINE_register_all_RSA.3
+file path=usr/share/man/man3/ENGINE_set_RSA.3
+file path=usr/share/man/man3/ENGINE_set_default.3
+file path=usr/share/man/man3/ENGINE_set_flags.3
+file path=usr/share/man/man3/ENGINE_unregister_RSA.3
 file path=usr/share/man/man3/ERR.3
 file path=usr/share/man/man3/ERR_GET_LIB.3
 file path=usr/share/man/man3/ERR_asprintf_error_data.3
@@ -514,7 +526,6 @@ file path=usr/share/man/man3/d2i_X509_NAME.3
 file path=usr/share/man/man3/d2i_X509_REQ.3
 file path=usr/share/man/man3/d2i_X509_SIG.3
 file path=usr/share/man/man3/des_read_pw.3
-file path=usr/share/man/man3/engine.3
 file path=usr/share/man/man3/evp.3
 file path=usr/share/man/man3/get_rfc3526_prime_8192.3
 file path=usr/share/man/man3/i2d_PKCS7_bio_stream.3
@@ -535,15 +546,15 @@ file path=usr/share/man/man3/tls_ocsp_process_response.3
 file path=usr/share/man/man3/tls_read.3
 file path=usr/share/man/man5/openssl.cnf.5
 file path=usr/share/man/man5/x509v3.cnf.5
-link path=usr/lib/amd64/libcrypto.so target=libcrypto.so.43.1
-link path=usr/lib/amd64/libcrypto.so.43 target=libcrypto.so.43.1
-link path=usr/lib/amd64/libssl.so target=libssl.so.45.1
-link path=usr/lib/amd64/libssl.so.45 target=libssl.so.45.1
-link path=usr/lib/amd64/libtls.so target=libtls.so.17.1
-link path=usr/lib/amd64/libtls.so.17 target=libtls.so.17.1
-link path=usr/lib/libcrypto.so target=libcrypto.so.43.1
-link path=usr/lib/libcrypto.so.43 target=libcrypto.so.43.1
-link path=usr/lib/libssl.so target=libssl.so.45.1
-link path=usr/lib/libssl.so.45 target=libssl.so.45.1
-link path=usr/lib/libtls.so target=libtls.so.17.1
-link path=usr/lib/libtls.so.17 target=libtls.so.17.1
+link path=usr/lib/amd64/libcrypto.so target=libcrypto.so.44.1
+link path=usr/lib/amd64/libcrypto.so.44 target=libcrypto.so.44.1
+link path=usr/lib/amd64/libssl.so target=libssl.so.46.1
+link path=usr/lib/amd64/libssl.so.46 target=libssl.so.46.1
+link path=usr/lib/amd64/libtls.so target=libtls.so.18.1
+link path=usr/lib/amd64/libtls.so.18 target=libtls.so.18.1
+link path=usr/lib/libcrypto.so target=libcrypto.so.44.1
+link path=usr/lib/libcrypto.so.44 target=libcrypto.so.44.1
+link path=usr/lib/libssl.so target=libssl.so.46.1
+link path=usr/lib/libssl.so.46 target=libssl.so.46.1
+link path=usr/lib/libtls.so target=libtls.so.18.1
+link path=usr/lib/libtls.so.18 target=libtls.so.18.1

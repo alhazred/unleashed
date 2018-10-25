@@ -1,4 +1,4 @@
-/* $OpenBSD: t1_enc.c,v 1.109 2017/05/06 22:24:58 beck Exp $ */
+/* $OpenBSD: t1_enc.c,v 1.114 2018/09/08 14:39:41 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -397,10 +397,13 @@ tls1_change_cipher_state_aead(SSL *s, char is_read, const unsigned char *key,
 	SSL_AEAD_CTX *aead_ctx;
 
 	if (is_read) {
+		ssl_clear_cipher_read_state(s);
 		if (!tls1_aead_ctx_init(&s->internal->aead_read_ctx))
 			return 0;
 		aead_ctx = s->internal->aead_read_ctx;
 	} else {
+		/* XXX - Need to correctly handle DTLS. */
+		ssl_clear_cipher_write_state(s);
 		if (!tls1_aead_ctx_init(&s->internal->aead_write_ctx))
 			return 0;
 		aead_ctx = s->internal->aead_write_ctx;
@@ -444,11 +447,10 @@ tls1_change_cipher_state_aead(SSL *s, char is_read, const unsigned char *key,
  * tls1_change_cipher_state_cipher performs the work needed to switch cipher
  * states when using EVP_CIPHER. The argument is_read is true iff this function
  * is being called due to reading, as opposed to writing, a ChangeCipherSpec
- * message. In order to support export ciphersuites, use_client_keys indicates
- * whether the key material provided is in the "client write" direction.
+ * message.
  */
 static int
-tls1_change_cipher_state_cipher(SSL *s, char is_read, char use_client_keys,
+tls1_change_cipher_state_cipher(SSL *s, char is_read,
     const unsigned char *mac_secret, unsigned int mac_secret_size,
     const unsigned char *key, unsigned int key_len, const unsigned char *iv,
     unsigned int iv_len)
@@ -456,6 +458,7 @@ tls1_change_cipher_state_cipher(SSL *s, char is_read, char use_client_keys,
 	EVP_CIPHER_CTX *cipher_ctx;
 	const EVP_CIPHER *cipher;
 	EVP_MD_CTX *mac_ctx;
+	EVP_PKEY *mac_key;
 	const EVP_MD *mac;
 	int mac_type;
 
@@ -469,15 +472,12 @@ tls1_change_cipher_state_cipher(SSL *s, char is_read, char use_client_keys,
 		else
 			s->internal->mac_flags &= ~SSL_MAC_FLAG_READ_MAC_STREAM;
 
-		EVP_CIPHER_CTX_free(s->enc_read_ctx);
-		s->enc_read_ctx = NULL;
-		EVP_MD_CTX_destroy(s->read_hash);
-		s->read_hash = NULL;
+		ssl_clear_cipher_read_state(s);
 
 		if ((cipher_ctx = EVP_CIPHER_CTX_new()) == NULL)
 			goto err;
 		s->enc_read_ctx = cipher_ctx;
-		if ((mac_ctx = EVP_MD_CTX_create()) == NULL)
+		if ((mac_ctx = EVP_MD_CTX_new()) == NULL)
 			goto err;
 		s->read_hash = mac_ctx;
 	} else {
@@ -493,40 +493,24 @@ tls1_change_cipher_state_cipher(SSL *s, char is_read, char use_client_keys,
 		 * contexts that are used for DTLS - these are instead freed
 		 * by DTLS when its frees a ChangeCipherSpec fragment.
 		 */
-		if (!SSL_IS_DTLS(s)) {
-			EVP_CIPHER_CTX_free(s->internal->enc_write_ctx);
-			s->internal->enc_write_ctx = NULL;
-			EVP_MD_CTX_destroy(s->internal->write_hash);
-			s->internal->write_hash = NULL;
-		}
+		if (!SSL_IS_DTLS(s))
+			ssl_clear_cipher_write_state(s);
+
 		if ((cipher_ctx = EVP_CIPHER_CTX_new()) == NULL)
 			goto err;
 		s->internal->enc_write_ctx = cipher_ctx;
-		if ((mac_ctx = EVP_MD_CTX_create()) == NULL)
+		if ((mac_ctx = EVP_MD_CTX_new()) == NULL)
 			goto err;
 		s->internal->write_hash = mac_ctx;
 	}
 
-	if (EVP_CIPHER_mode(cipher) == EVP_CIPH_GCM_MODE) {
-		EVP_CipherInit_ex(cipher_ctx, cipher, NULL, key, NULL,
-		    !is_read);
-		EVP_CIPHER_CTX_ctrl(cipher_ctx, EVP_CTRL_GCM_SET_IV_FIXED,
-		    iv_len, (unsigned char *)iv);
-	} else
-		EVP_CipherInit_ex(cipher_ctx, cipher, NULL, key, iv, !is_read);
+	EVP_CipherInit_ex(cipher_ctx, cipher, NULL, key, iv, !is_read);
 
-	if (!(EVP_CIPHER_flags(cipher) & EVP_CIPH_FLAG_AEAD_CIPHER)) {
-		EVP_PKEY *mac_key = EVP_PKEY_new_mac_key(mac_type, NULL,
-		    mac_secret, mac_secret_size);
-		if (mac_key == NULL)
-			goto err;
-		EVP_DigestSignInit(mac_ctx, NULL, mac, NULL, mac_key);
-		EVP_PKEY_free(mac_key);
-	} else if (mac_secret_size > 0) {
-		/* Needed for "composite" AEADs, such as RC4-HMAC-MD5 */
-		EVP_CIPHER_CTX_ctrl(cipher_ctx, EVP_CTRL_AEAD_SET_MAC_KEY,
-		    mac_secret_size, (unsigned char *)mac_secret);
-	}
+	if ((mac_key = EVP_PKEY_new_mac_key(mac_type, NULL, mac_secret,
+	    mac_secret_size)) == NULL)
+		goto err;
+	EVP_DigestSignInit(mac_ctx, NULL, mac, NULL, mac_key);
+	EVP_PKEY_free(mac_key);
 
 	if (S3I(s)->hs.new_cipher->algorithm_enc == SSL_eGOST2814789CNT) {
 		int nid;
@@ -560,7 +544,6 @@ tls1_change_cipher_state(SSL *s, int which)
 	const EVP_AEAD *aead;
 	char is_read, use_client_keys;
 
-
 	cipher = S3I(s)->tmp.new_sym_enc;
 	aead = S3I(s)->tmp.new_aead;
 
@@ -579,7 +562,6 @@ tls1_change_cipher_state(SSL *s, int which)
 	use_client_keys = ((which == SSL3_CHANGE_CIPHER_CLIENT_WRITE) ||
 	    (which == SSL3_CHANGE_CIPHER_SERVER_READ));
 
-
 	/*
 	 * Reset sequence number to zero - for DTLS this is handled in
 	 * dtls1_reset_seq_numbers().
@@ -595,10 +577,6 @@ tls1_change_cipher_state(SSL *s, int which)
 	} else {
 		key_len = EVP_CIPHER_key_length(cipher);
 		iv_len = EVP_CIPHER_iv_length(cipher);
-
-		/* If GCM mode only part of IV comes from PRF. */
-		if (EVP_CIPHER_mode(cipher) == EVP_CIPH_GCM_MODE)
-			iv_len = EVP_GCM_TLS_FIXED_IV_LEN;
 	}
 
 	mac_secret_size = s->s3->tmp.new_mac_secret_size;
@@ -645,7 +623,7 @@ tls1_change_cipher_state(SSL *s, int which)
 		    iv, iv_len);
 	}
 
-	return tls1_change_cipher_state_cipher(s, is_read, use_client_keys,
+	return tls1_change_cipher_state_cipher(s, is_read,
 	    mac_secret, mac_secret_size, key, key_len, iv, iv_len);
 
 err2:
@@ -667,7 +645,7 @@ tls1_setup_key_block(SSL *s)
 		return (1);
 
 	if (s->session->cipher &&
-	    (s->session->cipher->algorithm2 & SSL_CIPHER_ALGORITHM2_AEAD)) {
+	    (s->session->cipher->algorithm_mac & SSL_AEAD)) {
 		if (!ssl_cipher_get_evp_aead(s->session, &aead)) {
 			SSLerror(s, SSL_R_CIPHER_OR_HASH_UNAVAILABLE);
 			return (0);
@@ -682,10 +660,6 @@ tls1_setup_key_block(SSL *s)
 		}
 		key_len = EVP_CIPHER_key_length(cipher);
 		iv_len = EVP_CIPHER_iv_length(cipher);
-
-		/* If GCM mode only part of IV comes from PRF. */
-		if (EVP_CIPHER_mode(cipher) == EVP_CIPH_GCM_MODE)
-			iv_len = EVP_GCM_TLS_FIXED_IV_LEN;
 	}
 
 	S3I(s)->tmp.new_aead = aead;
@@ -957,28 +931,7 @@ tls1_enc(SSL *s, int send)
 		l = rec->length;
 		bs = EVP_CIPHER_block_size(ds->cipher);
 
-		if (EVP_CIPHER_flags(ds->cipher) & EVP_CIPH_FLAG_AEAD_CIPHER) {
-			unsigned char buf[13];
-
-			if (SSL_IS_DTLS(s)) {
-				dtls1_build_sequence_number(buf, seq,
-				    send ? D1I(s)->w_epoch : D1I(s)->r_epoch);
-			} else {
-				memcpy(buf, seq, SSL3_SEQUENCE_SIZE);
-				tls1_record_sequence_increment(seq);
-			}
-
-			buf[8] = rec->type;
-			buf[9] = (unsigned char)(s->version >> 8);
-			buf[10] = (unsigned char)(s->version);
-			buf[11] = rec->length >> 8;
-			buf[12] = rec->length & 0xff;
-			pad = EVP_CIPHER_CTX_ctrl(ds, EVP_CTRL_AEAD_TLS1_AAD, 13, buf);
-			if (send) {
-				l += pad;
-				rec->length += pad;
-			}
-		} else if ((bs != 1) && send) {
+		if (bs != 1 && send) {
 			i = bs - ((int)l % bs);
 
 			/* Add weird padding of upto 256 bytes */
@@ -1000,11 +953,6 @@ tls1_enc(SSL *s, int send)
 		if ((EVP_CIPHER_flags(ds->cipher) &
 		    EVP_CIPH_FLAG_CUSTOM_CIPHER) ? (i < 0) : (i == 0))
 			return -1;	/* AEAD can fail to verify MAC */
-		if (EVP_CIPHER_mode(enc) == EVP_CIPH_GCM_MODE && !send) {
-			rec->data += EVP_GCM_TLS_EXPLICIT_IV_LEN;
-			rec->input += EVP_GCM_TLS_EXPLICIT_IV_LEN;
-			rec->length -= EVP_GCM_TLS_EXPLICIT_IV_LEN;
-		}
 
 		ret = 1;
 		if (EVP_MD_CTX_md(s->read_hash) != NULL)

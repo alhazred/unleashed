@@ -1,4 +1,4 @@
-/* $OpenBSD: d1_srvr.c,v 1.91 2017/10/12 15:52:50 jsing Exp $ */
+/* $OpenBSD: d1_srvr.c,v 1.94 2018/08/30 16:56:16 jsing Exp $ */
 /*
  * DTLS implementation written by Nagendra Modadugu
  * (nagendra@cs.stanford.edu) for the OpenSSL project 2005.
@@ -134,11 +134,6 @@ static const SSL_METHOD_INTERNAL DTLSv1_server_method_internal_data = {
 	.ssl_free = dtls1_free,
 	.ssl_accept = ssl3_accept,
 	.ssl_connect = ssl_undefined_function,
-	.ssl_read = ssl3_read,
-	.ssl_peek = ssl3_peek,
-	.ssl_write = ssl3_write,
-	.ssl_shutdown = dtls1_shutdown,
-	.ssl_pending = ssl3_pending,
 	.get_ssl_method = dtls1_get_server_method,
 	.get_timeout = dtls1_default_timeout,
 	.ssl_version = ssl_undefined_void_function,
@@ -188,7 +183,7 @@ dtls1_send_hello_verify_request(SSL *s)
 			return 0;
 		}
 
-		if (!ssl3_handshake_msg_start_cbb(s, &cbb, &verify,
+		if (!ssl3_handshake_msg_start(s, &cbb, &verify,
 		    DTLS1_MT_HELLO_VERIFY_REQUEST))
 			goto err;
 		if (!CBB_add_u16(&verify, s->version))
@@ -197,7 +192,7 @@ dtls1_send_hello_verify_request(SSL *s)
 			goto err;
 		if (!CBB_add_bytes(&cookie, D1I(s)->cookie, D1I(s)->cookie_len))
 			goto err;
-		if (!ssl3_handshake_msg_finish_cbb(s, &cbb))
+		if (!ssl3_handshake_msg_finish(s, &cbb))
 			goto err;
 
 		S3I(s)->hs.state = DTLS1_ST_SW_HELLO_VERIFY_REQUEST_B;
