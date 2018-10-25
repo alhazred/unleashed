@@ -102,4 +102,3 @@ link path=usr/lib/security/$(ARCH64)/pam_krb5_migrate.so \
     target=./pam_krb5_migrate.so.1
 link path=usr/lib/security/pam_krb5.so target=./pam_krb5.so.1
 link path=usr/lib/security/pam_krb5_migrate.so target=./pam_krb5_migrate.so.1
-depend fmri=service/security/gss type=require
