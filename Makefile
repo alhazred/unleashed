@@ -4,6 +4,7 @@ SUBDIR = bin \
 	 include \
 	 kernel \
 	 lib \
+	 libexec \
 	 share
 
 .-include "cfgparam.mk"
