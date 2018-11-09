@@ -590,26 +590,26 @@ BASIC_AS_ARGS=	-x assembler-with-cpp \
 # Specify platform compiler versions for languages
 # that we use (currently only c and c++).
 #
-sparc_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
-sparc_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
+sparc_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+sparc_CCC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 sparc_CPP=		$(GNUC_ROOT)/bin/cpp
 sparc_AS=		/usr/bin/as -xregsym=no
 sparc_LD=		/usr/bin/ld
 
-sparcv9_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
-sparcv9_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
+sparcv9_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+sparcv9_CCC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 sparcv9_CPP=		$(GNUC_ROOT)/bin/cpp
 sparcv9_AS=		/usr/bin/as -xregsym=no
 sparcv9_LD=		/usr/bin/ld
 
-i386_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
-i386_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
+i386_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+i386_CCC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 i386_CPP=		$(GNUC_ROOT)/bin/cpp
 i386_AS=		$(GNUC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 i386_LD=		/usr/bin/ld
 
-amd64_CC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
-amd64_CCC=		$(SRC)/tools/scripts/gcc-wrap.sh $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
+amd64_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+amd64_CCC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 amd64_CPP=		$(GNUC_ROOT)/bin/cpp
 amd64_AS=		$(GNUC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 amd64_LD=		/usr/bin/ld

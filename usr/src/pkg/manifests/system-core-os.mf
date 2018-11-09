@@ -218,6 +218,8 @@ dir path=usr/lib/secure/$(ARCH64)
 dir path=usr/lib/security
 dir path=usr/lib/sysevent
 dir path=usr/lib/sysevent/modules
+dir path=usr/libexec
+dir path=usr/libexec/unleashed
 dir path=usr/net group=sys
 dir path=usr/net/nls group=sys
 dir path=usr/net/servers group=sys
@@ -1093,6 +1095,7 @@ file path=usr/lib/utmpd mode=0555
 file path=usr/lib/vtdaemon mode=0555
 file path=usr/lib/vtinfo mode=0555
 file path=usr/lib/vtxlock mode=0555
+file path=usr/libexec/unleashed/gcc-wrap mode=0555
 file path=usr/sbin/6to4relay mode=0555
 file path=usr/sbin/acctadm mode=0555
 file path=usr/sbin/add_drv group=sys mode=0555
