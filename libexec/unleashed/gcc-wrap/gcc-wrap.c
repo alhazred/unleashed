@@ -17,6 +17,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <unistd.h>
+#include <string.h>
+#include <err.h>
 
 int main(int argc, char **argv)
 {
@@ -48,5 +50,8 @@ int main(int argc, char **argv)
 	}
 
 	if (execv(new_argv[0], new_argv))
-		err("execv");
+		err(1, "execv");
+
+	/* pacify gcc */
+	return 0;
 }
