@@ -90,7 +90,7 @@ extern "C" {
  */
 
 #define	CPUID_INTC_ECX_SSE3	0x00000001	/* Yet more SSE extensions */
-#define	CPUID_INTC_ECX_PCLMULQDQ 0x00000002 	/* PCLMULQDQ insn */
+#define	CPUID_INTC_ECX_PCLMULQDQ 0x00000002	/* PCLMULQDQ insn */
 #define	CPUID_INTC_ECX_DTES64	0x00000004	/* 64-bit DS area */
 #define	CPUID_INTC_ECX_MON	0x00000008	/* MONITOR/MWAIT */
 #define	CPUID_INTC_ECX_DSCPL	0x00000010	/* CPL-qualified debug store */
@@ -322,10 +322,10 @@ extern "C" {
 #define	MSR_PRP4_LBSTK_FROM_5	0x685
 #define	MSR_PRP4_LBSTK_FROM_6	0x686
 #define	MSR_PRP4_LBSTK_FROM_7	0x687
-#define	MSR_PRP4_LBSTK_FROM_8 	0x688
+#define	MSR_PRP4_LBSTK_FROM_8	0x688
 #define	MSR_PRP4_LBSTK_FROM_9	0x689
 #define	MSR_PRP4_LBSTK_FROM_10	0x68a
-#define	MSR_PRP4_LBSTK_FROM_11 	0x68b
+#define	MSR_PRP4_LBSTK_FROM_11	0x68b
 #define	MSR_PRP4_LBSTK_FROM_12	0x68c
 #define	MSR_PRP4_LBSTK_FROM_13	0x68d
 #define	MSR_PRP4_LBSTK_FROM_14	0x68e
@@ -339,7 +339,7 @@ extern "C" {
 #define	MSR_PRP4_LBSTK_TO_6	0x6c6
 #define	MSR_PRP4_LBSTK_TO_7	0x6c7
 #define	MSR_PRP4_LBSTK_TO_8	0x6c8
-#define	MSR_PRP4_LBSTK_TO_9 	0x6c9
+#define	MSR_PRP4_LBSTK_TO_9	0x6c9
 #define	MSR_PRP4_LBSTK_TO_10	0x6ca
 #define	MSR_PRP4_LBSTK_TO_11	0x6cb
 #define	MSR_PRP4_LBSTK_TO_12	0x6cc
@@ -947,6 +947,7 @@ extern void reset_gdtr_limit(void);
 #define	HVSIG_VMWARE	"VMwareVMware"
 #define	HVSIG_KVM	"KVMKVMKVM"
 #define	HVSIG_MICROSOFT	"Microsoft Hv"
+#define	HVSIG_BHYVE	"bhyve bhyve "
 
 /*
  * Defined hardware environments
@@ -958,8 +959,10 @@ extern void reset_gdtr_limit(void);
 #define	HW_VMWARE	(1 << 3)	/* Running on VMware hypervisor */
 #define	HW_KVM		(1 << 4)	/* Running on KVM hypervisor */
 #define	HW_MICROSOFT	(1 << 5)	/* Running on Microsoft hypervisor */
+#define	HW_BHYVE	(1 << 6)	/* Running on bhyve hypervisor */
 
-#define	HW_VIRTUAL	(HW_XEN_HVM | HW_VMWARE | HW_KVM | HW_MICROSOFT)
+#define	HW_VIRTUAL	(HW_XEN_HVM | HW_VMWARE | HW_KVM | HW_MICROSOFT | \
+	    HW_BHYVE)
 
 #endif	/* _KERNEL */
 

@@ -25,10 +25,10 @@
 
 /*	Copyright (c) 1990, 1991 UNIX System Laboratories, Inc. */
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989, 1990 AT&T   */
-/*		All Rights Reserved   				*/
+/*		All Rights Reserved				*/
 /*								*/
-/*	Copyright (c) 1987, 1988 Microsoft Corporation  	*/
-/*		All Rights Reserved   				*/
+/*	Copyright (c) 1987, 1988 Microsoft Corporation		*/
+/*		All Rights Reserved				*/
 /*								*/
 
 /*
@@ -110,24 +110,24 @@ static const char *trap_type_mnemonic[] = {
 };
 
 static const char *trap_type[] = {
-	"Divide error",				/* trap id 0 	*/
+	"Divide error",				/* trap id 0	*/
 	"Debug",				/* trap id 1	*/
 	"NMI interrupt",			/* trap id 2	*/
-	"Breakpoint",				/* trap id 3 	*/
-	"Overflow",				/* trap id 4 	*/
-	"BOUND range exceeded",			/* trap id 5 	*/
-	"Invalid opcode",			/* trap id 6 	*/
-	"Device not available",			/* trap id 7 	*/
-	"Double fault",				/* trap id 8 	*/
-	"Coprocessor segment overrun",		/* trap id 9 	*/
-	"Invalid TSS",				/* trap id 10 	*/
-	"Segment not present",			/* trap id 11 	*/
-	"Stack segment fault",			/* trap id 12 	*/
-	"General protection",			/* trap id 13 	*/
-	"Page fault",				/* trap id 14 	*/
-	"Reserved",				/* trap id 15 	*/
-	"x87 floating point error",		/* trap id 16 	*/
-	"Alignment check",			/* trap id 17 	*/
+	"Breakpoint",				/* trap id 3	*/
+	"Overflow",				/* trap id 4	*/
+	"BOUND range exceeded",			/* trap id 5	*/
+	"Invalid opcode",			/* trap id 6	*/
+	"Device not available",			/* trap id 7	*/
+	"Double fault",				/* trap id 8	*/
+	"Coprocessor segment overrun",		/* trap id 9	*/
+	"Invalid TSS",				/* trap id 10	*/
+	"Segment not present",			/* trap id 11	*/
+	"Stack segment fault",			/* trap id 12	*/
+	"General protection",			/* trap id 13	*/
+	"Page fault",				/* trap id 14	*/
+	"Reserved",				/* trap id 15	*/
+	"x87 floating point error",		/* trap id 16	*/
+	"Alignment check",			/* trap id 17	*/
 	"Machine check",			/* trap id 18	*/
 	"SIMD floating point exception",	/* trap id 19	*/
 };
@@ -2039,6 +2039,7 @@ dump_ttrace(void)
 #endif
 	/* Define format for the TYPE and VC fields */
 	const char fmt2[] = "%4s %3x";
+	const char fmt2s[] = "%4s %3s";
 	char data2[9];	/* length of string formatted by fmt2 + 1 */
 	/*
 	 * Define format for the HANDLER field. Width is arbitrary, but should
@@ -2128,6 +2129,14 @@ dump_ttrace(void)
 				break;
 
 			case TT_INTERRUPT:
+				if (rec->ttr_regs.r_trapno == T_SOFTINT) {
+					(void) snprintf(data2, sizeof (data2),
+					    fmt2s, "intr", "-");
+					(void) snprintf(data3, sizeof (data3),
+					    fmt3s, "(fakesoftint)");
+					break;
+				}
+
 				(void) snprintf(data2, sizeof (data2), fmt2,
 				    "intr", rec->ttr_vector);
 				if (get_intr_handler != NULL)

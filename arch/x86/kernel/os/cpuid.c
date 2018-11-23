@@ -637,6 +637,10 @@ determine_platform(void)
 			platform_type = HW_KVM;
 			return;
 		}
+		if (strcmp(hvstr, HVSIG_BHYVE) == 0) {
+			platform_type = HW_BHYVE;
+			return;
+		}
 		if (strcmp(hvstr, HVSIG_MICROSOFT) == 0)
 			platform_type = HW_MICROSOFT;
 	} else {
@@ -3694,7 +3698,7 @@ cpuid_opteron_erratum(cpu_t *cpu, uint_t erratum)
 	eax = cpi->cpi_std[1].cp_eax;
 
 #define	SH_B0(eax)	(eax == 0xf40 || eax == 0xf50)
-#define	SH_B3(eax) 	(eax == 0xf51)
+#define	SH_B3(eax)	(eax == 0xf51)
 #define	B(eax)		(SH_B0(eax) || SH_B3(eax))
 
 #define	SH_C0(eax)	(eax == 0xf48 || eax == 0xf58)
@@ -3998,9 +4002,9 @@ static const char sl3_cache_str[] = "sectored-l3-cache";
 static const char sh_l2_tlb4k_str[] = "shared-l2-tlb-4k";
 
 static const struct cachetab {
-	uint8_t 	ct_code;
+	uint8_t	ct_code;
 	uint8_t		ct_assoc;
-	uint16_t 	ct_line_size;
+	uint16_t	ct_line_size;
 	size_t		ct_size;
 	const char	*ct_label;
 } intel_ctab[] = {
