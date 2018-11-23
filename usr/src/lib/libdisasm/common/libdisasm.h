@@ -24,6 +24,7 @@
  * Use is subject to license terms.
  * Copyright 2012 Joshua M. Clulow <josh@sysmgr.org>
  * Copyright 2015-2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+ * Copyright 2018, Joyent, Inc.
  */
 
 #ifndef	_LIBDISASM_H
@@ -57,13 +58,16 @@ typedef struct dis_handle dis_handle_t;
 /* s390 disassembler flags */
 #define	DIS_S3X0		0x020
 
+/* risc-v disassembler flags */
+#define	DIS_RISCV		0x100
+
 /* generic disassembler flags */
 #define	DIS_OCTAL		0x040
 #define	DIS_NOIMMSYM		0x080
 
 #define	DIS_ARCH_MASK		(DIS_SPARC_V8 | \
 		DIS_SPARC_V9 | DIS_SPARC_V9_SGI | DIS_SPARC_V9_OPL | \
-		DIS_X86 | DIS_S3X0)
+		DIS_X86 | DIS_S3X0 | DIS_RISCV)
 #define	DIS_SIZE_MASK		(DIS_SIZE_16 | \
 		DIS_SIZE_24 | DIS_SIZE_32 | DIS_SIZE_64)
 
