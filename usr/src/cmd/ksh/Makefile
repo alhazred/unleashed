@@ -36,7 +36,7 @@ $(BUILD64)SUBDIRS += $(MACH64)
 
 SUBDIRS += builtins
 
-ARCH32_i386= i86
+ARCH32_i386= i386
 ARCH32_sparc= sparcv7
 ARCH32= $(ARCH32_$(MACH))
 

@@ -27,7 +27,7 @@ set +x
 
 sparc_32=sparc
 sparc_64=sparcv9
-i386_32=i86
+i386_32=i386
 i386_64=amd64
 ARCH=`uname -p`
 eval 'ARCHBITS=${'"${ARCH}_${BITS}"'}'

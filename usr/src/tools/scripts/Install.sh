@@ -445,7 +445,7 @@ function copy_kernel {
 
 	case $KARCH in
 		sun4*)		ISA=sparc;	MACH=sparc	;;
-		i86*)		ISA=intel;	MACH=i386	;;
+		i386*)		ISA=intel;	MACH=i386	;;
 		*)		fail "${KARCH}: invalid kernel architecture";;
 	esac
 	export MACH

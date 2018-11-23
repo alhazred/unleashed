@@ -4,7 +4,7 @@
 
  (const
    MACH32
-   'i86)
+   'i386)
 
  (const
    MACH64

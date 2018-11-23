@@ -214,13 +214,13 @@ FORBIDDEN_DEP   usr/lib/netsvc/yp/ypxfrd        # C++
 FORBIDDEN libfakekernel\.so
 FORBIDDEN_DEP usr/MACH(lib)/libzpool.so.1
 FORBIDDEN_DEP usr/bin/amd64/ztest
-FORBIDDEN_DEP usr/bin/i86/ztest
+FORBIDDEN_DEP usr/bin/i386/ztest
 FORBIDDEN_DEP usr/bin/sparcv7/ztest
 FORBIDDEN_DEP usr/bin/sparcv9/ztest
 FORBIDDEN_DEP usr/lib/MACH(smbsrv)/libfksmbsrv.so.1
 FORBIDDEN_DEP usr/lib/smbsrv/fksmbd
 FORBIDDEN_DEP usr/sbin/amd64/zdb
-FORBIDDEN_DEP usr/sbin/i86/zdb
+FORBIDDEN_DEP usr/sbin/i386/zdb
 FORBIDDEN_DEP usr/sbin/sparcv7/zdb
 FORBIDDEN_DEP usr/sbin/sparcv9/zdb
 

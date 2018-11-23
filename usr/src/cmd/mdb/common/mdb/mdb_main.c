@@ -1103,7 +1103,7 @@ reexec:
 #ifdef __sparc
 	(void) strcpy(p, "/../sparcv7/");
 #else
-	(void) strcpy(p, "/../i86/");
+	(void) strcpy(p, "/../i386/");
 #endif
 #else
 #ifdef __sparc

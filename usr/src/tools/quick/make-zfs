@@ -31,7 +31,7 @@ i386)
 	x=intel
 	kmdb_arch="amd64"
 	mdb_arch="ia32 amd64"
-	arch32=i86
+	arch32=i386
 	arch64=amd64
 	;;
 sparc)

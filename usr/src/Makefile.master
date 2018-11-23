@@ -221,7 +221,7 @@ MACH64_1=	$(MACH:sparc=sparcv9)
 MACH64=		$(MACH64_1:i386=amd64)
 
 MACH32_1=	$(MACH:sparc=sparcv7)
-MACH32=		$(MACH32_1:i386=i86)
+MACH32=		$(MACH32_1:i386=i386)
 
 sparc_BUILD64=
 i386_BUILD64=

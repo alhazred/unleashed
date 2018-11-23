@@ -489,7 +489,7 @@ mdb_create(const char *execname, const char *arg0)
 	if (strcmp(strbasename(rootdir), "sparcv9") == 0 ||
 	    strcmp(strbasename(rootdir), "sparcv7") == 0 ||
 	    strcmp(strbasename(rootdir), "amd64") == 0 ||
-	    strcmp(strbasename(rootdir), "i86") == 0)
+	    strcmp(strbasename(rootdir), "i386") == 0)
 		(void) strdirname(rootdir);
 
 	if (strcmp(strbasename(rootdir), "bin") == 0) {

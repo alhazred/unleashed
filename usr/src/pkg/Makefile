@@ -157,7 +157,7 @@ PKGVERS= $(PKGVERS_COMPONENT),$(PKGVERS_BUILTON)$(PKGVERS_BRANCH)
 # only defined for the build architecture.  To do cross-platform
 # packaging, we need both values.
 #
-i386_ARCH32= i86
+i386_ARCH32= i386
 i386_ARCH64= amd64
 
 #
