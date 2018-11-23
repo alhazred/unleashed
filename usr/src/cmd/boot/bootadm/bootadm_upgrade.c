@@ -70,7 +70,7 @@ get_boot_cap(const char *osroot)
 	 */
 	class = ELFCLASS64;
 	(void) snprintf(fname, PATH_MAX, "%s/%s", osroot,
-	    "platform/i86pc/kernel/unix");
+	    "platform/kernel/unix");
 	fd = open(fname, O_RDONLY);
 
 	error = errno;

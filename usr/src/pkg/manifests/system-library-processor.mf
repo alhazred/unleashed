@@ -30,7 +30,6 @@ set name=pkg.summary value="Core Architecture"
 set name=info.classification value=org.opensolaris.category.2008:System/Core
 set name=variant.arch value=$(ARCH)
 dir path=platform group=sys
-dir path=platform/$(CONFIG_PLATFORM) group=sys
 # We force bootblks into a new BE because we want to make sure
 # the user can recover from a pre-existing copy of the bootblk
 # in the event that something goes horribly wrong.

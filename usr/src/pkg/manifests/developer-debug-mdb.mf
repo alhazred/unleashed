@@ -32,10 +32,9 @@ set name=variant.arch value=$(ARCH)
 dir path=kernel group=sys
 dir path=kernel/kmdb group=sys
 dir path=platform group=sys variant.opensolaris.zone=global
-dir path=platform/$(CONFIG_PLATFORM) group=sys variant.opensolaris.zone=global
-dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys \
+dir path=platform/kernel group=sys \
     variant.opensolaris.zone=global
-dir path=platform/$(CONFIG_PLATFORM)/kernel/kmdb group=sys
+dir path=platform/kernel/kmdb group=sys
 dir path=usr group=sys
 dir path=usr/bin
 dir path=usr/bin/$(ARCH32)
@@ -50,11 +49,10 @@ dir path=usr/lib/mdb/proc group=sys
 dir path=usr/lib/mdb/proc/$(ARCH64)
 dir path=usr/lib/mdb/raw group=sys
 dir path=usr/platform group=sys
-dir path=usr/platform/$(CONFIG_PLATFORM) group=sys
-dir path=usr/platform/$(CONFIG_PLATFORM)/lib
-dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb group=sys
-dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb/kvm group=sys
-dir path=usr/platform/$(CONFIG_PLATFORM)/lib/mdb/kvm/$(ARCH64) group=sys
+dir path=usr/platform/lib
+dir path=usr/platform/lib/mdb group=sys
+dir path=usr/platform/lib/mdb/kvm group=sys
+dir path=usr/platform/lib/mdb/kvm/$(ARCH64) group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man1
 file path=kernel/kmdb/arp group=sys mode=0555
@@ -90,10 +88,10 @@ file path=kernel/kmdb/sppp group=sys mode=0555
 file path=kernel/kmdb/ufs group=sys mode=0555
 file path=kernel/kmdb/uhci group=sys mode=0555
 file path=kernel/kmdb/usba group=sys mode=0555
-file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/apix group=sys mode=0555
-file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/pcplusmp group=sys mode=0555
-file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/unix group=sys mode=0555
-file path=platform/$(CONFIG_PLATFORM)/kernel/kmdb/uppc group=sys mode=0555
+file path=platform/kernel/kmdb/apix group=sys mode=0555
+file path=platform/kernel/kmdb/pcplusmp group=sys mode=0555
+file path=platform/kernel/kmdb/unix group=sys mode=0555
+file path=platform/kernel/kmdb/uppc group=sys mode=0555
 file path=usr/bin/$(ARCH32)/mdb mode=0555
 file path=usr/bin/$(ARCH64)/mdb mode=0555
 file path=usr/include/sys/mdb_modapi.h mode=0644
@@ -159,11 +157,11 @@ file path=usr/lib/mdb/proc/libuutil.so group=sys mode=0555
 file path=usr/lib/mdb/proc/mdb_ds.so group=sys mode=0555
 file path=usr/lib/mdb/proc/svc.configd.so group=sys mode=0555
 file path=usr/lib/mdb/proc/svc.startd.so group=sys mode=0555
-file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/apix.so group=sys mode=0555
-file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/pcplusmp.so group=sys \
+file path=usr/platform/lib/mdb/kvm/$(ARCH64)/apix.so group=sys mode=0555
+file path=usr/platform/lib/mdb/kvm/$(ARCH64)/pcplusmp.so group=sys \
     mode=0555
-file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/unix.so group=sys mode=0555
-file path=usr/platform/i86pc/lib/mdb/kvm/$(ARCH64)/uppc.so group=sys mode=0555
+file path=usr/platform/lib/mdb/kvm/$(ARCH64)/unix.so group=sys mode=0555
+file path=usr/platform/lib/mdb/kvm/$(ARCH64)/uppc.so group=sys mode=0555
 file path=usr/share/man/man1/adb.1
 file path=usr/share/man/man1/kmdb.1
 file path=usr/share/man/man1/mdb.1

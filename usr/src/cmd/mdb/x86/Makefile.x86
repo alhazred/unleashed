@@ -25,24 +25,24 @@
 #
 #ident	"%Z%%M%	%I%	%E% SMI"
 
-ROOTMOD = $(ROOT)/usr/platform/i86pc/lib/mdb/$(MDBTGT)$(MACHMODDIR)
-ROOTKMOD = $(ROOT)/platform/i86pc/kernel/kmdb
+ROOTMOD = $(ROOT)/usr/platform/lib/mdb/$(MDBTGT)$(MACHMODDIR)
+ROOTKMOD = $(ROOT)/platform/kernel/kmdb
 
-$(ROOT)/usr/platform/i86pc/lib/mdb:
+$(ROOT)/usr/platform/lib/mdb:
 	$(INS.dir)
 
-$(ROOT)/usr/platform/i86pc/lib/mdb/$(MDBTGT): $(ROOT)/usr/platform/i86pc/lib/mdb
+$(ROOT)/usr/platform/lib/mdb/$(MDBTGT): $(ROOT)/usr/platform/lib/mdb
 	$(INS.dir)
 
-$(ROOT)/usr/platform/i86pc/lib/mdb/$(MDBTGT)/amd64: \
-    $(ROOT)/usr/platform/i86pc/lib/mdb/$(MDBTGT)
+$(ROOT)/usr/platform/lib/mdb/$(MDBTGT)/amd64: \
+    $(ROOT)/usr/platform/lib/mdb/$(MDBTGT)
 	$(INS.dir)
 
-$(ROOT)/platform/i86pc/kernel:
+$(ROOT)/platform/kernel:
 	$(INS.dir)
 
-$(ROOT)/platform/i86pc/kernel/kmdb: $(ROOT)/platform/i86pc/kernel
+$(ROOT)/platform/kernel/kmdb: $(ROOT)/platform/kernel
 	$(INS.dir)
 
-$(ROOT)/platform/i86pc/kernel/kmdb/amd64: $(ROOT)/platform/i86pc/kernel/kmdb
+$(ROOT)/platform/kernel/kmdb/amd64: $(ROOT)/platform/kernel/kmdb
 	$(INS.dir)

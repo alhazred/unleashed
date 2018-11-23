@@ -80,19 +80,11 @@ $(XMODS):	FRC
 install_h check:	FRC
 
 #
-# Definitions for the /platform directory aliases.
-# Currently none for i86pc.
-#
-PLAT_LINKS	=
-
-#
 # Make the /platform directories.  This is hardwired here because
 # the first stage of the project (KBI) only implements the userland
 # changes, but the only reasonable place to record the aliases is
 # here in kernel land.
 #
-install_platforms:	$(ROOT_PSM_DIR) $(USR_PSM_DIR) \
-			$(ROOT_PLAT_LINKS) $(USR_PLAT_LINKS) \
-			$(OEM_USR_PLAT_LINKS)
+install_platforms:	$(ROOT_PSM_DIR) $(USR_PSM_DIR)
 
 include ../Makefile.targ

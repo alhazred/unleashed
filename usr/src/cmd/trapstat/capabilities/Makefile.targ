@@ -26,7 +26,7 @@
 #
 # trapstat provides two families of trap tables for SPARC platforms, one for
 # sun4u, and one for sun4v.  Previous implementations provided these families by
-# invoking a platform specific binary (/usr/platform/$PLATFORM/sbin/trapstat).
+# invoking a platform specific binary (/usr/platform/sbin/trapstat).
 # trapstat itself was linked to /usr/lib/platexec, a shell script used to
 # discover the platform name, and exec the associated platform specific binary.
 #

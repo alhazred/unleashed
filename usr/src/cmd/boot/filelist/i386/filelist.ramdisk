@@ -17,6 +17,6 @@ etc/rtc_config
 etc/system
 etc/hostid
 kernel
-platform/i86pc/kernel
-platform/i86pc/ucode/GenuineIntel
-platform/i86pc/ucode/AuthenticAMD
+platform/kernel
+platform/ucode/GenuineIntel
+platform/ucode/AuthenticAMD

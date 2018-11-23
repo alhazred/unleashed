@@ -321,7 +321,7 @@ The floppy disk device does not support the requested ioctl function (
 .sp
 .LP
 The driver attempts to initialize itself using the information found in the
-configuration file, \fB/platform/i86pc/kernel/drv/fd.conf\fR.
+configuration file, \fB/platform/kernel/drv/fd.conf\fR.
 .sp
 .in +2
 .nf
@@ -452,7 +452,7 @@ symbolic link to the entry in \fB/dev/rdiskette0\fR
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/fd\fR\fR
+\fB\fB/platform/kernel/drv/fd\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -462,7 +462,7 @@ driver module
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/fd.conf\fR\fR
+\fB\fB/platform/kernel/drv/fd.conf\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -472,7 +472,7 @@ configuration file for floppy driver
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/fdc\fR\fR
+\fB\fB/platform/kernel/drv/fdc\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -482,7 +482,7 @@ floppy-controller driver module
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/fdc.con\fRf\fR
+\fB\fB/platform/kernel/drv/fdc.con\fRf\fR
 .ad
 .sp .6
 .RS 4n

@@ -19,19 +19,19 @@
 # CDDL HEADER END
 #
 #
-# Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2016, Joyent, Inc.
 #
 
-MODULE = pcplusmp.so
+MODULE = apix.so
 MDBTGT = kvm
 
-MODSRCS = pcplusmp.c apic_common.c intr_common.c
+MODSRCS = apix.c apic_common.c intr_common.c
 
 include ../../../../../Makefile.cmd
 include ../../../../../Makefile.cmd.64
 include ../../../../intel/Makefile.amd64
-include ../../../Makefile.i86pc
+include ../../../Makefile.x86
 include ../../../../Makefile.module
 
 MODSRCS_DIR = ../../common

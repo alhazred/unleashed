@@ -39,9 +39,8 @@ DTDTARG = $(DTDFILE:%=%)
 ROOTDTDTARG = $(DTDTARG:%=$(ROOT)/usr/share/lib/xml/dtd/%)
 
 common_ROOTTOPOROOT = $(ROOT)/usr/lib/fm/topo/$(MODCLASS)
-arch_ROOTTOPOROOT = $(ROOT)/usr/platform/$(ARCH)/lib/fm/topo/$(MODCLASS)
-platform_ROOTTOPOROOT = \
-	$(PLATFORMS:%=$(ROOT)/usr/platform/%/lib/fm/topo/$(MODCLASS))
+arch_ROOTTOPOROOT = $(ROOT)/usr/platform/lib/fm/topo/$(MODCLASS)
+platform_ROOTTOPOROOT = $(ROOT)/usr/platform/lib/fm/topo/$(MODCLASS)
 ROOTTOPOROOT = $($(CLASS)_ROOTTOPOROOT)
 ROOTTOPOMAPS = $(TOPOFILE:%=$(ROOTTOPOROOT)/%)
 

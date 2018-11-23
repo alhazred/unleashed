@@ -104,13 +104,12 @@ dir path=usr/lib/locale/C/LC_MESSAGES variant.opensolaris.zone=__NODEFAULT
 dir path=usr/lib/mdb group=sys
 dir path=usr/lib/mdb/proc group=sys
 dir path=usr/platform group=sys
-dir path=usr/platform/i86pc group=sys
-dir path=usr/platform/i86pc/lib
-dir path=usr/platform/i86pc/lib/fm
-dir path=usr/platform/i86pc/lib/fm/eft
-dir path=usr/platform/i86pc/lib/fm/topo
-dir path=usr/platform/i86pc/lib/fm/topo/maps
-dir path=usr/platform/i86pc/lib/fm/topo/plugins
+dir path=usr/platform/lib
+dir path=usr/platform/lib/fm
+dir path=usr/platform/lib/fm/eft
+dir path=usr/platform/lib/fm/topo
+dir path=usr/platform/lib/fm/topo/maps
+dir path=usr/platform/lib/fm/topo/plugins
 #
 # Some directories common to both global and non-global zones:
 #
@@ -433,43 +432,43 @@ file path=usr/lib/mdb/proc/fmd.so group=sys mode=0555
 #
 # Platform-specific fmd plugins are global zone only
 #
-file path=usr/platform/i86pc/lib/fm/eft/$(ARCH64).eft mode=0444
-file path=usr/platform/i86pc/lib/fm/eft/gcpu.eft mode=0444
-file path=usr/platform/i86pc/lib/fm/eft/gcpu_amd.eft mode=0444
-file path=usr/platform/i86pc/lib/fm/eft/intel.eft mode=0444
+file path=usr/platform/lib/fm/eft/$(ARCH64).eft mode=0444
+file path=usr/platform/lib/fm/eft/gcpu.eft mode=0444
+file path=usr/platform/lib/fm/eft/gcpu_amd.eft mode=0444
+file path=usr/platform/lib/fm/eft/intel.eft mode=0444
 file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Joyent-Compute-Platform-1101-disk-hc-topology.xml \
-    mode=0444
-file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Netra-X4200-M2-disk-hc-topology.xml \
+    path=usr/platform/lib/fm/topo/maps/Joyent-Compute-Platform-1101-disk-hc-topology.xml \
     mode=0444
 file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4200-M2-disk-hc-topology.xml \
+    path=usr/platform/lib/fm/topo/maps/Netra-X4200-M2-disk-hc-topology.xml \
     mode=0444
 file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4200-Server-disk-hc-topology.xml \
+    path=usr/platform/lib/fm/topo/maps/Sun-Fire-X4200-M2-disk-hc-topology.xml \
     mode=0444
 file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4500-disk-hc-topology.xml \
+    path=usr/platform/lib/fm/topo/maps/Sun-Fire-X4200-Server-disk-hc-topology.xml \
     mode=0444
 file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4540-disk-hc-topology.xml \
+    path=usr/platform/lib/fm/topo/maps/Sun-Fire-X4500-disk-hc-topology.xml \
     mode=0444
 file \
-    path=usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4600-M2-disk-hc-topology.xml \
+    path=usr/platform/lib/fm/topo/maps/Sun-Fire-X4540-disk-hc-topology.xml \
     mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/maps/chassis-hc-topology.xml \
+file \
+    path=usr/platform/lib/fm/topo/maps/Sun-Fire-X4600-M2-disk-hc-topology.xml \
     mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/maps/chip-hc-topology.xml mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/maps/fan-hc-topology.xml mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/maps/i86pc-hc-topology.xml mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/maps/i86pc-legacy-hc-topology.xml \
+file path=usr/platform/lib/fm/topo/maps/chassis-hc-topology.xml \
     mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/maps/psu-hc-topology.xml mode=0444
-file path=usr/platform/i86pc/lib/fm/topo/plugins/chip.so mode=0555
-file path=usr/platform/i86pc/lib/fm/topo/plugins/hostbridge.so mode=0555
-file path=usr/platform/i86pc/lib/fm/topo/plugins/pcibus.so mode=0555
-file path=usr/platform/i86pc/lib/fm/topo/plugins/x86pi.so mode=0555
+file path=usr/platform/lib/fm/topo/maps/chip-hc-topology.xml mode=0444
+file path=usr/platform/lib/fm/topo/maps/fan-hc-topology.xml mode=0444
+file path=usr/platform/lib/fm/topo/maps/i86pc-hc-topology.xml mode=0444
+file path=usr/platform/lib/fm/topo/maps/i86pc-legacy-hc-topology.xml \
+    mode=0444
+file path=usr/platform/lib/fm/topo/maps/psu-hc-topology.xml mode=0444
+file path=usr/platform/lib/fm/topo/plugins/chip.so mode=0555
+file path=usr/platform/lib/fm/topo/plugins/hostbridge.so mode=0555
+file path=usr/platform/lib/fm/topo/plugins/pcibus.so mode=0555
+file path=usr/platform/lib/fm/topo/plugins/x86pi.so mode=0555
 #
 # Administrative utilities are common to both contexts
 #

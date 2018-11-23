@@ -29,7 +29,6 @@
 #
 
 LIBS =		acpihpd
-PLATFORM =      i86pc
 
 include ../../Makefile.cmd
 include ../../../Makefile.psm

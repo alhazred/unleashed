@@ -233,12 +233,12 @@ extern void vprintf(const char *, va_list);
 /*
  * Need to be able to get boot_archives from other places
  */
-#define	BOOTARCHIVE64	"/platform/i86pc/amd64/boot_archive"
-#define	BOOTARCHIVE32	"/platform/i86pc/boot_archive"
+#define	BOOTARCHIVE64	"/platform/amd64/boot_archive"
+#define	BOOTARCHIVE32	"/platform/boot_archive"
 #define	BOOTARCHIVE32_FAILSAFE	"/boot/x86.miniroot-safe"
 #define	BOOTARCHIVE64_FAILSAFE	"/boot/amd64/x86.miniroot-safe"
-#define	FAILSAFE_BOOTFILE32	"/boot/platform/i86pc/kernel/unix"
-#define	FAILSAFE_BOOTFILE64	"/boot/platform/i86pc/kernel/amd64/unix"
+#define	FAILSAFE_BOOTFILE32	"/boot/platform/kernel/unix"
+#define	FAILSAFE_BOOTFILE64	"/boot/platform/kernel/amd64/unix"
 
 static uint_t fastboot_vatoindex(fastboot_info_t *, uintptr_t, int);
 static void fastboot_map_with_size(fastboot_info_t *, uintptr_t,

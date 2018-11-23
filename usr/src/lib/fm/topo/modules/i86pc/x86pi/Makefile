@@ -43,7 +43,7 @@ include ../../Makefile.plugin
 
 LDLIBS += -lsmbios -ldevinfo -luutil -lpcidb
 
-CPPFLAGS += -I. -I$(ROOT)/usr/platform/i86pc/include -I$(TOPODIR)
+CPPFLAGS += -I. -I$(ROOT)/usr/platform/include -I$(TOPODIR)
 CPPFLAGS += -I$(UTILDIR) -I$(BRDIR)
 
 %.o: $(UTILDIR)/%.c

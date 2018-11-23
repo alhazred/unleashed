@@ -138,7 +138,7 @@ compress()
 
 		# now re-copy a couple of uncompressed files
 
-		if [ -d "$SRC/platform/i86pc" ] ; then
+		if [ -d "$SRC/platform" ] ; then
 			find `cat boot/solaris/filelist.ramdisk` -type file \
 			    -print 2> /dev/null > /tmp/flist$$
 			find usr/kernel -type file -print 2> /dev/null \

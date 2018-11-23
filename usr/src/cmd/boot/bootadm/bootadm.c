@@ -166,8 +166,6 @@ static int bam_zfs;
 static int bam_mbr;
 char rootbuf[PATH_MAX] = "/";
 static int bam_update_all;
-static int bam_alt_platform;
-static char *bam_platform;
 static char *bam_home_env = NULL;
 
 /* function prototypes */
@@ -191,7 +189,6 @@ static error_t read_list(char *, filelist_t *);
 
 static long s_strtol(char *);
 
-static char *get_machine(void);
 static void append_to_flist(filelist_t *, char *);
 
 #if !defined(_OBP)
@@ -641,18 +638,6 @@ parse_args_internal(int argc, char *argv[])
 			bam_root = rootbuf;
 			bam_rootlen = strlen(rootbuf);
 			break;
-		case 'p':
-			bam_alt_platform = 1;
-			bam_platform = optarg;
-			if ((strcmp(bam_platform, "i86pc") != 0) &&
-			    (strcmp(bam_platform, "sun4u") != 0) &&
-			    (strcmp(bam_platform, "sun4v") != 0)) {
-				error = 1;
-				bam_error(_("invalid platform %s - must be "
-				    "one of sun4u, sun4v or i86pc\n"),
-				    bam_platform);
-			}
-			break;
 		case 'X':
 			bam_is_hv = BAM_HV_PRESENT;
 			break;
@@ -670,14 +655,6 @@ parse_args_internal(int argc, char *argv[])
 			    "argument: -%c\n"), c);
 			break;
 		}
-	}
-
-	/*
-	 * An alternate platform requires an alternate root
-	 */
-	if (bam_alt_platform && bam_alt_root == 0) {
-		usage();
-		bam_exit(0);
 	}
 
 	/*
@@ -1806,7 +1783,7 @@ set_cache_dir(char *root, int what)
 	int		ret = 0;
 
 	ret = snprintf(get_cachedir(what), sizeof (get_cachedir(what)),
-	    "%s%s%s%s", root, ARCHIVE_PREFIX, get_machine(), CACHEDIR_SUFFIX);
+	    "%s%s%s", root, ARCHIVE_PREFIX, CACHEDIR_SUFFIX);
 
 	if (ret >= sizeof (get_cachedir(what))) {
 		bam_error(_("unable to create path on mountpoint %s, "
@@ -1845,8 +1822,8 @@ is_valid_archive(char *root, int what)
 	struct stat 	sb, timestamp;
 	int 		ret;
 
-	ret = snprintf(archive_path, sizeof (archive_path), "%s%s%s%s",
-	    root, ARCHIVE_PREFIX, get_machine(), ARCHIVE_SUFFIX);
+	ret = snprintf(archive_path, sizeof (archive_path), "%s%s%s",
+	    root, ARCHIVE_PREFIX, ARCHIVE_SUFFIX);
 
 	if (ret >= sizeof (archive_path)) {
 		bam_error(_("unable to create path on mountpoint %s, "
@@ -2020,28 +1997,19 @@ read_list(char *root, filelist_t  *flistp)
 		/*
 		 * build arguments to exec extract_boot_filelist.ksh
 		 */
-		char *rootarg, *platarg;
-		int platarglen = 1, rootarglen = 1;
+		char *rootarg;
+		int rootarglen = 1;
 		if (strlen(root) > 1)
 			rootarglen += strlen(root) + strlen("-R ");
-		if (bam_alt_platform)
-			platarglen += strlen(bam_platform) + strlen("-p ");
-		platarg = s_calloc(1, platarglen);
 		rootarg = s_calloc(1, rootarglen);
-		*platarg = 0;
 		*rootarg = 0;
 
 		if (strlen(root) > 1) {
 			(void) snprintf(rootarg, rootarglen,
 			    "-R %s", root);
 		}
-		if (bam_alt_platform) {
-			(void) snprintf(platarg, platarglen,
-			    "-p %s", bam_platform);
-		}
-		n = snprintf(cmd, sizeof (cmd), "%s %s %s /%s /%s",
-		    path, rootarg, platarg, BOOT_FILE_LIST, ETC_FILE_LIST);
-		free(platarg);
+		n = snprintf(cmd, sizeof (cmd), "%s %s /%s /%s",
+		    path, rootarg, BOOT_FILE_LIST, ETC_FILE_LIST);
 		free(rootarg);
 		if (n >= sizeof (cmd)) {
 			bam_error(_("archive filelist is empty\n"));
@@ -2497,17 +2465,9 @@ create_ramdisk(char *root)
 		return (BAM_ERROR);
 
 	len = strlen(path) + strlen(root) + 10;	/* room for space + -R */
-	if (bam_alt_platform)
-		len += strlen(bam_platform) + strlen("-p ");
 	cmdline = s_calloc(1, len);
 
-	if (bam_alt_platform) {
-		assert(strlen(root) > 1);
-		(void) snprintf(cmdline, len, "%s -p %s -R %s",
-		    path, bam_platform, root);
-		/* chop off / at the end */
-		cmdline[strlen(cmdline) - 1] = '\0';
-	} else if (strlen(root) > 1) {
+	if (strlen(root) > 1) {
 		(void) snprintf(cmdline, len, "%s -R %s", path, root);
 		/* chop off / at the end */
 		cmdline[strlen(cmdline) - 1] = '\0';
@@ -3469,30 +3429,6 @@ s_strdup(char *str)
 		bam_exit(1);
 	}
 	return (ptr);
-}
-
-static char *
-get_machine(void)
-{
-	static int cached = -1;
-	static char mbuf[257];	/* from sysinfo(2) manpage */
-
-	if (cached == 0)
-		return (mbuf);
-
-	if (bam_alt_platform) {
-		return (bam_platform);
-	} else {
-		if (sysinfo(SI_MACHINE, mbuf, sizeof (mbuf)) > 0) {
-			cached = 1;
-		}
-	}
-	if (cached == -1) {
-		mbuf[0] = '\0';
-		cached = 0;
-	}
-
-	return (mbuf);
 }
 
 static void

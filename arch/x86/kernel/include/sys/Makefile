@@ -1,4 +1,4 @@
-INCDIR=	/usr/platform/${CONFIG_PLATFORM}/include/sys
+INCDIR=	/usr/platform/include/sys
 INCS=	acpidev.h	\
 	amd_iommu.h	\
 	asm_misc.h	\

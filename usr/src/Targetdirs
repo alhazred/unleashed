@@ -50,7 +50,6 @@ TARGETDIRS	+= $(FILELINKS) $(DIRLINKS)
 i386_DIRS=			\
 	/boot/acpi		\
 	/boot/acpi/tables	\
-	/platform/i86pc		\
 	/lib/libmvec
 
 64ONLY=  $($(MACH)_64ONLY)
@@ -338,7 +337,7 @@ DIRS= \
 	/var/tmp
 
 amd64_DIRS64= \
-	/platform/i86pc/amd64
+	/platform/amd64
 
 DIRS64= \
 	$($(MACH64)_DIRS64) \
@@ -386,6 +385,7 @@ SYM.DIRS= \
 	/lib/32 \
 	/lib/crypto/32 \
 	/lib/secure/32 \
+	/platform/i86pc \
 	/usr/adm \
 	/usr/spool \
 	/usr/news \
@@ -483,6 +483,7 @@ $(ROOT)/etc/lib/ld.so.1:=		LINKDEST=../../lib/ld.so.1
 $(ROOT)/etc/lib/libdl.so.1:=		LINKDEST=../../lib/libdl.so.1
 $(ROOT)/etc/lib/nss_files.so.1:=	LINKDEST=../../lib/nss_files.so.1
 $(ROOT)/etc/log:=			LINKDEST=../var/adm/log
+$(ROOT)/platform/i86pc:=		LINKDEST=.
 $(ROOT)/usr/mail:=			LINKDEST=../var/mail
 $(ROOT)/usr/news:=			LINKDEST=../var/news
 $(ROOT)/usr/preserve:=			LINKDEST=../var/preserve

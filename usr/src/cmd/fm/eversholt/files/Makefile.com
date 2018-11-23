@@ -31,7 +31,7 @@ include $(SRC)/cmd/Makefile.cmd
 
 ROOT_EFT_ROOT=	$(ROOT)/usr/lib/fm/eft
 ROOT_COMMON_EFT_FILES= $(EFT_COMMON_FILES:%=$(ROOT_EFT_ROOT)/%)
-USR_PLAT_FM_DIR= $(ROOT)/usr/platform/$(EFT_PLAT)/lib/fm
+USR_PLAT_FM_DIR= $(ROOT)/usr/platform/lib/fm
 USR_PLAT_EFT_DIR= $(USR_PLAT_FM_DIR)/eft
 USR_PLAT_EFT_FILES= $(EFT_PLAT_FILES:%=$(USR_PLAT_EFT_DIR)/%)
 

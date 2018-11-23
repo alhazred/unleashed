@@ -42,7 +42,7 @@ POFILES = $(PROG_OBJS:%.o=%.po)
 INTEL_UCODE_FILE = intel-ucode.txt
 AMD_UCODE_FILE = amd-ucode.bin
 
-ROOTUCODEPATH = $(ROOT)/platform/i86pc/ucode
+ROOTUCODEPATH = $(ROOT)/platform/ucode
 ROOTINTELUCODE = $(INTEL_UCODE_FILE:%=$(ROOTUCODEPATH)/%)
 ROOTAMDUCODE = $(AMD_UCODE_FILE:%=$(ROOTUCODEPATH)/%)
 

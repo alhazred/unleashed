@@ -28,7 +28,7 @@
 include ../Makefile.com
 include ../../Makefile.lib.64
 
-DYNFLAGS += -R /usr/platform/\$$PLATFORM/lib/rsmlib/amd64
+DYNFLAGS += -R /usr/platform/lib/rsmlib/amd64
 
 .KEEP_STATE:
 

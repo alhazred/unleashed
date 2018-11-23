@@ -27,7 +27,7 @@
 
 #
 #	This makefile drives the production of the
-#	"platform/i86pc/kernel/drv/si3124" kernel module.
+#	"platform/kernel/drv/si3124" kernel module.
 #
 #	intel architecture dependent
 #

@@ -41,11 +41,11 @@ $(ROOT)/usr/lib/fm/topo/$(MODCLASS): $(ROOT)/usr/lib/fm/topo
 # Define the transitive set of rules to create a platform module's install dir
 # within the proto area.  This is used by all Makefile.<class> files.
 #
-$(ROOT)/usr/platform/%/lib/fm:
+$(ROOT)/usr/platform/lib/fm:
 	$(INS.dir)
 
-$(ROOT)/usr/platform/%/lib/fm/topo: $(ROOT)/usr/platform/%/lib/fm
+$(ROOT)/usr/platform/lib/fm/topo: $(ROOT)/usr/platform/lib/fm
 	$(INS.dir)
 
-$(ROOT)/usr/platform/%/lib/fm/topo/$(MODCLASS): $(ROOT)/usr/platform/%/lib/fm/topo
+$(ROOT)/usr/platform/lib/fm/topo/$(MODCLASS): $(ROOT)/usr/platform/lib/fm/topo
 	$(INS.dir)

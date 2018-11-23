@@ -10,12 +10,12 @@ bootadm \- manage bootability of the operating system
 .SH SYNOPSIS
 .LP
 .nf
-\fB/sbin/bootadm\fR update-archive [\fB-vn\fR] [\fB-R\fR \fIaltroot\fR [\fB-p\fR \fIplatform\fR]]
+\fB/sbin/bootadm\fR update-archive [\fB-vn\fR] [\fB-R\fR \fIaltroot\fR]
 .fi
 
 .LP
 .nf
-\fB/sbin/bootadm\fR list-archive [\fB-vn\fR] [\fB-R\fR \fIaltroot\fR [\fB-p\fR \fIplatform\fR]]
+\fB/sbin/bootadm\fR list-archive [\fB-vn\fR] [\fB-R\fR \fIaltroot\fR]
 .fi
 
 .LP
@@ -200,20 +200,6 @@ title name as values.
 .sp
 .ne 2
 .na
-\fB\fB-p\fR \fIplatform\fR\fR
-.ad
-.sp .6
-.RS 4n
-The platform, or machine hardware class, of the client. The platform type can
-only be specified together with \fB-R\fR, and is generally useful only for
-managing a diskless client where the client is of a different platform class
-than the server. Platform must be one of \fBi86pc\fR, \fBsun4u\fR, or
-\fBsun4v\fR.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fB-v\fR\fR
 .ad
 .sp .6
@@ -382,17 +368,17 @@ Title:       test-184
 Timeout:     10
 Console:     text
 Bootfs:      raid/ROOT/test-184
-Kernel:      /platform/i86pc/kernel/amd64/unix
+Kernel:      /platform/kernel/amd64/unix
 Boot-args:   "-v"
 
 Modules:
 Name:        boot_archive
-Path:        /platform/i86pc/${ISADIR}/boot_archive
+Path:        /platform/${ISADIR}/boot_archive
 Type:        rootfs
 Status:      Load
 
 Name:        boot_archive.hash
-Path:        /platform/i86pc/${ISADIR}/boot_archive.hash
+Path:        /platform/${ISADIR}/boot_archive.hash
 Type:        hash
 Status:      Load
 

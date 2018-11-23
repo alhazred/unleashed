@@ -19,27 +19,26 @@
 # CDDL HEADER END
 #
 #
-# Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
-# Use is subject to license terms.
+# Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2016, Joyent, Inc.
 #
-# Copyright 2016 Joyent, Inc.
 
-MODULE = uppc.so
+MODULE = pcplusmp.so
 MDBTGT = kvm
 
-MODSRCS = uppc.c intr_common.c
+MODSRCS = pcplusmp.c apic_common.c intr_common.c
 
 include ../../../../../Makefile.cmd
 include ../../../../../Makefile.cmd.64
 include ../../../../intel/Makefile.amd64
-include ../../../Makefile.i86pc
+include ../../../Makefile.x86
 include ../../../../Makefile.module
 
 MODSRCS_DIR = ../../common
 
 CPPFLAGS += -DMP -D_MACHDEP
-CPPFLAGS += -I../../common
 CPPFLAGS += -I../../../../common
+CPPFLAGS += -I../../common
 CPPFLAGS += -I$(SRCTOP)/arch/x86/include
 CPPFLAGS += -I$(SRC)/uts/intel
 CPPFLAGS += -I$(SRCTOP)/arch/x86/kernel/include

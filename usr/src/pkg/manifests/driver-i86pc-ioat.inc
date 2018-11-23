@@ -31,15 +31,14 @@
 dir path=kernel group=sys
 dir path=kernel/misc group=sys
 dir path=platform group=sys
-dir path=platform/$(CONFIG_PLATFORM) group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/drv group=sys
 driver name=ioat \
     alias=pciex8086,1a38 \
     alias=pciex8086,360b \
     alias=pciex8086,402f
 file path=kernel/misc/dcopy group=sys mode=0755
-file path=platform/$(CONFIG_PLATFORM)/kernel/drv/ioat group=sys
-file path=platform/$(CONFIG_PLATFORM)/kernel/drv/ioat.conf group=sys
+file path=platform/kernel/drv/ioat group=sys
+file path=platform/kernel/drv/ioat.conf group=sys
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

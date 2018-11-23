@@ -55,7 +55,7 @@ include ../../../Makefile.module
 dmod/$(MODULE) := LDLIBS += -lm -lproc
 
 #
-# We are not actually hardwiring some dependency on i86pc, we just need to
+# We are not actually hardwiring some dependency on x86, we just need to
 # include sys/param.h with _MACHDEP defined, and this forces the inclusion of
 # machparam.h, even though we don't use anything there.  This is a temporary
 # kludge until we invent -DDONTINCLUDEMACHPARAM or something.

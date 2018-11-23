@@ -31,15 +31,14 @@
 # information about overriding the defaults.
 #
 dir path=platform group=sys
-dir path=platform/$(CONFIG_PLATFORM) group=sys
-dir path=platform/$(CONFIG_PLATFORM)/$(ARCH64) group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/cpu group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/dacf group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/mach group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/misc group=sys
-dir path=platform/$(CONFIG_PLATFORM)/ucode group=sys
+dir path=platform/$(ARCH64) group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/cpu group=sys
+dir path=platform/kernel/dacf group=sys
+dir path=platform/kernel/drv group=sys
+dir path=platform/kernel/mach group=sys
+dir path=platform/kernel/misc group=sys
+dir path=platform/ucode group=sys
 dir path=usr/share/man/man4
 driver name=acpinex alias=acpivirtnex
 driver name=acpippm
@@ -67,45 +66,46 @@ driver name=xnbo \
     alias=xnb,SUNW_mac
 driver name=xnbu alias=xnb,netfront
 driver name=xnf
-file path=platform/$(CONFIG_PLATFORM)/kernel/unix group=sys \
+file path=platform/kernel/unix group=sys \
     mode=0755 pkg.depend.bypass-generate=dtracestubs
-file path=platform/i86pc/kernel/cpu/cpu.generic group=sys \
+file path=platform/kernel/cpu/cpu.generic group=sys \
     mode=0755
-file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
+file path=platform/kernel/cpu/cpu_ms.AuthenticAMD group=sys \
     mode=0755
-file path=platform/i86pc/kernel/cpu/cpu_ms.AuthenticAMD.15 \
+file path=platform/kernel/cpu/cpu_ms.AuthenticAMD.15 \
     group=sys mode=0755
-file path=platform/i86pc/kernel/cpu/cpu_ms.GenuineIntel group=sys \
+file path=platform/kernel/cpu/cpu_ms.GenuineIntel group=sys \
     mode=0755
-file path=platform/i86pc/kernel/dacf/consconfig_dacf group=sys \
+file path=platform/kernel/dacf/consconfig_dacf group=sys \
     mode=0755
-file path=platform/i86pc/kernel/drv/acpinex group=sys
-file path=platform/i86pc/kernel/drv/acpippm group=sys
-file path=platform/i86pc/kernel/drv/acpippm.conf group=sys
-file path=platform/i86pc/kernel/drv/amd_iommu group=sys
-file path=platform/i86pc/kernel/drv/amd_iommu.conf group=sys
-file path=platform/i86pc/kernel/drv/cpudrv group=sys
-file path=platform/i86pc/kernel/drv/isa group=sys
-file path=platform/i86pc/kernel/drv/npe group=sys
-file path=platform/i86pc/kernel/drv/pci group=sys
-file path=platform/i86pc/kernel/drv/pit_beep group=sys
-file path=platform/i86pc/kernel/drv/pit_beep.conf group=sys
-file path=platform/i86pc/kernel/drv/ppm group=sys
-file path=platform/i86pc/kernel/drv/ppm.conf group=sys
-file path=platform/i86pc/kernel/drv/rootnex group=sys
-file path=platform/i86pc/kernel/drv/rootnex.conf group=sys
-file path=platform/i86pc/kernel/mach/apix group=sys mode=0755
-file path=platform/i86pc/kernel/mach/pcplusmp group=sys mode=0755
-file path=platform/i86pc/kernel/mach/uppc group=sys mode=0755
-file path=platform/i86pc/kernel/misc/acpidev group=sys mode=0755
-file path=platform/i86pc/kernel/misc/gfx_private group=sys \
+file path=platform/kernel/drv/acpinex group=sys
+file path=platform/kernel/drv/acpippm group=sys
+file path=platform/kernel/drv/acpippm.conf group=sys
+file path=platform/kernel/drv/amd_iommu group=sys
+file path=platform/kernel/drv/amd_iommu.conf group=sys
+file path=platform/kernel/drv/cpudrv group=sys
+file path=platform/kernel/drv/isa group=sys
+file path=platform/kernel/drv/npe group=sys
+file path=platform/kernel/drv/pci group=sys
+file path=platform/kernel/drv/pit_beep group=sys
+file path=platform/kernel/drv/pit_beep.conf group=sys
+file path=platform/kernel/drv/ppm group=sys
+file path=platform/kernel/drv/ppm.conf group=sys
+file path=platform/kernel/drv/rootnex group=sys
+file path=platform/kernel/drv/rootnex.conf group=sys
+file path=platform/kernel/mach/apix group=sys mode=0755
+file path=platform/kernel/mach/pcplusmp group=sys mode=0755
+file path=platform/kernel/mach/uppc group=sys mode=0755
+file path=platform/kernel/misc/acpidev group=sys mode=0755
+file path=platform/kernel/misc/gfx_private group=sys \
     mode=0755
-file path=platform/i86pc/ucode/amd-ucode.bin group=sys mode=0444 \
+file path=platform/ucode/amd-ucode.bin group=sys mode=0444 \
     preserve=true reboot-needed=true
-file path=platform/i86pc/ucode/intel-ucode.txt group=sys mode=0444 \
+file path=platform/ucode/intel-ucode.txt group=sys mode=0444 \
     preserve=true reboot-needed=true
 file path=usr/share/man/man4/sysbus.4
 file path=usr/share/man/man7d/npe.7d
+link path=platform/i86pc target=.
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode

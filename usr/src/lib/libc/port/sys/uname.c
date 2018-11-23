@@ -30,8 +30,7 @@ uname(struct utsname *name)
 		strlcpy(name->sysname, "SunOS", sizeof(name->sysname));
 		strlcpy(name->release, "5.11", sizeof(name->release));
 		strlcpy(name->version, "legacy-uname", sizeof(name->version));
-		strlcpy(name->machine, CONFIG_PLATFORM_STR,
-			sizeof(name->machine));
+		strlcpy(name->machine, "i86pc", sizeof(name->machine));
 	}
 	errno = serr;
 	return ret;

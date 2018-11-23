@@ -32,31 +32,28 @@ dir path=lib
 dir path=lib/svc
 dir path=lib/svc/manifest group=sys
 dir path=lib/svc/manifest/platform group=sys
-dir path=lib/svc/manifest/platform/i86pc group=sys
 dir path=lib/svc/method
 dir path=platform group=sys
-dir path=platform/i86pc group=sys
-dir path=platform/i86pc/kernel group=sys
-dir path=platform/i86pc/kernel/drv group=sys
-dir path=platform/i86pc/kernel/misc group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/drv group=sys
+dir path=platform/kernel/misc group=sys
 dir path=usr group=sys
 dir path=usr/platform group=sys
-dir path=usr/platform/i86pc group=sys
-dir path=usr/platform/i86pc/lib
-dir path=usr/platform/i86pc/lib/cfgadm
-dir path=usr/platform/i86pc/lib/cfgadm/$(ARCH64)
+dir path=usr/platform/lib
+dir path=usr/platform/lib/cfgadm
+dir path=usr/platform/lib/cfgadm/$(ARCH64)
 driver name=dr alias=acpidr_sbd
-file path=lib/svc/manifest/platform/i86pc/acpihpd.xml group=sys mode=0444
+file path=lib/svc/manifest/platform/acpihpd.xml group=sys mode=0444
 file path=lib/svc/method/svc-acpihpd mode=0555
-file path=platform/i86pc/kernel/drv/dr group=sys
-file path=platform/i86pc/kernel/drv/dr.conf group=sys mode=0644
-file path=platform/i86pc/kernel/misc/drmach_acpi group=sys mode=0755
-file path=usr/platform/i86pc/lib/acpihpd group=sys mode=0755
-file path=usr/platform/i86pc/lib/cfgadm/$(ARCH64)/sbd.so.1
-file path=usr/platform/i86pc/lib/cfgadm/sbd.so.1
+file path=platform/kernel/drv/dr group=sys
+file path=platform/kernel/drv/dr.conf group=sys mode=0644
+file path=platform/kernel/misc/drmach_acpi group=sys mode=0755
+file path=usr/platform/lib/acpihpd group=sys mode=0755
+file path=usr/platform/lib/cfgadm/$(ARCH64)/sbd.so.1
+file path=usr/platform/lib/cfgadm/sbd.so.1
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 license usr/src/cmd/acpihpd/THIRDPARTYLICENSE \
     license=usr/src/cmd/acpihpd/THIRDPARTYLICENSE
-link path=usr/platform/i86pc/lib/cfgadm/$(ARCH64)/sbd.so target=./sbd.so.1
-link path=usr/platform/i86pc/lib/cfgadm/sbd.so target=./sbd.so.1
+link path=usr/platform/lib/cfgadm/$(ARCH64)/sbd.so target=./sbd.so.1
+link path=usr/platform/lib/cfgadm/sbd.so target=./sbd.so.1

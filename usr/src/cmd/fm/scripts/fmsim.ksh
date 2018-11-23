@@ -85,7 +85,7 @@ function cp_topo
 {
 	mkdir -p $2/usr/lib/fm/topo/maps
 	cp $1 $2/usr/lib/fm/topo/maps; 
-	for platdir in $2/usr/platform/*/lib/fm/topo/maps; do
+	for platdir in $2/usr/platform/lib/fm/topo/maps; do
 		rm -f $platdir/* 2>/dev/null
 	done
 }
@@ -206,7 +206,7 @@ echo "done."
 echo "fmsim: populating /usr/lib/fm from $sysroot ... \c"
 (cd $sysroot && find usr/lib/fm -depth -print | cpio -pdmu $simroot)
 
-for platdir in $sysroot/usr/platform/*/lib/fm; do
+for platdir in $sysroot/usr/platform/lib/fm; do
 	[[ -d $platdir ]] && platdir=${platdir#$sysroot} || continue
 	echo "fmsim: populating $platdir from $sysroot ... \c"
 	(cd $sysroot && find ${platdir#/} -depth -print | cpio -pdmu $simroot)

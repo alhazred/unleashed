@@ -1,4 +1,4 @@
-INCDIR=	/usr/platform/${CONFIG_PLATFORM}/include/vm
+INCDIR=	/usr/platform/include/vm
 INCS=	hat_i86.h \
 	hat_pte.h \
 	hment.h \

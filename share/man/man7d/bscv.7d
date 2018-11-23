@@ -53,7 +53,7 @@ logs.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/bscbus\fR\fR
+\fB\fB/platform/kernel/drv/bscbus\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -63,7 +63,7 @@ logs.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/bscv\fR\fR
+\fB\fB/platform/kernel/drv/bscv\fR\fR
 .ad
 .sp .6
 .RS 4n

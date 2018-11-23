@@ -29,13 +29,12 @@
 # information about overriding the defaults.
 #
 dir path=platform group=sys
-dir path=platform/i86pc group=sys
-dir path=platform/i86pc/kernel group=sys
-dir path=platform/i86pc/kernel/drv group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/drv group=sys
 driver name=fipe \
     alias=pci8086,25f0 \
     alias=pci8086,360c
-file path=platform/i86pc/kernel/drv/fipe group=sys
-file path=platform/i86pc/kernel/drv/fipe.conf group=sys
+file path=platform/kernel/drv/fipe group=sys
+file path=platform/kernel/drv/fipe.conf group=sys
 license usr/src/uts/i86pc/io/fipe/THIRDPARTYLICENSE \
     license=usr/src/uts/i86pc/io/fipe/THIRDPARTYLICENSE

@@ -29,11 +29,10 @@
 # information about overriding the defaults.
 #
 dir path=platform group=sys
-dir path=platform/$(CONFIG_PLATFORM) group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel group=sys
-dir path=platform/$(CONFIG_PLATFORM)/kernel/drv group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/drv group=sys
 driver name=xsvc devlink=type=ddi_pseudo;name=xsvc\t\M0
-file path=platform/$(CONFIG_PLATFORM)/kernel/drv/xsvc group=sys
-file path=platform/$(CONFIG_PLATFORM)/kernel/drv/xsvc.conf group=sys
+file path=platform/kernel/drv/xsvc group=sys
+file path=platform/kernel/drv/xsvc.conf group=sys
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

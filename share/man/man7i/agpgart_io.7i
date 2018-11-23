@@ -883,7 +883,7 @@ Symbolic link to the pseudo agpgart device.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/agpgart\fR\fR
+\fB\fB/platform/kernel/drv/agpgart\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -893,7 +893,7 @@ agpgart pseudo driver.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/agpgart.conf\fR\fR
+\fB\fB/platform/kernel/drv/agpgart.conf\fR\fR
 .ad
 .sp .6
 .RS 4n

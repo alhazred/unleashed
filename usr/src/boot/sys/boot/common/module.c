@@ -69,7 +69,7 @@ static vm_offset_t	loadaddr = 0;
 static const char	*default_searchpath =
     "/boot/kernel;/boot/modules;/boot/dtb";
 #else
-static const char	*default_searchpath ="/platform/i86pc";
+static const char	*default_searchpath ="/platform";
 #endif
 
 static STAILQ_HEAD(, moduledir) moduledir_list = STAILQ_HEAD_INITIALIZER(moduledir_list);

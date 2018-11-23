@@ -50,7 +50,7 @@ LIBS = $(DYNLIB)
 
 LDLIBS +=	-lc
 
-CPPFLAGS +=	-I$(ROOT)/usr/platform/$(PLATFORM)/include
+CPPFLAGS +=	-I$(ROOT)/usr/platform/include
 
 .KEEP_STATE:
 

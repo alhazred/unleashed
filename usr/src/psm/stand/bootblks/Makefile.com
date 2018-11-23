@@ -42,7 +42,7 @@ PROG		= bootblk
 #
 # base prefix for the usr/platform bootblk links
 #
-BOOTBLK_LINK_PREFIX	=../../../../../../platform/$(PLATFORM)/lib/fs
+BOOTBLK_LINK_PREFIX	=../../../../../../platform/lib/fs
 
 #
 # Used to convert Forth source to isa-independent FCode.

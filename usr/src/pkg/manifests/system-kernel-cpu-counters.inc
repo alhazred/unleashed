@@ -29,13 +29,12 @@
 # information about overriding the defaults.
 #
 dir path=platform group=sys
-dir path=platform/i86pc group=sys
-dir path=platform/i86pc/kernel group=sys
-dir path=platform/i86pc/kernel/drv group=sys
-dir path=platform/i86pc/kernel/sys group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/drv group=sys
+dir path=platform/kernel/sys group=sys
 driver name=cpc perms="shared 0666 root sys"
-file path=platform/i86pc/kernel/drv/cpc group=sys
-file path=platform/i86pc/kernel/drv/cpc.conf group=sys
-hardlink path=platform/i86pc/kernel/sys/cpc target=../drv/cpc
+file path=platform/kernel/drv/cpc group=sys
+file path=platform/kernel/drv/cpc.conf group=sys
+hardlink path=platform/kernel/sys/cpc target=../drv/cpc
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

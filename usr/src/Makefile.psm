@@ -29,7 +29,7 @@
 
 ROOT_PLAT_DIR		 = $(ROOT)/platform
 
-ROOT_PSM_DIR		 = $(ROOT_PLAT_DIR)/$(PLATFORM)
+ROOT_PSM_DIR		 = $(ROOT_PLAT_DIR)
 
 ROOT_PSM_MOD_DIR	 = $(ROOT_PSM_DIR)/kernel
 ROOT_PSM_LIB_DIR	 = $(ROOT_PSM_DIR)/lib
@@ -76,7 +76,7 @@ ROOT_PSM_LIB_ZFS_DIR	 = $(ROOT_PSM_LIB_FS_DIR)/zfs
 
 USR_PLAT_DIR		 = $(ROOT)/usr/platform
 
-USR_PSM_DIR		 = $(USR_PLAT_DIR)/$(PLATFORM)
+USR_PSM_DIR		 = $(USR_PLAT_DIR)
 
 USR_PSM_MOD_DIR		 = $(USR_PSM_DIR)/kernel
 USR_PSM_INCL_DIR	 = $(USR_PSM_DIR)/include
@@ -121,7 +121,7 @@ ROOT_US3_CRYPTO_DIR_64	= $(ROOT_US3_MOD_DIR)/crypto/$(SUBDIR64)
 ROOT_US3_CRYPTO_DIR	= $(ROOT_US3_CRYPTO_DIR_$(CLASS))
 ROOT_US3_CRYPTO_LINK	= $(ROOT_US3_CRYPTO_DIR_64:$(ROOT_PLAT_DIR)%=../../../..%)
 
-ROOT_BOOT_PSM_KERN_DIR	= $(ROOT)/boot/platform/$(PLATFORM)/kernel
+ROOT_BOOT_PSM_KERN_DIR	= $(ROOT)/boot/platform/kernel
 
 #
 # The following are for the installation of objects in PSM directories.

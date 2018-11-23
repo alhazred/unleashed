@@ -51,7 +51,7 @@ extern "C" {
 /*
  * Where to install the microcode
  */
-#define	UCODE_INSTALL_PATH		"platform/i86pc/ucode"
+#define	UCODE_INSTALL_PATH		"platform/ucode"
 #define	UCODE_INSTALL_COMMON_PATH	".f"
 
 /*

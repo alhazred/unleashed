@@ -46,12 +46,12 @@ OBJS = $(MODULESRCS:%.c=%.o) $(SHAREDSRCS:%.c=%.o)
 # We expect these macros to be defined by the Makefile that is including us.
 #
 common_ROOTPROG = $(ROOT)/usr/lib/fm/topo/plugins/$(PROG)
-arch_ROOTPROG = $(ROOT)/usr/platform/$(ARCH)/lib/fm/topo/plugins/$(PROG)
+arch_ROOTPROG = $(ROOT)/usr/platform/lib/fm/topo/plugins/$(PROG)
 plat_ROOTPROG = $(PLATFORMS:%=$(ROOT)/usr/platform/%/lib/fm/topo/plugins/$(PROG))
 ROOTPROG = $($(CLASS)_ROOTPROG)
 
 common_ROOTCONF = $(ROOT)/usr/lib/fm/topo/plugins/$(CONF)
-arch_ROOTCONF = $(ROOT)/usr/platform/$(ARCH)/lib/fm/topo/plugins/$(CONF)
+arch_ROOTCONF = $(ROOT)/usr/platform/lib/fm/topo/plugins/$(CONF)
 plat_ROOTCONF = $(PLATFORMS:%=$(ROOT)/usr/platform/%/lib/fm/topo/plugins/$(CONF))
 ROOTCONF = $($(CLASS)_ROOTCONF)
 

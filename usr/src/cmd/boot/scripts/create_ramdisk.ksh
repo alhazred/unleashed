@@ -38,13 +38,9 @@ usage() {
 	echo "and it is not recommended for stand-alone use."
 	echo "Please use bootadm(8) instead."
 	echo ""
-	echo "Usage: ${0##*/}: [-R \<root\>] [-p \<platform\>]"
-	echo "where \<platform\> is one of: i86pc"
+	echo "Usage: ${0##*/}: [-R \<root\>]"
 	exit
 }
-
-# default platform is what we're running on
-PLATFORM=`uname -m`
 
 export PATH=/usr/sbin:/usr/bin:/sbin
 export GZIP_CMD=/usr/bin/gzip
@@ -65,10 +61,6 @@ do
 			EXTRACT_FILELIST="${ALT_ROOT}${EXTRACT_FILELIST}"
 		fi
 		;;
-	-p)	shift
-		PLATFORM="$1"
-		EXTRACT_ARGS="${EXTRACT_ARGS} -p ${PLATFORM}"
-		;;
         *)      usage
 		;;
         esac
@@ -82,15 +74,7 @@ if [ $# -eq 1 ]; then
 	echo "Creating boot_archive for $ALT_ROOT"
 fi
 
-case $PLATFORM in
-i386)	PLATFORM=i86pc
-	;;
-i86pc)	;;
-*)	usage
-	;;
-esac
-
-BOOT_ARCHIVE=platform/$PLATFORM/boot_archive
+BOOT_ARCHIVE=platform/boot_archive
 
 function cleanup
 {

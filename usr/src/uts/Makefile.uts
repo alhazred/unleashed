@@ -350,24 +350,6 @@ USR_MOD_DIRS		+= $(USR_SOCK_DIR)
 include $(SRC)/Makefile.psm
 
 #
-#	The "-r" on the remove may be considered temporary, but is required
-#	while the replacement of the SUNW,SPARCstation-10,SX directory by
-#	a symbolic link is being propagated.
-#
-INS.slink1= $(RM) -r $@; $(SYMLINK) $(PLATFORM) $@
-INS.slink2= $(RM) -r $@; $(SYMLINK) ../$(PLATFORM)/$(@F) $@
-INS.slink3= $(RM) -r $@; $(SYMLINK) $(IMPLEMENTED_PLATFORM) $@
-INS.slink4= $(RM) -r $@; $(SYMLINK) ../$(PLATFORM)/include $@
-INS.slink5= $(RM) -r $@; $(SYMLINK) ../$(PLATFORM)/sbin $@
-INS.slink6= $(RM) -r $@; $(SYMLINK) ../../$(PLATFORM)/lib/$(MODULE) $@
-INS.slink7= $(RM) -r $@; $(SYMLINK) ../../$(PLATFORM)/sbin/$(@F) $@
-
-ROOT_PLAT_LINKS		 = $(PLAT_LINKS:%=$(ROOT_PLAT_DIR)/%)
-ROOT_PLAT_LINKS_2	 = $(PLAT_LINKS_2:%=$(ROOT_PLAT_DIR)/%)
-USR_PLAT_LINKS		 = $(PLAT_LINKS:%=$(USR_PLAT_DIR)/%)
-USR_PLAT_LINKS_2	 = $(PLAT_LINKS_2:%=$(USR_PLAT_DIR)/%)
-
-#
 # Collection of all relevant, delivered kernel modules.
 #
 # Note that we insist on building genunix first.  When doing a 'make' from

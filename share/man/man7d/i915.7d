@@ -22,7 +22,7 @@ and G33 series integrated graphics controllers.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/i915\fR\fR
+\fB\fB/platform/kernel/drv/i915\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -32,7 +32,7 @@ and G33 series integrated graphics controllers.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/amd64/i915\fR\fR
+\fB\fB/platform/kernel/drv/amd64/i915\fR\fR
 .ad
 .sp .6
 .RS 4n

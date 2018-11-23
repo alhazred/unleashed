@@ -32,7 +32,7 @@ OBJECTS= ap.o ap_msg.o ap_rcm.o ap_sbd.o ap_seq.o cfga.o ap_err.o
 include ../../../Makefile.lib
 
 USR_PLAT_DIR		= $(ROOT)/usr/platform
-USR_PSM_DIR		= $(USR_PLAT_DIR)/$(PLATFORM)
+USR_PSM_DIR		= $(USR_PLAT_DIR)
 USR_PSM_LIB_DIR		= $(USR_PSM_DIR)/lib
 USR_PSM_LIB_CFG_DIR	= $(USR_PSM_LIB_DIR)/cfgadm
 USR_PSM_LIB_CFG_DIR_64	= $(USR_PSM_LIB_CFG_DIR)/$(MACH64)
@@ -50,13 +50,13 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-char-subscripts
 CERRWARN +=	-Wno-uninitialized
 
-CPPFLAGS +=	-I$(ROOT)/usr/platform/$(PLATFORM)/include -DSBD_DEBUG
+CPPFLAGS +=	-I$(ROOT)/usr/platform/include -DSBD_DEBUG
 #
 #	Generate the error messages form sbd_ioctl.h
 #
 GENERRDIR=	$(SRC)/lib/cfgadm_plugins/sbd
 GENERR=		$(GENERRDIR)/sbdgenerr
-ERRSRC=		$(ROOT)/usr/platform/$(PLATFORM)/include/sys/sbd_ioctl.h
+ERRSRC=		$(ROOT)/usr/platform/include/sys/sbd_ioctl.h
 
 .KEEP_STATE:
 

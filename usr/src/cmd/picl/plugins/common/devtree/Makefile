@@ -53,7 +53,7 @@ CFLAGS +=	$(C_PICFLAGS)
 LDLIBS +=	-L$(SRC)/lib/libsysevent -L$(SRC)/lib/libpicltree/$(MACH)
 LDLIBS +=	-lc -lkstat -ldevinfo -lpicltree -lnvpair
 LDLIBS +=	-L../piclevent -L$(ROOT)/usr/lib/picl/plugins -lpiclevent
-LDLIBS +=	-R/usr/platform/\$$PLATFORM/lib/picl/plugins
+LDLIBS +=	-R/usr/platform/lib/picl/plugins
 LDLIBS +=	-R/usr/platform/sun4u/lib/picl/plugins
 LDLIBS +=	-R/usr/lib/picl/plugins
 

@@ -171,12 +171,12 @@ extern int is_zfs(char *);
 #define	ZFS_BOOT	"-B $ZFS-BOOTFS"
 
 /* directboot kernels */
-#define	DIRECT_BOOT_32	"/platform/i86pc/kernel/unix"
-#define	DIRECT_BOOT_64	"/platform/i86pc/kernel/amd64/unix"
-#define	DIRECT_BOOT_KERNEL	"/platform/i86pc/kernel/$ISADIR/unix"
+#define	DIRECT_BOOT_32	"/platform/kernel/unix"
+#define	DIRECT_BOOT_64	"/platform/kernel/amd64/unix"
+#define	DIRECT_BOOT_KERNEL	"/platform/kernel/$ISADIR/unix"
 #define	DIRECT_BOOT_KERNEL_ZFS	DIRECT_BOOT_KERNEL " " ZFS_BOOT
-#define	DIRECT_BOOT_PREFIX	"/platform/i86pc/"
-#define	KERNEL_PREFIX	"/platform/i86pc/"
+#define	DIRECT_BOOT_PREFIX	"/platform/"
+#define	KERNEL_PREFIX	"/platform/"
 #define	AMD_UNIX_SPACE	"/amd64/unix "
 #define	UNIX_SPACE	"/unix "
 

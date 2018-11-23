@@ -21,7 +21,7 @@ PCI Express error handling and PCI Express MSI interrupts.
 .sp
 .ne 2
 .na
-\fB/platform/i86pc/kernel/drv/npe\fR
+\fB/platform/kernel/drv/npe\fR
 .ad
 .sp .6
 .RS 4n
@@ -31,7 +31,7 @@ PCI Express error handling and PCI Express MSI interrupts.
 .sp
 .ne 2
 .na
-\fB/platform/i86pc/kernel/drv/amd64/npe\fR
+\fB/platform/kernel/drv/amd64/npe\fR
 .ad
 .sp .6
 .RS 4n

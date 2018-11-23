@@ -30,7 +30,7 @@ include $(SRC)/Makefile.master
 
 i386_MACHDIR = intel
 
-i386_SUBDIRS = intel $(CONFIG_PLATFORM)
+i386_SUBDIRS = intel x86
 
 MACHDIR = $($(MACH)_MACHDIR)
 SUBDIRS = tools $($(MACH)_SUBDIRS)

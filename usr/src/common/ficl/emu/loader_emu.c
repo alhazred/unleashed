@@ -70,7 +70,7 @@ struct moduledir {
 static STAILQ_HEAD(, moduledir) moduledir_list =
     STAILQ_HEAD_INITIALIZER(moduledir_list);
 
-static const char *default_searchpath = "/platform/i86pc";
+static const char *default_searchpath = "/platform";
 
 static char typestr[] = "?fc?d?b? ?l?s?w";
 static int	ls_getdir(char **pathp);

@@ -26,8 +26,7 @@
 
 . /lib/svc/share/smf_include.sh
 
-PLATFORM="i86pc"
-ACPIHPD=/usr/platform/${PLATFORM}/lib/acpihpd
+ACPIHPD=/usr/platform/lib/acpihpd
 
 /usr/sbin/prtconf -D /devices/fw/acpidr@0 > /dev/null 2>&1
 if [ $? -ne 0 ]; then

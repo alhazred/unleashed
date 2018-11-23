@@ -32,7 +32,6 @@
 # cmd/acpihpd/Makefile
 #
 
-PLATFORM = i86pc
 MANIFEST = acpihpd.xml
 SVCMETHOD = svc-acpihpd
 
@@ -40,7 +39,7 @@ include ../Makefile.cmd
 
 $(64ONLY)SUBDIRS= $(MACH)
 
-ROOTMANIFESTDIR = $(ROOTSVCPLATFORM)/${PLATFORM}
+ROOTMANIFESTDIR = $(ROOTSVCPLATFORM)
 
 all	:=	TARGET = all
 install	:=	TARGET = install

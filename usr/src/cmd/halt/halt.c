@@ -644,7 +644,7 @@ validate_disk(char *arg, char *mountpoint)
 	if (rc != 0)
 		return (rc);
 
-	(void) snprintf(kernpath, MAXPATHLEN, "%s/platform/i86pc/kernel/unix",
+	(void) snprintf(kernpath, MAXPATHLEN, "%s/platform/kernel/unix",
 	    mountpoint);
 
 	if (stat64(kernpath, &statbuf) != 0) {
@@ -1149,18 +1149,18 @@ parse_fastboot_args(char *bootargs_buf, size_t buf_size,
 	} else if (mplen != 0) {
 		/*
 		 * No unix argument, but mountpoint is not empty, use
-		 * /platform/i86pc/$ISADIR/kernel/unix as default.
+		 * /platform/$ISADIR/kernel/unix as default.
 		 */
 		char isa[20];
 
 		if (sysinfo(SI_ARCHITECTURE_64, isa, sizeof (isa)) != -1)
 			(void) snprintf(&unixfile[mplen],
 			    sizeof (unixfile) - mplen,
-			    "/platform/i86pc/kernel/%s/unix", isa);
+			    "/platform/kernel/%s/unix", isa);
 		else if (sysinfo(SI_ARCHITECTURE_32, isa, sizeof (isa)) != -1) {
 			(void) snprintf(&unixfile[mplen],
 			    sizeof (unixfile) - mplen,
-			    "/platform/i86pc/kernel/unix");
+			    "/platform/kernel/unix");
 		} else {
 			(void) fprintf(stderr,
 			    gettext("%s: Unknown architecture"), cmdname);
@@ -1174,7 +1174,7 @@ parse_fastboot_args(char *bootargs_buf, size_t buf_size,
 	 * portions again.  This is necessary to handle cases where mountpoint
 	 * is specified on the command line as part of the unix argument,
 	 * such as this:
-	 *	# reboot -f /.alt/platform/i86pc/kernel/amd64/unix
+	 *	# reboot -f /.alt/platform/kernel/amd64/unix
 	 */
 	unixlen = strlen(unixfile);
 	if (unixlen > 0) {

@@ -1411,7 +1411,7 @@ gfxp_bm_register_fbops(gfxp_fb_softc_ptr_t softc,
 
 /*
  * This is patchable with mdb, i.e.:
- *	$ mdb -w /platform/i86pc/kernel/misc/amd64/gfx_private
+ *	$ mdb -w /platform/kernel/misc/amd64/gfx_private
  *	> gfxp_fb_info?ddVV
  *	1024    768     32      24
  */

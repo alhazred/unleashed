@@ -19,10 +19,6 @@
    'amd64)
 
  (const
-   PLATFORM
-   'i86pc)
-
- (const
    ; Build 64-bit kernel modules
    KERNEL_BITS
    64)

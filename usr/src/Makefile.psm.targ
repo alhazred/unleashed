@@ -30,9 +30,6 @@
 $(ROOT_PLAT_DIR) $(USR_PLAT_DIR):
 	-$(INS.dir)
 
-$(ROOT_PSM_DIR):		$(ROOT_PLAT_DIR)
-	-$(INS.dir)
-
 $(ROOT_BOOT_PSM_KERN_DIR):
 	-$(INS.dir)
 
@@ -136,9 +133,6 @@ $(ROOT_PSM_LIB_ZFS_DIR)/%:	% $(ROOT_PSM_LIB_ZFS_DIR)
 #
 #
 #
-$(USR_PSM_DIR):			$(USR_PLAT_DIR)
-	-$(INS.dir)
-
 $(USR_PSM_INCL_DIR) \
 $(USR_PSM_LIB_DIR) \
 $(USR_PSM_SBIN_DIR):		$(USR_PSM_DIR)

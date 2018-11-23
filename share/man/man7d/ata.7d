@@ -227,7 +227,7 @@ performance.
 .sp
 If your controller hangs when attempting to use higher block factors, you may
 be unable to reboot the system. For x86 based systems, it is recommended that
-tuning be performed using a duplicate of the \fB/platform/i86pc/kernel\fR
+tuning be performed using a duplicate of the \fB/platform/kernel\fR
 directory subtree. This ensures that a bootable kernel subtree exists in the
 event of a failed test.
 .RE
@@ -333,7 +333,7 @@ eeprom 'atapi-cd-dma-enabled=1'
 .SH FILES
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/ata\fR\fR
+\fB\fB/platform/kernel/drv/ata\fR\fR
 .ad
 .sp .6
 .RS 4n
@@ -343,7 +343,7 @@ Device driver.
 .sp
 .ne 2
 .na
-\fB\fB/platform/i86pc/kernel/drv/ata.conf\fR\fR
+\fB\fB/platform/kernel/drv/ata.conf\fR\fR
 .ad
 .sp .6
 .RS 4n

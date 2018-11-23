@@ -39,8 +39,7 @@ usage() {
 	echo "and it is not recommended for stand-alone use."
 	echo "Please use bootadm(8) instead."
 	echo ""
-	echo "Usage: ${0##*/}: [-R <root>] [-p <platform>] <filelist> ..."
-	echo "where <platform> is one of i86pc, sun4u or sun4v"
+	echo "Usage: ${0##*/}: [-R <root>] <filelist> ..."
 	exit 2
 }
 
@@ -58,9 +57,6 @@ build_platform() {
 	)
 }
 
-# default platform is what we're running on
-PLATFORM=`uname -m`
-
 altroot=""
 filelists=
 platform_provided=no
@@ -72,9 +68,6 @@ do
         R)	if [ "$OPTARG" != "/" ]; then
 			altroot="$OPTARG"
 		fi
-		;;
-	p)	platform_provided=yes
-		PLATFORM="$OPTARG"
 		;;
         *)      usage
 		;;
@@ -94,22 +87,6 @@ filelists=$*
 # a smaller archive by not including unnecessary components.
 #
 filtering=no
-if [ "$altroot" == "" ] || [ $platform_provided = yes ]; then
-	case $PLATFORM in
-	i86pc)
-		STRIP=
-		;;
-	sun4u)
-		STRIP=platform/sun4v/
-		;;
-	sun4v)
-		STRIP=platform/sun4u/
-		;;
-	*)
-		STRIP=
-		;;
-	esac
-fi
 
 for list in $filelists
 do

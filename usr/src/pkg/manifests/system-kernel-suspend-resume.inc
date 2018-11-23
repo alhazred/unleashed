@@ -31,15 +31,14 @@
 dir path=kernel group=sys
 dir path=kernel/drv group=sys
 dir path=platform group=sys
-dir path=platform/i86pc group=sys
-dir path=platform/i86pc/kernel group=sys
-dir path=platform/i86pc/kernel/misc group=sys
+dir path=platform/kernel group=sys
+dir path=platform/kernel/misc group=sys
 dir path=usr/share/man
 dir path=usr/share/man/man7
 driver name=srn
 file path=kernel/drv/srn group=sys
 file path=kernel/drv/srn.conf group=sys
-file path=platform/i86pc/kernel/misc/cpr group=sys mode=0755
+file path=platform/kernel/misc/cpr group=sys mode=0755
 file path=usr/share/man/man7/cpr.7
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

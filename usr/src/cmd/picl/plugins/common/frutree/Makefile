@@ -55,7 +55,7 @@ LDLIBS +=	-L../memcfg
 LDLIBS +=	-L$(ROOT)/usr/lib/picl/plugins
 LDLIBS +=	-lc -lpicltree -lpicld_pluginutil -lpicldevtree
 LDLIBS +=	-lpiclmemcfg
-$(SPARC_BLD)LDLIBS +=	-R/usr/platform/\$$PLATFORM/lib/picl/plugins \
+$(SPARC_BLD)LDLIBS +=	-R/usr/platform/lib/picl/plugins \
 			-R/usr/platform/sun4u/lib/picl/plugins
 LDLIBS +=	-R/usr/lib/picl/plugins
 

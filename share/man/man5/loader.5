@@ -458,7 +458,7 @@ Define the number of lines on the screen, to be used by the pager.
 Sets the list of directories which will be searched for modules
 named in a load command or implicitly required by a dependency.
 The default value for this variable is
-.Dq Li /platform/i86pc/${ISADIR}
+.Dq Li /platform/${ISADIR}
 .It Va prompt
 Value of
 .Nm Ns 's
@@ -772,8 +772,8 @@ Notice that a kernel must be loaded before any other
 .Ic load
 command is attempted.
 .Bd -literal -offset indent
-load /platform/i86pc/kernel/amd64/unix
-load -t rootfs /platform/i86pc/amd64/boot_archive
+load /platform/kernel/amd64/unix
+load -t rootfs /platform/amd64/boot_archive
 autoboot 5
 .Ed
 .Pp
