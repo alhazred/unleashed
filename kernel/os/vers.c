@@ -15,17 +15,17 @@
  */
 
 /*
- * UTS_VERSION and  UTS_PLATFORM must defined by
- * the build system.
+ * UTS_VERSION must defined by the build system.
  */
 
 #include <sys/utsname.h>
 #include <sys/sunddi.h>
+#include <sys/cfgparam.h>
 
 struct utsname utsname = {
 	.sysname = "Unleashed",
 	.nodename = "",
 	.release = "1.1",
 	.version = UTS_VERSION,
-	.machine = UTS_PLATFORM,
+	.machine = CONFIG_MACH_STR,
 };

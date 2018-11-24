@@ -1,6 +1,6 @@
 .include <../../../cfgparam.mk>
 
-MAN_i386 = agpgart_io.7i
+MAN_amd64 = agpgart_io.7i
 
 MAN = audio.7i \
       cdio.7i \

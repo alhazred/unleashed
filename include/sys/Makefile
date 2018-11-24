@@ -1,4 +1,4 @@
-i386_INCS=			\
+amd64_INCS=			\
 	avintr.h		\
 	agpgart.h		\
 	asy.h			\

@@ -1,7 +1,7 @@
 ((config
    ; Support for Linux core files
    LINUX_CORE_SUPPORT
-   (= MACH 'i386))
+   (= MACH 'amd64))
 
  (config
    ; should SMB expose CUPS printers?

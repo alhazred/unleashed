@@ -33,7 +33,7 @@ MAN_sparc = audiocs.7d \
       zs.7d \
       zsh.7d
 
-MAN_i386 = ahci.7d \
+MAN_amd64 = ahci.7d \
       amd8111s.7d \
       amr.7d \
       arcmsr.7d \
@@ -215,10 +215,6 @@ MAN = aac.7d \
       zcons.7d \
       zero.7d \
       $(MAN_$(CONFIG_MACH))
-
-
-.if $(CONFIG_MACH) == sparc
-.endif
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

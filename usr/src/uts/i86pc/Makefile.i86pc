@@ -36,11 +36,6 @@
 PLATFORM	 = i86pc
 
 #
-#	uname -m value
-#
-UNAME_M		= $(PLATFORM)
-
-#
 #	Everybody needs to know how to build modstubs.o and to locate unix.o
 #
 UNIX_DIR	 = $(UTSBASE)/$(PLATFORM)/unix

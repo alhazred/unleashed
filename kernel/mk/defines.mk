@@ -67,14 +67,12 @@ KERNEL_CFLAGS_64 = \
 	-D_ELF64
 
 KERNEL_CFLAGS_i386 = \
-	-mno-mmx \
-	-mno-sse
-
-KERNEL_CFLAGS_i86 = \
 	-O \
 	-march=pentiumpro
 
 KERNEL_CFLAGS_amd64 = \
+	-mno-mmx \
+	-mno-sse \
 	-O2 \
 	-Dsun \
 	-D__SVR4 \
@@ -98,7 +96,7 @@ KERNEL_INCLUDES = \
 	-I${SRCTOP}/arch/${CONFIG_MACH}/include \
 	-I${SRCTOP}/include
 
-KERNEL_INCLUDES_i386 = \
+KERNEL_INCLUDES_amd64 = \
 	-I${SRCTOP}/usr/src/uts/intel
 
 KERNEL_INCLUDES_sparc =

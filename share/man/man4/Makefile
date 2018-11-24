@@ -2,7 +2,7 @@
 
 MAN_sparc = sbus.4
 
-MAN_i386 = sysbus.4
+MAN_amd64 = sysbus.4
 
 MAN = Intro.4 \
       NISLDAPmapping.4 \
@@ -158,10 +158,6 @@ MAN = Intro.4 \
       yppasswdd.4 \
       ypserv.4 \
       $(MAN_$(CONFIG_MACH))
-
-
-.if $(CONFIG_MACH) == i386
-.endif
 
 # We want to just install manpages but there is no manpage-only mk file so
 # we use prog.mk.  This is ugly, but so is the entire share/man subtree.

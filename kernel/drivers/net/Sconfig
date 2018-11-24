@@ -26,7 +26,7 @@
  (config
    ; support for i40e network adapters
    I40E
-   (= MACH 'i386))
+   (= MACH 'amd64))
 
  (config
    ; support for igb network adapters
@@ -46,7 +46,7 @@
  (config
    ; support for nge network adapters
    NGE
-   (= MACH 'i386))
+   (= MACH 'amd64))
 
  (config
    ; support for nxge network adapters
@@ -61,13 +61,13 @@
  (config
    ; support for sfxge network adapters
    SFXGE
-   (= MACH 'i386))
+   (= MACH 'amd64))
 
  (config
    ; support for virtio network devices
    VIRTIO_NET
    (and
-     (= MACH 'i386)
+     (= MACH 'amd64)
      (= VIRTIO #t)))
 
  (config

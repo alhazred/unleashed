@@ -16,7 +16,7 @@
  (config
    ; support for virtio devices
    VIRTIO
-   (= MACH 'i386))
+   (= MACH 'amd64))
 
  (include "net/Sconfig"))
 

@@ -1,5 +1,5 @@
 sparc_INCS=
-i386_INCS=	stack_unwind.h
+amd64_INCS=	stack_unwind.h
 
 ATTRDB_INCS=	secdb.h \
 		auth_attr.h \

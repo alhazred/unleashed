@@ -1,6 +1,6 @@
 .include <../../../cfgparam.mk>
 
-MAN_i386 = acpidump.8 \
+MAN_amd64 = acpidump.8 \
       acpixtract.8
 
 MAN = 6to4relay.8 \

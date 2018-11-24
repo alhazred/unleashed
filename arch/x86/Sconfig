@@ -1,6 +1,6 @@
 ((const
    MACH
-   'i386)
+   'amd64)
 
  (const
    MACH32

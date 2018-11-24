@@ -85,10 +85,10 @@ systeminfo(int command, char *buf, long count)
 #ifdef _LP64
 	case SI_ARCHITECTURE_64:
 	case SI_ARCHITECTURE_K:
+	case SI_ARCHITECTURE:
 		kstr = architecture;
 		break;
 	case SI_ARCHITECTURE_32:
-	case SI_ARCHITECTURE:
 		kstr = architecture_32;
 		break;
 	case SI_ARCHITECTURE_NATIVE:

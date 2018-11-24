@@ -4,7 +4,7 @@ MODULE_DEPS=	misc/mac \
 		drv/ip
 SRCS=		sfe.c \
 		sfe_util.c
-DEFS_i386=	-Di86pc
+DEFS_amd64=	-Di86pc
 DEFS_sparc=	-Dsun4u
 DEFS=		-DVERSION='"2.6.1"' \
 		${DEFS_${CONFIG_MACH}} \
