@@ -85,6 +85,9 @@ export BUILD_PROJECT=''
 export ATLOG="$SRCTOP/log"
 export LOGFILE="$ATLOG/nightly.log"
 export MACH="$(uname -p)"
+if [ "$MACH" = "amd64" ]; then
+    MACH=i386
+fi
 
 export ROOT="$SRCTOP/proto/root_${MACH}"
 export SRC="$SRCTOP/usr/src"
