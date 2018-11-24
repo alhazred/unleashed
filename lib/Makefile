@@ -8,9 +8,9 @@ build:
 	${.MAKE} MACHINE=${CONFIG_MACH64} obj
 	${.MAKE} MACHINE=${CONFIG_MACH64}
 	${.MAKE} MACHINE=${CONFIG_MACH64} install
-	${.MAKE} obj
-	${.MAKE}
-	${.MAKE} install
+	${.MAKE} MACHINE=${CONFIG_MACH32} obj
+	${.MAKE} MACHINE=${CONFIG_MACH32}
+	${.MAKE} MACHINE=${CONFIG_MACH32} install
 .endif
 
 # hack to build certain libs as 64-bit only
