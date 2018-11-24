@@ -729,7 +729,7 @@ be_do_installboot_helper(zpool_handle_t *zphp, nvlist_t *child, char *stage1,
 		return (zfs_err_to_be_err(g_zfs));
 	}
 
-	if (be_is_isa("i386")) {
+	if (be_is_isa("i386") || be_is_isa("amd64")) {
 		uint16_t force = flags & BE_INSTALLBOOT_FLAG_FORCE;
 		uint16_t mbr = flags & BE_INSTALLBOOT_FLAG_MBR;
 
@@ -893,7 +893,7 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 	}
 	ZFS_CLOSE(zhp);
 
-	if (be_is_isa("i386")) {
+	if (be_is_isa("i386") || be_is_isa("amd64")) {
 		(void) snprintf(stage1, sizeof (stage1), "%s%s",
 		    tmp_mntpt, BE_LOADER_STAGE_1);
 		(void) snprintf(stage2, sizeof (stage2), "%s%s",
