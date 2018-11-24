@@ -2041,7 +2041,6 @@ $endif
 	setpwent;
 	strtok_r;
 	sysinfo;
-	_sysinfo;
 	ttyname_r;
 
 $if _ELF32

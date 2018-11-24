@@ -174,6 +174,7 @@
  *			CI_* via RTLDINFO and _ld_libc()  - new libthread
  */
 
+#include <sys/syscall.h>
 #include <sys/debug.h>
 #include <synch.h>
 #include <signal.h>
@@ -735,6 +736,16 @@ __clock_gettime(clockid_t clock_id, struct timespec *tp)
 	return (__clock_gettime_sys(clock_id, tp));
 }
 #endif /* defined(__i386) || defined(__amd64) */
+
+/*
+ * The libc wrapper for sysinfo can't be used here since it uses
+ * strlcpy/getenv, so shim it with syscall() here.
+ */
+int
+sysinfo(int command, char *buf, long count)
+{
+	return syscall(SYS_systeminfo, command, buf, count);
+}
 
 /*
  * In a similar vein to the is* functions above, we also have to define our own
