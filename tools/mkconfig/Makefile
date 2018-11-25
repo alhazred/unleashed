@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+# Copyright (c) 2016-2018 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,7 @@ CFLAGS=-D_GNU_SOURCE -D_POSIX_C_SOURCE=200112L -D__EXTENSIONS__ \
        -I${CONTRDIR}
 LFLAGS=-P sexpr_reader_
 YFLAGS=-p sexpr_reader_ -d
-LDFLAGS=-lumem -lavl -luuid /usr/lib/libcmdutils.so.1
+LDFLAGS=-lumem -lavl -luuid -lcmdutils
 
 .include <bsd.prog.mk>
 
