@@ -37,6 +37,7 @@ CFGARCH=sparc
 CFGFILE=arch/${CFGARCH}/Sconfig
 
 gen-config:
+	${.MAKE} -C tools cleandir
 	${.MAKE} -C tools obj
 	${.MAKE} -C tools
 	${.CURDIR}/tools/mkconfig/obj/mkconfig -I _SYS_CFGPARAM_H -H -o include/sys/cfgparam.h ${CFGFILE}
