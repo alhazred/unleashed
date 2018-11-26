@@ -16,7 +16,7 @@ information between Solaris and the Blade support chip.
 .sp
 .LP
 These drivers do not export public interfaces. Instead they make information
-available via picl, prtdiag, prtfru and related tools. In addition, these
+available via picl, prtdiag, and related tools. In addition, these
 drivers log Blade support chip environmental event information into system
 logs.
 .SH FILES

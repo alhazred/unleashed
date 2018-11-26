@@ -414,12 +414,6 @@ i386_SUBDIRS=		\
 	ucodeadm	\
 	xhci
 
-sparc_SUBDIRS=		\
-	device_remap	\
-	drd		\
-	fruadm		\
-	prtfru
-
 #
 # Commands that are messaged.
 #
@@ -613,10 +607,6 @@ MSGSUBDIRS=		\
 	zonename	\
 	zpool		\
 	zonestat
-
-sparc_MSGSUBDIRS=	\
-	fruadm		\
-	prtfru
 
 i386_MSGSUBDIRS=	\
 	ucodeadm

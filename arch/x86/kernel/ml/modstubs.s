@@ -1056,15 +1056,6 @@ fcnname##_info:							\
 #endif
 
 /*
- * Stubs for i86hvm bootstraping
- */
-#ifndef HVM_BOOTSTRAP
-	MODULE(hvm_bootstrap,misc);
-	NO_UNLOAD_STUB(hvm_bootstrap, hvmboot_rootconf, nomod_zero);
-	END_MODULE(hvm_bootstrap);
-#endif
-
-/*
  * Stubs for kernel cryptographic framework module (misc/kcf).
  */
 #ifndef KCF_MODULE
