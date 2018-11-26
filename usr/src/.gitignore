@@ -692,7 +692,6 @@ cmd/dtrace/test/tst/common/nfs_prot.c
 cmd/dtrace/test/tst/common/pid/tst.args1.exe
 cmd/dtrace/test/tst/common/pid/tst.float.exe
 cmd/dtrace/test/tst/common/pid/tst.fork.exe
-cmd/dtrace/test/tst/common/pid/tst.gcc.exe
 cmd/dtrace/test/tst/common/pid/tst.ret1.exe
 cmd/dtrace/test/tst/common/pid/tst.ret2.exe
 cmd/dtrace/test/tst/common/pid/tst.vfork.exe

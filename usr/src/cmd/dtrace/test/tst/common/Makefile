@@ -44,7 +44,6 @@ CSRCS = io/tst.fds.c \
 	pid/tst.args1.c \
 	pid/tst.float.c \
 	pid/tst.fork.c \
-	pid/tst.gcc.c \
 	pid/tst.ret1.c \
 	pid/tst.ret2.c \
 	pid/tst.vfork.c \
@@ -566,7 +565,6 @@ DSRCS = aggs/err.D_AGG_FUNC.bad.d \
 	pid/tst.emptystack.d \
 	pid/tst.float.d \
 	pid/tst.fork.d \
-	pid/tst.gcc.d \
 	pid/tst.ret1.d \
 	pid/tst.ret2.d \
 	pid/tst.vfork.d \
@@ -1845,7 +1843,6 @@ TSTS =	aggs/err.D_AGG_FUNC.bad.d \
 	pid/tst.emptystack.d.out \
 	pid/tst.float.d \
 	pid/tst.fork.d \
-	pid/tst.gcc.d \
 	pid/tst.killonerror.ksh \
 	pid/tst.main.ksh \
 	pid/tst.manypids.ksh \
@@ -2665,10 +2662,6 @@ nfs/$(RPCSVCOBJS): $(RPCSVCSRCS)
 nfs/tst.call3.exe: nfs/tst.call3.o nfs/$(RPCSVCOBJS)
 	$(LINK.c) -o $@ nfs/tst.call3.o nfs/$(RPCSVCOBJS) \
 	$(LDLIBS) -lrpcsvc
-	$(POST_PROCESS) ; $(STRIP_STABS)
-
-pid/tst.gcc.exe: pid/tst.gcc.c
-	$(CC) -o pid/tst.gcc.exe pid/tst.gcc.c $(LDFLAGS) $(LDLIBS)
 	$(POST_PROCESS) ; $(STRIP_STABS)
 
 json/tst.usdt.o: json/usdt.h
