@@ -256,7 +256,7 @@ topo_fmristr_build(ssize_t *sz, char *buf, size_t buflen, char *str,
 		*sz += snprintf(buf, left, "%s%s%s", prepend, str, append);
 }
 
-#define	TOPO_PLATFORM_PATH	"%s/usr/platform/%s/lib/fm/topo/%s"
+#define	TOPO_PLATFORM_PATH	"%s/usr/platform/lib/fm/topo/%s"
 #define	TOPO_COMMON_PATH	"%s/usr/lib/fm/topo/%s"
 
 char *
@@ -270,10 +270,10 @@ topo_search_path(topo_mod_t *mod, const char *rootdir, const char *file)
 	 * topo directories
 	 */
 	(void) snprintf(sp, PATH_MAX, TOPO_PLATFORM_PATH, rootdir,
-	    thp->th_platform, file);
+	    file);
 	if (access(sp, F_OK) != 0) {
 		(void) snprintf(sp, PATH_MAX, TOPO_PLATFORM_PATH,
-		    thp->th_rootdir, thp->th_machine, file);
+		    thp->th_rootdir, file);
 		if (access(sp, F_OK) != 0) {
 			(void) snprintf(sp, PATH_MAX, TOPO_COMMON_PATH,
 			    thp->th_rootdir, file);
