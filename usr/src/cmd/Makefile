@@ -414,9 +414,6 @@ i386_SUBDIRS=		\
 	ucodeadm	\
 	xhci
 
-sparc_SUBDIRS=		\
-	device_remap
-
 #
 # Commands that are messaged.
 #

@@ -53,7 +53,6 @@ MAN = 6to4relay.8 \
       devattr.8 \
       devfree.8 \
       devfsadm.8 \
-      device_remap.8 \
       devinfo.8 \
       devlinks.8 \
       devnm.8 \
