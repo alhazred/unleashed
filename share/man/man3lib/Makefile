@@ -49,8 +49,6 @@ MAN = libMPAPI.3lib \
       libpam.3lib \
       libpanel.3lib \
       libpctx.3lib \
-      libpicl.3lib \
-      libpicltree.3lib \
       libpkcs11.3lib \
       libpool.3lib \
       libproc.3lib \

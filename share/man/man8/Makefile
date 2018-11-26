@@ -265,7 +265,6 @@ MAN = 6to4relay.8 \
       passmgmt.8 \
       pbind.8 \
       pcitool.8 \
-      picld.8 \
       ping.8 \
       plockstat.8 \
       pmadm.8 \
@@ -290,7 +289,6 @@ MAN = 6to4relay.8 \
       prstat.8 \
       prtconf.8 \
       prtdiag.8 \
-      prtpicl.8 \
       prtvtoc.8 \
       psradm.8 \
       psrinfo.8 \

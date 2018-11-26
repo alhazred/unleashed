@@ -35,10 +35,6 @@ dir path=usr/lib/picl/plugins group=sys
 dir path=usr/lib/sysevent
 dir path=usr/lib/sysevent/modules
 dir path=usr/sbin
-dir path=usr/share/man/man8
-dir path=usr/share/man/man3lib
-dir path=usr/share/man/man3picl
-dir path=usr/share/man/man3picltree
 file path=lib/svc/manifest/system/picl.xml group=sys mode=0444 \
     variant.opensolaris.zone=global
 file path=usr/lib/$(ARCH64)/libpicl.so.1
@@ -52,53 +48,6 @@ file path=usr/lib/picl/plugins/libpiclfrutree.so.1 group=sys
 file path=usr/lib/picl/plugins/libpiclmemcfg.so.1 group=sys
 file path=usr/lib/sysevent/modules/picl_slm.so
 file path=usr/sbin/prtpicl mode=0755
-file path=usr/share/man/man8/picld.8
-file path=usr/share/man/man8/prtpicl.8
-file path=usr/share/man/man3lib/libpicl.3lib
-file path=usr/share/man/man3lib/libpicltree.3lib
-file path=usr/share/man/man3picl/libpicl.3picl
-file path=usr/share/man/man3picl/picl_find_node.3picl
-file path=usr/share/man/man3picl/picl_get_first_prop.3picl
-file path=usr/share/man/man3picl/picl_get_frutree_parent.3picl
-file path=usr/share/man/man3picl/picl_get_next_by_row.3picl
-file path=usr/share/man/man3picl/picl_get_node_by_path.3picl
-file path=usr/share/man/man3picl/picl_get_prop_by_name.3picl
-file path=usr/share/man/man3picl/picl_get_propinfo.3picl
-file path=usr/share/man/man3picl/picl_get_propinfo_by_name.3picl
-file path=usr/share/man/man3picl/picl_get_propval.3picl
-file path=usr/share/man/man3picl/picl_get_root.3picl
-file path=usr/share/man/man3picl/picl_initialize.3picl
-file path=usr/share/man/man3picl/picl_set_propval.3picl
-file path=usr/share/man/man3picl/picl_shutdown.3picl
-file path=usr/share/man/man3picl/picl_strerror.3picl
-file path=usr/share/man/man3picl/picl_wait.3picl
-file path=usr/share/man/man3picl/picl_walk_tree_by_class.3picl
-file path=usr/share/man/man3picltree/libpicltree.3picltree
-file path=usr/share/man/man3picltree/picld_log.3picltree
-file path=usr/share/man/man3picltree/picld_plugin_register.3picltree
-file path=usr/share/man/man3picltree/ptree_add_node.3picltree
-file path=usr/share/man/man3picltree/ptree_add_prop.3picltree
-file path=usr/share/man/man3picltree/ptree_create_and_add_node.3picltree
-file path=usr/share/man/man3picltree/ptree_create_and_add_prop.3picltree
-file path=usr/share/man/man3picltree/ptree_create_node.3picltree
-file path=usr/share/man/man3picltree/ptree_create_prop.3picltree
-file path=usr/share/man/man3picltree/ptree_create_table.3picltree
-file path=usr/share/man/man3picltree/ptree_find_node.3picltree
-file path=usr/share/man/man3picltree/ptree_get_first_prop.3picltree
-file path=usr/share/man/man3picltree/ptree_get_frutree_parent.3picltree
-file path=usr/share/man/man3picltree/ptree_get_next_by_row.3picltree
-file path=usr/share/man/man3picltree/ptree_get_node_by_path.3picltree
-file path=usr/share/man/man3picltree/ptree_get_prop_by_name.3picltree
-file path=usr/share/man/man3picltree/ptree_get_propinfo.3picltree
-file path=usr/share/man/man3picltree/ptree_get_propinfo_by_name.3picltree
-file path=usr/share/man/man3picltree/ptree_get_propval.3picltree
-file path=usr/share/man/man3picltree/ptree_get_root.3picltree
-file path=usr/share/man/man3picltree/ptree_init_propinfo.3picltree
-file path=usr/share/man/man3picltree/ptree_post_event.3picltree
-file path=usr/share/man/man3picltree/ptree_register_handler.3picltree
-file path=usr/share/man/man3picltree/ptree_unregister_handler.3picltree
-file path=usr/share/man/man3picltree/ptree_update_propval.3picltree
-file path=usr/share/man/man3picltree/ptree_walk_tree_by_class.3picltree
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
 link path=usr/lib/$(ARCH64)/libpicl.so target=./libpicl.so.1

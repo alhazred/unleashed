@@ -39,8 +39,6 @@ SUBDIR = man1 \
 	 man3ofmt \
 	 man3pam \
 	 man3perl \
-	 man3picl \
-	 man3picltree \
 	 man3pool \
 	 man3proc \
 	 man3project \
