@@ -416,9 +416,7 @@ i386_SUBDIRS=		\
 
 sparc_SUBDIRS=		\
 	device_remap	\
-	drd		\
-	fruadm		\
-	prtfru
+	drd
 
 #
 # Commands that are messaged.
@@ -613,10 +611,6 @@ MSGSUBDIRS=		\
 	zonename	\
 	zpool		\
 	zonestat
-
-sparc_MSGSUBDIRS=	\
-	fruadm		\
-	prtfru
 
 i386_MSGSUBDIRS=	\
 	ucodeadm

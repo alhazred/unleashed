@@ -95,7 +95,6 @@ MAN = 6to4relay.8 \
       fmstat.8 \
       fmthard.8 \
       format.8 \
-      fruadm.8 \
       fsck.8 \
       fsck_pcfs.8 \
       fsck_udfs.8 \
@@ -293,7 +292,6 @@ MAN = 6to4relay.8 \
       prstat.8 \
       prtconf.8 \
       prtdiag.8 \
-      prtfru.8 \
       prtpicl.8 \
       prtvtoc.8 \
       psradm.8 \
