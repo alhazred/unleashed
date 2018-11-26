@@ -84,25 +84,14 @@ piclfrutree_register(void)
 static int
 get_config_file(char *outfilename)
 {
-	char	nmbuf[SYS_NMLN];
 	char	pname[PATH_MAX];
 
-	if (sysinfo(SI_PLATFORM, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		(void) strlcat(pname, FRUTREE_CONFFILE_NAME, PATH_MAX);
-		if (access(pname, R_OK) == 0) {
-			(void) strlcpy(outfilename, pname, PATH_MAX);
-			return (0);
-		}
-	}
+	(void) snprintf(pname, PATH_MAX, "%s/%s", PICLD_PLAT_PLUGIN_DIR,
+	    FRUTREE_CONFFILE_NAME);
 
-	if (sysinfo(SI_MACHINE, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		(void) strlcat(pname, FRUTREE_CONFFILE_NAME, PATH_MAX);
-		if (access(pname, R_OK) == 0) {
-			(void) strlcpy(outfilename, pname, PATH_MAX);
-			return (0);
-		}
+	if (access(pname, R_OK) == 0) {
+		(void) strlcpy(outfilename, pname, PATH_MAX);
+		return (0);
 	}
 
 	(void) snprintf(pname, PATH_MAX, "%s/%s", PICLD_COMMON_PLUGIN_DIR,

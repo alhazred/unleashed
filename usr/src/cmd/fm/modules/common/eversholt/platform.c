@@ -943,10 +943,10 @@ platform_get_files_stddirs(char *fname, int nodups)
 	(void) snprintf(eftgendir, MAXPATHLEN, "%s/usr/lib/fm/eft", Root);
 
 	(void) snprintf(eftmachdir,
-	    MAXPATHLEN, "%s/usr/platform/%s/lib/fm/eft", Root, Mach);
+	    MAXPATHLEN, "%s/usr/platform/lib/fm/eft", Root);
 
 	(void) snprintf(eftplatdir,
-	    MAXPATHLEN, "%s/usr/platform/%s/lib/fm/eft", Root, Plat);
+	    MAXPATHLEN, "%s/usr/platform/lib/fm/eft", Root);
 
 	dirlist[0] = eftplatdir;
 	dirlist[1] = eftmachdir;

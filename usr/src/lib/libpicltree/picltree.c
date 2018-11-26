@@ -3347,7 +3347,6 @@ picltree_init(void)
 static void
 add_unique_plugin_to_list(char *path, char *name)
 {
-	char	*buf;
 	picld_plugin_desc_t	*pl;
 	picld_plugin_desc_t	*tmp;
 
@@ -3366,12 +3365,9 @@ add_unique_plugin_to_list(char *path, char *name)
 	pl->libname = strdup(name);
 	if (pl->libname == NULL)
 		return;
-	buf = alloca(strlen(name) + strlen(path) + 2);
-	if (buf == NULL)
-		return;
-	(void) strcpy(buf, path);
-	(void) strcat(buf, name);
-	pl->pathname = strdup(buf);
+
+	if (asprintf(&pl->pathname, "%s/%s", path, name) < 0)
+		pl->pathname = NULL;
 	if (pl->pathname == NULL)
 		return;
 
@@ -3418,25 +3414,8 @@ get_plugins_from_dir(char *dirname)
 static void
 init_plugin_list(void)
 {
-	char	nmbuf[SYS_NMLN];
-	char	pname[PATH_MAX];
-
-	plugin_desc = NULL;
-	if (sysinfo(SI_PLATFORM, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		if (access(pname, R_OK) == 0)
-			get_plugins_from_dir(pname);
-	}
-
-	if (sysinfo(SI_MACHINE, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		if (access(pname, R_OK) == 0)
-			get_plugins_from_dir(pname);
-	}
-
-	(void) snprintf(pname, PATH_MAX, "%s/", PICLD_COMMON_PLUGIN_DIR);
-	if (access(pname, R_OK) == 0)
-		get_plugins_from_dir(pname);
+	get_plugins_from_dir(PICLD_PLAT_PLUGIN_DIR);
+	get_plugins_from_dir(PICLD_COMMON_PLUGIN_DIR);
 }
 
 static void

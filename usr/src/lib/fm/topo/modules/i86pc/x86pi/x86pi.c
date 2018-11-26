@@ -80,7 +80,6 @@ int
 _topo_init(topo_mod_t *mod, topo_version_t version)
 {
 	int	result;
-	char	isa[MAXNAMELEN];
 
 	if (getenv("TOPOX86PIDBG") != NULL) {
 		/* Debugging is requested for this module */
@@ -92,13 +91,6 @@ _topo_init(topo_mod_t *mod, topo_version_t version)
 		(void) topo_mod_seterrno(mod, EMOD_VER_NEW);
 		topo_mod_dprintf(mod, "incompatible topo version %d\n",
 		    version);
-		return (-1);
-	}
-
-	/* Verify that this is a i86pc architecture machine */
-	(void) sysinfo(SI_MACHINE, isa, MAXNAMELEN);
-	if (strncmp(isa, "i86pc", MAXNAMELEN) != 0) {
-		topo_mod_dprintf(mod, "not i86pc architecture: %s\n", isa);
 		return (-1);
 	}
 

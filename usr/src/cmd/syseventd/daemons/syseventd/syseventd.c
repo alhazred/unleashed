@@ -1164,9 +1164,9 @@ dispatch(void)
 	return (0);
 }
 
-#define	MODULE_DIR_HW	"/usr/platform/%s/lib/sysevent/modules/"
+#define	MODULE_DIR_HW	"/usr/platform/lib/sysevent/modules/"
 #define	MODULE_DIR_GEN	"/usr/lib/sysevent/modules/"
-#define	MOD_DIR_NUM	3
+#define	MOD_DIR_NUM	2
 static char dirname[MOD_DIR_NUM][MAXPATHLEN];
 
 static char *
@@ -1178,29 +1178,8 @@ dir_num2name(int dirnum)
 		return (NULL);
 
 	if (dirname[0][0] == '\0') {
-		if (sysinfo(SI_PLATFORM, infobuf, MAXPATHLEN) == -1) {
-			syseventd_print(1, "dir_num2name: "
-			    "sysinfo error %s\n", strerror(errno));
-			return (NULL);
-		} else if (snprintf(dirname[0], sizeof (dirname[0]),
-		    MODULE_DIR_HW, infobuf) >= sizeof (dirname[0])) {
-			syseventd_print(1, "dir_num2name: "
-			    "platform name too long: %s\n",
-			    infobuf);
-			return (NULL);
-		}
-		if (sysinfo(SI_MACHINE, infobuf, MAXPATHLEN) == -1) {
-			syseventd_print(1, "dir_num2name: "
-			    "sysinfo error %s\n", strerror(errno));
-			return (NULL);
-		} else if (snprintf(dirname[1], sizeof (dirname[1]),
-		    MODULE_DIR_HW, infobuf) >= sizeof (dirname[1])) {
-			syseventd_print(1, "dir_num2name: "
-			    "machine name too long: %s\n",
-			    infobuf);
-			return (NULL);
-		}
-		(void) strcpy(dirname[2], MODULE_DIR_GEN);
+		(void) strcpy(dirname[0], MODULE_DIR_HW);
+		(void) strcpy(dirname[1], MODULE_DIR_GEN);
 	}
 
 	return (dirname[dirnum]);
