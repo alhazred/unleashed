@@ -196,7 +196,7 @@ populate_physical(topo_hdl_t *hp, di_phys_t *pp)
 	err = 0;
 	wp = topo_walk_init(hp, FM_FMRI_SCHEME_HC, disk_walker, pp, &err);
 	if (wp == NULL) {
-		fatal(-1, "unable to initialise topo walker: %s",
+		fatal(-1, "unable to initialise topo walker: %s\n",
 		    topo_strerror(err));
 	}
 
@@ -204,7 +204,7 @@ populate_physical(topo_hdl_t *hp, di_phys_t *pp)
 		;
 
 	if (err == TOPO_WALK_ERR)
-		fatal(-1, "topo walk failed");
+		fatal(-1, "topo walk failed\n");
 
 	topo_walk_fini(wp);
 }
@@ -242,14 +242,14 @@ enumerate_disks(di_opts_t *opts)
 	err = 0;
 	hp = topo_open(TOPO_VERSION, NULL, &err);
 	if (hp == NULL) {
-		fatal(-1, "unable to obtain topo handle: %s",
+		fatal(-1, "unable to obtain topo handle: %s\n",
 		    topo_strerror(err));
 	}
 
 	err = 0;
 	(void) topo_snap_hold(hp, NULL, &err);
 	if (err != 0) {
-		fatal(-1, "unable to hold topo snapshot: %s",
+		fatal(-1, "unable to hold topo snapshot: %s\n",
 		    topo_strerror(err));
 	}
 
