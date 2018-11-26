@@ -24,7 +24,7 @@
 
 LIBRARY =	libipsecutil.a
 VERS =		.1
-OBJECTS =	ipsec_util.o algs.o ipsec_libssl_setup.o
+OBJECTS =	ipsec_util.o algs.o
 
 include ../../Makefile.lib
 
@@ -32,9 +32,11 @@ LIBS +=		$(DYNLIB)
 
 SRCDIR =	../common
 
-LDLIBS +=	-ltecla -lc
+BERDIR = $(SRC)/lib/libkmf/ber_der/inc
 
-CPPFLAGS +=	-I$(SRCDIR)
+LDLIBS +=	-ltecla -lc -lkmf -lkmfberder
+
+CPPFLAGS +=	-I$(SRCDIR) -I$(BERDIR)
 
 CERRWARN +=	-Wno-unused-function
 CERRWARN +=	-Wno-uninitialized

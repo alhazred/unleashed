@@ -19,6 +19,7 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018, Joyent, Inc.
 #
 
 LIBRARY= libkmf.a
@@ -54,10 +55,9 @@ INCDIR=	../../include
 
 LIBS=	$(DYNLIB)
 
-LDLIBS   += $(BERDERLIB) $(CRYPTOUTILLIB) -lmd -lpkcs11 -lc \
-	-lxml2
-LDLIBS64 += $(BERDERLIB64) $(CRYPTOUTILLIB64) -lmd -lpkcs11 -lc \
-	-lxml2
+LDLIBS	+=	$(BERDERLIB) $(CRYPTOUTILLIB) -lmd -lpkcs11 -lc
+LDLIBS	+=	-lcustr
+LDLIBS	+=	-lxml2
 
 CPPFLAGS	+=	-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 			-I../../ber_der/inc -I$(SRCDIR)

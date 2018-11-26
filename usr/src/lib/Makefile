@@ -526,9 +526,9 @@ libidmap:	libavl
 libinetsvc:	libscf
 libipadm:	libinetutil libdlpi libdhcpagent libdladm libsecdb libdhcputil
 libipmp:	libinetutil
-libipsecutil:	libtecla
+libipsecutil:	libtecla libkmf
 libiscsit:	libstmf libuuid
-libkmf:		libcryptoutil pkcs11
+libkmf:		libcryptoutil pkcs11 libcustr
 libkvm:		../cmd/sgs/libelf
 libldap5:	libsasl
 libmapid:	libresolv2 libscf
