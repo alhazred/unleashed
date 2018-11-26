@@ -415,8 +415,7 @@ i386_SUBDIRS=		\
 	xhci
 
 sparc_SUBDIRS=		\
-	device_remap	\
-	drd
+	device_remap
 
 #
 # Commands that are messaged.
