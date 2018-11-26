@@ -266,7 +266,6 @@ COMMON_SUBDIRS=		\
 	pginfo		\
 	pgstat		\
 	pgrep		\
-	picl		\
 	plimit		\
 	policykit	\
 	pools		\
@@ -530,7 +529,6 @@ MSGSUBDIRS=		\
 	pfexec		\
 	pg		\
 	pgrep		\
-	picl            \
 	pools		\
 	power		\
 	pr		\

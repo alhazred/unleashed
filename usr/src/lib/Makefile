@@ -162,8 +162,6 @@ SUBDIRS +=				\
 	libpam		\
 	libpcidb	\
 	libpctx		\
-	libpicl		\
-	libpicltree	\
 	libpool		\
 	libpp		\
 	libproc		\
@@ -277,7 +275,6 @@ MSGSUBDIRS=		\
 	libnwam		\
 	libofmt		\
 	libpam		\
-	libpicl		\
 	libpool		\
 	libpp		\
 	libreparse	\
@@ -365,8 +362,6 @@ HDRSUBDIRS=				\
 	libpam		\
 	libpcidb	\
 	libpctx		\
-	libpicl		\
-	libpicltree	\
 	libpool		\
 	libpp		\
 	libproc		\

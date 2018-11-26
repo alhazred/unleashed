@@ -41,7 +41,6 @@
 <include library-ncurses.inc>
 <include runtime-perl-module-sun-solaris.inc>
 <include service-file-system-smb.inc>
-<include service-picl.inc>
 <include service-resource-pools.inc>
 <include service-security-gss.inc>
 <include service-security-kerberos-5.inc>

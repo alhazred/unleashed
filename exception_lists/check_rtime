@@ -52,12 +52,6 @@ SKIP		^usr/MACH(lib)/lddstub$		# lddstub has no dependencies
 SKIP		^usr/MACH(lib)/libssagent\.so\.1$	# 4328854
 SKIP		^usr/lib/MACH(iconv)/geniconvtbl.so$	# 4384329
 
-# picl file exclusions (4385799)
-SKIP		^usr/platform/.*/libpsvcplugin_psr\.so\.1
-SKIP		^usr/platform/.*/libpsvcpolicy_psr\.so\.1
-SKIP		^usr/platform/.*/libpsvcpolicy\.so\.1
-SKIP		^usr/lib/sysevent/modules/picl_slm.so$
-
 # Objects that are allowed to have executable data segments
 EXEC_DATA	^MACH(lib)/ld\.so\.1$
 EXEC_DATA	^lib/libc\.so\.1$	# 6524709, 32-bit, needed for x86 only
@@ -88,9 +82,6 @@ STAB	^platform/MACH(kernel)/unix$
 # Files that are allowed undefined references
 UNDEF_REF	^usr/lib/libnisdb\.so\.2$
 
-# Objects allowed to have unused dependencies
-UNUSED_DEPS	^usr/lib/picl/plugins/		# require devtree dependencies
-
 # libnetsnmphelpers.so is empty in some net-snmp versions
 UNUSED_OBJ	unused object=.*/libnetsnmphelpers\.so\..*
 UNREF_OBJ	unreferenced object=.*/libnetsnmphelpers\.so\..*
@@ -101,11 +92,6 @@ UNUSED_RPATH	/etc/ppp/plugins.*\ from\ .*pppd
 UNUSED_RPATH	/usr/lib/inet/ppp.*\ from\ .*pppd
 UNUSED_RPATH	/usr/platform/.*rsmlib.*\ from\ .*librsm\.so\.2
 UNUSED_RPATH	\$ORIGIN.*\ from\ .*fcode.so
-
-# Unused runpaths in picl code
-UNUSED_RPATH	/usr/platform/.*\ from\ .*/usr/platform
-UNUSED_RPATH	/usr/lib/picl/.*\ from\ .*/usr/platform
-UNUSED_RPATH	/usr/platform/.*\ from\ .*/usr/lib/picl
 
 # Unused runpaths in non-OSNET objects we can't change
 UNUSED_RPATH	/usr/lib/mps.*\ from\ .*libnss3\.so
@@ -156,7 +142,6 @@ UNREF_OBJ	/libstdc\+\+\.so\.6;\ unused\ dependency\ of	# gcc build
 UNREF_OBJ	/libgcc_s\.so\.1;\ unused\ dependency\ of	# gcc build
 UNREF_OBJ	/libgcc_s\.so\.1.*\ of\ .*libstdc\+\+\.so\.6	# omnios gcc mix
 UNREF_OBJ	/libm\.so\.2.*\ of\ .*libstdc\+\+\.so\.6	# gcc build
-UNREF_OBJ	/lib.*\ of\ .*/lib/picl/plugins/		# picl
 UNREF_OBJ	/lib.*\ of\ .*kcfd				# interposer
 UNREF_OBJ	/libpkcs11\.so\.1; .*\ of\ .*libkmf\.so\.1	# interposed
 # Referenced by the Studio build, not the GCC build.  GCC eliminates the unused

@@ -73,9 +73,6 @@
   <service name='system/keymap' version='1' type='service'>
     <instance name='default' enabled='true'/>
   </service>
-  <service name='system/picl' version='1' type='service'>
-    <instance name='default' enabled='true'/>
-  </service>
   <service name='system/sac' version='1' type='service'>
     <instance name='default' enabled='true'/>
   </service>

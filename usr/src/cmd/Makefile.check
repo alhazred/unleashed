@@ -105,7 +105,6 @@ MANIFEST_SUBDIRS=			\
 	krb5/krb5kdc			\
 	krb5/kwarn			\
 	krb5/slave			\
-	picl/picld			\
 	rcap/rcapd			\
 	rpcsvc/rpc.bootparamd		\
 	smbsrv/smbd			\

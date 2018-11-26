@@ -53,7 +53,6 @@ PLUGIN		^usr/lib/iconv
 PLUGIN		^usr/lib/inet/ppp
 PLUGIN		^usr/lib/mdb
 PLUGIN		^usr/lib/pci
-PLUGIN		^usr/lib/picl/plugins
 PLUGIN		^usr/lib/python2.[467]
 PLUGIN		^usr/lib/rcm/modules
 PLUGIN		^usr/lib/scsi/plugins
@@ -78,7 +77,6 @@ NOVERDEF	^usr/MACH(lib)/sn1_brand\.so\.1$
 NOVERDEF	^usr/lib/fs/[^/]*/fstyp\.so\.1$
 NOVERDEF	^usr/lib/libwrap\.so\.1\.0$
 NOVERDEF	^usr/lib/locale/MACH(iso_8859_1)/iso_8859_1\.so\.3$
-NOVERDEF	^usr/lib/picl/plugins$
 
 
 # Objects that are allowed to deviate from our standard version
