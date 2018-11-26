@@ -898,21 +898,6 @@ be_do_installboot(be_transaction_data_t *bt, uint16_t flags)
 		    tmp_mntpt, BE_LOADER_STAGE_1);
 		(void) snprintf(stage2, sizeof (stage2), "%s%s",
 		    tmp_mntpt, BE_LOADER_STAGE_2);
-	} else if (be_is_isa("sparc")) {
-		char *platform = be_get_platform();
-
-		if (platform == NULL) {
-			be_print_err(gettext("%s: failed to detect system "
-			    "platform name\n"), __func__);
-			if (be_mounted)
-				(void) _be_unmount(bt->obe_name, 0);
-			free(tmp_mntpt);
-			return (BE_ERR_BOOTFILE_INST);
-		}
-		stage1[0] = '\0';	/* sparc has no stage1 */
-		(void) snprintf(stage2, sizeof (stage2),
-		    "%s/usr/platform/%s%s", tmp_mntpt,
-		    platform, BE_SPARC_BOOTBLK);
 	} else {
 		be_print_err(gettext("%s: unsupported architecture.\n"),
 		    __func__);

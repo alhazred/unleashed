@@ -770,12 +770,12 @@ rcm_append_info(rcm_info_t **head, rcm_info_t *info)
 
 /* get rcm module and rcm script directory names */
 
-#define	N_MODULE_DIR	3	/* search 3 directories for modules */
-#define	MODULE_DIR_HW	"/usr/platform/%s/lib/rcm/modules/"
+#define	N_MODULE_DIR	2
+#define	MODULE_DIR_HW	"/usr/platform/lib/rcm/modules/"
 #define	MODULE_DIR_GEN	"/usr/lib/rcm/modules/"
 
-#define	N_SCRIPT_DIR	4	/* search 4 directories for scripts */
-#define	SCRIPT_DIR_HW	"/usr/platform/%s/lib/rcm/scripts/"
+#define	N_SCRIPT_DIR	3
+#define	SCRIPT_DIR_HW	"/usr/platform/lib/rcm/scripts/"
 #define	SCRIPT_DIR_GEN	"/usr/lib/rcm/scripts/"
 #define	SCRIPT_DIR_ETC	"/etc/rcm/scripts/"
 
@@ -803,44 +803,12 @@ rcm_dir(uint_t dirnum, int *rcm_script)
 {
 	static char dir_name[N_MODULE_DIR + N_SCRIPT_DIR][MAXPATHLEN];
 
-	char infobuf[MAXPATHLEN];
-
 	if (dirnum >= (N_MODULE_DIR + N_SCRIPT_DIR))
 		return (NULL);
 
 	if (dir_name[0][0] == '\0') {
-		/*
-		 * construct the module directory names
-		 */
-		if (sysinfo(SI_PLATFORM, infobuf, MAXPATHLEN) == -1) {
-			dprintf((stderr, "sysinfo %s\n", strerror(errno)));
-			return (NULL);
-		} else {
-			if (snprintf(dir_name[0], MAXPATHLEN, MODULE_DIR_HW,
-			    infobuf) >= MAXPATHLEN ||
-			    snprintf(dir_name[N_MODULE_DIR + 1], MAXPATHLEN,
-			    SCRIPT_DIR_HW, infobuf) >= MAXPATHLEN) {
-				dprintf((stderr,
-				    "invalid module or script directory for "
-				    "platform %s\n", infobuf));
-				return (NULL);
-			}
-		}
-
-		if (sysinfo(SI_MACHINE, infobuf, MAXPATHLEN) == -1) {
-			dprintf((stderr, "sysinfo %s\n", strerror(errno)));
-			return (NULL);
-		} else {
-			if (snprintf(dir_name[1], MAXPATHLEN, MODULE_DIR_HW,
-			    infobuf) >= MAXPATHLEN ||
-			    snprintf(dir_name[N_MODULE_DIR + 2], MAXPATHLEN,
-			    SCRIPT_DIR_HW, infobuf) >= MAXPATHLEN) {
-				dprintf((stderr,
-				    "invalid module or script directory for "
-				    "machine type %s\n", infobuf));
-				return (NULL);
-			}
-		}
+		strlcpy(dir_name[0], MODULE_DIR_HW, MAXPATHLEN);
+		strlcpy(dir_name[N_MODULE_DIR + 1], SCRIPT_DIR_HW, MAXPATHLEN);
 
 		if (strlcpy(dir_name[2], MODULE_DIR_GEN, MAXPATHLEN) >=
 		    MAXPATHLEN ||

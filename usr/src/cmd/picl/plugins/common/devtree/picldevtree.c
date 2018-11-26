@@ -2336,24 +2336,13 @@ read_conf_file(char *fname, conf_entries_t *list)
 static void
 process_devtree_conf_file(void)
 {
-	char	nmbuf[SYS_NMLN];
 	char	pname[PATH_MAX];
 
 	conf_name_class_map = NULL;
 
-	if (sysinfo(SI_PLATFORM, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		(void) strlcat(pname, DEVTREE_CONFFILE_NAME, PATH_MAX);
-		conf_name_class_map = read_conf_file(pname,
-		    conf_name_class_map);
-	}
-
-	if (sysinfo(SI_MACHINE, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		(void) strlcat(pname, DEVTREE_CONFFILE_NAME, PATH_MAX);
-		conf_name_class_map = read_conf_file(pname,
-		    conf_name_class_map);
-	}
+	(void) snprintf(pname, PATH_MAX, "%s/%s", PICLD_PLAT_PLUGIN_DIR,
+	    DEVTREE_CONFFILE_NAME);
+	conf_name_class_map = read_conf_file(pname, conf_name_class_map);
 
 	(void) snprintf(pname, PATH_MAX, "%s/%s", PICLD_COMMON_PLUGIN_DIR,
 	    DEVTREE_CONFFILE_NAME);
@@ -2474,22 +2463,11 @@ read_asr_conf_file(char *fname, asr_conf_entries_t *list)
 static void
 process_asrtree_conf_file(void)
 {
-	char	nmbuf[SYS_NMLN];
 	char	pname[PATH_MAX];
 
-	if (sysinfo(SI_PLATFORM, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		(void) strlcat(pname, ASRTREE_CONFFILE_NAME, PATH_MAX);
-		conf_name_asr_map = read_asr_conf_file(pname,
-		    conf_name_asr_map);
-	}
-
-	if (sysinfo(SI_MACHINE, nmbuf, sizeof (nmbuf)) != -1) {
-		(void) snprintf(pname, PATH_MAX, PICLD_PLAT_PLUGIN_DIRF, nmbuf);
-		(void) strlcat(pname, ASRTREE_CONFFILE_NAME, PATH_MAX);
-		conf_name_asr_map = read_asr_conf_file(pname,
-		    conf_name_asr_map);
-	}
+	(void) snprintf(pname, PATH_MAX, "%s/%s", PICLD_PLAT_PLUGIN_DIR,
+	    ASRTREE_CONFFILE_NAME);
+	conf_name_asr_map = read_asr_conf_file(pname, conf_name_asr_map);
 
 	(void) snprintf(pname, PATH_MAX, "%s/%s", PICLD_COMMON_PLUGIN_DIR,
 	    ASRTREE_CONFFILE_NAME);

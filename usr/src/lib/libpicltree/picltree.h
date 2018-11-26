@@ -43,7 +43,7 @@ extern "C" {
  * Plug-in directories
  */
 #define	PICLD_COMMON_PLUGIN_DIR	"/usr/lib/picl/plugins"
-#define	PICLD_PLAT_PLUGIN_DIRF	"/usr/platform/%s/lib/picl/plugins/"
+#define	PICLD_PLAT_PLUGIN_DIR	"/usr/platform/lib/picl/plugins"
 
 typedef struct {
 	picl_nodehdl_t	nodeh;
