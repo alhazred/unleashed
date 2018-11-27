@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <compat.h>
+#include "compat.h"
 
 static int isescaped(const char *, const char *, int);
 

@@ -16,22 +16,22 @@
 dir path=etc group=sys
 dir path=etc/mail group=mail
 dir path=usr/bin
-dir path=usr/lib
+dir path=usr/libexec
 dir path=usr/sbin
 dir path=usr/share/man
 dir path=usr/share/man/man8
 dir path=usr/share/man/man4
 file path=etc/mailer.conf group=sys preserve=true
-file path=usr/lib/mailwrapper mode=0555
+file path=usr/libexec/mailwrapper mode=0555
 file path=usr/share/man/man8/mailwrapper.8
 file path=usr/share/man/man4/mailer.conf.4
-license usr/src/cmd/mailwrapper/THIRDPARTYLICENSE \
-    license=usr/src/cmd/mailwrapper/THIRDPARTYLICENSE
+license libexec/mailwrapper/THIRDPARTYLICENSE \
+    license=libexec/mailwrapper/THIRDPARTYLICENSE
 link path=usr/bin/mailq mediator=mta mediator-implementation=mailwrapper \
-    target=../lib/mailwrapper
+    target=../libexec/mailwrapper
 link path=usr/lib/sendmail mediator=mta mediator-implementation=mailwrapper \
-    target=mailwrapper
+    target=../libexec/mailwrapper
 link path=usr/sbin/newaliases mediator=mta mediator-implementation=mailwrapper \
-    target=../lib/mailwrapper
+    target=../libexec/mailwrapper
 link path=usr/sbin/sendmail mediator=mta mediator-implementation=mailwrapper \
-    target=../lib/mailwrapper
+    target=../libexec/mailwrapper

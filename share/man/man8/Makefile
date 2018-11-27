@@ -214,7 +214,6 @@ MAN = 6to4relay.8 \
       logadm.8 \
       logins.8 \
       luxadm.8 \
-      mailwrapper.8 \
       makedbm.8 \
       mdnsd.8 \
       mkdevalloc.8 \

@@ -220,7 +220,6 @@ COMMON_SUBDIRS=		\
 	ls		\
 	luxadm		\
 	mail		\
-	mailwrapper	\
 	mailx		\
 	make		\
 	mdb		\

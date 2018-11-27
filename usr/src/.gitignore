@@ -1558,7 +1558,6 @@ cmd/luxadm/luxadm
 cmd/luxadm/luxadm.po
 cmd/luxadm/x86_adm.po
 cmd/mail/mail
-cmd/mailwrapper/mailwrapper
 cmd/mailx/aux.po
 cmd/mailx/cmd1.po
 cmd/mailx/cmd2.po

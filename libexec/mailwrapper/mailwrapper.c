@@ -32,7 +32,7 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <compat.h>
+#include "compat.h"
 #include <err.h>
 #include <stdio.h>
 #include <string.h>
