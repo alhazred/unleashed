@@ -1090,12 +1090,12 @@ file path=usr/lib/sysevent/modules/sysevent_conf_mod.so
 file path=usr/lib/sysevent/modules/sysevent_reg_mod.so
 file path=usr/lib/sysevent/syseventconfd mode=0555
 file path=usr/lib/sysevent/syseventd mode=0555
-file path=usr/lib/utmp_update mode=4555
 file path=usr/lib/utmpd mode=0555
 file path=usr/lib/vtdaemon mode=0555
 file path=usr/lib/vtinfo mode=0555
 file path=usr/lib/vtxlock mode=0555
 file path=usr/libexec/unleashed/gcc-wrap mode=0555
+file path=usr/libexec/unleashed/utmp_update mode=4555
 file path=usr/sbin/6to4relay mode=0555
 file path=usr/sbin/acctadm mode=0555
 file path=usr/sbin/add_drv group=sys mode=0555

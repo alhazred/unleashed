@@ -475,7 +475,7 @@ getutline(const struct utmp *entry)
  * to the /etc/utmp file.
  */
 
-#define	UTMP_UPDATE 	"/usr/lib/utmp_update"
+#define	UTMP_UPDATE	"/usr/libexec/unleashed/utmp_update"
 #define	STRSZ	64	/* Size of char buffer for argument strings */
 
 static struct utmpx *
