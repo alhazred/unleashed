@@ -500,10 +500,6 @@ usr/include/stp_in.h
 usr/include/stp_vectors.h
 usr/lib/librstp.so
 #
-# Private nvfru API
-#
-usr/include/nvfru.h
-#
 # vrrp
 #
 usr/include/libvrrpadm.h

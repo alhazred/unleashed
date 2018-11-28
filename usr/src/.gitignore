@@ -3569,12 +3569,6 @@ lib/libfru/libfrureg/amd64/pics/
 lib/libfru/libfrureg/i386/libfrureg.so
 lib/libfru/libfrureg/i386/libfrureg.so.1
 lib/libfru/libfrureg/i386/pics/
-lib/libfru/libnvfru/amd64/libnvfru.so
-lib/libfru/libnvfru/amd64/libnvfru.so.1
-lib/libfru/libnvfru/amd64/pics/
-lib/libfru/libnvfru/i386/libnvfru.so
-lib/libfru/libnvfru/i386/libnvfru.so.1
-lib/libfru/libnvfru/i386/pics/
 lib/libfruutils/amd64/libfruutils.so
 lib/libfruutils/amd64/libfruutils.so.1
 lib/libfruutils/amd64/pics/

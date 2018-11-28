@@ -31,8 +31,8 @@ SUBDIRS_i386 = libfrureg $(MACH)
 $(BUILD64)SUBDIRS_i386 += $(MACH64)
 SUBDIRS_sparc = libfrureg $(MACH)
 $(BUILD64)SUBDIRS_sparc += $(MACH64)
-SUBDIRS_i386 += .WAIT libnvfru conf
-SUBDIRS_sparc += .WAIT libfrupicl libfrupicltree libnvfru
+SUBDIRS_i386 += .WAIT conf
+SUBDIRS_sparc += .WAIT libfrupicl libfrupicltree
 
 SUBDIRS = $(SUBDIRS_$(MACH))
 
@@ -73,6 +73,5 @@ $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 install_h check: $(CHECKHDRS)
-	@cd libnvfru; pwd; $(MAKE) $@
 
 FRC:
