@@ -121,7 +121,6 @@ SUBDIRS +=				\
 	libexacct/demo	\
 	libfcoe		\
 	libficl		\
-	libfruutils	\
 	libfsmgt	\
 	libfstyp	\
 	libgen		\
