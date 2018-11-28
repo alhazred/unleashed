@@ -13,6 +13,9 @@ was changed.
  - libpicl, libpicltree, picld(8), etc.
  - pyzfs & pysolaris
  - locator(8)
+ * uname(1) returns "amd64" for -m and -p
+ * sysinfo(SI_ARCHITECTURE) returns "amd64" (or "i386" when UNAME_LEGACY is
+   in the environment)
 
 1.1 release
 -----------
