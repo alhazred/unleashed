@@ -210,7 +210,6 @@ COMMON_SUBDIRS=		\
 	loadkeys	\
 	locale		\
 	lockstat	\
-	locator		\
 	lofiadm		\
 	logadm		\
 	logger		\

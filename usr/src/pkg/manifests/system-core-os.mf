@@ -1148,7 +1148,6 @@ file path=usr/sbin/ipseckey mode=0555
 file path=usr/sbin/keyserv group=sys mode=0555
 file path=usr/sbin/killall mode=0555
 file path=usr/sbin/link mode=0555
-file path=usr/sbin/locator mode=0555
 file path=usr/sbin/lofiadm mode=0555
 file path=usr/sbin/logadm mode=0555
 file path=usr/sbin/makedbm mode=0555

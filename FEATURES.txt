@@ -11,6 +11,7 @@ was changed.
 --------------
  - libfruraw, libnvfru, libfru, libfrureg, libfruutils
  - pyzfs & pysolaris
+ - locator(8)
 
 1.1 release
 -----------

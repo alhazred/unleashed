@@ -131,7 +131,6 @@ file path=usr/share/man/man8/labelit_ufs.8
 file path=usr/share/man/man8/link.8
 file path=usr/share/man/man8/listdgrp.8
 file path=usr/share/man/man8/listen.8
-file path=usr/share/man/man8/locator.8
 file path=usr/share/man/man8/lockfs.8
 file path=usr/share/man/man8/lofiadm.8
 file path=usr/share/man/man8/logadm.8

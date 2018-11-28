@@ -207,7 +207,6 @@ MAN = 6to4relay.8 \
       link.8 \
       listdgrp.8 \
       listen.8 \
-      locator.8 \
       lockfs.8 \
       lockstat.8 \
       lofiadm.8 \
