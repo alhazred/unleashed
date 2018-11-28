@@ -70,7 +70,6 @@ PLUGIN		^usr/lib/dtrace/64/libdtrace_forceload\.so$
 # so these directives are generally applied to non-plugin objects
 NOVERDEF	^usr/MACH(lib)/0\@0\.so\.1$
 NOVERDEF	^usr/lib/MACH(abi)/apptrace\.so\.1$
-NOVERDEF	^usr/MACH(lib)/libfru.*\.so\.1$
 NOVERDEF	^usr/MACH(lib)/libkrb5\.so\.1$
 NOVERDEF	^usr/MACH(lib)/libzpool\.so\.1$
 NOVERDEF	^usr/MACH(lib)/madv\.so\.1$

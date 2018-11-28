@@ -193,7 +193,6 @@ NOSYMSORT	ld\.so\.1					# libc_pic.a user
 NOSYMSORT	usr/bin/audioconvert				# C++
 NOSYMSORT	usr/bin/dmake					# C++
 NOSYMSORT	usr/MACH(lib)/libsun_fc\.so\.1			# C++
-NOSYMSORT	usr/MACH(lib)/libfru\.so\.1			# C++
 NOSYMSORT	usr/lib/libnisdb\.so\.2				# C++
 
 # The majority of illumos deliverables should not depend on the GCC runtime
@@ -203,7 +202,6 @@ NOSYMSORT	usr/lib/libnisdb\.so\.2				# C++
 FORBIDDEN	libgcc_s\.so
 FORBIDDEN_DEP	usr/bin/audioconvert            # C++
 FORBIDDEN_DEP   usr/bin/dmake                   # C++
-FORBIDDEN_DEP   usr/MACH(lib)/libfru.so.1       # C++
 FORBIDDEN_DEP   usr/MACH(lib)/libsun_fc.so.1    # C++
 FORBIDDEN_DEP   usr/lib/netsvc/yp/rpc.yppasswdd # C++
 FORBIDDEN_DEP   usr/lib/netsvc/yp/ypserv        # C++

@@ -121,7 +121,6 @@ SUBDIRS +=				\
 	libexacct/demo	\
 	libfcoe		\
 	libficl		\
-	libfru		\
 	libfruutils	\
 	libfsmgt	\
 	libfstyp	\
@@ -338,7 +337,6 @@ HDRSUBDIRS=				\
 	libelfsign	\
 	libeti		\
 	libfcoe		\
-	libfru		\
 	libfstyp	\
 	libgen		\
 	libidmap	\
@@ -519,7 +517,6 @@ libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
 libexacct/demo:	libexacct libproject
 libfcoe:	libdladm
 libficl:	libuuid libumem
-libfru:		libfruutils
 libfsmgt:	libkstat
 libidmap:	libavl
 libinetsvc:	libscf
@@ -580,7 +577,7 @@ policykit:	dbusdeps
 pylibbe:	libbe libzfs
 rpcsec_gss:	libgss
 sasl_plugins:	pkcs11 libgss libsasl
-scsi:		libfru libumem libdevid libdevinfo
+scsi:		libumem libdevid libdevinfo
 smbsrv:		libpthread librt libshare libidmap pkcs11 libsqlite \
 		libcryptoutil libreparse libcmdutils libresolv2 libsmbfs \
 		libuuid libads libgss libldap5 krb5 libmlrpc

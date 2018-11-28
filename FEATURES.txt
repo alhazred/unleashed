@@ -9,7 +9,7 @@ was changed.
 
 <next> release
 --------------
- - libfruraw, libnvfru
+ - libfruraw, libnvfru, libfru, libfrureg
  - pyzfs & pysolaris
 
 1.1 release
