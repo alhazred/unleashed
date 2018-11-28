@@ -306,6 +306,7 @@ file path=usr/lib/$(ARCH64)/libcfgadm.so.1
 file path=usr/lib/$(ARCH64)/libcommputil.so.1
 file path=usr/lib/$(ARCH64)/libcrle.so.1
 file path=usr/lib/$(ARCH64)/libcrypt.so.1
+file path=usr/lib/$(ARCH64)/libdemangle-sys.so.1 mode=0555
 file path=usr/lib/$(ARCH64)/libdisasm.so.1
 file path=usr/lib/$(ARCH64)/libexacct.so.1
 file path=usr/lib/$(ARCH64)/libfstyp.so.1
@@ -367,6 +368,7 @@ file path=usr/lib/libcfgadm.so.1
 file path=usr/lib/libcommputil.so.1
 file path=usr/lib/libcrle.so.1
 file path=usr/lib/libcrypt.so.1
+file path=usr/lib/libdemangle-sys.so.1 mode=0555
 file path=usr/lib/libdisasm.so.1
 file path=usr/lib/libexacct.so.1
 file path=usr/lib/libfstyp.so.1
@@ -477,6 +479,8 @@ file path=usr/lib/watchmalloc.so.1
 license cr_Sun license=cr_Sun
 license include/sys/THIRDPARTYLICENSE.unicode \
     license=include/sys/THIRDPARTYLICENSE.unicode
+license lib/libdemangle-sys/THIRDPARTYLICENSE \
+    license=lib/libdemangle-sys/THIRDPARTYLICENSE
 license lic_CDDL license=lic_CDDL
 license share/man/man3c/THIRDPARTYLICENSE.arc4random \
     license=share/man/man3c/THIRDPARTYLICENSE.arc4random
@@ -675,6 +679,7 @@ link path=usr/lib/$(ARCH64)/libctf.so \
     target=../../../lib/$(ARCH64)/libctf.so.1
 link path=usr/lib/$(ARCH64)/libctf.so.1 \
     target=../../../lib/$(ARCH64)/libctf.so.1
+link path=usr/lib/$(ARCH64)/libdemangle-sys.so target=./libdemangle-sys.so.1
 link path=usr/lib/$(ARCH64)/libdevice.so \
     target=../../../lib/$(ARCH64)/libdevice.so.1
 link path=usr/lib/$(ARCH64)/libdevice.so.1 \
@@ -911,6 +916,7 @@ link path=usr/lib/libcrypt_i.so target=./libcrypt.so
 link path=usr/lib/libcrypt_i.so.1 target=./libcrypt.so.1
 link path=usr/lib/libctf.so target=../../lib/libctf.so.1
 link path=usr/lib/libctf.so.1 target=../../lib/libctf.so.1
+link path=usr/lib/libdemangle-sys.so target=./libdemangle-sys.so.1
 link path=usr/lib/libdevice.so target=../../lib/libdevice.so.1
 link path=usr/lib/libdevice.so.1 target=../../lib/libdevice.so.1
 link path=usr/lib/libdevid.so target=../../lib/libdevid.so.1

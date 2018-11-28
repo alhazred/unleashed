@@ -178,6 +178,7 @@ file path=usr/include/dat/udat_config.h
 file path=usr/include/dat/udat_redirection.h
 file path=usr/include/dat/udat_vendor_specific.h
 file path=usr/include/deflt.h
+file path=usr/include/demangle-sys.h
 file path=usr/include/des/des.h mode=0644
 file path=usr/include/des/desdata.h mode=0644
 file path=usr/include/des/softdes.h mode=0644

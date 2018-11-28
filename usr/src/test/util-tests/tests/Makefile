@@ -12,8 +12,10 @@
 #
 # Copyright (c) 2012 by Delphix. All rights reserved.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2017 Jason King
 #
 
 SUBDIRS = date dis dladm iconv libnvpair_json libsff printf xargs mergeq workq
+SUBDIRS += demangle
 
 include $(SRC)/test/Makefile.com

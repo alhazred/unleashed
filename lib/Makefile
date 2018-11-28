@@ -1,4 +1,4 @@
-SUBDIR=	libc libcrypto libedit libncurses libssl libtls libuutil
+SUBDIR=	libc libcrypto libdemangle-sys libedit libncurses libssl libtls libuutil
 
 .include "${.CURDIR:H}/cfgparam.mk"
 

@@ -26,6 +26,7 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	crypt.h		\
 	ctype.h		\
 	deflt.h		\
+	demangle-sys.h	\
 	devid.h		\
 	devmgmt.h	\
 	devpoll.h	\
