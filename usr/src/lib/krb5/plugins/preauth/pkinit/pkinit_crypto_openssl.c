@@ -1635,7 +1635,7 @@ cleanup:
 	free(enc_data);
     if (encerts != NULL)
 	sk_X509_free(encerts);
-	
+
     return retval;
 }
 
@@ -1781,7 +1781,7 @@ cms_envelopeddata_verify(krb5_context context,
 
     if (!retval)
 	pkiDebug("PKCS7 Verification Success\n");
-    else { 	
+    else {
 	pkiDebug("PKCS7 Verification Failure\n");
 	goto cleanup;
     }
@@ -2626,7 +2626,7 @@ pkinit_create_sequence_of_principal_identifiers(
 	    if (retval) {
 		pkiDebug("create_krb5_trustedCertifiers failed\n");
 		goto cleanup;
-    	    }
+	    }
 	    break;
 	case TD_INVALID_CERTIFICATES:
 	    retval = create_krb5_invalidCertificates(context, plg_cryptoctx,
@@ -2634,7 +2634,7 @@ pkinit_create_sequence_of_principal_identifiers(
 	    if (retval) {
 		pkiDebug("create_krb5_invalidCertificates failed\n");
 		goto cleanup;
-    	    }
+	    }
 	    break;
 	default:
 	    retval = -1;
@@ -3877,7 +3877,7 @@ out:
     free(cert);
 
     free(cert_id);
-    
+
     return (r);
 }
 
@@ -3908,7 +3908,7 @@ pkinit_open_session(krb5_context context,
     CK_SLOT_ID_PTR slotlist = NULL, tmpslotlist = NULL;
     CK_TOKEN_INFO tinfo;
     krb5_boolean tokenmatch = FALSE;
-    CK_SESSION_HANDLE tmpsession = 0;
+    CK_SESSION_HANDLE tmpsession = CK_INVALID_HANDLE;
     struct _token_choices token_choices;
     int choice = 0;
 
@@ -4407,7 +4407,7 @@ pkinit_find_private_key(pkinit_identity_crypto_context id_cryptoctx,
 	cert = sk_X509_value(id_cryptoctx->my_certs, 0);
 	priv = X509_get_pubkey(cert);
 	if (priv == NULL) {
-    		pkiDebug("Failed to extract pub key from cert\n");
+		pkiDebug("Failed to extract pub key from cert\n");
 		return KRB5KDC_ERR_PREAUTH_FAILED;
 	}
 
@@ -5697,12 +5697,12 @@ crypto_cert_select(krb5_context context,
     cd = (struct _pkinit_cert_data *)md->ch;
     if (cd == NULL || cd->magic != CERT_MAGIC)
 	return EINVAL;
-    
-    /* copy the selected cert into our id_cryptoctx */ 
+
+    /* copy the selected cert into our id_cryptoctx */
     if (cd->idctx->my_certs != NULL) {
 	sk_X509_pop_free(cd->idctx->my_certs, X509_free);
     }
-    cd->idctx->my_certs = sk_X509_new_null();	
+    cd->idctx->my_certs = sk_X509_new_null();
     sk_X509_push(cd->idctx->my_certs, cd->cred->cert);
     cd->idctx->creds[cd->index]->cert = NULL;	    /* Don't free it twice */
     cd->idctx->cert_index = 0;
@@ -5710,7 +5710,7 @@ crypto_cert_select(krb5_context context,
     if (cd->idctx->pkcs11_method != 1) {
 	cd->idctx->my_key = cd->cred->key;
 	cd->idctx->creds[cd->index]->key = NULL;    /* Don't free it twice */
-    } 
+    }
 #ifndef WITHOUT_PKCS11
     else {
 	cd->idctx->cert_id = cd->cred->cert_id;
@@ -5752,11 +5752,11 @@ crypto_cert_select_default(krb5_context context,
 		 __FUNCTION__, cert_count);
 	goto errout;
     }
-    /* copy the selected cert into our id_cryptoctx */ 
+    /* copy the selected cert into our id_cryptoctx */
     if (id_cryptoctx->my_certs != NULL) {
 	sk_X509_pop_free(id_cryptoctx->my_certs, X509_free);
     }
-    id_cryptoctx->my_certs = sk_X509_new_null();	
+    id_cryptoctx->my_certs = sk_X509_new_null();
     sk_X509_push(id_cryptoctx->my_certs, id_cryptoctx->creds[0]->cert);
     id_cryptoctx->creds[0]->cert = NULL;	/* Don't free it twice */
     id_cryptoctx->cert_index = 0;
@@ -5764,7 +5764,7 @@ crypto_cert_select_default(krb5_context context,
     if (id_cryptoctx->pkcs11_method != 1) {
 	id_cryptoctx->my_key = id_cryptoctx->creds[0]->key;
 	id_cryptoctx->creds[0]->key = NULL;	/* Don't free it twice */
-    } 
+    }
 #ifndef WITHOUT_PKCS11
     else {
 	id_cryptoctx->cert_id = id_cryptoctx->creds[0]->cert_id;
@@ -6098,7 +6098,7 @@ if (longhorn == 0) {	/* XXX Longhorn doesn't like this */
 		if ((p = krb5_cas[i]->subjectKeyIdentifier.data =
 			(unsigned char *)malloc((size_t) len)) == NULL)
 		    goto cleanup;
-		i2d_ASN1_OCTET_STRING(ikeyid, &p);		
+		i2d_ASN1_OCTET_STRING(ikeyid, &p);
 		krb5_cas[i]->subjectKeyIdentifier.length = len;
 	    }
 	    if (ikeyid != NULL)
@@ -6374,7 +6374,7 @@ pkcs7_decrypt(krb5_context context,
     }
 #pragma error_messages (default, E_END_OF_LOOP_CODE_NOT_REACHED)
 
-    return 0; 
+    return 0;
 }
 
 krb5_error_code
@@ -6413,7 +6413,7 @@ pkinit_process_td_trusted_certifiers(
 		pkiDebug("#%d cert = %s is trusted by kdc\n", i, buf);
 	    else
 		pkiDebug("#%d cert = %s is invalid\n", i, buf);
-		sk_X509_NAME_push(sk_xn, xn);
+	    sk_X509_NAME_push(sk_xn, xn);
 	}
 
 	if (krb5_trusted_certifiers[i]->issuerAndSerialNumber.data != NULL) {
@@ -6523,7 +6523,6 @@ pkcs7_dataDecode(krb5_context context,
 		     PKCS7_R_NO_RECIPIENT_MATCHES_CERTIFICATE);
 	    goto cleanup;
 	}
-	
     }
 
     /* If we haven't got a certificate try each ri in turn */
