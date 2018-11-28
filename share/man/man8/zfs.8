@@ -28,6 +28,7 @@
 .\" Copyright (c) 2014 Integros [integros.com]
 .\" Copyright 2018 Nexenta Systems, Inc.
 .\" Copyright 2018 Joyent, Inc.
+.\" Copyright (c) 2018 Datto Inc.
 .\"
 .Dd December 6, 2017
 .Dt ZFS 8
@@ -271,7 +272,7 @@
 .Ar snapshot Ar snapshot Ns | Ns Ar filesystem
 .Nm
 .Cm program
-.Op Fl n
+.Op Fl jn
 .Op Fl t Ar timeout
 .Op Fl m Ar memory_limit
 .Ar pool script
@@ -3479,7 +3480,7 @@ Display the path's inode change time as the first column of output.
 .It Xo
 .Nm
 .Cm program
-.Op Fl n
+.Op Fl jn
 .Op Fl t Ar timeout
 .Op Fl m Ar memory_limit
 .Ar pool script
@@ -3501,6 +3502,11 @@ For full documentation of the ZFS channel program interface, see the manual
 page for
 .Xr zfs-program 8 .
 .Bl -tag -width ""
+.It Fl j
+Display channel program output in JSON format.
+When this flag is specified and standard output is empty -
+channel program encountered an error.
+The details of such an error will be printed to standard error in plain text.
 .It Fl n
 Executes a read-only channel program, which runs faster.
 The program cannot change on-disk state by calling functions from
