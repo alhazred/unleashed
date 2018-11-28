@@ -35,8 +35,6 @@
 #include <scsi/plugins/ses/vendor/sun.h>
 #include <scsi/plugins/ses/vendor/sun_impl.h>
 
-#include "../../../../../../lib/libfru/libnvfru/nvfru.h"
-
 int
 sun_fruid_parse_common(sun_fru_descr_impl_t *sfdip, nvlist_t *nvl)
 {

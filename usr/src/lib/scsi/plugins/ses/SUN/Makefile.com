@@ -33,6 +33,3 @@ SRCDIR =	../common
 PLUGINTYPE =	vendor
 
 include ../../Makefile.lib
-
-$(PROG) := LDLIBS += -lnvfru
-
