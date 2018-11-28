@@ -31,8 +31,8 @@ SUBDIRS_i386 = libfrureg $(MACH)
 $(BUILD64)SUBDIRS_i386 += $(MACH64)
 SUBDIRS_sparc = libfrureg $(MACH)
 $(BUILD64)SUBDIRS_sparc += $(MACH64)
-SUBDIRS_i386 += .WAIT libnvfru libfruraw conf
-SUBDIRS_sparc += .WAIT libfrupicl libfrupicltree libnvfru libfruraw
+SUBDIRS_i386 += .WAIT libnvfru conf
+SUBDIRS_sparc += .WAIT libfrupicl libfrupicltree libnvfru
 
 SUBDIRS = $(SUBDIRS_$(MACH))
 

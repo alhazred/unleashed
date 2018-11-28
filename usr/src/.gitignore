@@ -3563,12 +3563,6 @@ lib/libfru/amd64/pics/
 lib/libfru/i386/libfru.so
 lib/libfru/i386/libfru.so.1
 lib/libfru/i386/pics/
-lib/libfru/libfruraw/amd64/libfruraw.so
-lib/libfru/libfruraw/amd64/libfruraw.so.1
-lib/libfru/libfruraw/amd64/pics/
-lib/libfru/libfruraw/i386/libfruraw.so
-lib/libfru/libfruraw/i386/libfruraw.so.1
-lib/libfru/libfruraw/i386/pics/
 lib/libfru/libfrureg/amd64/libfrureg.so
 lib/libfru/libfrureg/amd64/libfrureg.so.1
 lib/libfru/libfrureg/amd64/pics/
