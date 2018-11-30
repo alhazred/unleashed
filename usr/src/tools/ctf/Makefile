@@ -26,7 +26,7 @@
 
 include ../Makefile.tools
 
-SUBDIRS = stabs ctfstrip libctf
+SUBDIRS = stabs ctfstrip
 
 .PARALLEL: $(SUBDIRS)
 
