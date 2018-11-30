@@ -1,4 +1,5 @@
-SUBDIR=	awk banner beadm cat clear cmp comm cut dis echo env false grep \
+SUBDIR=	awk banner beadm cat ctfconvert ctfdiff ctfdump ctfmerge clear cmp \
+	comm cut dis echo env false grep \
 	id infocmp join kill ksh less localedef logname \
 	mandoc make nc openssl \
 	paste pax puname pwd rev \

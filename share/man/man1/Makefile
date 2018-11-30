@@ -37,8 +37,6 @@ MAN = acctcom.1 \
       crypt.1 \
       csh.1 \
       csplit.1 \
-      ctfdiff.1 \
-      ctfdump.1 \
       ctrun.1 \
       ctstat.1 \
       ctwatch.1 \
