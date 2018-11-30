@@ -14,21 +14,21 @@
 # Copyright 2018 Nexenta Systems, Inc. All rights reserved.
 #
 
-file path=usr/share/man/man3/Intro.3
-file path=usr/share/man/man3/sockatmark.3
 file path=usr/share/man/man3/CMSG_DATA.3
-file path=usr/share/man/man3/readdir.3
-file path=usr/share/man/man3/err.3
-file path=usr/share/man/man3/fts.3
+file path=usr/share/man/man3/Intro.3
 file path=usr/share/man/man3/alloca.3
 file path=usr/share/man/man3/byteorder.3
 file path=usr/share/man/man3/endian.3
+file path=usr/share/man/man3/err.3
+file path=usr/share/man/man3/fts.3
 file path=usr/share/man/man3/inet.3
 file path=usr/share/man/man3/malloc.3
 file path=usr/share/man/man3/memset_s.3
 file path=usr/share/man/man3/posix_memalign.3
+file path=usr/share/man/man3/readdir.3
 file path=usr/share/man/man3/set_constraint_handler_s.3
 file path=usr/share/man/man3/setmode.3
+file path=usr/share/man/man3/sockatmark.3
 file path=usr/share/man/man3/strtonum.3
 file path=usr/share/man/man3/uname.3
 file path=usr/share/man/man3/unvis.3
