@@ -38,11 +38,6 @@ COMMON_SUBDIRS= \
 	protolist \
 	scripts
 
-sparc_SUBDIRS= \
-	chk4ubin \
-	stabs \
-	tokenize
-
 i386_SUBDIRS=		\
 	elfextract	\
 	btxld
