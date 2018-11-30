@@ -587,12 +587,6 @@ usr/lib/amd64/libdwarf.so		i386
 usr/lib/libdwarf.so
 
 #
-# We're not quite ready to ship ctfconvert and ctfmerge
-#
-usr/bin/ctfconvert
-usr/bin/ctfmerge
-
-#
 # libsff is private
 #
 usr/include/libsff.h
