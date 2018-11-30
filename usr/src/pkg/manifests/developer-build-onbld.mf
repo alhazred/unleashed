@@ -89,7 +89,6 @@ file path=opt/onbld/etc/exception_lists/interface_cmp
 file path=opt/onbld/etc/its.conf
 file path=opt/onbld/etc/its.reg
 file path=opt/onbld/lib/$(ARCH)/libctf.so.1 mode=0555
-file path=opt/onbld/lib/$(ARCH)/libdwarf.so.1
 file path=opt/onbld/lib/perl/onbld_elfmod.pm
 file path=opt/onbld/lib/perl/onbld_elfmod_vertype.pm
 file path=opt/onbld/lib/python$(PYTHON_VERSION)/onbld/Checks/CStyle.py \
@@ -172,8 +171,6 @@ file path=opt/onbld/man/man1/ndrgen.1
 file path=opt/onbld/man/man1/wsdiff.1
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
-license usr/src/lib/libdwarf/THIRDPARTYLICENSE \
-    license=usr/src/lib/libdwarf/THIRDPARTYLICENSE
 link path=opt/onbld/bin/git-nits target=git-pbchk
 link path=opt/onbld/lib/$(ARCH)/libctf.so target=libctf.so.1
 link path=opt/onbld/lib/python target=python$(PYTHON_VERSION)

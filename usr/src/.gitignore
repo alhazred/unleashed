@@ -4614,8 +4614,6 @@ test/zfs-tests/tests/functional/threadsappend/threadsappend
 tools/btxld/btxld
 tools/codereview/codereview
 tools/ctf/ctfstrip/ctfstrip
-tools/ctf/dwarf/i386/libdwarf.so.1
-tools/ctf/dwarf/i386/pics/
 tools/ctf/libctf/i386/libctf.so.1
 tools/ctf/libctf/i386/pics/
 tools/ctf/stabs/i386/ctfstabs

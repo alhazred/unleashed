@@ -37,7 +37,7 @@ clobber	:= TARGET= clobber
 
 .KEEP_STATE:
 
-all clean clobber install: dwarf .WAIT $(SUBDIRS)
+all clean clobber install: $(SUBDIRS)
 
 dwarf $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
