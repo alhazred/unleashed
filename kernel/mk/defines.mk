@@ -120,8 +120,8 @@ KERNEL_LDFLAGS = \
 #
 CC=/opt/gcc/4.4.4/bin/gcc
 LD=/usr/bin/ld
-CTFCONVERT=/opt/onbld/bin/i386/ctfconvert
-CTFMERGE=/opt/onbld/bin/i386/ctfmerge
+CTFCONVERT=/usr/bin/ctfconvert
+CTFMERGE=/usr/bin/ctfmerge
 
 #
 # Verbosity

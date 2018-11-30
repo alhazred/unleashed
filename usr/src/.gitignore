@@ -4613,10 +4613,6 @@ test/zfs-tests/tests/functional/libzfs/many_fds
 test/zfs-tests/tests/functional/threadsappend/threadsappend
 tools/btxld/btxld
 tools/codereview/codereview
-tools/ctf/ctfconvert/i386/ctfconvert
-tools/ctf/ctfdiff/i386/ctfdiff
-tools/ctf/ctfdump/i386/ctfdump
-tools/ctf/ctfmerge/i386/ctfmerge
 tools/ctf/ctfstrip/ctfstrip
 tools/ctf/dwarf/i386/libdwarf.so.1
 tools/ctf/dwarf/i386/pics/
