@@ -1386,12 +1386,12 @@ spec_setattr(
 	if (S_ISFENCED(sp))
 		return (ENXIO);
 
-	if (vp->v_type == VCHR && vp->v_stream && (vap->va_mask & AT_SIZE)) {
+	if (vp->v_type == VCHR && vp->v_stream && (vap->va_mask & VATTR_SIZE)) {
 		/*
 		 * 1135080:	O_TRUNC should have no effect on
 		 *		named pipes and terminal devices.
 		 */
-		ASSERT(vap->va_mask == AT_SIZE);
+		ASSERT(vap->va_mask == VATTR_SIZE);
 		return (0);
 	}
 
@@ -1404,9 +1404,9 @@ spec_setattr(
 		 * If times were changed, update snode.
 		 */
 		mutex_enter(&sp->s_lock);
-		if (vap->va_mask & AT_ATIME)
+		if (vap->va_mask & VATTR_ATIME)
 			sp->s_atime = vap->va_atime.tv_sec;
-		if (vap->va_mask & AT_MTIME) {
+		if (vap->va_mask & VATTR_MTIME) {
 			sp->s_mtime = vap->va_mtime.tv_sec;
 			sp->s_ctime = gethrestime_sec();
 		}
@@ -1535,7 +1535,7 @@ spec_fsync(
 	if (realvp == NULL)
 		return (0);
 
-	vatmp.va_mask = AT_ATIME|AT_MTIME;
+	vatmp.va_mask = VATTR_ATIME|VATTR_MTIME;
 	if (fop_getattr(realvp, &vatmp, 0, cr, ct) == 0) {
 
 		mutex_enter(&sp->s_lock);
@@ -1553,7 +1553,7 @@ spec_fsync(
 		}
 		mutex_exit(&sp->s_lock);
 
-		va.va_mask = AT_ATIME|AT_MTIME;
+		va.va_mask = VATTR_ATIME|VATTR_MTIME;
 		(void) fop_setattr(realvp, &va, 0, cr, ct);
 	}
 	(void) fop_fsync(realvp, syncflag, cr, ct);
@@ -1606,7 +1606,7 @@ spec_inactive(struct vnode *vp, struct cred *cr, caller_context_t *ct)
 			mutex_enter(&sp->s_lock);
 			sp->s_flag &= ~(SACC|SUPD|SCHG);
 			mutex_exit(&sp->s_lock);
-			vatmp.va_mask = AT_ATIME|AT_MTIME;
+			vatmp.va_mask = VATTR_ATIME|VATTR_MTIME;
 			/*
 			 * The user may not own the device, but we
 			 * want to update the attributes anyway.
@@ -1625,7 +1625,7 @@ spec_inactive(struct vnode *vp, struct cred *cr, caller_context_t *ct)
 					va.va_mtime.tv_nsec = 0;
 				}
 
-				va.va_mask = AT_ATIME|AT_MTIME;
+				va.va_mask = VATTR_ATIME|VATTR_MTIME;
 				(void) fop_setattr(rvp, &va, 0, kcred, ct);
 			}
 		}

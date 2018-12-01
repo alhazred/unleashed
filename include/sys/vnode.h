@@ -502,8 +502,8 @@ typedef struct xoptattr {
  * The fields of the xvattr structure are:
  *
  * xva_vattr - The first element of an xvattr is a legacy vattr structure
- * which includes the common attributes.  If AT_XVATTR is set in the va_mask
- * then the entire structure is treated as an xvattr.  If AT_XVATTR is not
+ * which includes the common attributes.  If VATTR_XVATTR is set in the va_mask
+ * then the entire structure is treated as an xvattr.  If VATTR_XVATTR is not
  * set, then only the xva_vattr structure can be used.
  *
  * xva_magic - 0x78766174 (hex for "xvat"). Magic number for verification.
@@ -581,41 +581,46 @@ typedef vattr_t		vattr32_t;
 /*
  * Attributes of interest to the caller of setattr or getattr.
  */
-#define	AT_TYPE		0x00001
-#define	AT_MODE		0x00002
-#define	AT_UID		0x00004
-#define	AT_GID		0x00008
-#define	AT_FSID		0x00010
-#define	AT_NODEID	0x00020
-#define	AT_NLINK	0x00040
-#define	AT_SIZE		0x00080
-#define	AT_ATIME	0x00100
-#define	AT_MTIME	0x00200
-#define	AT_CTIME	0x00400
-#define	AT_RDEV		0x00800
-#define	AT_BLKSIZE	0x01000
-#define	AT_NBLOCKS	0x02000
+#define	VATTR_TYPE	0x00001
+#define	VATTR_MODE	0x00002
+#define	VATTR_UID	0x00004
+#define	VATTR_GID	0x00008
+#define	VATTR_FSID	0x00010
+#define	VATTR_NODEID	0x00020
+#define	VATTR_NLINK	0x00040
+#define	VATTR_SIZE	0x00080
+#define	VATTR_ATIME	0x00100
+#define	VATTR_MTIME	0x00200
+#define	VATTR_CTIME	0x00400
+#define	VATTR_RDEV	0x00800
+#define	VATTR_BLKSIZE	0x01000
+#define	VATTR_NBLOCKS	0x02000
 /*			0x04000 */	/* unused */
-#define	AT_SEQ		0x08000
+#define	VATTR_SEQ	0x08000
 /*
- * If AT_XVATTR is set then there are additional bits to process in
+ * If VATTR_XVATTR is set then there are additional bits to process in
  * the xvattr_t's attribute bitmap.  If this is not set then the bitmap
  * MUST be ignored.  Note that this bit must be set/cleared explicitly.
- * That is, setting AT_ALL will NOT set AT_XVATTR.
+ * That is, setting VATTR_ALL will NOT set VATTR_XVATTR.
  */
-#define	AT_XVATTR	0x10000
+#define	VATTR_XVATTR	0x10000
 
-#define	AT_ALL		(AT_TYPE|AT_MODE|AT_UID|AT_GID|AT_FSID|AT_NODEID|\
-			AT_NLINK|AT_SIZE|AT_ATIME|AT_MTIME|AT_CTIME|\
-			AT_RDEV|AT_BLKSIZE|AT_NBLOCKS|AT_SEQ)
+#define	VATTR_ALL	(VATTR_TYPE | VATTR_MODE | VATTR_UID | VATTR_GID | \
+			 VATTR_FSID | VATTR_NODEID | VATTR_NLINK | \
+			 VATTR_SIZE | VATTR_ATIME | VATTR_MTIME | \
+			 VATTR_CTIME | VATTR_RDEV | VATTR_BLKSIZE | \
+			 VATTR_NBLOCKS | VATTR_SEQ)
 
-#define	AT_STAT		(AT_MODE|AT_UID|AT_GID|AT_FSID|AT_NODEID|AT_NLINK|\
-			AT_SIZE|AT_ATIME|AT_MTIME|AT_CTIME|AT_RDEV|AT_TYPE)
+#define	VATTR_STAT	(VATTR_MODE | VATTR_UID | VATTR_GID | VATTR_FSID | \
+			 VATTR_NODEID | VATTR_NLINK | VATTR_SIZE | \
+			 VATTR_ATIME | VATTR_MTIME | VATTR_CTIME | \
+			 VATTR_RDEV | VATTR_TYPE)
 
-#define	AT_TIMES	(AT_ATIME|AT_MTIME|AT_CTIME)
+#define	VATTR_TIMES	(VATTR_ATIME | VATTR_MTIME | VATTR_CTIME)
 
-#define	AT_NOSET	(AT_NLINK|AT_RDEV|AT_FSID|AT_NODEID|AT_TYPE|\
-			AT_BLKSIZE|AT_NBLOCKS|AT_SEQ)
+#define	VATTR_NOSET	(VATTR_NLINK | VATTR_RDEV | VATTR_FSID | \
+			 VATTR_NODEID | VATTR_TYPE | VATTR_BLKSIZE | \
+			 VATTR_NBLOCKS | VATTR_SEQ)
 
 /*
  * Attribute bits used in the extensible attribute's (xva's) attribute
@@ -702,7 +707,7 @@ typedef vattr_t		vattr32_t;
  * of requested attributes (xva_reqattrmap[]).
  */
 #define	XVA_SET_REQ(xvap, attr)					\
-	ASSERT((xvap)->xva_vattr.va_mask | AT_XVATTR);		\
+	ASSERT((xvap)->xva_vattr.va_mask | VATTR_XVATTR);		\
 	ASSERT((xvap)->xva_magic == XVA_MAGIC);			\
 	(xvap)->xva_reqattrmap[XVA_INDEX(attr)] |= XVA_ATTRBIT(attr)
 /*
@@ -710,7 +715,7 @@ typedef vattr_t		vattr32_t;
  * of requested attributes (xva_reqattrmap[]).
  */
 #define	XVA_CLR_REQ(xvap, attr)					\
-	ASSERT((xvap)->xva_vattr.va_mask | AT_XVATTR);		\
+	ASSERT((xvap)->xva_vattr.va_mask | VATTR_XVATTR);		\
 	ASSERT((xvap)->xva_magic == XVA_MAGIC);			\
 	(xvap)->xva_reqattrmap[XVA_INDEX(attr)] &= ~XVA_ATTRBIT(attr)
 
@@ -719,7 +724,7 @@ typedef vattr_t		vattr32_t;
  * of returned attributes (xva_rtnattrmap[]).
  */
 #define	XVA_SET_RTN(xvap, attr)					\
-	ASSERT((xvap)->xva_vattr.va_mask | AT_XVATTR);		\
+	ASSERT((xvap)->xva_vattr.va_mask | VATTR_XVATTR);		\
 	ASSERT((xvap)->xva_magic == XVA_MAGIC);			\
 	(XVA_RTNATTRMAP(xvap))[XVA_INDEX(attr)] |= XVA_ATTRBIT(attr)
 
@@ -728,7 +733,7 @@ typedef vattr_t		vattr32_t;
  * to see of the corresponding attribute bit is set.  If so, returns non-zero.
  */
 #define	XVA_ISSET_REQ(xvap, attr)					\
-	((((xvap)->xva_vattr.va_mask | AT_XVATTR) &&			\
+	((((xvap)->xva_vattr.va_mask | VATTR_XVATTR) &&			\
 		((xvap)->xva_magic == XVA_MAGIC) &&			\
 		((xvap)->xva_mapsize > XVA_INDEX(attr))) ?		\
 	((xvap)->xva_reqattrmap[XVA_INDEX(attr)] & XVA_ATTRBIT(attr)) :	0)
@@ -738,7 +743,7 @@ typedef vattr_t		vattr32_t;
  * to see of the corresponding attribute bit is set.  If so, returns non-zero.
  */
 #define	XVA_ISSET_RTN(xvap, attr)					\
-	((((xvap)->xva_vattr.va_mask | AT_XVATTR) &&			\
+	((((xvap)->xva_vattr.va_mask | VATTR_XVATTR) &&			\
 		((xvap)->xva_magic == XVA_MAGIC) &&			\
 		((xvap)->xva_mapsize > XVA_INDEX(attr))) ?		\
 	((XVA_RTNATTRMAP(xvap))[XVA_INDEX(attr)] & XVA_ATTRBIT(attr)) : 0)
@@ -1257,8 +1262,9 @@ void vsd_free(vnode_t *);
 
 /*
  * Extensible vnode attribute (xva) routines:
- * xva_init() initializes an xvattr_t (zero struct, init mapsize, set AT_XATTR)
- * xva_getxoptattr() returns a ponter to the xoptattr_t section of xvattr_t
+ * xva_init() initializes an xvattr_t (zero struct, init mapsize, set
+ * VATTR_XVATTR) xva_getxoptattr() returns a ponter to the xoptattr_t
+ * section of xvattr_t
  */
 void		xva_init(xvattr_t *);
 xoptattr_t	*xva_getxoptattr(xvattr_t *);	/* Get ptr to xoptattr_t */

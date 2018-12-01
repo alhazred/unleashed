@@ -2781,7 +2781,7 @@ convoff(struct vnode *vp, struct flock64 *lckdat, int whence, offset_t offset)
 	struct vattr 	vattr;
 
 	if ((lckdat->l_whence == 2) || (whence == 2)) {
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 	}
@@ -3586,7 +3586,7 @@ flk_convert_lock_data(vnode_t *vp, flock64_t *flp,
 		*start = (uoff_t)(flp->l_start + offset);
 		break;
 	case 2:		/* SEEK_END */
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 		*start = (uoff_t)(flp->l_start + vattr.va_size);

@@ -337,7 +337,7 @@ bind_consadm_conf(char *path)
 
 	if (vn_open(path, UIO_SYSSPACE, FREAD, 0, &vp, 0, 0) != 0)
 		return;
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	if ((err = fop_getattr(vp, &vattr, 0, kcred, NULL)) != 0) {
 		cmn_err(CE_WARN, "sysmsg: getattr: '%s': error %d",
 		    path, err);

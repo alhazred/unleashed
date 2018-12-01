@@ -148,7 +148,7 @@ nfs_validate_caches(vnode_t *vp, cred_t *cr)
 		return (0);
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	return (nfs_getattr_otw(vp, &va, cr));
 }
 
@@ -175,7 +175,7 @@ nfs3_validate_caches(vnode_t *vp, cred_t *cr)
 		return (0);
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	return (nfs3_getattr_otw(vp, &va, cr));
 }
 
@@ -1023,7 +1023,7 @@ nattr_to_vattr(vnode_t *vp, struct nfsfattr *na, struct vattr *vap)
 		return (EOVERFLOW);
 #endif
 
-	vap->va_mask = AT_ALL;
+	vap->va_mask = VATTR_ALL;
 
 	if (na->na_type < NFNON || na->na_type > NFSOC)
 		vap->va_type = VBAD;
@@ -1114,7 +1114,7 @@ fattr3_to_vattr(vnode_t *vp, fattr3 *na, struct vattr *vap)
 		/* file too big */
 		return (EFBIG);
 
-	vap->va_mask = AT_ALL;
+	vap->va_mask = VATTR_ALL;
 
 	if (na->type < NF3REG || na->type > NF3FIFO)
 		vap->va_type = VBAD;

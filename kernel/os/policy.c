@@ -692,7 +692,7 @@ secpolicy_fs_common(cred_t *cr, vnode_t *mvp, const vfs_t *vfsp,
 		vattr_t va;
 		int err;
 
-		va.va_mask = AT_UID|AT_MODE;
+		va.va_mask = VATTR_UID|VATTR_MODE;
 		err = fop_getattr(mvp, &va, 0, cr, NULL);
 		if (err != 0)
 			return (err);
@@ -1215,8 +1215,8 @@ secpolicy_setid_clear(vattr_t *vap, cred_t *cr)
 	if ((vap->va_mode & (S_ISUID | S_ISGID)) != 0 &&
 	    secpolicy_vnode_setid_retain(cr,
 	    (vap->va_mode & S_ISUID) != 0 &&
-	    (vap->va_mask & AT_UID) != 0 && vap->va_uid == 0) != 0) {
-		vap->va_mask |= AT_MODE;
+	    (vap->va_mask & VATTR_UID) != 0 && vap->va_uid == 0) != 0) {
+		vap->va_mask |= VATTR_MODE;
 		vap->va_mode &= ~(S_ISUID|S_ISGID);
 	}
 }
@@ -1343,11 +1343,11 @@ secpolicy_xvattr(xvattr_t *xvap, uid_t owner, cred_t *cr, vtype_t vtype)
  *			- permission to add sticky bit to non-directory
  *			- permission to add set-gid bit
  *
- * The ovap argument should include AT_MODE|AT_UID|AT_GID.
+ * The ovap argument should include VATTR_MODE|VATTR_UID|VATTR_GID.
  *
- * If the vap argument does not include AT_MODE, the mode will be copied from
+ * If the vap argument does not include VATTR_MODE, the mode will be copied from
  * ovap.  In certain situations set-uid/set-gid bits need to be removed;
- * this is done by marking vap->va_mask to include AT_MODE and va_mode
+ * this is done by marking vap->va_mask to include VATTR_MODE and va_mode
  * is updated to the newly computed mode.
  */
 
@@ -1361,7 +1361,7 @@ secpolicy_vnode_setattr(cred_t *cr, struct vnode *vp, struct vattr *vap,
 	int error = 0;
 	boolean_t skipaclchk = (flags & ATTR_NOACLCHECK) ? B_TRUE : B_FALSE;
 
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		if (vp->v_type == VDIR) {
 			error = EISDIR;
 			goto out;
@@ -1378,7 +1378,7 @@ secpolicy_vnode_setattr(cred_t *cr, struct vnode *vp, struct vattr *vap,
 				goto out;
 		}
 	}
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		/*
 		 * If not the owner of the file then check privilege
 		 * for two things: the privilege to set the mode at all
@@ -1396,7 +1396,7 @@ secpolicy_vnode_setattr(cred_t *cr, struct vnode *vp, struct vattr *vap,
 	} else
 		vap->va_mode = ovap->va_mode;
 
-	if (mask & (AT_UID|AT_GID)) {
+	if (mask & (VATTR_UID|VATTR_GID)) {
 		boolean_t checkpriv = B_FALSE;
 
 		/*
@@ -1418,8 +1418,8 @@ secpolicy_vnode_setattr(cred_t *cr, struct vnode *vp, struct vattr *vap,
 		if (cr->cr_uid != ovap->va_uid) {
 			checkpriv = B_TRUE;
 		} else {
-			if (((mask & AT_UID) && vap->va_uid != ovap->va_uid) ||
-			    ((mask & AT_GID) && vap->va_gid != ovap->va_gid &&
+			if (((mask & VATTR_UID) && vap->va_uid != ovap->va_uid) ||
+			    ((mask & VATTR_GID) && vap->va_gid != ovap->va_gid &&
 			    !groupmember(vap->va_gid, cr))) {
 				checkpriv = B_TRUE;
 			}
@@ -1438,7 +1438,7 @@ secpolicy_vnode_setattr(cred_t *cr, struct vnode *vp, struct vattr *vap,
 		 */
 		secpolicy_setid_clear(vap, cr);
 	}
-	if (mask & (AT_ATIME|AT_MTIME)) {
+	if (mask & (VATTR_ATIME|VATTR_MTIME)) {
 		/*
 		 * If not the file owner and not otherwise privileged,
 		 * always return an error when setting the
@@ -1463,7 +1463,7 @@ secpolicy_vnode_setattr(cred_t *cr, struct vnode *vp, struct vattr *vap,
 	/*
 	 * Check for optional attributes here by checking the following:
 	 */
-	if (mask & AT_XVATTR)
+	if (mask & VATTR_XVATTR)
 		error = secpolicy_xvattr((xvattr_t *)vap, ovap->va_uid, cr,
 		    vp->v_type);
 out:

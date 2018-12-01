@@ -73,7 +73,7 @@ int sdev_debug_cache_flags = 0;
  */
 /* prototype memory vattrs */
 vattr_t sdev_vattr_dir = {
-	AT_TYPE|AT_MODE|AT_UID|AT_GID,		/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID,/* va_mask */
 	VDIR,					/* va_type */
 	SDEV_DIRMODE_DEFAULT,			/* va_mode */
 	SDEV_UID_DEFAULT,			/* va_uid */
@@ -92,7 +92,7 @@ vattr_t sdev_vattr_dir = {
 };
 
 vattr_t sdev_vattr_lnk = {
-	AT_TYPE|AT_MODE,			/* va_mask */
+	VATTR_TYPE|VATTR_MODE,			/* va_mask */
 	VLNK,					/* va_type */
 	SDEV_LNKMODE_DEFAULT,			/* va_mode */
 	SDEV_UID_DEFAULT,			/* va_uid */
@@ -111,7 +111,7 @@ vattr_t sdev_vattr_lnk = {
 };
 
 vattr_t sdev_vattr_blk = {
-	AT_TYPE|AT_MODE|AT_UID|AT_GID,		/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID,/* va_mask */
 	VBLK,					/* va_type */
 	S_IFBLK | SDEV_DEVMODE_DEFAULT,		/* va_mode */
 	SDEV_UID_DEFAULT,			/* va_uid */
@@ -130,7 +130,7 @@ vattr_t sdev_vattr_blk = {
 };
 
 vattr_t sdev_vattr_chr = {
-	AT_TYPE|AT_MODE|AT_UID|AT_GID,		/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID,/* va_mask */
 	VCHR,					/* va_type */
 	S_IFCHR | SDEV_DEVMODE_DEFAULT,		/* va_mode */
 	SDEV_UID_DEFAULT,			/* va_uid */
@@ -256,29 +256,29 @@ sdev_attr_update(struct sdev_node *dv, vattr_t *vap)
 
 	attrp = dv->sdev_attr;
 	mask = vap->va_mask;
-	if (mask & AT_TYPE)
+	if (mask & VATTR_TYPE)
 		attrp->va_type = vap->va_type;
-	if (mask & AT_MODE)
+	if (mask & VATTR_MODE)
 		attrp->va_mode = vap->va_mode;
-	if (mask & AT_UID)
+	if (mask & VATTR_UID)
 		attrp->va_uid = vap->va_uid;
-	if (mask & AT_GID)
+	if (mask & VATTR_GID)
 		attrp->va_gid = vap->va_gid;
-	if (mask & AT_RDEV)
+	if (mask & VATTR_RDEV)
 		attrp->va_rdev = vap->va_rdev;
 
 	gethrestime(&now);
-	attrp->va_atime = (mask & AT_ATIME) ? vap->va_atime : now;
-	attrp->va_mtime = (mask & AT_MTIME) ? vap->va_mtime : now;
-	attrp->va_ctime = (mask & AT_CTIME) ? vap->va_ctime : now;
+	attrp->va_atime = (mask & VATTR_ATIME) ? vap->va_atime : now;
+	attrp->va_mtime = (mask & VATTR_MTIME) ? vap->va_mtime : now;
+	attrp->va_ctime = (mask & VATTR_CTIME) ? vap->va_ctime : now;
 }
 
 static void
 sdev_attr_alloc(struct sdev_node *dv, vattr_t *vap)
 {
 	ASSERT(dv->sdev_attr == NULL);
-	ASSERT(vap->va_mask & AT_TYPE);
-	ASSERT(vap->va_mask & AT_MODE);
+	ASSERT(vap->va_mask & VATTR_TYPE);
+	ASSERT(vap->va_mask & VATTR_MODE);
 
 	dv->sdev_attr = kmem_zalloc(sizeof (struct vattr), KM_SLEEP);
 	sdev_attr_update(dv, vap);
@@ -863,14 +863,14 @@ sdev_update_timestamps(struct vnode *vp, cred_t *cred, uint_t mask)
 
 	ASSERT(vp);
 	gethrestime(&now);
-	if (mask & AT_CTIME)
+	if (mask & VATTR_CTIME)
 		attr.va_ctime = now;
-	if (mask & AT_MTIME)
+	if (mask & VATTR_MTIME)
 		attr.va_mtime = now;
-	if (mask & AT_ATIME)
+	if (mask & VATTR_ATIME)
 		attr.va_atime = now;
 
-	attr.va_mask = (mask & AT_TIMES);
+	attr.va_mask = (mask & VATTR_TIMES);
 	err = fop_setattr(vp, &attr, 0, cred, NULL);
 	if (err && (err != EROFS)) {
 		sdcmn_err(("update timestamps error %d\n", err));
@@ -1098,7 +1098,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 	struct sdev_node *ndv = NULL;
 	timestruc_t now;
 
-	vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
+	vattr.va_mask = VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID;
 	error = fop_getattr(ovp, &vattr, 0, cred, NULL);
 	if (error)
 		return (error);
@@ -1270,7 +1270,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 
 	if ((*ndvp)->sdev_attrvp) {
 		sdev_update_timestamps((*ndvp)->sdev_attrvp, kcred,
-		    AT_CTIME|AT_ATIME);
+		    VATTR_CTIME|VATTR_ATIME);
 	} else {
 		ASSERT((*ndvp)->sdev_attr);
 		gethrestime(&now);
@@ -1280,7 +1280,7 @@ sdev_rnmnode(struct sdev_node *oddv, struct sdev_node *odv,
 
 	if (nddv->sdev_attrvp) {
 		sdev_update_timestamps(nddv->sdev_attrvp, kcred,
-		    AT_MTIME|AT_ATIME);
+		    VATTR_MTIME|VATTR_ATIME);
 	} else {
 		ASSERT(nddv->sdev_attr);
 		gethrestime(&now);
@@ -1468,7 +1468,7 @@ sdev_filldir_from_store(struct sdev_node *ddv, int dlen, struct cred *cred)
 			if (error)
 				continue;
 
-			vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
+			vattr.va_mask = VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID;
 			error = fop_getattr(vp, &vattr, 0, cred, NULL);
 			if (error)
 				continue;
@@ -1596,7 +1596,7 @@ lookup:
 	gethrestime(&vap->va_atime);
 	vap->va_mtime = vap->va_atime;
 	vap->va_ctime = vap->va_atime;
-	vap->va_mask |= AT_TYPE|AT_MODE;
+	vap->va_mask |= VATTR_TYPE|VATTR_MODE;
 	switch (vap->va_type) {
 	case VDIR:
 		error = fop_mkdir(rdvp, nm, vap, rvp, cred, NULL, 0, NULL);
@@ -1966,7 +1966,7 @@ tryagain:
 
 		if (!error) {
 
-			vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
+			vattr.va_mask = VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID;
 			error = fop_getattr(rvp, &vattr, 0, cred, NULL);
 			if (error) {
 				rw_exit(&ddv->sdev_contents);
@@ -2618,7 +2618,7 @@ full:
 		gethrestime(&now);
 		attr.va_ctime = now;
 		attr.va_atime = now;
-		attr.va_mask = AT_CTIME|AT_ATIME;
+		attr.va_mask = VATTR_CTIME|VATTR_ATIME;
 
 		(void) fop_setattr(ddv->sdev_attrvp, &attr, 0, kcred, NULL);
 	}
@@ -2917,8 +2917,8 @@ sdev_modctl_devexists(const char *path)
 /*
  * a generic setattr() function
  *
- * note: flags only supports AT_UID and AT_GID.
- *	 Future enhancements can be done for other types, e.g. AT_MODE
+ * note: flags only supports VATTR_UID and VATTR_GID.
+ *	 Future enhancements can be done for other types, e.g. VATTR_MODE
  */
 int
 devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
@@ -2932,10 +2932,10 @@ devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
 	int 			error;
 
 	/* some sanity checks */
-	if (vap->va_mask & AT_NOSET)
+	if (vap->va_mask & VATTR_NOSET)
 		return (EINVAL);
 
-	if (vap->va_mask & AT_SIZE) {
+	if (vap->va_mask & VATTR_SIZE) {
 		if (vp->v_type == VDIR) {
 			return (EISDIR);
 		}
@@ -2960,7 +2960,7 @@ devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
 	 */
 	ASSERT(dv->sdev_attr);
 	if (SDEV_IS_PERSIST(dv) ||
-	    ((vap->va_mask & ~AT_TIMES) != 0 && !SDEV_IS_DYNAMIC(dv))) {
+	    ((vap->va_mask & ~VATTR_TIMES) != 0 && !SDEV_IS_DYNAMIC(dv))) {
 		sdev_vattr_merge(dv, vap);
 		rw_enter(&dv->sdev_contents, RW_WRITER);
 		error = sdev_shadow_node(dv, cred);
@@ -2986,20 +2986,20 @@ devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
 	}
 
 	get = dv->sdev_attr;
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		get->va_mode &= S_IFMT;
 		get->va_mode |= vap->va_mode & ~S_IFMT;
 	}
 
-	if ((mask & AT_UID) || (mask & AT_GID)) {
-		if (mask & AT_UID)
+	if ((mask & VATTR_UID) || (mask & VATTR_GID)) {
+		if (mask & VATTR_UID)
 			get->va_uid = vap->va_uid;
-		if (mask & AT_GID)
+		if (mask & VATTR_GID)
 			get->va_gid = vap->va_gid;
 		/*
 		 * a callback must be provided if the protocol is set
 		 */
-		if ((protocol & AT_UID) || (protocol & AT_GID)) {
+		if ((protocol & VATTR_UID) || (protocol & VATTR_GID)) {
 			ASSERT(callback);
 			error = callback(dv, get, protocol);
 			if (error) {
@@ -3010,11 +3010,11 @@ devname_setattr_func(struct vnode *vp, struct vattr *vap, int flags,
 		}
 	}
 
-	if (mask & AT_ATIME)
+	if (mask & VATTR_ATIME)
 		get->va_atime = vap->va_atime;
-	if (mask & AT_MTIME)
+	if (mask & VATTR_MTIME)
 		get->va_mtime = vap->va_mtime;
-	if (mask & (AT_MODE | AT_UID | AT_GID | AT_CTIME)) {
+	if (mask & (VATTR_MODE | VATTR_UID | VATTR_GID | VATTR_CTIME)) {
 		gethrestime(&get->va_ctime);
 	}
 

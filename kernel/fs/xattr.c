@@ -228,7 +228,7 @@ xattr_fill_nvlist(vnode_t *vp, xattr_view_t xattr_view, nvlist_t *nvlp,
 	/*
 	 * For detecting ephemeral uid/gid
 	 */
-	xvattr.xva_vattr.va_mask |= (AT_UID|AT_GID);
+	xvattr.xva_vattr.va_mask |= (VATTR_UID|VATTR_GID);
 
 	/*
 	 * We need to access the real fs object.
@@ -318,7 +318,7 @@ xattr_fill_nvlist(vnode_t *vp, xattr_view_t xattr_view, nvlist_t *nvlp,
 	 * Process all the optional attributes together here.  Notice that
 	 * xoap was set when the optional attribute bits were set above.
 	 */
-	if ((xvattr.xva_vattr.va_mask & AT_XVATTR) && xoap) {
+	if ((xvattr.xva_vattr.va_mask & VATTR_XVATTR) && xoap) {
 		if (XVA_ISSET_RTN(&xvattr, XAT_READONLY)) {
 			VERIFY(nvlist_add_boolean_value(nvlp,
 			    attr_to_name(F_READONLY),
@@ -493,7 +493,7 @@ xattr_file_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	vap->va_nlink = 1;
 	pvp = gfs_file_parent(vp);
 	(void) memset(&pvattr, 0, sizeof (pvattr));
-	pvattr.va_mask = AT_CTIME|AT_MTIME;
+	pvattr.va_mask = VATTR_CTIME|VATTR_MTIME;
 	error = fop_getattr(pvp, &pvattr, flags, cr, ct);
 	if (error) {
 		return (error);
@@ -763,11 +763,11 @@ xattr_file_write(vnode_t *vp, uio_t *uiop, int ioflag, cred_t *cr,
 			if (attr == F_OWNERSID) {
 				(void) kidmap_getuidbysid(crgetzone(cr), domain,
 				    rid, &xvattr.xva_vattr.va_uid);
-				xvattr.xva_vattr.va_mask |= AT_UID;
+				xvattr.xva_vattr.va_mask |= VATTR_UID;
 			} else {
 				(void) kidmap_getgidbysid(crgetzone(cr), domain,
 				    rid, &xvattr.xva_vattr.va_gid);
-				xvattr.xva_vattr.va_mask |= AT_GID;
+				xvattr.xva_vattr.va_mask |= VATTR_GID;
 			}
 			break;
 		case F_AV_SCANSTAMP:
@@ -1068,7 +1068,7 @@ xattr_dir_close(vnode_t *vp, int flags, int count, offset_t off, cred_t *cr,
  * that fop_getattr() could turn off bits in the va_mask.
  */
 
-#define	PARENT_ATTRMASK	(AT_UID|AT_GID|AT_RDEV|AT_CTIME|AT_MTIME)
+#define	PARENT_ATTRMASK	(VATTR_UID|VATTR_GID|VATTR_RDEV|VATTR_CTIME|VATTR_MTIME)
 
 /* ARGSUSED */
 static int

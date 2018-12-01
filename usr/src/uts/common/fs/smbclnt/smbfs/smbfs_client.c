@@ -465,13 +465,13 @@ smbfsgetattr(vnode_t *vp, struct vattr *vap, cred_t *cr)
 	/*
 	 * If asked for UID or GID, update n_uid, n_gid.
 	 */
-	mask = AT_ALL;
-	if (vap->va_mask & (AT_UID | AT_GID)) {
+	mask = VATTR_ALL;
+	if (vap->va_mask & (VATTR_UID | VATTR_GID)) {
 		if (smi->smi_flags & SMI_ACL)
 			(void) smbfs_acl_getids(vp, cr);
 		/* else leave as set in make_smbnode */
 	} else {
-		mask &= ~(AT_UID | AT_GID);
+		mask &= ~(VATTR_UID | VATTR_GID);
 	}
 
 	/*
@@ -491,7 +491,7 @@ smbfsgetattr(vnode_t *vp, struct vattr *vap, cred_t *cr)
 	 * smbfs_attrcache_fa, smbfs_getattr_otw
 	 */
 	smbfattr_to_vattr(vp, &fa, vap);
-	if (vap->va_mask & AT_XVATTR)
+	if (vap->va_mask & VATTR_XVATTR)
 		smbfattr_to_xvattr(&fa, vap);
 
 	return (0);

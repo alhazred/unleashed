@@ -196,11 +196,11 @@ chdirec(vnode_t *vp, int ischroot, int do_traverse)
 		struct vattr rattr;
 		vnode_t *zonevp = curproc->p_zone->zone_rootvp;
 
-		tattr.va_mask = AT_FSID|AT_NODEID;
+		tattr.va_mask = VATTR_FSID|VATTR_NODEID;
 		if (error = fop_getattr(vp, &tattr, 0, CRED(), NULL))
 			goto bad;
 
-		rattr.va_mask = AT_FSID|AT_NODEID;
+		rattr.va_mask = VATTR_FSID|VATTR_NODEID;
 		if (error = fop_getattr(zonevp, &rattr, 0, CRED(), NULL))
 			goto bad;
 

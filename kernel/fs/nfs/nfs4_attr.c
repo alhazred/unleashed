@@ -77,13 +77,13 @@ nfs4_ver_fattr4_attr(vattr_t *vap, struct nfs4_ntov_map *ntovp,
 	 * Bit matches the mask
 	 */
 	switch (ntovp->vbit & vap->va_mask) {
-	case AT_SIZE:
+	case VATTR_SIZE:
 		nap->size = vap->va_size;
 		break;
-	case AT_MODE:
+	case VATTR_MODE:
 		nap->mode = vap->va_mode;
 		break;
-	case AT_UID:
+	case VATTR_UID:
 		/*
 		 * if no mapping, uid could be mapped to a numeric string,
 		 * e.g. 12345->"12345"
@@ -92,7 +92,7 @@ nfs4_ver_fattr4_attr(vattr_t *vap, struct nfs4_ntov_map *ntovp,
 		    FALSE))
 			retval = FALSE;
 		break;
-	case AT_GID:
+	case VATTR_GID:
 		/*
 		 * if no mapping, gid will be mapped to a number string,
 		 * e.g. "12345"
@@ -101,7 +101,7 @@ nfs4_ver_fattr4_attr(vattr_t *vap, struct nfs4_ntov_map *ntovp,
 		    FALSE))
 			retval = FALSE;
 		break;
-	case AT_ATIME:
+	case VATTR_ATIME:
 		if ((ntovp->nval != FATTR4_TIME_ACCESS) ||
 		    (*errorp = nfs4_time_vton(&vap->va_ctime,
 		    &nap->time_access))) {
@@ -113,7 +113,7 @@ nfs4_ver_fattr4_attr(vattr_t *vap, struct nfs4_ntov_map *ntovp,
 			retval = FALSE;
 		}
 		break;
-	case AT_MTIME:
+	case VATTR_MTIME:
 		if ((ntovp->nval != FATTR4_TIME_MODIFY) ||
 		    (*errorp = nfs4_time_vton(&vap->va_mtime,
 		    &nap->time_modify))) {
@@ -125,7 +125,7 @@ nfs4_ver_fattr4_attr(vattr_t *vap, struct nfs4_ntov_map *ntovp,
 			retval = FALSE;
 		}
 		break;
-	case AT_CTIME:
+	case VATTR_CTIME:
 		if (*errorp = nfs4_time_vton(&vap->va_ctime,
 		    &nap->time_metadata)) {
 			/*
@@ -166,13 +166,13 @@ nfs4_set_fattr4_attr(vattr_t *vap, vsecattr_t *vsap,
 	 * Bit matches the mask
 	 */
 	switch (ntovp->vbit & vap->va_mask) {
-	case AT_SIZE:
+	case VATTR_SIZE:
 		nap->size = vap->va_size;
 		break;
-	case AT_MODE:
+	case VATTR_MODE:
 		nap->mode = vap->va_mode;
 		break;
-	case AT_UID:
+	case VATTR_UID:
 		/*
 		 * if no mapping, uid will be mapped to a number string,
 		 * e.g. "12345"
@@ -181,7 +181,7 @@ nfs4_set_fattr4_attr(vattr_t *vap, vsecattr_t *vsap,
 		    FALSE))
 			retval = FALSE;
 		break;
-	case AT_GID:
+	case VATTR_GID:
 		/*
 		 * if no mapping, gid will be mapped to a number string,
 		 * e.g. "12345"
@@ -190,7 +190,7 @@ nfs4_set_fattr4_attr(vattr_t *vap, vsecattr_t *vsap,
 		    FALSE))
 			retval = FALSE;
 		break;
-	case AT_ATIME:
+	case VATTR_ATIME:
 		if ((ntovp->nval != FATTR4_TIME_ACCESS_SET) ||
 		    (*errorp = timestruc_to_settime4(&vap->va_atime,
 		    &nap->time_access_set, flags))) {
@@ -198,7 +198,7 @@ nfs4_set_fattr4_attr(vattr_t *vap, vsecattr_t *vsap,
 			retval = FALSE;
 		}
 		break;
-	case AT_MTIME:
+	case VATTR_MTIME:
 		if ((ntovp->nval != FATTR4_TIME_MODIFY_SET) ||
 		    (*errorp = timestruc_to_settime4(&vap->va_mtime,
 		    &nap->time_modify_set, flags))) {
@@ -343,17 +343,17 @@ vattr_to_fattr4(vattr_t *vap, vsecattr_t *vsap, fattr4 *fattrp, int flags,
 		} else {
 			/*
 			 * The only zero xdr_sizes we should see
-			 * are AT_UID, AT_GID and FATTR4_ACL_MASK
+			 * are VATTR_UID, VATTR_GID and FATTR4_ACL_MASK
 			 */
-			ASSERT(nfs4_ntov_map[i].vbit == AT_UID ||
-			    nfs4_ntov_map[i].vbit == AT_GID ||
+			ASSERT(nfs4_ntov_map[i].vbit == VATTR_UID ||
+			    nfs4_ntov_map[i].vbit == VATTR_GID ||
 			    nfs4_ntov_map[i].fbit == FATTR4_ACL_MASK);
-			if (nfs4_ntov_map[i].vbit == AT_UID) {
+			if (nfs4_ntov_map[i].vbit == VATTR_UID) {
 				uid_attr = attrcnt;
 				xdr_size += BYTES_PER_XDR_UNIT;	/* length */
 				xdr_size +=
 				    RNDUP(na[attrcnt].owner.utf8string_len);
-			} else if (nfs4_ntov_map[i].vbit == AT_GID) {
+			} else if (nfs4_ntov_map[i].vbit == VATTR_GID) {
 				gid_attr = attrcnt;
 				xdr_size += BYTES_PER_XDR_UNIT;	/* length */
 				xdr_size +=
@@ -461,7 +461,7 @@ nfs4_fattr4_free(fattr4 *attrp)
 void
 nfs4_vmask_to_nmask(uint_t vmask, bitmap4 *bitsval)
 {
-	if (vmask == AT_ALL || vmask == NFS4_VTON_ATTR_MASK) {
+	if (vmask == VATTR_ALL || vmask == NFS4_VTON_ATTR_MASK) {
 		*bitsval |= NFS4_NTOV_ATTR_MASK;
 		return;
 	}
@@ -471,33 +471,33 @@ nfs4_vmask_to_nmask(uint_t vmask, bitmap4 *bitsval)
 		return;
 	}
 
-	if (vmask & AT_TYPE)
+	if (vmask & VATTR_TYPE)
 		*bitsval |= FATTR4_TYPE_MASK;
-	if (vmask & AT_MODE)
+	if (vmask & VATTR_MODE)
 		*bitsval |= FATTR4_MODE_MASK;
-	if (vmask & AT_UID)
+	if (vmask & VATTR_UID)
 		*bitsval |= FATTR4_OWNER_MASK;
-	if (vmask & AT_GID)
+	if (vmask & VATTR_GID)
 		*bitsval |= FATTR4_OWNER_GROUP_MASK;
-	if (vmask & AT_FSID)
+	if (vmask & VATTR_FSID)
 		*bitsval |= FATTR4_FSID_MASK;
-	/* set mounted_on_fileid when AT_NODEID requested */
-	if (vmask & AT_NODEID)
+	/* set mounted_on_fileid when VATTR_NODEID requested */
+	if (vmask & VATTR_NODEID)
 		*bitsval |= FATTR4_FILEID_MASK | FATTR4_MOUNTED_ON_FILEID_MASK;
-	if (vmask & AT_NLINK)
+	if (vmask & VATTR_NLINK)
 		*bitsval |= FATTR4_NUMLINKS_MASK;
-	if (vmask & AT_SIZE)
+	if (vmask & VATTR_SIZE)
 		*bitsval |= FATTR4_SIZE_MASK;
-	if (vmask & AT_ATIME)
+	if (vmask & VATTR_ATIME)
 		*bitsval |= FATTR4_TIME_ACCESS_MASK;
-	if (vmask & AT_MTIME)
+	if (vmask & VATTR_MTIME)
 		*bitsval |= FATTR4_TIME_MODIFY_MASK;
-	/* also set CHANGE whenever AT_CTIME requested */
-	if (vmask & AT_CTIME)
+	/* also set CHANGE whenever VATTR_CTIME requested */
+	if (vmask & VATTR_CTIME)
 		*bitsval |= FATTR4_TIME_METADATA_MASK | FATTR4_CHANGE_MASK;
-	if (vmask & AT_NBLOCKS)
+	if (vmask & VATTR_NBLOCKS)
 		*bitsval |= FATTR4_SPACE_USED_MASK;
-	if (vmask & AT_RDEV)
+	if (vmask & VATTR_RDEV)
 		*bitsval |= FATTR4_RAWDEV_MASK;
 }
 
@@ -514,17 +514,17 @@ nfs4_vmask_to_nmask_set(uint_t vmask, bitmap4 *bitsval)
 		return;
 	}
 
-	if (vmask & AT_MODE)
+	if (vmask & VATTR_MODE)
 		*bitsval |= FATTR4_MODE_MASK;
-	if (vmask & AT_UID)
+	if (vmask & VATTR_UID)
 		*bitsval |= FATTR4_OWNER_MASK;
-	if (vmask & AT_GID)
+	if (vmask & VATTR_GID)
 		*bitsval |= FATTR4_OWNER_GROUP_MASK;
-	if (vmask & AT_SIZE)
+	if (vmask & VATTR_SIZE)
 		*bitsval |= FATTR4_SIZE_MASK;
-	if (vmask & AT_ATIME)
+	if (vmask & VATTR_ATIME)
 		*bitsval |= FATTR4_TIME_ACCESS_SET_MASK;
-	if (vmask & AT_MTIME)
+	if (vmask & VATTR_MTIME)
 		*bitsval |= FATTR4_TIME_MODIFY_SET_MASK;
 }
 
@@ -547,7 +547,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_SUPPORTED_ATTRS, 2 * BYTES_PER_XDR_UNIT, xdr_bitmap4,
 		NULL, "fattr4_supported_attrs" },
 
-	{ FATTR4_TYPE_MASK, AT_TYPE, FALSE, TRUE,
+	{ FATTR4_TYPE_MASK, VATTR_TYPE, FALSE, TRUE,
 		FATTR4_TYPE, BYTES_PER_XDR_UNIT, xdr_int,
 		NULL, "fattr4_type" },
 
@@ -559,7 +559,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_CHANGE, 2 * BYTES_PER_XDR_UNIT, xdr_u_longlong_t,
 		NULL, "fattr4_change" },
 
-	{ FATTR4_SIZE_MASK, AT_SIZE, FALSE, TRUE,
+	{ FATTR4_SIZE_MASK, VATTR_SIZE, FALSE, TRUE,
 		FATTR4_SIZE,  2 * BYTES_PER_XDR_UNIT, xdr_u_longlong_t,
 		NULL, "fattr4_size" },
 
@@ -575,7 +575,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_NAMED_ATTR, BYTES_PER_XDR_UNIT, xdr_bool,
 		NULL, "fattr4_named_attr" },
 
-	{ FATTR4_FSID_MASK, AT_FSID, FALSE, TRUE,
+	{ FATTR4_FSID_MASK, VATTR_FSID, FALSE, TRUE,
 		FATTR4_FSID, 4 * BYTES_PER_XDR_UNIT, xdr_fattr4_fsid,
 		NULL, "fattr4_fsid" },
 
@@ -623,7 +623,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_FILEHANDLE, 0, xdr_nfs_fh4,
 		NULL, "fattr4_filehandle" },
 
-	{ FATTR4_FILEID_MASK, AT_NODEID, FALSE, FALSE,
+	{ FATTR4_FILEID_MASK, VATTR_NODEID, FALSE, FALSE,
 		FATTR4_FILEID, 2 * BYTES_PER_XDR_UNIT, xdr_u_longlong_t,
 		NULL, "fattr4_fileid" },
 
@@ -675,7 +675,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_MIMETYPE, 0, xdr_utf8string,
 		NULL, "fattr4_mimetype" },
 
-	{ FATTR4_MODE_MASK, AT_MODE, FALSE, FALSE,
+	{ FATTR4_MODE_MASK, VATTR_MODE, FALSE, FALSE,
 		FATTR4_MODE, BYTES_PER_XDR_UNIT, xdr_u_int,
 		NULL, "fattr4_mode" },
 
@@ -683,15 +683,15 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_NO_TRUNC, BYTES_PER_XDR_UNIT, xdr_bool,
 		NULL, "fattr4_no_trunc" },
 
-	{ FATTR4_NUMLINKS_MASK, AT_NLINK, FALSE, FALSE,
+	{ FATTR4_NUMLINKS_MASK, VATTR_NLINK, FALSE, FALSE,
 		FATTR4_NUMLINKS, BYTES_PER_XDR_UNIT, xdr_u_int,
 		NULL, "fattr4_numlinks" },
 
-	{ FATTR4_OWNER_MASK, AT_UID, FALSE, FALSE,
+	{ FATTR4_OWNER_MASK, VATTR_UID, FALSE, FALSE,
 		FATTR4_OWNER, 0, xdr_utf8string,
 		NULL, "fattr4_owner" },
 
-	{ FATTR4_OWNER_GROUP_MASK, AT_GID, FALSE, FALSE,
+	{ FATTR4_OWNER_GROUP_MASK, VATTR_GID, FALSE, FALSE,
 		FATTR4_OWNER_GROUP, 0, xdr_utf8string,
 		NULL, "fattr4_owner_group" },
 
@@ -709,7 +709,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_QUOTA_USED, 2 * BYTES_PER_XDR_UNIT, xdr_u_longlong_t,
 		NULL, "fattr4_quota_used" },
 
-	{ FATTR4_RAWDEV_MASK, AT_RDEV, FALSE, FALSE,
+	{ FATTR4_RAWDEV_MASK, VATTR_RDEV, FALSE, FALSE,
 		FATTR4_RAWDEV, 2 * BYTES_PER_XDR_UNIT, xdr_fattr4_rawdev,
 		NULL, "fattr4_rawdev" },
 
@@ -725,7 +725,7 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_SPACE_TOTAL, 2 * BYTES_PER_XDR_UNIT, xdr_u_longlong_t,
 		NULL, "fattr4_space_total" },
 
-	{ FATTR4_SPACE_USED_MASK, AT_NBLOCKS, FALSE, FALSE,
+	{ FATTR4_SPACE_USED_MASK, VATTR_NBLOCKS, FALSE, FALSE,
 		FATTR4_SPACE_USED, 2 * BYTES_PER_XDR_UNIT, xdr_u_longlong_t,
 		NULL, "fattr4_space_used" },
 
@@ -733,11 +733,11 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_SYSTEM, BYTES_PER_XDR_UNIT, xdr_bool,
 		NULL, "fattr4_system" },
 
-	{ FATTR4_TIME_ACCESS_MASK, AT_ATIME, FALSE, FALSE,
+	{ FATTR4_TIME_ACCESS_MASK, VATTR_ATIME, FALSE, FALSE,
 		FATTR4_TIME_ACCESS, 3 * BYTES_PER_XDR_UNIT, xdr_nfstime4,
 		NULL, "fattr4_time_access" },
 
-	{ FATTR4_TIME_ACCESS_SET_MASK, AT_ATIME, FALSE, FALSE,
+	{ FATTR4_TIME_ACCESS_SET_MASK, VATTR_ATIME, FALSE, FALSE,
 		FATTR4_TIME_ACCESS_SET, 4 * BYTES_PER_XDR_UNIT, xdr_settime4,
 		NULL, "fattr4_time_access_set" },
 
@@ -753,19 +753,19 @@ struct nfs4_ntov_map nfs4_ntov_map[] = {
 		FATTR4_TIME_DELTA, 3 * BYTES_PER_XDR_UNIT, xdr_nfstime4,
 		NULL, "fattr4_time_delta" },
 
-	{ FATTR4_TIME_METADATA_MASK, AT_CTIME, FALSE, FALSE,
+	{ FATTR4_TIME_METADATA_MASK, VATTR_CTIME, FALSE, FALSE,
 		FATTR4_TIME_METADATA, 3 * BYTES_PER_XDR_UNIT, xdr_nfstime4,
 		NULL, "fattr4_time_metadata" },
 
-	{ FATTR4_TIME_MODIFY_MASK, AT_MTIME, FALSE, FALSE,
+	{ FATTR4_TIME_MODIFY_MASK, VATTR_MTIME, FALSE, FALSE,
 		FATTR4_TIME_MODIFY, 3 * BYTES_PER_XDR_UNIT, xdr_nfstime4,
 		NULL, "fattr4_time_modify" },
 
-	{ FATTR4_TIME_MODIFY_SET_MASK, AT_MTIME, FALSE, FALSE,
+	{ FATTR4_TIME_MODIFY_SET_MASK, VATTR_MTIME, FALSE, FALSE,
 		FATTR4_TIME_MODIFY_SET, 4 * BYTES_PER_XDR_UNIT, xdr_settime4,
 		NULL, "fattr4_time_modify_set" },
 
-	{ FATTR4_MOUNTED_ON_FILEID_MASK, AT_NODEID, FALSE, FALSE,
+	{ FATTR4_MOUNTED_ON_FILEID_MASK, VATTR_NODEID, FALSE, FALSE,
 		FATTR4_MOUNTED_ON_FILEID, 2 * BYTES_PER_XDR_UNIT,
 		xdr_u_longlong_t,
 		NULL, "fattr4_mounted_on_fileid" },

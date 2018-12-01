@@ -178,7 +178,7 @@ copen(int startfd, char *fname, int filemode, int createmode)
 		 * In order to access hidden attribute directory the
 		 * user must be able to stat() the file
 		 */
-		vattr.va_mask = AT_ALL;
+		vattr.va_mask = VATTR_ALL;
 		if (error = fop_getattr(startvp, &vattr, 0, CRED(), NULL)) {
 			pn_free(&pn);
 			goto out;

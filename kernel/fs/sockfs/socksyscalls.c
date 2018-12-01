@@ -2595,7 +2595,7 @@ snf_segmap(file_t *fp, vnode_t *fvp, uoff_t fileoff, uoff_t total_size,
 			goto done;
 
 		(void) fop_rwlock(fvp, V_WRITELOCK_FALSE, NULL);
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		error = fop_getattr(fvp, &va, 0, kcred, NULL);
 		if (error)
 			break;
@@ -2743,7 +2743,7 @@ snf_cache(file_t *fp, vnode_t *fvp, uoff_t fileoff, uoff_t size,
 
 		fileoff += iosize;
 		(void) fop_rwlock(fvp, V_WRITELOCK_FALSE, NULL);
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		error = fop_getattr(fvp, &va, 0, kcred, NULL);
 		if (error)
 			break;
@@ -2816,7 +2816,7 @@ sosendfile64(file_t *fp, file_t *rfp, const struct ksendfilevec64 *sfv,
 	 * from changing underneath.
 	 */
 	(void) fop_rwlock(fvp, V_WRITELOCK_FALSE, NULL);
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 	error = fop_getattr(fvp, &va, 0, kcred, NULL);
 	va_size = va.va_size;
 	if ((error != 0) || (va_size == 0) || (sfv_off >= va_size)) {

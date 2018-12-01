@@ -227,34 +227,34 @@ zil_prt_rec_setattr(zilog_t *zilog, int txtype, void *arg)
 	(void) printf("%sfoid %llu, mask 0x%llx\n", tab_prefix,
 	    (u_longlong_t)lr->lr_foid, (u_longlong_t)lr->lr_mask);
 
-	if (lr->lr_mask & AT_MODE) {
+	if (lr->lr_mask & VATTR_MODE) {
 		(void) printf("%sAT_MODE  %llo\n", tab_prefix,
 		    (longlong_t)lr->lr_mode);
 	}
 
-	if (lr->lr_mask & AT_UID) {
+	if (lr->lr_mask & VATTR_UID) {
 		(void) printf("%sAT_UID   %llu\n", tab_prefix,
 		    (u_longlong_t)lr->lr_uid);
 	}
 
-	if (lr->lr_mask & AT_GID) {
+	if (lr->lr_mask & VATTR_GID) {
 		(void) printf("%sAT_GID   %llu\n", tab_prefix,
 		    (u_longlong_t)lr->lr_gid);
 	}
 
-	if (lr->lr_mask & AT_SIZE) {
+	if (lr->lr_mask & VATTR_SIZE) {
 		(void) printf("%sAT_SIZE  %llu\n", tab_prefix,
 		    (u_longlong_t)lr->lr_size);
 	}
 
-	if (lr->lr_mask & AT_ATIME) {
+	if (lr->lr_mask & VATTR_ATIME) {
 		(void) printf("%sAT_ATIME %llu.%09llu %s", tab_prefix,
 		    (u_longlong_t)lr->lr_atime[0],
 		    (u_longlong_t)lr->lr_atime[1],
 		    ctime(&atime));
 	}
 
-	if (lr->lr_mask & AT_MTIME) {
+	if (lr->lr_mask & VATTR_MTIME) {
 		(void) printf("%sAT_MTIME %llu.%09llu %s", tab_prefix,
 		    (u_longlong_t)lr->lr_mtime[0],
 		    (u_longlong_t)lr->lr_mtime[1],

@@ -2813,7 +2813,7 @@ lofi_map_file(dev_t dev, struct lofi_ioctl *ulip, int pickminor,
 		goto err;
 	}
 
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	error = fop_getattr(vp, &vattr, 0, credp, NULL);
 	if (error)
 		goto err;

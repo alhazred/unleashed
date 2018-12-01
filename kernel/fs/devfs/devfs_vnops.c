@@ -231,7 +231,7 @@ devfs_setattr_dir(
 	ASSERT(vp->v_type == VDIR);
 	ASSERT((dv->dv_flags & DV_NO_FSPERM) == 0);
 
-	if (vap->va_mask & AT_NOSET)
+	if (vap->va_mask & VATTR_NOSET)
 		return (EINVAL);
 
 	/* to ensure consistency, single thread setting of attributes */
@@ -254,20 +254,20 @@ again:	if (dv->dv_attr) {
 		mask = vap->va_mask;
 
 		/* Change file access modes. */
-		if (mask & AT_MODE) {
+		if (mask & VATTR_MODE) {
 			map->va_mode &= S_IFMT;
 			map->va_mode |= vap->va_mode & ~S_IFMT;
 		}
-		if (mask & AT_UID)
+		if (mask & VATTR_UID)
 			map->va_uid = vap->va_uid;
-		if (mask & AT_GID)
+		if (mask & VATTR_GID)
 			map->va_gid = vap->va_gid;
-		if (mask & AT_ATIME)
+		if (mask & VATTR_ATIME)
 			map->va_atime = vap->va_atime;
-		if (mask & AT_MTIME)
+		if (mask & VATTR_MTIME)
 			map->va_mtime = vap->va_mtime;
 
-		if (mask & (AT_MODE | AT_UID | AT_GID | AT_MTIME))
+		if (mask & (VATTR_MODE | VATTR_UID | VATTR_GID | VATTR_MTIME))
 			gethrestime(&map->va_ctime);
 	} else {
 		/* use the backing attribute store */
@@ -277,7 +277,7 @@ again:	if (dv->dv_attr) {
 		 * See if we are changing something we care about
 		 * the persistence of - return success if we don't care.
 		 */
-		if (vap->va_mask & (AT_MODE|AT_UID|AT_GID|AT_ATIME|AT_MTIME)) {
+		if (vap->va_mask & (VATTR_MODE|VATTR_UID|VATTR_GID|VATTR_ATIME|VATTR_MTIME)) {
 			/* Set the attributes */
 			error = fop_setattr(dv->dv_attrvp,
 			    vap, flags, cr, NULL);
@@ -365,7 +365,7 @@ devfs_setattr(
 		return (ENOENT);
 	}
 
-	if (vap->va_mask & AT_NOSET)
+	if (vap->va_mask & VATTR_NOSET)
 		return (EINVAL);
 
 	/*
@@ -373,7 +373,7 @@ devfs_setattr(
 	 * the persistence of, return success.
 	 */
 	if ((vap->va_mask &
-	    (AT_MODE|AT_UID|AT_GID|AT_ATIME|AT_MTIME)) == 0)
+	    (VATTR_MODE|VATTR_UID|VATTR_GID|VATTR_ATIME|VATTR_MTIME)) == 0)
 		return (0);
 
 	/*
@@ -382,14 +382,14 @@ devfs_setattr(
 	 */
 	if (dv->dv_flags & DV_NO_FSPERM) {
 		ASSERT(dv->dv_attr);
-		if (vap->va_mask & (AT_MODE | AT_UID | AT_GID))
+		if (vap->va_mask & (VATTR_MODE | VATTR_UID | VATTR_GID))
 			return (EPERM);
-		if ((vap->va_mask & (AT_ATIME|AT_MTIME)) == 0)
+		if ((vap->va_mask & (VATTR_ATIME|VATTR_MTIME)) == 0)
 			return (0);
 		rw_enter(&dv->dv_contents, RW_WRITER);
-		if (vap->va_mask & AT_ATIME)
+		if (vap->va_mask & VATTR_ATIME)
 			dv->dv_attr->va_atime = vap->va_atime;
-		if (vap->va_mask & AT_MTIME)
+		if (vap->va_mask & VATTR_MTIME)
 			dv->dv_attr->va_mtime = vap->va_mtime;
 		rw_exit(&dv->dv_contents);
 		return (0);
@@ -416,7 +416,7 @@ devfs_setattr(
 	 * We don't need to create an attribute node
 	 * to persist access or modification times.
 	 */
-	persist = (vap->va_mask & (AT_MODE | AT_UID | AT_GID));
+	persist = (vap->va_mask & (VATTR_MODE | VATTR_UID | VATTR_GID));
 
 	/*
 	 * If persisting something, get the default permissions
@@ -483,20 +483,20 @@ devfs_setattr(
 	mask = vap->va_mask;
 
 	/* Change file access modes. */
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		map->va_mode &= S_IFMT;
 		map->va_mode |= vap->va_mode & ~S_IFMT;
 	}
-	if (mask & AT_UID)
+	if (mask & VATTR_UID)
 		map->va_uid = vap->va_uid;
-	if (mask & AT_GID)
+	if (mask & VATTR_GID)
 		map->va_gid = vap->va_gid;
-	if (mask & AT_ATIME)
+	if (mask & VATTR_ATIME)
 		map->va_atime = vap->va_atime;
-	if (mask & AT_MTIME)
+	if (mask & VATTR_MTIME)
 		map->va_mtime = vap->va_mtime;
 
-	if (mask & (AT_MODE | AT_UID | AT_GID | AT_MTIME)) {
+	if (mask & (VATTR_MODE | VATTR_UID | VATTR_GID | VATTR_MTIME)) {
 		gethrestime(&map->va_ctime);
 	}
 
@@ -526,13 +526,13 @@ devfs_setattr(
 			}
 			ASSERT(dv->dv_attr);
 		} else {
-			if (mask & AT_MODE)
+			if (mask & VATTR_MODE)
 				dcmn_err5(("%s persisting mode 0%o\n",
 				    dv->dv_name, vap->va_mode));
-			if (mask & AT_UID)
+			if (mask & VATTR_UID)
 				dcmn_err5(("%s persisting uid %d\n",
 				    dv->dv_name, vap->va_uid));
-			if (mask & AT_GID)
+			if (mask & VATTR_GID)
 				dcmn_err5(("%s persisting gid %d\n",
 				    dv->dv_name, vap->va_gid));
 
@@ -547,7 +547,7 @@ devfs_setattr(
 				if (dv->dv_attr == map) {
 					mask = map->va_mask;
 					map->va_mask =
-					    vap->va_mask | AT_ATIME | AT_MTIME;
+					    vap->va_mask | VATTR_ATIME | VATTR_MTIME;
 					error = fop_setattr(dv->dv_attrvp, map,
 					    flags, cr, NULL);
 					map->va_mask = mask;
@@ -1011,7 +1011,7 @@ full:	dcmn_err3(("devfs_readdir: moving %lu bytes: "
 			uiop->uio_loffset = diroff;
 		}
 
-		va.va_mask = AT_ATIME;
+		va.va_mask = VATTR_ATIME;
 		gethrestime(&va.va_atime);
 		rw_exit(&ddv->dv_contents);
 		(void) devfs_setattr(dvp, &va, 0, cred, ct);

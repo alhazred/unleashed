@@ -72,7 +72,7 @@ struct dv_node *dvroot;
 
 /* prototype memory vattrs */
 vattr_t dv_vattr_dir = {
-	AT_TYPE|AT_MODE|AT_UID|AT_GID, 		/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID,/* va_mask */
 	VDIR,					/* va_type */
 	DV_DIRMODE_DEFAULT,			/* va_mode */
 	DV_UID_DEFAULT,				/* va_uid */
@@ -91,7 +91,7 @@ vattr_t dv_vattr_dir = {
 };
 
 vattr_t dv_vattr_file = {
-	AT_TYPE|AT_MODE|AT_SIZE|AT_UID|AT_GID|AT_RDEV,	/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_SIZE|VATTR_UID|VATTR_GID|VATTR_RDEV,/* va_mask */
 	0,					/* va_type */
 	DV_DEVMODE_DEFAULT,			/* va_mode */
 	DV_UID_DEFAULT,				/* va_uid */
@@ -110,7 +110,7 @@ vattr_t dv_vattr_file = {
 };
 
 vattr_t dv_vattr_priv = {
-	AT_TYPE|AT_MODE|AT_SIZE|AT_UID|AT_GID|AT_RDEV,	/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_SIZE|VATTR_UID|VATTR_GID|VATTR_RDEV,/* va_mask */
 	0,					/* va_type */
 	DV_DEVMODE_PRIV,			/* va_mode */
 	DV_UID_DEFAULT,				/* va_uid */

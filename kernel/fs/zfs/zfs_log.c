@@ -70,7 +70,7 @@
 int
 zfs_log_create_txtype(zil_create_t type, vsecattr_t *vsecp, vattr_t *vap)
 {
-	int isxvattr = (vap->va_mask & AT_XVATTR);
+	int isxvattr = (vap->va_mask & VATTR_XVATTR);
 	switch (type) {
 	case Z_FILE:
 		if (vsecp == NULL && !isxvattr)
@@ -260,7 +260,7 @@ zfs_log_create(zilog_t *zilog, dmu_tx_t *tx, uint64_t txtype,
 		fuidsz += fuidp->z_fuid_cnt * sizeof (uint64_t);
 	}
 
-	if (vap->va_mask & AT_XVATTR)
+	if (vap->va_mask & VATTR_XVATTR)
 		xvatsize = ZIL_XVAT_SIZE(xvap->xva_mapsize);
 
 	if ((int)txtype == TX_CREATE_ATTR || (int)txtype == TX_MKDIR_ATTR ||
@@ -303,7 +303,7 @@ zfs_log_create(zilog_t *zilog, dmu_tx_t *tx, uint64_t txtype,
 	/*
 	 * Fill in xvattr info if any
 	 */
-	if (vap->va_mask & AT_XVATTR) {
+	if (vap->va_mask & VATTR_XVATTR) {
 		zfs_log_xvattr((lr_attr_t *)((caddr_t)lr + lrsize), xvap);
 		end = (caddr_t)lr + lrsize + xvatsize;
 	} else {
@@ -561,7 +561,7 @@ zfs_log_setattr(zilog_t *zilog, dmu_tx_t *tx, int txtype,
 	 * for lr_attr_t + xvattr mask, mapsize and create time
 	 * plus actual attribute values
 	 */
-	if (vap->va_mask & AT_XVATTR)
+	if (vap->va_mask & VATTR_XVATTR)
 		recsize = sizeof (*lr) + ZIL_XVAT_SIZE(xvap->xva_mapsize);
 
 	if (fuidp)
@@ -572,12 +572,12 @@ zfs_log_setattr(zilog_t *zilog, dmu_tx_t *tx, int txtype,
 	lr->lr_foid = zp->z_id;
 	lr->lr_mask = (uint64_t)mask_applied;
 	lr->lr_mode = (uint64_t)vap->va_mode;
-	if ((mask_applied & AT_UID) && IS_EPHEMERAL(vap->va_uid))
+	if ((mask_applied & VATTR_UID) && IS_EPHEMERAL(vap->va_uid))
 		lr->lr_uid = fuidp->z_fuid_owner;
 	else
 		lr->lr_uid = (uint64_t)vap->va_uid;
 
-	if ((mask_applied & AT_GID) && IS_EPHEMERAL(vap->va_gid))
+	if ((mask_applied & VATTR_GID) && IS_EPHEMERAL(vap->va_gid))
 		lr->lr_gid = fuidp->z_fuid_group;
 	else
 		lr->lr_gid = (uint64_t)vap->va_gid;
@@ -586,7 +586,7 @@ zfs_log_setattr(zilog_t *zilog, dmu_tx_t *tx, int txtype,
 	ZFS_TIME_ENCODE(&vap->va_atime, lr->lr_atime);
 	ZFS_TIME_ENCODE(&vap->va_mtime, lr->lr_mtime);
 	start = (lr_setattr_t *)(lr + 1);
-	if (vap->va_mask & AT_XVATTR) {
+	if (vap->va_mask & VATTR_XVATTR) {
 		zfs_log_xvattr((lr_attr_t *)start, xvap);
 		start = (caddr_t)start + ZIL_XVAT_SIZE(xvap->xva_mapsize);
 	}

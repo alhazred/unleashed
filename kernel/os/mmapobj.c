@@ -916,7 +916,7 @@ mmapobj_map_flat(vnode_t *vp, mmapobj_result_t *mrp, size_t padding,
 		ma_flags = 0;
 	}
 
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	error = fop_getattr(vp, &vattr, 0, fcred, NULL);
 	if (error) {
 		return (error);
@@ -1591,7 +1591,7 @@ process_phdrs(Ehdr *ehdrp, caddr_t phdrbase, int nphdrs, mmapobj_result_t *mrp,
 		use_lib_va = 0;
 	}
 	if (e_type == ET_DYN) {
-		vattr.va_mask = AT_FSID | AT_NODEID | AT_CTIME | AT_MTIME;
+		vattr.va_mask = VATTR_FSID | VATTR_NODEID | VATTR_CTIME | VATTR_MTIME;
 		error = fop_getattr(vp, &vattr, 0, fcred, NULL);
 		if (error) {
 			return (error);
@@ -2077,7 +2077,7 @@ mmapobj_map_interpret(vnode_t *vp, mmapobj_result_t *mrp,
 	ulong_t lheader[(MAX_HEADER_SIZE / (sizeof (ulong_t))) + 1];
 	caddr_t header = (caddr_t)&lheader;
 
-	vattr.va_mask = AT_FSID | AT_NODEID | AT_CTIME | AT_MTIME | AT_SIZE;
+	vattr.va_mask = VATTR_FSID | VATTR_NODEID | VATTR_CTIME | VATTR_MTIME | VATTR_SIZE;
 	error = fop_getattr(vp, &vattr, 0, fcred, NULL);
 	if (error) {
 		return (error);

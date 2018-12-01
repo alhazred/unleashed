@@ -186,7 +186,7 @@ cstat(vnode_t *vp, struct stat *ubp, int flag, cred_t *cr)
 	vattr_t vattr;
 	int error;
 
-	vattr.va_mask = AT_STAT | AT_NBLOCKS | AT_BLKSIZE | AT_SIZE;
+	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if ((error = fop_getattr(vp, &vattr, flag, cr, NULL)) != 0)
 		return (error);
 #ifdef	_ILP32
@@ -305,7 +305,7 @@ cstat32(vnode_t *vp, struct stat32 *ubp, int flag, struct cred *cr)
 	int error;
 	dev32_t st_dev, st_rdev;
 
-	vattr.va_mask = AT_STAT | AT_NBLOCKS | AT_BLKSIZE | AT_SIZE;
+	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if (error = fop_getattr(vp, &vattr, flag, cr, NULL))
 		return (error);
 
@@ -419,7 +419,7 @@ cstat64(vnode_t *vp, struct stat64 *ubp, int flag, cred_t *cr)
 	vattr_t vattr;
 	int error;
 
-	vattr.va_mask = AT_STAT | AT_NBLOCKS | AT_BLKSIZE | AT_SIZE;
+	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if (error = fop_getattr(vp, &vattr, flag, cr, NULL))
 		return (error);
 
@@ -519,7 +519,7 @@ cstat64_32(vnode_t *vp, struct stat64_32 *ubp, int flag, cred_t *cr)
 	int error;
 	dev32_t st_dev, st_rdev;
 
-	vattr.va_mask = AT_STAT | AT_NBLOCKS | AT_BLKSIZE | AT_SIZE;
+	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if (error = fop_getattr(vp, &vattr, flag, cr, NULL))
 		return (error);
 

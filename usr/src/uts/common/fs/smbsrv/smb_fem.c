@@ -446,7 +446,7 @@ smb_fem_oplock_setattr(
 {
 	int	rc = 0;
 
-	if (ct != &smb_ct && (vap->va_mask & AT_SIZE) != 0)
+	if (ct != &smb_ct && (vap->va_mask & VATTR_SIZE) != 0)
 		rc = smb_fem_oplock_break(arg, ct, SMB_OPLOCK_BREAK_TO_NONE);
 	if (rc == 0)
 		rc = vnext_setattr(arg, vap, flags, cr, ct);

@@ -429,7 +429,7 @@ acct(char st)
 	 * exceeding the 2GB limit as none of the accounting commands are
 	 * currently large file aware.
 	 */
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 	if (fop_getattr(vp, &va, 0, kcred, NULL) == 0) {
 		error = vn_rdwr(UIO_WRITE, vp, (caddr_t)&ag->acctbuf,
 		    sizeof (ag->acctbuf), 0LL, UIO_SYSSPACE, FAPPEND,

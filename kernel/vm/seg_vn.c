@@ -3455,7 +3455,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 			 * be truncated after we check its size here.
 			 * XXX fix NFS to remove this check.
 			 */
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			if (fop_getattr(vp, &va, ATTR_HINT, svd->cred, NULL)) {
 				VM_STAT_ADD(segvnvmstats.fill_vp_pages[6]);
 				page_unlock(targpp);
@@ -3525,7 +3525,7 @@ segvn_fill_vp_pages(struct segvn_data *svd, vnode_t *vp, uoff_t off,
 	if (io_pplist != NULL) {
 		VM_STAT_ADD(segvnvmstats.fill_vp_pages[12]);
 		io_len = eoff - io_off;
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		if (fop_getattr(vp, &va, ATTR_HINT, svd->cred, NULL) != 0) {
 			VM_STAT_ADD(segvnvmstats.fill_vp_pages[13]);
 			goto out;
@@ -4051,7 +4051,7 @@ segvn_fault_vnodepages(struct hat *hat, struct seg *seg, caddr_t lpgaddr,
 					err = FC_MAKE_ERR(ierr);
 					goto out;
 				}
-				va.va_mask = AT_SIZE;
+				va.va_mask = VATTR_SIZE;
 				if (fop_getattr(vp, &va, 0, svd->cred, NULL)) {
 					SEGVN_VMSTAT_FLTVNPAGES(20);
 					err = FC_MAKE_ERR(EIO);
@@ -6275,7 +6275,7 @@ segvn_setpagesize(struct seg *seg, caddr_t addr, size_t len, uint_t szc)
 	if (svd->vp != NULL && szc != 0) {
 		struct vattr va;
 		uoff_t eoffpage = svd->offset;
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		eoffpage += seg->s_size;
 		eoffpage = btopr(eoffpage);
 		if (fop_getattr(svd->vp, &va, 0, svd->cred, NULL) != 0) {
@@ -7707,7 +7707,7 @@ segvn_lockop(struct seg *seg, caddr_t addr, size_t len,
 				 * is mapped beyond the end of a file.
 				 */
 				if (error && svd->vp) {
-					va.va_mask = AT_SIZE;
+					va.va_mask = VATTR_SIZE;
 					if (fop_getattr(svd->vp, &va, 0,
 					    svd->cred, NULL) != 0) {
 						err = EIO;
@@ -9545,7 +9545,7 @@ segvn_textrepl(struct seg *seg)
 	 * Avoid creating anon maps with size bigger than the file size.
 	 * If fop_getattr() call fails bail out.
 	 */
-	va.va_mask = AT_SIZE | AT_MTIME | AT_CTIME;
+	va.va_mask = VATTR_SIZE | VATTR_MTIME | VATTR_CTIME;
 	if (fop_getattr(vp, &va, 0, svd->cred, NULL) != 0) {
 		svd->tr_state = SEGVN_TR_OFF;
 		SEGVN_TR_ADDSTAT(gaerr);

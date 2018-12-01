@@ -612,7 +612,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			if ((error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			    != 0)
 				break;
@@ -849,7 +849,7 @@ flock_check(vnode_t *vp, flock64_t *flp, offset_t offset, offset_t max)
 			return (EINVAL);
 		break;
 	case 2:		/* SEEK_END */
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 		if (flp->l_start > (max - (offset_t)vattr.va_size))
@@ -913,7 +913,7 @@ flock_get_start(vnode_t *vp, flock64_t *flp, offset_t offset, uoff_t *start)
 		*start = (uoff_t)(flp->l_start + offset);
 		break;
 	case 2:		/* SEEK_END */
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 			return (error);
 		*start = (uoff_t)(flp->l_start + (offset_t)vattr.va_size);

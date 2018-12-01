@@ -138,7 +138,7 @@ get_timespec_vattr(timespec_t *tsptr, struct vattr *vattr, int *flags)
 		if (ts[0].tv_nsec == UTIME_OMIT) {
 			ts[0].tv_nsec = 0;
 		} else {
-			mask |= AT_ATIME;
+			mask |= VATTR_ATIME;
 			if (ts[0].tv_nsec == UTIME_NOW)
 				ts[0] = now;
 			else if (ts[0].tv_nsec < 0 || ts[0].tv_nsec >= NANOSEC)
@@ -147,7 +147,7 @@ get_timespec_vattr(timespec_t *tsptr, struct vattr *vattr, int *flags)
 		if (ts[1].tv_nsec == UTIME_OMIT) {
 			ts[1].tv_nsec = 0;
 		} else {
-			mask |= AT_MTIME;
+			mask |= VATTR_MTIME;
 			if (ts[1].tv_nsec == UTIME_NOW)
 				ts[1] = now;
 			else if (ts[1].tv_nsec < 0 || ts[1].tv_nsec >= NANOSEC)
@@ -161,7 +161,7 @@ get_timespec_vattr(timespec_t *tsptr, struct vattr *vattr, int *flags)
 		gethrestime(&now);
 		vattr->va_atime = now;
 		vattr->va_mtime = now;
-		vattr->va_mask = AT_ATIME | AT_MTIME;
+		vattr->va_mask = VATTR_ATIME | VATTR_MTIME;
 		*flags = 0;
 	}
 

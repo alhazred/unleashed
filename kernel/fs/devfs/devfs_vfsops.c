@@ -219,7 +219,7 @@ devfs_mount(struct vfs *vfsp, struct vnode *mvp, struct mounta *uap,
 	devfs_mntinfo = devfs_data;
 	mutex_exit(&devfs_lock);
 
-	va.va_mask = AT_ATIME|AT_MTIME;
+	va.va_mask = VATTR_ATIME|VATTR_MTIME;
 	gethrestime(&va.va_atime);
 	gethrestime(&va.va_mtime);
 	(void) fop_setattr(DVTOV(dv), &va, 0, cr, NULL);

@@ -959,7 +959,7 @@ sendvec_chunk(file_t *fp, uoff_t *fileoff, struct sendfilevec *sfv,
 				struct vattr va;
 				boolean_t nowait;
 
-				va.va_mask = AT_SIZE;
+				va.va_mask = VATTR_SIZE;
 				error = fop_getattr(readvp, &va, 0, kcred,
 				    NULL);
 				if (error != 0 || sfv_off >= va.va_size) {

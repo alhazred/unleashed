@@ -430,7 +430,7 @@ dumpinit(vnode_t *vp, char *name, int justchecking)
 	if ((error = fop_open(&cvp, FREAD | FWRITE, kcred, NULL)) != 0)
 		return (error);
 
-	vattr.va_mask = AT_SIZE | AT_TYPE | AT_RDEV;
+	vattr.va_mask = VATTR_SIZE | VATTR_TYPE | VATTR_RDEV;
 	if ((error = fop_getattr(cvp, &vattr, 0, kcred, NULL)) == 0) {
 		if (vattr.va_type == VBLK || vattr.va_type == VCHR) {
 			if (devopsp[getmajor(vattr.va_rdev)]->
@@ -536,7 +536,7 @@ dumpfini(void)
 	/*
 	 * Determine if we are using zvols for our dump device
 	 */
-	vattr.va_mask = AT_RDEV;
+	vattr.va_mask = VATTR_RDEV;
 	if (fop_getattr(dumpvp, &vattr, 0, kcred, NULL) == 0) {
 		is_zfs = (getmajor(vattr.va_rdev) ==
 		    ddi_name_to_major(ZFS_DRIVER)) ? B_TRUE : B_FALSE;
@@ -1342,7 +1342,7 @@ dumpvp_resize()
 	vattr_t vattr;
 
 	mutex_enter(&dump_lock);
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	if ((error = fop_getattr(dumpvp, &vattr, 0, kcred, NULL)) != 0) {
 		mutex_exit(&dump_lock);
 		return (error);

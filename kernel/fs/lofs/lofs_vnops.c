@@ -717,9 +717,9 @@ lo_create(
 			struct vattr vattr;
 
 			vattr.va_size = 0;
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 
-			if ((va->va_mask & AT_SIZE) != 0 && va->va_size == 0 &&
+			if ((va->va_mask & VATTR_SIZE) != 0 && va->va_size == 0 &&
 			    fop_setattr(dvp, &vattr, 0, CRED(), NULL) != 0)
 				return (error);
 

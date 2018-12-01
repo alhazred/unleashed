@@ -586,7 +586,7 @@ xdr_fattr3_to_vattr(XDR *xdrs, fattr3_res *objp)
 	ASSERT(xdrs->x_op == XDR_DECODE);
 
 	/* On success, all attributes will be decoded */
-	vap->va_mask = AT_ALL;
+	vap->va_mask = VATTR_ALL;
 
 	objp->status = 0;
 	ptr = XDR_INLINE(xdrs, NFS3_SIZEOF_FATTR3 * BYTES_PER_XDR_UNIT);

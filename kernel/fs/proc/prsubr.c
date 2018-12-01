@@ -1695,7 +1695,7 @@ prgetmap(proc_t *p, int reserved, list_t *iolhead)
 			/*
 			 * Manufacture a filename for the "object" directory.
 			 */
-			vattr.va_mask = AT_FSID|AT_NODEID;
+			vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 			if (seg->s_ops == &segvn_ops &&
 			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
@@ -1811,7 +1811,7 @@ prgetmap32(proc_t *p, int reserved, list_t *iolhead)
 			/*
 			 * Manufacture a filename for the "object" directory.
 			 */
-			vattr.va_mask = AT_FSID|AT_NODEID;
+			vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 			if (seg->s_ops == &segvn_ops &&
 			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
@@ -2026,7 +2026,7 @@ again:
 			/*
 			 * Manufacture a filename for the "object" directory.
 			 */
-			vattr.va_mask = AT_FSID|AT_NODEID;
+			vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 			if (seg->s_ops == &segvn_ops &&
 			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
@@ -2177,7 +2177,7 @@ again:
 			/*
 			 * Manufacture a filename for the "object" directory.
 			 */
-			vattr.va_mask = AT_FSID|AT_NODEID;
+			vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 			if (seg->s_ops == &segvn_ops &&
 			    segop_getvp(seg, saddr, &vp) == 0 &&
 			    vp != NULL && vp->v_type == VREG &&
@@ -3816,7 +3816,7 @@ pr_getsegsize(struct seg *seg, int reserved)
 		vattr_t vattr;
 		vnode_t *vp;
 
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 
 		if (segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
@@ -4122,7 +4122,7 @@ prgetxmap(proc_t *p, list_t *iolhead)
 				 * Manufacture a filename for the "object" dir.
 				 */
 				mp->pr_dev = PRNODEV;
-				vattr.va_mask = AT_FSID|AT_NODEID;
+				vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 				if (seg->s_ops == &segvn_ops &&
 				    segop_getvp(seg, saddr, &vp) == 0 &&
 				    vp != NULL && vp->v_type == VREG &&
@@ -4323,7 +4323,7 @@ prgetxmap32(proc_t *p, list_t *iolhead)
 				 * Manufacture a filename for the "object" dir.
 				 */
 				mp->pr_dev = PRNODEV32;
-				vattr.va_mask = AT_FSID|AT_NODEID;
+				vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 				if (seg->s_ops == &segvn_ops &&
 				    segop_getvp(seg, saddr, &vp) == 0 &&
 				    vp != NULL && vp->v_type == VREG &&

@@ -142,7 +142,7 @@ rfs4_attr_init()
 	 */
 	sarg.op = NFS4ATTR_SUPPORTED;
 	sarg.cs = &cs;
-	sarg.vap->va_mask = AT_ALL;
+	sarg.vap->va_mask = VATTR_ALL;
 	sarg.sbp = &sb;
 	sarg.flag = 0;
 	sarg.rdattr_error = NFS4_OK;
@@ -261,11 +261,11 @@ rfs4_fattr4_type(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_TYPE)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_TYPE)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_TYPE);
+		ASSERT(sarg->vap->va_mask & VATTR_TYPE);
 
 		/*
 		 * if xattr flag not set, use v4_to_nf4 mapping;
@@ -295,7 +295,7 @@ rfs4_fattr4_type(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		/*
 		 * Compare the input type to the object type on server
 		 */
-		ASSERT(sarg->vap->va_mask & AT_TYPE);
+		ASSERT(sarg->vap->va_mask & VATTR_TYPE);
 		if (sarg->vap->va_type != nf4_to_vt[na->type])
 			error = -1;	/* no match */
 		break;
@@ -398,13 +398,13 @@ fattr4_get_change(struct nfs4_svgetit_arg *sarg, fattr4_change *changep)
 	nfsstat4 status;
 	timespec_t vis_change;
 
-	if ((vap->va_mask & AT_CTIME) == 0) {
+	if ((vap->va_mask & VATTR_CTIME) == 0) {
 		if (sarg->rdattr_error && (vp == NULL)) {
 			return (-1);	/* may be okay if rdattr_error */
 		}
 		ASSERT(vp != NULL);
 		vap = vap2;
-		vap->va_mask = AT_CTIME;
+		vap->va_mask = VATTR_CTIME;
 		status = rfs4_vop_getattr(vp, vap, 0, cs->cr);
 		if (status != NFS4_OK)
 			return (geterrno4(status));
@@ -447,7 +447,7 @@ rfs4_fattr4_change(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 	case NFS4ATTR_VERIT:
 		mask = vap->va_mask;
-		vap->va_mask &= ~AT_CTIME;	/* force a fop_getattr */
+		vap->va_mask &= ~VATTR_CTIME;	/* force a fop_getattr */
 		error = fattr4_get_change(sarg, &change);
 		vap->va_mask = mask;
 		if (!error && (na->change != change))
@@ -470,19 +470,19 @@ rfs4_fattr4_size(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 	case NFS4ATTR_SUPPORTED:
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_SIZE)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_SIZE)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_SIZE);
+		ASSERT(sarg->vap->va_mask & VATTR_SIZE);
 		na->size = sarg->vap->va_size;
 		break;
 	case NFS4ATTR_SETIT:
-		ASSERT(sarg->vap->va_mask & AT_SIZE);
+		ASSERT(sarg->vap->va_mask & VATTR_SIZE);
 		sarg->vap->va_size = na->size;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_SIZE);
+		ASSERT(sarg->vap->va_mask & VATTR_SIZE);
 		if (sarg->vap->va_size != na->size)
 			error = -1;	/* no match */
 		break;
@@ -977,10 +977,10 @@ rfs4_fattr4_acl(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		vs_ace4.vsa_aclentp = na->acl.fattr4_acl_val;
 		vs_ace4.vsa_aclentsz = vs_ace4.vsa_aclcnt * sizeof (ace_t);
 		/* make sure we have correct owner/group */
-		if ((vap->va_mask & (AT_UID | AT_GID)) !=
-		    (AT_UID | AT_GID)) {
+		if ((vap->va_mask & (VATTR_UID | VATTR_GID)) !=
+		    (VATTR_UID | VATTR_GID)) {
 			vap = &va;
-			vap->va_mask = AT_UID | AT_GID;
+			vap->va_mask = VATTR_UID | VATTR_GID;
 			status = rfs4_vop_getattr(vp,
 			    vap, 0, sarg->cs->cr);
 			if (status != NFS4_OK)
@@ -1266,11 +1266,11 @@ rfs4_fattr4_fileid(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_NODEID)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_NODEID)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_NODEID);
+		ASSERT(sarg->vap->va_mask & VATTR_NODEID);
 		na->fileid = sarg->vap->va_nodeid;
 		break;
 	case NFS4ATTR_SETIT:
@@ -1280,7 +1280,7 @@ rfs4_fattr4_fileid(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_NODEID);
+		ASSERT(sarg->vap->va_mask & VATTR_NODEID);
 		if (sarg->vap->va_nodeid != na->fileid)
 			error = -1;	/* no match */
 		break;
@@ -1319,7 +1319,7 @@ rfs4_get_mntdfileid(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg)
 			ASSERT(VN_CMP(vp, rootdir));
 			vap = sarg->vap;
 		} else {
-			va.va_mask = AT_NODEID;
+			va.va_mask = VATTR_NODEID;
 			vap = &va;
 			error = rfs4_vop_getattr(stubvp, vap, 0, sarg->cs->cr);
 		}
@@ -1337,13 +1337,13 @@ rfs4_get_mntdfileid(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg)
 		vap = sarg->vap;
 
 	/*
-	 * At this point, vap should contain "correct" AT_NODEID --
+	 * At this point, vap should contain "correct" VATTR_NODEID --
 	 * (for V_ROOT case, nodeid of stub, for non-VROOT case,
-	 * nodeid of vp).  If error or AT_NODEID not available, then
+	 * nodeid of vp).  If error or VATTR_NODEID not available, then
 	 * make the obligatory (yet mysterious) rdattr_error
 	 * check that is so common in the attr code.
 	 */
-	if (!error && (vap->va_mask & AT_NODEID)) {
+	if (!error && (vap->va_mask & VATTR_NODEID)) {
 		sarg->mounted_on_fileid = vap->va_nodeid;
 		sarg->mntdfid_set = TRUE;
 	} else if (sarg->rdattr_error)
@@ -1927,15 +1927,15 @@ rfs4_fattr4_mode(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 	case NFS4ATTR_SUPPORTED:
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_MODE)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_MODE)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_MODE);
+		ASSERT(sarg->vap->va_mask & VATTR_MODE);
 		na->mode = sarg->vap->va_mode;
 		break;
 	case NFS4ATTR_SETIT:
-		ASSERT(sarg->vap->va_mask & AT_MODE);
+		ASSERT(sarg->vap->va_mask & VATTR_MODE);
 		sarg->vap->va_mode = na->mode;
 		/*
 		 * If the filesystem is exported with nosuid, then mask off
@@ -1946,7 +1946,7 @@ rfs4_fattr4_mode(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			sarg->vap->va_mode &= ~(VSUID | VSGID);
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_MODE);
+		ASSERT(sarg->vap->va_mask & VATTR_MODE);
 		if (sarg->vap->va_mode != na->mode)
 			error = -1;	/* no match */
 		break;
@@ -2006,11 +2006,11 @@ rfs4_fattr4_numlinks(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_NLINK)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_NLINK)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_NLINK);
+		ASSERT(sarg->vap->va_mask & VATTR_NLINK);
 		na->numlinks = sarg->vap->va_nlink;
 		break;
 	case NFS4ATTR_SETIT:
@@ -2020,7 +2020,7 @@ rfs4_fattr4_numlinks(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_NLINK);
+		ASSERT(sarg->vap->va_mask & VATTR_NLINK);
 		if (sarg->vap->va_nlink != na->numlinks)
 			error = -1;	/* no match */
 		break;
@@ -2045,11 +2045,11 @@ rfs4_fattr4_owner(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 	case NFS4ATTR_SUPPORTED:
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_UID)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_UID)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_UID);
+		ASSERT(sarg->vap->va_mask & VATTR_UID);
 
 		/*
 		 * There are well defined polices for what happens on server-
@@ -2067,7 +2067,7 @@ rfs4_fattr4_owner(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 
 	case NFS4ATTR_SETIT:
-		ASSERT(sarg->vap->va_mask & AT_UID);
+		ASSERT(sarg->vap->va_mask & VATTR_UID);
 
 		/*
 		 * There are well defined policies for what happens on server-
@@ -2118,7 +2118,7 @@ rfs4_fattr4_owner(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_UID);
+		ASSERT(sarg->vap->va_mask & VATTR_UID);
 		error = nfs_idmap_str_uid(&na->owner, &uid, TRUE);
 		/*
 		 * Ignore warning that we are the nfsmapid (can't happen on srv)
@@ -2157,11 +2157,11 @@ rfs4_fattr4_owner_group(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 	case NFS4ATTR_SUPPORTED:
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_GID)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_GID)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_GID);
+		ASSERT(sarg->vap->va_mask & VATTR_GID);
 
 		/*
 		 * There are well defined polices for what happens on server-
@@ -2180,7 +2180,7 @@ rfs4_fattr4_owner_group(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 
 	case NFS4ATTR_SETIT:
-		ASSERT(sarg->vap->va_mask & AT_GID);
+		ASSERT(sarg->vap->va_mask & VATTR_GID);
 
 		/*
 		 * There are well defined policies for what happens on server-
@@ -2232,7 +2232,7 @@ rfs4_fattr4_owner_group(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		break;
 
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_GID);
+		ASSERT(sarg->vap->va_mask & VATTR_GID);
 		error = nfs_idmap_str_gid(&na->owner_group, &gid, TRUE);
 		/*
 		 * Ignore warning that we are the nfsmapid (can't happen on srv)
@@ -2298,11 +2298,11 @@ rfs4_fattr4_rawdev(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_RDEV)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_RDEV)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_RDEV);
+		ASSERT(sarg->vap->va_mask & VATTR_RDEV);
 		na->rawdev.specdata1 =  (uint32)getmajor(sarg->vap->va_rdev);
 		na->rawdev.specdata2 =  (uint32)getminor(sarg->vap->va_rdev);
 		break;
@@ -2313,7 +2313,7 @@ rfs4_fattr4_rawdev(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_RDEV);
+		ASSERT(sarg->vap->va_mask & VATTR_RDEV);
 		if ((na->rawdev.specdata1 !=
 		    (uint32)getmajor(sarg->vap->va_rdev)) ||
 		    (na->rawdev.specdata2 !=
@@ -2483,11 +2483,11 @@ rfs4_fattr4_space_used(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_NBLOCKS)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_NBLOCKS)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_NBLOCKS);
+		ASSERT(sarg->vap->va_mask & VATTR_NBLOCKS);
 		na->space_used =  (fattr4_space_used) DEV_BSIZE *
 		    (fattr4_space_used) sarg->vap->va_nblocks;
 		break;
@@ -2498,7 +2498,7 @@ rfs4_fattr4_space_used(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_NBLOCKS);
+		ASSERT(sarg->vap->va_mask & VATTR_NBLOCKS);
 		if (sarg->vap->va_nblocks != na->space_used)
 			error = -1;	/* no match */
 		break;
@@ -2533,11 +2533,11 @@ rfs4_fattr4_time_access(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_ATIME)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_ATIME)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_ATIME);
+		ASSERT(sarg->vap->va_mask & VATTR_ATIME);
 		error = nfs4_time_vton(&sarg->vap->va_atime, &na->time_access);
 		break;
 	case NFS4ATTR_SETIT:
@@ -2547,7 +2547,7 @@ rfs4_fattr4_time_access(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_ATIME);
+		ASSERT(sarg->vap->va_mask & VATTR_ATIME);
 		error = nfs4_time_ntov(&na->time_access, &atime);
 		if (error)
 			break;
@@ -2588,7 +2588,7 @@ rfs4_fattr4_time_access_set(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_SETIT:
-		ASSERT(sarg->vap->va_mask & AT_ATIME);
+		ASSERT(sarg->vap->va_mask & VATTR_ATIME);
 		/*
 		 * Set access time (by server or by client)
 		 */
@@ -2676,11 +2676,11 @@ rfs4_fattr4_time_metadata(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_CTIME)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_CTIME)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_CTIME);
+		ASSERT(sarg->vap->va_mask & VATTR_CTIME);
 		error = nfs4_time_vton(&sarg->vap->va_ctime,
 		    &na->time_metadata);
 		break;
@@ -2691,7 +2691,7 @@ rfs4_fattr4_time_metadata(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_CTIME);
+		ASSERT(sarg->vap->va_mask & VATTR_CTIME);
 		error = nfs4_time_ntov(&na->time_metadata, &ctime);
 		if (error)
 			break;
@@ -2721,11 +2721,11 @@ rfs4_fattr4_time_modify(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 			error = EINVAL;
 		break;		/* this attr is supported */
 	case NFS4ATTR_GETIT:
-		if (sarg->rdattr_error && !(sarg->vap->va_mask & AT_MTIME)) {
+		if (sarg->rdattr_error && !(sarg->vap->va_mask & VATTR_MTIME)) {
 			error = -1;	/* may be okay if rdattr_error */
 			break;
 		}
-		ASSERT(sarg->vap->va_mask & AT_MTIME);
+		ASSERT(sarg->vap->va_mask & VATTR_MTIME);
 		error = nfs4_time_vton(&sarg->vap->va_mtime, &na->time_modify);
 		break;
 	case NFS4ATTR_SETIT:
@@ -2735,7 +2735,7 @@ rfs4_fattr4_time_modify(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_VERIT:
-		ASSERT(sarg->vap->va_mask & AT_MTIME);
+		ASSERT(sarg->vap->va_mask & VATTR_MTIME);
 		error = nfs4_time_ntov(&na->time_modify, &mtime);
 		if (error)
 			break;
@@ -2776,7 +2776,7 @@ rfs4_fattr4_time_modify_set(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		error = EINVAL;
 		break;
 	case NFS4ATTR_SETIT:
-		ASSERT(sarg->vap->va_mask & AT_MTIME);
+		ASSERT(sarg->vap->va_mask & VATTR_MTIME);
 		/*
 		 * Set modify time (by server or by client)
 		 */

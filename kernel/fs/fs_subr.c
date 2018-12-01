@@ -517,7 +517,7 @@ fs_fab_acl(vnode_t *vp, vsecattr_t *vsecattr, int flag, cred_t *cr,
 	vsecattr->vsa_dfaclcnt	= 0;	/* Default ACLs are not fabricated */
 	vsecattr->vsa_dfaclentp	= NULL;
 
-	vattr.va_mask = AT_MODE | AT_UID | AT_GID;
+	vattr.va_mask = VATTR_MODE | VATTR_UID | VATTR_GID;
 	if (error = fop_getattr(vp, &vattr, 0, cr, ct))
 		return (error);
 

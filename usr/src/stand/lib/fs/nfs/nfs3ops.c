@@ -211,27 +211,27 @@ nfs3getattr(struct nfs_file *nfp, struct vattr *vap)
 	}
 
 	na = &getattr_res.GETATTR3res_u.resok.obj_attributes;
-	if (vap->va_mask & AT_TYPE) {
+	if (vap->va_mask & VATTR_TYPE) {
 		if (na->type < NF3REG || na->type > NF3FIFO)
 			vap->va_type = VBAD;
 		else
 			vap->va_type = nf3_to_vt[na->type];
 	}
-	if (vap->va_mask & AT_MODE)
+	if (vap->va_mask & VATTR_MODE)
 		vap->va_mode = (mode_t)na->mode;
-	if (vap->va_mask & AT_SIZE)
+	if (vap->va_mask & VATTR_SIZE)
 		vap->va_size = (uoff_t)na->size;
-	if (vap->va_mask & AT_NODEID)
+	if (vap->va_mask & VATTR_NODEID)
 		vap->va_nodeid = (u_longlong_t)na->fileid;
-	if (vap->va_mask & AT_ATIME) {
+	if (vap->va_mask & VATTR_ATIME) {
 		vap->va_atime.tv_sec  = na->atime.seconds;
 		vap->va_atime.tv_nsec = na->atime.nseconds;
 	}
-	if (vap->va_mask & AT_CTIME) {
+	if (vap->va_mask & VATTR_CTIME) {
 		vap->va_ctime.tv_sec  = na->ctime.seconds;
 		vap->va_ctime.tv_nsec = na->ctime.nseconds;
 	}
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		vap->va_mtime.tv_sec  = na->mtime.seconds;
 		vap->va_mtime.tv_nsec = na->mtime.nseconds;
 	}

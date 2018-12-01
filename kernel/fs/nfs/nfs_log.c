@@ -458,7 +458,7 @@ log_file_create(caddr_t origname, struct log_file **lfpp)
 	mutex_init(&logfile->lf_lock, NULL, MUTEX_DEFAULT, NULL);
 	rfsl_log_file++;
 
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 	error = fop_getattr(vp, &va, 0, CRED(), NULL);
 	if (error) {
 		nfs_cmn_err(error, CE_WARN,
@@ -821,7 +821,7 @@ nfslog_write_logrecords(struct log_file *lfp,
 	 * Save the size. If the write fails, reset the size to avoid
 	 * corrupted log buffer files.
 	 */
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 
 	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);  /* UIO_WRITE */
 	if ((error = fop_getattr(vp, &va, 0, CRED(), NULL)) == 0) {

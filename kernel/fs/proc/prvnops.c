@@ -3288,7 +3288,7 @@ prcreate(vnode_t *dp, char *comp, vattr_t *vap, vcexcl_t excl,
 		error = EEXIST;
 	} else if ((error = praccess(*vpp, mode, 0, cr, ct)) == 0) {
 		/* Before proceeding, handle O_TRUNC if necessary. */
-		if (vap->va_mask & AT_SIZE) {
+		if (vap->va_mask & VATTR_SIZE) {
 			vnode_t *vp = *vpp;
 
 			if (vp->v_type == VDIR) {
@@ -3306,7 +3306,7 @@ prcreate(vnode_t *dp, char *comp, vattr_t *vap, vcexcl_t excl,
 
 				vp = VTOP(vp)->pr_realvp;
 				mask = vap->va_mask;
-				vap->va_mask = AT_SIZE;
+				vap->va_mask = VATTR_SIZE;
 				error = fop_setattr(vp, vap, 0, cr, ct);
 				vap->va_mask = mask;
 			}
@@ -3597,7 +3597,7 @@ pr_lookup_objectdir(vnode_t *dp, char *comp)
 		/*
 		 * Manufacture a filename for the "object" directory.
 		 */
-		vattr.va_mask = AT_FSID|AT_NODEID;
+		vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 		if (seg->s_ops == &segvn_ops &&
 		    segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
@@ -4042,7 +4042,7 @@ pr_lookup_pathdir(vnode_t *dp, char *comp)
 					 * Manufacture a filename for the
 					 * "object" directory.
 					 */
-					vattr.va_mask = AT_FSID|AT_NODEID;
+					vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 					if (seg->s_ops == &segvn_ops &&
 					    segop_getvp(seg, seg->s_base, &vp)
 					    == 0 &&
@@ -4740,7 +4740,7 @@ rebuild_objdir(struct as *as)
 	/* fill in the new directory with desired entries */
 	nentries = 0;
 	do {
-		vattr.va_mask = AT_FSID|AT_NODEID;
+		vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 		if (seg->s_ops == &segvn_ops &&
 		    segop_getvp(seg, seg->s_base, &vp) == 0 &&
 		    vp != NULL && vp->v_type == VREG &&
@@ -4898,11 +4898,11 @@ pr_readdir_objectdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 		/*
 		 * Find next object.
 		 */
-		vattr.va_mask = AT_FSID | AT_NODEID;
+		vattr.va_mask = VATTR_FSID | VATTR_NODEID;
 		while (n < objdirsize && (((vp = obj_entry(as, n)) == NULL) ||
 		    (fop_getattr(vp, &vattr, 0, CRED(), NULL)
 		    != 0))) {
-			vattr.va_mask = AT_FSID | AT_NODEID;
+			vattr.va_mask = VATTR_FSID | VATTR_NODEID;
 			n++;
 		}
 
@@ -5250,7 +5250,7 @@ pr_readdir_pathdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 			obj = idx - 4 - fddirsize;
 			if ((vp = obj_entry(as, obj)) == NULL)
 				continue;
-			vattr.va_mask = AT_FSID|AT_NODEID;
+			vattr.va_mask = VATTR_FSID|VATTR_NODEID;
 			if (fop_getattr(vp, &vattr, 0, CRED(), NULL) != 0)
 				continue;
 			if (vp == p->p_exec)

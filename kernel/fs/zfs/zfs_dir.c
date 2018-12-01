@@ -1077,7 +1077,7 @@ top:
 	 * Once in a directory the ability to read/write attributes
 	 * is controlled by the permissions on the attribute file.
 	 */
-	va.va_mask = AT_TYPE | AT_MODE | AT_UID | AT_GID;
+	va.va_mask = VATTR_TYPE | VATTR_MODE | VATTR_UID | VATTR_GID;
 	va.va_type = VDIR;
 	va.va_mode = S_IFDIR | S_ISVTX | 0777;
 	zfs_fuid_map_ids(zp, cr, &va.va_uid, &va.va_gid);

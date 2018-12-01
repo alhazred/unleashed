@@ -264,7 +264,7 @@ create_core_file(char *fp, enum core_types core_type, vnode_t **vpp)
 	/*
 	 * Don't dump a core file owned by "nobody".
 	 */
-	vattr.va_mask = AT_UID;
+	vattr.va_mask = VATTR_UID;
 	if (error == 0 &&
 	    (fop_getattr(vp, &vattr, 0, credp, NULL) != 0 ||
 	    vattr.va_uid != crgetuid(credp))) {

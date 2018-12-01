@@ -1996,7 +1996,7 @@ ufs_getattr(struct vnode *vp, struct vattr *vap, int flags,
 	struct ufsvfs *ufsvfsp;
 	int err;
 
-	if (vap->va_mask == AT_SIZE) {
+	if (vap->va_mask == VATTR_SIZE) {
 		/*
 		 * for performance, if only the size is requested don't bother
 		 * with anything else.
@@ -2125,7 +2125,7 @@ ufs_setattr(struct vnode *vp, struct vattr *vap, int flags, struct cred *cr,
 	/*
 	 * Cannot set these attributes.
 	 */
-	if ((mask & AT_NOSET) || (mask & AT_XVATTR))
+	if ((mask & VATTR_NOSET) || (mask & VATTR_XVATTR))
 		return (EINVAL);
 
 	/*
@@ -2171,7 +2171,7 @@ again:
 	/*
 	 * Truncate file.  Must have write permission and not be a directory.
 	 */
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		rw_enter(&ip->i_contents, RW_WRITER);
 		if (vp->v_type == VDIR) {
 			error = EISDIR;
@@ -2215,7 +2215,7 @@ again:
 	/*
 	 * Grab quota lock if we are changing the file's owner.
 	 */
-	if (mask & AT_UID) {
+	if (mask & VATTR_UID) {
 		rw_enter(&ufsvfsp->vfs_dqrwlock, RW_READER);
 		dodqlock = 1;
 	}
@@ -2225,7 +2225,7 @@ again:
 	oldva.va_uid = ip->i_uid;
 	oldva.va_gid = ip->i_gid;
 
-	vap->va_mask &= ~AT_SIZE;
+	vap->va_mask &= ~VATTR_SIZE;
 
 	error = secpolicy_vnode_setattr(cr, vp, vap, &oldva, flags,
 	    ufs_priv_access, ip);
@@ -2237,7 +2237,7 @@ again:
 	/*
 	 * Change file access modes.
 	 */
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		ip->i_mode = (ip->i_mode & IFMT) | (vap->va_mode & ~IFMT);
 		TRANS_INODE(ufsvfsp, ip);
 		ip->i_flag |= ICHG;
@@ -2250,8 +2250,8 @@ again:
 			mutex_exit(&vp->v_lock);
 		}
 	}
-	if (mask & (AT_UID|AT_GID)) {
-		if (mask & AT_UID) {
+	if (mask & (VATTR_UID|VATTR_GID)) {
+		if (mask & VATTR_UID) {
 			/*
 			 * Don't change ownership of the quota inode.
 			 */
@@ -2302,7 +2302,7 @@ again:
 				    /* force */ 1, cr, &errmsg2, &len2);
 			}
 		}
-		if (mask & AT_GID) {
+		if (mask & VATTR_GID) {
 			ip->i_gid = vap->va_gid;
 		}
 		TRANS_INODE(ufsvfsp, ip);
@@ -2311,10 +2311,10 @@ again:
 	/*
 	 * Change file access or modified times.
 	 */
-	if (mask & (AT_ATIME|AT_MTIME)) {
+	if (mask & (VATTR_ATIME|VATTR_MTIME)) {
 		/* Check that the time value is within ufs range */
-		if (((mask & AT_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
-		    ((mask & AT_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime))) {
+		if (((mask & VATTR_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
+		    ((mask & VATTR_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime))) {
 			error = EOVERFLOW;
 			goto update_inode;
 		}
@@ -2324,15 +2324,15 @@ again:
 		 * update is requested, do nothing. No error is returned.
 		 */
 		if ((ufsvfsp->vfs_noatime) &&
-		    ((mask & (AT_ATIME|AT_MTIME)) == AT_ATIME))
+		    ((mask & (VATTR_ATIME|VATTR_MTIME)) == VATTR_ATIME))
 			goto skip_atime;
 
-		if (mask & AT_ATIME) {
+		if (mask & VATTR_ATIME) {
 			ip->i_atime.tv_sec = vap->va_atime.tv_sec;
 			ip->i_atime.tv_usec = vap->va_atime.tv_nsec / 1000;
 			ip->i_flag &= ~IACC;
 		}
-		if (mask & AT_MTIME) {
+		if (mask & VATTR_MTIME) {
 			ip->i_mtime.tv_sec = vap->va_mtime.tv_sec;
 			ip->i_mtime.tv_usec = vap->va_mtime.tv_nsec / 1000;
 			gethrestime(&now);
@@ -3045,7 +3045,7 @@ again:
 			ip->i_seq++;
 
 		if (((ip->i_mode & IFMT) == IFREG) &&
-		    (vap->va_mask & AT_SIZE) && vap->va_size == 0) {
+		    (vap->va_mask & VATTR_SIZE) && vap->va_size == 0) {
 			/*
 			 * Truncate regular files, if requested by caller.
 			 * Grab i_rwlock to make sure no one else is
@@ -3774,7 +3774,7 @@ ufs_mkdir(struct vnode *dvp, char *dirname, struct vattr *vap,
 	int indeadlock;
 	int retry = 1;
 
-	ASSERT((vap->va_mask & (AT_TYPE|AT_MODE)) == (AT_TYPE|AT_MODE));
+	ASSERT((vap->va_mask & (VATTR_TYPE|VATTR_MODE)) == (VATTR_TYPE|VATTR_MODE));
 
 	/*
 	 * Can't make directory in attr hidden dir

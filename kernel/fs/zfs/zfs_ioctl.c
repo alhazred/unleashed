@@ -5249,7 +5249,7 @@ zfs_ioc_smb_acl(zfs_cmd_t *zc)
 
 	switch (zc->zc_cookie) {
 	case ZFS_SMB_ACL_ADD:
-		vattr.va_mask = AT_MODE|AT_UID|AT_GID|AT_TYPE;
+		vattr.va_mask = VATTR_MODE|VATTR_UID|VATTR_GID|VATTR_TYPE;
 		vattr.va_type = VREG;
 		vattr.va_mode = S_IFREG|0777;
 		vattr.va_uid = 0;

@@ -1004,8 +1004,8 @@ mntgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	extern timespec_t vfs_mnttab_ctime;
 
 
-	/* AT_MODE, AT_UID and AT_GID are derived from the underlying file. */
-	if (mask & AT_MODE|AT_UID|AT_GID) {
+	/* VATTR_MODE, VATTR_UID and VATTR_GID are derived from the underlying file. */
+	if (mask & VATTR_MODE|VATTR_UID|VATTR_GID) {
 		if (error = fop_getattr(mnp->mnt_mountvp, vap, flags, cr, ct))
 			return (error);
 	}
@@ -1018,7 +1018,7 @@ mntgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	 * simply hold vfslist for the entire calculation because we might need
 	 * to call mntfs_snapshot(), which calls vfs_list_read_lock().
 	 */
-	if (mask & AT_SIZE|AT_NBLOCKS) {
+	if (mask & VATTR_SIZE|VATTR_NBLOCKS) {
 		rw_enter(&mnp->mnt_contents, RW_WRITER);
 
 		vfs_list_read_lock();
@@ -1067,44 +1067,44 @@ mntgetattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 		}
 
 		rw_exit(&mnp->mnt_contents);
-	} else if (mask & AT_ATIME|AT_MTIME) {
+	} else if (mask & VATTR_ATIME|VATTR_MTIME) {
 		vfs_list_read_lock();
 		vfs_mnttab_modtime(&mtime);
 		vfs_list_unlock();
 	}
 
 	/* Always look like a regular file. */
-	if (mask & AT_TYPE)
+	if (mask & VATTR_TYPE)
 		vap->va_type = VREG;
 	/* Mode should basically be read only. */
-	if (mask & AT_MODE)
+	if (mask & VATTR_MODE)
 		vap->va_mode &= 07444;
-	if (mask & AT_FSID)
+	if (mask & VATTR_FSID)
 		vap->va_fsid = vp->v_vfsp->vfs_dev;
 	/* Nodeid is always ROOTINO. */
-	if (mask & AT_NODEID)
+	if (mask & VATTR_NODEID)
 		vap->va_nodeid = (ino64_t)MNTROOTINO;
 	/*
 	 * Set nlink to the number of open vnodes for mnttab info
 	 * plus one for existing.
 	 */
-	if (mask & AT_NLINK)
+	if (mask & VATTR_NLINK)
 		vap->va_nlink = mntdata->mnt_nopen + 1;
-	if (mask & AT_SIZE)
+	if (mask & VATTR_SIZE)
 		vap->va_size = size;
-	if (mask & AT_ATIME)
+	if (mask & VATTR_ATIME)
 		vap->va_atime = mtime;
-	if (mask & AT_MTIME)
+	if (mask & VATTR_MTIME)
 		vap->va_mtime = mtime;
-	if (mask & AT_CTIME)
+	if (mask & VATTR_CTIME)
 		vap->va_ctime = vfs_mnttab_ctime;
-	if (mask & AT_RDEV)
+	if (mask & VATTR_RDEV)
 		vap->va_rdev = 0;
-	if (mask & AT_BLKSIZE)
+	if (mask & VATTR_BLKSIZE)
 		vap->va_blksize = DEV_BSIZE;
-	if (mask & AT_NBLOCKS)
+	if (mask & VATTR_NBLOCKS)
 		vap->va_nblocks = btod(size);
-	if (mask & AT_SEQ)
+	if (mask & VATTR_SEQ)
 		vap->va_seq = 0;
 
 	return (0);
@@ -1306,7 +1306,7 @@ mntfs_special_info_string(char *path, uint_t *major, uint_t *minor, cred_t *cr)
 	    lookupnameat(path + 1, UIO_SYSSPACE, FOLLOW, NULLVPP, &vp, rootdir))
 		return (0);
 
-	vattr.va_mask = AT_TYPE | AT_RDEV;
+	vattr.va_mask = VATTR_TYPE | VATTR_RDEV;
 	error = fop_getattr(vp, &vattr, ATTR_REAL, cr, NULL);
 	VN_RELE(vp);
 

@@ -350,7 +350,7 @@ tmp_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 	/*
 	 * Get the mode, uid, and gid from the underlying mount point.
 	 */
-	rattr.va_mask = AT_MODE|AT_UID|AT_GID;	/* Hint to getattr */
+	rattr.va_mask = VATTR_MODE|VATTR_UID|VATTR_GID;	/* Hint to getattr */
 	got_attrs = fop_getattr(mvp, &rattr, 0, cr, NULL);
 
 	rw_enter(&tp->tn_rwlock, RW_WRITER);

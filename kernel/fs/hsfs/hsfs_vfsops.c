@@ -624,7 +624,7 @@ hs_mountfs(
 		goto cleanup;
 	}
 
-	vap.va_mask = AT_SIZE;
+	vap.va_mask = VATTR_SIZE;
 	if ((error = fop_getattr(devvp, &vap, ATTR_COMM, cr, NULL)) != 0) {
 		cmn_err(CE_NOTE, "Cannot get attributes of the CD-ROM driver");
 		goto cleanup;
@@ -1370,7 +1370,7 @@ hs_getmdev(struct vfs *vfsp, char *fspec, int flags, dev_t *pdev, mode_t *mode,
 	if ((error = fop_access(svp, VREAD, 0, cr, NULL)) != 0)
 		goto out;
 
-	vap.va_mask = AT_MODE;		/* get protection mode */
+	vap.va_mask = VATTR_MODE;		/* get protection mode */
 	(void) fop_getattr(bvp, &vap, 0, CRED(), NULL);
 	*mode = vap.va_mode;
 

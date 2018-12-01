@@ -226,7 +226,7 @@ nm_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	bcopy(&nodep->nm_vattr, vap, sizeof (vattr_t));
 	mutex_exit(&nodep->nm_lock);
 
-	if ((va.va_mask = vap->va_mask & AT_SIZE) != 0) {
+	if ((va.va_mask = vap->va_mask & VATTR_SIZE) != 0) {
 		if (error = fop_getattr(nodep->nm_filevp, &va, flags, crp, ct))
 			return (error);
 		vap->va_size = va.va_size;
@@ -271,7 +271,7 @@ nm_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	/*
 	 * Cannot set these attributes.
 	 */
-	if (mask & (AT_NOSET|AT_SIZE))
+	if (mask & (VATTR_NOSET|VATTR_SIZE))
 		return (EINVAL);
 
 	(void) fop_rwlock(nodep->nm_filevp, V_WRITELOCK_TRUE, ctp);
@@ -292,7 +292,7 @@ nm_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	 * If request to change mode, copy new
 	 * mode into existing attribute structure.
 	 */
-	if (mask & AT_MODE)
+	if (mask & VATTR_MODE)
 		nmvap->va_mode = vap->va_mode & ~VSVTX;
 
 	/*
@@ -302,17 +302,17 @@ nm_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	 * owner is not permitted to give away the file, and can change
 	 * the group id only to a group of which they are a member.
 	 */
-	if (mask & AT_UID)
+	if (mask & VATTR_UID)
 		nmvap->va_uid = vap->va_uid;
-	if (mask & AT_GID)
+	if (mask & VATTR_GID)
 		nmvap->va_gid = vap->va_gid;
 	/*
 	 * If request is to modify times, make sure user has write
 	 * permissions on the file.
 	 */
-	if (mask & AT_ATIME)
+	if (mask & VATTR_ATIME)
 		nmvap->va_atime = vap->va_atime;
-	if (mask & AT_MTIME) {
+	if (mask & VATTR_MTIME) {
 		nmvap->va_mtime = vap->va_mtime;
 		gethrestime(&nmvap->va_ctime);
 	}

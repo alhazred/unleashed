@@ -418,7 +418,7 @@ r4_do_attrcache(vnode_t *vp, nfs4_ga_res_t *garp, int newnode,
 				r4_stub_none(rp);
 
 			/* Can not cache partial attr */
-			if (attr->va_mask == AT_ALL)
+			if (attr->va_mask == VATTR_ALL)
 				nfs4_attrcache_noinval(vp, garp, t);
 			else
 				PURGE_ATTRCACHE4(vp);

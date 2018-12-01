@@ -144,7 +144,7 @@ zut_readdir(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 		if (zr->zr_retcode)
 			goto zutr_done;
 
-		vattr.va_mask = AT_ALL;
+		vattr.va_mask = VATTR_ALL;
 		zr->zr_retcode = fop_getattr(fvn, &vattr, 0, cr, NULL);
 		if (zr->zr_retcode)
 			goto zutr_done;
@@ -220,7 +220,7 @@ zut_stat64(vnode_t *vp, struct stat64 *sb, uint64_t *xvs, int flag, cred_t *cr)
 	XVA_SET_REQ(&xv, XAT_OFFLINE);
 	XVA_SET_REQ(&xv, XAT_SPARSE);
 
-	xv.xva_vattr.va_mask |= AT_STAT | AT_NBLOCKS | AT_BLKSIZE | AT_SIZE;
+	xv.xva_vattr.va_mask |= VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if (error = fop_getattr(vp, &xv.xva_vattr, flag, cr, NULL))
 		return (error);
 
@@ -329,7 +329,7 @@ zut_lookup(intptr_t arg, cred_t *cr, int iflag, int *rvalp)
 		if (zl->zl_retcode)
 			goto zutl_done;
 
-		vattr.va_mask = AT_ALL;
+		vattr.va_mask = VATTR_ALL;
 		zl->zl_retcode = fop_getattr(fvn, &vattr, 0, cr, NULL);
 		if (zl->zl_retcode)
 			goto zutl_done;

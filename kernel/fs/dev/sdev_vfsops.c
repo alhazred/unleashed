@@ -349,7 +349,7 @@ sdev_mount(struct vfs *vfsp, struct vnode *mvp, struct mounta *uap,
 	}
 
 	sdev_update_timestamps(dv->sdev_attrvp,
-	    cr, AT_CTIME|AT_MTIME|AT_ATIME);
+	    cr, VATTR_CTIME|VATTR_MTIME|VATTR_ATIME);
 
 cleanup:
 	if (args)

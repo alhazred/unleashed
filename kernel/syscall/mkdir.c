@@ -58,7 +58,7 @@ mkdirat(int fd, char *dname, int dmode)
 
 	vattr.va_type = VDIR;
 	vattr.va_mode = dmode & PERMMASK;
-	vattr.va_mask = AT_TYPE|AT_MODE;
+	vattr.va_mask = VATTR_TYPE|VATTR_MODE;
 
 	if (dname == NULL)
 		return (set_errno(EFAULT));

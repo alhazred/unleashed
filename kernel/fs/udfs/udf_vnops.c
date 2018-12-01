@@ -421,7 +421,7 @@ udf_getattr(
 
 	ud_printf("udf_getattr\n");
 
-	if (vap->va_mask == AT_SIZE) {
+	if (vap->va_mask == VATTR_SIZE) {
 		/*
 		 * for performance, if only the size is requested don't bother
 		 * with anything else.
@@ -511,7 +511,7 @@ udf_setattr(
 	/*
 	 * Cannot set these attributes
 	 */
-	if (mask & AT_NOSET) {
+	if (mask & VATTR_NOSET) {
 		return (EINVAL);
 	}
 
@@ -529,18 +529,18 @@ udf_setattr(
 	/*
 	 * Change file access modes.
 	 */
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		ip->i_perm = VA2UD_PERM(vap->va_mode);
 		ip->i_char = vap->va_mode & (VSUID | VSGID | VSVTX);
 		mutex_enter(&ip->i_tlock);
 		ip->i_flag |= ICHG;
 		mutex_exit(&ip->i_tlock);
 	}
-	if (mask & (AT_UID|AT_GID)) {
-		if (mask & AT_UID) {
+	if (mask & (VATTR_UID|VATTR_GID)) {
+		if (mask & VATTR_UID) {
 			ip->i_uid = vap->va_uid;
 		}
-		if (mask & AT_GID) {
+		if (mask & VATTR_GID) {
 			ip->i_gid = vap->va_gid;
 		}
 		mutex_enter(&ip->i_tlock);
@@ -550,7 +550,7 @@ udf_setattr(
 	/*
 	 * Truncate file.  Must have write permission and not be a directory.
 	 */
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		if (vp->v_type == VDIR) {
 			error = EISDIR;
 			goto update_inode;
@@ -572,14 +572,14 @@ udf_setattr(
 	/*
 	 * Change file access or modified times.
 	 */
-	if (mask & (AT_ATIME|AT_MTIME)) {
+	if (mask & (VATTR_ATIME|VATTR_MTIME)) {
 		mutex_enter(&ip->i_tlock);
-		if (mask & AT_ATIME) {
+		if (mask & VATTR_ATIME) {
 			ip->i_atime.tv_sec = vap->va_atime.tv_sec;
 			ip->i_atime.tv_nsec = vap->va_atime.tv_nsec;
 			ip->i_flag &= ~IACC;
 		}
-		if (mask & AT_MTIME) {
+		if (mask & VATTR_MTIME) {
 			ip->i_mtime.tv_sec = vap->va_mtime.tv_sec;
 			ip->i_mtime.tv_nsec = vap->va_mtime.tv_nsec;
 			gethrestime(&now);
@@ -771,7 +771,7 @@ udf_create(
 			VN_RELE(ITOV(ip));
 			goto out;
 		} else if ((ip->i_type == VREG) &&
-		    (vap->va_mask & AT_SIZE) && vap->va_size == 0) {
+		    (vap->va_mask & VATTR_SIZE) && vap->va_size == 0) {
 			/*
 			 * Truncate regular files, if requested by caller.
 			 * Grab i_rwlock to make sure no one else is
@@ -1052,7 +1052,7 @@ udf_mkdir(
 	struct ud_inode *ip;
 	struct ud_inode *xip;
 
-	ASSERT((vap->va_mask & (AT_TYPE|AT_MODE)) == (AT_TYPE|AT_MODE));
+	ASSERT((vap->va_mask & (VATTR_TYPE|VATTR_MODE)) == (VATTR_TYPE|VATTR_MODE));
 
 	ud_printf("udf_mkdir\n");
 

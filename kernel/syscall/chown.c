@@ -69,9 +69,9 @@ fchownat(int fd, char *path, uid_t uid, gid_t gid, int flag)
 	vattr.va_gid = gid;
 	vattr.va_mask = 0;
 	if (vattr.va_uid != -1)
-		vattr.va_mask |= AT_UID;
+		vattr.va_mask |= VATTR_UID;
 	if (vattr.va_gid != -1)
-		vattr.va_mask |= AT_GID;
+		vattr.va_mask |= VATTR_GID;
 
 	error = fsetattrat(fd, path, flag, &vattr);
 	if (error)

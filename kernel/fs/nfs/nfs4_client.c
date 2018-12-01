@@ -688,7 +688,7 @@ nfs4_attrcache_va(vnode_t *vp, nfs4_ga_res_t *garp, int set_cache_timeout)
 	rp = VTOR4(vp);
 
 	ASSERT(MUTEX_HELD(&rp->r_statelock));
-	ASSERT(vap->va_mask == AT_ALL);
+	ASSERT(vap->va_mask == VATTR_ALL);
 
 	/* Switch to master before checking v_flag */
 	if (IS_SHADOW(vp, rp))
@@ -908,7 +908,7 @@ nfs4_getattr_otw_norecovery(vnode_t *vp, nfs4_ga_res_t *garp,
 	 * to be there. This can lead to anything from system crashes to
 	 * corrupted information processed by user apps.
 	 * So to ensure that all bases are covered, request at least
-	 * the AT_ALL attribute mask.
+	 * the VATTR_ALL attribute mask.
 	 */
 	argop[1].argop = OP_GETATTR;
 	argop[1].nfs_argop4_u.opgetattr.attr_request = NFS4_VATTR_MASK;

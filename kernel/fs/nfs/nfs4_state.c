@@ -518,7 +518,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 	/*
 	 * get the file size to do some basic validation
 	 */
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 	err = fop_getattr(vp, &va, 0, CRED(), NULL);
 
 	kill_file = (va.va_size == 0 || va.va_size <

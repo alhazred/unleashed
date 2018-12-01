@@ -1002,8 +1002,8 @@ ud_ialloc(struct ud_inode *pip,
 
 	ud_printf("ud_ialloc\n");
 
-	if (((vap->va_mask & AT_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
-	    ((vap->va_mask & AT_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime)))
+	if (((vap->va_mask & VATTR_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
+	    ((vap->va_mask & VATTR_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime)))
 		return (EOVERFLOW);
 
 	udf_vfsp = pip->i_udf;
@@ -1039,7 +1039,7 @@ ud_ialloc(struct ud_inode *pip,
 	 *	then use the process's gid.
 	 * 3) Otherwise, set the group-id to the gid of the parent directory.
 	 */
-	if ((vap->va_mask & AT_GID) &&
+	if ((vap->va_mask & VATTR_GID) &&
 	    ((vap->va_gid == pip->i_gid) || groupmember(vap->va_gid, cr) ||
 	    secpolicy_vnode_create_gid(cr) == 0)) {
 		/*
@@ -1087,12 +1087,12 @@ ud_ialloc(struct ud_inode *pip,
 	gethrestime(&now);
 	time.tv_sec = now.tv_sec;
 	time.tv_nsec = now.tv_nsec;
-	if (vap->va_mask & AT_ATIME) {
+	if (vap->va_mask & VATTR_ATIME) {
 		TIMESPEC_TO_TIMESPEC32(&settime, &vap->va_atime)
 		ud_utime2dtime(&settime, &fe->fe_acc_time);
 	} else
 		ud_utime2dtime(&time, &fe->fe_acc_time);
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		TIMESPEC_TO_TIMESPEC32(&settime, &vap->va_mtime)
 		ud_utime2dtime(&settime, &fe->fe_mod_time);
 	} else

@@ -289,7 +289,7 @@ nfs_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 			PURGE_ATTRCACHE(vp);
 			error = 0;
 		} else {
-			va.va_mask = AT_ALL;
+			va.va_mask = VATTR_ALL;
 			error = nfs_getattr_otw(vp, &va, cr);
 		}
 	} else
@@ -582,7 +582,7 @@ nfs_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 				return (EINTR);
 		}
 
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		error = nfsgetattr(vp, &va, cr);
 		if (error)
 			return (error);
@@ -1096,13 +1096,13 @@ nfs_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	rp = VTOR(vp);
 	if (flags & ATTR_HINT) {
 		if (vap->va_mask ==
-		    (vap->va_mask & (AT_SIZE | AT_FSID | AT_RDEV))) {
+		    (vap->va_mask & (VATTR_SIZE | VATTR_FSID | VATTR_RDEV))) {
 			mutex_enter(&rp->r_statelock);
-			if (vap->va_mask | AT_SIZE)
+			if (vap->va_mask | VATTR_SIZE)
 				vap->va_size = rp->r_size;
-			if (vap->va_mask | AT_FSID)
+			if (vap->va_mask | VATTR_FSID)
 				vap->va_fsid = rp->r_attr.va_fsid;
-			if (vap->va_mask | AT_RDEV)
+			if (vap->va_mask | VATTR_RDEV)
 				vap->va_rdev = rp->r_attr.va_rdev;
 			mutex_exit(&rp->r_statelock);
 			return (0);
@@ -1114,7 +1114,7 @@ nfs_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 * and if there any dirty pages or any outstanding
 	 * asynchronous (write) requests for this file.
 	 */
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		if (vn_has_cached_data(vp) &&
 		    ((rp->r_flags & RDIRTY) || rp->r_awcount > 0)) {
 			mutex_enter(&rp->r_statelock);
@@ -1146,10 +1146,10 @@ nfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 
 	mask = vap->va_mask;
 
-	if (mask & AT_NOSET)
+	if (mask & VATTR_NOSET)
 		return (EINVAL);
 
-	if ((mask & AT_SIZE) &&
+	if ((mask & VATTR_SIZE) &&
 	    vap->va_type == VREG &&
 	    vap->va_size > MAXOFF32_T)
 		return (EFBIG);
@@ -1157,7 +1157,7 @@ nfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	if (nfs_zone() != VTOMI(vp)->mi_zone)
 		return (EIO);
 
-	va.va_mask = AT_UID | AT_MODE;
+	va.va_mask = VATTR_UID | VATTR_MODE;
 
 	error = nfsgetattr(vp, &va, cr);
 	if (error)
@@ -1171,7 +1171,7 @@ nfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 
 	error = nfssetattr(vp, vap, flags, cr);
 
-	if (error == 0 && (mask & AT_SIZE) && vap->va_size == 0)
+	if (error == 0 && (mask & VATTR_SIZE) && vap->va_size == 0)
 		vnevent_truncate(vp, ct);
 
 	return (error);
@@ -1236,7 +1236,7 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	 * This is an overload of the protocol and should be
 	 * documented in the NFS Version 2 protocol specification.
 	 */
-	if ((mask & AT_MTIME) && !(flags & ATTR_UTIME)) {
+	if ((mask & VATTR_MTIME) && !(flags & ATTR_UTIME)) {
 		vap->va_mtime.tv_nsec = 1000000000;
 		if (NFS_TIME_T_OK(vap->va_mtime.tv_sec) &&
 		    NFS_TIME_T_OK(vap->va_atime.tv_sec)) {
@@ -1275,7 +1275,7 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	}
 	args.saa_fh = *VTOFH(vp);
 
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 	error = nfsgetattr(vp, &va, cr);
 	if (error)
 		return (error);
@@ -1298,7 +1298,7 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	 * change the access permissions of the file, so purge old
 	 * information and start over again.
 	 */
-	if ((mask & (AT_UID | AT_GID | AT_MODE)) && (mi->mi_flags & MI_ACL)) {
+	if ((mask & (VATTR_UID | VATTR_GID | VATTR_MODE)) && (mi->mi_flags & MI_ACL)) {
 		(void) nfs_access_purge_rp(rp);
 		if (rp->r_secattr != NULL) {
 			mutex_enter(&rp->r_statelock);
@@ -1325,7 +1325,7 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 			 * back in.  A read should be cheaper than a
 			 * write.
 			 */
-			if (mask & AT_SIZE) {
+			if (mask & VATTR_SIZE) {
 				nfs_invalidate_pages(vp,
 				    (vap->va_size & PAGEMASK), cr);
 			}
@@ -1351,7 +1351,7 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 			 * the file size by writing 1 byte at the
 			 * offset of the end of the file that we need.
 			 */
-			if ((mask & AT_SIZE) &&
+			if ((mask & VATTR_SIZE) &&
 			    ns.ns_attr.na_size < (uint32_t)vap->va_size) {
 				char zb = '\0';
 
@@ -1364,18 +1364,18 @@ nfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 			 * and setgid bits when changing the uid or gid.  The
 			 * client needs to compensate appropriately.
 			 */
-			if (mask & (AT_UID | AT_GID)) {
+			if (mask & (VATTR_UID | VATTR_GID)) {
 				int terror;
 
-				va.va_mask = AT_MODE;
+				va.va_mask = VATTR_MODE;
 				terror = nfsgetattr(vp, &va, cr);
 				if (!terror &&
-				    (((mask & AT_MODE) &&
+				    (((mask & VATTR_MODE) &&
 				    va.va_mode != vap->va_mode) ||
-				    (!(mask & AT_MODE) &&
+				    (!(mask & VATTR_MODE) &&
 				    va.va_mode != omode))) {
-					va.va_mask = AT_MODE;
-					if (mask & AT_MODE)
+					va.va_mask = VATTR_MODE;
+					if (mask & VATTR_MODE)
 						va.va_mode = vap->va_mode;
 					else
 						va.va_mode = omode;
@@ -1419,7 +1419,7 @@ nfs_access(vnode_t *vp, int mode, int flags, cred_t *cr, caller_context_t *ct)
 			return (error);
 	}
 
-	va.va_mask = AT_MODE | AT_UID | AT_GID;
+	va.va_mask = VATTR_MODE | VATTR_UID | VATTR_GID;
 	error = nfsgetattr(vp, &va, cr);
 	if (error)
 		return (error);
@@ -2033,9 +2033,9 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 				VN_RELE(tempvp);
 			}
 			if (!(error = fop_access(vp, mode, 0, cr, ct))) {
-				if ((vattr.va_mask & AT_SIZE) &&
+				if ((vattr.va_mask & VATTR_SIZE) &&
 				    vp->v_type == VREG) {
-					vattr.va_mask = AT_SIZE;
+					vattr.va_mask = VATTR_SIZE;
 					error = nfssetattr(vp, &vattr, 0, cr);
 
 					if (!error) {
@@ -2057,9 +2057,9 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 		return (error);
 	}
 
-	ASSERT(vattr.va_mask & AT_TYPE);
+	ASSERT(vattr.va_mask & VATTR_TYPE);
 	if (vattr.va_type == VREG) {
-		ASSERT(vattr.va_mask & AT_MODE);
+		ASSERT(vattr.va_mask & VATTR_MODE);
 		if (MANDMODE(vattr.va_mode)) {
 			nfs_rw_exit(&drp->r_rwlock);
 			return (EACCES);
@@ -2080,7 +2080,7 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 		nfs_rw_exit(&drp->r_rwlock);
 		return (error);
 	}
-	vattr.va_mask |= AT_GID;
+	vattr.va_mask |= VATTR_GID;
 
 	/*
 	 * This is a completely gross hack to make mknod
@@ -2114,19 +2114,19 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 		else
 			vattr.va_size = (uoff_t)nfsv2_cmpdev(d);
 
-		vattr.va_mask |= AT_MODE|AT_SIZE;
+		vattr.va_mask |= VATTR_MODE|VATTR_SIZE;
 	} else if (vattr.va_type == VFIFO) {
 		vattr.va_mode |= IFCHR;		/* xtra kludge for namedpipe */
 		vattr.va_size = (uoff_t)NFS_FIFO_DEV;	/* blech */
-		vattr.va_mask |= AT_MODE|AT_SIZE;
+		vattr.va_mask |= VATTR_MODE|VATTR_SIZE;
 	} else if (vattr.va_type == VSOCK) {
 		vattr.va_mode |= IFSOCK;
 		/*
-		 * To avoid triggering bugs in the servers set AT_SIZE
+		 * To avoid triggering bugs in the servers set VATTR_SIZE
 		 * (all other RFS_CREATE calls set this).
 		 */
 		vattr.va_size = 0;
-		vattr.va_mask |= AT_MODE|AT_SIZE;
+		vattr.va_mask |= VATTR_MODE|VATTR_SIZE;
 	}
 
 	args.ca_sa = &args.ca_sa_buf;
@@ -2185,7 +2185,7 @@ nfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 			 * any sleep over it).
 			 */
 			if (vattr.va_gid != rp->r_attr.va_gid) {
-				vattr.va_mask = AT_GID;
+				vattr.va_mask = VATTR_GID;
 				(void) nfssetattr(vp, &vattr, 0, cr);
 			}
 
@@ -2730,7 +2730,7 @@ nfs_mkdir(vnode_t *dvp, char *nm, struct vattr *va, vnode_t **vpp, cred_t *cr,
 	error = setdirmode(dvp, &va->va_mode, cr);
 	if (error)
 		return (error);
-	va->va_mask |= AT_MODE|AT_GID;
+	va->va_mask |= VATTR_MODE|VATTR_GID;
 
 	args.ca_sa = &args.ca_sa_buf;
 	error = vattr_to_sattr(va, args.ca_sa);
@@ -2778,7 +2778,7 @@ nfs_mkdir(vnode_t *dvp, char *nm, struct vattr *va, vnode_t **vpp, cred_t *cr,
 			 * any sleep over it).
 			 */
 			if (va->va_gid != VTOR(*vpp)->r_attr.va_gid) {
-				va->va_mask = AT_GID;
+				va->va_mask = VATTR_GID;
 				(void) nfssetattr(*vpp, va, 0, cr);
 			}
 		} else {
@@ -4326,7 +4326,7 @@ nfs_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	 * is timed out and if it is, then an over the wire getattr
 	 * will be issued.
 	 */
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	if (vn_has_cached_data(vp) &&
 	    !(VTOMI(vp)->mi_flags & MI_NOCTO) && !vn_is_readonly(vp))
 		error = nfs_getattr_otw(vp, &va, cr);
@@ -4609,11 +4609,11 @@ nfs_space(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 			 * mtime if we truncate the file to its
 			 * previous size.
 			 */
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			error = nfsgetattr(vp, &va, cr);
 			if (error || va.va_size == bfp->l_start)
 				return (error);
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			va.va_size = bfp->l_start;
 			error = nfssetattr(vp, &va, 0, cr);
 

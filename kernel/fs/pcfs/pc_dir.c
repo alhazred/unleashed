@@ -281,7 +281,7 @@ pc_makedirentry(struct pcnode *dp, struct pcdir *direntries,
 	struct buf *bp = NULL;
 	timestruc_t now;
 
-	if (vap != NULL && vap->va_mask & (AT_ATIME|AT_MTIME))
+	if (vap != NULL && vap->va_mask & (VATTR_ATIME|VATTR_MTIME))
 		return (EOPNOTSUPP);
 
 	ep = &direntries[ndirentries - 1];

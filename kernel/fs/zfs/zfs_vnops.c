@@ -1424,7 +1424,7 @@ zfs_create(vnode_t *dvp, char *name, vattr_t *vap, vcexcl_t excl,
 		uid = crgetuid(cr);
 
 	if (zfsvfs->z_use_fuids == B_FALSE &&
-	    (vsecp || (vap->va_mask & AT_XVATTR) ||
+	    (vsecp || (vap->va_mask & VATTR_XVATTR) ||
 	    IS_EPHEMERAL(uid) || IS_EPHEMERAL(gid)))
 		return (SET_ERROR(EINVAL));
 
@@ -1439,7 +1439,7 @@ zfs_create(vnode_t *dvp, char *name, vattr_t *vap, vcexcl_t excl,
 		return (SET_ERROR(EILSEQ));
 	}
 
-	if (vap->va_mask & AT_XVATTR) {
+	if (vap->va_mask & VATTR_XVATTR) {
 		if ((error = secpolicy_xvattr((xvattr_t *)vap,
 		    crgetuid(cr), cr, vap->va_type)) != 0) {
 			ZFS_EXIT(zfsvfs);
@@ -1598,7 +1598,7 @@ top:
 		 * Truncate regular files if requested.
 		 */
 		if ((ZTOV(zp)->v_type == VREG) &&
-		    (vap->va_mask & AT_SIZE) && (vap->va_size == 0)) {
+		    (vap->va_mask & VATTR_SIZE) && (vap->va_size == 0)) {
 			/* we can't hold any locks when calling zfs_freesp() */
 			zfs_dirent_unlock(dl);
 			dl = NULL;
@@ -1917,7 +1917,7 @@ zfs_mkdir(vnode_t *dvp, char *dirname, vattr_t *vap, vnode_t **vpp, cred_t *cr,
 	else
 		uid = crgetuid(cr);
 	if (zfsvfs->z_use_fuids == B_FALSE &&
-	    (vsecp || (vap->va_mask & AT_XVATTR) ||
+	    (vsecp || (vap->va_mask & VATTR_XVATTR) ||
 	    IS_EPHEMERAL(uid) || IS_EPHEMERAL(gid)))
 		return (SET_ERROR(EINVAL));
 
@@ -1938,7 +1938,7 @@ zfs_mkdir(vnode_t *dvp, char *dirname, vattr_t *vap, vnode_t **vpp, cred_t *cr,
 	if (flags & FIGNORECASE)
 		zf |= ZCILOOK;
 
-	if (vap->va_mask & AT_XVATTR) {
+	if (vap->va_mask & VATTR_XVATTR) {
 		if ((error = secpolicy_xvattr((xvattr_t *)vap,
 		    crgetuid(cr), cr, vap->va_type)) != 0) {
 			ZFS_EXIT(zfsvfs);
@@ -2506,7 +2506,7 @@ zfs_fsync(vnode_t *vp, int syncflag, cred_t *cr, caller_context_t *ct)
  *
  *	IN:	vp	- vnode of file.
  *		vap	- va_mask identifies requested attributes.
- *			  If AT_XVATTR set, then optional attrs are requested
+ *			  If VATTR_XVATTR set, then optional attrs are requested
  *		flags	- ATTR_NOACLCHECK (CIFS server context)
  *		cr	- credentials of caller.
  *		ct	- caller context
@@ -2709,7 +2709,7 @@ zfs_getattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
  *
  *	IN:	vp	- vnode of file to be modified.
  *		vap	- new attribute values.
- *			  If AT_XVATTR set, then optional attrs are being set
+ *			  If VATTR_XVATTR set, then optional attrs are being set
  *		flags	- ATTR_UTIME set if non-default time values provided.
  *			- ATTR_NOACLCHECK (CIFS context only).
  *		cr	- credentials of caller.
@@ -2753,7 +2753,7 @@ zfs_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	if (mask == 0)
 		return (0);
 
-	if (mask & AT_NOSET)
+	if (mask & VATTR_NOSET)
 		return (SET_ERROR(EINVAL));
 
 	ZFS_ENTER(zfsvfs);
@@ -2767,19 +2767,19 @@ zfs_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	 */
 
 	if (zfsvfs->z_use_fuids == B_FALSE &&
-	    (((mask & AT_UID) && IS_EPHEMERAL(vap->va_uid)) ||
-	    ((mask & AT_GID) && IS_EPHEMERAL(vap->va_gid)) ||
-	    (mask & AT_XVATTR))) {
+	    (((mask & VATTR_UID) && IS_EPHEMERAL(vap->va_uid)) ||
+	    ((mask & VATTR_GID) && IS_EPHEMERAL(vap->va_gid)) ||
+	    (mask & VATTR_XVATTR))) {
 		ZFS_EXIT(zfsvfs);
 		return (SET_ERROR(EINVAL));
 	}
 
-	if (mask & AT_SIZE && vp->v_type == VDIR) {
+	if (mask & VATTR_SIZE && vp->v_type == VDIR) {
 		ZFS_EXIT(zfsvfs);
 		return (SET_ERROR(EISDIR));
 	}
 
-	if (mask & AT_SIZE && vp->v_type != VREG && vp->v_type != VFIFO) {
+	if (mask & VATTR_SIZE && vp->v_type != VREG && vp->v_type != VFIFO) {
 		ZFS_EXIT(zfsvfs);
 		return (SET_ERROR(EINVAL));
 	}
@@ -2796,8 +2796,8 @@ zfs_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	 * Immutable files can only alter immutable bit and atime
 	 */
 	if ((zp->z_pflags & ZFS_IMMUTABLE) &&
-	    ((mask & (AT_SIZE|AT_UID|AT_GID|AT_MTIME|AT_MODE)) ||
-	    ((mask & AT_XVATTR) && XVA_ISSET_REQ(xvap, XAT_CREATETIME)))) {
+	    ((mask & (VATTR_SIZE|VATTR_UID|VATTR_GID|VATTR_MTIME|VATTR_MODE)) ||
+	    ((mask & VATTR_XVATTR) && XVA_ISSET_REQ(xvap, XAT_CREATETIME)))) {
 		ZFS_EXIT(zfsvfs);
 		return (SET_ERROR(EPERM));
 	}
@@ -2812,9 +2812,9 @@ zfs_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *cr,
 	 * handle times greater than 2039.  This check should be removed
 	 * once large timestamps are fully supported.
 	 */
-	if (mask & (AT_ATIME | AT_MTIME)) {
-		if (((mask & AT_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
-		    ((mask & AT_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime))) {
+	if (mask & (VATTR_ATIME | VATTR_MTIME)) {
+		if (((mask & VATTR_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
+		    ((mask & VATTR_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime))) {
 			ZFS_EXIT(zfsvfs);
 			return (SET_ERROR(EOVERFLOW));
 		}
@@ -2834,7 +2834,7 @@ top:
 	 * First validate permissions
 	 */
 
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		err = zfs_zaccess(zp, ACE_WRITE_DATA, 0, skipaclchk, cr);
 		if (err) {
 			ZFS_EXIT(zfsvfs);
@@ -2857,8 +2857,8 @@ top:
 			vnevent_truncate(ZTOV(zp), ct);
 	}
 
-	if (mask & (AT_ATIME|AT_MTIME) ||
-	    ((mask & AT_XVATTR) && (XVA_ISSET_REQ(xvap, XAT_HIDDEN) ||
+	if (mask & (VATTR_ATIME|VATTR_MTIME) ||
+	    ((mask & VATTR_XVATTR) && (XVA_ISSET_REQ(xvap, XAT_HIDDEN) ||
 	    XVA_ISSET_REQ(xvap, XAT_READONLY) ||
 	    XVA_ISSET_REQ(xvap, XAT_ARCHIVE) ||
 	    XVA_ISSET_REQ(xvap, XAT_OFFLINE) ||
@@ -2869,8 +2869,8 @@ top:
 		    skipaclchk, cr);
 	}
 
-	if (mask & (AT_UID|AT_GID)) {
-		int	idmask = (mask & (AT_UID|AT_GID));
+	if (mask & (VATTR_UID|VATTR_GID)) {
+		int	idmask = (mask & (VATTR_UID|VATTR_GID));
 		int	take_owner;
 		int	take_group;
 
@@ -2879,19 +2879,19 @@ top:
 		 * we may clear S_ISUID/S_ISGID bits.
 		 */
 
-		if (!(mask & AT_MODE))
+		if (!(mask & VATTR_MODE))
 			vap->va_mode = zp->z_mode;
 
 		/*
 		 * Take ownership or chgrp to group we are a member of
 		 */
 
-		take_owner = (mask & AT_UID) && (vap->va_uid == crgetuid(cr));
-		take_group = (mask & AT_GID) &&
+		take_owner = (mask & VATTR_UID) && (vap->va_uid == crgetuid(cr));
+		take_group = (mask & VATTR_GID) &&
 		    zfs_groupmember(zfsvfs, vap->va_gid, cr);
 
 		/*
-		 * If both AT_UID and AT_GID are set then take_owner and
+		 * If both VATTR_UID and VATTR_GID are set then take_owner and
 		 * take_group must both be set in order to allow taking
 		 * ownership.
 		 *
@@ -2899,16 +2899,16 @@ top:
 		 *
 		 */
 
-		if (((idmask == (AT_UID|AT_GID)) && take_owner && take_group) ||
-		    ((idmask == AT_UID) && take_owner) ||
-		    ((idmask == AT_GID) && take_group)) {
+		if (((idmask == (VATTR_UID|VATTR_GID)) && take_owner && take_group) ||
+		    ((idmask == VATTR_UID) && take_owner) ||
+		    ((idmask == VATTR_GID) && take_group)) {
 			if (zfs_zaccess(zp, ACE_WRITE_OWNER, 0,
 			    skipaclchk, cr) == 0) {
 				/*
 				 * Remove setuid/setgid for non-privileged users
 				 */
 				secpolicy_setid_clear(vap, cr);
-				trim_mask = (mask & (AT_UID|AT_GID));
+				trim_mask = (mask & (VATTR_UID|VATTR_GID));
 			} else {
 				need_policy =  TRUE;
 			}
@@ -2920,7 +2920,7 @@ top:
 	mutex_enter(&zp->z_lock);
 	oldva.va_mode = zp->z_mode;
 	zfs_fuid_map_ids(zp, cr, &oldva.va_uid, &oldva.va_gid);
-	if (mask & AT_XVATTR) {
+	if (mask & VATTR_XVATTR) {
 		/*
 		 * Update xvattr mask to include only those attributes
 		 * that are actually changing.
@@ -3005,7 +3005,7 @@ top:
 
 	mutex_exit(&zp->z_lock);
 
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		if (zfs_zaccess(zp, ACE_WRITE_ACL, 0, skipaclchk, cr) == 0) {
 			err = secpolicy_setid_setsticky_clear(vp, vap,
 			    &oldva, cr);
@@ -3013,7 +3013,7 @@ top:
 				ZFS_EXIT(zfsvfs);
 				return (err);
 			}
-			trim_mask |= AT_MODE;
+			trim_mask |= VATTR_MODE;
 		} else {
 			need_policy = TRUE;
 		}
@@ -3049,7 +3049,7 @@ top:
 	 */
 	mask = vap->va_mask;
 
-	if ((mask & (AT_UID | AT_GID))) {
+	if ((mask & (VATTR_UID | VATTR_GID))) {
 		err = sa_lookup(zp->z_sa_hdl, SA_ZPL_XATTR(zfsvfs),
 		    &xattr_obj, sizeof (xattr_obj));
 
@@ -3058,7 +3058,7 @@ top:
 			if (err)
 				goto out2;
 		}
-		if (mask & AT_UID) {
+		if (mask & VATTR_UID) {
 			new_uid = zfs_fuid_create(zfsvfs,
 			    (uint64_t)vap->va_uid, cr, ZFS_OWNER, &fuidp);
 			if (new_uid != zp->z_uid &&
@@ -3070,7 +3070,7 @@ top:
 			}
 		}
 
-		if (mask & AT_GID) {
+		if (mask & VATTR_GID) {
 			new_gid = zfs_fuid_create(zfsvfs, (uint64_t)vap->va_gid,
 			    cr, ZFS_GROUP, &fuidp);
 			if (new_gid != zp->z_gid &&
@@ -3084,7 +3084,7 @@ top:
 	}
 	tx = dmu_tx_create(zfsvfs->z_os);
 
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		uint64_t pmode = zp->z_mode;
 		uint64_t acl_obj;
 		new_mode = (pmode & S_IFMT) | (vap->va_mode & ~S_IFMT);
@@ -3122,7 +3122,7 @@ top:
 		mutex_exit(&zp->z_lock);
 		dmu_tx_hold_sa(tx, zp->z_sa_hdl, B_TRUE);
 	} else {
-		if ((mask & AT_XVATTR) &&
+		if ((mask & VATTR_XVATTR) &&
 		    XVA_ISSET_REQ(xvap, XAT_AV_SCANSTAMP))
 			dmu_tx_hold_sa(tx, zp->z_sa_hdl, B_TRUE);
 		else
@@ -3153,7 +3153,7 @@ top:
 	 */
 
 
-	if (mask & (AT_UID|AT_GID|AT_MODE))
+	if (mask & (VATTR_UID|VATTR_GID|VATTR_MODE))
 		mutex_enter(&zp->z_acl_lock);
 	mutex_enter(&zp->z_lock);
 
@@ -3161,7 +3161,7 @@ top:
 	    &zp->z_pflags, sizeof (zp->z_pflags));
 
 	if (attrzp) {
-		if (mask & (AT_UID|AT_GID|AT_MODE))
+		if (mask & (VATTR_UID|VATTR_GID|VATTR_MODE))
 			mutex_enter(&attrzp->z_acl_lock);
 		mutex_enter(&attrzp->z_lock);
 		SA_ADD_BULK_ATTR(xattr_bulk, xattr_count,
@@ -3169,9 +3169,9 @@ top:
 		    sizeof (attrzp->z_pflags));
 	}
 
-	if (mask & (AT_UID|AT_GID)) {
+	if (mask & (VATTR_UID|VATTR_GID)) {
 
-		if (mask & AT_UID) {
+		if (mask & VATTR_UID) {
 			SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_UID(zfsvfs), NULL,
 			    &new_uid, sizeof (new_uid));
 			zp->z_uid = new_uid;
@@ -3183,7 +3183,7 @@ top:
 			}
 		}
 
-		if (mask & AT_GID) {
+		if (mask & VATTR_GID) {
 			SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_GID(zfsvfs),
 			    NULL, &new_gid, sizeof (new_gid));
 			zp->z_gid = new_gid;
@@ -3194,7 +3194,7 @@ top:
 				attrzp->z_gid = new_gid;
 			}
 		}
-		if (!(mask & AT_MODE)) {
+		if (!(mask & VATTR_MODE)) {
 			SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MODE(zfsvfs),
 			    NULL, &new_mode, sizeof (new_mode));
 			new_mode = zp->z_mode;
@@ -3207,7 +3207,7 @@ top:
 		}
 	}
 
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MODE(zfsvfs), NULL,
 		    &new_mode, sizeof (new_mode));
 		zp->z_mode = new_mode;
@@ -3221,20 +3221,20 @@ top:
 	}
 
 
-	if (mask & AT_ATIME) {
+	if (mask & VATTR_ATIME) {
 		ZFS_TIME_ENCODE(&vap->va_atime, zp->z_atime);
 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_ATIME(zfsvfs), NULL,
 		    &zp->z_atime, sizeof (zp->z_atime));
 	}
 
-	if (mask & AT_MTIME) {
+	if (mask & VATTR_MTIME) {
 		ZFS_TIME_ENCODE(&vap->va_mtime, mtime);
 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MTIME(zfsvfs), NULL,
 		    mtime, sizeof (mtime));
 	}
 
 	/* XXX - shouldn't this be done *before* the ATIME/MTIME checks? */
-	if (mask & AT_SIZE && !(mask & AT_MTIME)) {
+	if (mask & VATTR_SIZE && !(mask & VATTR_MTIME)) {
 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_MTIME(zfsvfs),
 		    NULL, mtime, sizeof (mtime));
 		SA_ADD_BULK_ATTR(bulk, count, SA_ZPL_CTIME(zfsvfs), NULL,
@@ -3259,7 +3259,7 @@ top:
 	 * update from toggling bit
 	 */
 
-	if (xoap && (mask & AT_XVATTR)) {
+	if (xoap && (mask & VATTR_XVATTR)) {
 
 		/*
 		 * restore trimmed off masks
@@ -3298,11 +3298,11 @@ top:
 		zfs_log_setattr(zilog, tx, TX_SETATTR, zp, vap, mask, fuidp);
 
 	mutex_exit(&zp->z_lock);
-	if (mask & (AT_UID|AT_GID|AT_MODE))
+	if (mask & (VATTR_UID|VATTR_GID|VATTR_MODE))
 		mutex_exit(&zp->z_acl_lock);
 
 	if (attrzp) {
-		if (mask & (AT_UID|AT_GID|AT_MODE))
+		if (mask & (VATTR_UID|VATTR_GID|VATTR_MODE))
 			mutex_exit(&attrzp->z_acl_lock);
 		mutex_exit(&attrzp->z_lock);
 	}

@@ -120,7 +120,7 @@ acl2_getacl(GETACL2args *args, GETACL2res *resp, struct exportinfo *exi,
 		return;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
 	VN_RELE(vp);
@@ -218,7 +218,7 @@ acl2_setacl(SETACL2args *args, SETACL2res *resp, struct exportinfo *exi,
 		return;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
 	fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
@@ -258,7 +258,7 @@ acl2_getattr(GETATTR2args *args, GETATTR2res *resp, struct exportinfo *exi,
 		return;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
 	VN_RELE(vp);
@@ -315,7 +315,7 @@ acl2_access(ACCESS2args *args, ACCESS2res *resp, struct exportinfo *exi,
 	 * mandatory lock files is denied on the server, so it might
 	 * as well be reflected to the server during the open.
 	 */
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error) {
 		VN_RELE(vp);
@@ -354,7 +354,7 @@ acl2_access(ACCESS2args *args, ACCESS2res *resp, struct exportinfo *exi,
 			resp->resok.access |= ACCESS2_EXECUTE;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
 	VN_RELE(vp);
@@ -418,7 +418,7 @@ acl2_getxattrdir(GETXATTRDIR2args *args, GETXATTRDIR2res *resp,
 	}
 	if (!error) {
 		struct vattr va;
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 		error = rfs4_delegated_getattr(avp, &va, 0, cr);
 		if (!error) {
 			error = vattr_to_nattr(&va, &resp->resok.attr);
@@ -461,7 +461,7 @@ acl3_getacl(GETACL3args *args, GETACL3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
 
 	bzero((caddr_t)&resp->resok.acl, sizeof (resp->resok.acl));
@@ -492,7 +492,7 @@ acl3_getacl(GETACL3args *args, GETACL3res *resp, struct exportinfo *exi,
 	if (error)
 		goto out;
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
 
 	VN_RELE(vp);
@@ -574,7 +574,7 @@ acl3_setacl(SETACL3args *args, SETACL3res *resp, struct exportinfo *exi,
 
 	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
 
 	if (rdonly(ro, vp)) {
@@ -584,7 +584,7 @@ acl3_setacl(SETACL3args *args, SETACL3res *resp, struct exportinfo *exi,
 
 	error = fop_setsecattr(vp, &args->acl, 0, cr, NULL);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
 
 	if (error)
@@ -659,7 +659,7 @@ acl3_getxattrdir(GETXATTRDIR3args *args, GETXATTRDIR3res *resp,
 	}
 	if (!error) {
 		struct vattr va;
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 		error = rfs4_delegated_getattr(avp, &va, 0, cr);
 		if (!error) {
 			vattr_to_post_op_attr(&va, &resp->resok.attr);

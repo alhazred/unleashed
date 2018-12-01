@@ -1231,7 +1231,7 @@ nfsrootvp(vnode_t **rtvpp, vfs_t *vfsp, struct servinfo *svp,
 	rtvp = makenfsnode((fhandle_t *)svp->sv_fhandle.fh_buf,
 	    NULL, vfsp, gethrtime(), cr, NULL, NULL);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 
 	/*
 	 * If the uid is set then set the creds for secure mounts
@@ -1614,7 +1614,7 @@ nfs_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 	}
 
 	if (vp->v_type == VNON) {
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 		error = nfsgetattr(vp, &va, CRED());
 		if (error) {
 			VN_RELE(vp);

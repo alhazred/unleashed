@@ -151,19 +151,19 @@ extern "C" {
  * The corresponding AT_MASK
  */
 #define	NFS4_NTOV_ATTR_AT_MASK (	\
-	AT_TYPE |			\
-	AT_SIZE |			\
-	AT_FSID |			\
-	AT_NODEID |			\
-	AT_MODE |			\
-	AT_UID |			\
-	AT_GID |			\
-	AT_NLINK |			\
-	AT_ATIME |			\
-	AT_MTIME |			\
-	AT_CTIME |			\
-	AT_RDEV |			\
-	AT_NBLOCKS)
+	VATTR_TYPE |			\
+	VATTR_SIZE |			\
+	VATTR_FSID |			\
+	VATTR_NODEID |			\
+	VATTR_MODE |			\
+	VATTR_UID |			\
+	VATTR_GID |			\
+	VATTR_NLINK |			\
+	VATTR_ATIME |			\
+	VATTR_MTIME |			\
+	VATTR_CTIME |			\
+	VATTR_RDEV |			\
+	VATTR_NBLOCKS)
 
 /*
  * Common bitmap4 of filesystem attributes to be gathered
@@ -202,32 +202,32 @@ extern "C" {
  * The corresponding AT_MASK
  */
 #define	NFS4_NTOV_ATTR_CACHE_AT_MASK (	\
-	AT_CTIME |			\
-	AT_MTIME |			\
-	AT_SIZE)
+	VATTR_CTIME |			\
+	VATTR_MTIME |			\
+	VATTR_SIZE)
 
 #define	NFS4_VTON_ATTR_MASK (		\
-	AT_TYPE |			\
-	AT_MODE |			\
-	AT_UID |			\
-	AT_GID |			\
-	AT_NODEID |			\
-	AT_SIZE |			\
-	AT_NLINK |			\
-	AT_ATIME |			\
-	AT_MTIME |			\
-	AT_CTIME |			\
-	AT_RDEV |			\
-	AT_NBLOCKS |			\
-	AT_FSID)
+	VATTR_TYPE |			\
+	VATTR_MODE |			\
+	VATTR_UID |			\
+	VATTR_GID |			\
+	VATTR_NODEID |			\
+	VATTR_SIZE |			\
+	VATTR_NLINK |			\
+	VATTR_ATIME |			\
+	VATTR_MTIME |			\
+	VATTR_CTIME |			\
+	VATTR_RDEV |			\
+	VATTR_NBLOCKS |			\
+	VATTR_FSID)
 
 #define	NFS4_VTON_ATTR_MASK_SET (	\
-	AT_MODE |			\
-	AT_UID |			\
-	AT_GID |			\
-	AT_SIZE |			\
-	AT_ATIME |			\
-	AT_MTIME)
+	VATTR_MODE |			\
+	VATTR_UID |			\
+	VATTR_GID |			\
+	VATTR_SIZE |			\
+	VATTR_ATIME |			\
+	VATTR_MTIME)
 
 /* solaris-supported, non-vattr_t per-vnode scoped attrs */
 #define	NFS4_VP_ATTR_MASK (		\

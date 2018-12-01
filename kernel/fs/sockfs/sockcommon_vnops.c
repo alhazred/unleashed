@@ -372,9 +372,9 @@ socket_vop_setattr(struct vnode *vp, struct vattr *vap, int flags,
 		sotpi_info_t *sti = SOTOTPI(so);
 
 		mutex_enter(&so->so_lock);
-		if (vap->va_mask & AT_ATIME)
+		if (vap->va_mask & VATTR_ATIME)
 			sti->sti_atime = vap->va_atime.tv_sec;
-		if (vap->va_mask & AT_MTIME) {
+		if (vap->va_mask & VATTR_MTIME) {
 			sti->sti_mtime = vap->va_mtime.tv_sec;
 			sti->sti_ctime = gethrestime_sec();
 		}

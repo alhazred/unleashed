@@ -839,7 +839,7 @@ reencode_attrs:
 				ae = ar & (FATTR4_RDATTR_ERROR_MASK |
 				    FATTR4_MOUNTED_ON_FILEID_MASK);
 			} else {
-				va.va_mask = AT_ALL;
+				va.va_mask = VATTR_ALL;
 				rddirattr_error =
 				    fop_getattr(vp, &va, 0, cs->cr, NULL);
 				if (rddirattr_error) {

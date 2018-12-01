@@ -232,7 +232,7 @@ kmem_cache_t *vn_cache;
 
 /*
  * Zero out the structure, set the size of the requested/returned bitmaps,
- * set AT_XVATTR in the embedded vattr_t's va_mask, and set up the pointer
+ * set VATTR_XVATTR in the embedded vattr_t's va_mask, and set up the pointer
  * to the returned attributes array.
  */
 void
@@ -241,19 +241,19 @@ xva_init(xvattr_t *xvap)
 	bzero(xvap, sizeof (xvattr_t));
 	xvap->xva_mapsize = XVA_MAPSIZE;
 	xvap->xva_magic = XVA_MAGIC;
-	xvap->xva_vattr.va_mask = AT_XVATTR;
+	xvap->xva_vattr.va_mask = VATTR_XVATTR;
 	xvap->xva_rtnattrmapp = &(xvap->xva_rtnattrmap)[0];
 }
 
 /*
- * If AT_XVATTR is set, returns a pointer to the embedded xoptattr_t
+ * If VATTR_XVATTR is set, returns a pointer to the embedded xoptattr_t
  * structure.  Otherwise, returns NULL.
  */
 xoptattr_t *
 xva_getxoptattr(xvattr_t *xvap)
 {
 	xoptattr_t *xoap = NULL;
-	if (xvap->xva_vattr.va_mask & AT_XVATTR)
+	if (xvap->xva_vattr.va_mask & VATTR_XVATTR)
 		xoap = &xvap->xva_xoptattrs;
 	return (xoap);
 }
@@ -845,10 +845,10 @@ top:
 		/* Wish to create a file. */
 		vattr.va_type = VREG;
 		vattr.va_mode = createmode;
-		vattr.va_mask = AT_TYPE|AT_MODE;
+		vattr.va_mask = VATTR_TYPE|VATTR_MODE;
 		if (filemode & FTRUNC) {
 			vattr.va_size = 0;
-			vattr.va_mask |= AT_SIZE;
+			vattr.va_mask |= VATTR_SIZE;
 		}
 		if (filemode & FEXCL)
 			excl = EXCL;
@@ -876,7 +876,7 @@ top:
 		 */
 
 		if (!(filemode & FOFFMAX) && (vp->v_type == VREG)) {
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			if ((error = fop_getattr(vp, &vattr, 0,
 			    CRED(), NULL))) {
 				goto out;
@@ -917,7 +917,7 @@ top:
 				if (fop_realvp(vp, &rvp, NULL) != 0)
 					rvp = vp;
 				if (rvp->v_filocks != NULL) {
-					vattr.va_mask = AT_MODE;
+					vattr.va_mask = VATTR_MODE;
 					if ((error = fop_getattr(vp,
 					    &vattr, 0, CRED(), NULL)) == 0 &&
 					    MANDLOCK(vp, vattr.va_mode))
@@ -954,7 +954,7 @@ top:
 		goto out;
 	}
 	if (filemode & FNOLINKS) {
-		vattr.va_mask = AT_NLINK;
+		vattr.va_mask = VATTR_NLINK;
 		if ((error = fop_getattr(vp, &vattr, 0, CRED(), NULL))) {
 			goto out;
 		}
@@ -1012,7 +1012,7 @@ top:
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
 
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL))
 				goto out;
 			if (nbl_conflict(vp, NBL_WRITE, 0, vattr.va_size, 0,
@@ -1036,7 +1036,7 @@ top:
 	 */
 	if ((filemode & FTRUNC) && !(filemode & FCREAT)) {
 		vattr.va_size = 0;
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if ((error = fop_setattr(vp, &vattr, 0, CRED(), NULL)) != 0)
 			goto out;
 	}
@@ -1165,7 +1165,7 @@ vn_createat(
 	int estale_retry = 0;
 	uint32_t auditing = AU_AUDITING();
 
-	ASSERT((vap->va_mask & (AT_TYPE|AT_MODE)) == (AT_TYPE|AT_MODE));
+	ASSERT((vap->va_mask & (VATTR_TYPE|VATTR_MODE)) == (VATTR_TYPE|VATTR_MODE));
 
 	/* symlink interpretation */
 	if ((flag & FNOFOLLOW) || excl == EXCL)
@@ -1286,12 +1286,12 @@ top:
 		vp = *vpp;
 		if (fop_realvp(vp, &rvp, NULL) != 0)
 			rvp = vp;
-		if ((vap->va_mask & AT_SIZE) && nbl_need_check(vp)) {
+		if ((vap->va_mask & VATTR_SIZE) && nbl_need_check(vp)) {
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
 		}
 		if (rvp->v_filocks != NULL || rvp->v_shrlocks != NULL) {
-			vattr.va_mask = AT_MODE|AT_SIZE;
+			vattr.va_mask = VATTR_MODE|VATTR_SIZE;
 			if (error = fop_getattr(vp, &vattr, 0, CRED(), NULL)) {
 				goto out;
 			}
@@ -1303,7 +1303,7 @@ top:
 			 * File cannot be truncated if non-blocking mandatory
 			 * locks are currently on the file.
 			 */
-			if ((vap->va_mask & AT_SIZE) && in_crit) {
+			if ((vap->va_mask & VATTR_SIZE) && in_crit) {
 				uoff_t offset;
 				ssize_t length;
 
@@ -1355,7 +1355,7 @@ top:
 		if (why != CRMKDIR &&
 		    !(flag & FOFFMAX) &&
 		    (vp->v_type == VREG)) {
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			if ((error = fop_getattr(vp, &vattr, 0,
 			    CRED(), NULL))) {
 				goto out;
@@ -1455,11 +1455,11 @@ top:
 	 * Make sure both source vnode and target directory vnode are
 	 * in the same vfs and that it is writeable.
 	 */
-	vattr.va_mask = AT_FSID;
+	vattr.va_mask = VATTR_FSID;
 	if (error = fop_getattr(fvp, &vattr, 0, CRED(), NULL))
 		goto out;
 	fsid = vattr.va_fsid;
-	vattr.va_mask = AT_FSID;
+	vattr.va_mask = VATTR_FSID;
 	if (error = fop_getattr(tdvp, &vattr, 0, CRED(), NULL))
 		goto out;
 	if (fsid != vattr.va_fsid) {
@@ -1558,11 +1558,11 @@ top:
 	 * We check fsid's, not vfs pointers, so loopback fs works.
 	 */
 	if (fromvp != tovp) {
-		vattr.va_mask = AT_FSID;
+		vattr.va_mask = VATTR_FSID;
 		if (error = fop_getattr(fromvp, &vattr, 0, CRED(), NULL))
 			goto out;
 		fsid = vattr.va_fsid;
-		vattr.va_mask = AT_FSID;
+		vattr.va_mask = VATTR_FSID;
 		if (error = fop_getattr(tovp, &vattr, 0, CRED(), NULL))
 			goto out;
 		if (fsid != vattr.va_fsid) {
@@ -3255,7 +3255,7 @@ fop_getattr(
 	 * then turn off the xvattr bit.
 	 */
 	if (vfs_has_feature(vp->v_vfsp, VFSFT_XVATTR) == 0) {
-		vap->va_mask &= ~AT_XVATTR;
+		vap->va_mask &= ~VATTR_XVATTR;
 	}
 
 	/*
@@ -3289,7 +3289,7 @@ fop_setattr(
 	 * then turn off the xvattr bit.
 	 */
 	if (vfs_has_feature(vp->v_vfsp, VFSFT_XVATTR) == 0) {
-		vap->va_mask &= ~AT_XVATTR;
+		vap->va_mask &= ~VATTR_XVATTR;
 	}
 
 	/*
@@ -4482,7 +4482,7 @@ fs_reparse_mark(char *target, vattr_t *vap, xvattr_t *xvattr)
 
 	xva_init(xvattr);
 	xvattr->xva_vattr = *vap;
-	xvattr->xva_vattr.va_mask |= AT_XVATTR;
+	xvattr->xva_vattr.va_mask |= VATTR_XVATTR;
 	xoap = xva_getxoptattr(xvattr);
 	ASSERT(xoap);
 	XVA_SET_REQ(xvattr, XAT_REPARSE);
@@ -4513,7 +4513,7 @@ vn_is_reparse(vnode_t *vp, cred_t *cr, caller_context_t *ct)
 	if (fop_getattr(vp, &xvattr.xva_vattr, 0, cr, ct))
 		return (B_FALSE);
 
-	if ((!(xvattr.xva_vattr.va_mask & AT_XVATTR)) ||
+	if ((!(xvattr.xva_vattr.va_mask & VATTR_XVATTR)) ||
 	    (!(XVA_ISSET_RTN(&xvattr, XAT_REPARSE))))
 		return (B_FALSE);
 

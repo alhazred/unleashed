@@ -274,9 +274,9 @@ typedef struct znode {
 /*
  * Timestamp defines
  */
-#define	ACCESSED		(AT_ATIME)
-#define	STATE_CHANGED		(AT_CTIME)
-#define	CONTENT_MODIFIED	(AT_MTIME | AT_CTIME)
+#define	ACCESSED		(VATTR_ATIME)
+#define	STATE_CHANGED		(VATTR_CTIME)
+#define	CONTENT_MODIFIED	(VATTR_MTIME | VATTR_CTIME)
 
 #define	ZFS_ACCESSTIME_STAMP(zfsvfs, zp) \
 	if ((zfsvfs)->z_atime && !((zfsvfs)->z_vfs->vfs_flag & VFS_RDONLY)) \

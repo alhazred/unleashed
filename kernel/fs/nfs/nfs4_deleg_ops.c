@@ -217,7 +217,7 @@ deleg_rd_setattr(femarg_t *arg, vattr_t *vap, int flags, cred_t *cr,
 	bool_t trunc = FALSE;
 	rfs4_file_t *fp;
 
-	if ((vap->va_mask & AT_SIZE) && (vap->va_size == 0))
+	if ((vap->va_mask & VATTR_SIZE) && (vap->va_size == 0))
 		trunc = TRUE;
 
 	fp = (rfs4_file_t *)arg->fa_fnode->fn_available;
@@ -241,7 +241,7 @@ deleg_wr_setattr(femarg_t *arg, vattr_t *vap, int flags, cred_t *cr,
 	 * Use caller context to compare caller to delegation owner
 	 */
 	if (ct == NULL || (ct->cc_caller_id != nfs4_srv_caller_id)) {
-		if ((vap->va_mask & AT_SIZE) && (vap->va_size == 0))
+		if ((vap->va_mask & VATTR_SIZE) && (vap->va_size == 0))
 			trunc = TRUE;
 
 		fp = (rfs4_file_t *)arg->fa_fnode->fn_available;

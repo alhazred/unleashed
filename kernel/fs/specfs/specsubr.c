@@ -142,7 +142,7 @@ specvp(
 	 * this operation may block. Unfortunately, it may not have
 	 * been required if the snode is in the cache.
 	 */
-	va.va_mask = AT_FSID | AT_TIMES;
+	va.va_mask = VATTR_FSID | VATTR_TIMES;
 	rc = fop_getattr(vp, &va, 0, cr, NULL);	/* XXX may block! */
 
 	mutex_enter(&stable_lock);

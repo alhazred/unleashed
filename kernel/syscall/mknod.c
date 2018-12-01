@@ -80,14 +80,14 @@ mknodat(int fd, char *fname, mode_t fmode, dev_t dev)
 	 */
 	vattr.va_type = IFTOVT(fmode);
 	vattr.va_mode = fmode & MODEMASK;
-	vattr.va_mask = AT_TYPE|AT_MODE;
+	vattr.va_mask = VATTR_TYPE|VATTR_MODE;
 	if (vattr.va_type == VCHR || vattr.va_type == VBLK) {
 		if (get_udatamodel() != DATAMODEL_NATIVE)
 			dev = expldev(dev);
 		if (dev == NODEV || (getemajor(dev)) == (major_t)NODEV)
 			return (set_errno(EINVAL));
 		vattr.va_rdev = dev;
-		vattr.va_mask |= AT_RDEV;
+		vattr.va_mask |= VATTR_RDEV;
 	}
 
 	if (fname == NULL)

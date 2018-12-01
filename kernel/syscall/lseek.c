@@ -111,7 +111,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 		break;
 
 	case SEEK_END:
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if (error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL)) {
 			goto out;
 		}
@@ -141,7 +141,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			 * The ioctl is not supported, check the supplied
 			 * "off" is not past the end of file
 			 */
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				return (error);
@@ -170,7 +170,7 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 			 * ioctl is not supported, if the off is valid return
 			 * the "virtual hole" at the end of the file.
 			 */
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				return (error);
@@ -292,7 +292,7 @@ lseek64(int fdes, off_t off, int stype)
 		break;
 
 	case SEEK_END:
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		if ((error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL)) != 0)
 			goto lseek64error;
 		new_off += vattr.va_size;
@@ -317,7 +317,7 @@ lseek64(int fdes, off_t off, int stype)
 			 * The ioctl is not supported, check the supplied off
 			 * is not past end of file
 			 */
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				goto lseek64error;
@@ -345,7 +345,7 @@ lseek64(int fdes, off_t off, int stype)
 			 * ioctl is not supported, if the off is valid return
 			 * the "virtual hole" at the end of the file.
 			 */
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error)
 				goto lseek64error;

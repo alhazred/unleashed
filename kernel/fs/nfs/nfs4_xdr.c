@@ -820,7 +820,7 @@ static void
 xdr_ga_prefill_vattr(struct nfs4_ga_res *garp, struct mntinfo4 *mi)
 {
 	static vattr_t s_vattr = {
-		AT_ALL,		/* va_mask */
+		VATTR_ALL,	/* va_mask */
 		VNON,		/* va_type */
 		0777,		/* va_mode */
 		UID_NOBODY,	/* va_uid */
@@ -919,7 +919,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 			if (vap->va_type == VBLK)
 				vap->va_blksize = DEV_BSIZE;
 
-			vap->va_mask |= AT_TYPE;
+			vap->va_mask |= VATTR_TYPE;
 		}
 		if (resbmap & FATTR4_FH_EXPIRE_TYPE_MASK) {
 			if (!XDR_GETINT32(xdrs, (int *)&gesp->n4g_fet))
@@ -939,7 +939,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 				garp->n4g_attrerr = EFBIG;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATSIZE_ERR;
 			} else {
-				vap->va_mask |= AT_SIZE;
+				vap->va_mask |= VATTR_SIZE;
 			}
 		}
 		if (resbmap & FATTR4_LINK_SUPPORT_MASK) {
@@ -1069,7 +1069,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 			if (!xdr_u_longlong_t(xdrs,
 			    (u_longlong_t *)&vap->va_nodeid))
 				return (FALSE);
-			vap->va_mask |= AT_NODEID;
+			vap->va_mask |= VATTR_NODEID;
 		}
 		if (resbmap & FATTR4_FILES_AVAIL_MASK) {
 			if (!xdr_u_longlong_t(xdrs,
@@ -1153,7 +1153,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 		if (resbmap & FATTR4_MODE_MASK) {
 			if (!XDR_GETINT32(xdrs, (int *)&vap->va_mode))
 				return (FALSE);
-			vap->va_mask |= AT_MODE;
+			vap->va_mask |= VATTR_MODE;
 		}
 		if (resbmap & FATTR4_NO_TRUNC_MASK) {
 			if (!XDR_GETINT32(xdrs, (int *)&truefalse))
@@ -1164,7 +1164,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 		if (resbmap & FATTR4_NUMLINKS_MASK) {
 			if (!XDR_GETINT32(xdrs, (int *)&vap->va_nlink))
 				return (FALSE);
-			vap->va_mask |= AT_NLINK;
+			vap->va_mask |= VATTR_NLINK;
 		}
 	}
 	if (resbmap &
@@ -1212,7 +1212,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 			    bcmp(owner_val, pug->u_last.utf8string_val,
 			    *owner_length) == 0) {
 				vap->va_uid = pug->uid;
-				vap->va_mask |= AT_UID;
+				vap->va_mask |= VATTR_UID;
 			} else {
 				uid_t uid;
 
@@ -1236,7 +1236,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 					    NFS4_GETATTR_ATUID_ERR;
 				} else {
 					vap->va_uid = uid;
-					vap->va_mask |= AT_UID;
+					vap->va_mask |= VATTR_UID;
 					if (pug && ol <= MAX_OG_NAME) {
 						pug->uid = uid;
 						U_SWAP_CURR_LAST(pug);
@@ -1285,7 +1285,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 			    bcmp(group_val, pug->g_last.utf8string_val,
 			    *group_length) == 0) {
 				vap->va_gid = pug->gid;
-				vap->va_mask |= AT_GID;
+				vap->va_mask |= VATTR_GID;
 			} else {
 				uid_t gid;
 
@@ -1309,7 +1309,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 					    NFS4_GETATTR_ATGID_ERR;
 				} else {
 					vap->va_gid = gid;
-					vap->va_mask |= AT_GID;
+					vap->va_mask |= VATTR_GID;
 					if (pug && gl <= MAX_OG_NAME) {
 						pug->gid = gid;
 						G_SWAP_CURR_LAST(pug);
@@ -1349,7 +1349,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 			} else {
 				vap->va_rdev = 0;
 			}
-			vap->va_mask |= AT_RDEV;
+			vap->va_mask |= VATTR_RDEV;
 		}
 		if (resbmap & FATTR4_SPACE_AVAIL_MASK) {
 			if (!xdr_u_longlong_t(xdrs,
@@ -1376,7 +1376,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 				return (FALSE);
 
 			/* Compute space depending on device type */
-			ASSERT((vap->va_mask & AT_TYPE));
+			ASSERT((vap->va_mask & VATTR_TYPE));
 			if (vap->va_type == VREG || vap->va_type == VDIR ||
 			    vap->va_type == VLNK) {
 				vap->va_nblocks = (u_longlong_t)
@@ -1385,7 +1385,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 			} else {
 				vap->va_nblocks = 0;
 			}
-			vap->va_mask |= AT_NBLOCKS;
+			vap->va_mask |= VATTR_NBLOCKS;
 		}
 		if (resbmap & FATTR4_SYSTEM_MASK) {
 			ASSERT(0);
@@ -1416,7 +1416,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 				garp->n4g_attrerr = error;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATATIME_ERR;
 			}
-			vap->va_mask |= AT_ATIME;
+			vap->va_mask |= VATTR_ATIME;
 		}
 		if (resbmap & FATTR4_TIME_ACCESS_SET_MASK) {
 			ASSERT(0);
@@ -1446,7 +1446,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 				garp->n4g_attrerr = error;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATCTIME_ERR;
 			}
-			vap->va_mask |= AT_CTIME;
+			vap->va_mask |= VATTR_CTIME;
 		}
 		if (resbmap & FATTR4_TIME_MODIFY_MASK) {
 			nfstime4 mtime;
@@ -1462,7 +1462,7 @@ xdr_ga_fattr_res(XDR *xdrs, struct nfs4_ga_res *garp, bitmap4 resbmap,
 				garp->n4g_attrerr = error;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATMTIME_ERR;
 			}
-			vap->va_mask |= AT_MTIME;
+			vap->va_mask |= VATTR_MTIME;
 		}
 		if (resbmap & FATTR4_TIME_MODIFY_SET_MASK) {
 			ASSERT(0);
@@ -1588,7 +1588,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 			if (vap->va_type == VBLK)
 				vap->va_blksize = DEV_BSIZE;
 
-			vap->va_mask |= AT_TYPE;
+			vap->va_mask |= VATTR_TYPE;
 		}
 		if (resbmap & FATTR4_FH_EXPIRE_TYPE_MASK) {
 			gesp->n4g_fet = IXDR_GET_U_INT32(ptr);
@@ -1604,7 +1604,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 				garp->n4g_attrerr = EFBIG;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATSIZE_ERR;
 			} else {
-				vap->va_mask |= AT_SIZE;
+				vap->va_mask |= VATTR_SIZE;
 			}
 		}
 		if (resbmap & FATTR4_LINK_SUPPORT_MASK) {
@@ -1707,7 +1707,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 		}
 		if (resbmap & FATTR4_FILEID_MASK) {
 			IXDR_GET_U_HYPER(ptr, vap->va_nodeid);
-			vap->va_mask |= AT_NODEID;
+			vap->va_mask |= VATTR_NODEID;
 		}
 		if (resbmap & FATTR4_FILES_AVAIL_MASK) {
 			IXDR_GET_U_HYPER(ptr, gesp->n4g_sb.f_favail);
@@ -1771,7 +1771,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 		}
 		if (resbmap & FATTR4_MODE_MASK) {
 			vap->va_mode = IXDR_GET_U_INT32(ptr);
-			vap->va_mask |= AT_MODE;
+			vap->va_mask |= VATTR_MODE;
 		}
 		if (resbmap & FATTR4_NO_TRUNC_MASK) {
 			truefalse = IXDR_GET_U_INT32(ptr);
@@ -1780,7 +1780,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 		}
 		if (resbmap & FATTR4_NUMLINKS_MASK) {
 			vap->va_nlink = IXDR_GET_U_INT32(ptr);
-			vap->va_mask |= AT_NLINK;
+			vap->va_mask |= VATTR_NLINK;
 		}
 	}
 	if (resbmap &
@@ -1818,7 +1818,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 			    bcmp(owner_val, pug->u_last.utf8string_val,
 			    *owner_length) == 0) {
 				vap->va_uid = pug->uid;
-				vap->va_mask |= AT_UID;
+				vap->va_mask |= VATTR_UID;
 			} else {
 				uid_t uid;
 
@@ -1842,7 +1842,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 					    NFS4_GETATTR_ATUID_ERR;
 				} else {
 					vap->va_uid = uid;
-					vap->va_mask |= AT_UID;
+					vap->va_mask |= VATTR_UID;
 					/* save the results for next time */
 					if (pug && ol <= MAX_OG_NAME) {
 						pug->uid = uid;
@@ -1886,7 +1886,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 			    bcmp(group_val, pug->g_last.utf8string_val,
 			    *group_length) == 0) {
 				vap->va_gid = pug->gid;
-				vap->va_mask |= AT_GID;
+				vap->va_mask |= VATTR_GID;
 			} else {
 				uid_t gid;
 
@@ -1910,7 +1910,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 					    NFS4_GETATTR_ATGID_ERR;
 				} else {
 					vap->va_gid = gid;
-					vap->va_mask |= AT_GID;
+					vap->va_mask |= VATTR_GID;
 					if (pug && gl <= MAX_OG_NAME) {
 						pug->gid = gid;
 						pug->g_curr.utf8string_len =
@@ -1954,7 +1954,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 			} else {
 				vap->va_rdev = 0;
 			}
-			vap->va_mask |= AT_RDEV;
+			vap->va_mask |= VATTR_RDEV;
 		}
 		if (resbmap & FATTR4_SPACE_AVAIL_MASK) {
 			IXDR_GET_U_HYPER(ptr, gesp->n4g_sb.f_bavail);
@@ -1973,7 +1973,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 			IXDR_GET_U_HYPER(ptr, space_used);
 
 			/* Compute space depending on device type */
-			ASSERT((vap->va_mask & AT_TYPE));
+			ASSERT((vap->va_mask & VATTR_TYPE));
 			if (vap->va_type == VREG || vap->va_type == VDIR ||
 			    vap->va_type == VLNK) {
 				vap->va_nblocks = (u_longlong_t)
@@ -1982,7 +1982,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 			} else {
 				vap->va_nblocks = 0;
 			}
-			vap->va_mask |= AT_NBLOCKS;
+			vap->va_mask |= VATTR_NBLOCKS;
 		}
 		if (resbmap & FATTR4_SYSTEM_MASK) {
 			ASSERT(0);
@@ -2011,7 +2011,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 				garp->n4g_attrerr = error;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATATIME_ERR;
 			}
-			vap->va_mask |= AT_ATIME;
+			vap->va_mask |= VATTR_ATIME;
 		}
 		if (resbmap & FATTR4_TIME_ACCESS_SET_MASK) {
 			ASSERT(0);
@@ -2038,7 +2038,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 				garp->n4g_attrerr = error;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATCTIME_ERR;
 			}
-			vap->va_mask |= AT_CTIME;
+			vap->va_mask |= VATTR_CTIME;
 		}
 		if (resbmap & FATTR4_TIME_MODIFY_MASK) {
 			nfstime4 mtime;
@@ -2052,7 +2052,7 @@ xdr_ga_fattr_res_inline(uint32_t *ptr, struct nfs4_ga_res *garp,
 				garp->n4g_attrerr = error;
 				garp->n4g_attrwhy = NFS4_GETATTR_ATMTIME_ERR;
 			}
-			vap->va_mask |= AT_MTIME;
+			vap->va_mask |= VATTR_MTIME;
 		}
 		if (resbmap & FATTR4_TIME_MODIFY_SET_MASK) {
 			ASSERT(0);
@@ -2287,7 +2287,7 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 			 */
 			if (gar.n4g_mon_fid_valid)
 				dp->d_ino = gar.n4g_mon_fid;
-			else if (gar.n4g_va.va_mask & AT_NODEID)
+			else if (gar.n4g_va.va_mask & VATTR_NODEID)
 				dp->d_ino = gar.n4g_va.va_nodeid;
 			else
 				dp->d_ino = 0;

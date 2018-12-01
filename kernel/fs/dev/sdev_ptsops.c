@@ -50,7 +50,7 @@
 #define	isdigit(ch)	((ch) >= '0' && (ch) <= '9')
 
 static vattr_t devpts_vattr = {
-	AT_TYPE|AT_MODE|AT_UID|AT_GID,		/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID,/* va_mask */
 	VCHR,					/* va_type */
 	S_IFCHR | DEVPTS_DEVMODE_DEFAULT,	/* va_mode */
 	DEVPTS_UID_DEFAULT,			/* va_uid */
@@ -381,7 +381,7 @@ devpts_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred,
 static int
 devpts_set_id(struct sdev_node *dv, struct vattr *vap, int protocol)
 {
-	ASSERT((protocol & AT_UID) || (protocol & AT_GID));
+	ASSERT((protocol & VATTR_UID) || (protocol & VATTR_GID));
 	ptms_set_owner(getminor(SDEVTOV(dv)->v_rdev),
 	    vap->va_uid, vap->va_gid);
 	return (0);
@@ -395,7 +395,7 @@ devpts_setattr(struct vnode *vp, struct vattr *vap, int flags,
 {
 	ASSERT((vp->v_type == VCHR) || (vp->v_type == VDIR));
 	return (devname_setattr_func(vp, vap, flags, cred,
-	    devpts_set_id, AT_UID|AT_GID));
+	    devpts_set_id, VATTR_UID|VATTR_GID));
 }
 
 

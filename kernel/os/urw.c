@@ -68,7 +68,7 @@ page_valid(struct seg *seg, caddr_t addr)
 	 * Fail if the page doesn't map to a page in the underlying
 	 * mapped file, if an underlying mapped file exists.
 	 */
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	if (seg->s_ops == &segvn_ops &&
 	    segop_getvp(seg, addr, &vp) == 0 &&
 	    vp != NULL && vp->v_type == VREG &&

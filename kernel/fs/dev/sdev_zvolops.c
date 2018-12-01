@@ -612,7 +612,7 @@ devzvol_mk_ngz_node(struct sdev_node *parent, char *nm)
 
 	bzero(&vattr, sizeof (vattr));
 	gethrestime(&now);
-	vattr.va_mask = AT_TYPE|AT_MODE|AT_UID|AT_GID;
+	vattr.va_mask = VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID;
 	vattr.va_uid = SDEV_UID_DEFAULT;
 	vattr.va_gid = SDEV_GID_DEFAULT;
 	vattr.va_type = VNON;

@@ -1977,7 +1977,7 @@ aus_close(struct t_audit_data *tad)
 	if (fad->fad_aupath != NULL) {
 		au_uwrite(au_to_path(fad->fad_aupath));
 		if ((vp = fp->f_vnode) != NULL) {
-			attr.va_mask = AT_ALL;
+			attr.va_mask = VATTR_ALL;
 			if (fop_getattr(vp, &attr, 0, CRED(), NULL) == 0) {
 				/*
 				 * When write was not used and the file can be

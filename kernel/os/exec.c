@@ -1127,7 +1127,7 @@ execpermissions(struct vnode *vp, struct vattr *vattrp, struct uarg *args)
 	int error;
 	proc_t *p = ttoproc(curthread);
 
-	vattrp->va_mask = AT_MODE | AT_UID | AT_GID | AT_SIZE;
+	vattrp->va_mask = VATTR_MODE | VATTR_UID | VATTR_GID | VATTR_SIZE;
 	if (error = fop_getattr(vp, vattrp, ATTR_EXEC, p->p_cred, NULL))
 		return (error);
 	/*

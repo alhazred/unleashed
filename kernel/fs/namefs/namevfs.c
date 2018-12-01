@@ -399,11 +399,11 @@ nm_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *crp)
 
 	mutex_init(&nodep->nm_lock, NULL, MUTEX_DEFAULT, NULL);
 	vattrp = &nodep->nm_vattr;
-	vattrp->va_mask = AT_ALL;
+	vattrp->va_mask = VATTR_ALL;
 	if (error = fop_getattr(mvp, vattrp, 0, crp, NULL))
 		goto out;
 
-	filevattr.va_mask = AT_ALL;
+	filevattr.va_mask = VATTR_ALL;
 	if (error = fop_getattr(filevp, &filevattr, 0, crp, NULL))
 		goto out;
 	/*

@@ -779,7 +779,7 @@ vnode_match(vnode_t *v1, vnode_t *v2, cred_t *cr)
 			return (1);
 	}
 
-	v1attr.va_mask = v2attr.va_mask = AT_TYPE;
+	v1attr.va_mask = v2attr.va_mask = VATTR_TYPE;
 
 	/*
 	 * This check for symbolic links handles the pseudo-symlinks in procfs.
@@ -793,7 +793,7 @@ vnode_match(vnode_t *v1, vnode_t *v2, cred_t *cr)
 	    v1attr.va_type == VLNK || v2attr.va_type == VLNK)
 		return (0);
 
-	v1attr.va_mask = v2attr.va_mask = AT_TYPE | AT_FSID | AT_NODEID;
+	v1attr.va_mask = v2attr.va_mask = VATTR_TYPE | VATTR_FSID | VATTR_NODEID;
 
 	if (fop_getattr(v1, &v1attr, ATTR_REAL, cr, NULL) != 0 ||
 	    fop_getattr(v2, &v2attr, ATTR_REAL, cr, NULL) != 0)

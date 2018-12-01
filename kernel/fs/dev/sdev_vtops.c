@@ -51,7 +51,7 @@
 
 /* attributes for VT nodes */
 static vattr_t devvt_vattr = {
-	AT_TYPE|AT_MODE|AT_UID|AT_GID,		/* va_mask */
+	VATTR_TYPE|VATTR_MODE|VATTR_UID|VATTR_GID,/* va_mask */
 	VCHR,					/* va_type */
 	S_IFCHR | DEVVT_DEVMODE_DEFAULT,	/* va_mode */
 	DEVVT_UID_DEFAULT,			/* va_uid */

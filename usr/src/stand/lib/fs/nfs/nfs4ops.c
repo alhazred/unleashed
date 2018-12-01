@@ -238,32 +238,32 @@ nfs4getattr(struct nfs_file *nfp, struct vattr *vap)
 	}
 
 	bfattr4 = &getattrres.gr_attrs;
-	if (vap->va_mask & AT_TYPE) {
+	if (vap->va_mask & VATTR_TYPE) {
 		if (bfattr4->b_fattr4_type < NF4REG ||
 		    bfattr4->b_fattr4_type > NF4FIFO)
 			vap->va_type = VBAD;
 		else
 			vap->va_type = nf4_to_vt[bfattr4->b_fattr4_type];
 	}
-	if (vap->va_mask & AT_MODE)
+	if (vap->va_mask & VATTR_MODE)
 		vap->va_mode = (mode_t)bfattr4->b_fattr4_mode;
-	if (vap->va_mask & AT_SIZE)
+	if (vap->va_mask & VATTR_SIZE)
 		vap->va_size = (uoff_t)bfattr4->b_fattr4_size;
-	if (vap->va_mask & AT_NODEID)
+	if (vap->va_mask & VATTR_NODEID)
 		vap->va_nodeid = (uint64_t)bfattr4->b_fattr4_fileid;
 	/*
 	 * XXX - may need to do something more here.
 	 */
-	if (vap->va_mask & AT_ATIME) {
+	if (vap->va_mask & VATTR_ATIME) {
 		vap->va_atime.tv_sec = bfattr4->b_fattr4_time_access.seconds;
 		vap->va_atime.tv_nsec = bfattr4->b_fattr4_time_access.nseconds;
 	}
-	if (vap->va_mask & AT_CTIME) {
+	if (vap->va_mask & VATTR_CTIME) {
 		vap->va_ctime.tv_sec = bfattr4->b_fattr4_time_metadata.seconds;
 		vap->va_ctime.tv_nsec =
 		    bfattr4->b_fattr4_time_metadata.nseconds;
 	}
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		vap->va_mtime.tv_sec = bfattr4->b_fattr4_time_modify.seconds;
 		vap->va_mtime.tv_nsec = bfattr4->b_fattr4_time_modify.nseconds;
 	}

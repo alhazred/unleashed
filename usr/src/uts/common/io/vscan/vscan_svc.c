@@ -869,7 +869,7 @@ vscan_svc_process_scan_result(int idx)
 		/* if mtime has changed, don't clear the modified attribute */
 		vp = node->vsn_req->vsr_vp;
 		mtime = &(node->vsn_mtime);
-		attr.va_mask = AT_MTIME;
+		attr.va_mask = VATTR_MTIME;
 		if ((fop_getattr(vp, &attr, 0, kcred, NULL) != 0) ||
 		    (mtime->tv_sec != attr.va_mtime.tv_sec) ||
 		    (mtime->tv_nsec != attr.va_mtime.tv_nsec)) {
@@ -912,7 +912,7 @@ vscan_svc_process_scan_result(int idx)
 /*
  * vscan_svc_getattr
  *
- * Get the vscan related system attributes, AT_SIZE & AT_MTIME.
+ * Get the vscan related system attributes, VATTR_SIZE & VATTR_MTIME.
  */
 static int
 vscan_svc_getattr(int idx)
@@ -929,10 +929,10 @@ vscan_svc_getattr(int idx)
 		return (-1);
 
 	/* get the attributes */
-	xva_init(&xvattr); /* sets AT_XVATTR */
+	xva_init(&xvattr); /* sets VATTR_XVATTR */
 
-	xvattr.xva_vattr.va_mask |= AT_SIZE;
-	xvattr.xva_vattr.va_mask |= AT_MTIME;
+	xvattr.xva_vattr.va_mask |= VATTR_SIZE;
+	xvattr.xva_vattr.va_mask |= VATTR_MTIME;
 	XVA_SET_REQ(&xvattr, XAT_AV_MODIFIED);
 	XVA_SET_REQ(&xvattr, XAT_AV_QUARANTINED);
 	XVA_SET_REQ(&xvattr, XAT_AV_SCANSTAMP);
@@ -989,7 +989,7 @@ vscan_svc_setattr(int idx, int which)
 		return (-1);
 
 	/* update the attributes */
-	xva_init(&xvattr); /* sets AT_XVATTR */
+	xva_init(&xvattr); /* sets VATTR_XVATTR */
 	if ((xoap = xva_getxoptattr(&xvattr)) == NULL)
 		return (-1);
 
@@ -1012,7 +1012,7 @@ vscan_svc_setattr(int idx, int which)
 
 	/* if access is denied, set mtime to invalidate client cache */
 	if (node->vsn_access != VS_ACCESS_ALLOW) {
-		xvattr.xva_vattr.va_mask |= AT_MTIME;
+		xvattr.xva_vattr.va_mask |= VATTR_MTIME;
 		gethrestime(&xvattr.xva_vattr.va_mtime);
 	}
 
@@ -1082,7 +1082,7 @@ vscan_svc_exempt_file(vnode_t *vp, boolean_t *allow)
 
 	ASSERT(vp != NULL);
 
-	attr.va_mask = AT_SIZE;
+	attr.va_mask = VATTR_SIZE;
 
 	if (fop_getattr(vp, &attr, 0, kcred, NULL) != 0) {
 		*allow = B_FALSE;

@@ -59,7 +59,7 @@ fchmodat(int fd, char *path, int mode, int flag)
 		return (set_errno(EOPNOTSUPP));
 
 	vattr.va_mode = mode & MODEMASK;
-	vattr.va_mask = AT_MODE;
+	vattr.va_mask = VATTR_MODE;
 	error = fsetattrat(fd, path, flag, &vattr);
 	if (error)
 		return (set_errno(error));

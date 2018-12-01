@@ -1292,7 +1292,7 @@ nfs3rootvp(vnode_t **rtvpp, vfs_t *vfsp, struct servinfo *svp,
 
 	/* If we didn't get a type, get one now */
 	if (rtvp->v_type == VNON) {
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 
 		error = nfs3getattr(rtvp, &va, tcr);
 		if (error)
@@ -1610,7 +1610,7 @@ nfs3_vget(vfs_t *vfsp, vnode_t **vpp, fid_t *fidp)
 	}
 
 	if (vp->v_type == VNON) {
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 		error = nfs3getattr(vp, &va, CRED());
 		if (error) {
 			VN_RELE(vp);

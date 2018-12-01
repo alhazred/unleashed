@@ -1233,7 +1233,7 @@ ud_dirmakeinode(struct ud_inode *tdp, struct ud_inode **ipp,
 
 	ASSERT(vap != NULL);
 	ASSERT(op == DE_CREATE || op == DE_MKDIR);
-	ASSERT((vap->va_mask & (AT_TYPE|AT_MODE)) == (AT_TYPE|AT_MODE));
+	ASSERT((vap->va_mask & (VATTR_TYPE|VATTR_MODE)) == (VATTR_TYPE|VATTR_MODE));
 	ASSERT(RW_WRITE_HELD(&tdp->i_rwlock));
 
 	/*
@@ -1257,9 +1257,9 @@ ud_dirmakeinode(struct ud_inode *tdp, struct ud_inode **ipp,
 	 * mtime fields.  They were set from the passed in attributes in
 	 * ud_ialloc().
 	 */
-	if (vap->va_mask & AT_ATIME)
+	if (vap->va_mask & VATTR_ATIME)
 		ip->i_flag &= ~IACC;
-	if (vap->va_mask & AT_MTIME)
+	if (vap->va_mask & VATTR_MTIME)
 		ip->i_flag &= ~IUPD;
 	/*
 	 * push inode before it's name appears in a directory

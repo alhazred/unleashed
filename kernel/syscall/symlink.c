@@ -90,7 +90,7 @@ top:
 		if ((error = copyinstr(target, tbuf, MAXPATHLEN, &tlen)) == 0) {
 			vattr.va_type = VLNK;
 			vattr.va_mode = 0777;
-			vattr.va_mask = AT_TYPE|AT_MODE;
+			vattr.va_mask = VATTR_TYPE|VATTR_MODE;
 			error = fop_symlink(dvp, lpn.pn_path, &vattr,
 			    tbuf, CRED(), NULL, 0);
 			if (auditing)

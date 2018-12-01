@@ -103,7 +103,7 @@ rfs3_getattr(GETATTR3args *args, GETATTR3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
 	if (!error) {
@@ -188,14 +188,14 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	 * delegated this file.  If so, then we return JUKEBOX to
 	 * allow the client to retrasmit its request.
 	 */
-	if (vp->v_type == VREG && (ava.va_mask & AT_SIZE)) {
+	if (vp->v_type == VREG && (ava.va_mask & VATTR_SIZE)) {
 		if (nbl_need_check(vp)) {
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
 		}
 	}
 
-	bva.va_mask = AT_ALL;
+	bva.va_mask = VATTR_ALL;
 	error = rfs4_delegated_getattr(vp, &bva, 0, cr);
 
 	/*
@@ -228,7 +228,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	 * If the filesystem is exported with nosuid, then mask off
 	 * the setuid and setgid bits.
 	 */
-	if ((ava.va_mask & AT_MODE) && vp->v_type == VREG &&
+	if ((ava.va_mask & VATTR_MODE) && vp->v_type == VREG &&
 	    (exi->exi_export.ex_flags & EX_NOSUID))
 		ava.va_mode &= ~(VSUID | VSGID);
 
@@ -254,7 +254,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 	 * size of the file if there is a conflicting non-blocking
 	 * mandatory lock in the region the change.
 	 */
-	if (vp->v_type == VREG && (ava.va_mask & AT_SIZE)) {
+	if (vp->v_type == VREG && (ava.va_mask & VATTR_SIZE)) {
 		if (in_crit) {
 			uoff_t offset;
 			ssize_t length;
@@ -274,7 +274,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 		}
 
 		if (crgetuid(cr) == bva.va_uid && ava.va_size != bva.va_size) {
-			ava.va_mask &= ~AT_SIZE;
+			ava.va_mask &= ~VATTR_SIZE;
 			bf.l_type = F_WRLCK;
 			bf.l_whence = 0;
 			bf.l_start = (off64_t)ava.va_size;
@@ -295,7 +295,7 @@ rfs3_setattr(SETATTR3args *args, SETATTR3res *resp, struct exportinfo *exi,
 		goto out1;
 	}
 
-	ava.va_mask = AT_ALL;
+	ava.va_mask = VATTR_ALL;
 	avap = rfs4_delegated_getattr(vp, &ava, 0, cr) ? NULL : &ava;
 
 	/*
@@ -386,7 +386,7 @@ rfs3_lookup(LOOKUP3args *args, LOOKUP3res *resp, struct exportinfo *exi,
 		}
 	}
 
-	dva.va_mask = AT_ALL;
+	dva.va_mask = VATTR_ALL;
 	dvap = fop_getattr(dvp, &dva, 0, cr, NULL) ? NULL : &dva;
 
 	if (args->what.name == nfs3nametoolong) {
@@ -433,7 +433,7 @@ rfs3_lookup(LOOKUP3args *args, LOOKUP3res *resp, struct exportinfo *exi,
 	if (name != args->what.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
-	dva.va_mask = AT_ALL;
+	dva.va_mask = VATTR_ALL;
 	dvap = fop_getattr(dvp, &dva, 0, cr, NULL) ? NULL : &dva;
 
 	if (error)
@@ -461,7 +461,7 @@ rfs3_lookup(LOOKUP3args *args, LOOKUP3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
 
 	VN_RELE(vp);
@@ -547,7 +547,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 	 * mandatory lock files is denied on the server, so it might
 	 * as well be reflected to the server during the open.
 	 */
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error)
 		goto out;
@@ -601,7 +601,7 @@ rfs3_access(ACCESS3args *args, ACCESS3res *resp, struct exportinfo *exi,
 			resp->resok.access |= ACCESS3_EXECUTE;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = rfs4_delegated_getattr(vp, &va, 0, cr) ? NULL : &va;
 
 	resp->status = NFS3_OK;
@@ -662,7 +662,7 @@ rfs3_readlink(READLINK3args *args, READLINK3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error)
 		goto out;
@@ -719,7 +719,7 @@ rfs3_readlink(READLINK3args *args, READLINK3res *resp, struct exportinfo *exi,
 			*(data + MAXPATHLEN - uio.uio_resid) = '\0';
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/* Lie about object type again just to be consistent */
@@ -874,7 +874,7 @@ rfs3_read(READ3args *args, READ3res *resp, struct exportinfo *exi,
 
 	need_rwunlock = 1;
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	/*
@@ -1027,7 +1027,7 @@ doio_read:
 		ASSERT(mp != NULL);
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	error = fop_getattr(vp, &va, 0, cr, &ct);
 
 	if (error)
@@ -1186,7 +1186,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 	}
 
 
-	bva.va_mask = AT_ALL;
+	bva.va_mask = VATTR_ALL;
 	error = fop_getattr(vp, &bva, 0, cr, &ct);
 
 	/*
@@ -1305,7 +1305,7 @@ rfs3_write(WRITE3args *args, WRITE3res *resp, struct exportinfo *exi,
 		goto err1;
 	}
 
-	ava.va_mask = AT_ALL;
+	ava.va_mask = VATTR_ALL;
 	avap = fop_getattr(vp, &ava, 0, cr, &ct) ? NULL : &ava;
 
 	if (error)
@@ -1396,7 +1396,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	dbva.va_mask = AT_ALL;
+	dbva.va_mask = VATTR_ALL;
 	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
@@ -1426,7 +1426,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 	}
 
 	if (args->how.mode == EXCLUSIVE) {
-		va.va_mask = AT_TYPE | AT_MODE | AT_MTIME;
+		va.va_mask = VATTR_TYPE | VATTR_MODE | VATTR_MTIME;
 		va.va_type = VREG;
 		va.va_mode = (mode_t)0;
 		/*
@@ -1441,7 +1441,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 		    &va);
 		if (error)
 			goto out;
-		va.va_mask |= AT_TYPE;
+		va.va_mask |= VATTR_TYPE;
 		va.va_type = VREG;
 		if (args->how.mode == GUARDED)
 			excl = EXCL;
@@ -1456,7 +1456,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 			 * being modified. If there are conflicting locks fail
 			 * the operation with EACCES.
 			 */
-			if (va.va_mask & AT_SIZE) {
+			if (va.va_mask & VATTR_SIZE) {
 				struct vattr tva;
 
 				/*
@@ -1489,7 +1489,7 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 					nbl_start_crit(tvp, RW_READER);
 					in_crit = 1;
 
-					tva.va_mask = AT_SIZE;
+					tva.va_mask = VATTR_SIZE;
 					error = fop_getattr(tvp, &tva, 0, cr,
 					    NULL);
 					/*
@@ -1515,14 +1515,14 @@ rfs3_create(CREATE3args *args, CREATE3res *resp, struct exportinfo *exi,
 				}
 			}
 		}
-		if (va.va_mask & AT_SIZE)
+		if (va.va_mask & VATTR_SIZE)
 			reqsize = va.va_size;
 	}
 
 	/*
 	 * Must specify the mode.
 	 */
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		resp->status = NFS3ERR_INVAL;
 		goto out1;
 	}
@@ -1544,7 +1544,7 @@ tryagain:
 	error = fop_create(dvp, name, &va, excl, VWRITE,
 	    &vp, cr, 0, NULL, NULL);
 
-	dava.va_mask = AT_ALL;
+	dava.va_mask = VATTR_ALL;
 	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	if (error) {
@@ -1589,7 +1589,7 @@ tryagain:
 			goto out1;
 		}
 
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 		vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 		mtime = (nfstime3 *)&args->how.createhow3_u.verf;
@@ -1618,7 +1618,7 @@ tryagain:
 			goto out1;
 		}
 
-		va.va_mask = AT_ALL;
+		va.va_mask = VATTR_ALL;
 		vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 		/*
@@ -1638,10 +1638,10 @@ tryagain:
 		    args->how.mode == GUARDED) &&
 		    args->how.createhow3_u.obj_attributes.size.set_it &&
 		    vap->va_size != reqsize) {
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			va.va_size = reqsize;
 			(void) fop_setattr(vp, &va, 0, cr, NULL);
-			va.va_mask = AT_ALL;
+			va.va_mask = VATTR_ALL;
 			vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 		}
 	}
@@ -1737,7 +1737,7 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	dbva.va_mask = AT_ALL;
+	dbva.va_mask = VATTR_ALL;
 	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
@@ -1760,7 +1760,7 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 	if (error)
 		goto out;
 
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		resp->status = NFS3ERR_INVAL;
 		goto out1;
 	}
@@ -1774,7 +1774,7 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 		goto out1;
 	}
 
-	va.va_mask |= AT_TYPE;
+	va.va_mask |= VATTR_TYPE;
 	va.va_type = VDIR;
 
 	error = fop_mkdir(dvp, name, &va, &vp, cr, NULL, 0, NULL);
@@ -1782,7 +1782,7 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 	if (name != args->where.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
-	dava.va_mask = AT_ALL;
+	dava.va_mask = VATTR_ALL;
 	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	/*
@@ -1799,7 +1799,7 @@ rfs3_mkdir(MKDIR3args *args, MKDIR3res *resp, struct exportinfo *exi,
 	else
 		resp->resok.obj.handle_follows = TRUE;
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/*
@@ -1870,7 +1870,7 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 		goto err;
 	}
 
-	dbva.va_mask = AT_ALL;
+	dbva.va_mask = VATTR_ALL;
 	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
@@ -1893,7 +1893,7 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 	if (error)
 		goto err;
 
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		resp->status = NFS3ERR_INVAL;
 		goto err1;
 	}
@@ -1922,12 +1922,12 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 	}
 
 
-	va.va_mask |= AT_TYPE;
+	va.va_mask |= VATTR_TYPE;
 	va.va_type = VLNK;
 
 	error = fop_symlink(dvp, name, &va, symdata, cr, NULL, 0);
 
-	dava.va_mask = AT_ALL;
+	dava.va_mask = VATTR_ALL;
 	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	if (error)
@@ -1956,7 +1956,7 @@ rfs3_symlink(SYMLINK3args *args, SYMLINK3res *resp, struct exportinfo *exi,
 	else
 		resp->resok.obj.handle_follows = TRUE;
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/*
@@ -2030,7 +2030,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	dbva.va_mask = AT_ALL;
+	dbva.va_mask = VATTR_ALL;
 	dbvap = fop_getattr(dvp, &dbva, 0, cr, NULL) ? NULL : &dbva;
 	davap = dbvap;
 
@@ -2067,7 +2067,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 		va.va_rdev = makedevice(
 		    args->what.mknoddata3_u.device.spec.specdata1,
 		    args->what.mknoddata3_u.device.spec.specdata2);
-		va.va_mask |= AT_TYPE | AT_RDEV;
+		va.va_mask |= VATTR_TYPE | VATTR_RDEV;
 		break;
 	case NF3SOCK:
 		error = sattr3_to_vattr(
@@ -2075,7 +2075,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 		if (error)
 			goto out;
 		va.va_type = VSOCK;
-		va.va_mask |= AT_TYPE;
+		va.va_mask |= VATTR_TYPE;
 		break;
 	case NF3FIFO:
 		error = sattr3_to_vattr(
@@ -2083,7 +2083,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 		if (error)
 			goto out;
 		va.va_type = VFIFO;
-		va.va_mask |= AT_TYPE;
+		va.va_mask |= VATTR_TYPE;
 		break;
 	default:
 		resp->status = NFS3ERR_BADTYPE;
@@ -2093,7 +2093,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 	/*
 	 * Must specify the mode.
 	 */
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		resp->status = NFS3ERR_INVAL;
 		goto out1;
 	}
@@ -2117,7 +2117,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 	if (name != args->where.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
-	dava.va_mask = AT_ALL;
+	dava.va_mask = VATTR_ALL;
 	davap = fop_getattr(dvp, &dava, 0, cr, NULL) ? NULL : &dava;
 
 	/*
@@ -2136,7 +2136,7 @@ rfs3_mknod(MKNOD3args *args, MKNOD3res *resp, struct exportinfo *exi,
 	else
 		resp->resok.obj.handle_follows = TRUE;
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	/*
@@ -2206,7 +2206,7 @@ rfs3_remove(REMOVE3args *args, REMOVE3res *resp, struct exportinfo *exi,
 		goto err;
 	}
 
-	bva.va_mask = AT_ALL;
+	bva.va_mask = VATTR_ALL;
 	bvap = fop_getattr(vp, &bva, 0, cr, NULL) ? NULL : &bva;
 	avap = bvap;
 
@@ -2267,7 +2267,7 @@ rfs3_remove(REMOVE3args *args, REMOVE3res *resp, struct exportinfo *exi,
 	VN_RELE(targvp);
 	targvp = NULL;
 
-	ava.va_mask = AT_ALL;
+	ava.va_mask = VATTR_ALL;
 	avap = fop_getattr(vp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	/*
@@ -2334,7 +2334,7 @@ rfs3_rmdir(RMDIR3args *args, RMDIR3res *resp, struct exportinfo *exi,
 		goto err;
 	}
 
-	bva.va_mask = AT_ALL;
+	bva.va_mask = VATTR_ALL;
 	bvap = fop_getattr(vp, &bva, 0, cr, NULL) ? NULL : &bva;
 	avap = bvap;
 
@@ -2372,7 +2372,7 @@ rfs3_rmdir(RMDIR3args *args, RMDIR3res *resp, struct exportinfo *exi,
 	if (name != args->object.name)
 		kmem_free(name, MAXPATHLEN + 1);
 
-	ava.va_mask = AT_ALL;
+	ava.va_mask = VATTR_ALL;
 	avap = fop_getattr(vp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	/*
@@ -2458,7 +2458,7 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 		goto err;
 	}
 
-	fbva.va_mask = AT_ALL;
+	fbva.va_mask = VATTR_ALL;
 	fbvap = fop_getattr(fvp, &fbva, 0, cr, NULL) ? NULL : &fbva;
 	favap = fbvap;
 
@@ -2481,7 +2481,7 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 		goto err;
 	}
 
-	tbva.va_mask = AT_ALL;
+	tbva.va_mask = VATTR_ALL;
 	tbvap = fop_getattr(tvp, &tbva, 0, cr, NULL) ? NULL : &tbva;
 	tavap = tbvap;
 
@@ -2574,9 +2574,9 @@ rfs3_rename(RENAME3args *args, RENAME3res *resp, struct exportinfo *exi,
 	VN_RELE(srcvp);
 	srcvp = NULL;
 
-	fava.va_mask = AT_ALL;
+	fava.va_mask = VATTR_ALL;
 	favap = fop_getattr(fvp, &fava, 0, cr, NULL) ? NULL : &fava;
-	tava.va_mask = AT_ALL;
+	tava.va_mask = VATTR_ALL;
 	tavap = fop_getattr(tvp, &tava, 0, cr, NULL) ? NULL : &tava;
 
 	/*
@@ -2658,7 +2658,7 @@ rfs3_link(LINK3args *args, LINK3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	fh3 = &args->link.dir;
@@ -2680,7 +2680,7 @@ rfs3_link(LINK3args *args, LINK3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	bva.va_mask = AT_ALL;
+	bva.va_mask = VATTR_ALL;
 	bvap = fop_getattr(dvp, &bva, 0, cr, NULL) ? NULL : &bva;
 
 	if (dvp->v_type != VDIR) {
@@ -2714,9 +2714,9 @@ rfs3_link(LINK3args *args, LINK3res *resp, struct exportinfo *exi,
 
 	error = fop_link(dvp, vp, name, cr, NULL, 0);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
-	ava.va_mask = AT_ALL;
+	ava.va_mask = VATTR_ALL;
 	avap = fop_getattr(dvp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	/*
@@ -2830,7 +2830,7 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 
 	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (vp->v_type != VDIR) {
@@ -2871,7 +2871,7 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 
 	error = fop_readdir(vp, &uio, cr, &iseof, NULL, 0);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (error) {
@@ -3085,7 +3085,7 @@ rfs3_readdirplus(READDIRPLUS3args *args, READDIRPLUS3res *resp,
 
 	(void) fop_rwlock(vp, V_WRITELOCK_FALSE, NULL);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (vp->v_type != VDIR) {
@@ -3246,7 +3246,7 @@ getmoredents:
 		/* else, fall through */
 	}
 good:
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	fop_rwunlock(vp, V_WRITELOCK_FALSE, NULL);
@@ -3275,7 +3275,7 @@ good:
 			continue;
 		}
 
-		nva.va_mask = AT_ALL;
+		nva.va_mask = VATTR_ALL;
 		nvap = rfs4_delegated_getattr(nvp, &nva, 0, cr) ? NULL : &nva;
 
 		/* Lie about the object type for a referral */
@@ -3411,7 +3411,7 @@ rfs3_fsstat(FSSTAT3args *args, FSSTAT3res *resp, struct exportinfo *exi,
 
 	error = VFS_STATVFS(vp->v_vfsp, &sb);
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	if (error)
@@ -3491,7 +3491,7 @@ rfs3_fsinfo(FSINFO3args *args, FSINFO3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	resp->status = NFS3_OK;
@@ -3578,7 +3578,7 @@ rfs3_pathconf(PATHCONF3args *args, PATHCONF3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	vap = fop_getattr(vp, &va, 0, cr, NULL) ? NULL : &va;
 
 	error = fop_pathconf(vp, _PC_LINK_MAX, &val, cr, NULL);
@@ -3661,7 +3661,7 @@ rfs3_commit(COMMIT3args *args, COMMIT3res *resp, struct exportinfo *exi,
 		goto out;
 	}
 
-	bva.va_mask = AT_ALL;
+	bva.va_mask = VATTR_ALL;
 	error = fop_getattr(vp, &bva, 0, cr, NULL);
 
 	/*
@@ -3689,7 +3689,7 @@ rfs3_commit(COMMIT3args *args, COMMIT3res *resp, struct exportinfo *exi,
 
 	error = fop_fsync(vp, FSYNC, cr, NULL);
 
-	ava.va_mask = AT_ALL;
+	ava.va_mask = VATTR_ALL;
 	avap = fop_getattr(vp, &ava, 0, cr, NULL) ? NULL : &ava;
 
 	if (error)
@@ -3736,21 +3736,21 @@ sattr3_to_vattr(sattr3 *sap, struct vattr *vap)
 
 	if (sap->mode.set_it) {
 		vap->va_mode = (mode_t)sap->mode.mode;
-		vap->va_mask |= AT_MODE;
+		vap->va_mask |= VATTR_MODE;
 	}
 	if (sap->uid.set_it) {
 		vap->va_uid = (uid_t)sap->uid.uid;
-		vap->va_mask |= AT_UID;
+		vap->va_mask |= VATTR_UID;
 	}
 	if (sap->gid.set_it) {
 		vap->va_gid = (gid_t)sap->gid.gid;
-		vap->va_mask |= AT_GID;
+		vap->va_mask |= VATTR_GID;
 	}
 	if (sap->size.set_it) {
 		if (sap->size.size > (size3)((u_longlong_t)-1))
 			return (EINVAL);
 		vap->va_size = sap->size.size;
-		vap->va_mask |= AT_SIZE;
+		vap->va_mask |= VATTR_SIZE;
 	}
 	if (sap->atime.set_it == SET_TO_CLIENT_TIME) {
 #ifndef _LP64
@@ -3765,10 +3765,10 @@ sattr3_to_vattr(sattr3 *sap, struct vattr *vap)
 		NFS_TIME_T_CONVERT(vap->va_atime.tv_sec,
 		    sap->atime.atime.seconds);
 		vap->va_atime.tv_nsec = (uint32_t)sap->atime.atime.nseconds;
-		vap->va_mask |= AT_ATIME;
+		vap->va_mask |= VATTR_ATIME;
 	} else if (sap->atime.set_it == SET_TO_SERVER_TIME) {
 		gethrestime(&vap->va_atime);
-		vap->va_mask |= AT_ATIME;
+		vap->va_mask |= VATTR_ATIME;
 	}
 	if (sap->mtime.set_it == SET_TO_CLIENT_TIME) {
 #ifndef _LP64
@@ -3783,10 +3783,10 @@ sattr3_to_vattr(sattr3 *sap, struct vattr *vap)
 		NFS_TIME_T_CONVERT(vap->va_mtime.tv_sec,
 		    sap->mtime.mtime.seconds);
 		vap->va_mtime.tv_nsec = (uint32_t)sap->mtime.mtime.nseconds;
-		vap->va_mask |= AT_MTIME;
+		vap->va_mask |= VATTR_MTIME;
 	} else if (sap->mtime.set_it == SET_TO_SERVER_TIME) {
 		gethrestime(&vap->va_mtime);
-		vap->va_mask |= AT_MTIME;
+		vap->va_mask |= VATTR_MTIME;
 	}
 
 	return (0);

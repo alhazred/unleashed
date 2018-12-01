@@ -69,7 +69,7 @@ vop_fid_pseudo(vnode_t *vp, fid_t *fidp)
 	if (error == EREMOTE ||
 	    (error == 0 && fidp->fid_len > NFS_FH4MAXDATA)) {
 
-		va.va_mask = AT_NODEID;
+		va.va_mask = VATTR_NODEID;
 		error = fop_getattr(vp, &va, 0, CRED(), NULL);
 		if (error)
 			return (error);
@@ -711,7 +711,7 @@ treeclimb_export(struct exportinfo *exip)
 		 * Do a getattr to obtain the nodeid (inode num)
 		 * for this vnode.
 		 */
-		va.va_mask = AT_NODEID;
+		va.va_mask = VATTR_NODEID;
 		error = fop_getattr(vp, &va, 0, CRED(), NULL);
 		if (error)
 			break;

@@ -386,8 +386,8 @@ boot_nfs_fstat(int fd, struct bootstat *stp)
 		return (-1);
 
 	bzero((char *)&va, sizeof (va));
-	va.va_mask = AT_TYPE | AT_SIZE | AT_MODE | AT_NODEID |
-	    AT_ATIME | AT_CTIME | AT_MTIME;
+	va.va_mask = VATTR_TYPE | VATTR_SIZE | VATTR_MODE | VATTR_NODEID |
+	    VATTR_ATIME | VATTR_CTIME | VATTR_MTIME;
 
 	switch (filep->file.version) {
 	case NFS_VERSION:

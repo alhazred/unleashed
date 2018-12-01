@@ -139,7 +139,7 @@ gfs_get_parent_ino(vnode_t *dvp, cred_t *cr, caller_context_t *ct,
 	} else if (dvp->v_flag & V_XATTRDIR) {
 		vattr_t va;
 
-		va.va_mask = AT_NODEID;
+		va.va_mask = VATTR_NODEID;
 		error = fop_getattr(parent, &va, 0, cr, ct);
 		if (error)
 			return (error);

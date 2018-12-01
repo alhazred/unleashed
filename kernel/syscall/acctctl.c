@@ -296,7 +296,7 @@ ac_file_set(ac_info_t *info, void *ubuf, size_t bufsz)
 	/*
 	 * Write the exacct header only if the file is empty.
 	 */
-	error = fop_getattr(info->ac_vnode, &va, AT_SIZE, CRED(), NULL);
+	error = fop_getattr(info->ac_vnode, &va, VATTR_SIZE, CRED(), NULL);
 	if (error == 0 && va.va_size == 0)
 		error = exacct_write_header(info, hdr, hdrsize);
 

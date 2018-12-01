@@ -84,7 +84,7 @@ lookup:
 		 * Ask the underlying filesystem if it wants this
 		 * object to look like a symlink at user-level.
 		 */
-		vattr.va_mask = AT_TYPE;
+		vattr.va_mask = VATTR_TYPE;
 		error = fop_getattr(vp, &vattr, 0, CRED(), NULL);
 		if (error || vattr.va_type != VLNK) {
 			VN_RELE(vp);

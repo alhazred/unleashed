@@ -2077,7 +2077,7 @@ ufs_dirmakeinode(
 	ASSERT(vap != NULL);
 	ASSERT(op == DE_CREATE || op == DE_MKDIR || op == DE_ATTRDIR ||
 	    op == DE_SYMLINK);
-	ASSERT((vap->va_mask & (AT_TYPE|AT_MODE)) == (AT_TYPE|AT_MODE));
+	ASSERT((vap->va_mask & (VATTR_TYPE|VATTR_MODE)) == (VATTR_TYPE|VATTR_MODE));
 	ASSERT(RW_WRITE_HELD(&tdp->i_rwlock));
 	ASSERT(RW_WRITE_HELD(&tdp->i_contents));
 	/*
@@ -2159,7 +2159,7 @@ ufs_dirmakeinode(
 	 *	then use the process's gid.
 	 *   3) Otherwise, set the group-id to the gid of the parent directory.
 	 */
-	if (op != DE_ATTRDIR && (vap->va_mask & AT_GID) &&
+	if (op != DE_ATTRDIR && (vap->va_mask & VATTR_GID) &&
 	    ((vap->va_gid == tdp->i_gid) || groupmember(vap->va_gid, cr) ||
 	    secpolicy_vnode_create_gid(cr) == 0)) {
 		/*
@@ -2197,8 +2197,8 @@ ufs_dirmakeinode(
 			ip->i_mode &= ~ISGID;
 	}
 
-	if (((vap->va_mask & AT_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
-	    ((vap->va_mask & AT_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime))) {
+	if (((vap->va_mask & VATTR_ATIME) && TIMESPEC_OVERFLOW(&vap->va_atime)) ||
+	    ((vap->va_mask & VATTR_MTIME) && TIMESPEC_OVERFLOW(&vap->va_mtime))) {
 		err = EOVERFLOW;
 		goto fail;
 	}
@@ -2249,14 +2249,14 @@ ufs_dirmakeinode(
 	 * settings, then use them instead of using the current
 	 * high resolution time.
 	 */
-	if (vap->va_mask & (AT_MTIME|AT_ATIME)) {
-		if (vap->va_mask & AT_ATIME) {
+	if (vap->va_mask & (VATTR_MTIME|VATTR_ATIME)) {
+		if (vap->va_mask & VATTR_ATIME) {
 			ip->i_atime.tv_sec = vap->va_atime.tv_sec;
 			ip->i_atime.tv_usec = vap->va_atime.tv_nsec / 1000;
 			ip->i_flag &= ~IACC;
 		} else
 			ip->i_flag |= IACC;
-		if (vap->va_mask & AT_MTIME) {
+		if (vap->va_mask & VATTR_MTIME) {
 			ip->i_mtime.tv_sec = vap->va_mtime.tv_sec;
 			ip->i_mtime.tv_usec = vap->va_mtime.tv_nsec / 1000;
 			gethrestime(&now);
@@ -3208,7 +3208,7 @@ again:
 		if (tdp->i_mode & 0004)
 			va.va_mode |= 0705;
 	}
-	va.va_mask = AT_TYPE|AT_MODE;
+	va.va_mask = VATTR_TYPE|VATTR_MODE;
 
 	ufsvfsp = tdp->i_ufsvfs;
 

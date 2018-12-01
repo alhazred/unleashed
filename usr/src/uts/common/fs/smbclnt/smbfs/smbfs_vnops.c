@@ -594,7 +594,7 @@ smbfs_read(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 		return (EINVAL);
 
 	/* get vnode attributes from server */
-	va.va_mask = AT_SIZE | AT_MTIME;
+	va.va_mask = VATTR_SIZE | VATTR_MTIME;
 	if (error = smbfsgetattr(vp, &va, cr))
 		return (error);
 
@@ -759,7 +759,7 @@ smbfs_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 		 * Todo: Consider redesigning this to use a
 		 * handle opened for append instead.
 		 */
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		if (error = smbfsgetattr(vp, &va, cr))
 			return (error);
 		uiop->uio_loffset = va.va_size;
@@ -1459,13 +1459,13 @@ smbfs_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	np = VTOSMB(vp);
 	if (flags & ATTR_HINT) {
 		if (vap->va_mask ==
-		    (vap->va_mask & (AT_SIZE | AT_FSID | AT_RDEV))) {
+		    (vap->va_mask & (VATTR_SIZE | VATTR_FSID | VATTR_RDEV))) {
 			mutex_enter(&np->r_statelock);
-			if (vap->va_mask | AT_SIZE)
+			if (vap->va_mask | VATTR_SIZE)
 				vap->va_size = np->r_size;
-			if (vap->va_mask | AT_FSID)
+			if (vap->va_mask | VATTR_FSID)
 				vap->va_fsid = vp->v_vfsp->vfs_dev;
-			if (vap->va_mask | AT_RDEV)
+			if (vap->va_mask | VATTR_RDEV)
 				vap->va_rdev = vp->v_rdev;
 			mutex_exit(&np->r_statelock);
 			return (0);
@@ -1478,7 +1478,7 @@ smbfs_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 *
 	 * Here NFS also checks for async writes (np->r_awcount)
 	 */
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		if (vn_has_cached_data(vp) &&
 		    ((np->r_flags & RDIRTY) != 0)) {
 			mutex_enter(&np->r_statelock);
@@ -1522,7 +1522,7 @@ smbfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 		return (EIO);
 
 	mask = vap->va_mask;
-	if (mask & AT_NOSET)
+	if (mask & VATTR_NOSET)
 		return (EINVAL);
 
 	if (vfsp->vfs_flag & VFS_RDONLY)
@@ -1535,11 +1535,11 @@ smbfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 * need to check the _mount_ owner here.  See _access_rwx
 	 */
 	bzero(&oldva, sizeof (oldva));
-	oldva.va_mask = AT_TYPE | AT_MODE;
+	oldva.va_mask = VATTR_TYPE | VATTR_MODE;
 	error = smbfsgetattr(vp, &oldva, cr);
 	if (error)
 		return (error);
-	oldva.va_mask |= AT_UID | AT_GID;
+	oldva.va_mask |= VATTR_UID | VATTR_GID;
 	oldva.va_uid = smi->smi_uid;
 	oldva.va_gid = smi->smi_gid;
 
@@ -1548,7 +1548,7 @@ smbfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	if (error)
 		return (error);
 
-	if (mask & (AT_UID | AT_GID)) {
+	if (mask & (VATTR_UID | VATTR_GID)) {
 		if (smi->smi_flags & SMI_ACL)
 			error = smbfs_acl_setids(vp, vap, cr);
 		else
@@ -1569,7 +1569,7 @@ smbfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	error = smbfssetattr(vp, vap, flags, cr);
 
 #ifdef	SMBFS_VNEVENT
-	if (error == 0 && (vap->va_mask & AT_SIZE) && vap->va_size == 0)
+	if (error == 0 && (vap->va_mask & VATTR_SIZE) && vap->va_size == 0)
 		vnevent_truncate(vp, ct);
 #endif
 
@@ -1605,9 +1605,9 @@ smbfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	if (vp->v_flag & V_XATTRDIR)
 		return (0);
 	if (np->n_flag & N_XATTR) {
-		if (mask & AT_TIMES)
+		if (mask & VATTR_TIMES)
 			SMBVDEBUG("ignore set time on xattr\n");
-		mask &= AT_SIZE;
+		mask &= VATTR_SIZE;
 	}
 
 	/*
@@ -1653,18 +1653,18 @@ smbfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	 * map those into DOS attributes supported by SMB.
 	 * Note: zero means "no change".
 	 */
-	if (mask & AT_XVATTR)
+	if (mask & VATTR_XVATTR)
 		dosattr = xvattr_to_dosattr(np, vap);
 
 	/*
 	 * Will we need an open handle for this setattr?
 	 * If so, what rights will we need?
 	 */
-	if (dosattr || (mask & (AT_ATIME | AT_MTIME))) {
+	if (dosattr || (mask & (VATTR_ATIME | VATTR_MTIME))) {
 		rights |=
 		    SA_RIGHT_FILE_WRITE_ATTRIBUTES;
 	}
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		rights |=
 		    SA_RIGHT_FILE_WRITE_DATA |
 		    SA_RIGHT_FILE_APPEND_DATA;
@@ -1692,7 +1692,7 @@ smbfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	 * For now we claim to have made any such changes.
 	 */
 
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		/*
 		 * If the new file size is less than what the client sees as
 		 * the file size, then just change the size and invalidate
@@ -1724,8 +1724,8 @@ smbfssetattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr)
 	 * Todo: Implement setting create_time (which is
 	 * different from ctime).
 	 */
-	mtime = ((mask & AT_MTIME) ? &vap->va_mtime : 0);
-	atime = ((mask & AT_ATIME) ? &vap->va_atime : 0);
+	mtime = ((mask & VATTR_MTIME) ? &vap->va_mtime : 0);
+	atime = ((mask & VATTR_ATIME) ? &vap->va_atime : 0);
 
 	if (dosattr || mtime || atime) {
 		/*
@@ -1772,7 +1772,7 @@ out:
 		 * back in.  A read should be cheaper than a
 		 * write.
 		 */
-		if (mask & AT_SIZE) {
+		if (mask & VATTR_SIZE) {
 			smbfs_invalidate_pages(vp,
 			    (vap->va_size & PAGEMASK), cr);
 		}
@@ -1880,7 +1880,7 @@ smbfs_access_rwx(vfs_t *vfsp, int vtype, int mode, cred_t *cr)
 	 * Build our (fabricated) vnode attributes.
 	 */
 	bzero(&va, sizeof (va));
-	va.va_mask = AT_TYPE | AT_MODE | AT_UID | AT_GID;
+	va.va_mask = VATTR_TYPE | VATTR_MODE | VATTR_UID | VATTR_GID;
 	va.va_type = vtype;
 	va.va_mode = (vtype == VDIR) ?
 	    smi->smi_dmode : smi->smi_fmode;
@@ -2453,7 +2453,7 @@ smbfslookup_cache(vnode_t *dvp, char *nm, int nmlen,
 	 * this directory or file, we'll find out when we
 	 * try to open or get attributes.
 	 */
-	va.va_mask = AT_TYPE | AT_MODE;
+	va.va_mask = VATTR_TYPE | VATTR_MODE;
 	error = smbfsgetattr(dvp, &va, cr);
 	if (error) {
 #ifdef DEBUG
@@ -2611,7 +2611,7 @@ smbfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 		/*
 		 * Truncate (if requested).
 		 */
-		if ((vattr.va_mask & AT_SIZE) && vp->v_type == VREG) {
+		if ((vattr.va_mask & VATTR_SIZE) && vp->v_type == VREG) {
 			np = VTOSMB(vp);
 			/*
 			 * Check here for large file truncation by
@@ -2627,7 +2627,7 @@ smbfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 				VN_RELE(vp);
 				goto out;
 			}
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			error = smbfssetattr(vp, &vattr, 0, cr);
 			if (error) {
 				VN_RELE(vp);
@@ -2674,7 +2674,7 @@ smbfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 	else {
 		/* Truncate regular files if requested. */
 		if ((va->va_type == VREG) &&
-		    (va->va_mask & AT_SIZE) &&
+		    (va->va_mask & VATTR_SIZE) &&
 		    (va->va_size == 0))
 			disp = NTCREATEX_DISP_OVERWRITE_IF;
 		else
@@ -4398,7 +4398,7 @@ smbfs_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	 * NFS does close-to-open consistency stuff here.
 	 * Just get (possibly cached) attributes.
 	 */
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 	if ((error = smbfsgetattr(vp, &va, cr)) != 0)
 		return (error);
 
@@ -4723,11 +4723,11 @@ smbfs_space(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 			 * mtime if we truncate the file to its
 			 * previous size.
 			 */
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			error = smbfsgetattr(vp, &va, cr);
 			if (error || va.va_size == bfp->l_start)
 				return (error);
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			va.va_size = bfp->l_start;
 			error = smbfssetattr(vp, &va, 0, cr);
 			/* SMBFS_VNEVENT... */

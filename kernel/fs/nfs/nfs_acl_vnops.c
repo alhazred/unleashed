@@ -660,7 +660,7 @@ acl_getxattrdir3(vnode_t *vp, vnode_t **vpp, bool_t create, cred_t *cr,
 			nvp = makenfs3node(&res.resok.fh, NULL,
 			    vp->v_vfsp, t, cr, VTOR(vp)->r_path, XATTR_RPATH);
 			if (nvp->v_type == VNON) {
-				vattr.va_mask = AT_TYPE;
+				vattr.va_mask = VATTR_TYPE;
 				error = nfs3getattr(nvp, &vattr, cr);
 				if (error) {
 					VN_RELE(nvp);

@@ -2264,8 +2264,8 @@ nfs4_resend_open_otw(vnode_t **vpp, nfs4_lost_rqst_t *resend_rqstp,
 				 * just assume every thing is ok for now.
 				 */
 				if (!ep->error &&
-				    garp->n4g_va.va_mask & AT_NODEID &&
-				    rp->r_attr.va_mask & AT_NODEID &&
+				    garp->n4g_va.va_mask & VATTR_NODEID &&
+				    rp->r_attr.va_mask & VATTR_NODEID &&
 				    rp->r_attr.va_nodeid !=
 				    garp->n4g_va.va_nodeid) {
 					/*

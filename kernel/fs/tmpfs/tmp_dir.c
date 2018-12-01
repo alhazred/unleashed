@@ -1018,8 +1018,8 @@ tdirmaketnode(
 
 	ASSERT(va != NULL);
 	ASSERT(op == DE_CREATE || op == DE_MKDIR);
-	if (((va->va_mask & AT_ATIME) && TIMESPEC_OVERFLOW(&va->va_atime)) ||
-	    ((va->va_mask & AT_MTIME) && TIMESPEC_OVERFLOW(&va->va_mtime)))
+	if (((va->va_mask & VATTR_ATIME) && TIMESPEC_OVERFLOW(&va->va_atime)) ||
+	    ((va->va_mask & VATTR_MTIME) && TIMESPEC_OVERFLOW(&va->va_mtime)))
 		return (EOVERFLOW);
 	type = va->va_type;
 	tp = tmp_memalloc(sizeof (struct tmpnode), TMP_MUSTHAVE);
@@ -1051,7 +1051,7 @@ tdirmaketnode(
 	 *	then use the process's gid.
 	 *   3) Otherwise, set the group-id to the gid of the parent directory.
 	 */
-	if ((va->va_mask & AT_GID) &&
+	if ((va->va_mask & VATTR_GID) &&
 	    ((va->va_gid == dir->tn_gid) || groupmember(va->va_gid, cred) ||
 	    secpolicy_vnode_create_gid(cred) == 0)) {
 		/*
@@ -1079,9 +1079,9 @@ tdirmaketnode(
 			tp->tn_mode &= ~VSGID;
 	}
 
-	if (va->va_mask & AT_ATIME)
+	if (va->va_mask & VATTR_ATIME)
 		tp->tn_atime = va->va_atime;
-	if (va->va_mask & AT_MTIME)
+	if (va->va_mask & VATTR_MTIME)
 		tp->tn_mtime = va->va_mtime;
 
 	if (op == DE_MKDIR)

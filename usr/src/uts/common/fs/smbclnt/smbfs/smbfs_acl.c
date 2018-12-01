@@ -545,12 +545,12 @@ smbfs_acl_setids(vnode_t *vp, vattr_t *vap, cred_t *cr)
 	uint32_t selector = 0;
 	int error;
 
-	if (vap->va_mask & AT_UID) {
+	if (vap->va_mask & VATTR_UID) {
 		selector |= OWNER_SECURITY_INFORMATION;
 		uid = vap->va_uid;
 	}
 
-	if (vap->va_mask & AT_GID) {
+	if (vap->va_mask & VATTR_GID) {
 		selector |= GROUP_SECURITY_INFORMATION;
 		gid = vap->va_gid;
 	}

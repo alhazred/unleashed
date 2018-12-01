@@ -1506,7 +1506,7 @@ sbd_open_data_file(sbd_lu_t *sl, uint32_t *err_ret, int lu_size_valid,
 		return (ret);
 	}
 odf_over_open:
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	if ((ret = fop_getattr(sl->sl_data_vp, &vattr, 0, CRED(), NULL)) != 0) {
 		*err_ret = SBD_RET_DATA_FILE_GETATTR_FAILED;
 		goto odf_close_data_and_exit;

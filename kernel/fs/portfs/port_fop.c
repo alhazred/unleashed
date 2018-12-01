@@ -787,7 +787,7 @@ port_check_timestamp(portfop_cache_t *pfcp, vnode_t *vp, vnode_t *dvp,
 	/*
 	 * If time stamps are specified, get attributes and compare.
 	 */
-	vatt.va_mask = AT_ATIME|AT_MTIME|AT_CTIME;
+	vatt.va_mask = VATTR_ATIME|VATTR_MTIME|VATTR_CTIME;
 	if (get_udatamodel() == DATAMODEL_NATIVE) {
 		fobj = (file_obj_t *)objptr;
 		if (fobj->fo_atime.tv_sec || fobj->fo_atime.tv_nsec ||
@@ -2046,7 +2046,7 @@ port_fop_unmount(fsemarg_t *vf, int flag, cred_t *cr)
 
 /*
  * ------------------------------file op hooks--------------------------
- * The O_TRUNC operation is caught with the fop_setattr(AT_SIZE) call.
+ * The O_TRUNC operation is caught with the fop_setattr(VATTR_SIZE) call.
  */
 static int
 port_fop_open(femarg_t *vf, int mode, cred_t *cr, caller_context_t *ct)
@@ -2099,7 +2099,7 @@ port_fop_read(femarg_t *vf, struct uio *uiop, int ioflag, struct cred *cr,
 
 
 /*
- * AT_SIZE - is for the open(O_TRUNC) case.
+ * VATTR_SIZE - is for the open(O_TRUNC) case.
  */
 int
 port_fop_setattr(femarg_t *vf, vattr_t *vap, int flags, cred_t *cr,
@@ -2110,13 +2110,13 @@ port_fop_setattr(femarg_t *vf, vattr_t *vap, int flags, cred_t *cr,
 	int		events = 0;
 
 	retval = vnext_setattr(vf, vap, flags, cr, ct);
-	if (vap->va_mask & AT_SIZE) {
+	if (vap->va_mask & VATTR_SIZE) {
 		events |= FOP_FILE_TRUNC;
 	}
-	if (vap->va_mask & (AT_SIZE|AT_MTIME)) {
+	if (vap->va_mask & (VATTR_SIZE|VATTR_MTIME)) {
 		events |= FOP_FILE_SETATTR_MTIME;
 	}
-	if (vap->va_mask & AT_ATIME) {
+	if (vap->va_mask & VATTR_ATIME) {
 		events |= FOP_FILE_SETATTR_ATIME;
 	}
 	events |= FOP_FILE_SETATTR_CTIME;
@@ -2140,14 +2140,14 @@ port_fop_create(femarg_t *vf, char *name, vattr_t *vap, vcexcl_t excl,
 	 * modification time of the directory to determine if the
 	 * file was actually created.
 	 */
-	vatt.va_mask = AT_ATIME|AT_MTIME|AT_CTIME;
+	vatt.va_mask = VATTR_ATIME|VATTR_MTIME|VATTR_CTIME;
 	if (fop_getattr(vp, &vatt, 0, CRED(), ct)) {
 		got = 0;
 	}
 	retval = vnext_create(vf, name, vap, excl, mode, vpp, cr,
 	    flag, ct, vsecp);
 
-	vatt1.va_mask = AT_ATIME|AT_MTIME|AT_CTIME;
+	vatt1.va_mask = VATTR_ATIME|VATTR_MTIME|VATTR_CTIME;
 	if (got && !fop_getattr(vp, &vatt1, 0, CRED(), ct)) {
 		if ((vatt1.va_mtime.tv_sec > vatt.va_mtime.tv_sec ||
 		    (vatt1.va_mtime.tv_sec = vatt.va_mtime.tv_sec &&

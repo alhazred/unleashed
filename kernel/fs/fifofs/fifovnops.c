@@ -1478,9 +1478,9 @@ fifo_setattr(vnode_t *vp, vattr_t *vap, int flags, cred_t *crp,
 	if (error == 0) {
 		fn_lock = fnp->fn_lock;
 		mutex_enter(&fn_lock->flk_lock);
-		if (vap->va_mask & AT_ATIME)
+		if (vap->va_mask & VATTR_ATIME)
 			fnp->fn_atime = vap->va_atime.tv_sec;
-		if (vap->va_mask & AT_MTIME)
+		if (vap->va_mask & VATTR_MTIME)
 			fnp->fn_mtime = vap->va_mtime.tv_sec;
 		fnp->fn_ctime = gethrestime_sec();
 		mutex_exit(&fn_lock->flk_lock);
@@ -1537,16 +1537,16 @@ fifo_fsync(vnode_t *vp, int syncflag, cred_t *crp, caller_context_t *ct)
 		return (0);
 
 	bzero((caddr_t)&va, sizeof (va));
-	va.va_mask = AT_MTIME | AT_ATIME;
+	va.va_mask = VATTR_MTIME | VATTR_ATIME;
 	if (fop_getattr(fnp->fn_realvp, &va, 0, crp, ct) == 0) {
 		va.va_mask = 0;
 		if (fnp->fn_mtime > va.va_mtime.tv_sec) {
 			va.va_mtime.tv_sec = fnp->fn_mtime;
-			va.va_mask = AT_MTIME;
+			va.va_mask = VATTR_MTIME;
 		}
 		if (fnp->fn_atime > va.va_atime.tv_sec) {
 			va.va_atime.tv_sec = fnp->fn_atime;
-			va.va_mask |= AT_ATIME;
+			va.va_mask |= VATTR_ATIME;
 		}
 		if (va.va_mask != 0)
 			(void) fop_setattr(fnp->fn_realvp, &va, 0, crp, ct);

@@ -1966,23 +1966,23 @@ vattr_to_sattr(struct vattr *vap, struct nfssattr *sa)
 {
 	uint_t mask = vap->va_mask;
 
-	if (!(mask & AT_MODE))
+	if (!(mask & VATTR_MODE))
 		sa->sa_mode = (uint32_t)-1;
 	else
 		sa->sa_mode = vap->va_mode;
-	if (!(mask & AT_UID))
+	if (!(mask & VATTR_UID))
 		sa->sa_uid = (uint32_t)-1;
 	else
 		sa->sa_uid = (uint32_t)vap->va_uid;
-	if (!(mask & AT_GID))
+	if (!(mask & VATTR_GID))
 		sa->sa_gid = (uint32_t)-1;
 	else
 		sa->sa_gid = (uint32_t)vap->va_gid;
-	if (!(mask & AT_SIZE))
+	if (!(mask & VATTR_SIZE))
 		sa->sa_size = (uint32_t)-1;
 	else
 		sa->sa_size = (uint32_t)vap->va_size;
-	if (!(mask & AT_ATIME))
+	if (!(mask & VATTR_ATIME))
 		sa->sa_atime.tv_sec = sa->sa_atime.tv_usec = (int32_t)-1;
 	else {
 		/* check time validity */
@@ -1992,7 +1992,7 @@ vattr_to_sattr(struct vattr *vap, struct nfssattr *sa)
 		sa->sa_atime.tv_sec = vap->va_atime.tv_sec;
 		sa->sa_atime.tv_usec = vap->va_atime.tv_nsec / 1000;
 	}
-	if (!(mask & AT_MTIME))
+	if (!(mask & VATTR_MTIME))
 		sa->sa_mtime.tv_sec = sa->sa_mtime.tv_usec = (int32_t)-1;
 	else {
 		/* check time validity */
@@ -2010,31 +2010,31 @@ vattr_to_sattr3(struct vattr *vap, sattr3 *sa)
 {
 	uint_t mask = vap->va_mask;
 
-	if (!(mask & AT_MODE))
+	if (!(mask & VATTR_MODE))
 		sa->mode.set_it = FALSE;
 	else {
 		sa->mode.set_it = TRUE;
 		sa->mode.mode = (mode3)vap->va_mode;
 	}
-	if (!(mask & AT_UID))
+	if (!(mask & VATTR_UID))
 		sa->uid.set_it = FALSE;
 	else {
 		sa->uid.set_it = TRUE;
 		sa->uid.uid = (uid3)vap->va_uid;
 	}
-	if (!(mask & AT_GID))
+	if (!(mask & VATTR_GID))
 		sa->gid.set_it = FALSE;
 	else {
 		sa->gid.set_it = TRUE;
 		sa->gid.gid = (gid3)vap->va_gid;
 	}
-	if (!(mask & AT_SIZE))
+	if (!(mask & VATTR_SIZE))
 		sa->size.set_it = FALSE;
 	else {
 		sa->size.set_it = TRUE;
 		sa->size.size = (size3)vap->va_size;
 	}
-	if (!(mask & AT_ATIME))
+	if (!(mask & VATTR_ATIME))
 		sa->atime.set_it = DONT_CHANGE;
 	else {
 		/* check time validity */
@@ -2045,7 +2045,7 @@ vattr_to_sattr3(struct vattr *vap, sattr3 *sa)
 		sa->atime.atime.seconds = (uint32)vap->va_atime.tv_sec;
 		sa->atime.atime.nseconds = (uint32)vap->va_atime.tv_nsec;
 	}
-	if (!(mask & AT_MTIME))
+	if (!(mask & VATTR_MTIME))
 		sa->mtime.set_it = DONT_CHANGE;
 	else {
 		/* check time validity */
@@ -2083,7 +2083,7 @@ setdirgid(vnode_t *dvp, gid_t *gidp, cred_t *cr)
 	rnode_t *rp;
 	struct vattr va;
 
-	va.va_mask = AT_MODE | AT_GID;
+	va.va_mask = VATTR_MODE | VATTR_GID;
 	error = fop_getattr(dvp, &va, 0, cr, NULL);
 	if (error)
 		return (error);
@@ -2111,7 +2111,7 @@ setdirmode(vnode_t *dvp, mode_t *omp, cred_t *cr)
 	int error;
 	struct vattr va;
 
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 	error = fop_getattr(dvp, &va, 0, cr, NULL);
 	if (error)
 		return (error);

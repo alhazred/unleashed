@@ -109,7 +109,7 @@ skip_open:
 	/*
 	 * Determine the physical size of the file.
 	 */
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	error = fop_getattr(vf->vf_vnode, &vattr, 0, kcred, NULL);
 	if (error) {
 		vd->vdev_stat.vs_aux = VDEV_AUX_OPEN_FAILED;

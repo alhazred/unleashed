@@ -534,7 +534,7 @@ nlm_safelock(vnode_t *vp, const struct flock64 *fl, cred_t *cr)
 	if ((rp->r_mapcnt > 0) && (fl->l_start != 0 || fl->l_len != 0))
 		return (0);
 
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 	err = fop_getattr(vp, &va, 0, cr, NULL);
 	if (err != 0)
 		return (0);

@@ -109,7 +109,7 @@ audit_savepath(
 	    !(kctx->auk_policy & AUDIT_PUBLIC)) {
 		struct vattr attr;
 
-		attr.va_mask = AT_ALL;
+		attr.va_mask = VATTR_ALL;
 		if (fop_getattr(pvp, &attr, 0, CRED(), NULL) == 0) {
 			if (object_is_public(&attr)) {
 				tad->tad_ctrl |= TAD_NOAUDIT;
@@ -456,7 +456,7 @@ audit_attributes(struct vnode *vp)
 	tad = U2A(u);
 
 	if (vp) {
-		attr.va_mask = AT_ALL;
+		attr.va_mask = VATTR_ALL;
 		if (fop_getattr(vp, &attr, 0, CRED(), NULL) != 0)
 			return;
 
@@ -773,7 +773,7 @@ audit_closef(struct file *fp)
 	 * to build the audit record instead of the one off the thread.
 	 */
 	if ((vp = fp->f_vnode) != NULL) {
-		attr.va_mask = AT_ALL;
+		attr.va_mask = VATTR_ALL;
 		if (fop_getattr(vp, &attr, 0, CRED(), NULL) == 0) {
 			if ((fp->f_flag & FWRITE) == 0 &&
 			    object_is_public(&attr)) {

@@ -166,7 +166,7 @@ exacct_vn_write_impl(ac_info_t *info, void *buf, ssize_t bufsize)
 	 * Save the size. If vn_rdwr fails, reset the size to avoid corrupting
 	 * the present accounting file.
 	 */
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 	error = fop_getattr(info->ac_vnode, &va, 0, kcred, NULL);
 	if (error == 0) {
 		error = vn_rdwr(UIO_WRITE, info->ac_vnode, (caddr_t)buf,

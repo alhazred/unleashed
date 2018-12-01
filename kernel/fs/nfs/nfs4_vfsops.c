@@ -2561,7 +2561,7 @@ nfs4rootvp(vnode_t **rtvpp, vfs_t *vfsp, struct servinfo4 *svp_head,
 
 	/* If we didn't get a type, get one now */
 	if (rtvp->v_type == VNON) {
-		va.va_mask = AT_TYPE;
+		va.va_mask = VATTR_TYPE;
 		error = nfs4getattr(rtvp, &va, tcr);
 		if (error)
 			goto bad;

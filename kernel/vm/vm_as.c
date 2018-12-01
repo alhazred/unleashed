@@ -1574,7 +1574,7 @@ again:
 		return (error);
 	}
 
-	va.va_mask = AT_SIZE;
+	va.va_mask = VATTR_SIZE;
 	if (fop_getattr(vn_a->vp, &va, ATTR_HINT, vn_a->cred, NULL) != 0) {
 		szcvec = 0;
 		goto again;

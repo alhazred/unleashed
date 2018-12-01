@@ -30,7 +30,7 @@
 kmem_cache_t *bootfs_node_cache;
 
 static const vattr_t bootfs_vattr_dir = {
-	AT_ALL,					/* va_mask */
+	VATTR_ALL,				/* va_mask */
 	VDIR,					/* va_type */
 	S_IFDIR | 0555,				/* va_mode */
 	0,					/* va_uid */
@@ -49,7 +49,7 @@ static const vattr_t bootfs_vattr_dir = {
 };
 
 static const vattr_t bootfs_vattr_reg = {
-	AT_ALL,					/* va_mask */
+	VATTR_ALL,				/* va_mask */
 	VREG,					/* va_type */
 	S_IFREG | 0555,				/* va_mode */
 	0,					/* va_uid */

@@ -422,7 +422,7 @@ sdev_write(struct vnode *vp, struct uio *uio, int ioflag, struct cred *cred,
 	fop_rwunlock(dv->sdev_attrvp, 1, ct);
 	if (error == 0) {
 		sdev_update_timestamps(dv->sdev_attrvp, kcred,
-		    AT_MTIME);
+		    VATTR_MTIME);
 	}
 	return (error);
 }
@@ -721,7 +721,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		}
 
 		/* truncation first */
-		if ((vp->v_type == VREG) && (vap->va_mask & AT_SIZE) &&
+		if ((vp->v_type == VREG) && (vap->va_mask & VATTR_SIZE) &&
 		    (vap->va_size == 0)) {
 			ASSERT(parent->sdev_attrvp);
 			error = fop_create(parent->sdev_attrvp,
@@ -734,7 +734,7 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 		}
 
 		sdev_update_timestamps(vp, kcred,
-		    AT_CTIME|AT_MTIME|AT_ATIME);
+		    VATTR_CTIME|VATTR_MTIME|VATTR_ATIME);
 		*vpp = vp;
 		return (0);
 	}
@@ -774,8 +774,8 @@ sdev_create(struct vnode *dvp, char *nm, struct vattr *vap, vcexcl_t excl,
 	ASSERT(self);
 	/* take care the timestamps for the node and its parent */
 	sdev_update_timestamps(SDEVTOV(self), kcred,
-	    AT_CTIME|AT_MTIME|AT_ATIME);
-	sdev_update_timestamps(dvp, kcred, AT_MTIME|AT_ATIME);
+	    VATTR_CTIME|VATTR_MTIME|VATTR_ATIME);
+	sdev_update_timestamps(dvp, kcred, VATTR_MTIME|VATTR_ATIME);
 	if (SDEV_IS_GLOBAL(parent))
 		atomic_inc_ulong(&parent->sdev_gdir_gen);
 
@@ -995,7 +995,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 	 * in the same dev filesystem
 	 */
 	if (odvp != ndvp) {
-		vattr.va_mask = AT_FSID;
+		vattr.va_mask = VATTR_FSID;
 		if (error = fop_getattr(odvp, &vattr, 0, cred, ct)) {
 			mutex_exit(&sdev_lock);
 			VN_RELE(ovp);
@@ -1004,7 +1004,7 @@ sdev_rename(struct vnode *odvp, char *onm, struct vnode *ndvp, char *nnm,
 			return (error);
 		}
 		fsid = vattr.va_fsid;
-		vattr.va_mask = AT_FSID;
+		vattr.va_mask = VATTR_FSID;
 		if (error = fop_getattr(ndvp, &vattr, 0, cred, ct)) {
 			mutex_exit(&sdev_lock);
 			VN_RELE(ovp);
@@ -1212,8 +1212,8 @@ sdev_symlink(struct vnode *dvp, char *lnm, struct vattr *tva,
 
 	/* take care the timestamps for the node and its parent */
 	sdev_update_timestamps(SDEVTOV(self), kcred,
-	    AT_CTIME|AT_MTIME|AT_ATIME);
-	sdev_update_timestamps(dvp, kcred, AT_MTIME|AT_ATIME);
+	    VATTR_CTIME|VATTR_MTIME|VATTR_ATIME);
+	sdev_update_timestamps(dvp, kcred, VATTR_MTIME|VATTR_ATIME);
 	if (SDEV_IS_GLOBAL(parent))
 		atomic_inc_ulong(&parent->sdev_gdir_gen);
 
@@ -1284,8 +1284,8 @@ sdev_mkdir(struct vnode *dvp, char *nm, struct vattr *va, struct vnode **vpp,
 
 	/* take care the timestamps for the node and its parent */
 	sdev_update_timestamps(SDEVTOV(self), kcred,
-	    AT_CTIME|AT_MTIME|AT_ATIME);
-	sdev_update_timestamps(dvp, kcred, AT_MTIME|AT_ATIME);
+	    VATTR_CTIME|VATTR_MTIME|VATTR_ATIME);
+	sdev_update_timestamps(dvp, kcred, VATTR_MTIME|VATTR_ATIME);
 	if (SDEV_IS_GLOBAL(parent))
 		atomic_inc_ulong(&parent->sdev_gdir_gen);
 

@@ -401,7 +401,7 @@ dc_frlock(struct vnode *vp, int cmd, struct flock64 *bfp, int flag,
 	/*
 	 * If file is being mapped, disallow frlock.
 	 */
-	vattr.va_mask = AT_MODE;
+	vattr.va_mask = VATTR_MODE;
 	if (error = fop_getattr(dp->dc_subvp, &vattr, 0, cr, ctp))
 		return (error);
 	if (dp->dc_mapcnt > 0 && MANDLOCK(vp, vattr.va_mode))

@@ -112,7 +112,7 @@ rfs_getattr(fhandle_t *fhp, struct nfsattrstat *ns, struct exportinfo *exi,
 	/*
 	 * Do the getattr.
 	 */
-	va.va_mask = AT_ALL;	/* we want all the attributes */
+	va.va_mask = VATTR_ALL;	/* we want all the attributes */
 
 	error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
@@ -187,11 +187,11 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	 * This is an overload of the protocol and should be
 	 * documented in the NFS Version 2 protocol specification.
 	 */
-	if (va.va_mask & AT_MTIME) {
+	if (va.va_mask & VATTR_MTIME) {
 		if (va.va_mtime.tv_nsec == 1000000000) {
 			gethrestime(&va.va_mtime);
 			va.va_atime = va.va_mtime;
-			va.va_mask |= AT_ATIME;
+			va.va_mask |= VATTR_ATIME;
 			flag = 0;
 		} else
 			flag = ATTR_UTIME;
@@ -202,7 +202,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	 * If the filesystem is exported with nosuid, then mask off
 	 * the setuid and setgid bits.
 	 */
-	if ((va.va_mask & AT_MODE) && vp->v_type == VREG &&
+	if ((va.va_mask & VATTR_MODE) && vp->v_type == VREG &&
 	    (exi->exi_export.ex_flags & EX_NOSUID))
 		va.va_mode &= ~(VSUID | VSGID);
 
@@ -228,13 +228,13 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	 * size of the file if there is a conflicting non-blocking
 	 * mandatory lock in the region of change.
 	 */
-	if (vp->v_type == VREG && va.va_mask & AT_SIZE) {
+	if (vp->v_type == VREG && va.va_mask & VATTR_SIZE) {
 		if (nbl_need_check(vp)) {
 			nbl_start_crit(vp, RW_READER);
 			in_crit = 1;
 		}
 
-		bva.va_mask = AT_UID | AT_SIZE;
+		bva.va_mask = VATTR_UID | VATTR_SIZE;
 
 		error = fop_getattr(vp, &bva, 0, cr, &ct);
 
@@ -265,7 +265,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 
 		if (crgetuid(cr) == bva.va_uid && !error &&
 		    va.va_size != bva.va_size) {
-			va.va_mask &= ~AT_SIZE;
+			va.va_mask &= ~VATTR_SIZE;
 			bf.l_type = F_WRLCK;
 			bf.l_whence = 0;
 			bf.l_start = (off64_t)va.va_size;
@@ -301,7 +301,7 @@ rfs_setattr(struct nfssaargs *args, struct nfsattrstat *ns,
 	}
 
 	if (!error) {
-		va.va_mask = AT_ALL;	/* get everything */
+		va.va_mask = VATTR_ALL;	/* get everything */
 
 		error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
@@ -418,7 +418,7 @@ rfs_lookup(struct nfsdiropargs *da, struct nfsdiropres *dr,
 
 
 	if (!error) {
-		va.va_mask = AT_ALL;	/* we want everything */
+		va.va_mask = VATTR_ALL;	/* we want everything */
 
 		error = rfs4_delegated_getattr(vp, &va, 0, cr);
 
@@ -494,7 +494,7 @@ rfs_readlink(fhandle_t *fhp, struct nfsrdlnres *rl, struct exportinfo *exi,
 		return;
 	}
 
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 
 	error = fop_getattr(vp, &va, 0, cr, NULL);
 
@@ -683,7 +683,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 		return;
 	}
 
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 
 	error = fop_getattr(vp, &va, 0, cr, &ct);
 
@@ -822,7 +822,7 @@ rfs_read(struct nfsreadargs *ra, struct nfsrdresult *rr,
 	 * Get attributes again so we can send the latest access
 	 * time to the client side for its cache.
 	 */
-	va.va_mask = AT_ALL;
+	va.va_mask = VATTR_ALL;
 
 	error = fop_getattr(vp, &va, 0, cr, &ct);
 
@@ -945,7 +945,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 	ct.cc_caller_id = nfs2_srv_caller_id;
 	ct.cc_flags = CC_DONTBLOCK;
 
-	va.va_mask = AT_UID|AT_MODE;
+	va.va_mask = VATTR_UID|VATTR_MODE;
 
 	error = fop_getattr(vp, &va, 0, cr, &ct);
 
@@ -1097,7 +1097,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 * Get attributes again so we send the latest mod
 		 * time to the client side for its cache.
 		 */
-		va.va_mask = AT_ALL;	/* now we want everything */
+		va.va_mask = VATTR_ALL;	/* now we want everything */
 
 		error = fop_getattr(vp, &va, 0, cr, &ct);
 
@@ -1415,7 +1415,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 			continue;
 		}
 
-		va.va_mask = AT_UID|AT_MODE;
+		va.va_mask = VATTR_UID|VATTR_MODE;
 
 		error = fop_getattr(vp, &va, 0, rp->cr, &ct);
 
@@ -1591,7 +1591,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 			 * Get attributes again so we send the latest mod
 			 * time to the client side for its cache.
 			 */
-			va.va_mask = AT_ALL;	/* now we want everything */
+			va.va_mask = VATTR_ALL;	/* now we want everything */
 
 			error = fop_getattr(vp, &va, 0, rp->cr, &ct);
 
@@ -1700,7 +1700,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 	/*
 	 * Must specify the mode.
 	 */
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		VN_RELE(dvp);
 		dr->dr_status = NFSERR_INVAL;
 		return;
@@ -1725,7 +1725,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			else
 				va.va_rdev = (dev_t)va.va_size;
 		}
-		va.va_mask &= ~AT_SIZE;
+		va.va_mask &= ~VATTR_SIZE;
 	} else if ((va.va_mode & IFMT) == IFBLK) {
 		va.va_type = VBLK;
 		/*
@@ -1737,14 +1737,14 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			va.va_rdev = nfsv2_expdev(va.va_size);
 		else
 			va.va_rdev = (dev_t)va.va_size;
-		va.va_mask &= ~AT_SIZE;
+		va.va_mask &= ~VATTR_SIZE;
 	} else if ((va.va_mode & IFMT) == IFSOCK) {
 		va.va_type = VSOCK;
 	} else {
 		va.va_type = VREG;
 	}
 	va.va_mode &= ~IFMT;
-	va.va_mask |= AT_TYPE;
+	va.va_mask |= VATTR_TYPE;
 
 	ca = (struct sockaddr *)svc_getrpccaller(req->rq_xprt)->buf;
 	name = nfscmd_convname(ca, exi, name, NFSCMD_CONV_INBOUND,
@@ -1763,14 +1763,14 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 	 */
 	lookup_ok = 0;
 	mode = VWRITE;
-	if (!(va.va_mask & AT_SIZE) || va.va_type != VREG) {
+	if (!(va.va_mask & VATTR_SIZE) || va.va_type != VREG) {
 		error = fop_lookup(dvp, name, &tvp, NULL, 0, NULL, cr,
 		    NULL, NULL, NULL);
 		if (!error) {
 			struct vattr at;
 
 			lookup_ok = 1;
-			at.va_mask = AT_MODE;
+			at.va_mask = VATTR_MODE;
 			error = fop_getattr(tvp, &at, 0, cr, NULL);
 			if (!error)
 				mode = (at.va_mode & S_IWUSR) ? VWRITE : VREAD;
@@ -1796,7 +1796,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 	 * locks in the region being manipulated. Return EACCES if there
 	 * are conflicting locks.
 	 */
-	if (!error && (va.va_type == VREG) && (va.va_mask & AT_SIZE)) {
+	if (!error && (va.va_type == VREG) && (va.va_mask & VATTR_SIZE)) {
 		lookuperr = fop_lookup(dvp, name, &tvp, NULL, 0, NULL, cr,
 		    NULL, NULL, NULL);
 
@@ -1820,7 +1820,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 			nbl_start_crit(tvp, RW_READER);
 			in_crit = 1;
 
-			bva.va_mask = AT_SIZE;
+			bva.va_mask = VATTR_SIZE;
 			error = fop_getattr(tvp, &bva, 0, cr, NULL);
 			if (!error) {
 				if (va.va_size < bva.va_size) {
@@ -1861,7 +1861,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 
 		if (!error) {
 
-			if ((va.va_mask & AT_SIZE) && (va.va_size == 0))
+			if ((va.va_mask & VATTR_SIZE) && (va.va_size == 0))
 				trunc = TRUE;
 			else
 				trunc = FALSE;
@@ -1871,7 +1871,7 @@ rfs_create(struct nfscreatargs *args, struct nfsdiropres *dr,
 				curthread->t_flag |= T_WOULDBLOCK;
 				goto out;
 			}
-			va.va_mask = AT_ALL;
+			va.va_mask = VATTR_ALL;
 
 			error = fop_getattr(vp, &va, 0, cr, NULL);
 
@@ -2293,7 +2293,7 @@ rfs_symlink(struct nfsslargs *args, enum nfsstat *status,
 		return;
 	}
 
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		VN_RELE(vp);
 		*status = NFSERR_INVAL;
 		return;
@@ -2309,7 +2309,7 @@ rfs_symlink(struct nfsslargs *args, enum nfsstat *status,
 	}
 
 	va.va_type = VLNK;
-	va.va_mask |= AT_TYPE;
+	va.va_mask |= VATTR_TYPE;
 
 	error = fop_symlink(vp, args->sla_from.da_name, &va, name, cr, NULL, 0);
 
@@ -2385,14 +2385,14 @@ rfs_mkdir(struct nfscreatargs *args, struct nfsdiropres *dr,
 		return;
 	}
 
-	if (!(va.va_mask & AT_MODE)) {
+	if (!(va.va_mask & VATTR_MODE)) {
 		VN_RELE(vp);
 		dr->dr_status = NFSERR_INVAL;
 		return;
 	}
 
 	va.va_type = VDIR;
-	va.va_mask |= AT_TYPE;
+	va.va_mask |= VATTR_TYPE;
 
 	error = fop_mkdir(vp, name, &va, &dvp, cr, NULL, 0, NULL);
 
@@ -2401,7 +2401,7 @@ rfs_mkdir(struct nfscreatargs *args, struct nfsdiropres *dr,
 		 * Attribtutes of the newly created directory should
 		 * be returned to the client.
 		 */
-		va.va_mask = AT_ALL; /* We want everything */
+		va.va_mask = VATTR_ALL; /* We want everything */
 		error = fop_getattr(dvp, &va, 0, cr, NULL);
 
 		/* check for overflows */
@@ -2703,19 +2703,19 @@ sattr_to_vattr(struct nfssattr *sa, struct vattr *vap)
 	 */
 	if (sa->sa_mode != (uint32_t)((ushort_t)-1) &&
 	    sa->sa_mode != (uint32_t)-1) {
-		vap->va_mask |= AT_MODE;
+		vap->va_mask |= VATTR_MODE;
 		vap->va_mode = sa->sa_mode;
 	}
 	if (sa->sa_uid != (uint32_t)-1) {
-		vap->va_mask |= AT_UID;
+		vap->va_mask |= VATTR_UID;
 		vap->va_uid = sa->sa_uid;
 	}
 	if (sa->sa_gid != (uint32_t)-1) {
-		vap->va_mask |= AT_GID;
+		vap->va_mask |= VATTR_GID;
 		vap->va_gid = sa->sa_gid;
 	}
 	if (sa->sa_size != (uint32_t)-1) {
-		vap->va_mask |= AT_SIZE;
+		vap->va_mask |= VATTR_SIZE;
 		vap->va_size = sa->sa_size;
 	}
 	if (sa->sa_atime.tv_sec != (int32_t)-1 &&
@@ -2725,7 +2725,7 @@ sattr_to_vattr(struct nfssattr *sa, struct vattr *vap)
 		if (!NFS2_TIME_OK(sa->sa_atime.tv_sec))
 			return (EOVERFLOW);
 #endif
-		vap->va_mask |= AT_ATIME;
+		vap->va_mask |= VATTR_ATIME;
 		/*
 		 * nfs protocol defines times as unsigned so don't extend sign,
 		 * unless sysadmin set nfs_allow_preepoch_time.
@@ -2740,7 +2740,7 @@ sattr_to_vattr(struct nfssattr *sa, struct vattr *vap)
 		if (!NFS2_TIME_OK(sa->sa_mtime.tv_sec))
 			return (EOVERFLOW);
 #endif
-		vap->va_mask |= AT_MTIME;
+		vap->va_mask |= VATTR_MTIME;
 		/*
 		 * nfs protocol defines times as unsigned so don't extend sign,
 		 * unless sysadmin set nfs_allow_preepoch_time.

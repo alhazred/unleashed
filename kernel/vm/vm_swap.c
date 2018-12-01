@@ -1146,7 +1146,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 	 * available.  This can happen if the system was built
 	 * on a machine with a different size swap partition.
 	 */
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	if (error = fop_getattr(cvp, &vattr, ATTR_COMM, CRED(), NULL))
 		goto out;
 
@@ -1176,7 +1176,7 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 #endif	/* _ILP32 */
 
 	/* Fail if file not writeable (try to set size to current size) */
-	vattr.va_mask = AT_SIZE;
+	vattr.va_mask = VATTR_SIZE;
 	if (error = fop_setattr(cvp, &vattr, 0, CRED(), NULL))
 		goto out;
 

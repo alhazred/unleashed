@@ -680,7 +680,7 @@ tmp_getattr(
 		if (tp->tn_uid == UID_NOBODY || tp->tn_gid == GID_NOBODY) {
 			mutex_exit(&tp->tn_tlock);
 			bzero(&va, sizeof (struct vattr));
-			va.va_mask = AT_UID|AT_GID;
+			va.va_mask = VATTR_UID|VATTR_GID;
 			attrs = fop_getattr(mvp, &va, 0, cred, ct);
 		} else {
 			mutex_exit(&tp->tn_tlock);
@@ -733,7 +733,7 @@ tmp_setattr(
 	/*
 	 * Cannot set these attributes
 	 */
-	if ((vap->va_mask & AT_NOSET) || (vap->va_mask & AT_XVATTR))
+	if ((vap->va_mask & VATTR_NOSET) || (vap->va_mask & VATTR_XVATTR))
 		return (EINVAL);
 
 	mutex_enter(&tp->tn_tlock);
@@ -751,24 +751,24 @@ tmp_setattr(
 
 	mask = vap->va_mask;
 
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		get->va_mode &= S_IFMT;
 		get->va_mode |= vap->va_mode & ~S_IFMT;
 	}
 
-	if (mask & AT_UID)
+	if (mask & VATTR_UID)
 		get->va_uid = vap->va_uid;
-	if (mask & AT_GID)
+	if (mask & VATTR_GID)
 		get->va_gid = vap->va_gid;
-	if (mask & AT_ATIME)
+	if (mask & VATTR_ATIME)
 		get->va_atime = vap->va_atime;
-	if (mask & AT_MTIME)
+	if (mask & VATTR_MTIME)
 		get->va_mtime = vap->va_mtime;
 
-	if (mask & (AT_UID | AT_GID | AT_MODE | AT_MTIME))
+	if (mask & (VATTR_UID | VATTR_GID | VATTR_MODE | VATTR_MTIME))
 		gethrestime(&tp->tn_ctime);
 
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		ASSERT(vp->v_type != VDIR);
 
 		/* Don't support large files. */
@@ -1009,7 +1009,7 @@ again:
 			return (error);
 		}
 		*vpp = TNTOV(oldtp);
-		if ((*vpp)->v_type == VREG && (vap->va_mask & AT_SIZE) &&
+		if ((*vpp)->v_type == VREG && (vap->va_mask & VATTR_SIZE) &&
 		    vap->va_size == 0) {
 			rw_enter(&oldtp->tn_contents, RW_WRITER);
 			(void) tmpnode_trunc(tm, oldtp, 0);

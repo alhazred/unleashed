@@ -137,21 +137,21 @@ extern sysid_t lm_alloc_sysidt();
 #define	SMB_AT_MAX	16
 static const uint_t smb_attrmap[SMB_AT_MAX] = {
 	0,
-	AT_TYPE,
-	AT_MODE,
-	AT_UID,
-	AT_GID,
-	AT_FSID,
-	AT_NODEID,
-	AT_NLINK,
-	AT_SIZE,
-	AT_ATIME,
-	AT_MTIME,
-	AT_CTIME,
-	AT_RDEV,
-	AT_BLKSIZE,
-	AT_NBLOCKS,
-	AT_SEQ
+	VATTR_TYPE,
+	VATTR_MODE,
+	VATTR_UID,
+	VATTR_GID,
+	VATTR_FSID,
+	VATTR_NODEID,
+	VATTR_NLINK,
+	VATTR_SIZE,
+	VATTR_ATIME,
+	VATTR_MTIME,
+	VATTR_CTIME,
+	VATTR_RDEV,
+	VATTR_BLKSIZE,
+	VATTR_NBLOCKS,
+	VATTR_SEQ
 };
 
 static boolean_t	smb_vop_initialized = B_FALSE;
@@ -341,7 +341,7 @@ smb_vop_getattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *ret_attr,
 		ret_attr->sa_vattr = tmp_xvattr.xva_vattr;
 		ret_attr->sa_dosattr = 0;
 
-		if (tmp_xvattr.xva_vattr.va_mask & AT_XVATTR) {
+		if (tmp_xvattr.xva_vattr.va_mask & VATTR_XVATTR) {
 			xoap = xva_getxoptattr(&tmp_xvattr);
 			ASSERT(xoap);
 
@@ -406,7 +406,7 @@ smb_vop_getattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *ret_attr,
 		ret_attr->sa_vattr.va_type = VREG;
 
 		if (ret_attr->sa_mask & (SMB_AT_SIZE | SMB_AT_NBLOCKS)) {
-			tmp_attr.sa_vattr.va_mask = AT_SIZE | AT_NBLOCKS;
+			tmp_attr.sa_vattr.va_mask = VATTR_SIZE | VATTR_NBLOCKS;
 
 			error = fop_getattr(vp, &tmp_attr.sa_vattr,
 			    flags, cr, &smb_ct);
@@ -491,7 +491,7 @@ smb_vop_setattr(vnode_t *vp, vnode_t *unnamed_vp, smb_attr_t *attr,
 		return (error);
 
 	if (at_size) {
-		attr->sa_vattr.va_mask = AT_SIZE;
+		attr->sa_vattr.va_mask = VATTR_SIZE;
 		error = fop_setattr(vp, &attr->sa_vattr, flags,
 		    zone_kcred(), &smb_ct);
 	}
@@ -876,7 +876,7 @@ smb_vop_setup_xvattr(smb_attr_t *smb_attr, xvattr_t *xvattr)
 	/*
 	 * Copy caller-specified classic attributes to xvattr.
 	 * First save xvattr's mask (set in xva_init()), which
-	 * contains AT_XVATTR.  This is |'d in later if needed.
+	 * contains VATTR_XVATTR.  This is |'d in later if needed.
 	 */
 
 	xva_mask = xvattr->xva_vattr.va_mask;
@@ -888,13 +888,13 @@ smb_vop_setup_xvattr(smb_attr_t *smb_attr, xvattr_t *xvattr)
 	 * Do not set ctime (only the file system can do it)
 	 */
 
-	xvattr->xva_vattr.va_mask &= ~AT_CTIME;
+	xvattr->xva_vattr.va_mask &= ~VATTR_CTIME;
 
 	if (smb_attr->sa_mask & SMB_AT_DOSATTR) {
 
 		/*
 		 * "|" in the original xva_mask, which contains
-		 * AT_XVATTR
+		 * VATTR_XVATTR
 		 */
 
 		xvattr->xva_vattr.va_mask |= xva_mask;
@@ -935,7 +935,7 @@ smb_vop_setup_xvattr(smb_attr_t *smb_attr, xvattr_t *xvattr)
 	if (smb_attr->sa_mask & SMB_AT_CRTIME) {
 		/*
 		 * "|" in the original xva_mask, which contains
-		 * AT_XVATTR
+		 * VATTR_XVATTR
 		 */
 
 		xvattr->xva_vattr.va_mask |= xva_mask;

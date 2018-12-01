@@ -1544,7 +1544,7 @@ fsetattrat(int fd, char *path, int flags, struct vattr *vap)
 	 * Since we are never called to set the size of a file, we don't
 	 * need to check for non-blocking locks (via nbl_need_check(vp)).
 	 */
-	ASSERT(!(vap->va_mask & AT_SIZE));
+	ASSERT(!(vap->va_mask & VATTR_SIZE));
 
 	if ((error = fgetstartvp(fd, path, &startvp)) != 0)
 		return (error);

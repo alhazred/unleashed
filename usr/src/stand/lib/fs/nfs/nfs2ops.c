@@ -203,27 +203,27 @@ nfsgetattr(struct nfs_file *nfp, struct vattr *vap)
 	/* adapted from nattr_to_vattr() in nfs_client.c */
 
 	na = &getattr_res.attrstat_u.attributes;
-	if (vap->va_mask & AT_TYPE) {
+	if (vap->va_mask & VATTR_TYPE) {
 		if (na->type < NFNON || na->type > NFSOCK)
 			vap->va_type = VBAD;
 		else
 			vap->va_type = nf_to_vt[na->type];
 	}
-	if (vap->va_mask & AT_MODE)
+	if (vap->va_mask & VATTR_MODE)
 		vap->va_mode = na->mode;
-	if (vap->va_mask & AT_SIZE)
+	if (vap->va_mask & VATTR_SIZE)
 		vap->va_size = na->size;
-	if (vap->va_mask & AT_NODEID)
+	if (vap->va_mask & VATTR_NODEID)
 		vap->va_nodeid = na->fileid;
-	if (vap->va_mask & AT_ATIME) {
+	if (vap->va_mask & VATTR_ATIME) {
 		vap->va_atime.tv_sec  = na->atime.seconds;
 		vap->va_atime.tv_nsec = na->atime.useconds * 1000;
 	}
-	if (vap->va_mask & AT_CTIME) {
+	if (vap->va_mask & VATTR_CTIME) {
 		vap->va_ctime.tv_sec  = na->ctime.seconds;
 		vap->va_ctime.tv_nsec = na->ctime.useconds * 1000;
 	}
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		vap->va_mtime.tv_sec  = na->mtime.seconds;
 		vap->va_mtime.tv_nsec = na->mtime.useconds * 1000;
 	}

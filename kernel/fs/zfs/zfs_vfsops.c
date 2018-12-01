@@ -1465,7 +1465,7 @@ zfs_mount(vfs_t *vfsp, vnode_t *mvp, struct mounta *uap, cred_t *cr)
 			 * or has sufficient privileges.
 			 */
 
-			vattr.va_mask = AT_UID;
+			vattr.va_mask = VATTR_UID;
 
 			if (fop_getattr(mvp, &vattr, 0, cr, NULL)) {
 				goto out;

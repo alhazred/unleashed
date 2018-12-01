@@ -712,7 +712,7 @@ pcfs_setattr(
 	/*
 	 * cannot set these attributes
 	 */
-	if (mask & (AT_NOSET | AT_UID | AT_GID)) {
+	if (mask & (VATTR_NOSET | VATTR_UID | VATTR_GID)) {
 		return (EINVAL);
 	}
 	/*
@@ -729,7 +729,7 @@ pcfs_setattr(
 	 */
 	/* can't do some ops on directories anyway */
 	if ((vp->v_type == VDIR) &&
-	    (mask & AT_SIZE)) {
+	    (mask & VATTR_SIZE)) {
 		return (EINVAL);
 	}
 
@@ -754,7 +754,7 @@ pcfs_setattr(
 	 * If nobody has write permission, file is marked readonly.
 	 * Otherwise file is writable by anyone.
 	 */
-	if ((mask & AT_MODE) && (vap->va_mode != (mode_t)-1)) {
+	if ((mask & VATTR_MODE) && (vap->va_mode != (mode_t)-1)) {
 		if ((vap->va_mode & 0222) == 0)
 			pcp->pc_entry.pcd_attr |= PCA_RDONLY;
 		else
@@ -764,7 +764,7 @@ pcfs_setattr(
 	/*
 	 * Truncate file. Must have write permission.
 	 */
-	if ((mask & AT_SIZE) && (vap->va_size != (uoff_t)-1)) {
+	if ((mask & VATTR_SIZE) && (vap->va_size != (uoff_t)-1)) {
 		if (pcp->pc_entry.pcd_attr & PCA_RDONLY) {
 			error = EACCES;
 			goto out;
@@ -784,7 +784,7 @@ pcfs_setattr(
 	/*
 	 * Change file modified times.
 	 */
-	if (mask & (AT_MTIME | AT_CTIME)) {
+	if (mask & (VATTR_MTIME | VATTR_CTIME)) {
 		/*
 		 * If SysV-compatible option to set access and
 		 * modified times if privileged, owner, or write access,
@@ -810,7 +810,7 @@ pcfs_setattr(
 	/*
 	 * Change file access times.
 	 */
-	if (mask & AT_ATIME) {
+	if (mask & VATTR_ATIME) {
 		/*
 		 * If SysV-compatible option to set access and
 		 * modified times if privileged, owner, or write access,
@@ -1101,7 +1101,7 @@ pcfs_create(
 		}
 		if (error) {
 			VN_RELE(PCTOV(pcp));
-		} else if ((vp->v_type == VREG) && (vap->va_mask & AT_SIZE) &&
+		} else if ((vp->v_type == VREG) && (vap->va_mask & VATTR_SIZE) &&
 		    (vap->va_size == 0)) {
 			error = pc_truncate(pcp, 0L);
 			if (error) {
@@ -2027,7 +2027,7 @@ pcfs_space(
 		 */
 		if (bfp->l_len != 0)
 			return (EINVAL);
-		vattr.va_mask = AT_SIZE;
+		vattr.va_mask = VATTR_SIZE;
 		vattr.va_size = bfp->l_start;
 		error = fop_setattr(vp, (vattr_t *)&vattr, 0, cr, ct);
 	}

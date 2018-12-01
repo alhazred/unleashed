@@ -139,7 +139,7 @@ read(int fdes, void *cbuf, size_t count)
 	fileoff = (uoff_t)fp->f_offset;
 	if (fileoff >= OFFSET_MAX(fp) && (vp->v_type == VREG)) {
 		struct vattr va;
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL)))  {
 			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
@@ -417,7 +417,7 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	(void) fop_rwlock(vp, rwflag, NULL);
 	if (vp->v_type == VREG && fileoff == (uoff_t)maxoff) {
 		struct vattr va;
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL))) {
 			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
@@ -735,7 +735,7 @@ readv(int fdes, struct iovec *iovp, int iovcnt)
 
 	if ((vp->v_type == VREG) && (fileoff >= OFFSET_MAX(fp))) {
 		struct vattr va;
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		if ((error = fop_getattr(vp, &va, 0, fp->f_cred, NULL)))  {
 			fop_rwunlock(vp, rwflag, NULL);
 			goto out;
@@ -1146,7 +1146,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 
 	if ((vp->v_type == VREG) && (fileoff >= OFFSET_MAX(fp))) {
 		struct vattr va;
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		if ((error =
 		    fop_getattr(vp, &va, 0, fp->f_cred, NULL)))  {
 			fop_rwunlock(vp, rwflag, NULL);

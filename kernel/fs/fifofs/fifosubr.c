@@ -438,7 +438,7 @@ fifovp(vnode_t *vp, cred_t *crp)
 	/*
 	 * initialize the times from vp.
 	 */
-	va.va_mask = AT_TIMES;
+	va.va_mask = VATTR_TIMES;
 	if (fop_getattr(vp, &va, 0, crp, NULL) == 0) {
 		fnp->fn_atime = va.va_atime.tv_sec;
 		fnp->fn_mtime = va.va_mtime.tv_sec;

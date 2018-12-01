@@ -506,7 +506,7 @@ nfs4args_setattr(nfs_argop4 *argop, vattr_t *vap, vsecattr_t *vsap, int flags,
 	 * want to change this in the future (by OPENing the file).  See
 	 * bug # 4474852.
 	 */
-	if (vap->va_mask & AT_SIZE) {
+	if (vap->va_mask & VATTR_SIZE) {
 
 		ASSERT(rp != NULL);
 		mi = VTOMI4(RTOV4(rp));
@@ -825,7 +825,7 @@ nfs4open_otw(vnode_t *dvp, char *file_name, struct vattr *in_va,
 		if ((VTOMI4(dvp)->mi_flags & MI4_GRPID ||
 		    drp->r_attr.va_mode & VSGID) &&
 		    drp->r_attr.va_gid != GID_NOBODY) {
-			in_va->va_mask |= AT_GID;
+			in_va->va_mask |= VATTR_GID;
 			in_va->va_gid = drp->r_attr.va_gid;
 			setgid_flag = 1;
 		}
@@ -1119,7 +1119,7 @@ recov_retry:
 		/*
 		 * nverify
 		 */
-		_v.va_mask = AT_GID;
+		_v.va_mask = VATTR_GID;
 		_v.va_gid = in_va->va_gid;
 		if (!(e.error = nfs4args_verify(&argop[8], &_v, OP_NVERIFY,
 		    supp_attrs))) {
@@ -1127,8 +1127,8 @@ recov_retry:
 			/*
 			 * setattr
 			 *
-			 * We _know_ we're not messing with AT_SIZE or
-			 * AT_XTIME, so no need for stateid or flags.
+			 * We _know_ we're not messing with VATTR_SIZE or
+			 * VATTR_XTIME, so no need for stateid or flags.
 			 * Also we specify NULL rp since we're only
 			 * interested in setting owner_group attributes.
 			 */
@@ -1523,7 +1523,7 @@ recov_retry:
 	nfs4_end_op(VTOMI4(dvp), dvp, vpi, &recov_state, needrecov);
 
 	if (createmode == EXCLUSIVE4 &&
-	    (in_va->va_mask & ~(AT_GID | AT_SIZE))) {
+	    (in_va->va_mask & ~(VATTR_GID | VATTR_SIZE))) {
 		NFS4_DEBUG(nfs4_client_state_debug, (CE_NOTE, "nfs4open_otw:"
 		    " EXCLUSIVE4: sending a SETATTR"));
 		/*
@@ -1538,7 +1538,7 @@ recov_retry:
 		 * and the cookie should be destroyed if
 		 * appropriate.
 		 *
-		 * The AT_GID and AT_SIZE bits are turned off
+		 * The VATTR_GID and VATTR_SIZE bits are turned off
 		 * so that the SETATTR request will not attempt
 		 * to process these.  The gid will be set
 		 * separately if appropriate.  The size is turned
@@ -1548,8 +1548,8 @@ recov_retry:
 		 * because the file must have existed already.
 		 * Therefore, no truncate operation is needed.
 		 */
-		in_va->va_mask &= ~(AT_GID | AT_SIZE);
-		in_va->va_mask |= (AT_MTIME | AT_ATIME);
+		in_va->va_mask &= ~(VATTR_GID | VATTR_SIZE);
+		in_va->va_mask |= (VATTR_MTIME | VATTR_ATIME);
 
 		e.error = nfs4setattr(vp, in_va, 0, cr, NULL);
 		if (e.error) {
@@ -2094,8 +2094,8 @@ top:
 			 * If we don't we have a dumb server so we will
 			 * just assume every thing is ok for now.
 			 */
-			if (!ep->error && garp->n4g_va.va_mask & AT_NODEID &&
-			    rp->r_attr.va_mask & AT_NODEID &&
+			if (!ep->error && garp->n4g_va.va_mask & VATTR_NODEID &&
+			    rp->r_attr.va_mask & VATTR_NODEID &&
 			    rp->r_attr.va_nodeid != garp->n4g_va.va_nodeid) {
 				/*
 				 * We have fids, but they don't
@@ -2778,7 +2778,7 @@ nfs4_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 				return (EINTR);
 		}
 
-		va.va_mask = AT_SIZE;
+		va.va_mask = VATTR_SIZE;
 		error = nfs4getattr(vp, &va, cr);
 		if (error)
 			return (error);
@@ -3653,13 +3653,13 @@ nfs4_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 * call.
 	 */
 	if (flags & ATTR_HINT) {
-		if (!(vap->va_mask & ~(AT_SIZE | AT_FSID | AT_RDEV))) {
+		if (!(vap->va_mask & ~(VATTR_SIZE | VATTR_FSID | VATTR_RDEV))) {
 			mutex_enter(&rp->r_statelock);
-			if (vap->va_mask & AT_SIZE)
+			if (vap->va_mask & VATTR_SIZE)
 				vap->va_size = rp->r_size;
-			if (vap->va_mask & AT_FSID)
+			if (vap->va_mask & VATTR_FSID)
 				vap->va_fsid = rp->r_attr.va_fsid;
-			if (vap->va_mask & AT_RDEV)
+			if (vap->va_mask & VATTR_RDEV)
 				vap->va_rdev = rp->r_attr.va_rdev;
 			mutex_exit(&rp->r_statelock);
 			return (0);
@@ -3671,7 +3671,7 @@ nfs4_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 * and if there any dirty pages or any outstanding
 	 * asynchronous (write) requests for this file.
 	 */
-	if (vap->va_mask & AT_MTIME) {
+	if (vap->va_mask & VATTR_MTIME) {
 		rp = VTOR4(vp);
 		if (nfs4_has_pages(vp)) {
 			mutex_enter(&rp->r_statev4_lock);
@@ -3725,7 +3725,7 @@ nfs4_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 {
 	int error;
 
-	if (vap->va_mask & AT_NOSET)
+	if (vap->va_mask & VATTR_NOSET)
 		return (EINVAL);
 
 	if (nfs_zone() != VTOMI4(vp)->mi_zone)
@@ -3742,7 +3742,7 @@ nfs4_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 */
 	error = nfs4setattr(vp, vap, flags, cr, NULL);
 
-	if (error == 0 && (vap->va_mask & AT_SIZE) && vap->va_size == 0)
+	if (error == 0 && (vap->va_mask & VATTR_SIZE) && vap->va_size == 0)
 		vnevent_truncate(vp, ct);
 
 	return (error);
@@ -3820,9 +3820,9 @@ nfs4setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 		}
 	}
 
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		/*
-		 * Verification setattr compound for non-deleg AT_SIZE:
+		 * Verification setattr compound for non-deleg VATTR_SIZE:
 		 *	{ Putfh; Getattr; Verify; Setattr; Getattr }
 		 * Set ctime local here (outside the do_again label)
 		 * so that subsequent retries (after failed VERIFY)
@@ -3915,7 +3915,7 @@ recov_retry:
 			/*
 			 * Verify that the ctime match before doing setattr.
 			 */
-			va.va_mask = AT_CTIME;
+			va.va_mask = VATTR_CTIME;
 			va.va_ctime = ctime;
 			svp = rp->r_server;
 			(void) nfs_rw_enter_sig(&svp->sv_lock, RW_READER, 0);
@@ -3943,7 +3943,7 @@ recov_retry:
 		 * change the access permissions of the file, so purge old
 		 * information and start over again.
 		 */
-		if (mask & (AT_UID | AT_GID | AT_MODE)) {
+		if (mask & (VATTR_UID | VATTR_GID | VATTR_MODE)) {
 			(void) nfs4_access_purge_rp(rp);
 			if (rp->r_secattr != NULL) {
 				mutex_enter(&rp->r_statelock);
@@ -4138,7 +4138,7 @@ recov_retry:
 	 * back in.  A read should be cheaper than a
 	 * write.
 	 */
-	if (mask & AT_SIZE) {
+	if (mask & VATTR_SIZE) {
 		nfs4_invalidate_pages(vp, (vap->va_size & PAGEMASK), cr);
 	}
 
@@ -4189,7 +4189,7 @@ recov_retry:
 		}
 	}
 
-	if (res.status == NFS4_OK && (mask & AT_SIZE)) {
+	if (res.status == NFS4_OK && (mask & VATTR_SIZE)) {
 		/*
 		 * Set the size, rather than relying on getting it updated
 		 * via a GETATTR.  With delegations the client tries to
@@ -4216,17 +4216,17 @@ recov_retry:
 	 * and setgid bits when changing the uid or gid.  The
 	 * client needs to compensate appropriately.
 	 */
-	if (mask & (AT_UID | AT_GID)) {
+	if (mask & (VATTR_UID | VATTR_GID)) {
 		int terror, do_setattr;
 
 		do_setattr = 0;
-		va.va_mask = AT_MODE;
+		va.va_mask = VATTR_MODE;
 		terror = nfs4getattr(vp, &va, cr);
 		if (!terror &&
-		    (((mask & AT_MODE) && va.va_mode != vap->va_mode) ||
-		    (!(mask & AT_MODE) && va.va_mode != omode))) {
-			va.va_mask = AT_MODE;
-			if (mask & AT_MODE) {
+		    (((mask & VATTR_MODE) && va.va_mode != vap->va_mode) ||
+		    (!(mask & VATTR_MODE) && va.va_mode != omode))) {
+			va.va_mask = VATTR_MODE;
+			if (mask & VATTR_MODE) {
 				/*
 				 * We asked the mode to be changed and what
 				 * we just got from the server in getattr is
@@ -5558,7 +5558,7 @@ recov_retry:
 			if (nvp->v_type == VNON) {
 				vattr_t vattr;
 
-				vattr.va_mask = AT_TYPE;
+				vattr.va_mask = VATTR_TYPE;
 				/*
 				 * N.B. We've already called nfs4_end_fop above.
 				 */
@@ -6599,7 +6599,7 @@ top:
 			VN_RELE(tempvp);
 		}
 		if (!(error = fop_access(vp, mode, 0, cr, ct))) {
-			if ((vattr.va_mask & AT_SIZE) &&
+			if ((vattr.va_mask & VATTR_SIZE) &&
 			    vp->v_type == VREG) {
 				rp = VTOR4(vp);
 				/*
@@ -6622,7 +6622,7 @@ top:
 				}
 
 				if (must_trunc) {
-					vattr.va_mask = AT_SIZE;
+					vattr.va_mask = VATTR_SIZE;
 					error = nfs4setattr(vp, &vattr, 0, cr,
 					    NULL);
 				} else {
@@ -6649,8 +6649,8 @@ top:
 							    &rp->r_statelock);
 						}
 					}
-					vattr.va_mask = (AT_SIZE |
-					    AT_TYPE | AT_MODE);
+					vattr.va_mask = (VATTR_SIZE |
+					    VATTR_TYPE | VATTR_MODE);
 					vattr.va_type = VREG;
 					createmode = UNCHECKED4;
 					truncating = 1;
@@ -6686,7 +6686,7 @@ top:
 create_otw:
 	dnlc_remove(dvp, nm);
 
-	ASSERT(vattr.va_mask & AT_TYPE);
+	ASSERT(vattr.va_mask & VATTR_TYPE);
 
 	/*
 	 * If not a regular file let nfs4mknod() handle it.
@@ -6700,7 +6700,7 @@ create_otw:
 	/*
 	 * It _is_ a regular file.
 	 */
-	ASSERT(vattr.va_mask & AT_MODE);
+	ASSERT(vattr.va_mask & VATTR_MODE);
 	if (MANDMODE(vattr.va_mode)) {
 		nfs_rw_exit(&drp->r_rwlock);
 		return (EACCES);
@@ -6720,7 +6720,7 @@ create_otw:
 
 	if (vp != NULL) {
 		/* if create was successful, throw away the file's pages */
-		if (!error && (vattr.va_mask & AT_SIZE))
+		if (!error && (vattr.va_mask & VATTR_SIZE))
 			nfs4_invalidate_pages(vp, (vattr.va_size & PAGEMASK),
 			    cr);
 		/* release the lookup hold */
@@ -6835,7 +6835,7 @@ call_nfs4_create_req(vnode_t *dvp, char *nm, void *data, struct vattr *va,
 		struct vattr dva;
 
 		va->va_mode &= ~VSGID;
-		dva.va_mask = AT_MODE | AT_GID;
+		dva.va_mask = VATTR_MODE | VATTR_GID;
 		if (fop_getattr(dvp, &dva, 0, cr, NULL) == 0) {
 
 			/*
@@ -6849,7 +6849,7 @@ call_nfs4_create_req(vnode_t *dvp, char *nm, void *data, struct vattr *va,
 				setgid_flag = 1;
 				va->va_mode |= VSGID;
 				if (dva.va_gid != GID_NOBODY) {
-					va->va_mask |= AT_GID;
+					va->va_mask |= VATTR_GID;
 					va->va_gid = dva.va_gid;
 				}
 			}
@@ -6971,7 +6971,7 @@ recov_retry:
 		 * XXX - Revisit the last argument to nfs4_end_op()
 		 *	 once 5020486 is fixed.
 		 */
-		_v.va_mask = AT_GID;
+		_v.va_mask = VATTR_GID;
 		_v.va_gid = va->va_gid;
 		if (e.error = nfs4args_verify(&argop[8], &_v, OP_NVERIFY,
 		    supp_attrs)) {
@@ -6985,10 +6985,10 @@ recov_retry:
 		/*
 		 * setattr
 		 *
-		 * We _know_ we're not messing with AT_SIZE or AT_XTIME,
-		 * so no need for stateid or flags. Also we specify NULL
-		 * rp since we're only interested in setting owner_group
-		 * attributes.
+		 * We _know_ we're not messing with VATTR_SIZE or
+		 * VATTR_XTIME, so no need for stateid or flags. Also we
+		 * specify NULL rp since we're only interested in setting
+		 * owner_group attributes.
 		 */
 		nfs4args_setattr(&argop[9], &_v, NULL, 0, NULL, cr, supp_attrs,
 		    &e.error, 0);
@@ -7089,7 +7089,7 @@ recov_retry:
 		*vpp = vp = makenfs4node(sfhp, NULL, dvp->v_vfsp, t, cr, dvp,
 		    fn_get(VTOSV(dvp)->sv_name, nm, sfhp));
 		if (vp->v_type == VNON) {
-			vattr.va_mask = AT_TYPE;
+			vattr.va_mask = VATTR_TYPE;
 			/*
 			 * Need to call nfs4_end_op before nfs4getattr to avoid
 			 * potential nfs4_start_op deadlock. See RFE 4777612.
@@ -7188,7 +7188,7 @@ nfs4mknod(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 	 * to set group correctly, not sure what hope setattr has.
 	 */
 	if (va->va_gid != VTOR4(vp)->r_attr.va_gid) {
-		va->va_mask = AT_GID;
+		va->va_mask = VATTR_GID;
 		(void) nfs4setattr(vp, va, 0, cr, NULL);
 	}
 
@@ -8615,7 +8615,7 @@ nfs4_mkdir(vnode_t *dvp, char *nm, struct vattr *va, vnode_t **vpp, cred_t *cr,
 	 * Decision to get the right gid and setgid bit of the
 	 * new directory is now made in call_nfs4_create_req.
 	 */
-	va->va_mask |= AT_MODE;
+	va->va_mask |= VATTR_MODE;
 	error = call_nfs4_create_req(dvp, nm, NULL, va, &vp, cr, NF4DIR);
 	if (error)
 		return (error);
@@ -9467,7 +9467,7 @@ recov_retry:
 			 * The d_ino of .. must be the inode number
 			 * of the mounted filesystem.
 			 */
-			if (garp->n4g_va.va_mask & AT_NODEID)
+			if (garp->n4g_va.va_mask & VATTR_NODEID)
 				rd_res->dotdotp->d_ino =
 				    garp->n4g_va.va_nodeid;
 
@@ -10496,7 +10496,7 @@ nfs4_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	 */
 	if (flk_has_remote_locks(vp)) {
 		struct vattr va;
-		va.va_mask = AT_MODE;
+		va.va_mask = VATTR_MODE;
 		error = nfs4getattr(vp, &va, cr);
 		if (error != 0)
 			goto done;
@@ -10989,7 +10989,7 @@ nfs4_space(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 		if (bfp->l_len == 0) {
 			struct vattr va;
 
-			va.va_mask = AT_SIZE;
+			va.va_mask = VATTR_SIZE;
 			va.va_size = bfp->l_start;
 			error = nfs4setattr(vp, &va, 0, cr, NULL);
 
@@ -14510,7 +14510,7 @@ nfs4_safelock(vnode_t *vp, const struct flock64 *bfp, cred_t *cr)
 	}
 
 	/* mandatory locking and mapping don't mix */
-	va.va_mask = AT_MODE;
+	va.va_mask = VATTR_MODE;
 	error = fop_getattr(vp, &va, 0, cr, NULL);
 	if (error != 0) {
 		NFS4_DEBUG(nfs4_client_lock_debug, (CE_NOTE, "nfs4_safelock: "

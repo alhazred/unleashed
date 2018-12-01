@@ -1452,7 +1452,7 @@ ufs_acl_setattr(struct inode *ip, struct vattr *vap, cred_t *cr)
 
 	ASSERT(RW_WRITE_HELD(&ip->i_contents));
 
-	if (!(mask & (AT_MODE|AT_UID|AT_GID)))
+	if (!(mask & (VATTR_MODE|VATTR_UID|VATTR_GID)))
 		return (0);
 
 	/*
@@ -1476,7 +1476,7 @@ ufs_acl_setattr(struct inode *ip, struct vattr *vap, cred_t *cr)
 	 * an ACL mask exists, chmod(2) must set the acl mask (NOT the
 	 * group_obj permissions) to the requested group permissions.
 	 */
-	if (mask & AT_MODE) {
+	if (mask & VATTR_MODE) {
 		sp->aowner->acl_ic_perm = (o_mode_t)(ip->i_mode & 0700) >> 6;
 		if (sp->aclass.acl_ismask)
 			sp->aclass.acl_maskbits =
@@ -1487,12 +1487,12 @@ ufs_acl_setattr(struct inode *ip, struct vattr *vap, cred_t *cr)
 		sp->aother->acl_ic_perm = (o_mode_t)(ip->i_mode & 07);
 	}
 
-	if (mask & AT_UID) {
+	if (mask & VATTR_UID) {
 		/* Caller has verified our privileges */
 		sp->aowner->acl_ic_who = ip->i_uid;
 	}
 
-	if (mask & AT_GID) {
+	if (mask & VATTR_GID) {
 		sp->agroup->acl_ic_who = ip->i_gid;
 	}
 

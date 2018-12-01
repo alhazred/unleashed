@@ -88,7 +88,7 @@ ioctl(int fdes, int cmd, intptr_t arg)
 			 */
 			int32_t offset;
 
-			vattr.va_mask = AT_SIZE;
+			vattr.va_mask = VATTR_SIZE;
 			error = fop_getattr(vp, &vattr, 0, fp->f_cred, NULL);
 			if (error) {
 				releasef(fdes);
