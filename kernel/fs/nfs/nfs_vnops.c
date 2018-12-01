@@ -1094,19 +1094,17 @@ nfs_getattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 	 * call.
 	 */
 	rp = VTOR(vp);
-	if (flags & ATTR_HINT) {
-		if (vap->va_mask ==
-		    (vap->va_mask & (VATTR_SIZE | VATTR_FSID | VATTR_RDEV))) {
-			mutex_enter(&rp->r_statelock);
-			if (vap->va_mask | VATTR_SIZE)
-				vap->va_size = rp->r_size;
-			if (vap->va_mask | VATTR_FSID)
-				vap->va_fsid = rp->r_attr.va_fsid;
-			if (vap->va_mask | VATTR_RDEV)
-				vap->va_rdev = rp->r_attr.va_rdev;
-			mutex_exit(&rp->r_statelock);
-			return (0);
-		}
+	if ((flags & ATTR_HINT) &&
+	    ((vap->va_mask & ~(VATTR_SIZE | VATTR_FSID | VATTR_RDEV)) == 0)) {
+		mutex_enter(&rp->r_statelock);
+		if (vap->va_mask & VATTR_SIZE)
+			vap->va_size = rp->r_size;
+		if (vap->va_mask & VATTR_FSID)
+			vap->va_fsid = rp->r_attr.va_fsid;
+		if (vap->va_mask & VATTR_RDEV)
+			vap->va_rdev = rp->r_attr.va_rdev;
+		mutex_exit(&rp->r_statelock);
+		return (0);
 	}
 
 	/*
