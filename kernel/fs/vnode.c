@@ -2560,34 +2560,31 @@ vn_in_dnlc(vnode_t *vp)
  *
  * Vnode counts are only kept on regular files (v_type=VREG).
  */
-int
-vn_has_other_opens(
-	vnode_t *vp,
-	v_mode_t mode)
+bool
+vn_has_other_opens(struct vnode *vp, v_mode_t mode)
 {
-
 	ASSERT(vp != NULL);
 
 	switch (mode) {
 	case V_WRITE:
 		if (vp->v_wrcnt > 1)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDORWR:
 		if ((vp->v_rdcnt > 1) || (vp->v_wrcnt > 1))
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDANDWR:
 		if ((vp->v_rdcnt > 1) && (vp->v_wrcnt > 1))
-			return (V_TRUE);
+			return true;
 		break;
 	case V_READ:
 		if (vp->v_rdcnt > 1)
-			return (V_TRUE);
+			return true;
 		break;
 	}
 
-	return (V_FALSE);
+	return false;
 }
 
 /*
@@ -2596,46 +2593,38 @@ vn_has_other_opens(
  *
  * Vnode counts are only kept on regular files (v_type=VREG).
  */
-int
-vn_is_opened(
-	vnode_t *vp,
-	v_mode_t mode)
+bool vn_is_opened(struct vnode *vp, v_mode_t mode)
 {
-
 	ASSERT(vp != NULL);
 
 	switch (mode) {
 	case V_WRITE:
 		if (vp->v_wrcnt)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDANDWR:
 		if (vp->v_rdcnt && vp->v_wrcnt)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDORWR:
 		if (vp->v_rdcnt || vp->v_wrcnt)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_READ:
 		if (vp->v_rdcnt)
-			return (V_TRUE);
+			return true;
 		break;
 	}
 
-	return (V_FALSE);
+	return false;
 }
 
 /*
  * vn_is_mapped() checks whether a particular file is mapped and whether
  * the file is mapped read and/or write.
  */
-int
-vn_is_mapped(
-	vnode_t *vp,
-	v_mode_t mode)
+bool vn_is_mapped(struct vnode *vp, v_mode_t mode)
 {
-
 	ASSERT(vp != NULL);
 
 #if !defined(_LP64)
@@ -2649,45 +2638,45 @@ vn_is_mapped(
 	 */
 	case V_WRITE:
 		if (atomic_add_64_nv((&(vp->v_mmap_write)), 0))
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDANDWR:
 		if ((atomic_add_64_nv((&(vp->v_mmap_read)), 0)) &&
 		    (atomic_add_64_nv((&(vp->v_mmap_write)), 0)))
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDORWR:
 		if ((atomic_add_64_nv((&(vp->v_mmap_read)), 0)) ||
 		    (atomic_add_64_nv((&(vp->v_mmap_write)), 0)))
-			return (V_TRUE);
+			return true;
 		break;
 	case V_READ:
 		if (atomic_add_64_nv((&(vp->v_mmap_read)), 0))
-			return (V_TRUE);
+			return true;
 		break;
 	}
 #else
 	switch (mode) {
 	case V_WRITE:
 		if (vp->v_mmap_write)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDANDWR:
 		if (vp->v_mmap_read && vp->v_mmap_write)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_RDORWR:
 		if (vp->v_mmap_read || vp->v_mmap_write)
-			return (V_TRUE);
+			return true;
 		break;
 	case V_READ:
 		if (vp->v_mmap_read)
-			return (V_TRUE);
+			return true;
 		break;
 	}
 #endif
 
-	return (V_FALSE);
+	return false;
 }
 
 /*

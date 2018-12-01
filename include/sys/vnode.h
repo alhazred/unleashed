@@ -815,9 +815,6 @@ enum v_mode { V_READ, V_WRITE, V_RDORWR, V_RDANDWR };
 
 typedef enum v_mode v_mode_t;
 
-#define	V_TRUE	1
-#define	V_FALSE	0
-
 /*
  * Structure used on fop_getsecattr and fop_setsecattr operations
  */
@@ -1158,9 +1155,9 @@ void	vn_recycle(vnode_t *);
 void	vn_free(vnode_t *);
 
 int	vn_is_readonly(vnode_t *);
-int   	vn_is_opened(vnode_t *, v_mode_t);
-int   	vn_is_mapped(vnode_t *, v_mode_t);
-int   	vn_has_other_opens(vnode_t *, v_mode_t);
+bool	vn_is_opened(struct vnode *, v_mode_t);
+bool	vn_is_mapped(struct vnode *, v_mode_t);
+bool	vn_has_other_opens(struct vnode *, v_mode_t);
 void	vn_open_upgrade(vnode_t *, int);
 void	vn_open_downgrade(vnode_t *, int);
 
