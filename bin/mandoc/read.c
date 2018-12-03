@@ -248,7 +248,7 @@ static	const char * const	mandocerrs[MANDOCERR_MAX] = {
 	"missing list type, using -item",
 	"argument is not numeric, using 1",
 	"missing manual name, using \"\"",
-	"uname(3) system call failed, using UNKNOWN",
+	"uname(2) system call failed, using UNKNOWN",
 	"unknown standard specifier",
 	"skipping request without numeric argument",
 	"NOT IMPLEMENTED: .so with absolute path or \"..\"",

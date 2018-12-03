@@ -176,7 +176,7 @@ level automatically derives the operating system from the contents of the
 macro, from the
 .Fl Ios
 command line option, or from the
-.Xr uname 3
+.Xr uname 2
 return value.
 The levels
 .Cm openbsd
@@ -784,7 +784,7 @@ macro, of the
 .Fl Ios
 command line option, or, if neither are present, in the return value
 of the
-.Xr uname 3
+.Xr uname 2
 function.
 .Ss Conventions for base system manuals
 .Bl -ohang
@@ -1949,12 +1949,12 @@ request is not a number.
 The first call to
 .Ic \&Nm ,
 or any call in the NAME section, lacks the required argument.
-.It Sy "uname(3) system call failed, using UNKNOWN"
+.It Sy "uname(2) system call failed, using UNKNOWN"
 .Pq mdoc
 The
 .Ic \&Os
 macro is called without arguments, and the
-.Xr uname 3
+.Xr uname 2
 system call failed.
 As a workaround,
 .Nm
