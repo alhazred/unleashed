@@ -30,7 +30,6 @@ file path=usr/share/man/man3/posix_memalign.3
 file path=usr/share/man/man3/set_constraint_handler_s.3
 file path=usr/share/man/man3/setmode.3
 file path=usr/share/man/man3/strtonum.3
-file path=usr/share/man/man3/uname.3
 file path=usr/share/man/man3/unvis.3
 file path=usr/share/man/man3/valloc.3
 file path=usr/share/man/man3/vis.3
