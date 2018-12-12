@@ -9816,6 +9816,8 @@ export_method_context(scf_propertygroup_t *pg, struct entity_elts *elts)
 	int ret, err = 0;
 
 	n = xmlNewNode(NULL, (xmlChar *)"method_context");
+	prof = NULL;
+	cred = NULL;
 
 	env = export_method_environment(pg);
 
@@ -13824,7 +13826,7 @@ int
 lscf_setprop(const char *pgname, const char *type, const char *value,
     const uu_list_t *values)
 {
-	scf_type_t ty, current_ty;
+	scf_type_t ty = SCF_TYPE_INVALID, current_ty;
 	scf_service_t *svc;
 	scf_propertygroup_t *pg, *parent_pg;
 	scf_property_t *prop, *parent_prop;
@@ -14542,7 +14544,7 @@ static int
 lscf_setpropvalue(const char *pgname, const char *type,
     const char *arg, int isadd, int isnotfoundok)
 {
-	scf_type_t ty;
+	scf_type_t ty = SCF_TYPE_INVALID;
 	scf_propertygroup_t *pg;
 	scf_property_t *prop;
 	int ret, result = 0;
@@ -16249,7 +16251,7 @@ create_instance_list(scf_service_t *svc, int wohandcrafted)
 	scf_instance_t  *inst;
 	scf_iter_t	*inst_iter;
 	uu_list_t	*instances;
-	char		*instname;
+	char		*instname = NULL;
 	int		r;
 
 	inst_iter = scf_iter_create(g_hndl);
@@ -16945,7 +16947,7 @@ upgrade_svc_mfst_connection(scf_service_t *svc, const char *svcname)
 int
 lscf_service_cleanup(void *act, scf_walkinfo_t *wip)
 {
-	struct mpg_mfile	*mpntov;
+	struct mpg_mfile	*mpntov = NULL;
 	struct mpg_mfile	**mpvarry = NULL;
 	scf_service_t		*svc;
 	scf_propertygroup_t	*mpg;
@@ -16956,8 +16958,8 @@ lscf_service_cleanup(void *act, scf_walkinfo_t *wip)
 	uu_list_walk_t		*insts;
 	uu_list_t		*instances = NULL;
 	boolean_t		activity = (boolean_t)act;
-	char			*mpnbuf;
-	char			*mpvbuf;
+	char			*mpnbuf = NULL;
+	char			*mpvbuf = NULL;
 	char			*pgpropbuf;
 	int			mfstcnt, rminstct, instct, mfstmax;
 	int			index;

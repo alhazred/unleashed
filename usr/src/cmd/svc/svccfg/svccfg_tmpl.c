@@ -1638,6 +1638,9 @@ value_to_string(value_t *v)
 		case SCF_TYPE_INTEGER:
 			c = int64_to_str(v->sc_u.sc_integer);
 			return (c);
+		default:
+			/* unhandled numeric type */
+			abort();
 		}
 	} else {
 		c = v->sc_u.sc_string;

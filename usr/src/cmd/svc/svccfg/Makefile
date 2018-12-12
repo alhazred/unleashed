@@ -77,7 +77,6 @@ LDFLAGS +=	$(MAPOPTS)
 CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-switch
-CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-parentheses
 

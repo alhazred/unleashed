@@ -133,11 +133,13 @@ mhash_retrieve_entry(scf_handle_t *hndl, const char *name, uchar_t *hash,
 	 * svc:/MHASH_SVC/:properties/name/MHASH_PROP
 	 */
 
-	if ((scope = scf_scope_create(hndl)) == NULL ||
-	    (svc = scf_service_create(hndl)) == NULL ||
-	    (pg = scf_pg_create(hndl)) == NULL ||
-	    (prop = scf_property_create(hndl)) == NULL ||
-	    (val = scf_value_create(hndl)) == NULL) {
+	scope = scf_scope_create(hndl);
+	svc = scf_service_create(hndl);
+	pg = scf_pg_create(hndl);
+	prop = scf_property_create(hndl);
+	val = scf_value_create(hndl);
+	if (scope == NULL || svc == NULL || pg == NULL || prop == NULL ||
+	    val == NULL) {
 		result = -1;
 		goto out;
 	}
