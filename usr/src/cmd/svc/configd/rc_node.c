@@ -3923,9 +3923,10 @@ again:
 	assert(!(np->rn_flags & RC_NODE_OLD));
 
 #ifdef NATIVE_BUILD
-	if (!client_is_privileged()) {
+	if (!client_is_privileged())
 		rc = REP_PROTOCOL_FAIL_PERMISSION_DENIED;
-	}
+	else
+		rc = REP_PROTOCOL_SUCCESS;
 #else
 	if (is_main_repository) {
 		/* permission check */
