@@ -1308,6 +1308,9 @@ map_granted_status(perm_status_t status, permcheck_t *pcp)
 	case PERM_FAIL:
 		rc = REP_PROTOCOL_FAIL_NO_RESOURCES;
 		break;
+	default:
+		rc = REP_PROTOCOL_FAIL_UNKNOWN;
+		break;
 	}
 	return (rc);
 }
@@ -4257,12 +4260,13 @@ again:
 		(void) pthread_mutex_lock(&np->rn_lock);
 	}
 
+
+	nnp = prev = NULL;
 	if (parentp != NULL) {
 		if (pp != parentp) {
 			rc = REP_PROTOCOL_FAIL_BAD_REQUEST;
 			goto fail;
 		}
-		nnp = NULL;
 	} else {
 		/*
 		 * look for a former node with the snapid we need.

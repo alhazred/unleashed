@@ -58,7 +58,6 @@ CERRWARN += -Wno-type-limits
 CERRWARN += -Wno-unused-label
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-unused-function
-CERRWARN += -Wno-uninitialized
 MYLDLIBS = -lumem -luutil
 LDLIBS	+= -lsecdb $(MYLDLIBS)
 
