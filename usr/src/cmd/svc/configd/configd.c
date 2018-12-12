@@ -699,10 +699,6 @@ main(int argc, char *argv[])
 	fd_new.rlim_max = fd_new.rlim_cur = CONFIGD_MAX_FDS;
 	(void) setrlimit(RLIMIT_NOFILE, &fd_new);
 
-#ifndef NATIVE_BUILD /* Allow building on snv_38 and earlier; remove later. */
-	(void) enable_extended_FILE_stdio(-1, -1);
-#endif
-
 	if ((ret = backend_init(dbpath, npdbpath, have_npdb)) !=
 	    CONFIGD_EXIT_OKAY)
 		exit(ret);
