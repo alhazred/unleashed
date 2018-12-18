@@ -521,7 +521,6 @@ MSGSUBDIRS=		\
 	pools		\
 	power		\
 	pr		\
-	praudit		\
 	profiles	\
 	projadd		\
 	projects	\
