@@ -9,6 +9,9 @@ was changed.
 
 <next> release
 --------------
+
+1.2 release
+-----------
  - libfruraw, libnvfru, libfru, libfrureg, libfruutils
  - libpicl, libpicltree, picld(8), etc.
  - pyzfs & pysolaris
