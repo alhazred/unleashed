@@ -14,9 +14,14 @@ was changed.
  - pyzfs & pysolaris
  - locator(8)
  - auditing support and libbsm
+ + ship ctfconvert & ctfmerge in /usr/bin
+ * hwdata updated to 2018.11.29
+ * tzdata updated to 2018g
+ * libressl 2.8.2
  * uname(1) returns "amd64" for -m and -p
  * sysinfo(SI_ARCHITECTURE) returns "amd64" (or "i386" when UNAME_LEGACY is
    in the environment)
+ * rename vnode interface's AT_* to VATTR_*
 
 1.1 release
 -----------
