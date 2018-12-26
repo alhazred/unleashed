@@ -468,6 +468,27 @@ extern "C" {
  */
 #define	_ILLUMOS	1
 
+/*
+ * Default values.
+ */
+#ifndef _KERNEL
+#ifndef _XOPEN_SOURCE
+#define _XPG7
+#define _XPG6
+#define _XPG5
+#define _XPG4_2
+#define _XPG4
+#define _XPG3
+#define _XOPEN_SOURCE			700
+#ifndef __EXTENSIONS__
+#define __EXTENSIONS__
+#endif
+#endif
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE			200809L
+#endif
+#endif
+
 #ifdef	__cplusplus
 }
 #endif
