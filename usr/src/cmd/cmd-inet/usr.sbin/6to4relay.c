@@ -44,6 +44,9 @@
 #include <fcntl.h>
 #include <libdliptun.h>
 
+/* Well known 6to4 Relay Router Anycast address defined in RFC 3068 */
+#define	INADDR_6TO4RRANYCAST	0xc0586301U	/* 192.88.99.1 */
+
 static void usage(void);
 
 static dladm_handle_t	handle;
