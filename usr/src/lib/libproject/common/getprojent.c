@@ -145,10 +145,11 @@ ismember(struct project *proj, const char *user, gid_t gid, int is_default)
 	int group_ok = 0;
 	char **u, **g;
 	char *member;
+	struct group *result = NULL;
 
-	if (getgrgid_r(gid, &grp, grbuf, NSS_BUFLEN_GROUP) != NULL) {
+	if (getgrgid_r(gid, &grp, grbuf, NSS_BUFLEN_GROUP, &result) == 0) {
 		group_ok = 1;
-		(void) snprintf(groupname, MAXGLEN, grp.gr_name);
+		(void) snprintf(groupname, MAXGLEN, result->gr_name);
 	}
 
 	/*
@@ -184,8 +185,8 @@ ismember(struct project *proj, const char *user, gid_t gid, int is_default)
 		/*
 		 * Check if user is a member of one of project's groups.
 		 */
-		if (getgrnam_r(member, &grp, grbuf, NSS_BUFLEN_GROUP) != NULL) {
-			for (u = grp.gr_mem; *u; u++)
+		if (getgrnam_r(member, &grp, grbuf, NSS_BUFLEN_GROUP, &result) == 0) {
+			for (u = result->gr_mem; *u; u++)
 				if (strcmp(*u, user) == 0)
 					res = 1;
 		}
@@ -204,6 +205,7 @@ _getdefaultproj(const char *user, struct project *result,
 	struct group g;
 	char *attrproj;
 	struct passwd *pwd;
+	struct group *gr = NULL;
 
 	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2project);
 
@@ -240,8 +242,8 @@ _getdefaultproj(const char *user, struct project *result,
 	if ((result = NSS_XbyY_FINI(&arg)) != NULL &&
 	    ismember(result, user, p.pw_gid, DEFAULT_PROJECT))
 		return (result);
-	if (getgrgid_r(p.pw_gid, &g, buffer, buflen) != NULL) {
-		(void) snprintf(projname, PROJNAME_MAX, "group.%s", g.gr_name);
+	if (getgrgid_r(p.pw_gid, &g, buffer, buflen, &gr) == 0) {
+		(void) snprintf(projname, PROJNAME_MAX, "group.%s", gr->gr_name);
 		arg.key.name = projname;
 		(void) nss_search(&db_root, _nss_initf_project,
 		    NSS_DBOP_PROJECT_BYNAME, &arg);
@@ -271,6 +273,7 @@ _inproj(const char *user, const char *name, void *buffer, size_t buflen)
 	char *attrproj;
 	gid_t gid;
 	struct passwd *result;
+	struct group *resultgr;
 
 	NSS_XbyY_INIT(&arg, &proj, buffer, buflen, str2project);
 
@@ -322,9 +325,9 @@ _inproj(const char *user, const char *name, void *buffer, size_t buflen)
 	 * to be a member of project "group.groupname" even if project's
 	 * group list does not include "groupname".
 	 */
-	if (getgrgid_r(gid, &grp, grbuf, NSS_LINELEN_GROUP) != NULL) {
+	if (getgrgid_r(gid, &grp, grbuf, NSS_LINELEN_GROUP, &resultgr) == 0) {
 		(void) snprintf(projname, PROJNAME_MAX,
-		    "group.%s", grp.gr_name);
+		    "group.%s", resultgr->gr_name);
 		if (strcmp(projname, name) == 0)
 			return (ismember(&proj, user, gid, DEFAULT_PROJECT));
 	}

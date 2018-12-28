@@ -66,40 +66,43 @@ _uncached_getgrnam_r(const char *name, struct group *result, char *buffer,
 struct group *
 _uncached_getgrgid_r(gid_t gid, struct group *result, char *buffer, int buflen);
 
-/*
- * POSIX.1c Draft-6 version of the function getgrnam_r.
- * It was implemented by Solaris 2.3.
- */
-struct group *
-getgrnam_r(const char *name, struct group *result, char *buffer, int buflen)
+#pragma weak __posix_getgrnam_r = getgrnam_r
+#pragma weak __posix_getgrgid_r = getgrgid_r
+
+int
+getgrnam_r(const char *name, struct group *grp, char *buffer, size_t buflen,
+    struct group **result)
 {
 	nss_XbyY_args_t arg;
 
-	if (name == (const char *)NULL) {
+	if (!name) {
 		errno = ERANGE;
-		return (NULL);
+		return errno;
 	}
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
+	NSS_XbyY_INIT(&arg, grp, buffer, buflen, str2group);
 	arg.key.name = name;
-	(void) nss_search(&db_root, _nss_initf_group,
-	    NSS_DBOP_GROUP_BYNAME, &arg);
-	return ((struct group *)NSS_XbyY_FINI(&arg));
+	(void) nss_search(&db_root, _nss_initf_group, NSS_DBOP_GROUP_BYNAME,
+	    &arg);
+	*result = NSS_XbyY_FINI(&arg);
+	if (!*result)
+		return errno;
+	return 0;
 }
 
-/*
- * POSIX.1c Draft-6 version of the function getgrgid_r.
- * It was implemented by Solaris 2.3.
- */
-struct group *
-getgrgid_r(gid_t gid, struct group *result, char *buffer, int buflen)
+int
+getgrgid_r(gid_t gid, struct group *grp, char *buffer, size_t buflen,
+    struct group **result)
 {
 	nss_XbyY_args_t arg;
 
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
+	NSS_XbyY_INIT(&arg, grp, buffer, buflen, str2group);
 	arg.key.gid = gid;
-	(void) nss_search(&db_root, _nss_initf_group,
-	    NSS_DBOP_GROUP_BYGID, &arg);
-	return ((struct group *)NSS_XbyY_FINI(&arg));
+	(void) nss_search(&db_root, _nss_initf_group, NSS_DBOP_GROUP_BYGID,
+	    &arg);
+	*result = NSS_XbyY_FINI(&arg);
+	if (!*result)
+		return errno;
+	return 0;
 }
 
 struct group *
@@ -115,26 +118,6 @@ _uncached_getgrgid_r(gid_t gid, struct group *result, char *buffer,
 	return ((struct group *)NSS_XbyY_FINI(&arg));
 }
 
-/*
- * POSIX.1c standard version of the function getgrgid_r.
- * User gets it via static getgrgid_r from the header file.
- */
-int
-__posix_getgrgid_r(gid_t gid, struct group *grp, char *buffer,
-    size_t bufsize, struct group **result)
-{
-	int nerrno = 0;
-	int oerrno = errno;
-
-	errno = 0;
-	if ((*result = getgrgid_r(gid, grp, buffer, (uintptr_t)bufsize))
-	    == NULL) {
-			nerrno = errno;
-	}
-	errno = oerrno;
-	return (nerrno);
-}
-
 struct group *
 _uncached_getgrnam_r(const char *name, struct group *result, char *buffer,
 	int buflen)
@@ -145,63 +128,6 @@ _uncached_getgrnam_r(const char *name, struct group *result, char *buffer,
 	arg.key.name = name;
 	(void) nss_search(&db_root, _nss_initf_group,
 	    NSS_DBOP_GROUP_BYNAME, &arg);
-	return ((struct group *)NSS_XbyY_FINI(&arg));
-}
-
-/*
- * POSIX.1c standard version of the function getgrnam_r.
- * User gets it via static getgrnam_r from the header file.
- */
-int
-__posix_getgrnam_r(const char *name, struct group *grp, char *buffer,
-    size_t bufsize, struct group **result)
-{
-	int nerrno = 0;
-	int oerrno = errno;
-
-	if ((*result = getgrnam_r(name, grp, buffer, (uintptr_t)bufsize))
-	    == NULL) {
-			nerrno = errno;
-	}
-	errno = oerrno;
-	return (nerrno);
-}
-
-void
-setgrent(void)
-{
-	nss_setent(&db_root, _nss_initf_group, &context);
-}
-
-void
-endgrent(void)
-{
-	nss_endent(&db_root, _nss_initf_group, &context);
-	nss_delete(&db_root);
-}
-
-struct group *
-getgrent_r(struct group *result, char *buffer, int buflen)
-{
-	nss_XbyY_args_t arg;
-	char		*nam;
-
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
-	/* No key to fill in */
-	(void) nss_getent(&db_root, _nss_initf_group, &context, &arg);
-
-	return ((struct group *)NSS_XbyY_FINI(&arg));
-}
-
-struct group *
-fgetgrent_r(FILE *f, struct group *result, char *buffer, int buflen)
-{
-	extern void	_nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
-	nss_XbyY_args_t	arg;
-
-	/* No key to fill in */
-	NSS_XbyY_INIT(&arg, result, buffer, buflen, str2group);
-	_nss_XbyY_fgets(f, &arg);
 	return ((struct group *)NSS_XbyY_FINI(&arg));
 }
 

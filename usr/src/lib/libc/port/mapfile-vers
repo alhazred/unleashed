@@ -2009,14 +2009,12 @@ $endif
 	endpwent;
 	___errno;
 	fgetgrent;
-	fgetgrent_r;
 	fgetpwent;
 	flockfile;
 	funlockfile;
 	getchar_unlocked;
 	getc_unlocked;
 	getgrent;
-	getgrent_r;
 	getgrgid_r;
 	getgrnam_r;
 	getitimer;

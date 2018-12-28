@@ -514,8 +514,9 @@ open_dfstab(char *file)
 		grsize = sysconf(_SC_GETGR_R_SIZE_MAX);
 		buff = malloc(grsize);
 		if (buff != NULL)
-			grp = getgrnam_r(SA_DEFAULT_FILE_GRP, &group, buff,
-			    grsize);
+			 if (getgrnam_r(SA_DEFAULT_FILE_GRP, &group, buff,
+			     grsize, &grp) != 0)
+				 grp = NULL;
 		else
 			grp = getgrnam(SA_DEFAULT_FILE_GRP);
 		(void) fchmod(fileno(dfstab), 0644);

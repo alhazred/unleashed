@@ -877,8 +877,9 @@ smb_parse_owner(char *pair, uid_t *uid, gid_t *gid)
 	if (cp) {
 		*cp++ = '\0';
 		if (*cp && gid) {
-			if (getgrnam_r(cp, &gr, buf, sizeof (buf)) != NULL) {
-				*gid = gr.gr_gid;
+			struct group *result = NULL;
+			if (getgrnam_r(cp, &gr, buf, sizeof (buf), &result) == 0) {
+				*gid = result->gr_gid;
 			} else
 				smb_error(dgettext(TEXT_DOMAIN,
 				    "Invalid group name %s, ignored"), 0, cp);
