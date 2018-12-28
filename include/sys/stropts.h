@@ -493,20 +493,6 @@ struct strsigset {
 };
 #endif /* !defined(_XPG4_2) || defined(__EXTENSIONS__) */
 
-#ifdef	_XPG4_2
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-
-#pragma	redefine_extname putmsg		__xpg4_putmsg
-#pragma	redefine_extname putpmsg	__xpg4_putpmsg
-
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-
-#define	putmsg	__xpg4_putmsg
-#define	putpmsg	__xpg4_putpmsg
-
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _XPG4_2 */
-
 #ifdef	__cplusplus
 }
 #endif
