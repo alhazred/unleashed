@@ -99,26 +99,17 @@ extern "C" {
 #define	_MAP_STARTLOW	0x4000
 #endif /* _KERNEL */
 
-#if	(_POSIX_C_SOURCE <= 2) && !defined(_XPG4_2)
+#ifdef __UNLEASHED_VISIBLE
 /* these flags are used by memcntl */
-#define	PROC_TEXT	(PROT_EXEC | PROT_READ)
-#define	PROC_DATA	(PROT_READ | PROT_WRITE | PROT_EXEC)
 #define	SHARED		0x10
 #define	PRIVATE		0x20
 #define	VALID_ATTR  (PROT_READ|PROT_WRITE|PROT_EXEC|SHARED|PRIVATE)
-#endif	/* (_POSIX_C_SOURCE <= 2) && !defined(_XPG4_2) */
-
-#if	(_POSIX_C_SOURCE <= 2) || defined(_XPG4_2)
 #ifdef	_KERNEL
 #define	PROT_EXCL	0x20
 #endif	/* _KERNEL */
-
 #define	_MAP_LOW32	0x80	/* force mapping in lower 4G of address space */
 #define	MAP_32BIT	_MAP_LOW32
-#endif	/* (_POSIX_C_SOURCE <= 2) */
 
-
-#ifdef __UNLEASHED_VISIBLE
 /* External flags for mmapobj syscall (Exclusive of MAP_* flags above) */
 #define	MMOBJ_PADDING		0x10000
 #define	MMOBJ_INTERPRET		0x20000

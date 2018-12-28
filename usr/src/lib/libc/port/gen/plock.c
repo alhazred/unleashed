@@ -43,6 +43,10 @@
 #include <thread.h>
 #include <synch.h>
 
+
+#define	PROC_TEXT	(PROT_EXEC | PROT_READ)
+#define	PROC_DATA	(PROT_READ | PROT_WRITE | PROT_EXEC)
+
 /*
  * Module-scope variables.
  */
