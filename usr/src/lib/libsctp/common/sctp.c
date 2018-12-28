@@ -26,9 +26,6 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#define	_XPG4_2
-#define	__EXTENSIONS__
-
 #include <assert.h>
 #include <sys/types.h>
 #include <sys/uio.h>
