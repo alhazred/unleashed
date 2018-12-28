@@ -110,7 +110,6 @@ COMMON_SUBDIRS=		\
 	dmesg		\
 	dodatadm	\
 	dtrace		\
-	du		\
 	dumpadm		\
 	dumpcs		\
 	ed		\
@@ -443,7 +442,6 @@ MSGSUBDIRS=		\
 	diff		\
 	dladm		\
 	dlstat		\
-	du		\
 	dumpcs		\
 	ed		\
 	eject		\

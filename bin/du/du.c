@@ -67,16 +67,8 @@ static char		*name;
 static size_t		base_len = PATH_MAX + 1;    /* # of chars for base */
 static size_t		name_len = PATH_MAX + 1;    /* # of chars for name */
 
-/*
- * Output formats. illumos uses a tab as separator, XPG4 a space.
- */
-#ifdef XPG4
-#define	FORMAT1	"%s %s\n"
-#define	FORMAT2	"%lld %s\n"
-#else
 #define	FORMAT1	"%s\t%s\n"
 #define	FORMAT2	"%lld\t%s\n"
-#endif
 
 /*
  * convert DEV_BSIZE blocks to K blocks
@@ -87,7 +79,6 @@ static size_t		name_len = PATH_MAX + 1;    /* # of chars for name */
 #define	kb(n)		(((u_longlong_t)(n)) >> DEV_KSHIFT)
 #define	mb(n)		(((u_longlong_t)(n)) >> DEV_MSHIFT)
 
-long	wait();
 static u_longlong_t 	descend(char *curname, int curfd, int *retcode,
 			    dev_t device);
 static void		printsize(blkcnt_t blocks, char *path);
@@ -111,9 +102,7 @@ main(int argc, char **argv)
 #endif
 	(void) textdomain(TEXT_DOMAIN);
 
-#ifdef XPG4
 	rflg++;		/* "-r" is not an option but ON always */
-#endif
 
 	while ((c = getopt(argc, argv, "aAdhHkLmorsx")) != EOF)
 		switch (c) {
@@ -179,7 +168,7 @@ main(int argc, char **argv)
 			continue;
 		case '?':
 			(void) fprintf(stderr, gettext(
-			    "usage: du [-Adorx] [-a|-s] [-h|-k|-m] [-H|-L] "
+			    "usage: du [-Adox] [-a|-s] [-h|-k|-m] [-H|-L] "
 			    "[file...]\n"));
 			exit(2);
 		}

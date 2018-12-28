@@ -49,7 +49,6 @@ MAN = acctcom.1 \
       dispuid.1 \
       dmake.1 \
       dos2unix.1 \
-      du.1 \
       dump.1 \
       dumpcs.1 \
       ed.1 \
