@@ -125,11 +125,7 @@ int shmget(key_t, size_t, int);
 int shmids(int *, uint_t, uint_t *);
 int shmctl(int, int, struct shmid_ds *);
 void *shmat(int, const void *, int);
-#if defined(_XPG4)
 int shmdt(const void *);
-#else
-int shmdt(char *);
-#endif /* defined(_XPG4) */
 #endif /* !defined(_KERNEL) */
 
 #ifdef	__cplusplus
