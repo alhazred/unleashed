@@ -24,6 +24,7 @@
  */
 
 #include <sys/types.h>
+#include <sys/resource.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <errno.h>

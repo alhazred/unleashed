@@ -38,10 +38,6 @@
 #include <iso/stdlib_c99.h>
 #include <iso/stdlib_c11.h>
 
-#if defined(__EXTENSIONS__) || defined(_XPG4)
-#include <sys/wait.h>
-#endif
-
 /*
  * Allow global visibility for symbols defined in
  * C++ "std" namespace in <iso/stdlib_iso.h>.
