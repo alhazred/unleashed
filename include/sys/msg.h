@@ -103,13 +103,8 @@ struct ipcmsgbuf {
 #else
 struct msgbuf {
 #endif /* _KERNEL */
-#if defined(_XOPEN_SOURCE)
-	long	_mtype;		/* message type */
-	char	_mtext[1];	/* message text */
-#else
 	long	mtype;		/* message type */
 	char	mtext[1];	/* message text */
-#endif
 };
 
 /*
