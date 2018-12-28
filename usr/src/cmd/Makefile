@@ -60,7 +60,6 @@ COMMON_SUBDIRS=		\
 	auths		\
 	autopush	\
 	backup		\
-	bart		\
 	basename	\
 	bc		\
 	boot		\
@@ -416,7 +415,6 @@ MSGSUBDIRS=		\
 	auths		\
 	autopush	\
 	backup		\
-	bart		\
 	basename	\
 	busstat		\
 	cal		\

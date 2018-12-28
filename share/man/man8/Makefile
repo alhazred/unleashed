@@ -18,7 +18,6 @@ MAN = 6to4relay.8 \
       automount.8 \
       automountd.8 \
       autopush.8 \
-      bart.8 \
       boot.8 \
       bootadm.8 \
       busstat.8 \
