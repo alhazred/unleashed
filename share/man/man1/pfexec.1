@@ -5,7 +5,7 @@
 .\" When distributing Covered Code, include this CDDL HEADER in each file and include the License file at usr/src/OPENSOLARIS.LICENSE.  If applicable, add the following below this CDDL HEADER, with the fields enclosed by brackets "[]" replaced with your own identifying information: Portions Copyright [yyyy] [name of copyright owner]
 .TH PFEXEC 1 "Jul 8, 2016"
 .SH NAME
-pfexec, pfsh, pfcsh, pfksh \- execute a command in a profile
+pfexec, pfsh, pfksh \- execute a command in a profile
 .SH SYNOPSIS
 .LP
 .nf
@@ -24,11 +24,6 @@ pfexec, pfsh, pfcsh, pfksh \- execute a command in a profile
 
 .LP
 .nf
-\fB/usr/bin/pfcsh\fR [ \fIoptions\fR ] [ \fIargument\fR ]...
-.fi
-
-.LP
-.nf
 \fB/usr/bin/pfksh\fR [ \fIoptions\fR ] [ \fIargument\fR ]...
 .fi
 
@@ -36,8 +31,8 @@ pfexec, pfsh, pfcsh, pfksh \- execute a command in a profile
 .LP
 The \fBpfexec\fR program is used to execute commands with the attributes
 specified by the user's profiles in the \fBexec_attr\fR(4) database. It is
-invoked by the profile shells, \fBpfsh\fR, \fBpfcsh\fR, and \fBpfksh\fR which
-are linked to the Bourne shell, C shell, and Korn shell, respectively.
+invoked by the profile shells, \fBpfsh\fR and \fBpfksh\fR, which
+are linked to the Bourne shell and Korn shell, respectively.
 .sp
 .LP
 Profiles are searched in the order specified in the user's entry in the
@@ -63,7 +58,7 @@ in the current zone. This is normally managed by the
 such as specific user or group \fBID\fRs.
 .sp
 .LP
-Refer to the \fBsh\fR(1), \fBcsh\fR(1), and \fBksh\fR(1) man pages for complete
+Refer to the \fBsh\fR(1) and \fBksh\fR(1) man pages for complete
 usage descriptions of the profile shells.
 .SH EXAMPLES
 .LP
@@ -104,5 +99,5 @@ An error occurred.
 
 .SH SEE ALSO
 .LP
-\fBcsh\fR(1), \fBksh\fR(1), \fBprofiles\fR(1), \fBsh\fR(1), \fBexec_attr\fR(4),
+\fBksh\fR(1), \fBprofiles\fR(1), \fBsh\fR(1), \fBexec_attr\fR(4),
 \fBprof_attr\fR(4), \fBuser_attr\fR(4), \fBattributes\fR(5), \fBsmf\fR(5)

@@ -622,7 +622,6 @@ file path=usr/bin/cpio mode=0555
 file path=usr/bin/crle mode=0555
 file path=usr/bin/crontab mode=4555
 file path=usr/bin/crypt mode=0555
-file path=usr/bin/csh mode=0555
 file path=usr/bin/ctrun mode=0555
 file path=usr/bin/ctstat mode=0555
 file path=usr/bin/ctwatch mode=0555
@@ -1226,9 +1225,7 @@ hardlink path=usr/bin/mv target=../../usr/bin/cp
 hardlink path=usr/bin/newtask target=../../usr/lib/isaexec
 hardlink path=usr/bin/nohup target=../../usr/lib/isaexec
 hardlink path=usr/bin/pfbash target=../../usr/bin/pfexec
-hardlink path=usr/bin/pfcsh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfsh target=../../usr/bin/pfexec
-hardlink path=usr/bin/pftcsh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfzsh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pkill target=../../usr/bin/pgrep
 hardlink path=usr/bin/prctl target=../../usr/lib/isaexec
@@ -1286,8 +1283,6 @@ license usr/src/cmd/cmd-inet/usr.sbin/traceroute/THIRDPARTYLICENSE \
     license=usr/src/cmd/cmd-inet/usr.sbin/traceroute/THIRDPARTYLICENSE
 license usr/src/cmd/cron/THIRDPARTYLICENSE \
     license=usr/src/cmd/cron/THIRDPARTYLICENSE
-license usr/src/cmd/csh/THIRDPARTYLICENSE \
-    license=usr/src/cmd/csh/THIRDPARTYLICENSE
 license usr/src/cmd/eeprom/THIRDPARTYLICENSE \
     license=usr/src/cmd/eeprom/THIRDPARTYLICENSE
 license usr/src/cmd/fs.d/ufs/THIRDPARTYLICENSE \

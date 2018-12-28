@@ -33,7 +33,6 @@ MAN = acctcom.1 \
       crle.1 \
       crontab.1 \
       crypt.1 \
-      csh.1 \
       csplit.1 \
       ctrun.1 \
       ctstat.1 \

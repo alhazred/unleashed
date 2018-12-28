@@ -34,7 +34,6 @@ file path=usr/share/man/man1/cpio.1
 file path=usr/share/man/man1/crle.1
 file path=usr/share/man/man1/crontab.1
 file path=usr/share/man/man1/crypt.1
-file path=usr/share/man/man1/csh.1
 file path=usr/share/man/man1/ctrun.1
 file path=usr/share/man/man1/ctstat.1
 file path=usr/share/man/man1/ctwatch.1

@@ -81,7 +81,6 @@ COMMON_SUBDIRS=		\
 	cpc		\
 	cron		\
 	crypt		\
-	csh		\
 	csplit		\
 	ctrun		\
 	ctstat		\
@@ -431,7 +430,6 @@ MSGSUBDIRS=		\
 	cpio		\
 	cpc		\
 	cron		\
-	csh		\
 	csplit		\
 	ctrun		\
 	ctstat		\

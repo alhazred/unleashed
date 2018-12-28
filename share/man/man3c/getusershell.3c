@@ -33,18 +33,18 @@ system shells are used in its place:
 .sp
 .in +2
 .nf
-\fB/bin/bash\fR                  \fB/bin/csh\fR
+\fB/bin/bash\fR
 \fB/bin/jsh\fR                   \fB/bin/ksh\fR
-\fB/bin/ksh93\fR                 \fB/bin/pfcsh\fR
+\fB/bin/ksh93\fR
 \fB/bin/pfksh\fR                 \fB/bin/pfsh\fR
-\fB/bin/sh\fR                    \fB/bin/tcsh\fR
+\fB/bin/sh\fR
 \fB/bin/zsh\fR                   \fB/sbin/jsh\fR
 \fB/sbin/pfsh\fR                 \fB/sbin/sh\fR
-\fB/usr/bin/bash\fR              \fB/usr/bin/csh\fR
+\fB/usr/bin/bash\fR
 \fB/usr/bin/jsh\fR               \fB/usr/bin/ksh\fR
-\fB/usr/bin/ksh93\fR             \fB/usr/bin/pfcsh\fR
+\fB/usr/bin/ksh93\fR
 \fB/usr/bin/pfksh\fR             \fB/usr/bin/pfsh\fR
-\fB/usr/bin/sh\fR                \fB/usr/bin/tcsh\fR
+\fB/usr/bin/sh\fR
 \fB/usr/bin/zsh\fR               \fB/usr/sfw/bin/zsh\fR
 .fi
 .in -2
