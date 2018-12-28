@@ -259,15 +259,6 @@ extern char *getcwd(char *, size_t);
 extern const char *getexecname(void);
 
 #ifndef	__GETLOGIN_DEFINED	/* Avoid duplicate in unistd.h */
-#define	__GETLOGIN_DEFINED
-#ifndef	__USE_LEGACY_LOGNAME__
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname getlogin getloginx
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern char *getloginx(void);
-#define	getlogin	getloginx
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* __USE_LEGACY_LOGNAME__ */
 extern char *getlogin(void);
 #endif	/* __GETLOGIN_DEFINED */
 

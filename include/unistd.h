@@ -348,15 +348,6 @@ extern int gethostname(char *, int);
 #endif
 
 #ifndef	__GETLOGIN_DEFINED	/* Avoid duplicate in stdlib.h */
-#define	__GETLOGIN_DEFINED
-#ifndef	__USE_LEGACY_LOGNAME__
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname getlogin getloginx
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern char *getloginx(void);
-#define	getlogin	getloginx
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* __USE_LEGACY_LOGNAME__ */
 extern char *getlogin(void);
 #endif	/* __GETLOGIN_DEFINED */
 
@@ -581,97 +572,8 @@ extern int	truncate64(const char *, off64_t);
 extern int	lockf64(int, int, off64_t);
 #endif	/* _LARGEFILE64_SOURCE */
 
-/*
- * getlogin_r() & ttyname_r() prototypes are defined here.
- */
-
-/*
- * Previous releases of Solaris, starting at 2.3, provided definitions of
- * various functions as specified in POSIX.1c, Draft 6.  For some of these
- * functions, the final POSIX 1003.1c standard had a different number of
- * arguments and return values.
- *
- * The following segment of this header provides support for the standard
- * interfaces while supporting applications written under earlier
- * releases.  The application defines appropriate values of the feature
- * test macros _POSIX_C_SOURCE and _POSIX_PTHREAD_SEMANTICS to indicate
- * whether it was written to expect the Draft 6 or standard versions of
- * these interfaces, before including this header.  This header then
- * provides a mapping from the source version of the interface to an
- * appropriate binary interface.  Such mappings permit an application
- * to be built from libraries and objects which have mixed expectations
- * of the definitions of these functions.
- *
- * For applications using the Draft 6 definitions, the binary symbol is the
- * same as the source symbol, and no explicit mapping is needed.  For the
- * standard interface, the function func() is mapped to the binary symbol
- * _posix_func().  The preferred mechanism for the remapping is a compiler
- * #pragma.  If the compiler does not provide such a #pragma, the header file
- * defines a static function func() which calls the _posix_func() version;
- * this has to be done instead of #define since POSIX specifies that an
- * application can #undef the symbol and still be bound to the correct
- * implementation.  Unfortunately, the statics confuse lint so we fallback to
- * #define in that case.
- *
- * NOTE: Support for the Draft 6 definitions is provided for compatibility
- * only.  New applications/libraries should use the standard definitions.
- */
-
-#if	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_POSIX_PTHREAD_SEMANTICS)
-
-#ifndef	__USE_LEGACY_LOGNAME__
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname getlogin_r __posix_getloginx_r
-extern int getlogin_r(char *, int);
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern int __posix_getloginx_r(char *, int);
-#define	getlogin_r	__posix_getloginx_r
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#else	/* __USE_LEGACY_LOGNAME__ */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname getlogin_r __posix_getlogin_r
-extern int getlogin_r(char *, int);
-#else  /* __PRAGMA_REDEFINE_EXTNAME */
-extern int __posix_getlogin_r(char *, int);
-
-static int
-getlogin_r(char *__name, int __len)
-{
-	return (__posix_getlogin_r(__name, __len));
-}
-
-#endif /* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* __USE_LEGACY_LOGNAME__ */
-
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname ttyname_r __posix_ttyname_r
+extern int getlogin_r(char *, size_t);
 extern int ttyname_r(int, char *, size_t);
-#else  /* __PRAGMA_REDEFINE_EXTNAME */
-extern int __posix_ttyname_r(int, char *, size_t);
-
-static int
-ttyname_r(int __fildes, char *__buf, size_t __size)
-{
-	return (__posix_ttyname_r(__fildes, __buf, __size));
-}
-
-#endif /* __PRAGMA_REDEFINE_EXTNAME */
-
-#else  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
-#ifndef	__USE_LEGACY_LOGNAME__
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname getlogin_r getloginx_r
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern char *getloginx_r(char *, int);
-#define	getlogin_r	getloginx_r
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* __USE_LEGACY_LOGNAME__ */
-extern char *getlogin_r(char *, int);
-
-extern char *ttyname_r(int, char *, int);
-
-#endif /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
 
 #if !defined(_STRICT_SYMBOLS)
 extern int getentropy(void *, size_t);

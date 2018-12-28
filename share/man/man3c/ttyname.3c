@@ -57,14 +57,6 @@ ttyname, ttyname_r \- find pathname of a terminal
 
 .LP
 .nf
-\fBchar *\fR\fBttyname_r\fR(\fBint\fR \fIfildes\fR, \fBchar *\fR\fIname\fR, \fBint\fR \fInamelen\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-cc [ \fIflag\fR...] \fIfile\fR ... \fB-D_POSIX_PTHREAD_SEMANTICS\fR [ \fIlibrary\fR ... ]
-
 \fBint\fR \fBttyname_r\fR(\fBint\fR \fIfildes\fR, \fBchar *\fR\fIname\fR, \fBsize_t\fR \fInamesize\fR);
 .fi
 
@@ -79,20 +71,17 @@ content is overwritten by each call from the same thread.
 .LP
 The \fBttyname_r()\fR function has the same functionality as \fBttyname()\fR
 except that the caller must supply a buffer \fIname\fR with length
-\fInamelen\fR to store the result; this buffer must be at least
-\fB_POSIX_PATH_MAX\fR in size (defined in <\fBlimits.h\fR>). The
-standard-conforming version (see \fBstandards\fR(5)) of \fBttyname_r()\fR takes
-a \fInamesize\fR parameter of type \fBsize_t\fR.
+\fInamesize\fR to store the result; this buffer must be at least
+\fB_POSIX_PATH_MAX\fR in size (defined in <\fBlimits.h\fR>).
 .SH RETURN VALUES
 .sp
 .LP
-Upon successful completion, \fBttyname()\fR and \fBttyname_r()\fR return a
-pointer to a string. Otherwise, a null pointer is returned and \fBerrno\fR is
-set to indicate the error.
+Upon successful completion, \fBttyname()\fR returns a pointer to a string.
+Otherwise, a null pointer is returned and \fBerrno\fR is set to indicate the
+error.
 .sp
 .LP
-The standard-conforming \fBttyname_r()\fR returns 0 if successful or the error
-number upon failure.
+\fBttyname_r()\fR returns 0 if successful or the error number upon failure.
 .SH ERRORS
 .sp
 .LP
@@ -168,10 +157,3 @@ The return value of \fBttyname()\fR points to thread-specific data whose
 content is overwritten by each call from the same thread. This function is safe
 to use in multithreaded applications, but its use is discouraged. The
 \fBttyname_r()\fR function should used instead.
-.sp
-.LP
-Solaris 2.4 and earlier releases provided definitions of the \fBttyname_r()\fR
-interface as specified in POSIX.1c Draft 6. The final POSIX.1c standard changed
-the interface as described above. Support for the Draft 6 interface is provided
-for compatibility only and might not be supported in future releases. New
-applications and libraries should use the standard-conforming interface.
