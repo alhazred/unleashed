@@ -10,13 +10,18 @@
 #
 
 #
-# Copyright (c) 2012 by Delphix. All rights reserved.
-# Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
 #
 
-.PARALLEL: $(SUBDIRS)
+ROOTTESTS=	$(TESTS:%=$(ROOTTESTDIR)/%)
+$(ROOTTESTS) :=	FILEMODE = 0555
 
-SUBDIRS = libc-tests crypto-tests os-tests test-runner util-tests zfs-tests \
-	smbclient-tests
+all lint clean clobber:
 
-include Makefile.com
+install:	$(ROOTTESTDIR) $(ROOTTESTS)
+
+$(ROOTTESTDIR):
+		$(INS.dir)
+
+$(ROOTTESTDIR)/%: %.ksh
+		$(INS.rename)
