@@ -1242,6 +1242,7 @@ hardlink path=usr/bin/sh target=ksh
 hardlink path=usr/bin/touch target=../../usr/bin/settime
 hardlink path=usr/bin/uptime target=../../usr/lib/isaexec
 hardlink path=usr/bin/w target=../../usr/lib/isaexec
+hardlink path=usr/bin/whereis target=which
 hardlink path=usr/bin/xzegrep target=../../usr/bin/grep
 hardlink path=usr/bin/xzfgrep target=../../usr/bin/grep
 hardlink path=usr/bin/xzgrep target=../../usr/bin/grep
@@ -1303,8 +1304,6 @@ license usr/src/cmd/tip/THIRDPARTYLICENSE \
     license=usr/src/cmd/tip/THIRDPARTYLICENSE
 license usr/src/cmd/tr/THIRDPARTYLICENSE \
     license=usr/src/cmd/tr/THIRDPARTYLICENSE
-license usr/src/cmd/which/THIRDPARTYLICENSE \
-    license=usr/src/cmd/which/THIRDPARTYLICENSE
 license usr/src/cmd/xstr/THIRDPARTYLICENSE \
     license=usr/src/cmd/xstr/THIRDPARTYLICENSE
 license usr/src/common/bzip2/LICENSE license=usr/src/common/bzip2/LICENSE

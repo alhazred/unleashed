@@ -260,7 +260,6 @@ MAN = acctcom.1 \
       volcheck.1 \
       volrmmount.1 \
       w.1 \
-      which.1 \
       who.1 \
       whois.1 \
       write.1 \

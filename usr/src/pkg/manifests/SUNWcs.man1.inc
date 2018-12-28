@@ -170,6 +170,7 @@ file path=usr/share/man/man1/uuidgen.1
 file path=usr/share/man/man1/vtfontcvt.1
 file path=usr/share/man/man1/w.1
 file path=usr/share/man/man1/wc.1
+file path=usr/share/man/man1/whereis.1
 file path=usr/share/man/man1/which.1
 file path=usr/share/man/man1/who.1
 file path=usr/share/man/man1/write.1

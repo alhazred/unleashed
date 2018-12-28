@@ -370,7 +370,6 @@ COMMON_SUBDIRS=		\
 	vt		\
 	w		\
 	wall		\
-	which		\
 	who		\
 	whodo		\
 	wracct		\
