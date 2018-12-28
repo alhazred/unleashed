@@ -1047,7 +1047,7 @@ struct FTW *state;
 
 		case PRUNE:
 			if (type == FTW_D)
-				state->quit = FTW_PRUNE;
+				state->__quit = FTW_PRUNE;
 			val = 1;
 			break;
 		case NOUSER:
@@ -1138,7 +1138,7 @@ struct FTW *state;
 		}
 		case MAXDEPTH:
 			if (state->level == maxdepth && type == FTW_D)
-				state->quit = FTW_PRUNE;
+				state->__quit = FTW_PRUNE;
 			/* FALLTHROUGH */
 		case MINDEPTH:
 			val = 1;
