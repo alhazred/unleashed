@@ -54,7 +54,6 @@
 #include <rpc/auth_sys.h>
 #include <synch.h>
 
-extern int gethostname(char *, int);
 extern bool_t xdr_opaque_auth(XDR *, struct opaque_auth *);
 
 static struct auth_ops *authsys_ops(void);

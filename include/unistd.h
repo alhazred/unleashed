@@ -341,11 +341,7 @@ extern int getgroups(int, gid_t *);
 #if !defined(__XOPEN_OR_POSIX) || defined(_XPG4_2) || defined(__EXTENSIONS__)
 extern long gethostid(void);
 #endif
-#if defined(_XPG4_2)
 extern int gethostname(char *, size_t);
-#elif  !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
-extern int gethostname(char *, int);
-#endif
 
 #ifndef	__GETLOGIN_DEFINED	/* Avoid duplicate in stdlib.h */
 extern char *getlogin(void);
