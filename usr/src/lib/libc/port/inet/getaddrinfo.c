@@ -45,14 +45,7 @@
 
 #define	HOST_BROADCAST	"255.255.255.255"
 
-/*
- * getaddrinfo() returns EAI_NONAME in some cases, however
- * since EAI_NONAME is not part of SUSv3 it needed to be
- * masked in the standards compliant environment.
- * GAIV_DEFAULT and GAIV_XPG6 accomplish this.
- */
-#define	GAIV_DEFAULT	0
-#define	GAIV_XPG6	1
+#pragma weak __xnet_getaddrinfo = getaddrinfo
 
 /*
  * Storage allocation for global variables in6addr_any and
@@ -81,7 +74,7 @@ const struct in6_addr in6addr_loopback = IN6ADDR_LOOPBACK_INIT;
 
 /* function prototypes for used by getaddrinfo() routine */
 static int get_addr(int family, const char *hostname, struct addrinfo *aip,
-	struct addrinfo *cur, ushort_t port, int version);
+	struct addrinfo *cur, ushort_t port);
 static uint_t getscopeidfromzone(const struct sockaddr_in6 *sa,
     const char *zone, uint32_t *sin6_scope_id);
 static boolean_t str_isnumber(const char *p);
@@ -190,7 +183,7 @@ static boolean_t str_isnumber(const char *p);
 
 static int
 _getaddrinfo(const char *hostname, const char *servname,
-	const struct addrinfo *hints, struct addrinfo **res, int version)
+	const struct addrinfo *hints, struct addrinfo **res)
 {
 	struct addrinfo *cur;
 	struct addrinfo *aip;
@@ -508,7 +501,7 @@ v4only:
 	}
 
 	/* hostname string is a literal address or an alphabetical name */
-	error = get_addr(aip->ai_family, hostname, aip, cur, port, version);
+	error = get_addr(aip->ai_family, hostname, aip, cur, port);
 	if (error) {
 		*res = NULL;
 		return (error);
@@ -526,19 +519,12 @@ int
 getaddrinfo(const char *hostname, const char *servname,
 	const struct addrinfo *hints, struct addrinfo **res)
 {
-	return (_getaddrinfo(hostname, servname, hints, res, GAIV_DEFAULT));
-}
-
-int
-__xnet_getaddrinfo(const char *hostname, const char *servname,
-	const struct addrinfo *hints, struct addrinfo **res)
-{
-	return (_getaddrinfo(hostname, servname, hints, res, GAIV_XPG6));
+	return _getaddrinfo(hostname, servname, hints, res);
 }
 
 static int
 get_addr(int family, const char *hostname, struct addrinfo *aip, struct
-	addrinfo *cur, ushort_t port, int version)
+	addrinfo *cur, ushort_t port)
 {
 	struct hostent		*hp;
 	char			_hostname[MAXHOSTNAMELEN];
@@ -606,9 +592,7 @@ get_addr(int family, const char *hostname, struct addrinfo *aip, struct
 		case NO_RECOVERY:
 			return (EAI_FAIL);
 		case NO_ADDRESS:
-			if (version == GAIV_XPG6)
-				return (EAI_NONAME);
-			return (EAI_NODATA);
+			return (EAI_NONAME);
 		default:
 		return (EAI_SYSTEM);
 		}
