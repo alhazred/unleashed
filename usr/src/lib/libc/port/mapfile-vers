@@ -2087,7 +2087,6 @@ $endif
 	getdate_err;
 	_getdate_err;
 	getenv;
-	__huge_val;
 	__stdinp;
 	__stdoutp;
 	__stderrp;

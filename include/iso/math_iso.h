@@ -43,21 +43,6 @@ extern "C" {
 #endif
 #endif	/* !defined(__P) */
 
-#if !defined(_STDC_C99) && _XOPEN_SOURCE - 0 < 600 && !defined(__C99FEATURES__)
-typedef union _h_val {
-	unsigned long _i[sizeof (double) / sizeof (unsigned long)];
-	double _d;
-} _h_val;
-
-#ifdef __STDC__
-extern const _h_val __huge_val;
-#else
-extern _h_val __huge_val;
-#endif
-#undef	HUGE_VAL
-#define	HUGE_VAL __huge_val._d
-#endif	/* !defined(_STDC_C99) && _XOPEN_SOURCE - 0 < 600 && ... */
-
 #if __cplusplus >= 199711L
 namespace std {
 #endif

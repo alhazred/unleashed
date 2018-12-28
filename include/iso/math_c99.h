@@ -46,22 +46,15 @@ extern "C" {
 
 #if defined(_STDC_C99) || _XOPEN_SOURCE - 0 >= 600 || defined(__C99FEATURES__)
 #if defined(__GNUC__)
-#undef	HUGE_VAL
-#define	HUGE_VAL	(__builtin_huge_val())
-#undef	HUGE_VALF
+
 #define	HUGE_VALF	(__builtin_huge_valf())
-#undef	HUGE_VALL
 #define	HUGE_VALL	(__builtin_huge_vall())
-#undef	INFINITY
 #define	INFINITY	(__builtin_inff())
-#undef	NAN
 #define	NAN		(__builtin_nanf(""))
 
 /*
  * C99 7.12.3 classification macros
  */
-#undef	isnan
-#undef	isinf
 #if __GNUC__ >= 4
 #define	isnan(x)	__builtin_isnan(x)
 #define	isinf(x)	__builtin_isinf(x)
@@ -74,11 +67,9 @@ extern "C" {
 			__x_i == (__typeof(__x_i)) INFINITY || \
 			__x_i == (__typeof(__x_i)) (-INFINITY); })
 #endif
-#undef	isfinite
 #define	isfinite(x)	__extension__( \
 			{ __typeof(x) __x_f = (x); \
 			!isnan(__x_f) && !isinf(__x_f); })
-#undef	isnormal
 #define	isnormal(x)	__extension__( \
 			{ __typeof(x) __x_r = (x); isfinite(__x_r) && \
 			(sizeof (__x_r) == sizeof (float) ? \
@@ -86,7 +77,6 @@ extern "C" {
 			sizeof (__x_r) == sizeof (double) ? \
 			__builtin_fabs(__x_r) >= __DBL_MIN__ : \
 			__builtin_fabsl(__x_r) >= __LDBL_MIN__); })
-#undef	fpclassify
 #define	fpclassify(x)	__extension__( \
 			{ __typeof(x) __x_c = (x); \
 			isnan(__x_c) ? FP_NAN : \
@@ -94,7 +84,6 @@ extern "C" {
 			isnormal(__x_c) ? FP_NORMAL : \
 			__x_c == (__typeof(__x_c)) 0 ? FP_ZERO : \
 			FP_SUBNORMAL; })
-#undef	signbit
 #if defined(_BIG_ENDIAN)
 #define	signbit(x)	__extension__( \
 			{ __typeof(x) __x_s = (x); \
@@ -112,61 +101,12 @@ extern "C" {
 /*
  * C99 7.12.14 comparison macros
  */
-#undef	isgreater
 #define	isgreater(x, y)		__builtin_isgreater(x, y)
-#undef	isgreaterequal
 #define	isgreaterequal(x, y)	__builtin_isgreaterequal(x, y)
-#undef	isless
 #define	isless(x, y)		__builtin_isless(x, y)
-#undef	islessequal
 #define	islessequal(x, y)	__builtin_islessequal(x, y)
-#undef	islessgreater
 #define	islessgreater(x, y)	__builtin_islessgreater(x, y)
-#undef	isunordered
 #define	isunordered(x, y)	__builtin_isunordered(x, y)
-#else	/* defined(__GNUC__) */
-#undef	HUGE_VAL
-#define	HUGE_VAL	__builtin_huge_val
-#undef	HUGE_VALF
-#define	HUGE_VALF	__builtin_huge_valf
-#undef	HUGE_VALL
-#define	HUGE_VALL	__builtin_huge_vall
-#undef	INFINITY
-#define	INFINITY	__builtin_infinity
-#undef	NAN
-#define	NAN		__builtin_nan
-
-/*
- * C99 7.12.3 classification macros
- */
-#undef	fpclassify
-#define	fpclassify(x)	__builtin_fpclassify(x)
-#undef	isfinite
-#define	isfinite(x)	__builtin_isfinite(x)
-#undef	isinf
-#define	isinf(x)	__builtin_isinf(x)
-#undef	isnan
-#define	isnan(x)	__builtin_isnan(x)
-#undef	isnormal
-#define	isnormal(x)	__builtin_isnormal(x)
-#undef	signbit
-#define	signbit(x)	__builtin_signbit(x)
-
-/*
- * C99 7.12.14 comparison macros
- */
-#undef	isgreater
-#define	isgreater(x, y)		((x) __builtin_isgreater(y))
-#undef	isgreaterequal
-#define	isgreaterequal(x, y)	((x) __builtin_isgreaterequal(y))
-#undef	isless
-#define	isless(x, y)		((x) __builtin_isless(y))
-#undef	islessequal
-#define	islessequal(x, y)	((x) __builtin_islessequal(y))
-#undef	islessgreater
-#define	islessgreater(x, y)	((x) __builtin_islessgreater(y))
-#undef	isunordered
-#define	isunordered(x, y)	((x) __builtin_isunordered(y))
 #endif	/* defined(__GNUC__) */
 #endif	/* defined(_STDC_C99) || _XOPEN_SOURCE - 0 >= 600 || ... */
 
@@ -190,27 +130,17 @@ typedef long double float_t;
 typedef long double double_t;
 #endif
 
-#undef	FP_ZERO
 #define	FP_ZERO		0
-#undef	FP_SUBNORMAL
 #define	FP_SUBNORMAL	1
-#undef	FP_NORMAL
 #define	FP_NORMAL	2
-#undef	FP_INFINITE
 #define	FP_INFINITE	3
-#undef	FP_NAN
 #define	FP_NAN		4
 
-#undef	FP_ILOGB0
 #define	FP_ILOGB0	(-2147483647)
-#undef	FP_ILOGBNAN
 #define	FP_ILOGBNAN	2147483647
 
-#undef	MATH_ERRNO
 #define	MATH_ERRNO	1
-#undef	MATH_ERREXCEPT
 #define	MATH_ERREXCEPT	2
-#undef	math_errhandling
 #define	math_errhandling	MATH_ERREXCEPT
 
 extern double acosh __P((double));
