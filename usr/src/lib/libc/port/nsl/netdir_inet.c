@@ -99,6 +99,10 @@
 #define	DONT_SORT2	"SORT_ADDRS=FALSE"
 #define	LINESIZE	100
 
+#define	IN_SET_LOOPBACK_ADDR(a) \
+	{ (a)->sin_addr.s_addr  = htonl(INADDR_LOOPBACK); \
+	(a)->sin_family = AF_INET; }
+
 /*
  * constant values of addresses for HOST_SELF_BIND, HOST_SELF_CONNECT
  * and localhost.

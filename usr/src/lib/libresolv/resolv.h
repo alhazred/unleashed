@@ -47,6 +47,10 @@
 extern "C" {
 #endif
 
+#define	IN_SET_LOOPBACK_ADDR(a) \
+	{ (a)->sin_addr.s_addr  = htonl(INADDR_LOOPBACK); \
+	(a)->sin_family = AF_INET; }
+
 /*
  * Resolver configuration file.
  * Normally not present, but may contain the address of the

@@ -365,15 +365,6 @@ struct in_addr {
 #define	IN_LOOPBACKNET		127			/* official! */
 
 /*
- * Define a macro to stuff the loopback address into an Internet address
- */
-#if !defined(_XPG4_2) || !defined(__EXTENSIONS__)
-#define	IN_SET_LOOPBACK_ADDR(a) \
-	{ (a)->sin_addr.s_addr  = htonl(INADDR_LOOPBACK); \
-	(a)->sin_family = AF_INET; }
-#endif /* !defined(_XPG4_2) || !defined(__EXTENSIONS__) */
-
-/*
  * IPv4 Socket address.
  */
 struct sockaddr_in {
