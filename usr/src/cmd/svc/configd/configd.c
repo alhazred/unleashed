@@ -756,8 +756,9 @@ main(int argc, char *argv[])
 
 	(void) pthread_sigmask(SIG_BLOCK, &myset, NULL);
 	while (!finished) {
-		int sig = sigwait(&myset);
-		if (sig > 0) {
+		int sig, ret;
+		ret = sigwait(&myset, &sig);
+		if (ret == 0) {
 			break;
 		}
 	}

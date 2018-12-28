@@ -127,46 +127,8 @@ extern int sigwaitinfo(const sigset_t *_RESTRICT_KYWD,
 extern int sigtimedwait(const sigset_t *_RESTRICT_KYWD,
 	siginfo_t *_RESTRICT_KYWD, const struct timespec *_RESTRICT_KYWD);
 extern int sigqueue(pid_t, int, const union sigval);
-#endif /* defined(__EXTENSIONS__) || (!defined(_STRICT_STDC) && */
-
-/*
- * sigwait() prototype is defined here.
- */
-
-#if	defined(__EXTENSIONS__) || (!defined(_STRICT_STDC) && \
-	!defined(__XOPEN_OR_POSIX)) || (_POSIX_C_SOURCE - 0 >= 199506L) || \
-	defined(_POSIX_PTHREAD_SEMANTICS)
-
-#if	(_POSIX_C_SOURCE - 0 >= 199506L) || defined(_POSIX_PTHREAD_SEMANTICS)
-
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname sigwait __posix_sigwait
 extern int sigwait(const sigset_t *_RESTRICT_KYWD, int *_RESTRICT_KYWD);
-#else  /* __PRAGMA_REDEFINE_EXTNAME */
-
-extern int __posix_sigwait(const sigset_t *_RESTRICT_KYWD,
-    int *_RESTRICT_KYWD);
-
-#ifdef	__lint
-#define	sigwait __posix_sigwait
-#else	/* !__lint */
-
-static int
-sigwait(const sigset_t *_RESTRICT_KYWD __setp, int *_RESTRICT_KYWD __signo)
-{
-	return (__posix_sigwait(__setp, __signo));
-}
-
-#endif /* !__lint */
-#endif /* __PRAGMA_REDEFINE_EXTNAME */
-
-#else  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
-extern int sigwait(sigset_t *);
-
-#endif  /* (_POSIX_C_SOURCE - 0 >= 199506L) || ... */
-
-#endif /* defined(__EXTENSIONS__) || (!defined(_STRICT_STDC) ... */
+#endif /* defined(__EXTENSIONS__) || (!defined(_STRICT_STDC) && */
 
 #ifdef	__cplusplus
 }

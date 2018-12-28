@@ -135,7 +135,7 @@ main(int argc, char **argv)
 	 */
 	alarm(iod_alarm_time);
 again:
-	sig = sigwait(&tmpmask);
+	sigwait(&tmpmask, &sig);
 	DPRINT("main: sig=%d\n", sig);
 	switch (sig) {
 	case SIGCONT:

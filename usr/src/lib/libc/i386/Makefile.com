@@ -993,7 +993,6 @@ PORTSYS=			\
 	nfssys.o		\
 	open.o			\
 	pgrpsys.o		\
-	posix_sigwait.o		\
 	ppriv.o			\
 	psetsys.o		\
 	rctlsys.o		\

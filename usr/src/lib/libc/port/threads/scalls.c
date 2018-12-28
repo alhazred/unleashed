@@ -1000,10 +1000,16 @@ sigtimedwait(const sigset_t *set, siginfo_t *infop, const timespec_t *timeout)
 	return (sig);
 }
 
+#pragma weak __posix_sigwait = sigwait
+
 int
-sigwait(sigset_t *set)
+sigwait(const sigset_t *set, int *sig)
 {
-	return (sigtimedwait(set, NULL, NULL));
+	if ((*sig = sigtimedwait(set, NULL, NULL)) != -1)
+		return 0;
+	if (errno == 0)
+		errno = EINVAL;
+	return errno;
 }
 
 int

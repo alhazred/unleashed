@@ -254,8 +254,8 @@ main(
 
 	/* wait and process signals */
 	for (;;) {
-		sig = sigwait(&sigs);
-		if (sig < 0)
+		int ret = sigwait(&sigs, &sig);
+		if (ret != 0)
 			continue;
 		switch (sig) {
 		case SIGQUIT:

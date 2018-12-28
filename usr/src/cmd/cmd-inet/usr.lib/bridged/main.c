@@ -141,7 +141,7 @@ sighandler(void *arg)
 	(void) sigfillset(&sigset);
 
 	for (;;) {
-		sig = sigwait(&sigset);
+		sigwait(&sigset, &sig);
 		switch (sig) {
 		case SIGHUP:
 			(void) write(sigfd, "", 1);

@@ -11,15 +11,6 @@ sigwait \- wait until a signal is posted
 .nf
 #include <signal.h>
 
-\fBint\fR \fBsigwait\fR(\fBsigset_t *\fR\fIset\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-cc [ \fIflag\fR ... ] \fIfile\fR ... \fB-D_POSIX_PTHREAD_SEMANTICS\fR [ \fIlibrary\fR...]
-#include <signal.h>
-
 \fBint\fR \fBsigwait\fR(\fBconst sigset_t *\fR\fIset\fR, \fBint *\fR\fIsig\fR);
 .fi
 
@@ -30,13 +21,12 @@ The \fBsigwait()\fR function selects a signal in \fIset\fR that is pending on
 the calling thread. If no signal in \fIset\fR is pending, \fBsigwait()\fR
 blocks until a signal in \fIset\fR becomes pending. The selected signal is
 cleared from the set of signals pending on the calling thread and the number of
-the signal is returned, or in the standard-conforming version (see
-\fBstandards\fR(5)) placed in \fIsig\fR. The selection of a signal in \fIset\fR
-is independent of the signal mask of the calling thread. This means a thread
-can synchronously wait for signals that are being blocked by the signal mask of
-the calling thread \&. To ensure that only the caller receives the signals
-defined in \fIset\fR, all threads should have signals in \fIset\fR masked
-including the calling thread.
+the signal is placed in \fIsig\fR.  The selection of a signal in \fIset\fR is
+independent of the signal mask of the calling thread. This means a thread can
+synchronously wait for signals that are being blocked by the signal mask of the
+calling thread \&. To ensure that only the caller receives the signals defined
+in \fIset\fR, all threads should have signals in \fIset\fR masked including the
+calling thread.
 .sp
 .LP
 If more than one thread is using \fBsigwait()\fR to wait for the same signal,
@@ -54,11 +44,9 @@ non-realtime signals, is unspecified.
 .SH RETURN VALUES
 .sp
 .LP
-Upon successful completion, the default version of \fBsigwait()\fR returns a
-signal number; the standard-conforming version returns \fB0\fR and stores the
-received signal number at the location pointed to by \fIsig\fR. Otherwise, the
-default version returns -1 and sets errno to indicate an error; the
-standard-conforming version returns an error number to indicate the error.
+Upon successful completion, \fBsigwait()\fR returns \fB0\fR and stores the
+received signal number at the location pointed to by \fIsig\fR. Otherwise, an
+error number is returned.
 .SH ERRORS
 .sp
 .LP
@@ -103,9 +91,6 @@ More specifically, it catches the asynchronously generated signal,
 .in +2
 .nf
 /********************************************************************
-*
-* compile with -D_POSIX_PTHREAD_SEMANTICS switch;
-* required by sigwait()
 *
 * sigint thread handles delivery of signal. uses sigwait(\|) to wait
 * for SIGINT signal.
@@ -180,9 +165,6 @@ sigint(void *arg)
     printf("thread sigint [tid: %d] awaiting SIGINT\en",
                             pthread_self());
 
-    /*
-    /* use standard-conforming sigwait() -- 2 args: signal set, signum
-     */
     err = sigwait ( &signalSet, &sig );
 
     /* test for SIGINT; could catch other signals */
@@ -229,10 +211,3 @@ Standard	See \fBstandards\fR(5).
 The \fBsigwait()\fR function cannot be used to wait for signals that cannot be
 caught (see \fBsigaction\fR(2)). This restriction is silently imposed by the
 system.
-.sp
-.LP
-Solaris 2.4 and earlier releases provided a \fBsigwait()\fR facility as
-specified in POSIX.1c Draft 6. The final POSIX.1c standard changed the
-interface as described above. Support for the Draft 6 interface is provided for
-compatibility only and may not be supported in future releases. New
-applications and libraries should use the standard-conforming interface.
