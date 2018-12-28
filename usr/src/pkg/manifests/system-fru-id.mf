@@ -1,3 +1,0 @@
-set name=pkg.fmri value=pkg:/system/fru-id@$(PKGVERS)
-set name=pkg.obsolete value=true
-set name=variant.arch value=i386
