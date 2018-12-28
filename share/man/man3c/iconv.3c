@@ -57,16 +57,6 @@ iconv \- code conversion function
      \fBsize_t *restrict\fR \fIoutbytesleft\fR);
 .fi
 
-.SS "SUSv3"
-.LP
-.nf
-#include <iconv.h>
-
-\fBsize_t\fR \fBiconv\fR(\fBiconv_t\fR \fIcd\fR, \fBchar **restrict\fR \fIinbuf\fR,
-     \fBsize_t *restrict\fR \fIinbytesleft\fR, \fBchar **restrict\fR \fIoutbuf\fR,
-     \fBsize_t *restrict\fR \fIoutbytesleft\fR);
-.fi
-
 .SH DESCRIPTION
 .sp
 .LP

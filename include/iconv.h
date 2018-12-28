@@ -39,15 +39,9 @@ extern "C" {
 typedef struct _iconv_info *iconv_t;
 
 extern iconv_t	iconv_open(const char *, const char *);
-#ifdef _XPG6
-extern size_t	iconv(iconv_t, char **_RESTRICT_KYWD,
-		size_t *_RESTRICT_KYWD, char **_RESTRICT_KYWD,
-		size_t *_RESTRICT_KYWD);
-#else
 extern size_t	iconv(iconv_t, const char **_RESTRICT_KYWD,
 		size_t *_RESTRICT_KYWD, char **_RESTRICT_KYWD,
 		size_t *_RESTRICT_KYWD);
-#endif
 extern int	iconv_close(iconv_t);
 
 #ifdef	__cplusplus
