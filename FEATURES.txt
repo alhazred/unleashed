@@ -12,7 +12,7 @@ was changed.
  - nonstandard getgrent_r, fgetgrent_r removed from libc
  * removed posix.1c draft versions, and made default the standard versions, of
    the libc functions getgrgid_r, getgrnam_r, ttyname_r, getlogin_r
- * removed non-posix versions of the libc functions shmtd, sigwait,
+ * removed non-posix versions of the libc functions shmdt, sigwait,
    gethostname, putmsg, putpmsg, getaddrinfo
  + _XOPEN_SOURCE=700 and __EXTENSIONS__ are defined by default, if not
    specified. most third-party software already uses these on Solarises in an
