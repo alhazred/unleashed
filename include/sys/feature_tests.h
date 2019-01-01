@@ -137,10 +137,10 @@ extern "C" {
 
 #if __STDC_VERSION__ - 0 >= 201112L
 #define	_STDC_C11
-#endif
-
-#if __STDC_VERSION__ - 0 >= 199901L
+#define __ISO_C_VISIBLE		2011
+#elif __STDC_VERSION__ - 0 >= 199901L
 #define	_STDC_C99
+#define __ISO_C_VISIBLE		1999
 #endif
 
 /*
@@ -470,6 +470,9 @@ extern "C" {
 #ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE			200809L
 #endif
+#endif
+#ifndef __ISO_C_VISIBLE
+#define __ISO_C_VISIBLE			2011
 #endif
 
 #ifdef	__cplusplus
