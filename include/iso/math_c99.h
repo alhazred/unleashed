@@ -44,7 +44,7 @@ extern "C" {
 #endif
 #endif	/* !defined(__P) */
 
-#if defined(_STDC_C99) || _XOPEN_SOURCE - 0 >= 600 || defined(__C99FEATURES__)
+#if __ISO_C_VISIBLE >= 1999 || __XPG_VISIBLE >= 600 || defined(__C99FEATURES__)
 #if defined(__GNUC__)
 
 #define	HUGE_VALF	(__builtin_huge_valf())
@@ -108,9 +108,9 @@ extern "C" {
 #define	islessgreater(x, y)	__builtin_islessgreater(x, y)
 #define	isunordered(x, y)	__builtin_isunordered(x, y)
 #endif	/* defined(__GNUC__) */
-#endif	/* defined(_STDC_C99) || _XOPEN_SOURCE - 0 >= 600 || ... */
+#endif	/* __ISO_C_VISIBLE >= 1999 || __XPG_VISIBLE >= 600 */
 
-#if defined(__EXTENSIONS__) || defined(_STDC_C99) || \
+#if defined(__EXTENSIONS__) || __ISO_C_VISIBLE >= 1999 || \
 	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
 	defined(__C99FEATURES__)
 #if defined(__FLT_EVAL_METHOD__) && __FLT_EVAL_METHOD__ - 0 == 0
@@ -315,7 +315,7 @@ extern long double fminl __P((long double, long double));
 
 extern long double fmal __P((long double, long double, long double));
 
-#if !defined(_STRICT_STDC) && !defined(_NO_LONGLONG) || defined(_STDC_C99) || \
+#if !defined(_STRICT_STDC) && !defined(_NO_LONGLONG) || __ISO_C_VISIBLE >= 1999 || \
 	defined(__C99FEATURES__)
 extern long long int llrint __P((double));
 extern long long int llround __P((double));
@@ -396,7 +396,7 @@ extern long long int llroundl __P((long double));
 #pragma does_not_write_global_data(copysignl, nanl, nextafterl, nexttowardl)
 #pragma does_not_write_global_data(fdiml, fmaxl, fminl, fmal)
 
-#if !defined(_STRICT_STDC) && !defined(_NO_LONGLONG) || defined(_STDC_C99) || \
+#if !defined(_STRICT_STDC) && !defined(_NO_LONGLONG) || __ISO_C_VISIBLE >= 1999 || \
 	defined(__C99FEATURES__)
 #pragma does_not_read_global_data(llrint, llround)
 #pragma does_not_read_global_data(llrintf, llroundf, llrintl, llroundl)
@@ -446,12 +446,12 @@ extern long long int llroundl __P((long double));
 #pragma no_side_effect(copysignl, nanl, nextafterl, nexttowardl)
 #pragma no_side_effect(fdiml, fmaxl, fminl, fmal)
 
-#if !defined(_STRICT_STDC) && !defined(_NO_LONGLONG) || defined(_STDC_C99) || \
+#if !defined(_STRICT_STDC) && !defined(_NO_LONGLONG) || __ISO_C_VISIBLE >= 1999 || \
 	defined(__C99FEATURES__)
 #pragma no_side_effect(llrint, llround, llrintf, llroundf, llrintl, llroundl)
 #endif
 #endif	/* defined(__MATHERR_ERRNO_DONTCARE) */
-#endif	/* defined(__EXTENSIONS__) || defined(_STDC_C99) || ... */
+#endif	/* defined(__EXTENSIONS__) || __ISO_C_VISIBLE >= 1999 || ... */
 
 #ifdef __cplusplus
 }
