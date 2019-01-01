@@ -106,42 +106,25 @@ extern "C" {
  * of the language and library specified in these standards. A conforming
  * implementation shall accept any strictly conforming program.
  *
- * Based on these requirements, Sun's C compiler defines __STDC__ to 1 for
- * strictly conforming environments and __STDC__ to 0 for environments that
- * use ANSI C semantics but allow extensions to the C standard. For non-ANSI
- * C semantics, Sun's C compiler does not define __STDC__.
- *
- * The GNU C project interpretation is that __STDC__ should always be defined
+ * The GCC project interpretation is that __STDC__ should always be defined
  * to 1 for compilation modes that accept ANSI C syntax regardless of whether
  * or not extensions to the C standard are used. Violations of conforming
  * behavior are conditionally flagged as warnings via the use of the
  * -pedantic option. In addition to defining __STDC__ to 1, the GNU C
  * compiler also defines __STRICT_ANSI__ as a means of specifying strictly
  * conforming environments using the -ansi or -std=<standard> options.
+ * Clang (LLVM) works similarly.
  *
- * In the absence of any other compiler options, Sun and GNU set the value
- * of __STDC__ as follows when using the following options:
+ * In the absence of any other compiler options, GCC and Clang set the value of
+ * __STDC__ as follows when using the following options:
  *
- *				Value of __STDC__  __STRICT_ANSI__
- *
- * cc -Xa (default)			0	      undefined
- * cc -Xt (transitional)		0             undefined
- * cc -Xc (strictly conforming)		1	      undefined
- * cc -Xs (K&R C)		    undefined	      undefined
- *
- * gcc (default)			1	      undefined
- * gcc -ansi, -std={c89, c99,...)	1               defined
- * gcc -traditional (K&R)	    undefined	      undefined
- *
- * The default compilation modes for Sun C compilers versus GNU C compilers
- * results in a differing value for __STDC__ which results in a more
- * restricted namespace when using Sun compilers. To allow both GNU and Sun
- * interpretations to peacefully co-exist, we use the following Sun
- * implementation _STRICT_STDC_ macro:
+ *					__STDC__	__STRICT_ANSI__
+ * cc (default)				1		undefined
+ * cc -ansi, -std={c89, c99,...)	1		1
+ * cc -traditional (K&R)		undefined	undefined
  */
 
-#if (__STDC__ - 0 == 1 && !defined(__GNUC__)) || \
-	(defined(__GNUC__) && defined(__STRICT_ANSI__)) || \
+#if (__STDC__ - 0 == 1 && defined(__STRICT_ANSI__)) || \
 	defined(_ASM)
 #define	_STRICT_STDC
 #else
