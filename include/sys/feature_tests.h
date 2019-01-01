@@ -253,73 +253,57 @@ extern "C" {
  * _XOPEN_SOURCE = 500                                   XPG5
  * _XOPEN_SOURCE = 600  (or POSIX_C_SOURCE=200112L)      XPG6
  * _XOPEN_SOURCE = 700  (or POSIX_C_SOURCE=200809L)      XPG7
- *
- * In order to simplify the guards within the headers, the following
- * implementation private test macros have been created. Applications
- * must NOT use these private test macros as unexpected results will
- * occur.
- *
- * Note that in general, the use of these private macros is cumulative.
- * For example, the use of _XPG3 with no other restrictions on the X/Open
- * namespace will make the symbols visible for XPG3 through XPG6
- * compilation environments. The use of _XPG4_2 with no other X/Open
- * namespace restrictions indicates that the symbols were introduced in
- * XPG4v2 and are therefore visible for XPG4v2 through XPG6 compilation
- * environments, but not for XPG3 or XPG4 compilation environments.
- *
- * _XPG3    X/Open Portability Guide, Issue 3 (XPG3)
- * _XPG4    X/Open CAE Specification, Issue 4 (XPG4)
- * _XPG4_2  X/Open CAE Specification, Issue 4, Version 2 (XPG4v2/UNIX 95/SUS)
- * _XPG5    X/Open CAE Specification, Issue 5 (XPG5/UNIX 98/SUSv2)
- * _XPG6    Open Group Technical Standard, Issue 6 (XPG6/UNIX 03/SUSv3)
- * _XPG7    Open Group Technical Standard, Issue 7 (XPG7/UNIX 08/SUSv4)
  */
 
-/* X/Open Portability Guide, Issue 3 */
-#if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0 < 500) && \
-	(_XOPEN_VERSION - 0 < 4) && !defined(_XOPEN_SOURCE_EXTENDED)
-#define	_XPG3
-/* X/Open CAE Specification, Issue 4 */
-#elif	(defined(_XOPEN_SOURCE) && _XOPEN_VERSION - 0 == 4)
-#define	_XPG4
-#define	_XPG3
-/* X/Open CAE Specification, Issue 4, Version 2 */
-#elif (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE_EXTENDED - 0 == 1)
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-/* X/Open CAE Specification, Issue 5 */
-#elif	(_XOPEN_SOURCE - 0 == 500)
-#define	_XPG5
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-#undef	_POSIX_C_SOURCE
-#define	_POSIX_C_SOURCE			199506L
-/* Open Group Technical Standard , Issue 6 */
-#elif	(_XOPEN_SOURCE - 0 == 600) || (_POSIX_C_SOURCE - 0 == 200112L)
-#define	_XPG6
-#define	_XPG5
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-#undef	_POSIX_C_SOURCE
-#define	_POSIX_C_SOURCE			200112L
-#undef	_XOPEN_SOURCE
-#define	_XOPEN_SOURCE			600
+#ifndef _XOPEN_SOURCE
+# define __XPG_VISIBLE		700
+#else
+# if (_XOPEN_SOURCE - 0 >= 700)
+#  define __XPG_VISIBLE		700
+#  undef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE	200809L
+# elif (_XOPEN_SOURCE - 0 >= 600)
+#  define __XPG_VISIBLE		600
+#  undef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE	200112L
+# elif (_XOPEN_SOURCE - 0 >= 500)
+#  define __XPG_VISIBLE		500
+#  undef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE	199506L
+# elif (_XOPEN_SOURCE_EXTENDED - 0 == 1)
+#  define __XPG_VISIBLE		420
+# elif (_XOPEN_VERSION - 0 >= 4)
+#  define __XPG_VISIBLE		400
+# else
+#  define __XPG_VISIBLE		300
+# endif
+#endif
 
-/* Open Group Technical Standard, Issue 7 */
-#elif	(_XOPEN_SOURCE - 0 == 700) || (_POSIX_C_SOURCE - 0 == 200809L)
-#define	_XPG7
-#define	_XPG6
-#define	_XPG5
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-#undef	_POSIX_C_SOURCE
-#define	_POSIX_C_SOURCE			200809L
-#undef	_XOPEN_SOURCE
-#define	_XOPEN_SOURCE			700
+/*
+ * XXX for compatibility with headers inherited from illumos.
+ * this is a bit of a hack; a lot of headers check "#if !_XPG4_2" when exposing
+ * things needed in-tree, so we work around by not setting these for the
+ * kernel, for now.
+ */
+#ifndef _KERNEL
+#if (__XPG_VISIBLE >= 700)
+# define _XPG7
+#endif
+#if (__XPG_VISIBLE >= 600)
+# define _XPG6
+#endif
+#if (__XPG_VISIBLE >= 500)
+# define _XPG5
+#endif
+#if (__XPG_VISIBLE >= 420)
+# define _XPG4_2
+#endif
+#if (__XPG_VISIBLE >= 400)
+# define _XPG4
+#endif
+#if (__XPG_VISIBLE >= 300)
+# define _XPG3
+#endif
 #endif
 
 /*
@@ -456,12 +440,6 @@ extern "C" {
  */
 #ifndef _KERNEL
 #ifndef _XOPEN_SOURCE
-#define _XPG7
-#define _XPG6
-#define _XPG5
-#define _XPG4_2
-#define _XPG4
-#define _XPG3
 #define _XOPEN_SOURCE			700
 #ifndef __EXTENSIONS__
 #define __EXTENSIONS__
@@ -470,9 +448,9 @@ extern "C" {
 #ifndef _POSIX_C_SOURCE
 #define _POSIX_C_SOURCE			200809L
 #endif
-#endif
 #ifndef __ISO_C_VISIBLE
 #define __ISO_C_VISIBLE			2011
+#endif
 #endif
 
 #ifdef	__cplusplus
