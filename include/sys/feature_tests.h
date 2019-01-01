@@ -135,10 +135,10 @@ extern "C" {
  * Compiler complies with ISO/IEC 9899:1999 or ISO/IEC 9989:2011
  */
 
-#if __STDC_VERSION__ - 0 >= 201112L
+#if __STDC_VERSION__ - 0 >= 201112L || __cplusplus - 0 >= 201703
 #define	_STDC_C11
 #define __ISO_C_VISIBLE		2011
-#elif __STDC_VERSION__ - 0 >= 199901L
+#elif __STDC_VERSION__ - 0 >= 199901L || __cplusplus - 0 >= 201103
 #define	_STDC_C99
 #define __ISO_C_VISIBLE		1999
 #endif
