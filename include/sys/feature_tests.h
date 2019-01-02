@@ -144,14 +144,6 @@ extern "C" {
 #endif
 
 /*
- * Use strict symbol visibility.
- */
-#if (defined(_STRICT_STDC) || defined(__XOPEN_OR_POSIX)) && \
-	!defined(__EXTENSIONS__)
-#define	_STRICT_SYMBOLS
-#endif
-
-/*
  * Large file interfaces:
  *
  *	_LARGEFILE_SOURCE
@@ -451,6 +443,11 @@ extern "C" {
 #ifndef __ISO_C_VISIBLE
 #define __ISO_C_VISIBLE			2011
 #endif
+#endif
+
+#if (defined(_STRICT_STDC) || defined(__XOPEN_OR_POSIX)) && \
+	!defined(__EXTENSIONS__)
+#define	_STRICT_SYMBOLS
 #endif
 
 #ifdef	__cplusplus
