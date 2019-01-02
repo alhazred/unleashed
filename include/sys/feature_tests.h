@@ -247,9 +247,7 @@ extern "C" {
  * _XOPEN_SOURCE = 700  (or POSIX_C_SOURCE=200809L)      XPG7
  */
 
-#ifndef _XOPEN_SOURCE
-# define __XPG_VISIBLE		700
-#else
+#ifdef _XOPEN_SOURCE
 # if (_XOPEN_SOURCE - 0 >= 700)
 #  define __XPG_VISIBLE		700
 #  undef _POSIX_C_SOURCE
@@ -269,60 +267,6 @@ extern "C" {
 # else
 #  define __XPG_VISIBLE		300
 # endif
-#endif
-
-/*
- * XXX for compatibility with headers inherited from illumos.
- * this is a bit of a hack; a lot of headers check "#if !_XPG4_2" when exposing
- * things needed in-tree, so we work around by not setting these for the
- * kernel, for now.
- */
-#ifndef _KERNEL
-#if (__XPG_VISIBLE >= 700)
-# define _XPG7
-#endif
-#if (__XPG_VISIBLE >= 600)
-# define _XPG6
-#endif
-#if (__XPG_VISIBLE >= 500)
-# define _XPG5
-#endif
-#if (__XPG_VISIBLE >= 420)
-# define _XPG4_2
-#endif
-#if (__XPG_VISIBLE >= 400)
-# define _XPG4
-#endif
-#if (__XPG_VISIBLE >= 300)
-# define _XPG3
-#endif
-#endif
-
-/*
- * _XOPEN_VERSION is defined by the X/Open specifications and is not
- * normally defined by the application, except in the case of an XPG4
- * application.  On the implementation side, _XOPEN_VERSION defined with
- * the value of 3 indicates an XPG3 application. _XOPEN_VERSION defined
- * with the value of 4 indicates an XPG4 or XPG4v2 (UNIX 95) application.
- * _XOPEN_VERSION  defined with a value of 500 indicates an XPG5 (UNIX 98)
- * application and with a value of 600 indicates an XPG6 (UNIX 03)
- * application and with a value of 700 indicates an XPG7 (UNIX 08).
- * The appropriate version is determined by the use of the
- * feature test macros described earlier.  The value of _XOPEN_VERSION
- * defaults to 3 otherwise indicating support for XPG3 applications.
- */
-#ifndef _XOPEN_VERSION
-#if	defined(_XPG7)
-#define	_XOPEN_VERSION 700
-#elif	defined(_XPG6)
-#define	_XOPEN_VERSION 600
-#elif defined(_XPG5)
-#define	_XOPEN_VERSION 500
-#elif	defined(_XPG4_2)
-#define	_XOPEN_VERSION  4
-#else
-#define	_XOPEN_VERSION  3
-#endif
 #endif
 
 /*
@@ -431,23 +375,75 @@ extern "C" {
  * Default values.
  */
 #ifndef _KERNEL
-#ifndef _XOPEN_SOURCE
-#define _XOPEN_SOURCE			700
-#ifndef __EXTENSIONS__
-#define __EXTENSIONS__
+#ifndef __XPG_VISIBLE
+# define __XPG_VISIBLE			700
 #endif
+/*
+ * XXX illumos compat: many headers check _XOPEN_SOURCE, so define it.
+ * in addition, enable __EXTENSIONS__ if _XOPEN_SOURCE was not set by user.
+ */
+#ifndef _XOPEN_SOURCE
+# define _XOPEN_SOURCE			700
+# ifndef __EXTENSIONS__
+#  define __EXTENSIONS__
+# endif
 #endif
 #ifndef _POSIX_C_SOURCE
-#define _POSIX_C_SOURCE			200809L
+# define _POSIX_C_SOURCE		200809L
 #endif
 #ifndef __ISO_C_VISIBLE
-#define __ISO_C_VISIBLE			2011
+# define __ISO_C_VISIBLE		2011
 #endif
 #endif
 
 #if (defined(_STRICT_STDC) || defined(__XOPEN_OR_POSIX)) && \
 	!defined(__EXTENSIONS__)
 #define	_STRICT_SYMBOLS
+#endif
+
+/*
+ * XXX for compatibility with headers inherited from illumos.
+ * the _KERNEL check is a bit of a hack; a lot of headers check "#if !_XPG4_2"
+ * when exposing things needed in-tree, so we work around by not setting these
+ * for the kernel, for now.
+ */
+#ifndef _KERNEL
+#if (__XPG_VISIBLE >= 700)
+# define _XPG7
+#endif
+#if (__XPG_VISIBLE >= 600)
+# define _XPG6
+#endif
+#if (__XPG_VISIBLE >= 500)
+# define _XPG5
+#endif
+#if (__XPG_VISIBLE >= 420)
+# define _XPG4_2
+#endif
+#if (__XPG_VISIBLE >= 400)
+# define _XPG4
+#endif
+#if (__XPG_VISIBLE >= 300)
+# define _XPG3
+#endif
+#endif
+
+/*
+ * XXX illumos compat. _XOPEN_VERSION is actually defined by POSIX, but it is
+ * not really useful for anything.
+ */
+#ifndef _XOPEN_VERSION
+#if	defined(_XPG7)
+#define	_XOPEN_VERSION 700
+#elif	defined(_XPG6)
+#define	_XOPEN_VERSION 600
+#elif defined(_XPG5)
+#define	_XOPEN_VERSION 500
+#elif	defined(_XPG4_2)
+#define	_XOPEN_VERSION  4
+#else
+#define	_XOPEN_VERSION  3
+#endif
 #endif
 
 #ifdef	__cplusplus
