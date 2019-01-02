@@ -278,7 +278,7 @@ extern char *ulltostr(unsigned long long, char *);
 #endif /* defined(__EXTENSIONS__) || !defined(_STRICT_STDC) ... */
 
 /* OpenBSD compatibility functions */
-#if !defined(_STRICT_SYMBOLS)
+#if __UNLEASHED_VISIBLE
 
 #include <inttypes.h>
 extern uint32_t arc4random(void);
@@ -286,7 +286,7 @@ extern void arc4random_buf(void *, size_t);
 extern uint32_t arc4random_uniform(uint32_t);
 long long strtonum(const char *, long long, long long, const char **);
 
-#endif	/* !_STRICT_SYBMOLS */
+#endif	/* __UNLEASHED_VISIBLE */
 
 #ifdef	__cplusplus
 }
