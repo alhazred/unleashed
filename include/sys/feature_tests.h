@@ -406,6 +406,15 @@ extern "C" {
 #define	_ILLUMOS	1
 
 /*
+ * __UNLEASHED_VISIBLE: interfaces that are not part of any standard. Visible
+ * by default, hidden if POSIX or XPG is requested by user.
+ */
+#if !defined(_UNLEASHED_SOURCE) && \
+    (defined(__XPG_VISIBLE) || defined(__POSIX_VISIBLE))
+# define __UNLEASHED_VISIBLE	0
+#endif
+
+/*
  * Default values.
  *
  * XXX illumos compat: if we choose the default value here, also define
@@ -427,6 +436,9 @@ extern "C" {
 #ifndef __ISO_C_VISIBLE
 # define __ISO_C_VISIBLE		2011
 #endif
+#endif /* _KERNEL */
+#ifndef __UNLEASHED_VISIBLE
+# define __UNLEASHED_VISIBLE		1
 #endif
 
 #if (defined(_STRICT_STDC) || defined(__XOPEN_OR_POSIX)) && \

@@ -18,8 +18,6 @@
  * anonymous private mappings.
  */
 
-#define __UNLEASHED_VISIBLE /* memcntl() PRIVATE */
-
 #include <sys/types.h>
 #include <unistd.h>
 #include <assert.h>

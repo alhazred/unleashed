@@ -99,7 +99,7 @@ static void		setascii(int, char **);
 static void		setblksize(int, char **);
 static void		setsrexmt(int, char **);
 static void		settsize(int, char **);
-static void		setmode(char *);
+static void		settransfermode(char *);
 static void		putusage(char *);
 static void		getusage(char *);
 static char		*finddelimiter(char *);
@@ -325,7 +325,7 @@ modecmd(int argc, char **argv)
 	if (argc == 2) {
 		for (p = modes; p->m_name != NULL; p++)
 			if (strcmp(argv[1], p->m_name) == 0) {
-				setmode(p->m_mode);
+				settransfermode(p->m_mode);
 				return;
 			}
 		(void) fprintf(stderr, "%s: unknown mode\n", argv[1]);
@@ -343,18 +343,18 @@ modecmd(int argc, char **argv)
 static void
 setbinary(int argc, char **argv)
 {
-	setmode("octet");
+	settransfermode("octet");
 }
 
 /*ARGSUSED*/
 static void
 setascii(int argc, char **argv)
 {
-	setmode("netascii");
+	settransfermode("netascii");
 }
 
 static void
-setmode(char *newmode)
+settransfermode(char *newmode)
 {
 	(void) strlcpy(mode, newmode, sizeof (mode));
 	if (verbose)

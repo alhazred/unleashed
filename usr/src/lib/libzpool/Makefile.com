@@ -66,7 +66,7 @@ $(LIBS): ../common/zfs.h
 CFLAGS +=	-g
 CFLAGS64 +=	-g
 LDLIBS +=	-lcmdutils -lumem -lavl -lnvpair -lz -lc -lsysevent -lmd
-CPPFLAGS +=	$(INCS)	-DDEBUG -D__UNLEASHED_VISIBLE
+CPPFLAGS +=	$(INCS)	-DDEBUG
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-switch

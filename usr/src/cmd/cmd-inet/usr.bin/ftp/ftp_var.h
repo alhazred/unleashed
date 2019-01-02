@@ -244,7 +244,7 @@ extern void setbinary(int argc, char *argv[]);
 extern void setascii(int argc, char *argv[]);
 extern void settenex(int argc, char *argv[]);
 extern void setebcdic(int argc, char *argv[]);
-extern void setmode(int argc, char *argv[]);
+extern void setftpmode(int argc, char *argv[]);
 extern void setform(int argc, char *argv[]);
 extern void setstruct(int argc, char *argv[]);
 extern void put(int argc, char *argv[]);

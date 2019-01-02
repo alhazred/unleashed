@@ -99,7 +99,7 @@ extern "C" {
 #define	_MAP_STARTLOW	0x4000
 #endif /* _KERNEL */
 
-#ifdef __UNLEASHED_VISIBLE
+#if __UNLEASHED_VISIBLE
 /* these flags are used by memcntl */
 #define	SHARED		0x10
 #define	PRIVATE		0x20
@@ -177,7 +177,7 @@ typedef struct mmapobj_result32 {
 } mmapobj_result32_t;
 #endif	/* defined(_KERNEL) || defined(_SYSCALL32) */
 #endif	/* !defined(_ASM) */
-#endif	/* __UNLEASHED_VISIBLE */
+#endif /* __UNLEASHED_VISIBLE */
 
 #if	!defined(_ASM) && !defined(_KERNEL)
 /*

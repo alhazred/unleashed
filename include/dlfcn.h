@@ -74,7 +74,7 @@ typedef struct	dl_argsinfo {
 } Dl_argsinfo;
 typedef	Dl_argsinfo	Dl_argsinfo_t;
 
-#ifdef __UNLEASHED_VISIBLE
+#if __UNLEASHED_VISIBLE
 typedef struct {
 	mmapobj_result_t *dlm_maps;	/* mapping information */
 	uint_t		dlm_acnt;	/* number of dlm_maps mappings */

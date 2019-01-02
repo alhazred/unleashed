@@ -218,7 +218,7 @@ static char		*getshell();
 static void 		init_remote_fs();
 static char		*getname();
 static int		readmode();
-static mode_t		getmode();
+static mode_t		finalmode();
 static char		*gettail();
 
 
@@ -666,7 +666,7 @@ int *actionp;
 				    "find: -perm: Bad permission string\n"));
 				usage();
 			}
-			np->first.l = (long)getmode((mode_t)0);
+			np->first.l = (long)finalmode((mode_t)0);
 			break;
 		case TYPE:
 			i = *b;
@@ -1897,7 +1897,7 @@ init_remote_fs()
 /*
  * The PERM struct is the machine that builds permissions.  The p_special
  * field contains what permissions need to be checked at run-time in
- * getmode().  This is one of 'X', 'u', 'g', or 'o'.  It contains '\0' to
+ * finalmode().  This is one of 'X', 'u', 'g', or 'o'.  It contains '\0' to
  * indicate normal processing.
  */
 typedef	struct	PERMST	{
@@ -2189,7 +2189,7 @@ int c;
  * the file-type bits as well, so that S_ISDIR will succeed on directories.
  */
 static mode_t
-getmode(mode_t startmode)
+finalmode(mode_t startmode)
 {
 	PERMST *pp;
 	mode_t temp;

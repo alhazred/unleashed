@@ -101,7 +101,7 @@ struct in6_addr {
 #define	s6_addr32	_S6_un._S6_u32
 #endif
 
-#ifdef __UNLEASHED_VISIBLE
+#if __UNLEASHED_VISIBLE
 #define	IN6ADDR_INITIALIZER(a, b, c, d)				\
 	{							\
 		.s6_addr32 = {					\
@@ -407,8 +407,8 @@ struct sockaddr_in6 {
 
 /*
  * We don't use IN6ADDR_INITIALIZER here because (1) we don't want to rely
- * on this __UNLEASHED_VISIBLE macro, and (2) the macro uses C99 syntax and
- * we want these to be usable with older compilers.
+ * on __UNLEASHED_VISIBLE, and (2) the macro uses C99 syntax and we want these
+ * to be usable with older compilers.
  *
  * const struct in6_addr IN6ADDR_ANY_INIT;
  * const struct in6_addr IN6ADDR_LOOPBACK_INIT;

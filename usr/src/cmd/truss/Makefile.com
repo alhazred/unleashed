@@ -54,8 +54,6 @@ print.o := CPPFLAGS += -D__EXTENSIONS__
 %.o:	../%.c
 	$(COMPILE.c) $<
 
-codes.o print.o := CPPFLAGS += -D__UNLEASHED_VISIBLE
-
 all: $(PROG)
 
 $(PROG): $(OBJS)
