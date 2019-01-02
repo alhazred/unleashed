@@ -38,21 +38,6 @@ extern "C" {
 #endif
 
 /*
- * Values of _POSIX_C_SOURCE
- *
- *		undefined   not a POSIX compilation
- *		1	    POSIX.1-1990 compilation
- *		2	    POSIX.2-1992 compilation
- *		199309L	    POSIX.1b-1993 compilation (Real Time)
- *		199506L	    POSIX.1c-1995 compilation (POSIX Threads)
- *		200112L	    POSIX.1-2001 compilation (Austin Group Revision)
- *		200809L     POSIX.1-2008 compilation
- */
-#if defined(_POSIX_SOURCE) && !defined(_POSIX_C_SOURCE)
-#define	_POSIX_C_SOURCE 1
-#endif
-
-/*
  * The feature test macros __XOPEN_OR_POSIX, _STRICT_STDC, _STRICT_SYMBOLS,
  * and _STDC_C99 are Sun implementation specific macros created in order to
  * compress common standards specified feature test macros for easier reading.
@@ -91,6 +76,10 @@ extern "C" {
  *                      relaxed the strictness via __EXTENSIONS__.
  */
 
+/*
+ * XXX: this should go away, but right now it is required to be undefined for
+ * some code in base
+ */
 #if defined(_XOPEN_SOURCE) || defined(_POSIX_C_SOURCE)
 #define	__XOPEN_OR_POSIX
 #endif
@@ -129,18 +118,6 @@ extern "C" {
 #define	_STRICT_STDC
 #else
 #undef	_STRICT_STDC
-#endif
-
-/*
- * Compiler complies with ISO/IEC 9899:1999 or ISO/IEC 9989:2011
- */
-
-#if __STDC_VERSION__ - 0 >= 201112L || __cplusplus - 0 >= 201703
-#define	_STDC_C11
-#define __ISO_C_VISIBLE		2011
-#elif __STDC_VERSION__ - 0 >= 199901L || __cplusplus - 0 >= 201103
-#define	_STDC_C99
-#define __ISO_C_VISIBLE		1999
 #endif
 
 /*
@@ -270,6 +247,63 @@ extern "C" {
 #endif
 
 /*
+ *	_POSIX_SOURCE==1 means POSIX.1-1988. Later standards use
+ *	_POSIX_C_SOURCE:
+ *
+ *	undef		not POSIX
+ *	1		POSIX.1-1990
+ *	2		POSIX.2-1992
+ *	199309L		POSIX.1b-1993 (Real Time)
+ *	199506L		POSIX.1c-1995 (POSIX Threads)
+ *	200112L		POSIX.1-2001 (Austin Group Revision)
+ *	200809L		POSIX.1-2008
+ */
+#ifdef _POSIX_C_SOURCE
+# if (_POSIX_C_SOURCE - 0 >= 200809)
+#  define __POSIX_VISIBLE	200809
+# elif (_POSIX_C_SOURCE - 0 >= 200112)
+#  define __POSIX_VISIBLE	200112
+# elif (_POSIX_C_SOURCE - 0 >= 199506)
+#  define __POSIX_VISIBLE	199506
+# elif (_POSIX_C_SOURCE - 0 >= 199309)
+#  define __POSIX_VISIBLE	199309
+# elif (_POSIX_C_SOURCE - 0 >= 2)
+#  define __POSIX_VISIBLE	199209
+# else
+#  define _POSIX_VISIBLE	199009
+# endif
+#elif defined(_POSIX_SOURCE)
+# define __POSIX_VISIBLE	199808
+# define __ISO_C_VISIBLE	0
+#endif
+
+#if (__POSIX_VISIBLE - 0 >= 200112)
+# define __ISO_C_VISIBLE 1999
+#elif (__POSIX_VISIBLE - 0 >= 199009)
+# define __ISO_C_VISIBLE 1990
+#endif
+
+/*
+ * __STDC_VERSION__ and __cplusplus are set by the compiler. They override any
+ * __ISO_C_VISIBLE implied by XPG or POSIX above.
+ */
+#if __STDC_VERSION__ - 0 >= 201112L || __cplusplus - 0 >= 201703
+#undef __ISO_C_VISIBLE
+#define __ISO_C_VISIBLE		2011
+#elif __STDC_VERSION__ - 0 >= 199901L || __cplusplus - 0 >= 201103
+#undef __ISO_C_VISIBLE
+#define __ISO_C_VISIBLE		1999
+#endif
+
+/* XXX illumos compat */
+#if __ISO_C_VISIBLE >= 2011
+# define _STDC_C11
+#endif
+#if __ISO_C_VISIBLE >= 1999
+# define _STDC_C99
+#endif
+
+/*
  * ANSI C and ISO 9899:1990 say the type long long doesn't exist in strictly
  * conforming environments.  ISO 9899:1999 says it does.
  *
@@ -373,22 +407,21 @@ extern "C" {
 
 /*
  * Default values.
+ *
+ * XXX illumos compat: if we choose the default value here, also define
+ * _XOPEN_SOURCE/_POSIX_C_SOURCE since many headers check for them. also define
+ * __EXTENSIONS__ if XPG was not specified by user.
  */
 #ifndef _KERNEL
 #ifndef __XPG_VISIBLE
 # define __XPG_VISIBLE			700
-#endif
-/*
- * XXX illumos compat: many headers check _XOPEN_SOURCE, so define it.
- * in addition, enable __EXTENSIONS__ if _XOPEN_SOURCE was not set by user.
- */
-#ifndef _XOPEN_SOURCE
 # define _XOPEN_SOURCE			700
 # ifndef __EXTENSIONS__
 #  define __EXTENSIONS__
 # endif
 #endif
-#ifndef _POSIX_C_SOURCE
+#ifndef __POSIX_VISIBLE
+# define __POSIX_VISIBLE		200809
 # define _POSIX_C_SOURCE		200809L
 #endif
 #ifndef __ISO_C_VISIBLE
@@ -427,6 +460,7 @@ extern "C" {
 # define _XPG3
 #endif
 #endif
+
 
 /*
  * XXX illumos compat. _XOPEN_VERSION is actually defined by POSIX, but it is
