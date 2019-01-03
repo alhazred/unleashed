@@ -18,12 +18,6 @@ shmop, shmat, shmdt \- shared memory operations
 
 .LP
 .nf
-\fBint\fR \fBshmdt\fR(\fBchar *\fR\fIshmaddr\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
 \fBint\fR \fBshmdt\fR(\fBconst void *\fR\fIshmaddr\fR);
 .fi
 
@@ -121,9 +115,7 @@ The segment is attached for reading if (\fIshmflg\fR\fB&SHM_RDONLY\fR) is true
 .sp
 .LP
 The \fBshmdt()\fR function detaches from the calling process's data segment the
-shared memory segment located at the address specified by \fIshmaddr\fR. If the
-application is standard-conforming (see \fBstandards\fR(5)), the \fIshmaddr\fR
-argument is of type \fBconst void *\fR. Otherwise it is of type \fBchar *\fR.
+shared memory segment located at the address specified by \fIshmaddr\fR.
 .sp
 .LP
 Shared memory segments must be explicitly removed after the last reference to

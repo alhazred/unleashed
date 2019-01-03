@@ -2908,12 +2908,13 @@ ns_lookup_byname(const char *name, const char *lower_name, idmap_id *id)
 		if (grpbufsiz == 0)
 			grpbufsiz = sysconf(_SC_GETGR_R_SIZE_MAX);
 		buf = alloca(grpbufsiz);
-		grpp = getgrnam_r(name, &grp, buf, grpbufsiz);
-		if (grpp == NULL && errno == 0 && lower_name != NULL &&
-		    name != lower_name && strcmp(name, lower_name) != 0)
-			grpp = getgrnam_r(lower_name, &grp, buf, grpbufsiz);
+		ret = getgrnam_r(name, &grp, buf, grpbufsiz, &grpp);
+		if (ret == 0 && grpp == NULL && lower_name != NULL && name !=
+		    lower_name && strcmp(name, lower_name) != 0)
+			ret = getgrnam_r(lower_name, &grp, buf, grpbufsiz,
+			    &grpp);
 		if (grpp == NULL) {
-			if (errno == 0)
+			if (ret == 0)
 				return (IDMAP_ERR_NOTFOUND);
 			else
 				return (IDMAP_ERR_INTERNAL);
@@ -2941,6 +2942,7 @@ ns_lookup_bypid(uid_t pid, int is_user, char **unixname)
 	static size_t	grpbufsiz = 0;
 	int		ret;
 	struct passwd	*pwdp;
+	struct group	*grpp;
 
 	if (is_user) {
 		if (pwdbufsiz == 0)
@@ -2959,8 +2961,9 @@ ns_lookup_bypid(uid_t pid, int is_user, char **unixname)
 			grpbufsiz = sysconf(_SC_GETGR_R_SIZE_MAX);
 		buf = alloca(grpbufsiz);
 		errno = 0;
-		if (getgrgid_r(pid, &grp, buf, grpbufsiz) == NULL) {
-			if (errno == 0)
+		ret = getgrgid_r(pid, &grp, buf, grpbufsiz, &grpp);
+		if (!grpp) {
+			if (ret == 0)
 				return (IDMAP_ERR_NOTFOUND);
 			else
 				return (IDMAP_ERR_INTERNAL);

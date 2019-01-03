@@ -44,10 +44,10 @@
 .\" Copyright (c) 2001, The IEEE and The Open Group.  All Rights Reserved.
 .\" Portions Copyright (c) 2004, Sun Microsystems, Inc.  All Rights Reserved.
 .\"
-.TH GETGRNAM 3C "Feb 25, 2017"
+.TH GETGRNAM 3C "Dec 28, 2018"
 .SH NAME
-getgrnam, getgrnam_r, getgrent, getgrent_r, getgrgid, getgrgid_r, setgrent,
-endgrent, fgetgrent, fgetgrent_r \- group database entry functions
+getgrnam, getgrnam_r, getgrent, getgrgid, getgrgid_r, setgrent,
+endgrent \- group database entry functions
 .SH SYNOPSIS
 .LP
 .nf
@@ -58,8 +58,8 @@ endgrent, fgetgrent, fgetgrent_r \- group database entry functions
 
 .LP
 .nf
-\fBstruct group *\fR\fBgetgrnam_r\fR(\fBconst char *\fR\fIname\fR, \fBstruct group *\fR\fIgrp\fR,
-     \fBchar *\fR\fIbuffer\fR, \fBint\fR \fIbufsize\fR);
+\fBint\fR \fBgetgrnam_r\fR(\fBconst char *\fR\fIname\fR, \fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR,
+     \fBsize_t\fR \fIbufsize\fR, \fBstruct group **\fR\fIresult\fR);
 .fi
 
 .LP
@@ -69,18 +69,13 @@ endgrent, fgetgrent, fgetgrent_r \- group database entry functions
 
 .LP
 .nf
-\fBstruct group *\fR\fBgetgrent_r\fR(\fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR, \fBint\fR \fIbufsize\fR);
-.fi
-
-.LP
-.nf
 \fBstruct group *\fR\fBgetgrgid\fR(\fBgid_t\fR \fIgid\fR);
 .fi
 
 .LP
 .nf
-\fBstruct group *\fR\fBgetgrgid_r\fR(\fBgid_t\fR \fIgid\fR, \fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBint\fR \fIbufsize\fR);
+\fBint\fR \fBgetgrgid_r\fR(\fBgid_t\fR \fIgid\fR, \fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR,
+     \fBsize_t\fR \fIbufsize\fR, \fBstruct group **\fR\fIresult\fR);
 .fi
 
 .LP
@@ -91,32 +86,6 @@ endgrent, fgetgrent, fgetgrent_r \- group database entry functions
 .LP
 .nf
 \fBvoid\fR \fBendgrent\fR(\fBvoid\fR);
-.fi
-
-.LP
-.nf
-\fBstruct group *\fR\fBfgetgrent\fR(\fBFILE *\fR\fIf\fR);
-.fi
-
-.LP
-.nf
-\fBstruct group *\fR\fBfgetgrent_r\fR(\fBFILE *\fR\fIf\fR, \fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBint\fR \fIbufsize\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-cc [ \fIflag\fR... ] \fIfile\fR... \fB-D_POSIX_PTHREAD_SEMANTICS\fR [ \fIlibrary\fR... ]
-
-\fBint\fR \fBgetgrnam_r\fR(\fBconst char *\fR\fIname\fR, \fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBsize_t\fR \fIbufsize\fR, \fBstruct group **\fR\fIresult\fR);
-.fi
-
-.LP
-.nf
-\fBint\fR \fBgetgrgid_r\fR(\fBgid_t\fR \fIgid\fR, \fBstruct group *\fR\fIgrp\fR, \fBchar *\fR\fIbuffer\fR,
-     \fBsize_t\fR \fIbufsize\fR, \fBstruct group **\fR\fIresult\fR);
 .fi
 
 .SH DESCRIPTION
@@ -155,23 +124,16 @@ The \fBendgrent()\fR function can be called to close the group database and
 deallocate resources when processing is complete. It is permissible, though
 possibly less efficient, for the process to call more group functions after
 calling \fBendgrent()\fR.
-.sp
-.LP
-The \fBfgetgrent()\fR function, unlike the other functions above, does not use
-\fBnsswitch.conf\fR. It reads and parses the next line from the stream \fIf\fR,
-which is assumed to have the format of the \fBgroup\fR file (see
-\fBgroup\fR(4)).
 .SS "Reentrant Interfaces"
 .LP
-The  \fBgetgrnam()\fR, \fBgetgrgid()\fR, \fBgetgrent()\fR, and
-\fBfgetgrent()\fR functions use thread-specific storage that is reused in each
+The  \fBgetgrnam()\fR, \fBgetgrgid()\fR, and \fBgetgrent()\fR
+functions use thread-specific storage that is reused in each
 call to one of these functions by the same thread, making them safe to use but
 not recommended for multithreaded applications.
 .sp
 .LP
-The parallel functions \fBgetgrnam_r()\fR, \fBgetgrgid_r()\fR,
-\fBgetgrent_r()\fR, and \fBfgetgrent_r()\fR provide reentrant interfaces for
-these operations.
+The parallel functions \fBgetgrnam_r()\fR and \fBgetgrgid_r()\fR
+provide reentrant interfaces for these operations.
 .sp
 .LP
 Each reentrant interface performs the same operation as its non-reentrant
@@ -198,10 +160,9 @@ if the requested entry is not found.
 For enumeration in multithreaded applications, the position within the
 enumeration is a process-wide property shared by all threads. The
 \fBsetgrent()\fR function can be used in a multithreaded application but resets
-the enumeration position for all threads.  If multiple threads interleave calls
-to \fBgetgrent_r()\fR, the threads will enumerate disjoint subsets of the group
-database. Like their non-reentrant counterparts, \fBgetgrnam_r()\fR and
-\fBgetgrgid_r()\fR leave the enumeration position in an indeterminate state.
+the enumeration position for all threads. Like their non-reentrant
+counterparts, \fBgetgrnam_r()\fR and \fBgetgrgid_r()\fR leave the enumeration
+position in an indeterminate state.
 .SS "group Structure"
 .LP
 Group entries are represented by the \fBstruct group\fR structure defined in
@@ -221,80 +182,30 @@ struct group {
 
 .SH RETURN VALUES
 .LP
-The \fBgetgrnam()\fR, \fBgetgrnam_r()\fR, \fBgetgrgid()\fR, and
-\fBgetgrgid_r()\fR functions each return a pointer to a \fBstruct group\fR if
-they successfully locate the requested entry. They return a null pointer if
-either the requested entry was not found or an error occurred. On error,
-\fBerrno\fR is set to indicate the error. The standard-conforming functions
-\fBgetgrnam_r()\fR and \fBgetgrgid_r()\fR return \fB0\fR upon success or an
-error number in case of failure.
+The \fBgetgrnam()\fR and \fBgetgrgid()\fR functions return a pointer to a
+\fBstruct group\fR if they successfully locate the requested entry. They return
+a null pointer if either the requested entry was not found or an error
+occurred. On error, \fBerrno\fR is set to indicate the error. The
+\fBgetgrnam_r()\fR and \fBgetgrgid_r()\fR functions return \fB0\fR upon success
+or an error number in case of failure.
 .sp
 .LP
-The  \fBgetgrent()\fR, \fBgetgrent_r()\fR, \fBfgetgrent()\fR, and
-\fBfgetgrent_r()\fR functions each return a pointer to a \fBstruct group\fR if
-they successfully enumerate an entry; otherwise they return a null pointer on
+The  \fBgetgrent()\fR, function returns a pointer to a \fBstruct group\fR if
+it successfully enumerates an entry; otherwise it returns a null pointer on
 end-of-file or error. On error, \fBerrno\fR is set to indicate the error.
 .sp
 .LP
-The \fBgetgrnam()\fR, \fBgetgrgid()\fR, \fBgetgrent()\fR, and \fBfgetgrent()\fR
+The \fBgetgrnam()\fR, \fBgetgrgid()\fR, and \fBgetgrent()\fR
 functions use thread-specific data storage, so returned data must be copied
 before a subsequent call to any of these functions if the data are to be saved.
 .sp
 .LP
-When the pointer returned by the reentrant functions \fBgetgrnam_r()\fR,
-\fBgetgrgid_r()\fR, \fBgetgrent_r()\fR, and \fBfgetgrent_r()\fR is non-null, it
-is always equal to the \fIgrp\fR pointer that was supplied by the caller.
-.sp
-.LP
 Applications wishing to check for error situations should set \fBerrno\fR to 0
-before calling \fBgetgrnam()\fR, \fBgetgrnam_r()\fR, \fBgetgrent()\fR,
-\fBgetgrent_r()\fR\fBgetgrgid()\fR, \fBgetgrgid_r()\fR, \fBfgetgrent()\fR, and
-\fBfgetgrent_r()\fR. If these functions return a null pointer and \fBerrno\fR
-is non-zero, an error occurred.
+before calling \fBgetgrnam()\fR, \fBgetgrent()\fR, and \fBgetgrgid()\fR.  If
+these functions return a null pointer and \fBerrno\fR is non-zero, an error
+occurred.
 .SH ERRORS
 .LP
-The \fBgetgrent_r()\fR, \fBfgetgrent()\fR, and \fBfgetgrent_r()\fR functions
-will fail if:
-.sp
-.ne 2
-.na
-\fB\fBEIO\fR\fR
-.ad
-.RS 10n
-An I/O error has occurred.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBERANGE\fR\fR
-.ad
-.RS 10n
-Insufficient storage was supplied by \fIbuffer\fR and \fIbufsize\fR to contain
-the data to be referenced by the resulting \fBgroup\fR structure.
-.RE
-
-.sp
-.LP
-The \fBgetgrent_r()\fR function will fail if:
-.sp
-.ne 2
-.na
-\fB\fBEMFILE\fR\fR
-.ad
-.RS 10n
-There are {\fBOPEN_MAX\fR} file descriptors currently open in the calling
-process.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBENFILE\fR\fR
-.ad
-.RS 10n
-The maximum allowable number of files is currently open in the system.
-.RE
 
 .sp
 .LP
@@ -381,21 +292,7 @@ Standard.
 When compiling multithreaded programs, see \fBIntro\fR(3).
 .sp
 .LP
-Use of the enumeration interfaces \fBgetgrent()\fR and \fBgetgrent_r()\fR is
-discouraged; enumeration is supported for the group file and \fBNIS\fR
-but in general is not efficient and might not be supported for all
-database sources.  The semantics of enumeration are discussed further in
-\fBnsswitch.conf\fR(4).
-.sp
-.LP
-Solaris 2.4 and earlier releases provided definitions of the \fBgetgrnam_r()\fR
-and \fBgetgrgid_r()\fR functions as specified in POSIX.1c Draft 6. The final
-POSIX.1c standard changed the interface for these functions. Support for the
-Draft 6 interface is provided for compatibility only and might not be supported
-in future releases. New applications and libraries should use the
-standard-conforming interface.
-.sp
-.LP
-For POSIX.1c-conforming applications, the \fB_POSIX_PTHREAD_SEMANTICS\fR
-flag is automatically turned on by defining the \fB_POSIX_C_SOURCE\fR flag
-with a value \(>=199506L.
+Use of the enumeration interface \fBgetgrent()\fR is discouraged; enumeration
+is supported for the group file and \fBNIS\fR but in general is not efficient
+and might not be supported for all database sources.  The semantics of
+enumeration are discussed further in \fBnsswitch.conf\fR(4).

@@ -106,7 +106,7 @@ typedef struct statvfs64 {
 	fsfilcnt64_t	f_ffree;	/* total # of free file nodes */
 	fsfilcnt64_t	f_favail;	/* free nodes avail to non-superuser */
 	unsigned long	f_fsid;		/* file system id (dev for now) */
-	char		f_basetype[FSTYPSZ];	/* target fs type name, */
+	char		f_basetype[_FSTYPSZ];	/* target fs type name, */
 						/* null-terminated */
 	unsigned long	f_flag;		/* bit-mask of flags */
 	unsigned long	f_namemax;	/* maximum file name length */
@@ -135,7 +135,7 @@ typedef struct statvfs64_32 {
 	fsfilcnt64_t	f_ffree;	/* total # of free file nodes */
 	fsfilcnt64_t	f_favail;	/* free nodes avail to non-superuser */
 	uint32_t	f_fsid;		/* file system id (dev for now) */
-	char		f_basetype[FSTYPSZ];	/* target fs type name, */
+	char		f_basetype[_FSTYPSZ];	/* target fs type name, */
 						/* null-terminated */
 	uint32_t	f_flag;		/* bit-mask of flags */
 	uint32_t	f_namemax;	/* maximum file name length */

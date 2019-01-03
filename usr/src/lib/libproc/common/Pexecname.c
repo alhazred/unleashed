@@ -26,9 +26,7 @@
  * Copyright (c) 2013 by Delphix. All rights reserved.
  */
 
-#define	__EXTENSIONS__
 #include <string.h>
-#undef	__EXTENSIONS__
 
 #include <libgen.h>
 #include <limits.h>

@@ -33,7 +33,6 @@ MAN = acctcom.1 \
       crle.1 \
       crontab.1 \
       crypt.1 \
-      csh.1 \
       csplit.1 \
       ctrun.1 \
       ctstat.1 \
@@ -50,7 +49,6 @@ MAN = acctcom.1 \
       dispuid.1 \
       dmake.1 \
       dos2unix.1 \
-      du.1 \
       dump.1 \
       dumpcs.1 \
       ed.1 \
@@ -260,7 +258,6 @@ MAN = acctcom.1 \
       volcheck.1 \
       volrmmount.1 \
       w.1 \
-      which.1 \
       who.1 \
       whois.1 \
       write.1 \

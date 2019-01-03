@@ -36,7 +36,7 @@ SRCDIR =	../common
 LDLIBS +=	 -lc
 
 C99MODE =	$(C99_ENABLE)
-CPPFLAGS +=	-I$(SRCDIR) -DNOT_HAVE_SA_LEN -D_XPG4_2 -D__EXTENSIONS__
+CPPFLAGS +=	-I$(SRCDIR) -DNOT_HAVE_SA_LEN
 CPPFLAGS +=	-DMDNS_VERSIONSTR_NODTS
 
 pics/dnssd_clientstub.o := CERRWARN +=	-Wno-unused-but-set-variable

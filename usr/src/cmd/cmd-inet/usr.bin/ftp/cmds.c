@@ -298,7 +298,7 @@ setebcdic(int argc, char *argv[])
  */
 /*ARGSUSED*/
 void
-setmode(int argc, char *argv[])
+setftpmode(int argc, char *argv[])
 {
 	(void) printf("We only support %s mode, sorry.\n", modename);
 	code = -1;

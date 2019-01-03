@@ -46,6 +46,8 @@
 #define	MYBUFSIZE (LINE_MAX)
 	/* Corresponds to MYBUFSIZE in grpck.c, BUFCONST in nss_dbdefs.c */
 
+extern struct group *fgetgrent(FILE *);
+
 int
 edit_group(char *login, char *new_login, gid_t gids[], int overwrite)
 {

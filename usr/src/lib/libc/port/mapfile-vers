@@ -322,9 +322,9 @@ SYMBOL_VERSION ILLUMOS_0.7 {	# Illumos additions
 
 SYMBOL_VERSION ILLUMOS_0.6 {	# Illumos additions
     protected:
-	getloginx;
-	getloginx_r;
-	__posix_getloginx_r;
+	getloginx { FLAGS = NODYNSORT };
+	getloginx_r { FLAGS = NODYNSORT };
+	__posix_getloginx_r { FLAGS = NODYNSORT };
 } ILLUMOS_0.5;
 
 SYMBOL_VERSION ILLUMOS_0.5 {	# common C++ ABI exit handlers
@@ -2009,14 +2009,12 @@ $endif
 	endpwent;
 	___errno;
 	fgetgrent;
-	fgetgrent_r;
 	fgetpwent;
 	flockfile;
 	funlockfile;
 	getchar_unlocked;
 	getc_unlocked;
 	getgrent;
-	getgrent_r;
 	getgrgid_r;
 	getgrnam_r;
 	getitimer;
@@ -2087,7 +2085,6 @@ $endif
 	getdate_err;
 	_getdate_err;
 	getenv;
-	__huge_val;
 	__stdinp;
 	__stdoutp;
 	__stderrp;
@@ -2731,10 +2728,8 @@ $endif
 	_ctermid;
 	_getgrgid;
 	_getgrnam;
-	_getlogin;
 	_getpwnam;
 	_getpwuid;
-	_ttyname;
 
 $if !sparc32
 	_sbrk;
@@ -2947,7 +2942,6 @@ $endif
 	_get_exit_frame_monitor;
 	_getfp;
 	_getgroupsbymember;
-	_getlogin_r;
 	getrandom;
 	_getsp;
 	__gettsp;

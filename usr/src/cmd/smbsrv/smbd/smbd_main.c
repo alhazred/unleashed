@@ -169,13 +169,13 @@ main(int argc, char *argv[])
 	}
 
 	while (!smbd.s_shutting_down) {
-		sigval = sigwait(&set);
+		int ret = sigwait(&set, &sigval);
+		if (ret != 0) {
+			syslog(LOG_DEBUG, "sigwait failed: %s", strerror(ret));
+			continue;
+		}
 
 		switch (sigval) {
-		case -1:
-			syslog(LOG_DEBUG, "sigwait failed: %s",
-			    strerror(errno));
-			break;
 		case SIGPIPE:
 			break;
 

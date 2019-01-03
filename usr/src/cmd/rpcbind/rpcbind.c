@@ -756,12 +756,12 @@ terminate(void)
 	int sig;
 
 	for (;;) {
-		sig = sigwait(&sigwaitset);
+		int ret = sigwait(&sigwaitset, &sig);
 		if (sig == SIGHUP) {
 			rpcb_check_init();
 			continue;
 		}
-		if (sig != -1 || errno != EINTR)
+		if (ret == 0)
 			break;
 	}
 

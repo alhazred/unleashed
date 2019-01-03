@@ -42,6 +42,8 @@
 #include "users.h"
 #include "messages.h"
 
+extern struct group *fgetgrent(FILE *);
+
 /* lint error-killers: */
 int errmsg(int, int);
 

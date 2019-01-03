@@ -334,7 +334,6 @@ PORTFP=				\
 	fconvert.o		\
 	file_decim.o		\
 	finite.o		\
-	fp_data.o		\
 	func_decim.o		\
 	gconvert.o		\
 	hex_bin.o		\
@@ -962,7 +961,6 @@ PORTSYS=			\
 	nfssys.o		\
 	open.o			\
 	pgrpsys.o		\
-	posix_sigwait.o		\
 	ppriv.o			\
 	psetsys.o		\
 	rctlsys.o		\

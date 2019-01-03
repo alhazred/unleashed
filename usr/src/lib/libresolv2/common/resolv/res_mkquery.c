@@ -102,6 +102,9 @@ extern const char *_res_opcodes[];
 static int      _confcheck(res_state statp);
 #endif /* SUNW_CONFCHECK */
 
+#define	IN_SET_LOOPBACK_ADDR(a) \
+	{ (a)->sin_addr.s_addr  = htonl(INADDR_LOOPBACK); \
+	(a)->sin_family = AF_INET; }
 
 /*%
  * Form all types of queries.

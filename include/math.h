@@ -74,6 +74,10 @@ extern "C" {
 #endif
 #endif	/* !defined(__P) */
 
+#ifdef __GNUC__
+#define	HUGE_VAL	(__builtin_huge_val())
+#endif
+
 #if defined(__EXTENSIONS__) || defined(_XOPEN_SOURCE) || \
 	!defined(_STRICT_STDC) && !defined(_POSIX_C_SOURCE)
 /*

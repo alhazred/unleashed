@@ -139,6 +139,7 @@ void
 dump_datum(datum *dat)
 {
 	int	i;
+	char	*datstr;
 
 	if (NULL == dat) {
 		printf("NULL datum");
@@ -149,8 +150,9 @@ dump_datum(datum *dat)
 		printf("NULL dptr");
 		return;
 	}
+	datstr = dat->dptr;
 	for (i = 0; i < dat->dsize; i++)
-		putchar(dat->dptr[i]);
+		putchar(datstr[i]);
 }
 
 /*

@@ -39,7 +39,7 @@
 #include <sys/systeminfo.h>
 
 int
-gethostname(char *name, int namelen)
+gethostname(char *name, size_t namelen)
 {
 	return (sysinfo(SI_HOSTNAME, name, namelen) == -1 ? -1 : 0);
 }

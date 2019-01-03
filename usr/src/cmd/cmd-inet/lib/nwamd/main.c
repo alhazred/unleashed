@@ -136,7 +136,7 @@ sighandler(void *arg)
 	int sig;
 
 	while (!shutting_down) {
-		sig = sigwait(&sigwaitset);
+		sigwait(&sigwaitset, &sig);
 		nlog(LOG_DEBUG, "signal %s caught", strsignal(sig));
 
 		switch (sig) {

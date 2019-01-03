@@ -302,7 +302,7 @@ main(int argc, char **argv)
 	 * Main thread just waits for signals.
 	 */
 again:
-	sig = sigwait(&tmpmask);
+	sigwait(&tmpmask, &sig);
 	if (d_flag)
 		fprintf(stderr, "main: sig=%d\n", sig);
 	switch (sig) {

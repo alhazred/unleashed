@@ -404,28 +404,29 @@ main(argc, argv)
 		content.dptr = p;
 		content.dsize = strlen(p) - 1; /* erase trailing newline */
 		if (lower_case_keys) {
-			for (i = (strncmp(key.dptr, "YP_MULTI_", 9) ? 0 : 9);
+			char *keystr = key.dptr;
+			for (i = (strncmp(keystr, "YP_MULTI_", 9) ? 0 : 9);
 					i < key.dsize; i++) {
 
-				ic = *(key.dptr+i);
+				ic = keystr[i];
 				if (isascii(ic) && isupper(ic))
-					*(key.dptr+i) = tolower(ic);
+					keystr[i] = tolower(ic);
 			}
 		}
 		tmp = dbm_fetch(fdb, key);
 		if (tmp.dptr == NULL) {
 			if (dbm_store(fdb, key, content, 1) != 0) {
 				printf("problem storing %.*s %.*s\n",
-				    key.dsize, key.dptr,
-				    content.dsize, content.dptr);
+				    key.dsize, (char *)key.dptr,
+				    content.dsize, (char *)content.dptr);
 				exit(1);
 			}
 		}
 #ifdef DEBUG
 		else {
 			printf("duplicate: %.*s %.*s\n",
-			    key.dsize, key.dptr,
-			    content.dsize, content.dptr);
+			    key.dsize, (char *)key.dptr,
+			    content.dsize, (char *)content.dptr);
 		}
 #endif
 	}

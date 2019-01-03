@@ -33,6 +33,8 @@
 #include <grp.h>
 #include <unistd.h>
 
+extern struct group *fgetgrent(FILE *);
+
 /*
  * putgrent()	function to write a group structure to a file
  *		supports the use of group names that with + or -

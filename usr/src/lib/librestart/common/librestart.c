@@ -2172,7 +2172,9 @@ get_gid(const char *str)
 
 		return (gid);
 	} else {
-		struct group grp, *ret;
+		struct group grp;
+		struct group *result = NULL;
+		int ret;
 		char *buffer;
 		size_t buflen;
 
@@ -2182,10 +2184,11 @@ get_gid(const char *str)
 			uu_die(allocfail);
 
 		errno = 0;
-		ret = getgrnam_r(str, &grp, buffer, buflen);
+		ret = getgrnam_r(str, &grp, buffer, buflen, &result);
 		free(buffer);
-
-		return (ret == NULL ? (gid_t)-1 : grp.gr_gid);
+		if (ret != 0)
+			return -1;
+		return result->gr_gid;
 	}
 }
 

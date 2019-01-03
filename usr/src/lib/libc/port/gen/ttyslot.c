@@ -54,7 +54,6 @@ int
 ttyslot(void)
 {
 	struct futmpx ubuf;
-	char *p;
 	int s;
 	int ret = -1;
 	int console = FALSE;
@@ -68,9 +67,10 @@ ttyslot(void)
 	 */
 	(void) pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cancel_state);
 
-	if ((p = ttyname_r(0, ttynm, 128)) != NULL ||
-	    (p = ttyname_r(1, ttynm, 128)) != NULL ||
-	    (p = ttyname_r(2, ttynm, 128)) != NULL) {
+	if ((ttyname_r(0, ttynm, 128)) == 0 ||
+	    (ttyname_r(1, ttynm, 128)) == 0 ||
+	    (ttyname_r(2, ttynm, 128)) == 0) {
+		char *p = ttynm;
 		if (strncmp(p, "/dev/", 5) == 0)
 			p += 5;
 		if (strcmp(p, "console") == 0)

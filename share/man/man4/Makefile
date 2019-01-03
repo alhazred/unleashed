@@ -10,8 +10,6 @@ MAN = Intro.4 \
       au.4 \
       auth_attr.4 \
       autofs.4 \
-      bart_manifest.4 \
-      bart_rules.4 \
       bootparams.4 \
       contract.4 \
       core.4 \

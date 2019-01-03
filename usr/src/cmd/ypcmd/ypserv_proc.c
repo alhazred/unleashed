@@ -214,6 +214,7 @@ ypmatch(SVCXPRT *transp, struct svc_req *rqstp)
 	    &resp.status)) != NULL &&
 	    yp_map_access(transp, &resp.status, fdb)) {
 
+		char *str;
 		/* Check with the DBM database */
 		resp.valdat = dbm_fetch(fdb, req.keydat);
 		if (resp.valdat.dptr != NULL) {
@@ -230,13 +231,12 @@ ypmatch(SVCXPRT *transp, struct svc_req *rqstp)
 		 * really want to waste any more time.  Specifically, we don't
 		 * want to ask DNS
 		 */
+		str = req.keydat.dptr;
 		if (req.keydat.dsize == 0 ||
-		    req.keydat.dptr == NULL ||
-		    req.keydat.dptr[0] == '\0' ||
-		    strncmp(req.keydat.dptr,
-		    yp_secure, req.keydat.dsize) == 0 ||
-		    strncmp(req.keydat.dptr, yp_interdomain,
-		    req.keydat.dsize) == 0) {
+		    str == NULL ||
+		    str[0] == '\0' ||
+		    strncmp(str, yp_secure, req.keydat.dsize) == 0 ||
+		    strncmp(str, yp_interdomain, req.keydat.dsize) == 0) {
 			goto send_reply;
 		}
 
@@ -894,7 +894,7 @@ multihomed(struct ypreq_key req, struct ypresp_val *resp,
 		 * responsibility.
 		 */
 
-		char *buf, *endbuf;
+		char *buf, *endbuf, *str;
 
 		if ((buf = strdup(resp->valdat.dptr)) == NULL) /* no memory */
 			return (0);
@@ -929,9 +929,10 @@ multihomed(struct ypreq_key req, struct ypresp_val *resp,
 
 		free(buf);
 		/* remove trailing newline */
+		str = resp->valdat.dptr;
 		if (resp->valdat.dsize &&
-		    resp->valdat.dptr[resp->valdat.dsize-1] == '\n') {
-			resp->valdat.dptr[resp->valdat.dsize-1] = '\0';
+		    str[resp->valdat.dsize-1] == '\n') {
+			str[resp->valdat.dsize-1] = '\0';
 			resp->valdat.dsize -= 1;
 		}
 
@@ -1012,6 +1013,7 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 	    &resp.ypmatch_resp_status,
 	    fdb))) {
 
+		char *str;
 		/* Check with the DBM database */
 		resp.ypmatch_resp_valdat = dbm_fetch(fdb,
 		    req.ypmatch_req_keydat);
@@ -1030,11 +1032,12 @@ ypoldmatch(SVCXPRT *transp, struct svc_req *rqstp)
 		 * really want to waste any more time.  Specifically, we don't
 		 * want to ask DNS
 		 */
+		str = req.ypmatch_req_keyptr;
 		if (req.ypmatch_req_keysize == 0 ||
-		    req.ypmatch_req_keyptr == NULL ||
-		    req.ypmatch_req_keyptr[0] == '\0' ||
-		    strncmp(req.ypmatch_req_keyptr, "YP_SECURE", 9) == 0 ||
-		    strncmp(req.ypmatch_req_keyptr, "YP_INTERDOMAIN", 14) == 0)
+		    str == NULL ||
+		    str[0] == '\0' ||
+		    strncmp(str, "YP_SECURE", 9) == 0 ||
+		    strncmp(str, "YP_INTERDOMAIN", 14) == 0)
 
 			goto send_oldreply;
 

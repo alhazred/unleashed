@@ -294,7 +294,7 @@ walk(char *component,
 	if ((vp->curflags & FTW_MOUNT) && type != FTW_NS &&
 	    statb.st_dev != vp->cur_mount)
 		goto quit;
-	vp->state.quit = 0;
+	vp->state.__quit = 0;
 
 	/*
 	 * If current component is not a directory, call user
@@ -304,8 +304,8 @@ walk(char *component,
 		rc = (*fn)(vp->tmppath, &statb, type, &vp->state);
 	if (rc > 0)
 		val = rc;
-	skip = (vp->state.quit & FTW_SKD);
-	if (rc != 0 || type != FTW_D || (vp->state.quit & FTW_PRUNE))
+	skip = (vp->state.__quit & FTW_SKD);
+	if (rc != 0 || type != FTW_D || (vp->state.__quit & FTW_PRUNE))
 		goto quit;
 
 	if (vp->tmppath[0] != '\0' && component[-1] != '/')

@@ -38,10 +38,6 @@
 #include <iso/stdlib_c99.h>
 #include <iso/stdlib_c11.h>
 
-#if defined(__EXTENSIONS__) || defined(_XPG4)
-#include <sys/wait.h>
-#endif
-
 /*
  * Allow global visibility for symbols defined in
  * C++ "std" namespace in <iso/stdlib_iso.h>.
@@ -259,15 +255,6 @@ extern char *getcwd(char *, size_t);
 extern const char *getexecname(void);
 
 #ifndef	__GETLOGIN_DEFINED	/* Avoid duplicate in unistd.h */
-#define	__GETLOGIN_DEFINED
-#ifndef	__USE_LEGACY_LOGNAME__
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname getlogin getloginx
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern char *getloginx(void);
-#define	getlogin	getloginx
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* __USE_LEGACY_LOGNAME__ */
 extern char *getlogin(void);
 #endif	/* __GETLOGIN_DEFINED */
 
@@ -291,7 +278,7 @@ extern char *ulltostr(unsigned long long, char *);
 #endif /* defined(__EXTENSIONS__) || !defined(_STRICT_STDC) ... */
 
 /* OpenBSD compatibility functions */
-#if !defined(_STRICT_SYMBOLS)
+#if __UNLEASHED_VISIBLE
 
 #include <inttypes.h>
 extern uint32_t arc4random(void);
@@ -299,7 +286,7 @@ extern void arc4random_buf(void *, size_t);
 extern uint32_t arc4random_uniform(uint32_t);
 long long strtonum(const char *, long long, long long, const char **);
 
-#endif	/* !_STRICT_SYBMOLS */
+#endif	/* __UNLEASHED_VISIBLE */
 
 #ifdef	__cplusplus
 }

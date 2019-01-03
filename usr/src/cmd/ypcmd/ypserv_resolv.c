@@ -297,6 +297,7 @@ int resolv_req(bool *fwding, CLIENT **client, int *pid, char *tp,
 	struct in6_addr in6;
 	int byname, byaddr;
 	int byname_v6, byaddr_v6;
+	char *str;
 #ifdef TDRPC
 	struct sockaddr_in *addrp;
 #else
@@ -317,11 +318,12 @@ int resolv_req(bool *fwding, CLIENT **client, int *pid, char *tp,
 	byaddr = strcmp(map, "hosts.byaddr") == 0;
 	byname_v6 = strcmp(map, "ipnodes.byname") == 0;
 	byaddr_v6 = strcmp(map, "ipnodes.byaddr") == 0;
+	str = req->keydat.dptr;
 	if ((!byname && !byaddr && !byname_v6 && !byaddr_v6) ||
 				req->keydat.dsize == 0 ||
-				req->keydat.dptr[0] == '\0' ||
-				!isascii(req->keydat.dptr[0]) ||
-				!isgraph(req->keydat.dptr[0])) {
+				str[0] == '\0' ||
+				!isascii(str[0]) ||
+				!isgraph(str[0])) {
 		/* default status is YP_NOKEY */
 		return (FALSE);
 	}

@@ -306,9 +306,4 @@ extern void set_variable __P((char *, char *));
 extern char *get_variable __P((char *, char **, int));
 extern void resetlexer __P((void));
 
-#ifdef SOLARIS
-extern int gethostname __P((char *, int ));
-extern void sync __P((void));
-#endif
-
 #endif /* __IPF_H__ */

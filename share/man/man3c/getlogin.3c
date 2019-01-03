@@ -58,14 +58,6 @@ getlogin, getlogin_r \- get login name
 
 .LP
 .nf
-\fBchar *\fR\fBgetlogin_r\fR(\fBchar *\fR\fIname\fR, \fBint\fR \fInamelen\fR);
-.fi
-
-.SS "Standard conforming"
-.LP
-.nf
-cc [ \fIflag \fR... ] \fIfile\fR... \fB-D_POSIX_PTHREAD_SEMANTICS\fR [ \fIlibrary \fR... ]
-
 \fBint\fR \fBgetlogin_r\fR(\fBchar *\fR\fIname\fR, \fBsize_t\fR \fInamesize\fR);
 .fi
 
@@ -82,22 +74,6 @@ The login name plus the terminating null byte can be up to 33 characters
 in length.
 Newly-compiled programs should use the \fBLOGIN_NAME_MAX\fR symbol,
 defined in <\fBlimits.h\fR>, to size the buffer.
-Older programs that call \fBgetlogin()\fR  expect only the legacy
-9-character length.
-These automatically link to a version of the \fBgetlogin()\fR functions that
-truncates longer login names.
-It's also possible to compile new programs that link to truncating versions
-of these functions by defining \fB__USE_LEGACY_LOGNAME__\fR in the
-compile environment.
-.sp
-.LP
-Some older programs will correctly handle long login names returned
-by the \fBgetlogin()\fR function.
-For this case, the user compatibility library
-\fB/usr/lib/getloginx.so.1\fR redirects to a version of the \fBgetlogin()\fR
-function that returns the long name.
-This library should be added to such an application
-at runtime using \fBLD_PRELOAD\fR.
 .sp
 .LP
 If \fBgetlogin()\fR is called within a process that is not attached to a
@@ -106,17 +82,9 @@ login name is to call \fBcuserid\fR(3C), or to call \fBgetlogin()\fR and if it
 fails to call \fBgetpwuid\fR(3C).
 .sp
 .LP
-
 The \fBgetlogin_r()\fR function has the same functionality as \fBgetlogin()\fR
-except that the caller must supply a buffer \fIname\fR with length \fInamelen\fR
-to store the result.  The \fIname\fR buffer should be at least
-\fBLOGIN_NAME_MAX\fR bytes in size (defined in <\fBlimits.h\fR>). The POSIX
-version (see \fBstandards\fR(5)) of \fBgetlogin_r()\fR takes a \fInamesize\fR
-parameter of type \fBsize_t\fR. If the size of the supplied buffer is less than
-the size of \fBLOGIN_NAME_MAX\fR and the name, including the null
-terminator, does not fit inside the buffer, than an error will be generated.
-Otherwise, the buffer \fIname\fR will be updated with the login name.
-
+except that the caller must supply a buffer \fIname\fR with length \fInamesize\fR
+to store the result.
 .SH RETURN VALUES
 .sp
 .LP
@@ -125,8 +93,8 @@ name or a null pointer if the user's login name cannot be found.  Otherwise it
 returns a null pointer and sets \fBerrno\fR to indicate the error.
 .sp
 .LP
-The standard-conforming \fBgetlogin_r()\fR returns \fB0\fR if successful, or
-the error number upon failure.
+\fBgetlogin_r()\fR returns \fB0\fR if successful, or the error number upon
+failure.
 .SH ERRORS
 .sp
 .LP
@@ -264,10 +232,3 @@ When compiling multithreaded programs, see \fBIntro\fR(3).
 .LP
 The \fBgetlogin()\fR function is safe to use in multithreaded applications, but
 is discouraged. The \fBgetlogin_r()\fR function should be used instead.
-.sp
-.LP
-Solaris 2.4 and earlier releases provided a \fBgetlogin_r()\fR as specified in
-POSIX.1c Draft 6. The final POSIX.1c standard changed the interface as
-described above. Support for the Draft 6 interface is provided for
-compatibility only and may not be supported in future releases. New
-applications and libraries should use the standard-conforming interface.

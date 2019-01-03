@@ -319,6 +319,7 @@ datumToRuleValue(datum *key, datum *value, __nis_table_mapping_t *t,
 
 	/* Handle datum value */
 	if (value != 0 && t->e) {
+		char *valstr = value->dptr;
 		valueLen = value->dsize;
 		/*
 		 * Extract the comment, if any, and add it to
@@ -326,17 +327,17 @@ datumToRuleValue(datum *key, datum *value, __nis_table_mapping_t *t,
 		 */
 		if (t->commentChar != '\0') {
 			/*
-			 * We loop on value->dsize because value->dptr
+			 * We loop on value->dsize because valstr
 			 * may not be NULL-terminated.
 			 */
 			for (i = 0; i < value->dsize; i++) {
-				if (value->dptr[i] == t->commentChar) {
+				if (valstr[i] == t->commentChar) {
 					valueLen = i;
 					comLen = value->dsize - i - 1;
 					if (comLen == 0)
 						break;
 					if (addCol2RuleValue(vt_string,
-						N2LCOMMENT, value->dptr + i + 1,
+						N2LCOMMENT, valstr + i + 1,
 						comLen, rvq)) {
 						freeRuleValue(rvq, 1);
 						*statP = MAP_INTERNAL_ERROR;
@@ -348,8 +349,8 @@ datumToRuleValue(datum *key, datum *value, __nis_table_mapping_t *t,
 		}
 
 		/* Skip trailing whitespaces */
-		for (; valueLen > 0 && (value->dptr[valueLen - 1] == ' ' ||
-			value->dptr[valueLen - 1] == '\t'); valueLen--);
+		for (; valueLen > 0 && (valstr[valueLen - 1] == ' ' ||
+			valstr[valueLen - 1] == '\t'); valueLen--);
 
 		/*
 		 * At this point valueLen is the effective length of
@@ -357,7 +358,7 @@ datumToRuleValue(datum *key, datum *value, __nis_table_mapping_t *t,
 		 * we can use the matchMappingItem function to break it
 		 * into fields.
 		 */
-		if ((val = stringToValue(value->dptr, valueLen)) == 0) {
+		if ((val = stringToValue(valstr, valueLen)) == 0) {
 			freeRuleValue(rvq, 1);
 			*statP = MAP_NO_MEMORY;
 			return (0);
@@ -914,7 +915,8 @@ getKeyFromRuleValue(__nis_table_mapping_t *t, __nis_rule_value_t *rv, int *nv,
 							    YPMULTISZ);
 						}
 						while (k < key[j].dsize) {
-							key[j].dptr[k] =
+							char *d = key[j].dptr;
+							d[k] =
 							    (char)tolower(
 							    (int)(uchar_t)
 							    str[k]);
@@ -1216,14 +1218,16 @@ singleWriteToDIT(char *map, char *domain, datum *key, datum *value,
 	int			nv, nr, i, rc, collapse;
 	char			*dn = 0, *skey, *svalue, *str;
 	char			*myself = "singleWriteToDIT";
+	char			*keystr;
 
 	if (!map || !domain || !key || !value) {
 		return (MAP_PARAM_ERROR);
 	}
 
+	keystr = key->dptr;
 	/* Return SUCCESS for empty or whitespace key */
-	for (i = 0; i < key->dsize && (key->dptr[i] == 0 ||
-		key->dptr[i] == ' ' || key->dptr[i] == '\t'); i++);
+	for (i = 0; i < key->dsize && (keystr[i] == 0 ||
+		keystr[i] == ' ' || keystr[i] == '\t'); i++);
 	if (i >= key->dsize)
 		return (SUCCESS);
 

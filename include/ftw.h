@@ -70,11 +70,7 @@ extern "C" {
 #if defined(__EXTENSIONS__) || !defined(_XOPEN_SOURCE) || defined(_XPG4_2)
 struct FTW
 {
-#if defined(_XPG4_2)
 	int	__quit;
-#else
-	int	quit;
-#endif
 	int	base;
 	int	level;
 };

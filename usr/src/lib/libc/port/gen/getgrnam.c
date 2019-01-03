@@ -27,8 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 #pragma weak _getgrnam	= getgrnam
 #pragma weak _getgrgid	= getgrgid
 
@@ -39,95 +37,70 @@
 #include <stdio.h>
 #include "tsd.h"
 
-extern size_t _nss_get_bufsizes(int arg);
-
-/*
- * Ye olde non-reentrant interface (MT-unsafe, caveat utor)
- */
-
-static void
-free_grbuf(void *arg)
-{
-	nss_XbyY_buf_t **buffer = arg;
-
-	NSS_XbyY_FREE(buffer);
-}
-
-static nss_XbyY_buf_t *
-get_grbuf(int max_buf)
-{
-	nss_XbyY_buf_t **buffer =
-	    tsdalloc(_T_GRBUF, sizeof (nss_XbyY_buf_t *), free_grbuf);
-	nss_XbyY_buf_t *b;
-	size_t	blen;
-
-	if (buffer == NULL)
-		return (NULL);
-	if (max_buf == 0)
-		blen = _nss_get_bufsizes(0);		/* default size */
-	else
-		blen = sysconf(_SC_GETGR_R_SIZE_MAX);	/* max size */
-	if (*buffer) {
-		if ((*buffer)->buflen >= blen)	/* existing size fits */
-			return (*buffer);
-		NSS_XbyY_FREE(buffer);		/* existing is too small */
-	}
-	b = NSS_XbyY_ALLOC(buffer, sizeof (struct group), blen);
-	return (b);
-}
+static struct group _gr_group;
+static char _gr_buf[1024];
 
 struct group *
 getgrgid(gid_t gid)
 {
-	nss_XbyY_buf_t	*b = get_grbuf(0);
-	struct group *ret;
+	struct group *result;
+	int ret;
 
-	if (b == NULL)
-		return (NULL);
-
-	ret = getgrgid_r(gid, b->result, b->buffer, b->buflen);
-	if (ret == NULL && errno == ERANGE) {
-		b = get_grbuf(1);
-		if (b == NULL)
-			return (NULL);
-		ret = getgrgid_r(gid, b->result, b->buffer, b->buflen);
-	}
-	return (ret);
+	ret = getgrgid_r(gid, &_gr_group, _gr_buf, sizeof(_gr_buf), &result);
+	if (ret != 0)
+		errno = ret;
+	return result;
 }
 
 struct group *
 getgrnam(const char *nam)
 {
-	nss_XbyY_buf_t	*b = get_grbuf(0);
-	struct group *ret;
+	struct group *result;
+	int ret;
 
-	if (b == NULL)
-		return (NULL);
+	ret = getgrnam_r(nam, &_gr_group, _gr_buf, sizeof(_gr_buf), &result);
+	if (ret != 0)
+		errno = ret;
+	return result;
+}
 
-	ret = getgrnam_r(nam, b->result, b->buffer, b->buflen);
-	if (ret == NULL && errno == ERANGE && nam != NULL) {
-		b = get_grbuf(1);
-		if (b == NULL)
-			return (NULL);
-		ret = getgrnam_r(nam, b->result, b->buffer, b->buflen);
-	}
-	return (ret);
+void _nss_initf_group(nss_db_params_t *);
+void _nss_XbyY_fgets(FILE *, nss_XbyY_args_t *);
+static DEFINE_NSS_DB_ROOT(db_root);
+static DEFINE_NSS_GETENT(context);
+int str2group(const char *, int, void *, char *, int);
+
+void
+setgrent(void)
+{
+	nss_setent(&db_root, _nss_initf_group, &context);
+}
+
+void
+endgrent(void)
+{
+	nss_endent(&db_root, _nss_initf_group, &context);
+	nss_delete(&db_root);
 }
 
 struct group *
 getgrent(void)
 {
-	nss_XbyY_buf_t	*b = get_grbuf(1);
+	nss_XbyY_args_t arg;
+	char		*nam;
 
-	return (b == NULL ? NULL :
-	    getgrent_r(b->result, b->buffer, b->buflen));
+	NSS_XbyY_INIT(&arg, &_gr_group, _gr_buf, sizeof(_gr_buf), str2group);
+	(void) nss_getent(&db_root, _nss_initf_group, &context, &arg);
+
+	return NSS_XbyY_FINI(&arg);
 }
 
 struct group *
 fgetgrent(FILE *f)
 {
-	nss_XbyY_buf_t	*b = get_grbuf(1);
+	nss_XbyY_args_t	arg;
 
-	return (b == NULL ? NULL :
-	    fgetgrent_r(f, b->result, b->buffer, b->buflen));
+	NSS_XbyY_INIT(&arg, &_gr_group, _gr_buf, sizeof(_gr_buf), str2group);
+	_nss_XbyY_fgets(f, &arg);
+	return NSS_XbyY_FINI(&arg);
 }

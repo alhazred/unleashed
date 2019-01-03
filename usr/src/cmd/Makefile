@@ -60,7 +60,6 @@ COMMON_SUBDIRS=		\
 	auths		\
 	autopush	\
 	backup		\
-	bart		\
 	basename	\
 	bc		\
 	boot		\
@@ -82,7 +81,6 @@ COMMON_SUBDIRS=		\
 	cpc		\
 	cron		\
 	crypt		\
-	csh		\
 	csplit		\
 	ctrun		\
 	ctstat		\
@@ -112,7 +110,6 @@ COMMON_SUBDIRS=		\
 	dmesg		\
 	dodatadm	\
 	dtrace		\
-	du		\
 	dumpadm		\
 	dumpcs		\
 	ed		\
@@ -371,7 +368,6 @@ COMMON_SUBDIRS=		\
 	vt		\
 	w		\
 	wall		\
-	which		\
 	who		\
 	whodo		\
 	wracct		\
@@ -416,7 +412,6 @@ MSGSUBDIRS=		\
 	auths		\
 	autopush	\
 	backup		\
-	bart		\
 	basename	\
 	busstat		\
 	cal		\
@@ -434,7 +429,6 @@ MSGSUBDIRS=		\
 	cpio		\
 	cpc		\
 	cron		\
-	csh		\
 	csplit		\
 	ctrun		\
 	ctstat		\
@@ -448,7 +442,6 @@ MSGSUBDIRS=		\
 	diff		\
 	dladm		\
 	dlstat		\
-	du		\
 	dumpcs		\
 	ed		\
 	eject		\

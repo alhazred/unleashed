@@ -306,15 +306,6 @@ void setservent(int);
 #endif /* !defined(_XPG4_2) || defined(__EXTENSIONS__) */
 
 #if !defined(_XPG4_2) || defined(_XPG6) || defined(__EXTENSIONS__)
-
-#ifdef	_XPG6
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname getaddrinfo __xnet_getaddrinfo
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	getaddrinfo __xnet_getaddrinfo
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _XPG6 */
-
 int		getaddrinfo(const char *_RESTRICT_KYWD,
 			const char *_RESTRICT_KYWD,
 			const struct addrinfo *_RESTRICT_KYWD,

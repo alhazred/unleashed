@@ -76,7 +76,7 @@ shmctl64(int shmid, int cmd, struct shmid_ds64 *buf)
 }
 
 int
-shmdt(char *shmaddr)
+shmdt(const void *shmaddr)
 {
 	return (syscall(SYS_shmsys, SHMDT, shmaddr));
 }

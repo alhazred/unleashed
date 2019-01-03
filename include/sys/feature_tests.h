@@ -38,21 +38,6 @@ extern "C" {
 #endif
 
 /*
- * Values of _POSIX_C_SOURCE
- *
- *		undefined   not a POSIX compilation
- *		1	    POSIX.1-1990 compilation
- *		2	    POSIX.2-1992 compilation
- *		199309L	    POSIX.1b-1993 compilation (Real Time)
- *		199506L	    POSIX.1c-1995 compilation (POSIX Threads)
- *		200112L	    POSIX.1-2001 compilation (Austin Group Revision)
- *		200809L     POSIX.1-2008 compilation
- */
-#if defined(_POSIX_SOURCE) && !defined(_POSIX_C_SOURCE)
-#define	_POSIX_C_SOURCE 1
-#endif
-
-/*
  * The feature test macros __XOPEN_OR_POSIX, _STRICT_STDC, _STRICT_SYMBOLS,
  * and _STDC_C99 are Sun implementation specific macros created in order to
  * compress common standards specified feature test macros for easier reading.
@@ -91,6 +76,10 @@ extern "C" {
  *                      relaxed the strictness via __EXTENSIONS__.
  */
 
+/*
+ * XXX: this should go away, but right now it is required to be undefined for
+ * some code in base
+ */
 #if defined(_XOPEN_SOURCE) || defined(_POSIX_C_SOURCE)
 #define	__XOPEN_OR_POSIX
 #endif
@@ -106,66 +95,29 @@ extern "C" {
  * of the language and library specified in these standards. A conforming
  * implementation shall accept any strictly conforming program.
  *
- * Based on these requirements, Sun's C compiler defines __STDC__ to 1 for
- * strictly conforming environments and __STDC__ to 0 for environments that
- * use ANSI C semantics but allow extensions to the C standard. For non-ANSI
- * C semantics, Sun's C compiler does not define __STDC__.
- *
- * The GNU C project interpretation is that __STDC__ should always be defined
+ * The GCC project interpretation is that __STDC__ should always be defined
  * to 1 for compilation modes that accept ANSI C syntax regardless of whether
  * or not extensions to the C standard are used. Violations of conforming
  * behavior are conditionally flagged as warnings via the use of the
  * -pedantic option. In addition to defining __STDC__ to 1, the GNU C
  * compiler also defines __STRICT_ANSI__ as a means of specifying strictly
  * conforming environments using the -ansi or -std=<standard> options.
+ * Clang (LLVM) works similarly.
  *
- * In the absence of any other compiler options, Sun and GNU set the value
- * of __STDC__ as follows when using the following options:
+ * In the absence of any other compiler options, GCC and Clang set the value of
+ * __STDC__ as follows when using the following options:
  *
- *				Value of __STDC__  __STRICT_ANSI__
- *
- * cc -Xa (default)			0	      undefined
- * cc -Xt (transitional)		0             undefined
- * cc -Xc (strictly conforming)		1	      undefined
- * cc -Xs (K&R C)		    undefined	      undefined
- *
- * gcc (default)			1	      undefined
- * gcc -ansi, -std={c89, c99,...)	1               defined
- * gcc -traditional (K&R)	    undefined	      undefined
- *
- * The default compilation modes for Sun C compilers versus GNU C compilers
- * results in a differing value for __STDC__ which results in a more
- * restricted namespace when using Sun compilers. To allow both GNU and Sun
- * interpretations to peacefully co-exist, we use the following Sun
- * implementation _STRICT_STDC_ macro:
+ *					__STDC__	__STRICT_ANSI__
+ * cc (default)				1		undefined
+ * cc -ansi, -std={c89, c99,...)	1		1
+ * cc -traditional (K&R)		undefined	undefined
  */
 
-#if (__STDC__ - 0 == 1 && !defined(__GNUC__)) || \
-	(defined(__GNUC__) && defined(__STRICT_ANSI__)) || \
+#if (__STDC__ - 0 == 1 && defined(__STRICT_ANSI__)) || \
 	defined(_ASM)
 #define	_STRICT_STDC
 #else
 #undef	_STRICT_STDC
-#endif
-
-/*
- * Compiler complies with ISO/IEC 9899:1999 or ISO/IEC 9989:2011
- */
-
-#if __STDC_VERSION__ - 0 >= 201112L
-#define	_STDC_C11
-#endif
-
-#if __STDC_VERSION__ - 0 >= 199901L
-#define	_STDC_C99
-#endif
-
-/*
- * Use strict symbol visibility.
- */
-#if (defined(_STRICT_STDC) || defined(__XOPEN_OR_POSIX)) && \
-	!defined(__EXTENSIONS__)
-#define	_STRICT_SYMBOLS
 #endif
 
 /*
@@ -270,100 +222,85 @@ extern "C" {
  * _XOPEN_SOURCE = 500                                   XPG5
  * _XOPEN_SOURCE = 600  (or POSIX_C_SOURCE=200112L)      XPG6
  * _XOPEN_SOURCE = 700  (or POSIX_C_SOURCE=200809L)      XPG7
- *
- * In order to simplify the guards within the headers, the following
- * implementation private test macros have been created. Applications
- * must NOT use these private test macros as unexpected results will
- * occur.
- *
- * Note that in general, the use of these private macros is cumulative.
- * For example, the use of _XPG3 with no other restrictions on the X/Open
- * namespace will make the symbols visible for XPG3 through XPG6
- * compilation environments. The use of _XPG4_2 with no other X/Open
- * namespace restrictions indicates that the symbols were introduced in
- * XPG4v2 and are therefore visible for XPG4v2 through XPG6 compilation
- * environments, but not for XPG3 or XPG4 compilation environments.
- *
- * _XPG3    X/Open Portability Guide, Issue 3 (XPG3)
- * _XPG4    X/Open CAE Specification, Issue 4 (XPG4)
- * _XPG4_2  X/Open CAE Specification, Issue 4, Version 2 (XPG4v2/UNIX 95/SUS)
- * _XPG5    X/Open CAE Specification, Issue 5 (XPG5/UNIX 98/SUSv2)
- * _XPG6    Open Group Technical Standard, Issue 6 (XPG6/UNIX 03/SUSv3)
- * _XPG7    Open Group Technical Standard, Issue 7 (XPG7/UNIX 08/SUSv4)
  */
 
-/* X/Open Portability Guide, Issue 3 */
-#if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0 < 500) && \
-	(_XOPEN_VERSION - 0 < 4) && !defined(_XOPEN_SOURCE_EXTENDED)
-#define	_XPG3
-/* X/Open CAE Specification, Issue 4 */
-#elif	(defined(_XOPEN_SOURCE) && _XOPEN_VERSION - 0 == 4)
-#define	_XPG4
-#define	_XPG3
-/* X/Open CAE Specification, Issue 4, Version 2 */
-#elif (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE_EXTENDED - 0 == 1)
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-/* X/Open CAE Specification, Issue 5 */
-#elif	(_XOPEN_SOURCE - 0 == 500)
-#define	_XPG5
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-#undef	_POSIX_C_SOURCE
-#define	_POSIX_C_SOURCE			199506L
-/* Open Group Technical Standard , Issue 6 */
-#elif	(_XOPEN_SOURCE - 0 == 600) || (_POSIX_C_SOURCE - 0 == 200112L)
-#define	_XPG6
-#define	_XPG5
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-#undef	_POSIX_C_SOURCE
-#define	_POSIX_C_SOURCE			200112L
-#undef	_XOPEN_SOURCE
-#define	_XOPEN_SOURCE			600
-
-/* Open Group Technical Standard, Issue 7 */
-#elif	(_XOPEN_SOURCE - 0 == 700) || (_POSIX_C_SOURCE - 0 == 200809L)
-#define	_XPG7
-#define	_XPG6
-#define	_XPG5
-#define	_XPG4_2
-#define	_XPG4
-#define	_XPG3
-#undef	_POSIX_C_SOURCE
-#define	_POSIX_C_SOURCE			200809L
-#undef	_XOPEN_SOURCE
-#define	_XOPEN_SOURCE			700
+#ifdef _XOPEN_SOURCE
+# if (_XOPEN_SOURCE - 0 >= 700)
+#  define __XPG_VISIBLE		700
+#  undef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE	200809L
+# elif (_XOPEN_SOURCE - 0 >= 600)
+#  define __XPG_VISIBLE		600
+#  undef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE	200112L
+# elif (_XOPEN_SOURCE - 0 >= 500)
+#  define __XPG_VISIBLE		500
+#  undef _POSIX_C_SOURCE
+#  define _POSIX_C_SOURCE	199506L
+# elif (_XOPEN_SOURCE_EXTENDED - 0 == 1)
+#  define __XPG_VISIBLE		420
+# elif (_XOPEN_VERSION - 0 >= 4)
+#  define __XPG_VISIBLE		400
+# else
+#  define __XPG_VISIBLE		300
+# endif
 #endif
 
 /*
- * _XOPEN_VERSION is defined by the X/Open specifications and is not
- * normally defined by the application, except in the case of an XPG4
- * application.  On the implementation side, _XOPEN_VERSION defined with
- * the value of 3 indicates an XPG3 application. _XOPEN_VERSION defined
- * with the value of 4 indicates an XPG4 or XPG4v2 (UNIX 95) application.
- * _XOPEN_VERSION  defined with a value of 500 indicates an XPG5 (UNIX 98)
- * application and with a value of 600 indicates an XPG6 (UNIX 03)
- * application and with a value of 700 indicates an XPG7 (UNIX 08).
- * The appropriate version is determined by the use of the
- * feature test macros described earlier.  The value of _XOPEN_VERSION
- * defaults to 3 otherwise indicating support for XPG3 applications.
+ *	_POSIX_SOURCE==1 means POSIX.1-1988. Later standards use
+ *	_POSIX_C_SOURCE:
+ *
+ *	undef		not POSIX
+ *	1		POSIX.1-1990
+ *	2		POSIX.2-1992
+ *	199309L		POSIX.1b-1993 (Real Time)
+ *	199506L		POSIX.1c-1995 (POSIX Threads)
+ *	200112L		POSIX.1-2001 (Austin Group Revision)
+ *	200809L		POSIX.1-2008
  */
-#ifndef _XOPEN_VERSION
-#if	defined(_XPG7)
-#define	_XOPEN_VERSION 700
-#elif	defined(_XPG6)
-#define	_XOPEN_VERSION 600
-#elif defined(_XPG5)
-#define	_XOPEN_VERSION 500
-#elif	defined(_XPG4_2)
-#define	_XOPEN_VERSION  4
-#else
-#define	_XOPEN_VERSION  3
+#ifdef _POSIX_C_SOURCE
+# if (_POSIX_C_SOURCE - 0 >= 200809)
+#  define __POSIX_VISIBLE	200809
+# elif (_POSIX_C_SOURCE - 0 >= 200112)
+#  define __POSIX_VISIBLE	200112
+# elif (_POSIX_C_SOURCE - 0 >= 199506)
+#  define __POSIX_VISIBLE	199506
+# elif (_POSIX_C_SOURCE - 0 >= 199309)
+#  define __POSIX_VISIBLE	199309
+# elif (_POSIX_C_SOURCE - 0 >= 2)
+#  define __POSIX_VISIBLE	199209
+# else
+#  define _POSIX_VISIBLE	199009
+# endif
+#elif defined(_POSIX_SOURCE)
+# define __POSIX_VISIBLE	199808
+# define __ISO_C_VISIBLE	0
 #endif
+
+#if (__POSIX_VISIBLE - 0 >= 200112)
+# define __ISO_C_VISIBLE 1999
+#elif (__POSIX_VISIBLE - 0 >= 199009)
+# define __ISO_C_VISIBLE 1990
+#endif
+
+/*
+ * __STDC_VERSION__ and __cplusplus are set by the compiler. They override any
+ * __ISO_C_VISIBLE implied by XPG or POSIX above.
+ */
+#if __STDC_VERSION__ - 0 >= 201112L || __cplusplus - 0 >= 201703
+#undef __ISO_C_VISIBLE
+#define __ISO_C_VISIBLE		2011
+#elif __STDC_VERSION__ - 0 >= 199901L || __cplusplus - 0 >= 201103
+#undef __ISO_C_VISIBLE
+#define __ISO_C_VISIBLE		1999
+#endif
+
+/* XXX illumos compat */
+#if __ISO_C_VISIBLE >= 2011
+# define _STDC_C11
+#endif
+#if __ISO_C_VISIBLE >= 1999
+# define _STDC_C99
 #endif
 
 /*
@@ -467,6 +404,93 @@ extern "C" {
  * distinguish us from other SunOS derived systems.
  */
 #define	_ILLUMOS	1
+
+/*
+ * __UNLEASHED_VISIBLE: interfaces that are not part of any standard. Visible
+ * by default, hidden if POSIX or XPG is requested by user.
+ */
+#if !defined(_UNLEASHED_SOURCE) && \
+    (defined(__XPG_VISIBLE) || defined(__POSIX_VISIBLE))
+# define __UNLEASHED_VISIBLE	0
+#endif
+
+/*
+ * Default values.
+ *
+ * XXX illumos compat: if we choose the default value here, also define
+ * _XOPEN_SOURCE/_POSIX_C_SOURCE since many headers check for them. also define
+ * __EXTENSIONS__ if XPG was not specified by user.
+ */
+#ifndef _KERNEL
+#ifndef __XPG_VISIBLE
+# define __XPG_VISIBLE			700
+# define _XOPEN_SOURCE			700
+# ifndef __EXTENSIONS__
+#  define __EXTENSIONS__
+# endif
+#endif
+#ifndef __POSIX_VISIBLE
+# define __POSIX_VISIBLE		200809
+# define _POSIX_C_SOURCE		200809L
+#endif
+#ifndef __ISO_C_VISIBLE
+# define __ISO_C_VISIBLE		2011
+#endif
+#endif /* _KERNEL */
+#ifndef __UNLEASHED_VISIBLE
+# define __UNLEASHED_VISIBLE		1
+#endif
+
+#if (defined(_STRICT_STDC) || defined(__XOPEN_OR_POSIX)) && \
+	!defined(__EXTENSIONS__)
+#define	_STRICT_SYMBOLS
+#endif
+
+/*
+ * XXX for compatibility with headers inherited from illumos.
+ * the _KERNEL check is a bit of a hack; a lot of headers check "#if !_XPG4_2"
+ * when exposing things needed in-tree, so we work around by not setting these
+ * for the kernel, for now.
+ */
+#ifndef _KERNEL
+#if (__XPG_VISIBLE >= 700)
+# define _XPG7
+#endif
+#if (__XPG_VISIBLE >= 600)
+# define _XPG6
+#endif
+#if (__XPG_VISIBLE >= 500)
+# define _XPG5
+#endif
+#if (__XPG_VISIBLE >= 420)
+# define _XPG4_2
+#endif
+#if (__XPG_VISIBLE >= 400)
+# define _XPG4
+#endif
+#if (__XPG_VISIBLE >= 300)
+# define _XPG3
+#endif
+#endif
+
+
+/*
+ * XXX illumos compat. _XOPEN_VERSION is actually defined by POSIX, but it is
+ * not really useful for anything.
+ */
+#ifndef _XOPEN_VERSION
+#if	defined(_XPG7)
+#define	_XOPEN_VERSION 700
+#elif	defined(_XPG6)
+#define	_XOPEN_VERSION 600
+#elif defined(_XPG5)
+#define	_XOPEN_VERSION 500
+#elif	defined(_XPG4_2)
+#define	_XOPEN_VERSION  4
+#else
+#define	_XOPEN_VERSION  3
+#endif
+#endif
 
 #ifdef	__cplusplus
 }

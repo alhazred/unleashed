@@ -78,17 +78,10 @@ typedef struct {
 	char	dbm_dirbuf[_DBLKSIZ];	/* directory file block buffer */
 } DBM;
 
-#if defined(_XPG4_2)
 typedef struct {
 	void	*dptr;
 	size_t	dsize;
 } datum;
-#else
-typedef struct {
-	char	*dptr;
-	long	dsize;
-} datum;
-#endif
 
 DBM	*dbm_open(const char *, int, mode_t);
 void	dbm_close(DBM *);

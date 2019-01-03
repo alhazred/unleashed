@@ -500,19 +500,11 @@ getpmsg(int fd, struct strbuf *ctlptr, struct strbuf *dataptr,
 	PERFORM(__getpmsg(fd, ctlptr, dataptr, bandp, flagsp))
 }
 
+#pragma weak __xpg4_putmsg = putmsg
+#pragma weak __xpg4_putpmsg = putpmsg
+
 int
 putmsg(int fd, const struct strbuf *ctlptr,
-	const struct strbuf *dataptr, int flags)
-{
-	extern int __putmsg(int, const struct strbuf *,
-	    const struct strbuf *, int);
-	int rv;
-
-	PERFORM(__putmsg(fd, ctlptr, dataptr, flags))
-}
-
-int
-__xpg4_putmsg(int fd, const struct strbuf *ctlptr,
 	const struct strbuf *dataptr, int flags)
 {
 	extern int __putmsg(int, const struct strbuf *,
@@ -524,17 +516,6 @@ __xpg4_putmsg(int fd, const struct strbuf *ctlptr,
 
 int
 putpmsg(int fd, const struct strbuf *ctlptr,
-	const struct strbuf *dataptr, int band, int flags)
-{
-	extern int __putpmsg(int, const struct strbuf *,
-	    const struct strbuf *, int, int);
-	int rv;
-
-	PERFORM(__putpmsg(fd, ctlptr, dataptr, band, flags))
-}
-
-int
-__xpg4_putpmsg(int fd, const struct strbuf *ctlptr,
 	const struct strbuf *dataptr, int band, int flags)
 {
 	extern int __putpmsg(int, const struct strbuf *,
@@ -1000,10 +981,16 @@ sigtimedwait(const sigset_t *set, siginfo_t *infop, const timespec_t *timeout)
 	return (sig);
 }
 
+#pragma weak __posix_sigwait = sigwait
+
 int
-sigwait(sigset_t *set)
+sigwait(const sigset_t *set, int *sig)
 {
-	return (sigtimedwait(set, NULL, NULL));
+	if ((*sig = sigtimedwait(set, NULL, NULL)) != -1)
+		return 0;
+	if (errno == 0)
+		errno = EINVAL;
+	return errno;
 }
 
 int

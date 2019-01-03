@@ -235,7 +235,6 @@ l l .
 \fBffsll\fR	\fBfls\fR
 \fBflsl\fR	\fBflsll\fR
 \fBfgetattr\fR	\fBfgetc\fR	
-\fBfgetgrent\fR	\fBfgetgrent_r\fR
 \fBfgetpos\fR	\fBfgets\fR
 \fBfgetspent\fR	\fBfgetspent_r\fR
 \fBfgetwc\fR	\fBfgetwc_l\fR
@@ -280,7 +279,7 @@ l l .
 \fBgetegid\fR	\fBgetenv\fR
 \fBgeteuid\fR	\fBgetexecname\fR
 \fBgetextmntent\fR	\fBgetgid\fR
-\fBgetgrent\fR	\fBgetgrent_r\fR
+\fBgetgrent\fR
 \fBgetgrgid\fR	\fBgetgrgid_r\fR
 \fBgetgrnam\fR	\fBgetgrnam_r\fR
 \fBgetgroups\fR	\fBgethomelgroup\fR

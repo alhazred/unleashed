@@ -62,8 +62,6 @@
  * device numbers.
  */
 
-#pragma weak _ttyname = ttyname
-
 #include "lint.h"
 #include "mtlib.h"
 #include "libc.h"
@@ -167,12 +165,9 @@ _ttyname_dev(dev_t rdev, char *buffer, size_t buflen)
 	return (_ttyname_common(&fsb, buffer, MATCH_MM));
 }
 
-/*
- * POSIX.1c Draft-6 version of the function ttyname_r.
- * It was implemented by Solaris 2.3.
- */
-char *
-ttyname_r(int f, char *buffer, int buflen)
+#pragma weak __posix_ttyname_r = ttyname_r
+int
+ttyname_r(int f, char *buffer, size_t buflen)
 {
 	struct stat64 fsb;	/* what we are searching for */
 	/*
@@ -181,20 +176,25 @@ ttyname_r(int f, char *buffer, int buflen)
 	 */
 	if (fstat64(f, &fsb) < 0) {
 		errno = EBADF;
-		return (0);
+		return errno;
 	}
 	if ((isatty(f) == 0) ||
 	    ((fsb.st_mode & S_IFMT) != S_IFCHR)) {
 		errno = ENOTTY;
-		return (0);
+		return errno;
 	}
 
 	if (buflen < MAX_DEV_PATH) {
 		errno = ERANGE;
-		return (0);
+		return errno;
 	}
 
-	return (_ttyname_common(&fsb, buffer, MATCH_ALL));
+	buffer = _ttyname_common(&fsb, buffer, MATCH_ALL);
+	if (!buffer) {
+		errno = EINVAL;
+		return errno;
+	}
+	return 0;
 }
 
 static char *
@@ -321,34 +321,6 @@ _ttyname_common(struct stat64 *fsp, char *buffer, uint_t match_mask)
 out:	retval = (retval ? strcpy(buffer, retval) : NULL);
 	callout_lock_exit();
 	return (retval);
-}
-
-/*
- * POSIX.1c standard version of the function ttyname_r.
- * User gets it via static ttyname_r from the header file.
- */
-int
-__posix_ttyname_r(int fildes, char *name, size_t namesize)
-{
-	int nerrno = 0;
-	int oerrno = errno;
-	int namelen;
-
-	errno = 0;
-
-	if (namesize > INT_MAX)
-		namelen = INT_MAX;
-	else
-		namelen = (int)namesize;
-
-	if (ttyname_r(fildes, name, namelen) == NULL) {
-		if (errno == 0)
-			nerrno = EINVAL;
-		else
-			nerrno = errno;
-	}
-	errno = oerrno;
-	return (nerrno);
 }
 
 /*
@@ -772,7 +744,9 @@ ttyname(int f)
 {
 	char *ans = tsdalloc(_T_TTYNAME, MAX_DEV_PATH, NULL);
 
-	if (ans == NULL)
-		return (NULL);
-	return (ttyname_r(f, ans, MAX_DEV_PATH));
+	if (!ans)
+		return NULL;
+	if (ttyname_r(f, ans, MAX_DEV_PATH) != 0)
+		return NULL;
+	return ans;
 }

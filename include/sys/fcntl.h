@@ -71,13 +71,13 @@ extern "C" {
  */
 #define	FREAD		(O_RDONLY + 1)
 #define	FWRITE		(O_WRONLY + 1)
-#if defined(_KERNEL) || defined(__UNLEASHED_VISIBLE)
+#if __UNLEASHED_VISIBLE
 #define	FSEARCH		O_SEARCH
 #define	FEXEC		O_EXEC
 /* convert from open() flags to/from fflags; convert O_RD/WR to FREAD/FWRITE */
 #define FFLAGS(oflags)  ((oflags) & (O_EXEC|O_SEARCH) ? (oflags) : (oflags) + 1)
 #define OFLAGS(fflags)  ((fflags) & (FEXEC|FSEARCH) ? (fflags) : (fflags) - 1)
-#endif /* _KERNEL || __UNLEASHED_VISIBLE */
+#endif /* __UNLEASHED_VISIBLE */
 
 #if defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE)
 #define	O_NDELAY	0x00000004	/* non-blocking I/O */
@@ -102,7 +102,7 @@ extern "C" {
 #define	O_CLOEXEC	0x00800000	/* set the close-on-exec flag */
 #define	O_DIRECTORY	0x01000000
 
-#if defined(_KERNEL) || defined(__UNLEASHED_VISIBLE)
+#if __UNLEASHED_VISIBLE
 #define	FNDELAY		O_NDELAY
 #define	FAPPEND		O_APPEND
 #define	FSYNC		O_SYNC		/* file (data+inode) integrity while writing */
@@ -139,7 +139,7 @@ extern "C" {
  * value.
  */
 #define	F_REMOTELOCK	0x04000000	/* Set if NLM lock */
-#endif /* _KERNEL || __UNLEASHED_VISIBLE */
+#endif /* __UNLEASHED_VISIBLE */
 
 /*
  * fcntl(2) requests

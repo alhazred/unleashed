@@ -101,7 +101,7 @@ struct in6_addr {
 #define	s6_addr32	_S6_un._S6_u32
 #endif
 
-#ifdef __UNLEASHED_VISIBLE
+#if __UNLEASHED_VISIBLE
 #define	IN6ADDR_INITIALIZER(a, b, c, d)				\
 	{							\
 		.s6_addr32 = {					\
@@ -357,21 +357,7 @@ struct in_addr {
 /* RFC 3927 IPv4 link local address (i in host byte-order) */
 #define	IN_LINKLOCAL(i)		(((i) & IN_AUTOCONF_MASK) == IN_AUTOCONF_NET)
 
-/* Well known 6to4 Relay Router Anycast address defined in RFC 3068 */
-#if !defined(_XPG4_2) || !defined(__EXTENSIONS__)
-#define	INADDR_6TO4RRANYCAST	0xc0586301U 	/* 192.88.99.1 */
-#endif	/* !defined(_XPG4_2) || !defined(__EXTENSIONS__) */
-
 #define	IN_LOOPBACKNET		127			/* official! */
-
-/*
- * Define a macro to stuff the loopback address into an Internet address
- */
-#if !defined(_XPG4_2) || !defined(__EXTENSIONS__)
-#define	IN_SET_LOOPBACK_ADDR(a) \
-	{ (a)->sin_addr.s_addr  = htonl(INADDR_LOOPBACK); \
-	(a)->sin_family = AF_INET; }
-#endif /* !defined(_XPG4_2) || !defined(__EXTENSIONS__) */
 
 /*
  * IPv4 Socket address.
@@ -421,8 +407,8 @@ struct sockaddr_in6 {
 
 /*
  * We don't use IN6ADDR_INITIALIZER here because (1) we don't want to rely
- * on this __UNLEASHED_VISIBLE macro, and (2) the macro uses C99 syntax and
- * we want these to be usable with older compilers.
+ * on __UNLEASHED_VISIBLE, and (2) the macro uses C99 syntax and we want these
+ * to be usable with older compilers.
  *
  * const struct in6_addr IN6ADDR_ANY_INIT;
  * const struct in6_addr IN6ADDR_LOOPBACK_INIT;
