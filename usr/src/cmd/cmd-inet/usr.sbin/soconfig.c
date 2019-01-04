@@ -37,6 +37,8 @@
 
 #define	MAXLINELEN	4096
 
+int _sockconfig(int, void *, void *, void *, void *);
+
 /*
  * Usage:
  *	soconfig -d <dir>
@@ -372,7 +374,7 @@ parse_params(char *famstr, char *typestr, char *protostr, char *path,
 	printf("not calling sockconfig(%d, %d, %d, %d, %s)\n",
 	    cmd, fam, type, protocol, path == NULL ? "(null)" : path);
 #else
-	if (_sockconfig(cmd, fam, type, protocol, path) == -1) {
+	if (_sockconfig(cmd, (void *)fam, (void *)type, (void *)protocol, (void *)path) == -1) {
 		char *s;
 
 		switch (errno) {
@@ -423,8 +425,8 @@ parse_filter_params(int argc, char **argv)
 	int i;
 
 	if (argc == 1) {
-		if (_sockconfig(SOCKCONFIG_REMOVE_FILTER, argv[0], 0,
-		    0, 0) < 0) {
+		if (_sockconfig(SOCKCONFIG_REMOVE_FILTER, argv[0], NULL,
+		    NULL, NULL) < 0) {
 			switch (errno) {
 			case ENXIO:
 				fprintf(stderr,
@@ -562,7 +564,7 @@ parse_filter_params(int argc, char **argv)
 	filprop.sfp_socktuple_cnt = tupcnt;
 	filprop.sfp_socktuple = socktuples;
 
-	if (_sockconfig(SOCKCONFIG_ADD_FILTER, argv[0], &filprop, 0, 0) < 0) {
+	if (_sockconfig(SOCKCONFIG_ADD_FILTER, argv[0], &filprop, NULL, NULL) < 0) {
 		switch (errno) {
 		case EINVAL:
 			fprintf(stderr,
@@ -601,7 +603,7 @@ print_socktable()
 	(void) memset(&sc_table, 0, sizeof (sockconfig_socktable_t));
 
 	/* get number of entries */
-	if (_sockconfig(SOCKCONFIG_GET_SOCKTABLE, &sc_table) == -1) {
+	if (_sockconfig(SOCKCONFIG_GET_SOCKTABLE, &sc_table, NULL, NULL, NULL) == -1) {
 		fprintf(stderr,
 		    gettext("cannot get in-kernel socket table: %s\n"),
 		    strerror(errno));
@@ -618,7 +620,7 @@ print_socktable()
 	}
 
 	/* get socket table entries */
-	if (_sockconfig(SOCKCONFIG_GET_SOCKTABLE, &sc_table) == -1) {
+	if (_sockconfig(SOCKCONFIG_GET_SOCKTABLE, &sc_table, NULL, NULL, NULL) == -1) {
 		fprintf(stderr,
 		    gettext("cannot get in-kernel socket table: %s\n"),
 		    strerror(errno));

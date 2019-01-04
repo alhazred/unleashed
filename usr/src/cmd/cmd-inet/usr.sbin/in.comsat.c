@@ -51,6 +51,9 @@
 #include <syslog.h>
 #include <sys/ioctl.h>
 #include <pwd.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <utime.h>
 
 /*
  * comsat
@@ -285,7 +288,7 @@ struct utmpx *utp;
 	char tty[sizeof (utmp[0].ut_line) + 5];
 	char name[sizeof (utmp[0].ut_name) + 1];
 	struct stat stb, stl;
-	time_t timep[2];
+	struct utimbuf timep;
 	struct passwd *pwd;
 	int fd, mbox;
 
@@ -394,10 +397,10 @@ struct utmpx *utp;
 		exit(1);
 	}
 
-	timep[0] = stb.st_atime;
-	timep[1] = stb.st_mtime;
+	timep.actime = stb.st_atime;
+	timep.modtime = stb.st_mtime;
 	jkfprintf(tp, name, mbox, offset);
-	utime(name, timep);
+	utime(name, &timep);
 	exit(0);
 }
 
