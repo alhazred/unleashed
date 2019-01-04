@@ -29,7 +29,9 @@
  */
 
 #include	<sys/types.h>
+#include	<ctype.h>
 #include	<stdio.h>
+#include	<stdlib.h>
 #include	<strings.h>
 #include	<sys/param.h>
 #include	<users.h>

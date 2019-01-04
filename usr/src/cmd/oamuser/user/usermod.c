@@ -86,6 +86,7 @@
 extern int **valid_lgroup(), isbusy(), get_default_zfs_flags();
 extern int valid_uid(), check_perm(), create_home(), move_dir();
 extern int valid_expire(), edit_group(), call_passmgmt();
+extern int edit_project();
 extern projid_t **valid_lproject();
 extern struct passwd *fgetpwent(FILE *);
 

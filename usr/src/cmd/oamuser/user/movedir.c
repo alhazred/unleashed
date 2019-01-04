@@ -36,6 +36,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <utime.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define	SBUFSZ	256
 
