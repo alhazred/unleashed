@@ -326,7 +326,7 @@ show_files(struct ps_prochandle *Pr)
 	struct rlimit rlim;
 
 	if (pr_getrlimit(Pr, RLIMIT_NOFILE, &rlim) == 0) {
-		ulong_t nfd = rlim.rlim_cur;
+		rlim_t nfd = rlim.rlim_cur;
 		if (nfd == RLIM_INFINITY)
 			(void) printf(
 			    "  Current rlimit: unlimited file descriptors\n");
