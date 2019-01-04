@@ -34,7 +34,6 @@ OBJS=		$(LIBPROG).o $(ROLLOBJS) $(FSLIB)
 SRCS=		$(LIBPROG).c $(ROLLSRCS) $(FSLIBSRC)
 MKFSOBJS=	mkfs.o
 
-CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-empty-body
 CERRWARN +=	-Wno-uninitialized
@@ -52,7 +51,7 @@ $(POFILE):      $(SRCS)
 	sed "/^domain/d" messages.po >  $@
 	$(RM) $(POFILE).i messages.po
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+CPPFLAGS +=	-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I$(FSCOMMONDIR)
 LDLIBS +=	-ladm -lefi
 
 $(LIBPROG):	$(OBJS)
