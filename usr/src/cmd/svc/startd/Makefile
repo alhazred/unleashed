@@ -89,7 +89,10 @@ LDLIBS += \
 	-luutil
 
 LDLIBS_i386 +=	-lbe
-LDLIBS +=	$(LDLIBS_$(MACH)) -L $(ROOT)/lib/fm -lfmevent
+# we don't directly depend on anything in /usr/lib/fm, but libfmevent does
+# (libtopo is there), so we must specify it here or we will link against
+# libtopo on the running system
+LDLIBS +=	$(LDLIBS_$(MACH)) -L $(ROOT)/lib/fm -L $(ROOT)/usr/lib/fm -lfmevent
 LDFLAGS +=	-R /lib/fm
 
 FILEMODE = 0555
