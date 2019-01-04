@@ -38,6 +38,7 @@
 #include <signal.h>
 #include <sys/stat.h>
 #include <poll.h>
+#include <string.h>
 #include "misc.h"
 #include "msgs.h"
 #include "extern.h"
@@ -45,6 +46,8 @@
 #include "adm.h"
 #include "structs.h"
 
+int sendsig(struct sactab *, int);
+int startpm(struct sactab *);
 
 /*
  * findpm - find a port monitor entry

@@ -54,7 +54,6 @@ ROOTADMF= $(ADMF:%=$(ROOTUSRSBIN)/%)
 
 LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 
-CERRWARN += -Wno-implicit-function-declaration
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-extra

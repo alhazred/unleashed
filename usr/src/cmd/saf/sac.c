@@ -43,6 +43,7 @@
 #include <unistd.h>
 #include <utmpx.h>
 #include <memory.h>
+#include <ulimit.h>
 #include "msgs.h"
 #include "extern.h"
 #include <sac.h>
@@ -78,7 +79,7 @@ int validstate(unchar);
 int mk_cmd_pipe(void);
 void startpoll(void);
 
-
+int sendsig(struct sactab *, int);
 
 /*
  * main - scan args for sac, initialize everything, and wait for commands
