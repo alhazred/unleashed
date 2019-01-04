@@ -42,12 +42,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <setjmp.h>
 #include <signal.h>
+#include <string.h>
 #include <dirent.h>
 #include <pwd.h>
 #include <time.h>
 #include <locale.h>
+#include <utime.h>
 
 #define INDENT 3
 #define	RD_WR_ALL	(S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH)
@@ -355,9 +358,7 @@ late_news(void(*emit)(), int update)
 	char fname[50], *cp;
 	struct stat newstime;
 	int fd;
-	struct {
-		long actime, modtime;
-	} utb;
+	struct utimbuf utb;
 	extern char *getenv();
 
 	/* Determine the time when last called */
