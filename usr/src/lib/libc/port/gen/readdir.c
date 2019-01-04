@@ -47,8 +47,9 @@
 
 #if !defined(_LP64)
 #pragma weak _readdir64 = readdir64
-#endif
+#else
 #pragma weak _readdir = readdir
+#endif
 
 #include "lint.h"
 #include <dirent.h>
@@ -123,39 +124,5 @@ readdir64(DIR *dirp)
 
 	dp64 = (dirent64_t *)(uintptr_t)&dirp->dd_buf[dirp->dd_loc];
 	return (dp64);
-}
-
-/*
- * readdir now does translation of dirent64 entries into dirent entries.
- * We rely on the fact that dirents are smaller than dirent64s and we
- * reuse the space accordingly.
- */
-dirent_t *
-readdir(DIR *dirp)
-{
-	dirent64_t *dp64;	/* -> directory data */
-	dirent_t *dp32;		/* -> directory data */
-
-	if ((dp64 = readdir64(dirp)) == NULL)
-		return (NULL);
-
-	/*
-	 * Make sure that the offset fits in 32 bits.
-	 */
-	if (((off_t)dp64->d_off != dp64->d_off &&
-	    (uint64_t)dp64->d_off > (uint64_t)UINT32_MAX) ||
-	    dp64->d_ino > SIZE_MAX) {
-		errno = EOVERFLOW;
-		return (NULL);
-	}
-
-	dp32 = (dirent_t *)(&dp64->d_off);
-	dp32->d_off = (off_t)dp64->d_off;
-	dp32->d_ino = (ino_t)dp64->d_ino;
-	dp32->d_reclen = (unsigned short)(dp64->d_reclen -
-	    ((char *)&dp64->d_off - (char *)dp64));
-	dp64->d_ino = (ino64_t)-1;	/* flag as converted for readdir64 */
-	/* d_name d_reclen should not move */
-	return (dp32);
 }
 #endif	/* _LP64 */

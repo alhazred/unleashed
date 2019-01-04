@@ -37,8 +37,9 @@
 
 #if !defined(_LP64)
 #pragma weak _fseeko64 = fseeko64
-#endif
+#else
 #pragma weak _fseeko = fseeko
+#endif
 
 #include "lint.h"
 #include "file64.h"
@@ -87,10 +88,11 @@ fseeko64(FILE *iop, off64_t offset, int ptrname)
 	FUNLOCKFILE(lk);
 	return ((p == -1)? -1: 0);
 }
-#endif	/* _LP64 */
+#else
 
 int
 fseeko(FILE *iop, off_t offset, int ptrname)
 {
 	return (fseek(iop, offset, ptrname));
 }
+#endif

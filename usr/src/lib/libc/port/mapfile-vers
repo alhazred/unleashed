@@ -217,8 +217,10 @@ SYMBOL_VERSION ILLUMOS_0.11 {	# Illumos additions
 
 SYMBOL_VERSION ILLUMOS_0.10 {	# Illumos additions
     protected:
+$if _ELF64
 	preadv;
 	pwritev;
+$endif
 
 $if lf64
 	preadv64;
@@ -315,9 +317,11 @@ SYMBOL_VERSION ILLUMOS_0.8 {	# POSIX 2008 newlocale and friends
 } ILLUMOS_0.7;
 
 SYMBOL_VERSION ILLUMOS_0.7 {	# Illumos additions
+$if _ELF64
     protected:
 	_glob_ext;
 	_globfree_ext;
+$endif
 } ILLUMOS_0.6;
 
 SYMBOL_VERSION ILLUMOS_0.6 {	# Illumos additions
@@ -337,8 +341,10 @@ SYMBOL_VERSION ILLUMOS_0.4 {	# Illumos additions
     protected:
         pipe2;
         dup3;
+$if _ELF64
         mkostemp;
         mkostemps;
+$endif
 
 $if lf64
         mkostemp64;
@@ -383,18 +389,20 @@ $if sparc32
 $endif
 
 	addrtosymstr;
-	aio_cancel;
 	aiocancel;
+$if _ELF64
+	aio_cancel;
 	aio_error;
 	aio_fsync;
 	aio_read;
 	aioread;
 	aio_return;
 	aio_suspend;
-	aiowait;
 	aio_waitn;
 	aio_write;
 	aiowrite;
+$endif
+	aiowait;
 	asprintf;
 	assfail;
 	backtrace;
@@ -446,13 +454,17 @@ $endif
 	htonll;
 	htons;
 	linkat;
+$if _ELF64
 	lio_listio;
+$endif
 	memmem;
 	mkdirat;
 	mkdtemp;
 	mkfifoat;
 	mknodat;
+$if _ELF64
 	mkstemps;
+$endif
 	mmapobj;
 	mq_close;
 	mq_getattr;
@@ -470,8 +482,10 @@ $endif
 	ntohl;
 	ntohll;
 	ntohs;
+$if _ELF64
 	posix_fadvise;
 	posix_fallocate;
+$endif
 	posix_madvise;
 	posix_memalign;
 	posix_spawn_file_actions_addclosefrom_np;
@@ -774,8 +788,10 @@ $error unknown platform
 $endif
 
     protected:
+$if _ELF64
 	alphasort;
 	_alphasort;
+$endif
 	atomic_add_16;
 	atomic_add_16_nv;
 	atomic_add_32;
@@ -926,8 +942,10 @@ $endif
 	pthread_spin_trylock;
 	pthread_spin_unlock;
 	rctlblk_set_recipient_pid;
+$if _ELF64
 	scandir;
 	_scandir;
+$endif
 	schedctl_exit;
 	schedctl_init;
 	schedctl_lookup;
@@ -1075,8 +1093,10 @@ SYMBOL_VERSION SUNW_1.21.1 {	# SunOS 5.9 (Solaris 9) patch additions
 
 SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
     protected:
+$if _ELF64
 	attropen;
 	_attropen;
+$endif
 	bind_textdomain_codeset;
 	closefrom;
 	_closefrom;
@@ -1089,7 +1109,9 @@ SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
 	_fdopendir;
 	fdwalk;
 	_fdwalk;
+$if _ELF64
 	fstatat;
+$endif
 	futimesat;
 	_futimesat;
 	getcpuid;
@@ -1105,7 +1127,9 @@ SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
 	meminfo;
 	_meminfo;
 	ngettext;
+$if _ELF64
 	openat;
+$endif
 	printstack;
 	priocntl;
 	priocntlset;
@@ -1374,8 +1398,10 @@ SYMBOL_VERSION SUNW_1.1 {	# SunOS 5.6 (Solaris 2.6)
 	fpsetround;
 	fputwc;
 	fputws;
+$if _ELF64
 	fseeko;
 	ftello;
+$endif
 	ftrylockfile;
 	getexecname;
 	_getexecname;
@@ -1675,8 +1701,10 @@ SYMBOL_VERSION SUNW_0.8 {	# SunOS 5.4 (Solaris 2.4)
 	confstr;
 	fnmatch;
 	_getdate_err_addr;
+$if _ELF64
 	glob;
 	globfree;
+$endif
 	iconv;
 	iconv_close;
 	iconv_open;
@@ -1817,12 +1845,16 @@ $endif
 	fpsetmask;
 	fpsetsticky;
 	fstatfs;
+$if _ELF64
 	ftruncate;
 	ftw;
+$endif
 	func_to_decimal;
 	gconvert;
 	gcvt;
+$if _ELF64
 	getdents;
+$endif
 	gethrtime;
 	gethrvtime;
 	getmntany;
@@ -1887,8 +1919,10 @@ $endif
 	__makedev;
 	mincore;
 	__minor;
+$if _ELF64
 	mkstemp;
 	_mkstemp;
+$endif
 	mlockall;
 	mrand48;
 	munlockall;
@@ -1904,7 +1938,9 @@ $endif
 	openlog;
 	plock;
 	p_online;
+$if _ELF64
 	pread;
+$endif
 	__priocntl;
 	__priocntlset;
 	processor_bind;
@@ -1915,7 +1951,9 @@ $endif
 	putspent;
 	pututline;
 	pututxline;
+$if _ELF64
 	pwrite;
+$endif
 	qeconvert;
 	qecvt;
 	qfconvert;
@@ -1961,7 +1999,9 @@ $endif
 	syslog;
 	_syslog;
 	tmpnam_r;
+$if _ELF64
 	truncate;
+$endif
 	ttyslot;
 	uadmin;
 	ulckpwdf;
@@ -2030,7 +2070,9 @@ $endif
 	putchar_unlocked;
 	putc_unlocked;
 	rand_r;
+$if _ELF64
 	readdir_r;
+$endif
 	setgrent;
 	setitimer;
 	_setitimer;
@@ -2163,7 +2205,9 @@ $endif
 	close;
 	closedir;
 	_closedir;
+$if _ELF64
 	creat;
+$endif
 	ctermid;
 	ctime;
 	cuserid;
@@ -2206,7 +2250,9 @@ $endif
 	ferror;
 	fflush;
 	fgetc;
+$if _ELF64
 	fgetpos;
+$endif
 	fgets;
 	__filbuf;
 	fileno;
@@ -2214,7 +2260,9 @@ $endif
 	__flsbuf;
 	fmtmsg;
 	_fmtmsg;
+$if _ELF64
 	fopen;
+$endif
 	fork;
 	fpathconf;
 	_fpathconf;
@@ -2222,13 +2270,17 @@ $endif
 	fputc;
 	fputs;
 	fread;
+$if _ELF64
 	freopen;
+$endif
 	fscanf;
 	fseek;
+$if _ELF64
 	fsetpos;
 	fstat;
 	fstatvfs;
 	_fstatvfs;
+$endif
 	fsync;
 	ftell;
 	ftok;
@@ -2269,8 +2321,10 @@ $endif
 	_getppid;
 	getpwnam;
 	getpwuid;
+$if _ELF64
 	getrlimit;
 	_getrlimit;
+$endif
 	gets;
 	getsid;
 	_getsid;
@@ -2324,13 +2378,17 @@ $endif
 	_link;
 	localeconv;
 	localtime;
+$if _ELF64
 	lockf;
+$endif
 	longjmp;
 	lsearch;
 	_lsearch;
+$if _ELF64
 	lseek;
 	_lseek;
 	lstat;
+$endif
 	makecontext;
 	_makecontext;
 	mblen;
@@ -2352,8 +2410,10 @@ $endif
 	mktime;
 	mlock;
 	_mlock;
+$if _ELF64
 	mmap;
 	_mmap;
+$endif
 	monitor;
 	_monitor;
 	mount;
@@ -2371,13 +2431,17 @@ $endif
 	_munlock;
 	munmap;
 	_munmap;
+$if _ELF64
 	nftw;
 	_nftw;
+$endif
 	nice;
 	_nice;
 	nl_langinfo;
 	_nl_langinfo;
+$if _ELF64
 	open;
+$endif
 	opendir;
 	_opendir;
 	pathconf;
@@ -2410,8 +2474,10 @@ $endif
 	raise;
 	rand;
 	read;
+$if _ELF64
 	readdir;
 	_readdir;
+$endif
 	readlink;
 	_readlink;
 	readv;
@@ -2446,8 +2512,10 @@ $endif
 	_setpgid;
 	setpgrp;
 	_setpgrp;
+$if _ELF64
 	setrlimit;
 	_setrlimit;
+$endif
 	setsid;
 	_setsid;
 	setuid;
@@ -2502,9 +2570,11 @@ $endif
 	sprintf;
 	srand;
 	sscanf;
+$if _ELF64
 	stat;
 	statvfs;
 	_statvfs;
+$endif
 	stime;
 	_stime;
 	strcat;
@@ -2560,8 +2630,10 @@ $endif
 	_tcsetpgrp;
 	tdelete;
 	_tdelete;
+$if _ELF64
 	tell;
 	_tell;
+$endif
 	telldir;
 	_telldir;
 	tempnam;
@@ -2572,7 +2644,9 @@ $endif
 	_time;
 	times;
 	_times;
+$if _ELF64
 	tmpfile;
+$endif
 	tmpnam;
 	toascii;
 	_toascii;
@@ -2613,7 +2687,9 @@ $endif
 	wctomb;
 	write;
 	writev;
+$if _ELF64
 	_xftw;
+$endif
 
 $if _ELF32
 	ptrace;
@@ -2934,11 +3010,15 @@ $endif
 	_fpsetmask;
 	_fpsetround;
 	_fpsetsticky;
+$if _ELF64
 	_ftw;
+$endif
 	_gcvt;
 	_getarg;
 	__getcontext;
+$if _ELF64
 	_getdents;
+$endif
 	_get_exit_frame_monitor;
 	_getfp;
 	_getgroupsbymember;
@@ -4002,11 +4082,13 @@ $endif
 	verrc;
 	warnc;
 	vwarnc;
+$if _ELF64
 	fts_close;
 	fts_children;
 	fts_open;
 	fts_read;
 	fts_set;
+$endif
 	vis;
 	strvis;
 	strnvis;

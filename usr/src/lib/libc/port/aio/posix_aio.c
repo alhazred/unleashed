@@ -62,6 +62,7 @@ static int _aio_check_timeout(const timespec_t *, timespec_t *, int *);
 static void _lio_list_decr(aio_lio_t *);
 static long aio_list_max = 0;
 
+#ifdef _LP64
 int
 aio_read(aiocb_t *aiocbp)
 {
@@ -98,6 +99,8 @@ aio_write(aiocb_t *aiocbp)
 	    (AIO_KAIO | AIO_NO_DUPS)));
 }
 
+#endif
+
 /*
  * __lio_listio() cancellation handler.
  */
@@ -117,6 +120,8 @@ _lio_listio_cleanup(aio_lio_t *head)
 	if (freeit)
 		_aio_lio_free(head);
 }
+
+#ifdef _LP64
 
 int
 lio_listio(int mode, aiocb_t *_RESTRICT_KYWD const *_RESTRICT_KYWD list,
@@ -315,6 +320,8 @@ lio_listio(int mode, aiocb_t *_RESTRICT_KYWD const *_RESTRICT_KYWD list,
 	}
 	return (error);
 }
+
+#endif
 
 static void
 _lio_list_decr(aio_lio_t *head)
@@ -621,6 +628,8 @@ __aio_suspend(void **list, int nent, const timespec_t *timo, int largefile)
 	return (-1);
 }
 
+#ifdef _LP64
+
 int
 aio_suspend(const aiocb_t * const list[], int nent,
     const timespec_t *timeout)
@@ -722,24 +731,6 @@ aio_return(aiocb_t *aiocbp)
 	if (retval == -1)
 		errno = error;
 	return (retval);
-}
-
-void
-_lio_remove(aio_req_t *reqp)
-{
-	aio_lio_t *head;
-	int refcnt;
-
-	if ((head = reqp->req_head) != NULL) {
-		sig_mutex_lock(&head->lio_mutex);
-		ASSERT(head->lio_refcnt == head->lio_nent);
-		refcnt = --head->lio_nent;
-		head->lio_refcnt--;
-		sig_mutex_unlock(&head->lio_mutex);
-		if (refcnt == 0)
-			_aio_lio_free(head);
-		reqp->req_head = NULL;
-	}
 }
 
 /*
@@ -897,6 +888,26 @@ aio_cancel(int fd, aiocb_t *aiocbp)
 	}
 
 	return (aiocancel_all(fd));
+}
+
+#endif
+
+static void
+_lio_remove(aio_req_t *reqp)
+{
+	aio_lio_t *head;
+	int refcnt;
+
+	if ((head = reqp->req_head) != NULL) {
+		sig_mutex_lock(&head->lio_mutex);
+		ASSERT(head->lio_refcnt == head->lio_nent);
+		refcnt = --head->lio_nent;
+		head->lio_refcnt--;
+		sig_mutex_unlock(&head->lio_mutex);
+		if (refcnt == 0)
+			_aio_lio_free(head);
+		reqp->req_head = NULL;
+	}
 }
 
 /*
@@ -1196,12 +1207,16 @@ out:
 	return (error);
 }
 
+#ifdef _LP64
+
 int
 aio_waitn(aiocb_t *list[], uint_t nent, uint_t *nwait,
 	const timespec_t *timeout)
 {
 	return (__aio_waitn((void **)list, nent, nwait, timeout));
 }
+
+#endif
 
 void
 _aio_waitn_wakeup(void)

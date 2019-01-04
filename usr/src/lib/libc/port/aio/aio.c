@@ -314,6 +314,7 @@ _kaio_init()
 	lmutex_unlock(&__aio_initlock);
 }
 
+#ifdef _LP64
 int
 aioread(int fd, caddr_t buf, int bufsz, off_t offset, int whence,
     aio_result_t *resultp)
@@ -328,7 +329,7 @@ aiowrite(int fd, caddr_t buf, int bufsz, off_t offset, int whence,
 	return (_aiorw(fd, buf, bufsz, offset, whence, resultp, AIOWRITE));
 }
 
-#if !defined(_LP64)
+#else
 int
 aioread64(int fd, caddr_t buf, int bufsz, off64_t offset, int whence,
     aio_result_t *resultp)

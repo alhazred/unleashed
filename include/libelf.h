@@ -38,11 +38,6 @@
 extern "C" {
 #endif
 
-
-#if defined(_ILP32) && (_FILE_OFFSET_BITS != 32)
-#error "large files are not supported by libelf"
-#endif
-
 typedef void	Elf_Void;
 
 /*

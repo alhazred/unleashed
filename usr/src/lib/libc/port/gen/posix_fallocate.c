@@ -53,6 +53,7 @@ fallocate_errno(int fd)
 	return (error);
 }
 
+#if defined(_LP64)
 int
 posix_fallocate(int fd, off_t offset, off_t len)
 {
@@ -77,8 +78,7 @@ posix_fallocate(int fd, off_t offset, off_t len)
 	return (0);
 }
 
-#if !defined(_LP64)
-
+#else
 int
 posix_fallocate64(int fd, off64_t offset, off64_t len)
 {

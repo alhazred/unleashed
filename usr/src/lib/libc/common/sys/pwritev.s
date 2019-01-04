@@ -20,7 +20,7 @@
 
 #include "SYS.h"
 
-#if !defined(_LARGEFILE_SOURCE)
+#ifdef _LP64
 
 	SYSCALL2_RESTART_RVAL1(__pwritev,pwritev)
 	RET

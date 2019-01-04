@@ -52,11 +52,12 @@
 
 #include <sys/feature_tests.h>
 
-#pragma weak _scandir = scandir
-#pragma weak _alphasort = alphasort
 #if !defined(_LP64)
 #pragma weak _scandir64 = scandir64
 #pragma weak _alphasort64 = alphasort64
+#else
+#pragma weak _scandir = scandir
+#pragma weak _alphasort = alphasort
 #endif
 
 #include "lint.h"
@@ -152,7 +153,7 @@ fail:
 	(void) closedir(dirp);
 	return (-1);
 }
-#endif
+#else
 
 
 int
@@ -237,10 +238,12 @@ fail:
 	(void) closedir(dirp);
 	return (-1);
 }
+#endif
 
 /*
  * Alphabetic order comparison routine for those who want it.
  */
+#if defined(_LP64)
 int
 alphasort(const struct dirent **d1, const struct dirent **d2)
 {
@@ -248,7 +251,7 @@ alphasort(const struct dirent **d1, const struct dirent **d2)
 	    (*d2)->d_name));
 }
 
-#if !defined(_LP64)
+#else
 int
 alphasort64(const struct dirent64 **d1, const struct dirent64 **d2)
 {

@@ -38,8 +38,9 @@
 
 #if !defined(_LP64)
 #pragma weak _ftello64 = ftello64
-#endif
+#else
 #pragma weak _ftello = ftello
+#endif
 
 #include "lint.h"
 #include "file64.h"
@@ -86,10 +87,11 @@ ftello64(FILE *iop)
 	return (tres);
 }
 
-#endif	/* _LP64 */
+#else
 
 off_t
 ftello(FILE *iop)
 {
 	return ((off_t)ftell(iop));
 }
+#endif

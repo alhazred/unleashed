@@ -2460,7 +2460,12 @@ thr_setstate(thread_t tid, int flag, gregset_t rs)
 int
 getlwpstatus(thread_t tid, struct lwpstatus *sp)
 {
+#ifdef _LP64
 	extern ssize_t __pread(int, void *, size_t, off_t);
+#else
+	extern ssize_t __pread64(int, void *, size_t, off64_t);
+#define __pread __pread64
+#endif
 	char buf[100];
 	int fd;
 

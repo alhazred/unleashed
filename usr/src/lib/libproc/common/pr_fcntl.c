@@ -95,6 +95,7 @@ pr_fcntl(struct ps_prochandle *Pr, int fd, int cmd, void *argp)
 		adp->arg_type = AT_BYREF;
 		adp->arg_inout = AI_INOUT;
 		switch (cmd) {
+#ifdef _LP64
 		case F_GETLK:
 		case F_SETLK:
 		case F_SETLKW:
@@ -102,7 +103,6 @@ pr_fcntl(struct ps_prochandle *Pr, int fd, int cmd, void *argp)
 		case F_FREESP:
 			adp->arg_size = sizeof (struct flock);
 			break;
-#ifdef _LP64
 		case 33:
 		case 34:
 		case 35:

@@ -706,6 +706,7 @@ fsync(int fildes)
 	PERFORM(__fdsync(fildes, O_SYNC))
 }
 
+#ifdef _LP64
 int
 lockf(int fildes, int function, off_t size)
 {
@@ -715,7 +716,7 @@ lockf(int fildes, int function, off_t size)
 	PERFORM(__lockf(fildes, function, size))
 }
 
-#if !defined(_LP64)
+#else
 int
 lockf64(int fildes, int function, off64_t size)
 {
@@ -724,7 +725,7 @@ lockf64(int fildes, int function, off64_t size)
 
 	PERFORM(__lockf64(fildes, function, size))
 }
-#endif	/* !_LP64 */
+#endif	/* _LP64 */
 
 ssize_t
 msgrcv(int msqid, void *msgp, size_t msgsz, long msgtyp, int msgflg)
@@ -753,6 +754,7 @@ msync(void *addr, size_t len, int flags)
 	PERFORM(__msync(addr, len, flags))
 }
 
+#ifdef _LP64
 int
 openat(int fd, const char *path, int oflag, ...)
 {
@@ -785,7 +787,7 @@ creat(const char *path, mode_t mode)
 	return (open(path, O_WRONLY | O_CREAT | O_TRUNC, mode));
 }
 
-#if !defined(_LP64)
+#else
 int
 openat64(int fd, const char *path, int oflag, ...)
 {
@@ -817,7 +819,7 @@ creat64(const char *path, mode_t mode)
 {
 	return (open64(path, O_WRONLY | O_CREAT | O_TRUNC, mode));
 }
-#endif	/* !_LP64 */
+#endif	/* _LP64 */
 
 int
 pause(void)
@@ -828,6 +830,7 @@ pause(void)
 	PERFORM(__pause())
 }
 
+#ifdef _LP64
 ssize_t
 pread(int fildes, void *buf, size_t nbyte, off_t offset)
 {
@@ -836,28 +839,6 @@ pread(int fildes, void *buf, size_t nbyte, off_t offset)
 
 	PERFORM(__pread(fildes, buf, nbyte, offset))
 }
-
-#if !defined(_LP64)
-ssize_t
-pread64(int fildes, void *buf, size_t nbyte, off64_t offset)
-{
-	extern ssize_t __pread64(int, void *, size_t, off64_t);
-	ssize_t rv;
-
-	PERFORM(__pread64(fildes, buf, nbyte, offset))
-}
-
-ssize_t
-preadv64(int fildes, const struct iovec *iov, int iovcnt, off64_t offset)
-{
-
-	extern ssize_t __preadv64(int, const struct iovec *, int, off_t, off_t);
-	ssize_t rv;
-
-	PERFORM(__preadv64(fildes, iov, iovcnt, offset & 0xffffffffULL,
-	    offset>>32))
-}
-#endif	/* !_LP64 */
 
 ssize_t
 preadv(int fildes, const struct iovec *iov, int iovcnt, off_t offset)
@@ -877,7 +858,36 @@ pwrite(int fildes, const void *buf, size_t nbyte, off_t offset)
 	PERFORM(__pwrite(fildes, buf, nbyte, offset))
 }
 
-#if !defined(_LP64)
+ssize_t
+pwritev(int fildes, const struct iovec *iov, int iovcnt, off_t offset)
+{
+	extern ssize_t __pwritev(int, const struct iovec *, int, off_t, off_t);
+	ssize_t rv;
+
+	PERFORM(__pwritev(fildes, iov, iovcnt, offset, 0))
+}
+
+#else
+ssize_t
+pread64(int fildes, void *buf, size_t nbyte, off64_t offset)
+{
+	extern ssize_t __pread64(int, void *, size_t, off64_t);
+	ssize_t rv;
+
+	PERFORM(__pread64(fildes, buf, nbyte, offset))
+}
+
+ssize_t
+preadv64(int fildes, const struct iovec *iov, int iovcnt, off64_t offset)
+{
+
+	extern ssize_t __preadv64(int, const struct iovec *, int, off_t, off_t);
+	ssize_t rv;
+
+	PERFORM(__preadv64(fildes, iov, iovcnt, offset & 0xffffffffULL,
+	    offset>>32))
+}
+
 ssize_t
 pwrite64(int fildes, const void *buf, size_t nbyte, off64_t offset)
 {
@@ -900,15 +910,6 @@ pwritev64(int fildes, const struct iovec *iov, int iovcnt, off64_t offset)
 }
 
 #endif	/* !_LP64 */
-
-ssize_t
-pwritev(int fildes, const struct iovec *iov, int iovcnt, off_t offset)
-{
-	extern ssize_t __pwritev(int, const struct iovec *, int, off_t, off_t);
-	ssize_t rv;
-
-	PERFORM(__pwritev(fildes, iov, iovcnt, offset, 0))
-}
 
 ssize_t
 readv(int fildes, const struct iovec *iov, int iovcnt)

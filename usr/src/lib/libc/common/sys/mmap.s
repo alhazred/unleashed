@@ -31,7 +31,7 @@
 
 #include <sys/asm_linkage.h>
 
-#if !defined(_LARGEFILE_SOURCE)
+#ifdef _LP64
 	ANSI_PRAGMA_WEAK(mmap,function)
 #else
 	ANSI_PRAGMA_WEAK(mmap64,function)
@@ -39,7 +39,7 @@
 
 #include "SYS.h"
 
-#if !defined(_LARGEFILE_SOURCE)
+#ifdef _LP64
 
 /*
  * C library -- mmap

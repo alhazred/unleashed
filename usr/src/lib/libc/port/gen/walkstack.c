@@ -162,15 +162,15 @@ static int
 read_safe(int fd, struct frame *fp, struct frame **savefp, uintptr_t *savepc)
 {
 
-	uintptr_t newfp;
+	uintptr_t newfp, savfp, savpc;
 
 	if ((uintptr_t)fp & (sizeof (void *) - 1))
 		return (-1); /* misaligned */
 
 	if ((pread(fd, (void *)&newfp, sizeof (fp->fr_savfp),
-	    (off_t)&fp->fr_savfp) != sizeof (fp->fr_savfp)) ||
+	    (intptr_t)&fp->fr_savfp) != sizeof (fp->fr_savfp)) ||
 	    pread(fd, (void *)savepc, sizeof (fp->fr_savpc),
-	    (off_t)&fp->fr_savpc) != sizeof (fp->fr_savpc))
+	    (intptr_t)&fp->fr_savpc) != sizeof (fp->fr_savpc))
 		return (-1);
 
 	/*

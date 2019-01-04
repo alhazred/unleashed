@@ -28,7 +28,7 @@
 
 #include "SYS.h"
 
-#if !defined(_LARGEFILE_SOURCE)
+#ifdef _LP64
 
 /* C library -- pwrite						*/
 /* ssize_t __pwrite(int, const void *, size_t, off_t);		*/

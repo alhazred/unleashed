@@ -137,56 +137,13 @@ extern "C" {
  *
  * Requesting _LARGEFILE64_SOURCE implies requesting _LARGEFILE_SOURCE as
  * well.
- *
- * The large file interfaces are made visible regardless of the initial values
- * of the feature test macros under certain circumstances:
- *    -	If no explicit standards-conforming environment is requested (neither
- *	of _POSIX_SOURCE nor _XOPEN_SOURCE is defined and the value of
- *	__STDC__ does not imply standards conformance).
- *    -	Extended system interfaces are explicitly requested (__EXTENSIONS__
- *	is defined).
- *    -	Access to in-kernel interfaces is requested (_KERNEL or _KMEMUSER is
- *	defined).  (Note that this dependency is an artifact of the current
- *	kernel implementation and may change in future releases.)
  */
-#if	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
-		defined(_KERNEL) || defined(_KMEMUSER) || \
-		defined(__EXTENSIONS__)
 #undef	_LARGEFILE64_SOURCE
 #define	_LARGEFILE64_SOURCE	1
-#endif
-#if	_LARGEFILE64_SOURCE - 0 == 1
 #undef	_LARGEFILE_SOURCE
 #define	_LARGEFILE_SOURCE	1
-#endif
 
-/*
- * Large file compilation environment control:
- *
- * The setting of _FILE_OFFSET_BITS controls the size of various file-related
- * types and governs the mapping between file-related source function symbol
- * names and the corresponding binary entry points.
- *
- * In the 32-bit environment, the default value is 32; if not set, set it to
- * the default here, to simplify tests in other headers.
- *
- * In the 64-bit compilation environment, the only value allowed is 64.
- */
-#if defined(_LP64)
-#ifndef _FILE_OFFSET_BITS
-#define	_FILE_OFFSET_BITS	64
-#endif
-#if	_FILE_OFFSET_BITS - 0 != 64
-#error	"invalid _FILE_OFFSET_BITS value specified"
-#endif
-#else	/* _LP64 */
-#ifndef	_FILE_OFFSET_BITS
-#define	_FILE_OFFSET_BITS	32
-#endif
-#if	_FILE_OFFSET_BITS - 0 != 32 && _FILE_OFFSET_BITS - 0 != 64
-#error	"invalid _FILE_OFFSET_BITS value specified"
-#endif
-#endif	/* _LP64 */
+#define _FILE_OFFSET_BITS 64
 
 /*
  * Use of _XOPEN_SOURCE

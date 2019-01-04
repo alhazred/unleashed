@@ -146,40 +146,4 @@ readdir64_r(DIR *dirp, dirent64_t *entry, dirent64_t **result)
 	lmutex_unlock(&pdirp->dd_lock);
 	return (0);
 }
-
-/*
- * POSIX.1c standard version of the function readdir_r.
- */
-
-int
-readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
-{
-	int error;
-	dirent64_t *dp64;
-	struct {
-		dirent64_t dirent64;
-		char chars[MAXNAMLEN];
-	} buf;
-
-	error = readdir64_r(dirp, (dirent64_t *)&buf, &dp64);
-	if (error != 0 || dp64 == NULL) {
-		*result = NULL;
-		return (error);
-	}
-
-	if (dp64->d_ino > SIZE_MAX ||
-	    (uint64_t)dp64->d_off > (uint64_t)UINT32_MAX) {
-		*result = NULL;
-		return (EOVERFLOW);
-	}
-
-	entry->d_ino = (ino_t)dp64->d_ino;
-	entry->d_off = (off_t)dp64->d_off;
-	entry->d_reclen = (unsigned short)((((char *)entry->d_name -
-	    (char *)entry) + strlen(dp64->d_name) + 1 + 3) & ~3);
-	(void) strcpy(entry->d_name, dp64->d_name);
-	*result = entry;
-	return (0);
-}
-
 #endif	/* _LP64 */

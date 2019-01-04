@@ -45,6 +45,8 @@
  */
 
 /* ARGSUSED1 */
+
+#if defined(_LP64)
 int
 posix_fadvise(int fd, off_t offset, off_t len, int advice)
 {
@@ -70,8 +72,7 @@ posix_fadvise(int fd, off_t offset, off_t len, int advice)
 	return (0);
 }
 
-#if !defined(_LP64)
-
+#else
 /* ARGSUSED1 */
 int
 posix_fadvise64(int fd, off64_t offset, off64_t len, int advice)

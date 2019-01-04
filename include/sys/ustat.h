@@ -43,10 +43,6 @@
 extern "C" {
 #endif
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#error	"Cannot use ustat in the large files compilation environment"
-#endif
-
 struct  ustat {
 	daddr_t	f_tfree;	/* total free */
 	ino_t	f_tinode;	/* total inodes free */

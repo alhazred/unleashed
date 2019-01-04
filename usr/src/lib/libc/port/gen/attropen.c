@@ -30,12 +30,6 @@
  *	attropen -- C library extension routine
  */
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#pragma weak _attropen64 = attropen64
-#else
-#pragma weak _attropen = attropen
-#endif
-
 #include "lint.h"
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -44,6 +38,12 @@
 #include <errno.h>
 #include <unistd.h>
 #include <stdarg.h>
+
+#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
+#pragma weak _attropen64 = attropen64
+#else
+#pragma weak _attropen = attropen
+#endif
 
 #if !defined(_LP64) && _FILE_OFFSET_BITS == 64
 

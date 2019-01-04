@@ -34,7 +34,7 @@
 
 #include <sys/asm_linkage.h>
 
-#if !defined(_LARGEFILE_SOURCE)
+#ifdef _LP64
 	ANSI_PRAGMA_WEAK(statvfs,function)
 #else
 	ANSI_PRAGMA_WEAK(statvfs64,function)
@@ -42,7 +42,7 @@
 
 #include "SYS.h"
 
-#if !defined(_LARGEFILE_SOURCE)
+#ifdef _LP64
 	
 	SYSCALL_RVAL1(statvfs)
 	RETC

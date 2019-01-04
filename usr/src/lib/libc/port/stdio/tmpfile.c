@@ -101,7 +101,7 @@ tmpfile64(void)
 {
 	return (_common(B_TRUE));
 }
-#endif	/* _LP64 */
+#else
 
 /*
  * This is a bit confusing -- some explanation is in order.
@@ -116,3 +116,4 @@ tmpfile(void)
 {
 	return (_common(B_FALSE));
 }
+#endif

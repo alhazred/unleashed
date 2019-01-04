@@ -106,42 +106,6 @@ pics/%.o: $(LIBCBASE)/../$(TARGET_ARCH)/sys/%.s
 	$(BUILD.s)
 	$(POST_PROCESS_O)
 
-# rules to build large file aware objects (xxx64.o from xxx.s or xxx.c)
-
-pics/%64.o: $(LIBCBASE)/../common/sys/%.s
-	$(BUILD.s)
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/sys/%.s
-	$(BUILD.s)
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/gen/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/../port/gen/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/../port/sys/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/../port/print/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/../port/regex/%.c
-	$(COMPILE.c) -DM_I18N_MB -DI18N \
-	-I$(LIBCBASE)/../port/regex \
-	-I$(LIBCBASE)/../port/gen -o $@ $<
-	$(POST_PROCESS_O)
-
-pics/%64.o: $(LIBCBASE)/../port/stdio/%.c
-	$(COMPILE.c) -o $@ $<
-	$(POST_PROCESS_O)
-
 pics/%_w.o: $(LIBCBASE)/../port/stdio/%.c
 	$(COMPILE.c) -o $@ $<
 	$(POST_PROCESS_O)
