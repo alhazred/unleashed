@@ -40,6 +40,8 @@
 
 /*
  * Invoked at user logon due to SmbSessionSetupX.
+ *
+ * On error, returns NULL, and status in user_info->lg_status
  */
 smb_token_t *
 smbd_user_auth_logon(smb_logon_t *user_info)
@@ -52,9 +54,16 @@ smbd_user_auth_logon(smb_logon_t *user_info)
 	if (user_info->lg_username == NULL ||
 	    user_info->lg_domain == NULL ||
 	    user_info->lg_workstation == NULL) {
+		user_info->lg_status = NT_STATUS_INVALID_PARAMETER;
 		return (NULL);
 	}
 
+	/*
+	 * Avoid modifying the caller-provided struct because it
+	 * may or may not point to allocated strings etc.
+	 * Copy to tmp_user, auth, then copy the (out) lg_status
+	 * member back to the caller-provided struct.
+	 */
 	tmp_user = *user_info;
 	if (tmp_user.lg_username[0] == '\0') {
 		tmp_user.lg_flags |= SMB_ATF_ANON;
@@ -78,6 +87,7 @@ smbd_user_auth_logon(smb_logon_t *user_info)
 	}
 
 	token = smb_logon(&tmp_user);
+	user_info->lg_status = tmp_user.lg_status;
 
 	return (token);
 

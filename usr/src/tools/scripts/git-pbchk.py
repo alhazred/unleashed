@@ -18,9 +18,9 @@
 # Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2008, 2012 Richard Lowe
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
-# Copyright (c) 2014, Joyent, Inc.
 # Copyright (c) 2015, 2016 by Delphix. All rights reserved.
 # Copyright 2016 Nexenta Systems, Inc.
+# Copyright 2018 Joyent, Inc.
 #
 
 import getopt
@@ -360,29 +360,34 @@ def pbchk(root, parent, paths):
 
 def main(cmd, args):
     parent_branch = None
+    checkname = None
 
     try:
-        opts, args = getopt.getopt(args, 'b:')
+        opts, args = getopt.getopt(args, 'b:p:')
     except getopt.GetoptError, e:
         sys.stderr.write(str(e) + '\n')
-        sys.stderr.write("Usage: %s [-b branch] [path...]\n" % cmd)
+        sys.stderr.write("Usage: %s [-p branch] [path...]\n" % cmd)
         sys.exit(1)
 
     for opt, arg in opts:
-        if opt == '-b':
+        # We accept "-b" as an alias of "-p" for backwards compatibility.
+        if opt == '-p' or opt == '-b':
             parent_branch = arg
 
     if not parent_branch:
         parent_branch = git_parent_branch(git_branch())
 
-    func = nits
-    if cmd == 'git-pbchk':
-        func = pbchk
+    if checkname is None:
+        if cmd == 'git-pbchk':
+            checkname = 'pbchk'
+
+    if checkname == 'pbchk':
         if args:
             sys.stderr.write("only complete workspaces may be pbchk'd\n");
             sys.exit(1)
-
-    func(git_root(), parent_branch, args)
+        pbchk(git_root(), parent_branch, None)
+    else:
+        run_checks(git_root(), parent_branch, [eval(checkname)], args)
 
 if __name__ == '__main__':
     try:
