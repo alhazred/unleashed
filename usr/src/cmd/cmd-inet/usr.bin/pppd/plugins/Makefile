@@ -49,11 +49,7 @@ $(MINCONN):=	MAPFILES = mapfile-minconn
 $(PASSPROMPT):=	MAPFILES = mapfile-passprompt
 $(PPPOE):=	MAPFILES = mapfile-pppoe
 
-# A bug in pmake causes redundancy when '+=' is conditionally assigned, so
-# '=' is used with extra variables.
-XXXLDLIBS =
-$(PASSPROMPT):=	XXXLDLIBS = -lc
-LDLIBS +=	$(XXXLDLIBS)
+$(PASSPROMPT) $(PPPOE):= LDLIBS += -lc
 
 CPPFLAGS +=	-I.. -I$(SRC)/uts/common -I$(SRCTOP)/include
 # XX64 -- this should not be needed -- fix me
