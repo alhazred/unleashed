@@ -633,17 +633,6 @@ fcntl(int fildes, int cmd, ...)
 	return (__fcntl(fildes, cmd, arg));
 }
 
-#ifndef _LP64
-/*
- * XXX always-largefile hack: open/openat are special: they are defined in
- * external.c, and we want to use those. but the system headers have
- * #redefine_extname'd them to the *64 versions. so for 32-bit, define the *64
- * funcs here.
- */
-#define open open64
-#define openat openat64
-#endif
-
 int
 open(const char *path, int oflag, ...)
 {

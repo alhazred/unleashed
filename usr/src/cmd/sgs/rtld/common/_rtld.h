@@ -57,18 +57,6 @@ extern "C" {
 #endif
 
 /*
- * FIXME: hack for always-largefile transition. we must match the libc symbol
- * names here or we pull in objects from libc_pic.a we should not.
- */
-#ifndef _LP64
-#pragma redefine_extname mmap mmap64
-#pragma redefine_extname readdir readdir64
-#pragma redefine_extname getdents getdents64
-#pragma redefine_extname __open __open64
-#pragma redefine_extname __openat __openat64
-#endif
-
-/*
  * Dependency search rule order.
  */
 #define	RPLENV		1		/* replaceable LD_LIBRARY_PATH */
@@ -492,18 +480,9 @@ typedef struct {
 						/*    should be retried */
 #define	BINFO_MSK_REJECTED	0xff0000	/* a mask of bindings that */
 						/*    have been rejected */
-/*
- * XXX always-largefile transitional hack
- */
-#ifndef _LP64
-#define rtld_fstat	fstat64
-#define rtld_stat	stat64
-typedef struct stat64	rtld_stat_t;
-#else
 #define	rtld_fstat	fstat
 #define	rtld_stat	stat
 typedef	struct stat	rtld_stat_t;
-#endif
 
 /*
  * Some capabilities aux vector definitions have been removed over time.
