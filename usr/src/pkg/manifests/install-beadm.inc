@@ -24,14 +24,14 @@
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 #
 
+$(python2_ONLY)<include system-library-python-libbe-2.inc>
+$(python3_ONLY)<include system-library-python-libbe-3.inc>
+
 dir path=sbin group=sys
 dir path=usr group=sys
 dir path=usr/include
 dir path=usr/lib
 dir path=usr/lib/$(ARCH64)
-dir path=usr/lib/python$(PYTHON_VERSION)
-dir path=usr/lib/python$(PYTHON_VERSION)/vendor-packages
-dir path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/64
 dir path=usr/sbin
 dir path=usr/share
 dir path=usr/share/man
@@ -40,8 +40,6 @@ file path=sbin/beadm mode=0555
 file path=usr/include/libbe.h
 file path=usr/lib/$(ARCH64)/libbe.so.1
 file path=usr/lib/libbe.so.1
-file path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/64/libbe_py.so
-file path=usr/lib/python$(PYTHON_VERSION)/vendor-packages/libbe_py.so
 file path=usr/share/man/man8/beadm.8
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL

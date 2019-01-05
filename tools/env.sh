@@ -120,3 +120,6 @@ export PKGFMT_OUTPUT='v1'
 # POST_NIGHTLY can be any command to be run at the end of nightly.  See
 # nightly(1) for interactions between environment variables and this command.
 #POST_NIGHTLY=
+
+# Don't build python 3 versions of libs.
+export BUILDPY3='#'

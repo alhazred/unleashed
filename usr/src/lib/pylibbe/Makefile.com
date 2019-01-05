@@ -22,6 +22,7 @@
 #
 # Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
+# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 #
 
 LIBRARY =	libbe_py.a
@@ -34,20 +35,19 @@ LIBLINKS =
 SRCDIR =	../common
 ROOTLIBDIR=	$(ROOT)/usr/lib/python$(PYTHON_VERSION)/vendor-packages
 ROOTLIBDIR64=	$(ROOT)/usr/lib/python$(PYTHON_VERSION)/vendor-packages/64
-PYOBJS=		$(PYSRCS:%.py=$(SRCDIR)/%.pyc)
-PYFILES=	$(PYSRCS) $(PYSRCS:%.py=%.pyc)
+PYFILES=	$(PYSRCS)
 ROOTPYBEFILES=  $(PYFILES:%=$(ROOTLIBDIR)/%)
 
 C99MODE=        $(C99_ENABLE)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lbe -lnvpair -lc
-CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/python$(PYTHON_VERSION) \
-		-D_FILE_OFFSET_BITS=64 -I../../libbe/common
+CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 -I../../libbe/common \
+	-I$(ADJUNCT_PROTO)/usr/include/python$(PYTHON_VERSION)$(PYTHON_SUFFIX)
 
 .KEEP_STATE:
 
-all install := LDLIBS += -lpython$(PYTHON_VERSION)
+all install := LDLIBS += -lpython$(PYTHON_VERSION)$(PYTHON_SUFFIX)
 
 all: $(PYOBJS) $(LIBS)
 

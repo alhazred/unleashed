@@ -54,6 +54,21 @@ i386_DIRS=			\
 
 64ONLY=  $($(MACH)_64ONLY)
 
+PYTHON2_DIRS=
+PYTHON2_64DIRS=
+PYTHON3_DIRS=
+
+$(BUILDPY2)PYTHON2_DIRS += \
+	/usr/lib/python$(PYTHON_VERSION) \
+	/usr/lib/python$(PYTHON_VERSION)/vendor-packages \
+
+$(BUILDPY2)PYTHON2_64DIRS += \
+	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/64 \
+
+$(BUILDPY3)PYTHON3_DIRS += \
+	/usr/lib/python$(PYTHON3_VERSION) \
+	/usr/lib/python$(PYTHON3_VERSION)/vendor-packages \
+
 DIRS= \
 	/boot \
 	/boot/solaris \
@@ -241,9 +256,7 @@ DIRS= \
 	/usr/lib/nfs \
 	/usr/net \
 	/usr/net/servers \
-	/usr/lib/python$(PYTHON_VERSION) \
-	/usr/lib/python$(PYTHON_VERSION)/vendor-packages \
-	/usr/lib/python$(PYTHON_VERSION)/vendor-packages/64 \
+	$(PYTHON2_DIRS) \
 	/usr/lib/rcap \
 	/usr/lib/rcap/$(MACH32) \
 	/usr/lib/sa  \
@@ -359,6 +372,8 @@ DIRS64= \
 	/usr/lib/lwp/$(MACH64) \
 	/usr/lib/mdb/kvm/$(MACH64) \
 	/usr/lib/mdb/proc/$(MACH64) \
+	$(PYTHON2_64DIRS) \
+	$(PYTHON3_DIRS) \
 	/usr/lib/rcap/$(MACH64) \
 	/usr/lib/sasl/$(MACH64) \
 	/usr/lib/scsi/$(MACH64) \

@@ -18,32 +18,13 @@
 #
 # CDDL HEADER END
 #
-
 #
-# Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
-# Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 #
 
-include	../Makefile.lib
-
-SUBDIRS=
-$(BUILDPY2)SUBDIRS += $(MACH)
-$(BUILD64)$(BUILDPY2)SUBDIRS += $(MACH64)
-$(BUILD64)$(BUILDPY3)SUBDIRS += py3
-
-all :=		TARGET= all
-install :=	TARGET= install
-clean :=	TARGET= clean
-clobber :=	TARGET= clobber
-
-.KEEP_STATE:
-
-all install clean clobber: $(SUBDIRS)
-
-$(SUBDIRS): FRC
-	@cd $@; pwd; $(MAKE) $(TARGET)
-
-FRC:
-
-include ../../Makefile.msg.targ
+dir path=usr/lib/python$(PYTHON3_VERSION)
+dir path=usr/lib/python$(PYTHON3_VERSION)/vendor-packages
+file path=usr/lib/python$(PYTHON3_VERSION)/vendor-packages/libbe_py.so
+license cr_Sun license=cr_Sun
+license lic_CDDL license=lic_CDDL
+depend fmri=runtime/python$(PYTHON3_PKGVERS) type=require

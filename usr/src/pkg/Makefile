@@ -23,6 +23,7 @@
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2015, OmniTI Computer Consulting, Inc. All rights reserved.
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
+# Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 #
 
 include $(SRC)/Makefile.master
@@ -187,7 +188,11 @@ PKGMOG_DEFINES= \
 	PERL_VERSION=$(PERL_VERSION) \
 	PERL_PKGVERS=$(PERL_PKGVERS) \
 	PYTHON_VERSION=$(PYTHON_VERSION) \
+	PYTHON3_VERSION=$(PYTHON3_VERSION) \
 	PYTHON_PKGVERS=$(PYTHON_PKGVERS) \
+	PYTHON3_PKGVERS=$(PYTHON3_PKGVERS) \
+	python2_ONLY=$(BUILDPY2) \
+	python3_ONLY=$(BUILDPY3) \
 	HUMAN_VERSION=$(VERSION)
 
 PKGDEP_TOKENS_i386= \
@@ -259,8 +264,8 @@ PUB_PKGS= $(SYNTH_PKGS:%=$(PDIR)/%.pub) $(PKGS:%=$(PDIR)/%.pub)
 #
 # The meanings of each package status are as follows:
 #
-# 	PKGSTAT		meaning
-# 	----------	----------------------------------------------------
+#	PKGSTAT		meaning
+#	----------	----------------------------------------------------
 # 	noincorp	Do not include in incorporation or group package
 #	obsolete	Include in incorporation, but not group package
 #	renamed		Include in incorporation, but not group package
@@ -300,7 +305,7 @@ PKGLISTS= \
 #		| use pkgsend to publish the package
 #		|
 #	placeholder to indicate successful publication (mypkg.pub)
-#	
+#
 # * This may be suppressed via SUPPRESSPKGDEP.  The resulting
 #   packages will install correctly, but care must be taken to
 #   install all dependencies, because pkg will not have the input
@@ -340,16 +345,16 @@ PKGLISTS= \
 #		 |		|
 #		 |		| pkgsend publish
 #		 |		|
-#	  repositories 	    resolved dependencies
+#	  repositories	    resolved dependencies
 #		 |			|
 # pkgsend	 |			| pkgdepend resolve
-# create-repository	 	 	|
+# create-repository			|
 #		 |		generated dependencies
 #	 repo directories		|
 #					| pkgdepend
 #					|
 #				processed manifests
-# 
+#
 
 ALL_TARGETS= $(PROC_SYNTH_PKGS) proto_list_$(PKGMACH)
 
