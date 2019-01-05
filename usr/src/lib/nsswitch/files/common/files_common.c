@@ -388,7 +388,7 @@ _nss_files_XY_hash(files_backend_ptr_t be, nss_XbyY_args_t *args,
 	int netdb, files_hash_t *fhp, int hashop, files_XY_check_func check)
 {
 	/* LINTED E_FUNC_VAR_UNUSED */
-	int fd, retries, ht, stat;
+	int fd, retries, ht, status;
 	/* LINTED E_FUNC_VAR_UNUSED */
 	uint_t hash, line, f;
 	/* LINTED E_FUNC_VAR_UNUSED */
@@ -438,21 +438,21 @@ retry:
 				continue;
 
 			if (be->filename != NULL) {
-				stat = NSS_STR_PARSE_SUCCESS;
+				status = NSS_STR_PARSE_SUCCESS;
 				if (strcmp(be->filename, PF_PATH) == 0)
-					stat = validate_passwd_ids(
+					status = validate_passwd_ids(
 					    fhp->fh_line[line].l_start,
 					    &fhp->fh_line[line].l_len,
 					    fhp->fh_line[line].l_len + 1,
 					    1);
 				else if (strcmp(be->filename, GF_PATH) == 0)
-					stat = validate_group_ids(
+					status = validate_group_ids(
 					    fhp->fh_line[line].l_start,
 					    &fhp->fh_line[line].l_len,
 					    fhp->fh_line[line].l_len + 1,
 					    1, check);
-				if (stat != NSS_STR_PARSE_SUCCESS) {
-					if (stat == NSS_STR_PARSE_ERANGE)
+				if (status != NSS_STR_PARSE_SUCCESS) {
+					if (status == NSS_STR_PARSE_ERANGE)
 						args->erange = 1;
 					continue;
 				}
