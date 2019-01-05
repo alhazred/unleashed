@@ -63,7 +63,7 @@ CERRWARN +=	-Wno-uninitialized
 
 MY_NATIVE_CPPFLAGS =\
 		-DNATIVE_BUILD $(DTEXTDOM) \
-		-I../inc -I$(COMDIR) -I$(ROOTHDRDIR)
+		-I../inc -I$(COMDIR)
 MY_NATIVE_LDLIBS = -luutil -lc -lgen -lnvpair
 MY_NATIVE_LDLIBS_i386 = -lsmbios
 MY_NATIVE_LDLIBS += $(MY_NATIVE_LDLIBS_$(MACH))
