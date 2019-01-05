@@ -34,27 +34,11 @@
 
 #include <sys/asm_linkage.h>
 
-#ifdef _LP64
 	ANSI_PRAGMA_WEAK(getrlimit,function)
-#else
-	ANSI_PRAGMA_WEAK(getrlimit64,function)
-#endif
+	ANSI_PRAGMA_WEAK2(getrlimit64,getrlimit,function)
 
 #include "SYS.h"
-
-#ifdef _LP64
 
 	SYSCALL_RVAL1(getrlimit)
 	RETC
 	SET_SIZE(getrlimit)
-
-#else
-
-/* C library -- getrlimit64					*/
-/* int getrlimit64(int resources, struct rlimit64 *rlp)		*/
-	
-	SYSCALL_RVAL1(getrlimit64)
-	RETC
-	SET_SIZE(getrlimit64)
-
-#endif

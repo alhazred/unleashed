@@ -34,24 +34,11 @@
 
 #include <sys/asm_linkage.h>
 
-#ifdef _LP64
 	ANSI_PRAGMA_WEAK(setrlimit,function)
-#else
-	ANSI_PRAGMA_WEAK(setrlimit64,function)
-#endif
+	ANSI_PRAGMA_WEAK2(setrlimit64,setrlimit,function)
 
 #include "SYS.h"
 
-#ifdef _LP64
-	
 	SYSCALL_RVAL1(setrlimit)
 	RETC
 	SET_SIZE(setrlimit)
-
-#else
-
-	SYSCALL_RVAL1(setrlimit64)
-	RETC
-	SET_SIZE(setrlimit64)
-
-#endif

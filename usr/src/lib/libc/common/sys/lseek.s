@@ -34,29 +34,11 @@
 
 #include <sys/asm_linkage.h>
 
-#ifdef _LP64
 	ANSI_PRAGMA_WEAK(lseek,function)
-#else
-	ANSI_PRAGMA_WEAK(lseek64,function)
-#endif
+	ANSI_PRAGMA_WEAK2(lseek64,lseek,function)
 
 #include "SYS.h"
 
-#ifdef _LP64
-	
-	SYSCALL_RVAL1(lseek)
+	SYSCALL64(lseek)
 	RET
 	SET_SIZE(lseek)
-
-#else
-
-/* C library -- lseek64 transitional large file API		*/
-/* off64_t lseek64(int fildes, off64_t offset, int whence);	*/
-
-	ENTRY(lseek64)
-	SYSTRAP_64RVAL(llseek)
-	SYSCERROR64
-	RET
-	SET_SIZE(lseek64)
-
-#endif

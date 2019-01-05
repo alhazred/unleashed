@@ -37,16 +37,10 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#define	mkstemp		mkstemp64
-#define	mkstemps	mkstemps64
-#define	mkostemp	mkostemp64
-#define	mkostemps	mkostemps64
-#define	libc_mkstemps	libc_mkstemps64		/* prefer unique statics */
-#pragma weak _mkstemp64 = mkstemp64
-#else
-#pragma weak _mkstemp = mkstemp
-#endif
+#pragma weak mkostemp64 = mkostemp
+#pragma weak mkostemps64 = mkostemps
+#pragma weak mkstemp64 = mkstemp
+#pragma weak mkstemps64 = mkstemps
 
 #include "lint.h"
 #include <sys/fcntl.h>
@@ -92,17 +86,10 @@ libc_mkstemps(char *as, int slen, int flags)
 				return (-1);
 			}
 		}
-#if _FILE_OFFSET_BITS == 64
-		if ((fd = open64(as, O_CREAT|O_EXCL|O_RDWR|flags,
-		    0600)) != -1) {
-			return (fd);
-		}
-#else
 		if ((fd = open(as, O_CREAT|O_EXCL|O_RDWR|flags,
 		    0600)) != -1) {
 			return (fd);
 		}
-#endif  /* _FILE_OFFSET_BITS == 64 */
 
 		/*
 		 * If the error condition is other than EEXIST or if the

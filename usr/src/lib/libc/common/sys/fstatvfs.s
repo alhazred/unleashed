@@ -34,27 +34,11 @@
 
 #include <sys/asm_linkage.h>
 
-#ifdef _LP64
 	ANSI_PRAGMA_WEAK(fstatvfs,function)
-#else
-	ANSI_PRAGMA_WEAK(fstatvfs64,function)
-#endif
+	ANSI_PRAGMA_WEAK2(fstatvfs64,fstatvfs,function)
 
 #include "SYS.h"
-
-#ifdef _LP64
 
 	SYSCALL_RVAL1(fstatvfs)
 	RETC
 	SET_SIZE(fstatvfs)
-
-#else
-
-/* C library -- fstatvfs64					*/
-/* int fstatvfs64(int fildes, struct statvfs64 *buf)		*/
-
-	SYSCALL_RVAL1(fstatvfs64)
-	RETC
-	SET_SIZE(fstatvfs64)
-	
-#endif

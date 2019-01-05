@@ -40,41 +40,6 @@
 extern "C" {
 #endif
 
-/*
- * Do all of our 'redefine_extname' processing before
- * declarations of the associated functions are seen.
- * This is necessary to keep gcc happy.
- */
-#if defined(__PRAGMA_REDEFINE_EXTNAME)
-
-/* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#pragma redefine_extname	fopen		fopen64
-#pragma redefine_extname	freopen		freopen64
-#pragma redefine_extname	tmpfile		tmpfile64
-#pragma redefine_extname	fgetpos		fgetpos64
-#pragma redefine_extname	fsetpos		fsetpos64
-#if defined(_LARGEFILE_SOURCE)
-#pragma redefine_extname	fseeko		fseeko64
-#pragma redefine_extname	ftello		ftello64
-#endif	/* _LARGEFILE_SOURCE */
-#endif	/* !defined(_LP64) && _FILE_OFFSET_BITS == 64 */
-
-/* In the LP64 compilation environment, all APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#pragma redefine_extname	fopen64		fopen
-#pragma redefine_extname	freopen64	freopen
-#pragma redefine_extname	tmpfile64	tmpfile
-#pragma redefine_extname	fgetpos64	fgetpos
-#pragma redefine_extname	fsetpos64	fsetpos
-#if defined(_LARGEFILE_SOURCE)
-#pragma redefine_extname	fseeko64	fseeko
-#pragma redefine_extname	ftello64	ftello
-#endif	/* _LARGEFILE_SOURCE */
-#endif	/* defined(_LP64) && defined(_LARGEFILE64_SOURCE) */
-
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-
 #ifdef	__cplusplus
 }
 #endif
@@ -154,31 +119,21 @@ using std::__flsbuf;
 extern "C" {
 #endif
 
-#if defined(_LARGEFILE_SOURCE) || defined(_XPG5)
 #ifndef	_OFF_T
 #define	_OFF_T
-#if defined(_LP64) || _FILE_OFFSET_BITS == 32
+#if defined(_LP64)
 typedef long		off_t;
 #else
 typedef __longlong_t	off_t;
 #endif
-#ifdef	_LARGEFILE64_SOURCE
-#ifdef _LP64
-typedef	off_t		off64_t;
-#else
-typedef __longlong_t	off64_t;
-#endif
-#endif /* _LARGEFILE64_SOURCE */
+typedef off_t		off64_t;
 #endif /* _OFF_T */
-#endif /* _LARGEFILE_SOURCE */
 
-#ifdef _LARGEFILE64_SOURCE
 #ifdef _LP64
 typedef fpos_t		fpos64_t;
 #else
 typedef __longlong_t	fpos64_t;
 #endif
-#endif /* _LARGEFILE64_SOURCE */
 
 /*
  * XPG4 requires that va_list be defined in <stdio.h> "as described in
@@ -213,45 +168,10 @@ typedef	__va_list va_list;
 extern unsigned char	 _sibuf[], _sobuf[];
 #endif
 
-/* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#if !defined(__PRAGMA_REDEFINE_EXTNAME)
-extern FILE	*fopen64(const char *, const char *);
-extern FILE	*freopen64(const char *, const char *, FILE *);
-extern FILE	*tmpfile64(void);
-extern int	fgetpos64(FILE *, fpos_t *);
-extern int	fsetpos64(FILE *, const fpos_t *);
-#define	fopen			fopen64
-#define	freopen			freopen64
-#define	tmpfile			tmpfile64
-#define	fgetpos			fgetpos64
-#define	fsetpos			fsetpos64
-#ifdef	_LARGEFILE_SOURCE
-#define	fseeko			fseeko64
-#define	ftello			ftello64
-#endif
-#endif	/* !__PRAGMA_REDEFINE_EXTNAME */
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
 #ifndef _LP64
 extern unsigned char	*_bufendtab[];
 extern FILE		*_lastbuf;
 #endif
-
-/* In the LP64 compilation environment, all APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#if !defined(__PRAGMA_REDEFINE_EXTNAME)
-#define	fopen64		fopen
-#define	freopen64	freopen
-#define	tmpfile64	tmpfile
-#define	fgetpos64	fgetpos
-#define	fsetpos64	fsetpos
-#ifdef	_LARGEFILE_SOURCE
-#define	fseeko64	fseeko
-#define	ftello64	ftello
-#endif
-#endif	/* !__PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
 
 #ifndef	_SSIZE_T
 #define	_SSIZE_T
@@ -331,28 +251,12 @@ extern int	putw(int, FILE *);
 
 #endif	/* defined(__EXTENSIONS__) || !defined(_STRICT_STDC) ... */
 
-/*
- * The following are defined as part of the Large File Summit interfaces.
- */
-#if defined(_LARGEFILE_SOURCE) || defined(_XPG5)
 extern int	fseeko(FILE *, off_t, int);
 extern off_t	ftello(FILE *);
-#endif
 
-/*
- * The following are defined as part of the transitional Large File Summit
- * interfaces.
- */
-#if defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern FILE	*fopen64(const char *, const char *);
-extern FILE	*freopen64(const char *, const char *, FILE *);
-extern FILE	*tmpfile64(void);
-extern int	fgetpos64(FILE *, fpos64_t *);
-extern int	fsetpos64(FILE *, const fpos64_t *);
-extern int	fseeko64(FILE *, off64_t, int);
-extern off64_t	ftello64(FILE *);
-#endif
+/* FIXME: source compat: these syms are aliases to non-64 vers in libc */
+int fseeko64(FILE *, off_t, int);
+off_t ftello64(FILE *);
 
 #define	getchar_unlocked()	getc_unlocked(stdin)
 #define	putchar_unlocked(x)	putc_unlocked((x), stdout)

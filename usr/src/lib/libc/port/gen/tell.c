@@ -35,11 +35,7 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#pragma weak _tell64 = tell64
-#else
-#pragma weak _tell = tell
-#endif
+#pragma weak tell64 = tell
 
 #include "lint.h"
 #include <fcntl.h>
@@ -47,20 +43,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-
-off64_t
-tell64(int f)
-{
-	return (lseek64(f, 0, SEEK_CUR));
-}
-
-#else
-
 off_t
 tell(int f)
 {
 	return (lseek(f, 0, SEEK_CUR));
 }
-
-#endif  /* _FILE_OFFSET_BITS == 64 */

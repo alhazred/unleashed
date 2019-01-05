@@ -157,46 +157,20 @@ typedef struct statvfs64_32 {
 #define	ST_NOSUID	0x02	/* does not support setuid/setgid semantics */
 #define	ST_NOTRUNC	0x04	/* does not truncate long file names */
 
-#if !defined(_KERNEL)
+#ifndef _KERNEL
+int statvfs(const char *_RESTRICT_KYWD, struct statvfs *_RESTRICT_KYWD);
+int fstatvfs(int, struct statvfs *);
+
 /*
- * large file compilation environment setup
+ * FIXME: source compat; statvfs64() is an alias of statvfs(), but the argument
+ * types have different names (struct statvfs vs struct statvfs64) even if
+ * identical, so we can't simply add the function decl here - use a #define
+ * instead.
  */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	statvfs		statvfs64
-#pragma redefine_extname	fstatvfs	fstatvfs64
-#else
-#define	statvfs_t		statvfs64_t
-#define	statvfs			statvfs64
-#define	fstatvfs		fstatvfs64
+#define statvfs64 statvfs
+#define statvfs64_t statvfs_t
+int fstatvfs64(int, struct statvfs *);
 #endif
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-/*
- * In the LP64 compilation environment, map large file interfaces
- * back to native versions where possible.
- */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	statvfs64	statvfs
-#pragma	redefine_extname	fstatvfs64	fstatvfs
-#else
-#define	statvfs64_t		statvfs_t
-#define	statvfs64		statvfs
-#define	fstatvfs64		fstatvfs
-#endif
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
-int statvfs(const char *_RESTRICT_KYWD, statvfs_t *_RESTRICT_KYWD);
-int fstatvfs(int, statvfs_t *);
-
-/* transitional large file interface versions */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-int statvfs64(const char *_RESTRICT_KYWD, statvfs64_t *_RESTRICT_KYWD);
-int fstatvfs64(int, statvfs64_t *);
-#endif	/* _LARGEFILE64_SOURCE... */
-#endif	/* !defined(_KERNEL) */
 
 #ifdef	__cplusplus
 }

@@ -84,40 +84,6 @@ struct FTW
 #define	FTW_FOLLOW	2
 #define	FTW_PRUNE	4
 
-/* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	_xftw	_xftw64
-#pragma redefine_extname	_ftw	_ftw64
-#if !defined(_XOPEN_SOURCE) || defined(_XPG5)
-#pragma redefine_extname	nftw	nftw64
-#endif
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	_xftw			_xftw64
-#define	_ftw			_ftw64
-#if !defined(_XOPEN_SOURCE) || defined(_XPG5)
-#define	nftw			nftw64
-#endif
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif /* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-/* In the LP64 compilation environment, all APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	_xftw64		_xftw
-#pragma	redefine_extname	_ftw64		_ftw
-#if !defined(_XOPEN_SOURCE) || defined(_XPG5)
-#pragma	redefine_extname	nftw64		nftw
-#endif
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	_xftw64		_xftw
-#define	_ftw64		_ftw
-#if !defined(_XOPEN_SOURCE) || defined(_XPG5)
-#define	nftw64		nftw
-#endif
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
 extern int ftw(const char *,
 	int (*)(const char *, const struct stat *, int), int);
 extern int _xftw(int, const char *,
@@ -128,30 +94,7 @@ extern int nftw(const char *,
 	int, int);
 #endif /* defined(__EXTENSIONS__) || !defined(_XOPEN_SOURCE) ... */
 
-/*
- * transitional large file interface versions
- */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern int ftw64(const char *,
-	int (*)(const char *, const struct stat64 *, int), int);
-extern int _xftw64(int, const char *,
-	int (*)(const char *, const struct stat64 *, int), int);
-#if !defined(_XOPEN_SOURCE)
-extern int nftw64(const char *,
-	int (*)(const char *, const struct stat64 *, int, struct FTW *),
-	int, int);
-#endif /* !defined(_XOPEN_SOURCE) */
-#endif /* _LARGEFILE64_SOURCE .. */
-
 #define	_XFTWVER	2	/* version of file tree walk */
-
-#define	ftw(path, fn, depth)	_xftw(_XFTWVER, (path), (fn), (depth))
-
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-#define	ftw64(path, fn, depth)	_xftw64(_XFTWVER, (path), (fn), (depth))
-#endif
 
 #ifdef	__cplusplus
 }

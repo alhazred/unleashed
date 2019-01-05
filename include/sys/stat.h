@@ -153,62 +153,6 @@ struct  stat64 {
 #else /* !defined(_KERNEL) */
 
 /*
- * large file compilation environment setup
- */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	fstat	fstat64
-#pragma redefine_extname	stat	stat64
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) || \
-	defined(_ATFILE_SOURCE)
-#pragma	redefine_extname	fstatat	fstatat64
-#endif /* defined (_ATFILE_SOURCE) */
-
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG_2) || defined(__EXTENSIONS__)
-#pragma	redefine_extname	lstat	lstat64
-#endif
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	fstat	fstat64
-#define	stat	stat64
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) || \
-	defined(_ATFILE_SOURCE)
-#define	fstatat	fstatat64
-#endif /* defined (_ATFILE_SOURCE) */
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG_2) || defined(__EXTENSIONS__)
-#define	lstat	lstat64
-#endif
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-/*
- * In the LP64 compilation environment, map large file interfaces
- * back to native versions where possible.
- */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	fstat64	fstat
-#pragma	redefine_extname	stat64	stat
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) || \
-	defined(_ATFILE_SOURCE)
-#pragma	redefine_extname	fstatat64 fstatat
-#endif /* defined (_ATFILE_SOURCE) */
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG_2) || defined(__EXTENSIONS__)
-#pragma	redefine_extname	lstat64	lstat
-#endif
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	fstat64	fstat
-#define	stat64	stat
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) || \
-	defined(_ATFILE_SOURCE)
-#define	fstatat64	fstatat
-#endif /* defined (_ATFILE_SOURCE) */
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG_2) || defined(__EXTENSIONS__)
-#define	lstat64	lstat
-#endif
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
-/*
  * User level stat structure definitions.
  */
 
@@ -250,9 +194,6 @@ struct	stat {
 	dev_t		st_rdev;
 	long		st_pad2[2];
 	off_t		st_size;
-#if _FILE_OFFSET_BITS != 64
-	long		st_pad3;	/* future off_t expansion */
-#endif
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 	timestruc_t	st_atim;
 	timestruc_t	st_mtim;
@@ -270,63 +211,18 @@ struct	stat {
 
 #endif	/* _LP64 */
 
-/* transitional large file interface version */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-#if defined(_LP64)
-
-struct stat64 {
-	dev_t		st_dev;
-	ino_t		st_ino;
-	mode_t		st_mode;
-	nlink_t		st_nlink;
-	uid_t		st_uid;
-	gid_t		st_gid;
-	dev_t		st_rdev;
-	off_t		st_size;
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
-	timestruc_t	st_atim;
-	timestruc_t	st_mtim;
-	timestruc_t	st_ctim;
-#else
-	_timestruc_t	st_atim;
-	_timestruc_t	st_mtim;
-	_timestruc_t	st_ctim;
-#endif
-	blksize_t	st_blksize;
-	blkcnt_t	st_blocks;
-	char		st_fstype[_ST_FSTYPSZ];
-};
-
-#else	/* _LP64 */
-
-struct	stat64 {
-	dev_t		st_dev;
-	long		st_pad1[3];	/* reserved for network id */
-	ino64_t		st_ino;
-	mode_t		st_mode;
-	nlink_t		st_nlink;
-	uid_t		st_uid;
-	gid_t		st_gid;
-	dev_t		st_rdev;
-	long		st_pad2[2];
-	off64_t		st_size;
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
-	timestruc_t	st_atim;
-	timestruc_t	st_mtim;
-	timestruc_t	st_ctim;
-#else
-	_timestruc_t    st_atim;
-	_timestruc_t    st_mtim;
-	_timestruc_t    st_ctim;
-#endif
-	blksize_t	st_blksize;
-	blkcnt64_t	st_blocks;
-	char		st_fstype[_ST_FSTYPSZ];
-	long		st_pad4[8];	/* expansion area */
-};
-
-#endif	/* _LP64 */
+#ifndef _KERNEL
+/*
+ * FIXME: source compat: *stat64 syms are aliased to non-64 ones in libc, but
+ * because one of the args is a "struct stat *" and the *64 versions use
+ * "struct stat64 *", we have to use a #define here for stat. the other
+ * functions can use a normal decl here. NOTE: the actual decls live in
+ * sys/stat_impl.h for some reason.
+ */
+#define stat64 stat
+int fstat64(int, struct stat *);
+int fstatat64(int, const char *, struct stat *, int);
+int lstat64(const char *_RESTRICT_KYWD, struct stat *_RESTRICT_KYWD);
 #endif
 
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
@@ -490,18 +386,6 @@ extern int chmod(const char *, mode_t);
 extern int mkdir(const char *, mode_t);
 extern int mkfifo(const char *, mode_t);
 extern mode_t umask(mode_t);
-
-/* transitional large file interfaces */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern int fstat64(int, struct stat64 *);
-extern int stat64(const char *_RESTRICT_KYWD, struct stat64 *_RESTRICT_KYWD);
-extern int lstat64(const char *_RESTRICT_KYWD, struct stat64 *_RESTRICT_KYWD);
-#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) || \
-	defined(_ATFILE_SOURCE)
-extern int fstatat64(int, const char *, struct stat64 *, int);
-#endif /* defined (_ATFILE_SOURCE) */
-#endif
 
 #if defined(__EXTENSIONS__) || defined(_ATFILE_SOURCE) || \
 	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX))

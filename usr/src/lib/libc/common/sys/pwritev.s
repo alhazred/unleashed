@@ -15,24 +15,15 @@
 
 	.file	"pwritev.s"
 
+#include <sys/asm_linkage.h>
+
+	ANSI_PRAGMA_WEAK2(__pwritev64,__pwritev,function)
+
 /* C library -- pwritev							*/
 /* ssize_t __pwritev(int, const struct iovec *, int, off_t, off_t);	*/
 
 #include "SYS.h"
 
-#ifdef _LP64
-
 	SYSCALL2_RESTART_RVAL1(__pwritev,pwritev)
 	RET
 	SET_SIZE(__pwritev)
-
-#else
-
-/* C library -- pwrite64 transitional large file API,			*/
-/* ssize_t __pwritev64(int, const struct iovec *, int, off_t, off_t);	*/
-
-	SYSCALL2_RESTART_RVAL1(__pwritev64,pwritev)
-	RET
-	SET_SIZE(__pwritev64)
-
-#endif

@@ -35,9 +35,7 @@
 
 #include	<sys/feature_tests.h>
 
-#if !defined(_LP64)
-#pragma weak _readdir64_r = readdir64_r
-#endif
+#pragma weak readdir64_r = readdir_r
 
 #include "lint.h"
 #include "libc.h"
@@ -47,8 +45,6 @@
 #include <string.h>
 #include <limits.h>
 #include <errno.h>
-
-#ifdef _LP64
 
 /*
  * POSIX.1c standard version of the thread function readdir_r.
@@ -91,59 +87,3 @@ readdir_r(DIR *dirp, dirent_t *entry, dirent_t **result)
 	*result = entry;
 	return (0);
 }
-
-#else	/* _LP64 */
-
-/*
- * POSIX.1c standard version of the thr function readdir_r.
- * Large file version.
- */
-
-int
-readdir64_r(DIR *dirp, dirent64_t *entry, dirent64_t **result)
-{
-	private_DIR *pdirp = (private_DIR *)(uintptr_t)dirp;
-	dirent64_t *dp64;	/* -> directory data */
-	int saveloc = 0;
-
-	lmutex_lock(&pdirp->dd_lock);
-	if (dirp->dd_size != 0) {
-		dp64 = (dirent64_t *)(uintptr_t)&dirp->dd_buf[dirp->dd_loc];
-		/* was converted by readdir and needs to be reversed */
-		if (dp64->d_ino == (ino64_t)-1) {
-			dirent_t *dp32;	/* -> 32 bit directory data */
-
-			dp32 = (dirent_t *)(&dp64->d_off);
-			dp64->d_ino = (ino64_t)dp32->d_ino;
-			dp64->d_off = (off64_t)dp32->d_off;
-			dp64->d_reclen = (unsigned short)(dp32->d_reclen +
-			    ((char *)&dp64->d_off - (char *)dp64));
-		}
-		saveloc = dirp->dd_loc;		/* save for possible EOF */
-		dirp->dd_loc += (int)dp64->d_reclen;
-	}
-
-	if (dirp->dd_loc >= dirp->dd_size)
-		dirp->dd_loc = dirp->dd_size = 0;
-
-	if (dirp->dd_size == 0 &&	/* refill buffer */
-	    (dirp->dd_size = getdents64(dirp->dd_fd,
-	    (dirent64_t *)(uintptr_t)dirp->dd_buf, DIRBUF)) <= 0) {
-		if (dirp->dd_size == 0) {	/* This means EOF */
-			dirp->dd_loc = saveloc;	/* so save for telldir */
-			lmutex_unlock(&pdirp->dd_lock);
-			*result = NULL;
-			return (0);
-		}
-		lmutex_unlock(&pdirp->dd_lock);
-		*result = NULL;
-		return (errno);		/* error */
-	}
-
-	dp64 = (dirent64_t *)(uintptr_t)&dirp->dd_buf[dirp->dd_loc];
-	(void) memcpy(entry, dp64, (size_t)dp64->d_reclen);
-	*result = entry;
-	lmutex_unlock(&pdirp->dd_lock);
-	return (0);
-}
-#endif	/* _LP64 */

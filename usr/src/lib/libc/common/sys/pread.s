@@ -29,24 +29,15 @@
 
 	.file	"pread.s"
 
+#include <sys/asm_linkage.h>
+
+	ANSI_PRAGMA_WEAK2(__pread64,__pread,function)
+
 /* C library -- pread					*/
 /* ssize_t __pread(int, void *, size_t, off_t);		*/
 
 #include "SYS.h"
 
-#ifdef _LP64
-
 	SYSCALL2_RESTART_RVAL1(__pread,pread)
 	RET
 	SET_SIZE(__pread)
-
-#else
-
-/* C library -- pread64 transitional large file API	*/
-/* ssize_t __pread(int, void *, size_t, off64_t);	*/
-
-	SYSCALL2_RESTART_RVAL1(__pread64,pread64)
-	RET
-	SET_SIZE(__pread64)
-
-#endif

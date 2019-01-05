@@ -148,6 +148,15 @@ struct rlimit64 {
 	rlim64_t	rlim_max;	/* maximum value for rlim_cur */
 };
 
+#ifndef _KERNEL
+/*
+ * FIXME: source compat: remove these after modifiyng software to use non-64
+ * versions
+ */
+int setrlimit64(int, const struct rlimit64 *);
+int getrlimit64(int, struct rlimit64 *);
+#endif
+
 #endif
 
 /*
@@ -228,45 +237,8 @@ struct proc;
 #define	RUSAGE_LWP	1
 #define	RUSAGE_CHILDREN	-1
 
-
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-/*
- * large file compilation environment setup
- */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	setrlimit	setrlimit64
-#pragma redefine_extname	getrlimit	getrlimit64
-#else
-#define	setrlimit		setrlimit64
-#define	getrlimit		getrlimit64
-#define	rlimit			rlimit64
-#endif
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-/*
- * In the LP64 compilation environment, map large file interfaces
- * back to native versions where possible.
- */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	setrlimit64	setrlimit
-#pragma	redefine_extname	getrlimit64	getrlimit
-#else
-#define	setrlimit64		setrlimit
-#define	getrlimit64		getrlimit
-#define	rlimit64		rlimit
-#endif
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
 extern int setrlimit(int, const struct rlimit *);
 extern int getrlimit(int, struct rlimit *);
-
-/* transitional large file interfaces */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern int setrlimit64(int, const struct rlimit64 *);
-extern int getrlimit64(int, struct rlimit64 *);
-#endif	/* _LARGEFILE64_SOURCE... */
 
 extern int getpriority(int, id_t);
 extern int setpriority(int, id_t, int);

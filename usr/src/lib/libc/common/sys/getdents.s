@@ -34,29 +34,11 @@
 
 #include <sys/asm_linkage.h>
 
-#ifdef _LP64
 	ANSI_PRAGMA_WEAK(getdents,function)
-#else
-	ANSI_PRAGMA_WEAK(getdents64,function)
-#endif	
+	ANSI_PRAGMA_WEAK2(getdents64,getdents,function)
 
 #include "SYS.h"
 
-#ifdef _LP64
-	
 	SYSCALL_RVAL1(getdents)
 	RET
 	SET_SIZE(getdents)
-
-#else
-
-/* C library -- getdents64					*/
-/* int getdents64 (int fildes, struct dirent64 *buf, size_t count)	*/
-
-	SYSCALL_RVAL1(getdents64)
-	RET
-	SET_SIZE(getdents64)
-
-#endif
-
-

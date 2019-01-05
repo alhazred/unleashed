@@ -39,12 +39,8 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#pragma weak _ftruncate64 = ftruncate64
-#pragma weak _truncate64 = truncate64
-#define	ftruncate	ftruncate64
-#define	truncate	truncate64
-#endif /* !_LP64 && _FILE_OFFSET_BITS == 64 */
+#pragma weak ftruncate64 = ftruncate
+#pragma weak truncate64 = truncate
 
 #include "lint.h"
 #include <unistd.h>

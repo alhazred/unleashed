@@ -260,6 +260,10 @@ extern int	__filbuf(FILE *);
 extern int	__flsbuf(int, FILE *);
 #endif	/*	_LP64	*/
 
+/* FIXME: source compat: this is an alias to fopen() in libc */
+FILE *fopen64(const char *_RESTRICT_KYWD, const char *_RESTRICT_KYWD);
+
+
 #if __cplusplus >= 199711L
 }
 #endif /* end of namespace std */

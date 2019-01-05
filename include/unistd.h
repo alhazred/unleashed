@@ -194,47 +194,11 @@ extern "C" {
 #define	_LFS64_STDIO		1
 #define	_LFS64_ASYNCHRONOUS_IO	1
 
-/* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	ftruncate	ftruncate64
-#pragma redefine_extname	lseek		lseek64
-#pragma redefine_extname	pread		pread64
-#pragma redefine_extname	pwrite		pwrite64
-#pragma redefine_extname	truncate	truncate64
-#pragma redefine_extname	lockf		lockf64
-#pragma	redefine_extname	tell		tell64
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	ftruncate			ftruncate64
-#define	lseek				lseek64
-#define	pread				pread64
-#define	pwrite				pwrite64
-#define	truncate			truncate64
-#define	lockf				lockf64
-#define	tell				tell64
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-/* In the LP64 compilation environment, the APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	ftruncate64	ftruncate
-#pragma redefine_extname	lseek64		lseek
-#pragma redefine_extname	pread64		pread
-#pragma redefine_extname	pwrite64	pwrite
-#pragma redefine_extname	truncate64	truncate
-#pragma redefine_extname	lockf64		lockf
-#pragma redefine_extname	tell64		tell
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	ftruncate64			ftruncate
-#define	lseek64				lseek
-#define	pread64				pread
-#define	pwrite64			pwrite
-#define	truncate64			truncate
-#define	lockf64				lockf
-#define	tell64				tell
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
+/* FIXME: source compat: these libc syms are aliases to non-64 ones */
+off_t lseek64(int, off_t, int);
+int ftruncate64(int, off_t);
+ssize_t pread64(int, void *, size_t, off_t);
+ssize_t pwrite64(int, const void *, size_t, off_t);
 
 extern int access(const char *, int);
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
@@ -324,11 +288,7 @@ extern long fpathconf(int, int);
 	defined(__EXTENSIONS__)
 extern int fsync(int);
 #endif /* !defined(_POSIX_C_SOURCE) || (_POSIX_C_SOURCE > 2)... */
-#if !defined(__XOPEN_OR_POSIX) || (_POSIX_C_SOURCE > 2) || defined(_XPG4_2) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64) || \
-	defined(__EXTENSIONS__)
 extern int ftruncate(int, off_t);
-#endif /* !defined(__XOPEN_OR_POSIX) || (_POSIX_C_SOURCE > 2)... */
 extern char *getcwd(char *, size_t);
 #if !defined(__XOPEN_OR_POSIX) || (defined(_XPG4_2) && !defined(_XPG6)) || \
 	defined(__EXTENSIONS__)
@@ -395,11 +355,7 @@ extern int link(const char *, const char *);
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern offset_t llseek(int, offset_t, int);
 #endif
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG4_2) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64) || \
-	defined(__EXTENSIONS__)
 extern int lockf(int, int, off_t);
-#endif
 extern off_t lseek(int, off_t, int);
 #if !defined(_POSIX_C_SOURCE) || defined(_XOPEN_SOURCE) || \
 	defined(__EXTENSIONS__)
@@ -412,11 +368,7 @@ extern long pathconf(const char *, int);
 extern int pause(void);
 extern int pipe(int *);
 extern int pipe2(int *, int);
-#if !defined(_POSIX_C_SOURCE) || defined(_XPG5) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64) || \
-	defined(__EXTENSIONS__)
 extern ssize_t pread(int, void *, size_t, off_t);
-#endif
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern void profil(unsigned short *, size_t, unsigned long, unsigned int);
 #endif
@@ -436,11 +388,7 @@ extern int pthread_atfork(void (*) (void), void (*) (void), void (*) (void));
 	(!defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__))
 extern int ptrace(int, pid_t, int, int);
 #endif
-#if !defined(_POSIX_C_SOURCE) || defined(_XPG5) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64) || \
-	defined(__EXTENSIONS__)
 extern ssize_t pwrite(int, const void *, size_t, off_t);
-#endif
 extern ssize_t read(int, void *, size_t);
 #if !defined(__XOPEN_OR_POSIX) || \
 	defined(_XPG4_2) || defined(__EXTENSIONS__)
@@ -510,16 +458,12 @@ extern void sync(void);
 extern long sysconf(int);
 extern pid_t tcgetpgrp(int);
 extern int tcsetpgrp(int, pid_t);
-#if !defined(__XOPEN_OR_POSIX) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64) || \
-	defined(__EXTENSIONS__)
+#if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern off_t tell(int);
 #endif /* !defined(__XOPEN_OR_POSIX)... */
-#if !defined(__XOPEN_OR_POSIX) || defined(_XPG4_2) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64) || \
-	defined(__EXTENSIONS__)
+#if __XPG_VISIBLE >= 420
 extern int truncate(const char *, off_t);
-#endif /* !defined(__XOPEN_OR_POSIX) || defined(_XPG4_2)... */
+#endif
 extern char *ttyname(int);
 #if (defined(_XPG4_2) && !defined(_XPG7)) || !defined(_STRICT_SYMBOLS)
 extern useconds_t ualarm(useconds_t, useconds_t);
@@ -555,18 +499,6 @@ extern int unlinkat(int, const char *, int);
 extern int get_nprocs(void);
 extern int get_nprocs_conf(void);
 #endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
-
-/* transitional large file interface versions */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern int ftruncate64(int, off64_t);
-extern off64_t lseek64(int, off64_t, int);
-extern ssize_t	pread64(int, void *, size_t, off64_t);
-extern ssize_t	pwrite64(int, const void *, size_t, off64_t);
-extern off64_t	tell64(int);
-extern int	truncate64(const char *, off64_t);
-extern int	lockf64(int, int, off64_t);
-#endif	/* _LARGEFILE64_SOURCE */
 
 extern int getlogin_r(char *, size_t);
 extern int ttyname_r(int, char *, size_t);

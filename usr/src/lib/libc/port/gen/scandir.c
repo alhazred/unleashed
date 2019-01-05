@@ -52,13 +52,8 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_LP64)
-#pragma weak _scandir64 = scandir64
-#pragma weak _alphasort64 = alphasort64
-#else
-#pragma weak _scandir = scandir
-#pragma weak _alphasort = alphasort
-#endif
+#pragma weak scandir64 = scandir
+#pragma weak alphasort64 = alphasort
 
 #include "lint.h"
 #include <dirent.h>
@@ -68,93 +63,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-
-
-#if !defined(_LP64)
-int
-scandir64(const char *dirname, struct dirent64 *(*namelist[]),
-    int (*select)(const struct dirent64 *),
-    int (*dcomp)(const struct dirent64 **, const struct dirent64 **))
-{
-	struct dirent64	*d, *p, **names = NULL;
-	size_t	nitems = 0;
-	size_t	arraysz, entlen;
-	struct stat64	stb;
-	DIR	*dirp;
-	u_longlong_t	tmp_arraysz;
-
-	if ((dirp = opendir(dirname)) == NULL)
-		return (-1);
-	if (fstat64(dirp->dd_fd, &stb) < 0)
-		goto fail;
-
-	/*
-	 * estimate the array size by taking the size of the directory file
-	 * and dividing it by a multiple of the minimum size entry.
-	 */
-	tmp_arraysz = stb.st_size / 24;	/* 24 bytes on a 64-bit system */
-	if (tmp_arraysz > INT_MAX)
-		arraysz = INT_MAX;
-	else
-		arraysz = (size_t)tmp_arraysz;
-	names = malloc(arraysz * sizeof (struct dirent64 *));
-	if (names == NULL)
-		goto fail;
-
-	while ((d = readdir64(dirp)) != NULL) {
-		if (select != NULL && !(*select)(d))
-			continue;	/* just selected names */
-
-		entlen = d->d_reclen;
-		/*
-		 * Make a minimum size copy of the data
-		 */
-		p = malloc(entlen);
-		if (p == NULL)
-			goto fail;
-		(void) memcpy(p, d, entlen);
-		/*
-		 * Check to make sure the array has space left and
-		 * realloc the maximum size.
-		 */
-		if (nitems >= arraysz) {
-			struct dirent64	**tmp;
-			if (nitems == INT_MAX) {
-				/* overflow */
-				free(p);
-				errno = EOVERFLOW;
-				goto fail;
-			}
-			arraysz += 512;		/* no science here */
-			tmp = realloc(names,
-			    arraysz * sizeof (struct dirent64 *));
-			if (tmp == NULL) {
-				free(p);
-				goto fail;
-			}
-			names = tmp;
-		}
-		names[nitems++] = p;
-	}
-	(void) closedir(dirp);
-	if (nitems && dcomp != NULL)
-		qsort(names, nitems, sizeof (struct dirent64 *),
-		    (int(*)(const void *, const void *))dcomp);
-	*namelist = names;
-
-	return ((int)nitems);
-
-fail:
-	while (nitems != 0) {
-		free(names[--nitems]);
-	}
-	if (names)
-		free(names);
-	(void) closedir(dirp);
-	return (-1);
-}
-#else
-
 
 int
 scandir(const char *dirname, struct dirent *(*namelist[]),
@@ -238,24 +146,13 @@ fail:
 	(void) closedir(dirp);
 	return (-1);
 }
-#endif
 
 /*
  * Alphabetic order comparison routine for those who want it.
  */
-#if defined(_LP64)
 int
 alphasort(const struct dirent **d1, const struct dirent **d2)
 {
 	return (strcoll((*d1)->d_name,
 	    (*d2)->d_name));
 }
-
-#else
-int
-alphasort64(const struct dirent64 **d1, const struct dirent64 **d2)
-{
-	return (strcoll((*d1)->d_name,
-	    (*d2)->d_name));
-}
-#endif

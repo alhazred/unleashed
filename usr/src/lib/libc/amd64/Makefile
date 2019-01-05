@@ -1179,23 +1179,6 @@ SRCS=							\
 $(DYNLIB) := CRTI = crti.o
 $(DYNLIB) := CRTN = crtn.o
 
-# large-file-aware components that should be built large
-
-#$(COMSYSOBJS64:%=pics/%) := \
-#	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-#$(SYSOBJS64:%=pics/%) := \
-#	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-#$(PORTGEN64:%=pics/%) := \
-#	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-#$(PORTSTDIO64:%=pics/%) := \
-#	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-#$(PORTSYS64:%=pics/%) := \
-#	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
 $(PORTSTDIO_W:%=pics/%) := \
 	CPPFLAGS += -D_WIDE
 

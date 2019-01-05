@@ -115,10 +115,8 @@ extern void old_globfree(old_glob_t *);
  * _glob_ext() and _globfree_ext() to have a 64 suffix. When building the LFS
  * version, we do not include the old versions.
  */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#define	_glob_ext	_glob_ext64
-#define	_globfree_ext	_globfree_ext64
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
+#pragma weak _glob_ext64 = _glob_ext
+#pragma weak _globfree_ext64 = _globfree_ext
 
 #define	DOLLAR		'$'
 #define	DOT		'.'

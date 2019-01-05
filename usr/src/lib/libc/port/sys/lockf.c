@@ -31,10 +31,6 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#define	__lockf		__lockf64
-#endif
-
 #include "lint.h"
 #include <sys/types.h>
 #include <unistd.h>

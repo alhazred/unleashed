@@ -65,27 +65,7 @@ extern char **____loc1(void);
 extern char *bgets(char *, size_t, FILE *, char *);
 extern size_t bufsplit(char *, size_t, char **);
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	copylist	copylist64
-#else
-#define	copylist		copylist64
-#endif
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	copylist64	copylist
-#else
-#define	copylist64		copylist
-#endif
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
 extern char *copylist(const char *, off_t *);
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern char *copylist64(const char *, off64_t *);
-#endif	/* _LARGEFILE64_SOURCE... */
 
 extern int eaccess(const char *, int);
 extern int gmatch(const char *, const char *);
