@@ -17,7 +17,9 @@ was changed.
  + _XOPEN_SOURCE=700 and __EXTENSIONS__ are defined by default, if not
    specified. most third-party software already uses these on Solarises in an
    attempt to get a somewhat sane compilation environment
-
+ + all applications automatically use 64-bit files. using the LFS/"large file"
+   interfaces _LARGEFILE_SOURCE, _LARGEFILE64_SOURCE and _FILE_OFFSET_BITS is
+   no longer necessary.
 
 1.2 release
 -----------
