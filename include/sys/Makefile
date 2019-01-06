@@ -73,6 +73,7 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	condvar.h		\
 	condvar_impl.h		\
 	conf.h			\
+	containerof.h		\
 	consdev.h		\
 	console.h		\
 	consplat.h		\
