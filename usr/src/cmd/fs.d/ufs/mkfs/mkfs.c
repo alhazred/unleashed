@@ -236,6 +236,7 @@
 #include	<signal.h>
 #include	<sys/efi_partition.h>
 #include	"roll_log.h"
+#include	"fslib.h"
 
 #define	bcopy(f, t, n)    (void) memcpy(t, f, n)
 #define	bzero(s, n)	(void) memset(s, 0, n)

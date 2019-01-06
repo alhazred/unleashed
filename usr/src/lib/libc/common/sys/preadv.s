@@ -15,24 +15,15 @@
 
 	.file	"preadv.s"
 
+#include <sys/asm_linkage.h>
+
+	ANSI_PRAGMA_WEAK2(__preadv64,__preadv,function)
+
 /* C library -- preadv							*/
 /* ssize_t __preadv(int, const struct iovec *, int, off_t, off_t);	*/
 
 #include "SYS.h"
 
-#if !defined(_LARGEFILE_SOURCE)
-
 	SYSCALL2_RESTART_RVAL1(__preadv,preadv)
 	RET
 	SET_SIZE(__preadv)
-
-#else
-
-/* C library -- preadv64 transitional large file API			*/
-/* ssize_t __preadv64(int, void *, size_t, off_t, off_t);		*/
-
-	SYSCALL2_RESTART_RVAL1(__preadv64,preadv)
-	RET
-	SET_SIZE(__preadv64)
-
-#endif

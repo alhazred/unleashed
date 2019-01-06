@@ -141,10 +141,6 @@ Insufficient storage space is available.
 The stream refers to a file which is unlinked.  If the process is killed in the
 period between file creation and unlinking, a permanent file may be left
 behind.
-.sp
-.LP
-The \fBtmpfile()\fR function has a transitional interface for 64-bit file
-offsets. See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -165,4 +161,4 @@ Interface Stability	Standard
 .sp
 .LP
 \fBunlink\fR(2), \fBfopen\fR(3C), \fBmkstemp\fR(3C), \fBmktemp\fR(3C),
-\fBtmpnam\fR(3C), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBtmpnam\fR(3C), \fBstandards\fR(5)

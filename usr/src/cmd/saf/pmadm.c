@@ -29,16 +29,25 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
 #include "extern.h"
 #include "misc.h"
 #include <sac.h>
 #include "structs.h"
+
+int check_version(int, char *); /* libc/nsl */
+
+int do_config(char *, char *);
+int copy_file(FILE *, FILE *, int, int);
+int find_pm(FILE *, char *);
+int tell_sac(char *);
 
 #define	ADD		0x1	/* -a or other required options seen */
 #define	REMOVE		0x2	/* -r seen */
@@ -65,6 +74,7 @@ void	rem_svc();
 void	ed_svc();
 void	list_svcs();
 void	doconf();
+int find_svc(FILE *, char *, char *);
 
 /*
  * format of a _pmtab entry - used to hold parsed info

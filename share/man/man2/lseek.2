@@ -156,11 +156,6 @@ correctly in an object of type \fBoff_t\fR for regular files.
 The \fIfildes\fR argument is associated with a pipe, a FIFO, or a socket.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBlseek()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .sp
 .LP
 In multithreaded applications, using \fBlseek()\fR in conjunction with a
@@ -190,4 +185,4 @@ MT-Level	Async-Signal-Safe
 .LP
 \fBcreat\fR(2), \fBdup\fR(2), \fBfcntl\fR(2), \fBfpathconf\fR(2),
 \fBopen\fR(2), \fBread\fR(2), \fBwrite\fR(2), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

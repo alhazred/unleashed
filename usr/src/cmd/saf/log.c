@@ -30,11 +30,13 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <sys/param.h>
-#include <sys/fcntl.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <strings.h>
 #include <errno.h>
 

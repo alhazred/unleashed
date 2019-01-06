@@ -946,11 +946,6 @@ if ((pfd = open(filename, O_WRONLY | O_CREAT | O_TRUNC,
 .fi
 .in -2
 
-.SH USAGE
-.LP
-The \fBopen()\fR function has a transitional interface for 64-bit file offsets.
-See \fBlf64\fR(5). Note that using \fBopen64()\fR is equivalent to using
-\fBopen()\fR with \fBO_LARGEFILE\fR set in \fIoflag\fR.
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
@@ -976,7 +971,7 @@ Standard	For \fBopen()\fR, see \fBstandards\fR(5).
 \fBexec\fR(2), \fBfcntl\fR(2), \fBgetmsg\fR(2), \fBgetrlimit\fR(2),
 \fBlseek\fR(2), \fBputmsg\fR(2), \fBread\fR(2), \fBstat\fR(2), \fBumask\fR(2),
 \fBwrite\fR(2), \fBattropen\fR(3C), \fBfcntl.h\fR(3HEAD), \fBstat.h\fR(3HEAD),
-\fBunlockpt\fR(3C), \fBattributes\fR(5), \fBlf64\fR(5), \fBprivileges\fR(5),
+\fBunlockpt\fR(3C), \fBattributes\fR(5), \fBprivileges\fR(5),
 \fBstandards\fR(5), \fBconnld\fR(7M), \fBstreamio\fR(7I)
 .SH NOTES
 .LP

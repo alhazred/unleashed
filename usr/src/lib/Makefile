@@ -471,7 +471,7 @@ brand:		libzonecfg libmapmalloc
 cfgadm_plugins:	libdevice libdevinfo libhotplug librcm hbaapi libkstat libscf
 fm:		libexacct libipmi libzfs scsi libdevinfo libdevid libcfgadm \
 		libcontract libsysevent ../cmd/sgs/libelf libdladm libsff \
-		libpcidb
+		libpcidb libdiskmgt
 gss_mechs/mech_dh: libgss
 gss_mechs/mech_dummy: libgss
 gss_mechs/mech_krb5: libgss libresolv2 pkcs11 libkstat

@@ -30,33 +30,10 @@
 #include <sys/stat.h>
 #include <sys/fcntl.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-
-int
-fstatat64(int fd, const char *name, struct stat64 *sb, int flags)
-{
-	return (syscall(SYS_fstatat64, fd, name, sb, flags));
-}
-
-int
-stat64(const char *name, struct stat64 *sb)
-{
-	return (fstatat64(AT_FDCWD, name, sb, 0));
-}
-
-int
-lstat64(const char *name, struct stat64 *sb)
-{
-	return (fstatat64(AT_FDCWD, name, sb, AT_SYMLINK_NOFOLLOW));
-}
-
-int
-fstat64(int fd, struct stat64 *sb)
-{
-	return (fstatat64(fd, NULL, sb, 0));
-}
-
-#else	/* !defined(_LP64) && _FILE_OFFSET_BITS == 64 */
+#pragma weak fstat64 = fstat
+#pragma weak fstatat64 = fstatat
+#pragma weak stat64 = stat
+#pragma weak lstat64 = lstat
 
 int
 fstatat(int fd, const char *name, struct stat *sb, int flags)
@@ -81,5 +58,3 @@ fstat(int fd, struct stat *sb)
 {
 	return (fstatat(fd, NULL, sb, 0));
 }
-
-#endif	/* !defined(_LP64) && _FILE_OFFSET_BITS == 64 */

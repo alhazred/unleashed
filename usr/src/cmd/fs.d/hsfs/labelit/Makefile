@@ -30,7 +30,6 @@ ATTMK= 		$(LIBPROG)
 include		../../Makefile.fstype
 
 CERRWARN += -Wno-switch
-CERRWARN += -Wno-implicit-function-declaration
 CERRWARN += -Wno-unused-variable
 
 

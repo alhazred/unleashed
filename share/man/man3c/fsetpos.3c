@@ -96,11 +96,6 @@ The file descriptor underlying \fIstream\fR is associated with a pipe, a FIFO,
 or a socket.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBfsetpos()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -124,4 +119,4 @@ MT-Level	MT-Safe
 .LP
 \fBlseek\fR(2), \fBfgetpos\fR(3C), \fBfopen\fR(3C), \fBfseek\fR(3C),
 \fBftell\fR(3C), \fBrewind\fR(3C), \fBungetc\fR(3C), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

@@ -112,15 +112,7 @@
 #include <strings.h>
 #include <fcntl.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#define	nftw	nftw64
-#define	stat	stat64
-#define	fstat	fstat64
-#define	fstatat	fstatat64
-#pragma weak _nftw64 = nftw64
-#else
-#pragma weak _nftw = nftw
-#endif /* !_LP64 && _FILE_OFFSET_BITS == 64 */
+#pragma weak nftw64 = nftw
 
 #ifndef PATH_MAX
 #define	PATH_MAX	1023

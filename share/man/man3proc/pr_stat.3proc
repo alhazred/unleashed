@@ -16,11 +16,8 @@
 .Os
 .Sh NAME
 .Nm pr_fstat ,
-.Nm pr_fstat64 ,
 .Nm pr_lstat ,
-.Nm pr_lstat64 ,
-.Nm pr_stat ,
-.Nm pr_stat64
+.Nm pr_stat
 .Nd inject stat system call into victim process
 .Sh SYNOPSIS
 .Lb libproc
@@ -32,34 +29,16 @@
 .Fa "struct stat *buf"
 .Fc
 .Ft int
-.Fo pr_fstat64
-.Fa "struct ps_prochandle *P"
-.Fa "int fd"
-.Fa "struct stat64 *buf"
-.Fc
-.Ft int
 .Fo pr_lstat
 .Fa "struct ps_prochandle *P"
 .Fa "const char *path"
 .Fa "struct stat *buf"
 .Fc
 .Ft int
-.Fo pr_lstat64
-.Fa "struct ps_prochandle *P"
-.Fa "const char *path"
-.Fa "struct stat64 *buf"
-.Fc
-.Ft int
 .Fo pr_stat
 .Fa "struct ps_prochandle *P"
 .Fa "const char *path"
 .Fa "struct stat *buf"
-.Fc
-.Ft int
-.Fo pr_stat64
-.Fa "struct ps_prochandle *P"
-.Fa "const char *path"
-.Fa "struct stat64 *buf"
 .Fc
 .Sh DESCRIPTION
 The
@@ -136,22 +115,6 @@ and
 functions only work on active processes.
 Process handles that correspond to core files, zombie processes, or ELF objects
 do not support system call injection.
-.Pp
-The
-.Fn pr_stat64 ,
-.Fn pr_fstat64 ,
-and
-.Fn pr_lstat64
-functions are equivalent to
-.Fn pr_stat ,
-.Fn pr_fstat ,
-and
-.Fn pr_lstat
-respectively; however, rather than having the stat information be subject to the
-data model of the target process, they always provide 64-bit stat information.
-See
-.Xr lf64 5
-for more information.
 .Sh RETURN VALUES
 Upon successful completion, the
 .Fn pr_stat
@@ -192,5 +155,4 @@ in
 .Sh SEE ALSO
 .Xr stat 2 ,
 .Xr libproc 3LIB ,
-.Xr proc 4 ,
-.Xr lf64 5
+.Xr proc 4

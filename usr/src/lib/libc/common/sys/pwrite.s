@@ -26,9 +26,11 @@
 
 	.file	"pwrite.s"
 
-#include "SYS.h"
+#include <sys/asm_linkage.h>
 
-#if !defined(_LARGEFILE_SOURCE)
+	ANSI_PRAGMA_WEAK2(__pwrite64,__pwrite,function)
+
+#include "SYS.h"
 
 /* C library -- pwrite						*/
 /* ssize_t __pwrite(int, const void *, size_t, off_t);		*/
@@ -36,14 +38,3 @@
 	SYSCALL2_RESTART_RVAL1(__pwrite,pwrite)
 	RET
 	SET_SIZE(__pwrite)
-
-#else
-
-/* C library -- pwrite64 transitional large file API		*/
-/* ssize_t __pwrite64(int, const void *, size_t, off64_t);	*/
-
-	SYSCALL2_RESTART_RVAL1(__pwrite64,pwrite64)
-	RET
-	SET_SIZE(__pwrite64)
-
-#endif

@@ -44,14 +44,6 @@ typedef struct {
  * keep these in the same order as in sys/unistd.h
  */
 static const config	default_conf[] = {
-	{ _CS_LFS_CFLAGS,	"-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" },
-	{ _CS_LFS_LDFLAGS,	""					},
-	{ _CS_LFS_LIBS,		""					},
-	{ _CS_LFS_LINTFLAGS,	"-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" },
-	{ _CS_LFS64_CFLAGS,	"-D_LARGEFILE64_SOURCE"			},
-	{ _CS_LFS64_LDFLAGS,	""					},
-	{ _CS_LFS64_LIBS,	""					},
-	{ _CS_LFS64_LINTFLAGS,	"-D_LARGEFILE64_SOURCE"			},
 	{ _CS_XBS5_ILP32_OFF32_CFLAGS,	""				},
 	{ _CS_XBS5_ILP32_OFF32_LDFLAGS,	""				},
 	{ _CS_XBS5_ILP32_OFF32_LIBS,	""				},

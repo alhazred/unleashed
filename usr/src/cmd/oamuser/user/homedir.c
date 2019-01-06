@@ -31,6 +31,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <ctype.h>
 #include <stdio.h>
 #include <userdefs.h>
 #include <errno.h>
@@ -42,6 +43,7 @@
 #include <libgen.h>
 #include <limits.h>
 #include <deflt.h>
+#include <unistd.h>
 
 #include "funcs.h"
 #include "messages.h"

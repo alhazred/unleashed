@@ -36,10 +36,7 @@
 
 #include <sys/feature_tests.h>
 
-#if !defined(_LP64)
-#pragma weak _ftello64 = ftello64
-#endif
-#pragma weak _ftello = ftello
+#pragma weak ftello64 = ftello
 
 #include "lint.h"
 #include "file64.h"
@@ -54,39 +51,6 @@
 #include <fcntl.h>
 #include <stddef.h>
 #include "stdiom.h"
-
-#if !defined(_LP64)
-
-off64_t
-ftello64(FILE *iop)
-{
-	ptrdiff_t adjust;
-	off64_t	tres;
-	rmutex_t *lk;
-
-	FLOCKFILE(lk, iop);
-	if (iop->_cnt < 0)
-		iop->_cnt = 0;
-	if (iop->_flag & _IOREAD)
-		adjust = (ptrdiff_t)-iop->_cnt;
-	else if (iop->_flag & (_IOWRT | _IORW)) {
-		adjust = 0;
-		if (((iop->_flag & (_IOWRT | _IONBF)) == _IOWRT) &&
-		    (iop->_base != 0))
-			adjust = iop->_ptr - iop->_base;
-	} else {
-		errno = EBADF;	/* file descriptor refers to no open file */
-		FUNLOCKFILE(lk);
-		return ((off64_t)EOF);
-	}
-	tres = lseek64(FILENO(iop), 0, SEEK_CUR);
-	if (tres >= 0)
-		tres += (off64_t)adjust;
-	FUNLOCKFILE(lk);
-	return (tres);
-}
-
-#endif	/* _LP64 */
 
 off_t
 ftello(FILE *iop)

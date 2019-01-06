@@ -215,11 +215,6 @@ offset maximum in the open file description associated with
 \fIaiocbp\fR\(->\fBaio_fildes\fR.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBaio_write()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -246,4 +241,4 @@ Standard	See \fBstandards\fR(5).
 \fBaio_cancel\fR(3C), \fBaio_error\fR(3C), \fBaio_read\fR(3C),
 \fBaio_return\fR(3C), \fBlio_listio\fR(3C), \fBclose\fR(2), \fB_Exit\fR(2),
 \fBfork\fR(2), \fBlseek\fR(2), \fBwrite\fR(2), \fBaio.h\fR(3HEAD),
-\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBstandards\fR(5)

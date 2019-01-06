@@ -10,7 +10,7 @@ ct_ctl_qack \- common contract control functions
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB-D_LARGEFILE64_SOURCE\fR \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
+cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
 #include <libcontract.h>
 
 \fBint\fR \fBct_ctl_adopt\fR(\fBint\fR \fIfd\fR);
@@ -212,5 +212,4 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBlibcontract\fR(3LIB), \fBcontract\fR(4), \fBattributes\fR(5),
-\fBlfcompile\fR(5)
+\fBlibcontract\fR(3LIB), \fBcontract\fR(4), \fBattributes\fR(5)

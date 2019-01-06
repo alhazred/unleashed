@@ -95,32 +95,6 @@ typedef struct dirent64 {
 
 #if !defined(_KERNEL)
 
-/*
- * large file compilation environment setup
- *
- * In the LP64 compilation environment, map large file interfaces
- * back to native versions where possible. (This only works because
- * a 'struct dirent' == 'struct dirent64').
- */
-
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	getdents	getdents64
-#else
-#define	getdents		getdents64
-#endif
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	getdents64	getdents
-#else
-#define	getdents64		getdents
-#define	dirent64		dirent
-#define	dirent64_t		dirent_t
-#endif
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
 extern int getdents(int, struct dirent *, size_t);
 
 /* N.B.: transitional large file interface version deliberately not provided */

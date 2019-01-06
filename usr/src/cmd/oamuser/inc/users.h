@@ -85,6 +85,7 @@ extern int valid_project(char *, struct project *, void *buf, size_t, int *);
 extern int valid_projname(char *, struct project *, void *buf, size_t, int *);
 extern void warningmsg(int, char *);
 extern void putgrent(struct group *, FILE *);
+extern void putprojent(struct project *, FILE *);
 
 /* passmgmt */
 #define	PASSMGMT	"/usr/lib/passmgmt";

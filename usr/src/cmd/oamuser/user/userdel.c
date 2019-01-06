@@ -58,6 +58,7 @@
 
 extern int check_perm(), isbusy(), get_default_zfs_flags();
 extern int rm_files(), call_passmgmt(), edit_group();
+extern int edit_project();
 extern struct passwd *fgetpwent(FILE *);
 
 static char *logname;			/* login name to delete */

@@ -54,8 +54,8 @@
 #include "stdiom.h"
 #include "xpg6.h"
 
-/* Final argument to _endopen depends on build environment */
-#define	LARGE_OPEN		(_FILE_OFFSET_BITS == 64)
+#pragma weak fopen64 = fopen
+#pragma weak freopen64 = freopen
 
 FILE *
 fopen(const char *name, const char *type) /* open name, return new stream */
@@ -68,7 +68,7 @@ fopen(const char *name, const char *type) /* open name, return new stream */
 	 * Note that iop is not locked here, since no other thread could
 	 * possibly call _endopen with the same iop at this point.
 	 */
-	rc = _endopen(name, type, iop, LARGE_OPEN);
+	rc = _endopen(name, type, iop);
 
 	if (rc == NULL && iop != NULL)
 		iop->_flag = 0; /* release iop */
@@ -222,7 +222,7 @@ freopen(const char *name, const char *type, FILE *iop)
 
 	(void) close_fd(iop);
 
-	rc = _endopen(name, type, iop, LARGE_OPEN);
+	rc = _endopen(name, type, iop);
 
 	if (rc == NULL)
 		iop->_flag = 0; /* release iop */

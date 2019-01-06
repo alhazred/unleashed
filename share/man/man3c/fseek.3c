@@ -276,10 +276,6 @@ permissible to seek to positions relative to that offset, portability to
 non-UNIX systems requires that an offset be used by \fBfseek()\fR directly.
 Arithmetic may not meaningfully be performed on such an offset, which is not
 necessarily measured in bytes.
-.sp
-.LP
-The \fBfseeko()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
@@ -301,4 +297,4 @@ MT-Level	MT-Safe
 .LP
 \fBgetrlimit\fR(2), \fBulimit\fR(2), \fBftell\fR(3C),
 \fBrewind\fR(3C), \fBungetc\fR(3C), \fBungetwc\fR(3C), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

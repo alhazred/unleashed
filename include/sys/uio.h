@@ -257,44 +257,12 @@ extern	uioasync_t uioasync;
 extern ssize_t readv(int, const struct iovec *, int);
 extern ssize_t writev(int, const struct iovec *, int);
 
-/*
- * When in the large file compilation environment,
- * map preadv/pwritev to their 64 bit offset versions
- */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	preadv	preadv64
-#pragma	redefine_extname	pwritev	pwritev64
-#else /* __PRAGMA_REDEFINE_EXTNAME */
-#define	preadv	preadv64
-#define	pwritev	pwritev64
-#endif /* __PRAGMA_REDEFINE_EXTNAME */
-#endif /* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-/* In the LP64 compilation environment, the APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef  __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	preadv64	preadv
-#pragma	redefine_extname	pwritev64	pwritev
-#else   /* __PRAGMA_REDEFINE_EXTNAME */
-#define	preadv64	preadv
-#define	pwritev64	pwritev
-#endif  /* __PRAGMA_REDEFINE_EXTNAME */
-#endif  /* _LP64 && _LARGEFILE64_SOURCE */
-
 extern ssize_t preadv(int, const struct iovec *, int, off_t);
 extern ssize_t pwritev(int, const struct iovec *, int, off_t);
 
-/*
- * preadv64 and pwritev64 should be defined when:
- * - Using the transitional compilation environment, and not
- *     the large file compilation environment.
- */
-#if defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	!defined(__PRAGMA_REDEFINE_EXTNAME))
-extern ssize_t preadv64(int, const struct iovec *, int, off64_t);
-extern ssize_t pwritev64(int, const struct iovec *, int, off64_t);
-#endif /* _LARGEFILE64_SOURCE */
+/* FIXME: source compat: these libc syms are aliases to non-64 ones */
+ssize_t preadv64(int, const struct iovec *, int, off_t);
+ssize_t pwritev64(int, const struct iovec *, int, off_t);
 
 #endif	/* defined(_KERNEL) */
 

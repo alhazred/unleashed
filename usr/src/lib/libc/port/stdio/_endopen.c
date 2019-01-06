@@ -53,7 +53,7 @@
  */
 
 FILE *
-_endopen(const char *name, const char *type, FILE *iop, int largefile)
+_endopen(const char *name, const char *type, FILE *iop)
 {
 	int oflag, fd, fflag, eflag, plusflag, xflag;
 	const char *echr;
@@ -109,12 +109,7 @@ _endopen(const char *name, const char *type, FILE *iop, int largefile)
 		oflag |= O_EXCL;
 	}
 
-	/* select small or large file open based on flag */
-	if (largefile) {
-		fd = open64(name, oflag, 0666);
-	} else {
-		fd = open(name, oflag, 0666);
-	}
+	fd = open(name, oflag, 0666);
 	if (fd < 0)
 		return (NULL);
 

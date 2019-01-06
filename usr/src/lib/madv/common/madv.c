@@ -718,6 +718,7 @@ shmat(int shmid, const void *shmaddr, int shmflag)
 	return (result);
 }
 
+#ifdef _LP64
 /*
  * mmap interpose
  */
@@ -770,7 +771,7 @@ mmap(void *addr, size_t len, int prot, int flags, int fd, off_t pos)
 	return (result);
 }
 
-#if !defined(_LP64)
+#else
 /*
  * mmap64 interpose
  */
@@ -820,4 +821,4 @@ mmap64(void *addr, size_t len, int prot, int flags, int fd, off64_t pos)
 
 	return (result);
 }
-#endif	/* !_LP64 */
+#endif	/* _LP64 */

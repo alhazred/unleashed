@@ -57,11 +57,6 @@ $mapfile_version 2
 #	'sparc'. Since '_sparc' is predefined to apply to, all sparc platforms,
 #	naming the 32-bit version 'sparc' would be too likely to cause errors.
 #
-# -	lf64: Defined on platforms that offer the 32-bit largefile APIs
-#
-$if _ELF32
-$add lf64
-$endif
 $if _sparc && _ELF32
 $add sparc32
 $endif
@@ -84,14 +79,6 @@ SYMBOL_VERSION ILLUMOS_0.27 {	# memset_s(3C) and set_constraint_handler_s(3C)
 } ILLUMOS_0.26;
 
 SYMBOL_VERSION ILLUMOS_0.26 {	# fts(3) LFS
-$if lf64
-    protected:
-	fts_children64;
-	fts_close64;
-	fts_open64;
-	fts_read64;
-	fts_set64;
-$endif
 } ILLUMOS_0.22;
 
 SYMBOL_VERSION ILLUMOS_0.22 {	# endian(3C)
@@ -165,11 +152,9 @@ SYMBOL_VERSION ILLUMOS_0.18 {	# signalfd
 } ILLUMOS_0.17;
 
 SYMBOL_VERSION ILLUMOS_0.17 {	# glob(3C) LFS
-$if lf64
     protected:
-	_glob_ext64;
-	_globfree_ext64;
-$endif
+	_glob_ext64 { FLAGS = NODYNSORT };
+	_globfree_ext64 { FLAGS = NODYNSORT };
 } ILLUMOS_0.16;
 
 SYMBOL_VERSION ILLUMOS_0.16 {	# timerfd
@@ -219,11 +204,8 @@ SYMBOL_VERSION ILLUMOS_0.10 {	# Illumos additions
     protected:
 	preadv;
 	pwritev;
-
-$if lf64
-	preadv64;
-	pwritev64;
-$endif
+	preadv64 { FLAGS = NODYNSORT };
+	pwritev64 { FLAGS = NODYNSORT };
 } ILLUMOS_0.9;
 
 SYMBOL_VERSION ILLUMOS_0.9 {
@@ -316,8 +298,8 @@ SYMBOL_VERSION ILLUMOS_0.8 {	# POSIX 2008 newlocale and friends
 
 SYMBOL_VERSION ILLUMOS_0.7 {	# Illumos additions
     protected:
-	_glob_ext;
-	_globfree_ext;
+	_glob_ext { FLAGS = NODYNSORT };
+	_globfree_ext { FLAGS = NODYNSORT };
 } ILLUMOS_0.6;
 
 SYMBOL_VERSION ILLUMOS_0.6 {	# Illumos additions
@@ -339,11 +321,8 @@ SYMBOL_VERSION ILLUMOS_0.4 {	# Illumos additions
         dup3;
         mkostemp;
         mkostemps;
-
-$if lf64
-        mkostemp64;
-        mkostemps64;
-$endif
+        mkostemp64 { FLAGS = NODYNSORT };
+        mkostemps64 { FLAGS = NODYNSORT };
 } ILLUMOS_0.3;
 
 SYMBOL_VERSION ILLUMOS_0.3 {	# Illumos additions
@@ -383,18 +362,18 @@ $if sparc32
 $endif
 
 	addrtosymstr;
-	aio_cancel;
 	aiocancel;
+	aio_cancel;
 	aio_error;
 	aio_fsync;
 	aio_read;
 	aioread;
 	aio_return;
 	aio_suspend;
-	aiowait;
 	aio_waitn;
 	aio_write;
 	aiowrite;
+	aiowait;
 	asprintf;
 	assfail;
 	backtrace;
@@ -550,22 +529,20 @@ $endif
 	wcsncasecmp;
 	wcsnlen;
 
-$if lf64
-	aio_cancel64;
-	aio_error64;
-	aio_fsync64;
-	aio_read64;
-	aioread64;
-	aio_return64;
-	aio_suspend64;
-	aio_waitn64;
-	aio_write64;
-	aiowrite64;
-	lio_listio64;
-	mkstemps64;
-	posix_fadvise64;
-	posix_fallocate64;
-$endif
+	aio_cancel64 { FLAGS = NODYNSORT };
+	aio_error64 { FLAGS = NODYNSORT };
+	aio_fsync64 { FLAGS = NODYNSORT };
+	aio_read64 { FLAGS = NODYNSORT };
+	aioread64 { FLAGS = NODYNSORT };
+	aio_return64 { FLAGS = NODYNSORT };
+	aio_suspend64 { FLAGS = NODYNSORT };
+	aio_waitn64 { FLAGS = NODYNSORT };
+	aio_write64 { FLAGS = NODYNSORT };
+	aiowrite64 { FLAGS = NODYNSORT };
+	lio_listio64 { FLAGS = NODYNSORT };
+	mkstemps64 { FLAGS = NODYNSORT };
+	posix_fadvise64 { FLAGS = NODYNSORT };
+	posix_fallocate64 { FLAGS = NODYNSORT };
 } SUNW_1.22.7;
 
 SYMBOL_VERSION SUNW_1.22.7 {   # s10u10 - SunOS 5.10 (Solaris 10) patch additions
@@ -775,7 +752,6 @@ $endif
 
     protected:
 	alphasort;
-	_alphasort;
 	atomic_add_16;
 	atomic_add_16_nv;
 	atomic_add_32;
@@ -927,7 +903,6 @@ $endif
 	pthread_spin_unlock;
 	rctlblk_set_recipient_pid;
 	scandir;
-	_scandir;
 	schedctl_exit;
 	schedctl_init;
 	schedctl_lookup;
@@ -981,13 +956,9 @@ $endif
 	wcstoull;
 	wcstoumax;
 
-$if lf64
-	alphasort64;
-	_alphasort64;
-	pselect_large_fdset;
-	scandir64;
-	_scandir64;
-$endif
+	alphasort64 { FLAGS = NODYNSORT };
+	pselect_large_fdset { FLAGS = NODYNSORT };
+	scandir64 { FLAGS = NODYNSORT };
 
 $if _ELF64
 	walkcontext;
@@ -1076,7 +1047,6 @@ SYMBOL_VERSION SUNW_1.21.1 {	# SunOS 5.9 (Solaris 9) patch additions
 SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
     protected:
 	attropen;
-	_attropen;
 	bind_textdomain_codeset;
 	closefrom;
 	_closefrom;
@@ -1148,12 +1118,9 @@ $if _ELF32
 	walkcontext;
 $endif
 
-$if lf64
-	attropen64;
-	_attropen64;
-	fstatat64;
-	openat64;
-$endif
+	attropen64 { FLAGS = NODYNSORT };
+	fstatat64 { FLAGS = NODYNSORT };
+	openat64 { FLAGS = NODYNSORT };
 } SUNW_1.20.4;
 
 SYMBOL_VERSION SUNW_1.20.4 {	# SunOS 5.8 (Solaris 8) patch additions
@@ -1539,57 +1506,42 @@ SYMBOL_VERSION SUNW_1.1 {	# SunOS 5.6 (Solaris 2.6)
 	__xpg4_putmsg;
 	__xpg4_putpmsg;
 
-$if lf64
-	creat64;
-	fgetpos64;
-	fopen64;
-	freopen64;
-	fseeko64;
-	fsetpos64;
-	fstat64;
-	fstatvfs64;
-	_fstatvfs64;
-	ftello64;
-	ftruncate64;
-	_ftruncate64;
-	ftw64;
-	_ftw64;
-	getdents64;
-	_getdents64;
-	getrlimit64;
-	_getrlimit64;
-	lockf64;
-	lseek64;
-	_lseek64;
-	lstat64;
-	mkstemp64;
-	_mkstemp64;
-	mmap64;
-	_mmap64;
-	nftw64;
-	_nftw64;
-	open64;
-	pread64;
-	pwrite64;
-	readdir64;
-	_readdir64;
-	readdir64_r;
-	_readdir64_r;
-	setrlimit64;
-	_setrlimit64;
+$if _ELF32
 	s_fcntl;
 	_s_fcntl		{ FLAGS = NODYNSORT };
 	s_ioctl;
-	stat64;
-	statvfs64;
-	_statvfs64;
-	tell64;
-	_tell64;
-	tmpfile64;
-	truncate64;
-	_truncate64;
-	_xftw64;
 $endif
+
+	creat64 { FLAGS = NODYNSORT };
+	fgetpos64 { FLAGS = NODYNSORT };
+	fopen64 { FLAGS = NODYNSORT };
+	freopen64 { FLAGS = NODYNSORT };
+	fseeko64 { FLAGS = NODYNSORT };
+	fsetpos64 { FLAGS = NODYNSORT };
+	fstat64 { FLAGS = NODYNSORT };
+	fstatvfs64 { FLAGS = NODYNSORT };
+	ftello64 { FLAGS = NODYNSORT };
+	ftruncate64 { FLAGS = NODYNSORT };
+	ftw64 { FLAGS = NODYNSORT };
+	getdents64 { FLAGS = NODYNSORT };
+	getrlimit64 { FLAGS = NODYNSORT };
+	lockf64 { FLAGS = NODYNSORT };
+	lseek64 { FLAGS = NODYNSORT };
+	lstat64 { FLAGS = NODYNSORT };
+	mkstemp64 { FLAGS = NODYNSORT };
+	mmap64 { FLAGS = NODYNSORT };
+	nftw64 { FLAGS = NODYNSORT };
+	open64 { FLAGS = NODYNSORT };
+	pread64 { FLAGS = NODYNSORT };
+	pwrite64 { FLAGS = NODYNSORT };
+	readdir64 { FLAGS = NODYNSORT };
+	readdir64_r { FLAGS = NODYNSORT };
+	setrlimit64 { FLAGS = NODYNSORT };
+	stat64 { FLAGS = NODYNSORT };
+	statvfs64 { FLAGS = NODYNSORT };
+	tell64 { FLAGS = NODYNSORT };
+	tmpfile64 { FLAGS = NODYNSORT };
+	truncate64 { FLAGS = NODYNSORT };
 
 $if _sparc
 	__flt_rounds;
@@ -1888,7 +1840,6 @@ $endif
 	mincore;
 	__minor;
 	mkstemp;
-	_mkstemp;
 	mlockall;
 	mrand48;
 	munlockall;
@@ -2228,7 +2179,6 @@ $endif
 	fsetpos;
 	fstat;
 	fstatvfs;
-	_fstatvfs;
 	fsync;
 	ftell;
 	ftok;
@@ -2270,7 +2220,6 @@ $endif
 	getpwnam;
 	getpwuid;
 	getrlimit;
-	_getrlimit;
 	gets;
 	getsid;
 	_getsid;
@@ -2329,7 +2278,6 @@ $endif
 	lsearch;
 	_lsearch;
 	lseek;
-	_lseek;
 	lstat;
 	makecontext;
 	_makecontext;
@@ -2353,7 +2301,6 @@ $endif
 	mlock;
 	_mlock;
 	mmap;
-	_mmap;
 	monitor;
 	_monitor;
 	mount;
@@ -2372,7 +2319,6 @@ $endif
 	munmap;
 	_munmap;
 	nftw;
-	_nftw;
 	nice;
 	_nice;
 	nl_langinfo;
@@ -2411,7 +2357,6 @@ $endif
 	rand;
 	read;
 	readdir;
-	_readdir;
 	readlink;
 	_readlink;
 	readv;
@@ -2447,7 +2392,6 @@ $endif
 	setpgrp;
 	_setpgrp;
 	setrlimit;
-	_setrlimit;
 	setsid;
 	_setsid;
 	setuid;
@@ -2504,7 +2448,6 @@ $endif
 	sscanf;
 	stat;
 	statvfs;
-	_statvfs;
 	stime;
 	_stime;
 	strcat;
@@ -2561,7 +2504,6 @@ $endif
 	tdelete;
 	_tdelete;
 	tell;
-	_tell;
 	telldir;
 	_telldir;
 	tempnam;
@@ -2934,11 +2876,9 @@ $endif
 	_fpsetmask;
 	_fpsetround;
 	_fpsetsticky;
-	_ftw;
 	_gcvt;
 	_getarg;
 	__getcontext;
-	_getdents;
 	_get_exit_frame_monitor;
 	_getfp;
 	_getgroupsbymember;
@@ -4031,11 +3971,6 @@ $endif
 	__imax_lldiv				{ FLAGS = NODYNSORT };
 	_ti_thr_self				{ FLAGS = NODYNSORT };
 	*;
-
-$if lf64
-	_seekdir64		{ FLAGS = NODYNSORT };
-	_telldir64		{ FLAGS = NODYNSORT };
-$endif
 
 $if _sparc
 	__cerror		{ FLAGS = NODYNSORT };

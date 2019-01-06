@@ -90,8 +90,7 @@ copylist64(const char *filenm, off64_t *szptr)
 
 	return (common_copylist(filenm, stbuf.st_size));
 }
-#endif
-
+#else
 
 char *
 copylist(const char *filenm, off_t *szptr)
@@ -112,3 +111,4 @@ copylist(const char *filenm, off_t *szptr)
 
 	return (common_copylist(filenm, stbuf.st_size));
 }
+#endif

@@ -97,40 +97,6 @@ extern "C" {
 typedef	unsigned int	uid_t;		/* UID type		*/
 #endif	/* !_UID_T */
 
-/* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	mkstemp		mkstemp64
-#pragma redefine_extname	mkstemps	mkstemps64
-#pragma	redefine_extname	mkostemp	mkostemp64
-#pragma	redefine_extname	mkostemps	mkostemps64
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	mkstemp			mkstemp64
-#define	mkstemps		mkstemps64
-#define	mkostemp		mkostemp64
-#define	mkostemps		mkostemps64
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-
-#endif	/* _FILE_OFFSET_BITS == 64 */
-
-/* In the LP64 compilation environment, all APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	mkstemp64	mkstemp
-#pragma redefine_extname	mkstemps64	mkstemps
-#pragma	redefine_extname	mkostemp64	mkostemp
-#pragma	redefine_extname	mkostemps64	mkostemps
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-#define	mkstemp64		mkstemp
-#define	mkstemps64		mkstemps
-#define	mkostemp64		mkostemp
-#define	mkostemps64		mkostemps
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
 extern int rand_r(unsigned int *);
 
 extern void _exithandle(void);
@@ -175,21 +141,12 @@ extern void swab(const char *, char *, ssize_t);
 #endif /* defined(__EXTENSIONS__) || !defined(_STRICT_STDC) ... */
 
 #if defined(__EXTENSIONS__) || \
-	!defined(__XOPEN_OR_POSIX) || defined(_XPG4_2) || \
-	(defined(_LARGEFILE_SOURCE) && _FILE_OFFSET_BITS == 64)
+	!defined(__XOPEN_OR_POSIX) || defined(_XPG4_2)
 extern int	mkstemp(char *);
 #if !defined(_XPG4_2) || defined(__EXTENSIONS__)
 extern int	mkstemps(char *, int);
 #endif
 #endif /* defined(__EXTENSIONS__) ... */
-
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern int	mkstemp64(char *);
-#if !defined(_XPG4_2) || defined(__EXTENSIONS__)
-extern int	mkstemps64(char *, int);
-#endif
-#endif	/* _LARGEFILE64_SOURCE... */
 
 #if !defined(_STRICT_SYMBOLS) || defined(_XPG7)
 extern char	*mkdtemp(char *);
@@ -198,11 +155,6 @@ extern char	*mkdtemp(char *);
 #if !defined(_STRICT_SYMBOLS)
 extern int		mkostemp(char *, int);
 extern int		mkostemps(char *, int, int);
-#if defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-		!defined(__PRAGMA_REDEFINE_EXTNAME))
-extern int		mkostemp64(char *, int);
-extern int		mkostemps64(char *, int, int);
-#endif	/* defined(_LARGEFILE64_SOURCE) || !((_FILE_OFFSET_BITS == 64) ... */
 #endif	/* !defined(_STRICT_SYMBOLS) */
 
 #if defined(__EXTENSIONS__) || \
@@ -287,6 +239,12 @@ extern uint32_t arc4random_uniform(uint32_t);
 long long strtonum(const char *, long long, long long, const char **);
 
 #endif	/* __UNLEASHED_VISIBLE */
+
+/* FIXME: source compat: these are libc aliases to non-64 versions */
+int mkstemp64(char *);
+int mkstemps64(char *, int);
+int mkostemp64(char *, int);
+int mkostemps64(char *, int, int);
 
 #ifdef	__cplusplus
 }

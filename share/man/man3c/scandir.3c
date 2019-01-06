@@ -70,11 +70,6 @@ The number of directory entries exceeds the number that can be represented by
 an \fBint\fR.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBscandir()\fR and \fBalphasort()\fR functions have transitional
-interfaces for 64-bit file offsets. See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -100,4 +95,4 @@ The \fBscandir()\fR function is Unsafe. The \fBalphasort()\fR function is Safe.
 .sp
 .LP
 \fBmalloc\fR(3C), \fBqsort\fR(3C), \fBreaddir\fR(3C), \fBstrcoll\fR(3C),
-\fBattributes\fR(5), \fBlf64\fR(5)
+\fBattributes\fR(5)

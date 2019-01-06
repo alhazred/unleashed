@@ -48,10 +48,6 @@
 extern "C" {
 #endif
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#error  "Cannot use swapctl in the large files compilation environment"
-#endif
-
 /* The following are for the swapctl system call */
 
 #define	SC_ADD		1	/* add a specified resource for swapping */

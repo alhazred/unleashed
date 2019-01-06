@@ -1829,14 +1829,6 @@ show_fcntl(private_t *pri)
 		show_flock64(pri, offset);
 		break;
 #else	/* _LP64 */
-	case F_GETLK:
-	case F_SETLK:
-	case F_SETLKW:
-	case F_FREESP:
-	case F_ALLOCSP:
-	case F_SETLK_NBMAND:
-		show_flock32(pri, offset);
-		break;
 	case F_GETLK64:
 	case F_SETLK64:
 	case F_SETLKW64:

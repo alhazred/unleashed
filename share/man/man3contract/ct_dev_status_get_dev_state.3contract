@@ -11,7 +11,7 @@ object
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB-D_LARGEFILE64_SOURCE\fR \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
+cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
 #include <libcontract.h>
 #include <sys/contract/device.h>
 
@@ -220,4 +220,4 @@ MT-Level	Safe
 .LP
 \fBct_status_free\fR(3CONTRACT), \fBct_status_read\fR(3CONTRACT),
 \fBlibcontract\fR(3LIB), \fBcontract\fR(4), \fBdevices\fR(4),
-\fBattributes\fR(5), \fBlfcompile\fR(5)
+\fBattributes\fR(5)

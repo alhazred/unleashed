@@ -31,6 +31,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <signal.h>
 #include "misc.h"
 #include "msgs.h"
@@ -40,6 +41,10 @@
 #include <unistd.h>
 #include "extern.h"
 
+int check_version(int, char *); /* libc/nsl */
+
+int startpm(struct sactab *);
+int sendsig(struct sactab *, int);
 
 /*
  * read_table - read in SAC's administrative file and build internal

@@ -453,7 +453,7 @@ srch_dir(const entry_t path,	/* current path */
     struct stat64 *fsb)		/* the file being searched for */
 {
 	DIR *dirp;
-	struct dirent64 *direntp;
+	struct dirent *direntp;
 	struct stat64 tsb;
 	char file_name[MAX_DEV_PATH];
 	entry_t file;
@@ -490,7 +490,7 @@ srch_dir(const entry_t path,	/* current path */
 	/*
 	 * read thru the directory
 	 */
-	while ((!found) && ((direntp = readdir64(dirp)) != NULL)) {
+	while ((!found) && ((direntp = readdir(dirp)) != NULL)) {
 		/*
 		 * skip "." and ".." entries, if present
 		 */

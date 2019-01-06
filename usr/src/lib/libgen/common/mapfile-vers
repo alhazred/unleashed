@@ -48,7 +48,9 @@ SYMBOL_VERSION SUNW_1.1 {
 	___braslist;
 	bufsplit;
 	compile;
+$if _ELF64
 	copylist;
+$endif
 	eaccess;
 	gmatch;
 	isencrypt;

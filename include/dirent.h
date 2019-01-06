@@ -69,32 +69,6 @@ typedef struct {
 
 #endif /* !defined(__XOPEN_OR_POSIX) */
 
-/* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	readdir	readdir64
-#pragma	redefine_extname	scandir	scandir64
-#pragma	redefine_extname	alphasort alphasort64
-#else
-#define	readdir			readdir64
-#define	scandir			scandir64
-#define	alphasort		alphasort64
-#endif
-#endif	/* _FILE_OFFSET_BITS == 64 */
-
-/* In the LP64 compilation environment, all APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	readdir64	readdir
-#pragma	redefine_extname	scandir64	scandir
-#pragma	redefine_extname	alphasort64	alphasort
-#else
-#define	readdir64		readdir
-#define	scandir64		scandir
-#define	alphsort64		alphasort
-#endif
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
-
 extern DIR		*opendir(const char *);
 #if defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX) || \
 	defined(_ATFILE_SOURCE)
@@ -118,53 +92,21 @@ extern void		seekdir(DIR *, long);
 extern void		rewinddir(DIR *);
 extern int		closedir(DIR *);
 
-/* transitional large file interface */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern struct dirent64	*readdir64(DIR *);
-#if defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX)
-extern int	scandir64(const char *, struct dirent64 *(*[]),
-			int (*)(const struct dirent64 *),
-			int (*)(const struct dirent64 **,
-				const struct dirent64 **));
-extern int	alphasort64(const struct dirent64 **, const struct dirent64 **);
-#endif /* defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX) */
-#endif
-
 #if defined(__EXTENSIONS__) || !defined(_POSIX_C_SOURCE) || \
 	defined(_XOPEN_SOURCE)
 #define	rewinddir(dirp)	seekdir(dirp, 0L)
 #endif
 
-/*
- * readdir_r() prototype is defined here.
- *
- * In the LP64 compilation environment, all APIs are already large file.
- */
-
-#if defined(_LP64)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname readdir64_r	readdir_r
-#else
-#define	readdir64_r		readdir_r
-#endif
-#elif	_FILE_OFFSET_BITS != 32
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname readdir_r	readdir64_r
-#else
-#define	readdir_r		readdir64_r
-#endif
-#endif
-
 extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
 	struct dirent **_RESTRICT_KYWD);
 
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-/* transitional large file interface */
-extern int readdir64_r(DIR *_RESTRICT_KYWD, struct dirent64 *_RESTRICT_KYWD,
-	struct dirent64 **_RESTRICT_KYWD);
-#endif
+/*
+ * FIXME source compat: these are aliases to non-64 ones in libc (though the
+ * arg types are differently named).
+ */
+struct dirent64 *readdir64(DIR *);
+int readdir64_r(DIR *_RESTRICT_KYWD, struct dirent64 *_RESTRICT_KYWD,
+    struct dirent64 **_RESTRICT_KYWD);
 
 #ifdef	__cplusplus
 }

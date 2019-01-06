@@ -34,6 +34,9 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#pragma weak fgetpos64 = fgetpos
+#pragma weak fsetpos64 = fsetpos
+
 int
 fgetpos(FILE *stream, fpos_t *pos)
 {

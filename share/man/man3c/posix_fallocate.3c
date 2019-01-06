@@ -158,11 +158,6 @@ There is insufficient free space remaining on the file system storage media.
 The \fIfd\fR argument is associated with a pipe or FIFO.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBposix_fallocate()\fR function has a transitional interface for 64-bit
-file offsets. See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP

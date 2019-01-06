@@ -39,10 +39,6 @@ MAN = Intro.5 \
       kerberos.5 \
       krb5_auth_rules.5 \
       krb5envvar.5 \
-      largefile.5 \
-      lf64.5 \
-      lfcompile.5 \
-      lfcompile64.5 \
       loader.4th.5 \
       loader.5 \
       locale.5 \

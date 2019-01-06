@@ -137,10 +137,6 @@ The \fBtmpfile\fR(3C) function is preferred over this function.
 .LP
 The \fBmkstemp()\fR function is frequently used to create a temporary file that
 will be removed by the application before the application terminates.
-.sp
-.LP
-The \fBmkstemp()\fR function has a transitional interface for 64-bit file
-offsets. See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -165,5 +161,5 @@ The \fBmkstemp()\fR function is Standard. The \fBmkstemps()\fR and
 .sp
 .LP
 \fBgetpid\fR(2), \fBlstat\fR(2), \fBmkdir\fR(2), \fBopen\fR(2),
-\fBtmpfile\fR(3C), \fBmktemp\fR(3C), \fBattributes\fR(5), \fBlf64\fR(5),
+\fBtmpfile\fR(3C), \fBmktemp\fR(3C), \fBattributes\fR(5),
 \fBstandards\fR(5)

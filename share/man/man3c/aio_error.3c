@@ -86,11 +86,6 @@ The \fIaiocbp\fR argument does not refer to an asynchronous operation whose
 return status has not yet been retrieved.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBaio_error()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH EXAMPLES
 .LP
 \fBExample 1 \fRThe following is an example of an error handling routine using
@@ -161,4 +156,4 @@ Standard	See \fBstandards\fR(5).
 \fBwrite\fR(2), \fBaio.h\fR(3HEAD), \fBaio_cancel\fR(3C), \fBaio_fsync\fR(3C),
 \fBaio_read\fR(3C), \fBaio_return\fR(3C), \fBaio_write\fR(3C),
 \fBlio_listio\fR(3C), \fBsignal.h\fR(3HEAD), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

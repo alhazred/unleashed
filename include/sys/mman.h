@@ -180,28 +180,6 @@ typedef struct mmapobj_result32 {
 #endif /* __UNLEASHED_VISIBLE */
 
 #if	!defined(_ASM) && !defined(_KERNEL)
-/*
- * large file compilation environment setup
- *
- * In the LP64 compilation environment, map large file interfaces
- * back to native versions where possible.
- */
-
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname	mmap	mmap64
-#else
-#define	mmap			mmap64
-#endif
-#endif /* !_LP64 && _FILE_OFFSET_BITS == 64 */
-
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
-#ifdef	__PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	mmap64	mmap
-#else
-#define	mmap64			mmap
-#endif
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
 
 #ifdef __PRAGMA_REDEFINE_EXTNAME
 #pragma redefine_extname	getpagesizes	getpagesizes2
@@ -209,17 +187,16 @@ typedef struct mmapobj_result32 {
 #define	getpagesizes	getpagesizes2
 #endif
 
+
 extern void *mmap(void *, size_t, int, int, int, off_t);
 extern int munmap(void *, size_t);
 extern int mprotect(void *, size_t, int);
 extern int msync(void *, size_t, int);
 extern int mlock(const void *, size_t);
 extern int munlock(const void *, size_t);
-/* transitional large file interface version */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
-extern void *mmap64(void *, size_t, int, int, int, off64_t);
-#endif	/* _LARGEFILE64_SOURCE... */
+
+/* FIXME source compat: this libc symbol is an alias to mmap() */
+void *mmap64(void *, size_t, int, int, int, off_t);
 
 extern int mincore(caddr_t, size_t, char *);
 extern int memcntl(caddr_t, size_t, int, caddr_t, int, int);

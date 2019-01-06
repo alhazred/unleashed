@@ -30,10 +30,6 @@ interfaces.
 A combination of standard system calls (for example, \fBopen\fR(2),
 \fBclose\fR(2), and \fBpoll\fR(2)) and calls to \fBlibcontract\fR(3LIB) access
 \fB/system/contract\fR files.
-.sp
-.LP
-Consumers of the contract file system must be large file aware. See
-\fBlargefile\fR(5) and \fBlfcompile64\fR(5).
 .SS "DIRECTORY STRUCTURE"
 .LP
 At the top level, the \fB/system/contract\fR directory contains subdirectories
@@ -613,4 +609,4 @@ Status info for contract ID
 \fBct_status_get_state\fR(3CONTRACT), \fBct_status_get_type\fR(3CONTRACT),
 \fBct_tmpl_set_cookie\fR(3CONTRACT), \fBct_tmpl_set_critical\fR(3CONTRACT),
 \fBct_tmpl_set_informative\fR(3CONTRACT), \fBlibcontract\fR(3LIB),
-\fBprocess\fR(4), \fBlargefile\fR(5), \fBlfcompile\fR(5), \fBprivileges\fR(5)
+\fBprocess\fR(4), \fBprivileges\fR(5)

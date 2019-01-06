@@ -46,6 +46,9 @@
 #include <sys/types.h>
 #include <sys/file.h>
 #include <dirent.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include <sys/fs/hsfs_isospec.h>
 #include <sys/fs/hsfs_spec.h>

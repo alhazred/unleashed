@@ -32,6 +32,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+#pragma weak posix_fadvise64 = posix_fadvise
+
 /*
  * SUSv3 - file advisory information
  *
@@ -45,6 +47,7 @@
  */
 
 /* ARGSUSED1 */
+
 int
 posix_fadvise(int fd, off_t offset, off_t len, int advice)
 {
@@ -69,33 +72,3 @@ posix_fadvise(int fd, off_t offset, off_t len, int advice)
 		return (ESPIPE);
 	return (0);
 }
-
-#if !defined(_LP64)
-
-/* ARGSUSED1 */
-int
-posix_fadvise64(int fd, off64_t offset, off64_t len, int advice)
-{
-	struct stat64 statb;
-
-	switch (advice) {
-	case POSIX_FADV_NORMAL:
-	case POSIX_FADV_RANDOM:
-	case POSIX_FADV_SEQUENTIAL:
-	case POSIX_FADV_WILLNEED:
-	case POSIX_FADV_DONTNEED:
-	case POSIX_FADV_NOREUSE:
-		break;
-	default:
-		return (EINVAL);
-	}
-	if (len < 0)
-		return (EINVAL);
-	if (fstat64(fd, &statb) != 0)
-		return (EBADF);
-	if (S_ISFIFO(statb.st_mode))
-		return (ESPIPE);
-	return (0);
-}
-
-#endif

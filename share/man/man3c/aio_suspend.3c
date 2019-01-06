@@ -147,11 +147,6 @@ later.
 The \fBaio_suspend()\fR function is not supported by the system.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBaio_suspend()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -177,7 +172,7 @@ Standard	See \fBstandards\fR(5).
 .LP
 \fBaio.h\fR(3HEAD), \fBaio_fsync\fR(3C), \fBaio_read\fR(3C),
 \fBaio_return\fR(3C), \fBaio_write\fR(3C), \fBlio_listio\fR(3C),
-\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBstandards\fR(5)
 .SH NOTES
 .sp
 .LP

@@ -31,15 +31,10 @@
 
 #include <sys/asm_linkage.h>
 
-#if !defined(_LARGEFILE_SOURCE)
 	ANSI_PRAGMA_WEAK(mmap,function)
-#else
-	ANSI_PRAGMA_WEAK(mmap64,function)
-#endif
+	ANSI_PRAGMA_WEAK2(mmap64,mmap,function)
 
 #include "SYS.h"
-
-#if !defined(_LARGEFILE_SOURCE)
 
 /*
  * C library -- mmap
@@ -52,19 +47,3 @@
 	SYSCERROR
 	RET
 	SET_SIZE(mmap)
-
-#else
-
-/*
- * C library -- mmap64
- * void *mmap64(void *addr, size_t len, int prot,
- *	int flags, int fd, off64_t off)
- */
-
-	ENTRY(mmap64)
-	SYSTRAP_RVAL1(mmap64)
-	SYSCERROR
-	RET
-	SET_SIZE(mmap64)
-
-#endif

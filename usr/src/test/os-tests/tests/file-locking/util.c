@@ -154,21 +154,22 @@ flock_cmdname(int cmd)
 	switch (cmd) {
 	case F_SETLK:
 		return ("F_SETLK");
-	case F_OFD_SETLK:
-		return ("F_OFD_SETLK");
 	case F_SETLKW:
 		return ("F_SETLKW");
-	case F_OFD_SETLKW:
-		return ("F_OFD_SETLKW");
 	case F_GETLK:
 		return ("F_GETLK");
-	case F_OFD_GETLK:
-		return ("F_OFD_GETLK");
 	case F_FLOCK:
 		return ("F_FLOCK");
 	case F_FLOCKW:
 		return ("F_FLOCKW");
-#if !defined(_LP64)
+#ifdef _LP64
+	case F_OFD_SETLK:
+		return ("F_OFD_SETLK");
+	case F_OFD_SETLKW:
+		return ("F_OFD_SETLKW");
+	case F_OFD_GETLK:
+		return ("F_OFD_GETLK");
+#else
 	case F_OFD_SETLK64:
 		return ("F_OFD_SETLK64");
 	case F_OFD_SETLKW64:

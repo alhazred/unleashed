@@ -212,7 +212,7 @@ extern Uchar 	*_findbuf(FILE *iop);
 /*
  * Internal routine used by fopen.c
  */
-extern	FILE	*_endopen(const char *, const char *, FILE *, int);
+extern	FILE	*_endopen(const char *, const char *, FILE *);
 
 /*
  * Internal routine from fwrite.c

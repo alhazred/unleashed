@@ -287,7 +287,6 @@ extern void _aio_lio_free(aio_lio_t *);
 extern int _aio_idle(aio_worker_t *);
 extern void *_aio_do_request(void *);
 extern void *_aio_do_notify(void *);
-extern void _lio_remove(aio_req_t *);
 extern aio_req_t *_aio_req_remove(aio_req_t *);
 extern int _aio_get_timedelta(timespec_t *, timespec_t *);
 extern aio_result_t *_aio_req_done(void);

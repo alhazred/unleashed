@@ -73,7 +73,6 @@ include ../Makefile.cmd-inet
 ROOTSBINPROG = $(ROOTFS_PROG:%=$(ROOTSBIN)/%)
 ROOTUSRSBINLINKS = $(SBINLINKS:%=$(ROOTUSRSBIN)/%)
 
-CERRWARN += -Wno-implicit-function-declaration
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-unused-variable
 CERRWARN += -Wno-unused-function

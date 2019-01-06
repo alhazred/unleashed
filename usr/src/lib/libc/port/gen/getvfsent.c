@@ -112,7 +112,7 @@ getvfsany(FILE *fd, struct vfstab *vgetp, struct vfstab *vrefp)
 	mode_t	bmode, cmode;
 	dev_t	brdev, crdev;
 	struct stat64	statb;
-	off64_t start = ftello64(fd);
+	off_t start = ftello(fd);
 
 	/* Match by straight strcmp */
 	while ((ret = getvfsent(fd, vgetp)) == 0 &&
@@ -133,7 +133,7 @@ getvfsany(FILE *fd, struct vfstab *vgetp, struct vfstab *vrefp)
 	 * match the devices by doing stat's (retains compatibility
 	 * with original getvfsany).
 	 */
-	(void) fseeko64(fd, start, SEEK_SET);
+	(void) fseeko(fd, start, SEEK_SET);
 
 	if (vrefp->vfs_special && stat64(vrefp->vfs_special, &statb) == 0 &&
 	    ((bmode = (statb.st_mode & S_IFMT)) == S_IFBLK ||

@@ -45,18 +45,13 @@
 
 #include	<sys/feature_tests.h>
 
-#if !defined(_LP64)
-#pragma weak _readdir64 = readdir64
-#endif
-#pragma weak _readdir = readdir
+#pragma weak readdir64 = readdir
 
 #include "lint.h"
 #include <dirent.h>
 #include <limits.h>
 #include <errno.h>
 #include "libc.h"
-
-#ifdef _LP64
 
 dirent_t *
 readdir(DIR *dirp)
@@ -82,80 +77,3 @@ readdir(DIR *dirp)
 
 	return ((dirent_t *)(uintptr_t)&dirp->dd_buf[dirp->dd_loc]);
 }
-
-#else	/* _LP64 */
-
-/*
- * Welcome to the complicated world of large files on a small system.
- */
-
-dirent64_t *
-readdir64(DIR *dirp)
-{
-	dirent64_t *dp64;	/* -> directory data */
-	int saveloc = 0;
-
-	if (dirp->dd_size != 0) {
-		dp64 = (dirent64_t *)(uintptr_t)&dirp->dd_buf[dirp->dd_loc];
-		/* was converted by readdir and needs to be reversed */
-		if (dp64->d_ino == (ino64_t)-1) {
-			dirent_t *dp32;
-
-			dp32 = (dirent_t *)(&dp64->d_off);
-			dp64->d_ino = (ino64_t)dp32->d_ino;
-			dp64->d_off = (off64_t)dp32->d_off;
-			dp64->d_reclen = (unsigned short)(dp32->d_reclen +
-			    ((char *)&dp64->d_off - (char *)dp64));
-		}
-		saveloc = dirp->dd_loc;		/* save for possible EOF */
-		dirp->dd_loc += (int)dp64->d_reclen;
-	}
-	if (dirp->dd_loc >= dirp->dd_size)
-		dirp->dd_loc = dirp->dd_size = 0;
-
-	if (dirp->dd_size == 0 && 	/* refill buffer */
-	    (dirp->dd_size = getdents64(dirp->dd_fd,
-	    (dirent64_t *)(uintptr_t)dirp->dd_buf, DIRBUF)) <= 0) {
-		if (dirp->dd_size == 0)		/* This means EOF */
-			dirp->dd_loc = saveloc;	/* so save for telldir */
-		return (NULL);		/* error or EOF */
-	}
-
-	dp64 = (dirent64_t *)(uintptr_t)&dirp->dd_buf[dirp->dd_loc];
-	return (dp64);
-}
-
-/*
- * readdir now does translation of dirent64 entries into dirent entries.
- * We rely on the fact that dirents are smaller than dirent64s and we
- * reuse the space accordingly.
- */
-dirent_t *
-readdir(DIR *dirp)
-{
-	dirent64_t *dp64;	/* -> directory data */
-	dirent_t *dp32;		/* -> directory data */
-
-	if ((dp64 = readdir64(dirp)) == NULL)
-		return (NULL);
-
-	/*
-	 * Make sure that the offset fits in 32 bits.
-	 */
-	if (((off_t)dp64->d_off != dp64->d_off &&
-	    (uint64_t)dp64->d_off > (uint64_t)UINT32_MAX) ||
-	    dp64->d_ino > SIZE_MAX) {
-		errno = EOVERFLOW;
-		return (NULL);
-	}
-
-	dp32 = (dirent_t *)(&dp64->d_off);
-	dp32->d_off = (off_t)dp64->d_off;
-	dp32->d_ino = (ino_t)dp64->d_ino;
-	dp32->d_reclen = (unsigned short)(dp64->d_reclen -
-	    ((char *)&dp64->d_off - (char *)dp64));
-	dp64->d_ino = (ino64_t)-1;	/* flag as converted for readdir64 */
-	/* d_name d_reclen should not move */
-	return (dp32);
-}
-#endif	/* _LP64 */

@@ -43,15 +43,7 @@
 #include <thread.h>
 #include <synch.h>
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-#undef ftw
-#undef ftw64
-#define	ftw	ftw64
-#pragma weak _ftw64 = ftw64
-#else
-#undef ftw
-#pragma weak _ftw = ftw
-#endif
+#pragma weak ftw64 = ftw
 
 int
 ftw(const char *path, int (*fn)(), int depth)

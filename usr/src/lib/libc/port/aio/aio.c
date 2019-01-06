@@ -34,6 +34,9 @@
 #include <sys/file.h>
 #include <sys/port.h>
 
+#pragma weak aiowrite64 = aiowrite
+#pragma weak aioread64 = aioread
+
 static int _aio_hash_insert(aio_result_t *, aio_req_t *);
 static aio_req_t *_aio_req_get(aio_worker_t *);
 static void _aio_req_add(aio_req_t *, aio_worker_t **, int);
@@ -327,22 +330,6 @@ aiowrite(int fd, caddr_t buf, int bufsz, off_t offset, int whence,
 {
 	return (_aiorw(fd, buf, bufsz, offset, whence, resultp, AIOWRITE));
 }
-
-#if !defined(_LP64)
-int
-aioread64(int fd, caddr_t buf, int bufsz, off64_t offset, int whence,
-    aio_result_t *resultp)
-{
-	return (_aiorw(fd, buf, bufsz, offset, whence, resultp, AIOAREAD64));
-}
-
-int
-aiowrite64(int fd, caddr_t buf, int bufsz, off64_t offset, int whence,
-    aio_result_t *resultp)
-{
-	return (_aiorw(fd, buf, bufsz, offset, whence, resultp, AIOAWRITE64));
-}
-#endif	/* !defined(_LP64) */
 
 int
 _aiorw(int fd, caddr_t buf, int bufsz, offset_t offset, int whence,
@@ -887,10 +874,6 @@ _aio_create_worker(aio_req_t *reqp, int mode)
 	case AIOWRITE:
 	case AIOAREAD:
 	case AIOAWRITE:
-#if !defined(_LP64)
-	case AIOAREAD64:
-	case AIOAWRITE64:
-#endif
 		workers = &__workers_rw;
 		nextworker = &__nextworker_rw;
 		aio_workerscnt = &__rw_workerscnt;
@@ -1120,53 +1103,6 @@ top:
 			}
 			sigoff(self);	/* block SIGAIOCANCEL */
 			break;
-#if !defined(_LP64)
-		case AIOAREAD64:
-			sigon(self);	/* unblock SIGAIOCANCEL */
-			retval = pread64(arg->fd, arg->buf,
-			    arg->bufsz, arg->offset);
-			if (retval == -1) {
-				if (errno == ESPIPE) {
-					retval = read(arg->fd,
-					    arg->buf, arg->bufsz);
-					if (retval == -1)
-						error = errno;
-				} else {
-					error = errno;
-				}
-			}
-			sigoff(self);	/* block SIGAIOCANCEL */
-			break;
-		case AIOAWRITE64:
-			/*
-			 * The SUSv3 POSIX spec for aio_write() states:
-			 *	If O_APPEND is set for the file descriptor,
-			 *	write operations append to the file in the
-			 *	same order as the calls were made.
-			 * but, somewhat inconsistently, it requires pwrite()
-			 * to ignore the O_APPEND setting.  So we have to use
-			 * fcntl() to get the open modes and call write() for
-			 * the O_APPEND case.
-			 */
-			append = (__fcntl(arg->fd, F_GETFL) & O_APPEND);
-			sigon(self);	/* unblock SIGAIOCANCEL */
-			retval = append?
-			    write(arg->fd, arg->buf, arg->bufsz) :
-			    pwrite64(arg->fd, arg->buf, arg->bufsz,
-			    arg->offset);
-			if (retval == -1) {
-				if (errno == ESPIPE) {
-					retval = write(arg->fd,
-					    arg->buf, arg->bufsz);
-					if (retval == -1)
-						error = errno;
-				} else {
-					error = errno;
-				}
-			}
-			sigoff(self);	/* block SIGAIOCANCEL */
-			break;
-#endif	/* !defined(_LP64) */
 		case AIOFSYNC:
 			if (_aio_fsync_del(aiowp, reqp))
 				goto top;
@@ -1259,12 +1195,7 @@ _aio_finish_request(aio_worker_t *aiowp, ssize_t retval, int error)
 void
 _aio_req_mark_done(aio_req_t *reqp)
 {
-#if !defined(_LP64)
-	if (reqp->req_largefile)
-		((aiocb64_t *)reqp->req_aiocbp)->aio_state = USERAIO_DONE;
-	else
-#endif
-		((aiocb_t *)reqp->req_aiocbp)->aio_state = USERAIO_DONE;
+	((aiocb_t *)reqp->req_aiocbp)->aio_state = USERAIO_DONE;
 }
 
 /*
@@ -1738,10 +1669,6 @@ _aio_req_add(aio_req_t *reqp, aio_worker_t **nextworker, int mode)
 	case AIOWRITE:
 	case AIOAREAD:
 	case AIOAWRITE:
-#if !defined(_LP64)
-	case AIOAREAD64:
-	case AIOAWRITE64:
-#endif
 		/* try to find an idle worker */
 		found = 0;
 		do {
@@ -1895,10 +1822,6 @@ _aio_req_get(aio_worker_t *aiowp)
 		case AIOWRITE:
 		case AIOAREAD:
 		case AIOAWRITE:
-#if !defined(_LP64)
-		case AIOAREAD64:
-		case AIOAWRITE64:
-#endif
 			ASSERT(aiowp->work_minload1 > 0);
 			aiowp->work_minload1--;
 			break;
@@ -2231,117 +2154,3 @@ _aio_rw(aiocb_t *aiocbp, aio_lio_t *lio_head, aio_worker_t **nextworker,
 	_aio_req_add(reqp, nextworker, mode);
 	return (0);
 }
-
-#if !defined(_LP64)
-/*
- * 64-bit AIO interface for POSIX
- */
-int
-_aio_rw64(aiocb64_t *aiocbp, aio_lio_t *lio_head, aio_worker_t **nextworker,
-    int mode, int flg)
-{
-	aio_req_t *reqp;
-	aio_args_t *ap;
-	int kerr;
-
-	if (aiocbp == NULL) {
-		errno = EINVAL;
-		return (-1);
-	}
-
-	/* initialize kaio */
-	if (!_kaio_ok)
-		_kaio_init();
-
-	aiocbp->aio_state = NOCHECK;
-
-	/*
-	 * If we have been called because a list I/O
-	 * kaio() failed, we dont want to repeat the
-	 * system call
-	 */
-
-	if (flg & AIO_KAIO) {
-		/*
-		 * Try kernel aio first.
-		 * If errno is ENOTSUP/EBADFD,
-		 * fall back to the thread implementation.
-		 */
-		if (_kaio_ok > 0 && KAIO_SUPPORTED(aiocbp->aio_fildes)) {
-			aiocbp->aio_resultp.aio_errno = EINPROGRESS;
-			aiocbp->aio_state = CHECK;
-			kerr = (int)_kaio(mode, aiocbp);
-			if (kerr == 0)
-				return (0);
-			if (errno != ENOTSUP && errno != EBADFD) {
-				aiocbp->aio_resultp.aio_errno = errno;
-				aiocbp->aio_resultp.aio_return = -1;
-				aiocbp->aio_state = NOCHECK;
-				return (-1);
-			}
-			if (errno == EBADFD)
-				SET_KAIO_NOT_SUPPORTED(aiocbp->aio_fildes);
-		}
-	}
-
-	aiocbp->aio_resultp.aio_errno = EINPROGRESS;
-	aiocbp->aio_state = USERAIO;
-
-	if (!__uaio_ok && __uaio_init() == -1)
-		return (-1);
-
-	if ((reqp = _aio_req_alloc()) == NULL) {
-		errno = EAGAIN;
-		return (-1);
-	}
-
-	/*
-	 * If an LIO request, add the list head to the aio request
-	 */
-	reqp->req_head = lio_head;
-	reqp->req_type = AIO_POSIX_REQ;
-	reqp->req_op = mode;
-	reqp->req_largefile = 1;
-
-	if (aiocbp->aio_sigevent.sigev_notify == SIGEV_NONE) {
-		reqp->req_sigevent.sigev_notify = SIGEV_NONE;
-	} else if (aiocbp->aio_sigevent.sigev_notify == SIGEV_SIGNAL) {
-		reqp->req_sigevent.sigev_notify = SIGEV_SIGNAL;
-		reqp->req_sigevent.sigev_signo =
-		    aiocbp->aio_sigevent.sigev_signo;
-		reqp->req_sigevent.sigev_value.sival_ptr =
-		    aiocbp->aio_sigevent.sigev_value.sival_ptr;
-	} else if (aiocbp->aio_sigevent.sigev_notify == SIGEV_PORT) {
-		port_notify_t *pn = aiocbp->aio_sigevent.sigev_value.sival_ptr;
-		reqp->req_sigevent.sigev_notify = SIGEV_PORT;
-		reqp->req_sigevent.sigev_signo =
-		    pn->portnfy_port;
-		reqp->req_sigevent.sigev_value.sival_ptr =
-		    pn->portnfy_user;
-	} else if (aiocbp->aio_sigevent.sigev_notify == SIGEV_THREAD) {
-		reqp->req_sigevent.sigev_notify = SIGEV_THREAD;
-		reqp->req_sigevent.sigev_signo =
-		    aiocbp->aio_sigevent.sigev_signo;
-		reqp->req_sigevent.sigev_value.sival_ptr =
-		    aiocbp->aio_sigevent.sigev_value.sival_ptr;
-	}
-
-	reqp->req_resultp = &aiocbp->aio_resultp;
-	reqp->req_aiocbp = aiocbp;
-	ap = &reqp->req_args;
-	ap->fd = aiocbp->aio_fildes;
-	ap->buf = (caddr_t)aiocbp->aio_buf;
-	ap->bufsz = aiocbp->aio_nbytes;
-	ap->offset = aiocbp->aio_offset;
-
-	if ((flg & AIO_NO_DUPS) &&
-	    _aio_hash_insert(&aiocbp->aio_resultp, reqp) != 0) {
-		aio_panic("_aio_rw64(): request already in hash table");
-		_aio_req_free(reqp);
-		errno = EINVAL;
-		return (-1);
-	}
-	_aio_req_add(reqp, nextworker, mode);
-	return (0);
-}
-#endif	/* !defined(_LP64) */

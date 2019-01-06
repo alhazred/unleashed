@@ -351,11 +351,6 @@ Pathname resolution of a symbolic link produced an intermediate result whose
 length exceeds {\fBPATH_MAX\fR}.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBtruncate()\fR and \fBftruncate()\fR functions have transitional
-interfaces for 64-bit file offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -378,4 +373,4 @@ MT-Level	MT-Safe
 .sp
 .LP
 \fBchmod\fR(2), \fBfcntl\fR(2), \fBopen\fR(2), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

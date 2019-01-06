@@ -669,7 +669,7 @@ add_new_property(scf_handle_t *h, scf_transaction_t *tx, const char *name,
 
 	switch (ty) {
 	case SCF_TYPE_COUNT:
-		scf_value_set_count(v, (uint64_t)(uintptr_t)val);
+		scf_value_set_count(v, *(uint64_t *)val);
 		break;
 
 	case SCF_TYPE_TIME:
@@ -709,6 +709,7 @@ set_legacy_service(scf_propertygroup_t *pg, const char *script, ino_t inode)
 	ctid_t ctid;
 	char *svc_name = NULL;
 	int ret;
+	uint64_t count;
 
 	h = scf_pg_handle(pg);
 	if (h == NULL) {
@@ -749,8 +750,9 @@ set_legacy_service(scf_propertygroup_t *pg, const char *script, ino_t inode)
 	    SCF_TYPE_TIME, &tstamp) != 0)
 		goto err;
 
+	count = inode;
 	if (add_new_property(h, tx, SCF_LEGACY_PROPERTY_INODE,
-	    SCF_TYPE_COUNT, (void *)inode) != 0)
+	    SCF_TYPE_COUNT, &count) != 0)
 		goto err;
 
 	if ((suffix = script_suffix(script)) != NULL) {
@@ -761,8 +763,9 @@ set_legacy_service(scf_propertygroup_t *pg, const char *script, ino_t inode)
 		free(suffix);
 	}
 
+	count = ctid;
 	if (add_new_property(h, tx, SCF_PROPERTY_CONTRACT, SCF_TYPE_COUNT,
-	    (void *)ctid) != 0)
+	    &count) != 0)
 		goto err;
 
 	for (;;) {

@@ -32,6 +32,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#pragma weak posix_fallocate64 = posix_fallocate
+
 /*
  * Return the proper Posix error number for a failed (EINVAL) fcntl() operation.
  */
@@ -76,31 +78,3 @@ posix_fallocate(int fd, off_t offset, off_t len)
 	}
 	return (0);
 }
-
-#if !defined(_LP64)
-
-int
-posix_fallocate64(int fd, off64_t offset, off64_t len)
-{
-	struct flock64 lck;
-	int error;
-
-	if (offset < 0 || len <= 0)
-		return (EINVAL);
-
-	lck.l_whence = 0;
-	lck.l_start = offset;
-	lck.l_len = len;
-	lck.l_type = F_WRLCK;
-
-	if (fcntl(fd, F_ALLOCSP64, &lck) == -1) {
-		if ((error = errno) == EINVAL)
-			error = fallocate_errno(fd);
-		else if (error == EOVERFLOW)
-			error = EFBIG;
-		return (error);
-	}
-	return (0);
-}
-
-#endif

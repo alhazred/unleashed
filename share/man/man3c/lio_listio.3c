@@ -281,11 +281,6 @@ or equal to the offset maximum in the open file description associated with
 \fIaiocbp\fR\(->\fBaio_fildes.\fR
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBlio_listio()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -314,4 +309,4 @@ Standard	See \fBstandards\fR(5).
 \fBaio_fsync\fR(3C), \fBaio_read\fR(3C), \fBaio_return\fR(3C),
 \fBaio_write\fR(3C), \fBaio.h\fR(3HEAD), \fBfcntl.h\fR(3HEAD),
 \fBsiginfo.h\fR(3HEAD), \fBsignal.h\fR(3HEAD), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

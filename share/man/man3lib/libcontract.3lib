@@ -9,7 +9,7 @@ libcontract \- contract management library
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR... ] `getconf LFS_CFLAGS` \fIfile\fR... \fB-lcontract\fR [ \fIlibrary\fR... ]
+cc [ \fIflag\fR... ] \fIfile\fR... \fB-lcontract\fR [ \fIlibrary\fR... ]
 #include <\fBlibcontract.h\fR>
 .fi
 
@@ -114,5 +114,4 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBpvs\fR(1), \fBIntro\fR(3), \fBcontract\fR(4), \fBattributes\fR(5),
-\fBlfcompile\fR(5)
+\fBpvs\fR(1), \fBIntro\fR(3), \fBcontract\fR(4), \fBattributes\fR(5)

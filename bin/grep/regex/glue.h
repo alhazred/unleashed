@@ -23,7 +23,7 @@
 #define tre_isalnum			iswalnum
 
 #define REG_OK				0
-#define REG_LITERAL			0020
+#define REG_LITERAL			REG_NOSPEC
 #define REG_WORD			0100
 #define REG_GNU				0400
 

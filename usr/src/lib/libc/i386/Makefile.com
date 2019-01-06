@@ -170,22 +170,6 @@ GENOBJS=			\
 	unvis.o			\
 	vis.o
 
-# sysobjs that contain large-file interfaces
-COMSYSOBJS64=			\
-	fstatvfs64.o		\
-	getdents64.o		\
-	getrlimit64.o		\
-	lseek64.o		\
-	mmap64.o		\
-	pread64.o		\
-	preadv64.o		\
-	pwrite64.o		\
-	pwritev64.o		\
-	setrlimit64.o		\
-	statvfs64.o
-
-SYSOBJS64=
-
 COMSYSOBJS=			\
 	__clock_timer.o		\
 	__getloadavg.o		\
@@ -341,17 +325,6 @@ SYSOBJS=			\
 	umount.o		\
 	vforkx.o		\
 	xstat.o
-
-# objects under $(LIBCDIR)/port which contain transitional large file interfaces
-PORTGEN64=			\
-	_xftw64.o		\
-	attropen64.o		\
-	fts64.o			\
-	ftw64.o			\
-	mkstemp64.o		\
-	nftw64.o		\
-	tell64.o		\
-	truncate64.o
 
 # objects from source under $(LIBCDIR)/port
 PORTFP=				\
@@ -652,12 +625,6 @@ PORTPRINT=			\
 	vwprintf.o		\
 	wprintf.o
 
-# portable stdio objects that contain large file interfaces.
-# Note: fopen64 is a special case, as we build it small.
-PORTSTDIO64=			\
-	fopen64.o		\
-	fpos64.o
-
 PORTSTDIO_W=			\
 	doscan_w.o
 
@@ -956,11 +923,6 @@ UNWINDMACHOBJS=			\
 UNWINDASMOBJS=			\
 	unwind_frame.o
 
-# objects that implement the transitional large file API
-PORTSYS64=			\
-	lockf64.o		\
-	stat64.o
-
 PORTSYS=			\
 	_autofssys.o		\
 	access.o		\
@@ -1031,9 +993,6 @@ PORTREGEX=			\
 	regfree.o		\
 	wordexp.o
 
-PORTREGEX64=			\
-	glob64.o
-
 PORTSOCKET= _soutil.o sockatmark.o socket.o socketpair.o weaks.o
 
 MOSTOBJS=			\
@@ -1050,7 +1009,6 @@ MOSTOBJS=			\
 	$(GENOBJS)		\
 	$(PORTFP)		\
 	$(PORTGEN)		\
-	$(PORTGEN64)		\
 	$(PORTI18N)		\
 	$(PORTI18N_COND)	\
 	$(PORTINET)		\
@@ -1059,13 +1017,10 @@ MOSTOBJS=			\
 	$(PORTPRINT)		\
 	$(PORTPRINT_W)		\
 	$(PORTREGEX)		\
-	$(PORTREGEX64)		\
 	$(PORTSOCKET)		\
 	$(PORTSTDIO)		\
-	$(PORTSTDIO64)		\
 	$(PORTSTDIO_W)		\
 	$(PORTSYS)		\
-	$(PORTSYS64)		\
 	$(AIOOBJS)		\
 	$(RTOBJS)		\
 	$(SECFLAGSOBJS)		\
@@ -1078,8 +1033,6 @@ MOSTOBJS=			\
 	$(UNWINDASMOBJS)	\
 	$(COMSYSOBJS)		\
 	$(SYSOBJS)		\
-	$(COMSYSOBJS64)		\
-	$(SYSOBJS64)		\
 	$(VALUES)
 
 TRACEOBJS=			\
@@ -1231,26 +1184,6 @@ SRCS=							\
 # conditional assignments
 $(DYNLIB) := CRTI = crti.o
 $(DYNLIB) := CRTN = crtn.o
-
-# large-file-aware components that should be built large
-
-$(COMSYSOBJS64:%=pics/%) := \
-	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-$(SYSOBJS64:%=pics/%) := \
-	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-$(PORTGEN64:%=pics/%) := \
-	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-$(PORTREGEX64:%=pics/%) := \
-	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-$(PORTSTDIO64:%=pics/%) := \
-	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-
-$(PORTSYS64:%=pics/%) := \
-	CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 $(PORTSTDIO_W:%=pics/%) := \
 	CPPFLAGS += -D_WIDE

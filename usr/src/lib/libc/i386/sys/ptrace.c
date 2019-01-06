@@ -707,7 +707,7 @@ GetPsargs(cstatus_t *cp)
 		return;
 	}
 	(void) pread(fd, cp->user.u_psargs, PSARGSZ,
-	    (off_t)((psinfo_t *)0)->pr_psargs);
+	    (intptr_t)((psinfo_t *)0)->pr_psargs);
 	(void) close(fd);
 
 	cp->flags |= CS_PSARGS;

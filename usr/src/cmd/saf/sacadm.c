@@ -29,6 +29,7 @@
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
@@ -46,6 +47,12 @@
 #include "adm.h"
 #include "extern.h"
 
+int check_version(int, char *); /* libc/nsl */
+
+int copy_file(FILE *, FILE *, int, int);
+int do_config(char *, char *);
+int find_pm(FILE *, char *);
+int sac_home(void);
 
 /*
  * functions
