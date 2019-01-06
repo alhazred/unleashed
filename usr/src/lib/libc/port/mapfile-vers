@@ -298,8 +298,8 @@ SYMBOL_VERSION ILLUMOS_0.8 {	# POSIX 2008 newlocale and friends
 
 SYMBOL_VERSION ILLUMOS_0.7 {	# Illumos additions
     protected:
-	_glob_ext;
-	_globfree_ext;
+	_glob_ext { FLAGS = NODYNSORT };
+	_globfree_ext { FLAGS = NODYNSORT };
 } ILLUMOS_0.6;
 
 SYMBOL_VERSION ILLUMOS_0.6 {	# Illumos additions
@@ -1627,10 +1627,8 @@ SYMBOL_VERSION SUNW_0.8 {	# SunOS 5.4 (Solaris 2.4)
 	confstr;
 	fnmatch;
 	_getdate_err_addr;
-$if _ELF64
 	glob;
 	globfree;
-$endif
 	iconv;
 	iconv_close;
 	iconv_open;

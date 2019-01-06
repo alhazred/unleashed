@@ -152,10 +152,6 @@ typedef	struct	glob_t	{
 #define	GLOB_ABORTED	(-1)		/* GLOB_ERR set or errfunc return!=0 */
 #define	GLOB_ABEND	GLOB_ABORTED	/* backward compatibility */
 
-/* TODO remove this hack; we don't need old_glob */
-#pragma redefine_extname glob _glob_ext
-#pragma redefine_extname globfree _globfree_ext
-
 extern int glob(const char *_RESTRICT_KYWD, int, int(*)(const char *, int),
 		glob_t *_RESTRICT_KYWD);
 extern void globfree(glob_t *);

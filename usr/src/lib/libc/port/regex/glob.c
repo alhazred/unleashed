@@ -78,46 +78,6 @@
 #include <wchar.h>
 #include <wctype.h>
 
-/*
- * This is the legacy glob_t prior to illumos enhancement 1097,
- * used when old programs call the old libc glob functions.
- * (New programs call the _glob_ext, _globfree_ext functions.)
- * This struct should be considered "carved in stone".
- */
-typedef	struct	old_glob	{
-	size_t	gl_pathc;		/* Count of paths matched by pattern */
-	char	**gl_pathv;		/* List of matched pathnames */
-	size_t	gl_offs;		/* # of slots reserved in gl_pathv */
-	/* following are internal to the implementation */
-	char	**gl_pathp;		/* gl_pathv + gl_offs */
-	int	gl_pathn;		/* # of elements allocated */
-}	old_glob_t;
-
-/*
- * For old programs, the external names need to be the old names:
- * glob() and globfree() .  We've redefined those already to
- *  _glob_ext() and _globfree_ext() .  Now redefine old_glob()
- * and old_globfree() to glob() and globfree() .
- */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname	old_glob	glob
-#pragma	redefine_extname	old_globfree	globfree
-#endif /* __PRAGMA_REDEFINE_EXTNAME */
-extern int old_glob(const char *, int, int (*)(const char *, int),
-    old_glob_t *);
-extern void old_globfree(old_glob_t *);
-
-/*
- * The various extensions to glob(3C) allow for stat and dirent structures to
- * show up whose size may change in a largefile environment. If libc defines
- * _FILE_OFFSET_BITS to be 64 that is the key to indicate that we're building
- * the LFS version of this file. As such, we rename the public functions here,
- * _glob_ext() and _globfree_ext() to have a 64 suffix. When building the LFS
- * version, we do not include the old versions.
- */
-#pragma weak _glob_ext64 = _glob_ext
-#pragma weak _globfree_ext64 = _globfree_ext
-
 #define	DOLLAR		'$'
 #define	DOT		'.'
 #define	EOS		'\0'
@@ -198,12 +158,13 @@ static int	 globexp2(const wcat_t *, const wcat_t *, glob_t *,
 		    struct glob_lim *, int (*)(const char *, int));
 static int	 match(wcat_t *, wcat_t *, wcat_t *);
 
-/*
- * Extended glob() function, selected by #pragma redefine_extname
- * in glob.h with the external name _glob_ext() .
- */
+#pragma weak _glob_ext = glob
+#pragma weak _glob_ext64 = glob
+#pragma weak _globfree_ext = globfree
+#pragma weak _globfree_ext64 = globfree
+
 int
-_glob_ext(const char *pattern, int flags, int (*errfunc)(const char *, int),
+glob(const char *pattern, int flags, int (*errfunc)(const char *, int),
     glob_t *pglob)
 {
 	const char *patnext;
@@ -1181,12 +1142,8 @@ fail:
 	return (0);
 }
 
-/*
- * Extended globfree() function, selected by #pragma redefine_extname
- * in glob.h with the external name _globfree_ext() .
- */
 void
-_globfree_ext(glob_t *pglob)
+globfree(glob_t *pglob)
 {
 	int i;
 	char **pp;
@@ -1279,79 +1236,3 @@ g_Ctoc(const wcat_t *str, char *buf, uint_t len)
 	}
 	return (1);
 }
-
-#if defined(_LP64) || _FILE_OFFSET_BITS != 64
-
-/* glob() function with legacy glob structure */
-int
-old_glob(const char *pattern, int flags, int (*errfunc)(const char *, int),
-    old_glob_t *pglob)
-{
-
-	glob_t gl;
-	int rv;
-
-	flags &= GLOB_POSIX;
-
-	(void) memset(&gl, 0, sizeof (gl));
-
-	/*
-	 * Copy all the members, old to new.  There's
-	 * really no point in micro-optimizing the copying.
-	 * Other members are set to zero.
-	 */
-	gl.gl_pathc = pglob->gl_pathc;
-	gl.gl_pathv = pglob->gl_pathv;
-	gl.gl_offs = pglob->gl_offs;
-	gl.gl_pathp = pglob->gl_pathp;
-	gl.gl_pathn = pglob->gl_pathn;
-
-	rv = _glob_ext(pattern, flags, errfunc, &gl);
-
-	/*
-	 * Copy all the members, new to old.  There's
-	 * really no point in micro-optimizing the copying.
-	 */
-	pglob->gl_pathc = gl.gl_pathc;
-	pglob->gl_pathv = gl.gl_pathv;
-	pglob->gl_offs = gl.gl_offs;
-	pglob->gl_pathp = gl.gl_pathp;
-	pglob->gl_pathn = gl.gl_pathn;
-
-	return (rv);
-}
-
-/* globfree() function with legacy glob structure */
-void
-old_globfree(old_glob_t *pglob)
-{
-	glob_t gl;
-
-	(void) memset(&gl, 0, sizeof (gl));
-
-	/*
-	 * Copy all the members, old to new.  There's
-	 * really no point in micro-optimizing the copying.
-	 * Other members are set to zero.
-	 */
-	gl.gl_pathc = pglob->gl_pathc;
-	gl.gl_pathv = pglob->gl_pathv;
-	gl.gl_offs = pglob->gl_offs;
-	gl.gl_pathp = pglob->gl_pathp;
-	gl.gl_pathn = pglob->gl_pathn;
-
-	_globfree_ext(&gl);
-
-	/*
-	 * Copy all the members, new to old.  There's
-	 * really no point in micro-optimizing the copying.
-	 */
-	pglob->gl_pathc = gl.gl_pathc;
-	pglob->gl_pathv = gl.gl_pathv;
-	pglob->gl_offs = gl.gl_offs;
-	pglob->gl_pathp = gl.gl_pathp;
-	pglob->gl_pathn = gl.gl_pathn;
-
-}
-
-#endif	/* _LP64 || _FILE_OFFSET_BITS != 64 */
