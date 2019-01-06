@@ -116,11 +116,6 @@ The \fIfildes\fR argument is not a valid file descriptor.
 The \fBaio_cancel()\fR function is not supported.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBaio_cancel()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -145,7 +140,7 @@ Standard	See \fBstandards\fR(5).
 .sp
 .LP
 \fBaio.h\fR(3HEAD), \fBsignal.h\fR(3HEAD), \fBaio_read\fR(3C),
-\fBaio_return\fR(3C), \fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBaio_return\fR(3C), \fBattributes\fR(5), \fBstandards\fR(5)
 .SH NOTES
 .sp
 .LP

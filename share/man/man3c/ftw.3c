@@ -545,10 +545,6 @@ fact that an interrupt has occurred and arrange to have \fIfn\fR return a
 non-zero value at its next invocation.
 .sp
 .LP
-The \fBftw()\fR and \fBnftw()\fR functions have transitional interfaces for
-64-bit file offsets.  See \fBlf64\fR(5).
-.sp
-.LP
 The \fBftw()\fR function is safe in multithreaded applications. The
 \fBnftw()\fR function is safe in multithreaded applications when the
 \fBFTW_CHDIR\fR flag is not set.
@@ -573,5 +569,5 @@ MT-Level	MT-Safe with exceptions
 .SH SEE ALSO
 .sp
 .LP
-\fBstat\fR(2), \fBlongjmp\fR(3C), \fBattributes\fR(5), \fBlf64\fR(5),
+\fBstat\fR(2), \fBlongjmp\fR(3C), \fBattributes\fR(5),
 \fBstandards\fR(5)

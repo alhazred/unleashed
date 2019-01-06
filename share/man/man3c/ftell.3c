@@ -121,11 +121,6 @@ The current file offset cannot be represented correctly in an object of type
 \fBoff_t\fR.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBftello()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -148,4 +143,4 @@ MT-Level	MT-Safe
 .sp
 .LP
 \fBlseek\fR(2), \fBfopen\fR(3C), \fBfseek\fR(3C), \fBattributes\fR(5), ,
-\fBstandards\fR(5), \fBlf64\fR(5)
+\fBstandards\fR(5)

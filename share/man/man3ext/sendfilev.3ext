@@ -218,10 +218,6 @@ the signal.
 The socket type is not supported.
 .RE
 
-.SH USAGE
-.LP
-The \fBsendfilev()\fR function has a transitional interface for 64-bit file
-offsets. See \fBlf64\fR(5).
 .SH EXAMPLES
 .LP
 The following example sends 2 vectors, one of HEADER data and a file of length

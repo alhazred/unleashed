@@ -159,11 +159,6 @@ In the event that any of the queued I/O operations fail, \fBaio_fsync()\fR
 returns the error condition defined for \fBread\fR(2) and \fBwrite\fR(2). The
 error will be returned in the error status for the asynchronous \fBfsync\fR(3C)
 operation, which can be retrieved using \fBaio_error\fR(3C).
-.SH USAGE
-.sp
-.LP
-The \fBaio_fsync()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -190,4 +185,4 @@ Standard	See \fBstandards\fR(5).
 \fBfcntl\fR(2), \fBopen\fR(2), \fBread\fR(2), \fBwrite\fR(2),
 \fBaio_error\fR(3C), \fBaio_return\fR(3C), \fBaio.h\fR(3HEAD),
 \fBfcntl.h\fR(3HEAD), \fBfdatasync\fR(3C), \fBfsync\fR(3C),
-\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBstandards\fR(5)

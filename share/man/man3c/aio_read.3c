@@ -218,10 +218,6 @@ associated with \fIaiocbp\fR->\fBaio_fildes\fR.
 .LP
 For portability, the application should set \fIaiocb->\fR\fBaio_reqprio\fR to
 \fB0\fR.
-.sp
-.LP
-The \fBaio_read()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -248,4 +244,4 @@ Standard	See \fBstandards\fR(5).
 \fBclose\fR(2), \fBexec\fR(2), \fBexit\fR(2), \fBfork\fR(2), \fBlseek\fR(2),
 \fBread\fR(2), \fBwrite\fR(2), \fBaio_cancel\fR(3C), \fBaio_return\fR(3C),
 \fBaio.h\fR(3HEAD), \fBlio_listio\fR(3C), \fBsiginfo.h\fR(3HEAD),
-\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBsignal.h\fR(3HEAD), \fBattributes\fR(5), \fBstandards\fR(5)

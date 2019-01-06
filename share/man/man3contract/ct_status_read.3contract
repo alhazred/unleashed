@@ -13,7 +13,7 @@ ct_status_get_critical \- common contract status functions
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB-D_LARGEFILE64_SOURCE\fR \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
+cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
 #include <libcontract.h>
 
 \fBint\fR \fBct_status_read\fR(\fBint\fR \fIfd\fR, \fBint\fR \fIdetail\fR, \fBct_stathdl_t *\fR\fIstathdlp\fR);
@@ -252,5 +252,4 @@ MT-Level	Safe
 .SH SEE ALSO
 .sp
 .LP
-\fBlibcontract\fR(3LIB), \fBcontract\fR(4), \fBattributes\fR(5),
-\fBlfcompile\fR(5)
+\fBlibcontract\fR(3LIB), \fBcontract\fR(4), \fBattributes\fR(5)

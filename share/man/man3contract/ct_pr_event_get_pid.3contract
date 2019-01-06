@@ -12,7 +12,7 @@ ct_pr_event_get_pcorefile, ct_pr_event_get_gcorefile, ct_pr_event_get_zcorefile
 .SH SYNOPSIS
 .LP
 .nf
-cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB-D_LARGEFILE64_SOURCE\fR \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
+cc [ \fIflag\fR\&.\|.\|. ] \fIfile\fR\&.\|.\|. \fB -lcontract \fR [ \fIlibrary\fR\&.\|.\|. ]
 #include <libcontract.h>
 #include <sys/contract/process.h>
 
@@ -258,4 +258,4 @@ MT-Level	Safe
 .LP
 \fBct_event_free\fR(3CONTRACT), \fBct_event_read\fR(3CONTRACT),
 \fBct_event_read_critical\fR(3CONTRACT), \fBlibcontract\fR(3LIB),
-\fBcontract\fR(4), \fBprocess\fR(4), \fBattributes\fR(5), \fBlfcompile\fR(5)
+\fBcontract\fR(4), \fBprocess\fR(4), \fBattributes\fR(5)

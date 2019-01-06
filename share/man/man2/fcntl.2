@@ -286,16 +286,6 @@ one is returned is unspecified. If the blocking lock is an OFD-style lock,
 .sp
 .ne 2
 .na
-\fB\fBF_GETLK64\fR\fR
-.ad
-.RS 14n
-Equivalent to \fBF_GETLK\fR, but takes a \fBstruct flock64\fR argument rather
-than a \fBstruct flock\fR argument.  See \fBlf64\fR(5).
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBF_SETLK\fR\fR
 .ad
 .RS 14n
@@ -312,16 +302,6 @@ return value of \fB\(mi1\fR\&.
 .sp
 .ne 2
 .na
-\fB\fBF_SETLK64\fR\fR
-.ad
-.RS 14n
-Equivalent to \fBF_SETLK\fR, but takes a \fBstruct flock64\fR argument rather
-than a \fBstruct flock\fR argument. See \fBlf64\fR(5).
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBF_SETLKW\fR\fR
 .ad
 .RS 14n
@@ -331,16 +311,6 @@ satisfied. If a signal that is to be caught is received while \fBfcntl()\fR is
 waiting for a region, \fBfcntl()\fR will be interrupted. Upon return from the
 process' signal handler, \fBfcntl()\fR will return \fB\(mi1\fR with \fBerrno\fR
 set to \fBEINTR\fR, and the lock operation will not be done.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBF_SETLKW64\fR\fR
-.ad
-.RS 14n
-Equivalent to \fBF_SETLKW\fR, but takes a \fBstruct flock64\fR argument rather
-than a \fBstruct flock\fR argument. See \fBlf64\fR(5).
 .RE
 
 .sp
@@ -372,18 +342,6 @@ one is returned is unspecified. If the blocking lock is an OFD-style lock,
 .sp
 .ne 2
 .na
-\fB\fBF_OFD_GETLK64\fR\fR
-.ad
-.RS 14n
-Equivalent to \fBF_OFD_GETLK\fR, but takes a \fBstruct flock64\fR argument
-rather than a \fBstruct flock\fR argument. See \fBlf64\fR(5). This command
-exists solely to allow the use of OFD locks with the transitional 64-bit file
-interfaces.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBF_OFD_SETLK\fR\fR
 .ad
 .RS 14n
@@ -400,18 +358,6 @@ immediately with a return value of \fB\(mi1\fR\&.
 .sp
 .ne 2
 .na
-\fB\fBF_OFD_SETLK64\fR\fR
-.ad
-.RS 14n
-Equivalent to \fBF_OFD_SETLK\fR, but takes a \fBstruct flock64\fR argument
-rather than a \fBstruct flock\fR argument. See \fBlf64\fR(5). This command
-exists solely to allow the use of OFD locks with the transitional 64-bit file
-interfaces.
-.RE
-
-.sp
-.ne 2
-.na
 \fB\fBF_OFD_SETLKW\fR\fR
 .ad
 .RS 14n
@@ -421,18 +367,6 @@ request can be satisfied. If a signal that is to be caught is received while
 \fBfcntl()\fR is waiting for a region, \fBfcntl()\fR will be interrupted. Upon
 return from the process' signal handler, \fBfcntl()\fR will return \fB\(mi1\fR
 with \fBerrno\fR set to \fBEINTR\fR, and the lock operation will not be done.
-.RE
-
-.sp
-.ne 2
-.na
-\fB\fBF_OFD_SETLKW64\fR\fR
-.ad
-.RS 14n
-Equivalent to \fBF_OFD_SETLKW\fR, but takes a \fBstruct flock64\fR argument
-rather than a \fBstruct flock\fR argument. See \fBlf64\fR(5).  This command
-exists solely to allow the use of OFD locks with the transitional 64-bit file
-interfaces.
 .RE
 
 .sp
@@ -1163,7 +1097,7 @@ MT-Level	Async-Signal Safe
 \fBexec\fR(2), \fBfork\fR(2), \fBmmap\fR(2), \fBopen\fR(2), \fBpipe\fR(2),
 \fBread\fR(2), \fBsigaction\fR(2), \fBwrite\fR(2), \fBdup2\fR(3C),
 \fBflock\fR(3C), \fBlockf\fR(3C), \fBfcntl.h\fR(3HEAD), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)
 .sp
 .LP
 \fIProgramming Interfaces Guide\fR

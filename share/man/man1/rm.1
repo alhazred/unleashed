@@ -241,14 +241,6 @@ Specifies the pathname of a directory entry to be removed.
 .It Ar dirname
 Specifies the pathname of an empty directory to be removed.
 .El
-.Sh USAGE
-See
-.Xr largefile 5
-for the description of the behavior of
-.Nm rm
-and
-.Nm rmdir
-when encountering files greater than or equal to 2 Gbyte (2^31 bytes).
 .Sh EXIT STATUS
 The following exit values are returned:
 .Bl -tag -width Sy
@@ -389,7 +381,6 @@ The built-in interfaces are Uncommitted.
 .Xr unlink 2 ,
 .Xr attributes 5 ,
 .Xr environ 5 ,
-.Xr largefile 5 ,
 .Xr standards 5
 .Sh NOTES
 A

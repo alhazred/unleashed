@@ -100,11 +100,6 @@ The current value of the file position cannot be represented correctly in an
 object of type \fBfpos_t\fR.
 .RE
 
-.SH USAGE
-.sp
-.LP
-The \fBfgetpos()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -125,4 +120,4 @@ Interface Stability	Standard
 .sp
 .LP
 \fBfopen\fR(3C), \fBfsetpos\fR(3C), \fBftell\fR(3C), \fBrewind\fR(3C),
-\fBungetc\fR(3C), \fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBungetc\fR(3C), \fBattributes\fR(5), \fBstandards\fR(5)

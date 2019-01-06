@@ -360,10 +360,6 @@ The name of a raw special device residing in the \fB/dev\fR directory (for
 example, \fB/dev/rdsk/c0t0d0s6\fR) on which to create the file system.
 .RE
 
-.SH USAGE
-.LP
-See \fBlargefile\fR(5) for the description of the behavior of \fBnewfs\fR when
-encountering files greater than or equal to 2 Gbyte ( 2^31 bytes).
 .SH EXAMPLES
 .LP
 \fBExample 1 \fRDisplaying the Parameters for the Raw Special Device
@@ -435,7 +431,7 @@ Other exit values may be returned by \fBmkfs\fR(8), which is called by
 .SH SEE ALSO
 .LP
 \fBfsck\fR(8), \fBfsck_ufs\fR(8), \fBfsirand\fR(8), \fBmkfs\fR(8),
-\fBmkfs_ufs\fR(8), \fBtunefs\fR(8), \fBattributes\fR(5), \fBlargefile\fR(5),
+\fBmkfs_ufs\fR(8), \fBtunefs\fR(8), \fBattributes\fR(5),
 \fBufs\fR(7FS)
 .SH DIAGNOSTICS
 .ne 2

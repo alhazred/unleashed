@@ -19,11 +19,6 @@ rquotad \- remote quota server
 local file system which is mounted by a remote machine over the \fBNFS.\fR The
 results are used by \fBquota\fR(8) to display user quotas for remote file
 systems. The \fBrquotad\fR daemon is normally invoked by \fBinetd\fR(8).
-.SH USAGE
-.sp
-.LP
-See \fBlargefile\fR(5) for the description of the behavior of \fBrquotad\fR
-when encountering files greater than or equal to 2 Gbyte (2^31 bytes).
 .SH FILES
 .sp
 .ne 2
@@ -39,7 +34,7 @@ quota file at a UFS file system root
 .LP
 \fBsvcs\fR(1), \fBautomountd\fR(8), \fBinetadm\fR(8), \fBinetd\fR(8),
 \fBmount_nfs\fR(8), \fBquota\fR(8), \fBshare_nfs\fR(8), \fBsvcadm\fR(8),
-\fBrpc\fR(4), \fBservices\fR(4), \fBattributes\fR(5), \fBlargefile\fR(5),
+\fBrpc\fR(4), \fBservices\fR(4), \fBattributes\fR(5),
 \fBsmf\fR(5)
 .sp
 .LP

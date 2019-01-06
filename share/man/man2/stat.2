@@ -598,10 +598,6 @@ field (defined in \fBmknod\fR(2)) are unchanged.  A non-trivial ACL entry is
 one whose meaning cannot be represented in the file's mode field alone. The new
 ACL mask permissions  might change the effective permissions for additional
 users and groups that have ACL entries on the file.
-.sp
-.LP
-The \fBstat()\fR, \fBfstat()\fR, and \fBlstat()\fR functions have transitional
-interfaces for 64-bit file offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .sp
 .LP
@@ -631,4 +627,4 @@ For \fBstat()\fR, \fBfstat()\fR, and \fBlstat()\fR, see \fBstandards\fR(5).
 \fBaccess\fR(2), \fBchmod\fR(2), \fBchown\fR(2), \fBcreat\fR(2), \fBlink\fR(2),
 \fBmknod\fR(2), \fBpipe\fR(2), \fBread\fR(2), \fBtime\fR(2), \fBunlink\fR(2),
 \fButime\fR(2), \fBwrite\fR(2), \fBfattach\fR(3C), \fBstat.h\fR(3HEAD),
-\fBattributes\fR(5), \fBfsattr\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBattributes\fR(5), \fBfsattr\fR(5), \fBstandards\fR(5)

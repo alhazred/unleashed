@@ -987,4 +987,4 @@ MT-Level	Safe
 .SH SEE ALSO
 .LP
 \fBpvs\fR(1), \fBIntro\fR(2), \fBIntro\fR(3), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5)
+\fBstandards\fR(5)

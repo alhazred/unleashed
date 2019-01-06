@@ -894,10 +894,6 @@ conjunction with any other file access method, such as \fBread\fR(2) and
 \fBwrite\fR(2), standard input/output, and \fBshmat\fR(2).
 .sp
 .LP
-The \fBmmap()\fR function has a transitional interface for 64-bit file offsets.
-See \fBlf64\fR(5).
-.sp
-.LP
 The \fBmmap()\fR function allows access to resources using address space
 manipulations instead of the \fBread()\fR/\fBwrite()\fR interface. Once a file
 is mapped, all a process has to do to access it is use the data at the address
@@ -951,4 +947,4 @@ MT-Level	Async-Signal-Safe
 \fBgetrlimit\fR(2), \fBmemcntl\fR(2), \fBmmapobj\fR(2), \fBmprotect\fR(2),
 \fBmunmap\fR(2), \fBshmat\fR(2), \fBlockf\fR(3C), \fBmlockall\fR(3C),
 \fBmsync\fR(3C), \fBplock\fR(3C), \fBsysconf\fR(3C), \fBattributes\fR(5),
-\fBlf64\fR(5), \fBstandards\fR(5), \fBnull\fR(7D), \fBzero\fR(7D)
+\fBstandards\fR(5), \fBnull\fR(7D), \fBzero\fR(7D)

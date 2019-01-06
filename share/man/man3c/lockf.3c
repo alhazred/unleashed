@@ -279,10 +279,6 @@ address space.  The process may later read/write data which is/was locked.  The
 .LP
 The \fBalarm\fR(2) function may be used to provide a timeout facility in
 applications requiring it.
-.sp
-.LP
-The \fBlockf()\fR function has a transitional interface for 64-bit file
-offsets.  See \fBlf64\fR(5).
 .SH ATTRIBUTES
 .LP
 See \fBattributes\fR(5) for descriptions of the following attributes:
@@ -304,4 +300,4 @@ MT-Level	MT-Safe
 .LP
 \fBIntro\fR(2), \fBalarm\fR(2), \fBchmod\fR(2), \fBclose\fR(2), \fBcreat\fR(2),
 \fBfcntl\fR(2), \fBmmap\fR(2), \fBopen\fR(2), \fBread\fR(2), \fBwrite\fR(2),
-\fBattributes\fR(5), \fBlf64\fR(5), \fBstandards\fR(5)
+\fBattributes\fR(5), \fBstandards\fR(5)
