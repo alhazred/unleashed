@@ -224,7 +224,6 @@ COMSYSOBJS=			\
 	ioctl.o			\
 	kaio.o			\
 	kill.o			\
-	llseek.o		\
 	lseek.o			\
 	mmapobjsys.o		\
 	memcntl.o		\

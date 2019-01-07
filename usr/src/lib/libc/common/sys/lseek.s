@@ -36,6 +36,7 @@
 
 	ANSI_PRAGMA_WEAK(lseek,function)
 	ANSI_PRAGMA_WEAK2(lseek64,lseek,function)
+	ANSI_PRAGMA_WEAK2(llseek,lseek,function)
 
 #include "SYS.h"
 

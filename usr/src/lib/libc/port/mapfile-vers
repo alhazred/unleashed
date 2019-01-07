@@ -1813,7 +1813,7 @@ $endif
 	llabs;
 	lldiv;
 	llog10;
-	llseek;
+	llseek { FLAGS = NODYNSORT };
 	lltostr;
 	lmul;
 	lrand48;
@@ -3188,7 +3188,6 @@ $endif
 	_ecvt					{ FLAGS = NODYNSORT };
 	_fcvt					{ FLAGS = NODYNSORT };
 	_getc_unlocked				{ FLAGS = NODYNSORT };
-	_llseek					{ FLAGS = NODYNSORT };
 	_pthread_attr_getdetachstate		{ FLAGS = NODYNSORT };
 	_pthread_attr_getinheritsched		{ FLAGS = NODYNSORT };
 	_pthread_attr_getschedparam		{ FLAGS = NODYNSORT };
