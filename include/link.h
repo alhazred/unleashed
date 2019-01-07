@@ -61,7 +61,6 @@ extern void	ld_input_section(const char *, Elf32_Shdr **, Elf32_Word,
 extern void	ld_section(const char *, Elf32_Shdr *, Elf32_Word,
 			Elf_Data *, Elf *);
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 extern void	ld_start64(const char *, const Elf64_Half, const char *);
 extern void	ld_atexit64(int);
 extern void	ld_open64(const char **, const char **, int *, int, Elf **,
@@ -72,7 +71,6 @@ extern void	ld_input_section64(const char *, Elf64_Shdr **, Elf64_Word,
 extern void	ld_section64(const char *, Elf64_Shdr *, Elf64_Word,
 			Elf_Data *, Elf *);
 
-#endif /* (defined(_LP64) || defined(_LONGLONG_TYPE) */
 #endif /* !defined(_ILP32) || _FILE_OFFSET_BITS != 64 */
 
 /*

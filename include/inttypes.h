@@ -84,24 +84,6 @@ typedef struct {
 } imaxdiv_t;
 #endif /* (!defined(_XOPEN_SOURCE) || defined(_XPG6)) ... */
 
-#if !defined(_LP64) && !defined(_LONGLONG_TYPE)
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname imaxabs	_imaxabs_c89
-#pragma	redefine_extname imaxdiv	_imaxdiv_c89
-#pragma	redefine_extname strtoimax	_strtoimax_c89
-#pragma	redefine_extname strtoumax	_strtoumax_c89
-#pragma	redefine_extname wcstoimax	_wcstoimax_c89
-#pragma	redefine_extname wcstoumax	_wcstoumax_c89
-#else
-#define	imaxabs		_imaxabs_c89
-#define	imaxdiv		_imaxdiv_c89
-#define	strtoimax	_strtoimax_c89
-#define	strtoumax	_strtoumax_c89
-#define	wcstoimax	_wcstoimax_c89
-#define	wcstoumax	_wcstoumax_c89
-#endif
-#endif /* !defined(_LP64) && !defined(_LONGLONG_TYPE) */
-
 #if (!defined(_XOPEN_SOURCE) || defined(_XPG6)) || defined(_STDC_C99) || \
 	defined(__EXTENSIONS__)
 

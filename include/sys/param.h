@@ -258,11 +258,7 @@ extern "C" {
 #define	MAXOFFSET_T	0x7fffffffffffffffl
 #else
 #define	MAXOFF_T	0x7fffffffl
-#ifdef _LONGLONG_TYPE
 #define	MAXOFFSET_T 	0x7fffffffffffffffLL
-#else
-#define	MAXOFFSET_T	0x7fffffff
-#endif
 #endif	/* _LP64 */
 
 #define	btodb(bytes)			/* calculates (bytes / DEV_BSIZE) */ \

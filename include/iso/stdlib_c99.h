@@ -54,12 +54,10 @@ extern "C" {
  * on the C namespace.
  */
 
-#if defined(_LONGLONG_TYPE)
 typedef struct {
 	long long	quot;
 	long long	rem;
 } lldiv_t;
-#endif  /* defined(_LONGLONG_TYPE) */
 
 #if (!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
 	defined(_STDC_C99) || defined(__EXTENSIONS__)
@@ -76,7 +74,6 @@ extern _NORETURN_KYWD void _Exit(int);
 extern float strtof(const char *_RESTRICT_KYWD, char **_RESTRICT_KYWD);
 extern long double strtold(const char *_RESTRICT_KYWD, char **_RESTRICT_KYWD);
 
-#if defined(_LONGLONG_TYPE)
 extern long long atoll(const char *);
 extern long long llabs(long long);
 extern lldiv_t lldiv(long long, long long);
@@ -84,7 +81,6 @@ extern long long strtoll(const char *_RESTRICT_KYWD, char **_RESTRICT_KYWD,
 	int);
 extern unsigned long long strtoull(const char *_RESTRICT_KYWD,
 	char **_RESTRICT_KYWD, int);
-#endif /* defined(_LONGLONG_TYPE) */
 
 #endif  /* (!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) ... */
 

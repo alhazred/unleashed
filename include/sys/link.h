@@ -58,7 +58,6 @@ typedef struct {
 	} d_un;
 } Elf32_Dyn;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Xword d_tag;		/* how to interpret value */
 	union {
@@ -66,7 +65,6 @@ typedef struct {
 		Elf64_Addr	d_ptr;
 	} d_un;
 } Elf64_Dyn;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 #endif	/* _ASM */
 
 /*
@@ -374,7 +372,6 @@ typedef struct {
 } Elf32_Syminfo;
 
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Half	vd_version;	/* this structures version revision */
 	Elf64_Half	vd_flags;	/* version information */
@@ -416,7 +413,6 @@ typedef struct {
 	Elf64_Half	si_boundto;	/* direct bindings - symbol bound to */
 	Elf64_Half	si_flags;	/* per symbol flags */
 } Elf64_Syminfo;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 
 #endif	/* _ASM */
 
@@ -596,7 +592,6 @@ typedef struct {
 	} eb_un;
 } Elf32_Boot;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Xword eb_tag;		/* what this one is */
 	union {				/* possible values */
@@ -605,7 +600,6 @@ typedef struct {
 		Elf64_Off eb_off;
 	} eb_un;
 } Elf64_Boot;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 #endif	/* _ASM */
 
 /*

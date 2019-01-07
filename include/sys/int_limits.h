@@ -85,7 +85,7 @@ extern "C" {
 #define	INT32_MAX	(2147483647)
 #if defined(_LP64)
 #define	INT64_MAX	(9223372036854775807L)
-#elif defined(_LONGLONG_TYPE)
+#else
 #define	INT64_MAX	(9223372036854775807LL)
 #endif
 
@@ -94,7 +94,7 @@ extern "C" {
 #define	UINT32_MAX	(4294967295U)
 #if defined(_LP64)
 #define	UINT64_MAX	(18446744073709551615UL)
-#elif defined(_LONGLONG_TYPE)
+#else
 #define	UINT64_MAX	(18446744073709551615ULL)
 #endif
 
@@ -203,7 +203,7 @@ extern "C" {
 #define	INT32_MIN	(-2147483647-1)
 #if defined(_LP64)
 #define	INT64_MIN	(-9223372036854775807L-1)
-#elif defined(_LONGLONG_TYPE)
+#else
 #define	INT64_MIN	(-9223372036854775807LL-1)
 #endif
 

@@ -200,7 +200,6 @@ unsigned	elf_version(unsigned);
 Elf_Data	*elf32_xlatetof(Elf_Data *, const Elf_Data *, unsigned);
 Elf_Data	*elf32_xlatetom(Elf_Data *, const Elf_Data *, unsigned);
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 size_t		elf64_fsize(Elf_Type, size_t, unsigned);
 Elf64_Ehdr	*elf64_getehdr(Elf *);
 Elf64_Phdr	*elf64_getphdr(Elf *);
@@ -210,7 +209,6 @@ Elf64_Ehdr	*elf64_newehdr(Elf *);
 Elf64_Phdr	*elf64_newphdr(Elf *, size_t);
 Elf_Data	*elf64_xlatetof(Elf_Data *, const Elf_Data *, unsigned);
 Elf_Data	*elf64_xlatetom(Elf_Data *, const Elf_Data *, unsigned);
-#endif /* (defined(_LP64) || defined(_LONGLONG_TYPE) */
 
 #ifdef	__cplusplus
 }

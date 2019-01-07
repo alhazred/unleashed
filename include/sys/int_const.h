@@ -82,10 +82,8 @@ extern "C" {
 /* CSTYLED */
 #define	INT64_C(c)	__CONCAT__(c,l)
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 /* CSTYLED */
 #define	INT64_C(c)	__CONCAT__(c,ll)
-#endif
 #endif
 
 /* CSTYLED */
@@ -98,10 +96,8 @@ extern "C" {
 /* CSTYLED */
 #define	UINT64_C(c)	__CONCAT__(c,ul)
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 /* CSTYLED */
 #define	UINT64_C(c)	__CONCAT__(c,ull)
-#endif
 #endif
 
 #ifdef  _LP64
@@ -110,15 +106,10 @@ extern "C" {
 /* CSTYLED */
 #define	UINTMAX_C(c)	__CONCAT__(c,ul)
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 /* CSTYLED */
 #define	INTMAX_C(c)	__CONCAT__(c,ll)
 /* CSTYLED */
 #define	UINTMAX_C(c)	__CONCAT__(c,ull)
-#else
-#define	INTMAX_C(c)	(c)
-#define	UINTMAX_C(c)	(c)
-#endif
 #endif
 
 #ifdef __cplusplus

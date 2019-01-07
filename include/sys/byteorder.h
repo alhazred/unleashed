@@ -91,12 +91,10 @@ extern	in_addr_t ntohl(in_addr_t);
 extern	in_port_t ntohs(in_port_t);
 #endif	/* !_XPG4_2 || __EXTENSIONS__ || _XPG5 */
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 #if !defined(_XPG4_2) || defined(__EXTENSIONS__)
 extern	uint64_t htonll(uint64_t);
 extern	uint64_t ntohll(uint64_t);
 #endif	/* !_XPG4_2 || __EXTENSIONS__ */
-#endif	/* _LP64 || _LONGLONG_TYPE  */
 #endif
 
 #if !defined(_XPG4_2) || defined(__EXTENSIONS__)
@@ -110,7 +108,6 @@ extern	uint64_t ntohll(uint64_t);
 			(((uint32_t)(x) << 8) & 0xff0000) | \
 			(((uint32_t)(x) >> 8) & 0xff00) | \
 			((uint32_t)(x)  >> 24))
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 #define	_BSWAP_64(x)	(((uint64_t)(x) << 56) | \
 			(((uint64_t)(x) << 40) & 0xff000000000000ULL) | \
 			(((uint64_t)(x) << 24) & 0xff0000000000ULL) | \
@@ -119,9 +116,6 @@ extern	uint64_t ntohll(uint64_t);
 			(((uint64_t)(x) >> 24) & 0xff0000ULL) | \
 			(((uint64_t)(x) >> 40) & 0xff00ULL) | \
 			((uint64_t)(x)  >> 56))
-#else /* no uint64_t */
-#define	_BSWAP_64(x)	((_BSWAP_32(x) << 32) | _BSWAP_32((x) >> 32))
-#endif	/* _LP64 || _LONGLONG_TYPE  */
 
 /*
  * We do this convoluted compile time constant check because we need to
@@ -205,13 +199,7 @@ extern	uint64_t ntohll(uint64_t);
 #define	BE_IN32(xa) htonl(*((uint32_t *)(void *)(xa)))
 #endif	/* !__i386 && !__amd64 */
 
-#if (!defined(__i386) && !defined(__amd64)) || \
-	(!defined(_LP64) && !defined(_LONGLONG_TYPE))
-#define	BE_IN64(xa) \
-	(((uint64_t)BE_IN32(xa) << 32) | BE_IN32((uint8_t *)(xa) + 4))
-#else /* x86 */
 #define	BE_IN64(xa) htonll(*((uint64_t *)(void *)(xa)))
-#endif /* (!__i386 && !__amd64) || (!_LP64 && !_LONGLONG_TYPE) */
 
 #define	LE_IN8(xa) \
 	*((uint8_t *)(xa))
@@ -240,14 +228,7 @@ extern	uint64_t ntohll(uint64_t);
 	BE_OUT16((uint8_t *)(xa) + 2, yv); \
 	BE_OUT16((uint8_t *)(xa), (yv) >> 16);
 
-#if (!defined(__i386) && !defined(__amd64)) || \
-	(!defined(_LP64) && !defined(_LONGLONG_TYPE))
-#define	BE_OUT64(xa, yv) \
-	BE_OUT32((uint8_t *)(xa) + 4, yv); \
-	BE_OUT32((uint8_t *)(xa), (yv) >> 32);
-#else /* x86 with uint64_t */
 #define	BE_OUT64(xa, yv) *((uint64_t *)(void *)(xa)) = htonll((uint64_t)(yv));
-#endif	/* (!__i386 && !__amd64) || (!_LP64 && !_LONGLONG_TYPE) */
 
 #define	LE_OUT8(xa, yv) *((uint8_t *)(xa)) = (uint8_t)(yv);
 

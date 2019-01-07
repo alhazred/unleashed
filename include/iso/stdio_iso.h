@@ -67,22 +67,12 @@
 extern "C" {
 #endif
 
-#if !defined(_LP64) && (_FILE_OFFSET_BITS == 64 || defined(_LARGEFILE64_SOURCE))
 /*
  * The following typedefs are adopted from ones in <sys/types.h> (with leading
  * underscores added to avoid polluting the ANSI C name space).  See the
  * commentary there for further explanation.
  */
-#if defined(_LONGLONG_TYPE)
 typedef	long long	__longlong_t;
-#else
-/* used to reserve space and generate alignment */
-typedef union {
-	double	_d;
-	int	_l[2];
-} __longlong_t;
-#endif
-#endif  /* !_LP64 && _FILE_OFFSET_BITS == 64 || defined(_LARGEFILE64_SOURCE) */
 
 #if __cplusplus >= 199711L
 namespace std {
@@ -164,32 +154,6 @@ extern __FILE	*__stderrp;
 #if __cplusplus >= 199711L
 namespace std {
 #endif
-
-#if !defined(_LP64) && !defined(_LONGLONG_TYPE)
-
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname fprintf	_fprintf_c89
-#pragma redefine_extname printf		_printf_c89
-#pragma redefine_extname sprintf	_sprintf_c89
-#pragma redefine_extname vfprintf	_vfprintf_c89
-#pragma redefine_extname vprintf	_vprintf_c89
-#pragma redefine_extname vsprintf	_vsprintf_c89
-#pragma redefine_extname fscanf		_fscanf_c89
-#pragma redefine_extname scanf		_scanf_c89
-#pragma redefine_extname sscanf		_sscanf_c89
-#else
-#define	fprintf		_fprintf_c89
-#define	printf		_printf_c89
-#define	sprintf		_sprintf_c89
-#define	vfprintf	_vfprintf_c89
-#define	vprintf		_vprintf_c89
-#define	vsprintf	_vsprintf_c89
-#define	fscanf		_fscanf_c89
-#define	scanf		_scanf_c89
-#define	sscanf		_sscanf_c89
-#endif
-
-#endif /* !defined(_LP64) && !defined(_LONGLONG_TYPE) */
 
 extern int	remove(const char *);
 extern int	rename(const char *, const char *);

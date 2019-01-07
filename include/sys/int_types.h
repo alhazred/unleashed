@@ -78,14 +78,11 @@ typedef signed char		int8_t;
 #endif
 typedef short			int16_t;
 typedef int			int32_t;
-#ifdef	_LP64
 #define	_INT64_TYPE
+#ifdef	_LP64
 typedef long			int64_t;
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
-#define	_INT64_TYPE
 typedef	long long		int64_t;
-#endif
 #endif
 
 typedef unsigned char		uint8_t;
@@ -94,9 +91,7 @@ typedef unsigned int		uint32_t;
 #ifdef	_LP64
 typedef unsigned long		uint64_t;
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 typedef unsigned long long	uint64_t;
-#endif
 #endif
 
 /*
@@ -138,9 +133,7 @@ typedef int			int_fast32_t;
 #ifdef	_LP64
 typedef long			int_fast64_t;
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 typedef long long		int_fast64_t;
-#endif
 #endif
 
 typedef unsigned char		uint_fast8_t;
@@ -149,9 +142,7 @@ typedef unsigned int		uint_fast32_t;
 #ifdef	_LP64
 typedef unsigned long		uint_fast64_t;
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 typedef unsigned long long	uint_fast64_t;
-#endif
 #endif
 
 /*
@@ -168,9 +159,7 @@ typedef int			int_least32_t;
 #ifdef	_LP64
 typedef long			int_least64_t;
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 typedef long long		int_least64_t;
-#endif
 #endif
 
 typedef unsigned char		uint_least8_t;
@@ -179,9 +168,7 @@ typedef unsigned int		uint_least32_t;
 #ifdef	_LP64
 typedef unsigned long		uint_least64_t;
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 typedef unsigned long long	uint_least64_t;
-#endif
 #endif
 
 #ifdef __cplusplus

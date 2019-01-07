@@ -83,7 +83,6 @@ typedef struct {
 	Elf32_Half	e_shstrndx;		/* shdr string index */
 } Elf32_Ehdr;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	unsigned char	e_ident[EI_NIDENT];	/* ident bytes */
 	Elf64_Half	e_type;			/* file type */
@@ -100,8 +99,6 @@ typedef struct {
 	Elf64_Half	e_shnum;		/* number shdrs */
 	Elf64_Half	e_shstrndx;		/* shdr string index */
 } Elf64_Ehdr;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
-
 
 #define	EI_MAG0		0	/* e_ident[] indexes */
 #define	EI_MAG1		1
@@ -456,7 +453,6 @@ typedef struct {
 	Elf32_Word	p_align;	/* memory/file alignment */
 } Elf32_Phdr;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Word	p_type;		/* entry type */
 	Elf64_Word	p_flags;	/* entry flags */
@@ -467,8 +463,6 @@ typedef struct {
 	Elf64_Xword	p_memsz;	/* memory size */
 	Elf64_Xword	p_align;	/* memory/file alignment */
 } Elf64_Phdr;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
-
 
 #define	PT_NULL		0		/* p_type */
 #define	PT_LOAD		1
@@ -541,7 +535,6 @@ typedef struct {
 	Elf32_Word	sh_entsize;	/* entry size if table */
 } Elf32_Shdr;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Word	sh_name;	/* section name */
 	Elf64_Word	sh_type;	/* SHT_... */
@@ -554,7 +547,6 @@ typedef struct {
 	Elf64_Xword	sh_addralign;	/* memory alignment */
 	Elf64_Xword	sh_entsize;	/* entry size if table */
 } Elf64_Shdr;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 
 #define	SHT_NULL		0		/* sh_type */
 #define	SHT_PROGBITS		1
@@ -665,7 +657,6 @@ typedef struct {
 	Elf32_Half	st_shndx;	/* SHN_... */
 } Elf32_Sym;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Word	st_name;
 	unsigned char	st_info;	/* bind, type: ELF_64_ST_... */
@@ -674,7 +665,6 @@ typedef struct {
 	Elf64_Addr	st_value;
 	Elf64_Xword	st_size;
 } Elf64_Sym;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 
 #define	STN_UNDEF	0
 
@@ -749,7 +739,6 @@ typedef struct {
 	Elf32_Sword	r_addend;
 } Elf32_Rela;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Addr	r_offset;
 	Elf64_Xword	r_info;		/* sym, type: ELF64_R_... */
@@ -760,8 +749,6 @@ typedef struct {
 	Elf64_Xword	r_info;		/* sym, type: ELF64_R_... */
 	Elf64_Sxword	r_addend;
 } Elf64_Rela;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
-
 
 /*
  *	Macros to compose and decompose values for Rel.r_info, Rela.f_info
@@ -809,18 +796,15 @@ typedef struct {
 	Elf32_Word	n_type;		/* type of note */
 } Elf32_Nhdr;
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Word	n_namesz;	/* length of note's name */
 	Elf64_Word	n_descsz;	/* length of note's "desc" */
 	Elf64_Word	n_type;		/* type of note */
 } Elf64_Nhdr;
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 
 /*
  *	Move entry
  */
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf32_Lword	m_value;	/* symbol value */
 	Elf32_Word 	m_info;		/* size + index */
@@ -851,9 +835,6 @@ typedef struct {
 #define	ELF64_M_SIZE(info)	((unsigned char)(info))
 #define	ELF64_M_INFO(sym, size)	(((sym)<<8)+(unsigned char)(size))
 
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
-
-
 /*
  *	Capabilities entry, Capabilities info and Capabilities chain.
  */
@@ -881,7 +862,6 @@ typedef	Elf32_Word	Elf32_Capchain;
 #define	ELF32_C_INFO(sym, grp)	(((sym)<<8)+(unsigned char)(grp))
 
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef struct {
 	Elf64_Xword	c_tag;		/* how to interpret value */
 	union {
@@ -904,7 +884,6 @@ typedef	Elf64_Word	Elf64_Capchain;
 #define	ELF64_C_GROUP(info)    	((Elf64_Word)(info))
 #define	ELF64_C_INFO(sym, grp)	(((Elf64_Xword)(sym)<<32)+(Elf64_Xword)(grp))
 
-#endif	/* defined(_LP64) || defined(_LONGLONG_TYPE) */
 #endif
 
 /*

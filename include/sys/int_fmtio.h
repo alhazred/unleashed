@@ -106,9 +106,7 @@ extern "C" {
 #ifdef  _LP64
 #define	PRId64			"ld"
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 #define	PRId64			"lld"
-#endif
 #endif
 #ifdef PRId64
 #define	PRIdLEAST64		PRId64
@@ -127,9 +125,7 @@ extern "C" {
 #ifdef  _LP64
 #define	PRIi64			"li"
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 #define	PRIi64			"lli"
-#endif
 #endif
 #ifdef PRIi64
 #define	PRIiLEAST64		PRIi64
@@ -152,9 +148,7 @@ extern "C" {
 #ifdef  _LP64
 #define	PRIo64			"lo"
 #else	/* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 #define	PRIo64			"llo"
-#endif
 #endif
 #ifdef PRIo64
 #define	PRIoLEAST64		PRIo64
@@ -173,9 +167,7 @@ extern "C" {
 #ifdef  _LP64
 #define	PRIu64			"lu"
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 #define	PRIu64			"llu"
-#endif
 #endif
 #ifdef PRIu64
 #define	PRIuLEAST64		PRIu64
@@ -194,9 +186,7 @@ extern "C" {
 #ifdef  _LP64
 #define	PRIx64			"lx"
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 #define	PRIx64			"llx"
-#endif
 #endif
 #ifdef PRIx64
 #define	PRIxLEAST64		PRIx64
@@ -215,9 +205,7 @@ extern "C" {
 #ifdef  _LP64
 #define	PRIX64			"lX"
 #else   /* _ILP32 */
-#if defined(_LONGLONG_TYPE)
 #define	PRIX64			"llX"
-#endif
 #endif
 #ifdef PRIX64
 #define	PRIXLEAST64		PRIX64
@@ -349,7 +337,7 @@ extern "C" {
 /*
  * The following macros define I/O formats for intmax_t and uintmax_t.
  */
-#if !defined(_LP64) && defined(_LONGLONG_TYPE)
+#if !defined(_LP64)
 #define	PRIdMAX			"lld"
 #define	PRIiMAX			"lli"
 #define	PRIoMAX			"llo"
@@ -363,7 +351,7 @@ extern "C" {
 #define	PRIxMAX			"lx"
 #define	PRIuMAX			"lu"
 #define	PRIXMAX			"lX"
-#endif	/* !defined(_LP64) && defined(_LONGLONG_TYPE) */
+#endif	/* !defined(_LP64) */
 
 #define	SCNdMAX			PRIdMAX
 #define	SCNiMAX			PRIiMAX

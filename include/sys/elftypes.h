@@ -31,50 +31,22 @@
 #ifndef _SYS_ELFTYPES_H
 #define	_SYS_ELFTYPES_H
 
-#include <sys/feature_tests.h>
+#include <stdint.h>
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
+typedef uint32_t		Elf32_Addr;
+typedef uint16_t		Elf32_Half;
+typedef uint32_t		Elf32_Off;
+typedef int32_t			Elf32_Sword;
+typedef uint32_t		Elf32_Word;
 
-#if defined(_LP64) || defined(_I32LPx)
-typedef unsigned int		Elf32_Addr;
-typedef unsigned short		Elf32_Half;
-typedef unsigned int		Elf32_Off;
-typedef int			Elf32_Sword;
-typedef unsigned int		Elf32_Word;
-#else
-typedef unsigned long		Elf32_Addr;
-typedef unsigned short		Elf32_Half;
-typedef unsigned long		Elf32_Off;
-typedef long			Elf32_Sword;
-typedef unsigned long		Elf32_Word;
-#endif
-
-#if defined(_LP64)
-typedef unsigned long		Elf64_Addr;
-typedef unsigned short		Elf64_Half;
-typedef unsigned long		Elf64_Off;
-typedef int			Elf64_Sword;
-typedef long			Elf64_Sxword;
-typedef	unsigned int		Elf64_Word;
-typedef	unsigned long		Elf64_Xword;
-typedef unsigned long		Elf64_Lword;
-typedef unsigned long		Elf32_Lword;
-#elif defined(_LONGLONG_TYPE)
-typedef unsigned long long	Elf64_Addr;
-typedef unsigned short		Elf64_Half;
-typedef unsigned long long	Elf64_Off;
-typedef int			Elf64_Sword;
-typedef long long		Elf64_Sxword;
-typedef	unsigned int		Elf64_Word;
-typedef	unsigned long long	Elf64_Xword;
-typedef	unsigned long long	Elf64_Lword;
-typedef unsigned long long	Elf32_Lword;
-#endif
-
-#ifdef	__cplusplus
-}
-#endif
+typedef uint64_t		Elf64_Addr;
+typedef uint16_t		Elf64_Half;
+typedef uint64_t		Elf64_Off;
+typedef int32_t			Elf64_Sword;
+typedef int64_t			Elf64_Sxword;
+typedef	uint32_t		Elf64_Word;
+typedef	uint64_t		Elf64_Xword;
+typedef uint64_t		Elf64_Lword;
+typedef uint64_t		Elf32_Lword;
 
 #endif	/* _SYS_ELFTYPES_H */

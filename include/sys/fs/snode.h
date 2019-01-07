@@ -201,12 +201,8 @@ void	spec_size_invalidate(dev_t, vtype_t);
  * this restriction.
  */
 #ifdef	_ILP32
-#ifdef	_LONGLONG_TYPE
 #define	SPEC_MAXOFFSET_T	((1LL << ((NBBY * sizeof (daddr32_t)) +	\
 				DEV_BSHIFT - 1)) - 1)
-#else	/* !defined(_LONGLONG_TYPE) */
-#define	SPEC_MAXOFFSET_T	MAXOFF_T
-#endif	/* _LONGLONG_TYPE */
 #endif	/* _ILP32 */
 
 /*

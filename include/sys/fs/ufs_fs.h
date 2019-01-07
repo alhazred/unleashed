@@ -120,14 +120,9 @@ extern "C" {
  */
 #define	UFSROOTINO	((ino_t)2)	/* i number of all roots */
 #define	LOSTFOUNDINO    (UFSROOTINO + 1)
-#ifndef _LONGLONG_TYPE
-#define	UFS_MAXOFFSET_T	MAXOFF_T
-#define	UFS_FILESIZE_BITS	32
-#else
 #define	UFS_MAXOFFSET_T	((1LL << NBBY * sizeof (daddr32_t) + DEV_BSHIFT - 1) \
 							- 1)
 #define	UFS_FILESIZE_BITS	41
-#endif /* _LONGLONG_TYPE */
 
 /*
  * MINBSIZE is the smallest allowable block size.

@@ -1523,11 +1523,7 @@ dircache_updatedir(const char *path, int what)
 #define	DO_CACHE_DIR	0
 #define	DO_UPDATE_DIR	1
 
-#if defined(_LP64) || defined(_LONGLONG_TYPE)
 typedef		Elf64_Ehdr	_elfhdr;
-#else
-typedef		Elf32_Ehdr	_elfhdr;
-#endif
 
 /*
  * This routine updates the contents of the cache directory

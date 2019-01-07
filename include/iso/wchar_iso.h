@@ -139,32 +139,6 @@ typedef __mbstate_t	mbstate_t;
 typedef __FILE FILE;
 #endif
 
-#if !defined(_LP64) && !defined(_LONGLONG_TYPE)
-
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname fwprintf	_fwprintf_c89
-#pragma	redefine_extname swprintf	_swprintf_c89
-#pragma	redefine_extname vfwprintf	_vfwprintf_c89
-#pragma	redefine_extname vswprintf	_vswprintf_c89
-#pragma	redefine_extname vwprintf	_vwprintf_c89
-#pragma	redefine_extname wprintf	_wprintf_c89
-#pragma	redefine_extname fwscanf	_fwscanf_c89
-#pragma	redefine_extname swscanf	_swscanf_c89
-#pragma	redefine_extname wscanf		_wscanf_c89
-#else
-#define	fwprintf	_fwprintf_c89
-#define	swprintf	_swprintf_c89
-#define	vfwprintf	_vfwprintf_c89
-#define	vswprintf	_vswprintf_c89
-#define	vwprintf	_vwprintf_c89
-#define	wprintf		_wprintf_c89
-#define	fwscanf		_fwscanf_c89
-#define	swscanf		_swscanf_c89
-#define	wscanf		_wscanf_c89
-#endif
-
-#endif /* !defined(_LP64) && !defined(_LONGLONG_TYPE) */
-
 extern wint_t fgetwc(__FILE *);
 extern wchar_t *fgetws(wchar_t *_RESTRICT_KYWD, int, __FILE *_RESTRICT_KYWD);
 extern wint_t fputwc(wint_t, __FILE *);

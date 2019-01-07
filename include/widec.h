@@ -85,9 +85,7 @@ extern long	wstol(const wchar_t *, wchar_t **, int);
 extern int	wscasecmp(const wchar_t *, const wchar_t *);
 extern int	wsncasecmp(const wchar_t *, const wchar_t *, size_t);
 extern int	wsprintf(wchar_t *, const char *, ...);
-#if defined(_LONGLONG_TYPE)
 extern long long	wstoll(const wchar_t *, wchar_t **, int);
-#endif	/* defined(_LONGLONG_TYPE) */
 
 #endif /* !defined(_STRICT_SYMBOLS) */
 
@@ -102,9 +100,7 @@ extern long long	wstoll(const wchar_t *, wchar_t **, int);
 #define	wrindex		wsrchr
 
 #define	watol(s)	wstol((s), (wchar_t **)0, 10)
-#if defined(_LONGLONG_TYPE) && !defined(__lint)
 #define	watoll(s)	wstoll((s), (wchar_t **)0, 10)
-#endif	/* defined(_LONGLONG_TYPE) && !defined(__lint) */
 #define	watoi(s)	((int)wstol((s), (wchar_t **)0, 10))
 #define	watof(s)	wstod((s), (wchar_t **)0)
 

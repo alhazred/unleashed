@@ -222,10 +222,10 @@ extern char *mkdtemp(char *);
 extern const char *getprogname(void);
 extern void setprogname(const char *);
 
-#if !defined(_STRICT_STDC) && defined(_LONGLONG_TYPE)
+#if __UNLEASHED_VISIBLE
 extern char *lltostr(long long, char *);
 extern char *ulltostr(unsigned long long, char *);
-#endif	/* !defined(_STRICT_STDC) && defined(_LONGLONG_TYPE) */
+#endif
 
 #endif /* defined(__EXTENSIONS__) || !defined(_STRICT_STDC) ... */
 

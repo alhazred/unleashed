@@ -261,26 +261,6 @@ extern "C" {
 #endif
 
 /*
- * ANSI C and ISO 9899:1990 say the type long long doesn't exist in strictly
- * conforming environments.  ISO 9899:1999 says it does.
- *
- * The presence of _LONGLONG_TYPE says "long long exists" which is therefore
- * defined in all but strictly conforming environments that disallow it.
- */
-#if !defined(_STDC_C99) && defined(_STRICT_STDC) && !defined(__GNUC__)
-/*
- * Resist attempts to force the definition of long long in this case.
- */
-#if defined(_LONGLONG_TYPE)
-#error	"No long long in strictly conforming ANSI C & 1990 ISO C environments"
-#endif
-#else
-#if !defined(_LONGLONG_TYPE)
-#define	_LONGLONG_TYPE
-#endif
-#endif
-
-/*
  * The following macro defines a value for the ISO C99 restrict
  * keyword so that _RESTRICT_KYWD resolves to "restrict" if
  * an ISO C99 compiler is used, "__restrict" for c++ and "" (null string)

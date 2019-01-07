@@ -44,20 +44,6 @@
 extern "C" {
 #endif
 
-/* Introduced in ISO/IEC 9899:1999 standard */
-
-#if !defined(_LP64) && !defined(_LONGLONG_TYPE)
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma	redefine_extname vfwscanf	_vfwscanf_c89
-#pragma	redefine_extname vswscanf	_vswscanf_c89
-#pragma	redefine_extname vwscanf	_vwscanf_c89
-#else
-#define	vfwscanf	_vfwscanf_c89
-#define	vswscanf	_vswscanf_c89
-#define	vwscanf		_vwscanf_c89
-#endif
-#endif /* !defined(_LP64) && !defined(_LONGLONG_TYPE) */
-
 #if defined(_STDC_C99) || \
 	(!defined(_STRICT_STDC) && !defined(__XOPEN_OR_POSIX)) || \
 	defined(_XPG6) || defined(__EXTENSIONS__)
@@ -68,15 +54,12 @@ extern int vswscanf(const wchar_t *_RESTRICT_KYWD,
 extern int vwscanf(const wchar_t *_RESTRICT_KYWD, __va_list);
 extern float wcstof(const wchar_t *_RESTRICT_KYWD,
 		wchar_t **_RESTRICT_KYWD);
-#if defined(_LONGLONG_TYPE)
 extern long double wcstold(const wchar_t *_RESTRICT_KYWD,
 		wchar_t **_RESTRICT_KYWD);
 extern long long wcstoll(const wchar_t *_RESTRICT_KYWD,
 		wchar_t **_RESTRICT_KYWD, int);
 extern unsigned long long wcstoull(const wchar_t *_RESTRICT_KYWD,
 		wchar_t **_RESTRICT_KYWD, int);
-#endif /* defined(_LONGLONG_TYPE) */
-
 #endif /* defined(_STDC_C99) || (!defined(_STRICT_STDC)... */
 
 #ifdef	__cplusplus

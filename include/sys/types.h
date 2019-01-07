@@ -62,25 +62,8 @@
 extern "C" {
 #endif
 
-/*
- * Strictly conforming ANSI C environments prior to the 1999
- * revision of the C Standard (ISO/IEC 9899:1999) do not have
- * the long long data type.
- */
-#if defined(_LONGLONG_TYPE)
 typedef	long long		longlong_t;
 typedef	unsigned long long	u_longlong_t;
-#else
-/* used to reserve space and generate alignment */
-typedef union {
-	double	_d;
-	int32_t	_l[2];
-} longlong_t;
-typedef union {
-	double		_d;
-	uint32_t	_l[2];
-} u_longlong_t;
-#endif	/* defined(_LONGLONG_TYPE) */
 
 /*
  * These types (t_{u}scalar_t) exist because the XTI/TPI/DLPI standards had
