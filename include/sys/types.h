@@ -124,58 +124,34 @@ typedef	short		index_t;
 typedef void		*timeout_id_t;	/* opaque handle from timeout(9F) */
 typedef void		*bufcall_id_t;	/* opaque handle from bufcall(9F) */
 
-/*
- * The size of off_t and related types depends on the setting of
- * _FILE_OFFSET_BITS.  (Note that other system headers define other types
- * related to those defined here.)
- *
- * If _LARGEFILE64_SOURCE is defined, variants of these types that are
- * explicitly 64 bits wide become available.
- */
 #ifndef _OFF_T
 #define	_OFF_T
 
-#if defined(_LP64) || _FILE_OFFSET_BITS == 32
+#if defined(_LP64)
 typedef long		off_t;		/* offsets within files */
-#elif _FILE_OFFSET_BITS == 64
+#else
 typedef longlong_t	off_t;		/* offsets within files */
 #endif
-
-#if defined(_LARGEFILE64_SOURCE)
-#ifdef _LP64
-typedef	off_t		off64_t;	/* offsets within files */
-#else
-typedef longlong_t	off64_t;	/* offsets within files */
-#endif
-#endif	/* _LARGEFILE64_SOURCE */
+typedef off_t off64_t;
 
 #endif /* _OFF_T */
 
-#if defined(_LP64) || _FILE_OFFSET_BITS == 32
+#if defined(_LP64)
 typedef ulong_t		ino_t;		/* expanded inode type	*/
 typedef long		blkcnt_t;	/* count of file blocks */
 typedef ulong_t		fsblkcnt_t;	/* count of file system blocks */
 typedef ulong_t		fsfilcnt_t;	/* count of files */
-#elif _FILE_OFFSET_BITS == 64
+#else
 typedef u_longlong_t	ino_t;		/* expanded inode type	*/
 typedef longlong_t	blkcnt_t;	/* count of file blocks */
 typedef u_longlong_t	fsblkcnt_t;	/* count of file system blocks */
 typedef u_longlong_t	fsfilcnt_t;	/* count of files */
 #endif
 
-#if defined(_LARGEFILE64_SOURCE)
-#ifdef _LP64
 typedef	ino_t		ino64_t;	/* expanded inode type */
 typedef	blkcnt_t	blkcnt64_t;	/* count of file blocks */
 typedef	fsblkcnt_t	fsblkcnt64_t;	/* count of file system blocks */
 typedef	fsfilcnt_t	fsfilcnt64_t;	/* count of files */
-#else
-typedef u_longlong_t	ino64_t;	/* expanded inode type	*/
-typedef longlong_t	blkcnt64_t;	/* count of file blocks */
-typedef u_longlong_t	fsblkcnt64_t;	/* count of file system blocks */
-typedef u_longlong_t	fsfilcnt64_t;	/* count of files */
-#endif
-#endif	/* _LARGEFILE64_SOURCE */
 
 #ifdef _LP64
 typedef	int		blksize_t;	/* used for block sizes */
