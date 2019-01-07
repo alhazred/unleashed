@@ -109,38 +109,22 @@ typedef void		*bufcall_id_t;	/* opaque handle from bufcall(9F) */
 
 #ifndef _OFF_T
 #define	_OFF_T
-
-#if defined(_LP64)
-typedef long		off_t;		/* offsets within files */
-#else
-typedef longlong_t	off_t;		/* offsets within files */
-#endif
-typedef off_t off64_t;
-
+typedef int64_t		off_t;		/* offsets within files */
+typedef off_t		off64_t;	/* compat alias */
 #endif /* _OFF_T */
 
-#if defined(_LP64)
-typedef ulong_t		ino_t;		/* expanded inode type	*/
-typedef long		blkcnt_t;	/* count of file blocks */
-typedef ulong_t		fsblkcnt_t;	/* count of file system blocks */
-typedef ulong_t		fsfilcnt_t;	/* count of files */
-#else
-typedef u_longlong_t	ino_t;		/* expanded inode type	*/
-typedef longlong_t	blkcnt_t;	/* count of file blocks */
-typedef u_longlong_t	fsblkcnt_t;	/* count of file system blocks */
-typedef u_longlong_t	fsfilcnt_t;	/* count of files */
-#endif
+typedef uint64_t	ino_t;		/* expanded inode type	*/
+typedef int64_t		blkcnt_t;	/* count of file blocks */
+typedef uint64_t	fsblkcnt_t;	/* count of file system blocks */
+typedef uint64_t	fsfilcnt_t;	/* count of files */
 
-typedef	ino_t		ino64_t;	/* expanded inode type */
-typedef	blkcnt_t	blkcnt64_t;	/* count of file blocks */
-typedef	fsblkcnt_t	fsblkcnt64_t;	/* count of file system blocks */
-typedef	fsfilcnt_t	fsfilcnt64_t;	/* count of files */
+/* compat aliases */
+typedef ino_t		ino64_t;
+typedef blkcnt_t	blkcnt64_t;
+typedef fsblkcnt_t	fsblkcnt64_t;
+typedef fsfilcnt_t	fsfilcnt64_t;
 
-#ifdef _LP64
-typedef	int		blksize_t;	/* used for block sizes */
-#else
-typedef	long		blksize_t;	/* used for block sizes */
-#endif
+typedef int32_t		blksize_t;	/* used for block sizes */
 
 #if defined(__XOPEN_OR_POSIX)
 typedef enum { _B_FALSE, _B_TRUE } boolean_t;
@@ -185,10 +169,10 @@ typedef union {
 	uint32_t	_l[4];
 } upad128_t;
 
-typedef	longlong_t	offset_t;
-typedef	u_longlong_t	uoff_t;
-typedef u_longlong_t	len_t;
-typedef	u_longlong_t	diskaddr_t;
+typedef off_t		offset_t;
+typedef uint64_t	uoff_t;
+typedef uint64_t	len_t;
+typedef uint64_t	diskaddr_t;
 #if (defined(_KERNEL) || defined(_KMEMUSER) || defined(_BOOT))
 typedef	uint64_t	paddr_t;
 #endif

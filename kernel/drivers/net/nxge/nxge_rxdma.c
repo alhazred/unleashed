@@ -4871,13 +4871,8 @@ nxge_rxdma_inject_err(p_nxge_t nxgep, uint32_t err_id, uint8_t chan)
 			cs.bits.hdw.rbrlogpage = 1;
 		else if (err_id == NXGE_FM_EREPORT_RDMC_CFIGLOGPAGE)
 			cs.bits.hdw.cfiglogpage = 1;
-#if defined(__i386)
 		cmn_err(CE_NOTE, "!Write 0x%llx to RX_DMA_CTL_STAT_DBG_REG\n",
 		    cs.value);
-#else
-		cmn_err(CE_NOTE, "!Write 0x%lx to RX_DMA_CTL_STAT_DBG_REG\n",
-		    cs.value);
-#endif
 		RXDMA_REG_WRITE64(nxgep->npi_handle, RX_DMA_CTL_STAT_DBG_REG,
 		    chan, cs.value);
 		break;
@@ -4891,15 +4886,9 @@ nxge_rxdma_inject_err(p_nxge_t nxgep, uint32_t err_id, uint8_t chan)
 			cdfs.bits.ldw.zcp_eop_err = (1 << nxgep->mac.portnum);
 		else if (err_id == NXGE_FM_EREPORT_RDMC_IPP_EOP_ERR)
 			cdfs.bits.ldw.ipp_eop_err = (1 << nxgep->mac.portnum);
-#if defined(__i386)
 		cmn_err(CE_NOTE,
 		    "!Write 0x%llx to RX_CTL_DAT_FIFO_STAT_DBG_REG\n",
 		    cdfs.value);
-#else
-		cmn_err(CE_NOTE,
-		    "!Write 0x%lx to RX_CTL_DAT_FIFO_STAT_DBG_REG\n",
-		    cdfs.value);
-#endif
 		NXGE_REG_WR64(nxgep->npi_handle,
 		    RX_CTL_DAT_FIFO_STAT_DBG_REG, cdfs.value);
 		break;

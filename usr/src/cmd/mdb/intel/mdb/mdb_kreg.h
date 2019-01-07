@@ -38,11 +38,7 @@ extern "C" {
 #endif
 
 #ifndef _ASM
-#ifdef __amd64
-typedef uint64_t kreg_t;
-#else	/* __amd64 */
-typedef uint32_t kreg_t;
-#endif	/* __amd64 */
+typedef uintptr_t kreg_t;
 #endif	/* !_ASM */
 
 #define	KREG_NGREG	KDIREG_NGREG

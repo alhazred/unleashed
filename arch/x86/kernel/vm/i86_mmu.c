@@ -381,7 +381,7 @@ invpcid(uint64_t type, uint64_t pcid, uintptr_t addr)
 		break;
 
 	default:
-		panic("unsupported invpcid(%lu)", type);
+		panic("unsupported invpcid(%llu)", type);
 		break;
 	}
 }

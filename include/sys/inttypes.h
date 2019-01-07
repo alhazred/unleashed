@@ -39,10 +39,8 @@
 
 #include <sys/feature_tests.h>
 #include <sys/int_types.h>
-#if !defined(_XOPEN_SOURCE) || defined(_XPG6) || defined(__EXTENSIONS__)
 #include <sys/int_limits.h>
 #include <sys/int_const.h>
 #include <sys/int_fmtio.h>
-#endif
 
 #endif /* _SYS_INTTYPES_H */

@@ -1692,8 +1692,8 @@ dumpregs(struct regs *rp)
 	printf(fmt, "r10", rp->r_r10, "r11", rp->r_r11, "r12", rp->r_r12);
 	printf(fmt, "r13", rp->r_r13, "r14", rp->r_r14, "r15", rp->r_r15);
 
-	printf(fmt, "fsb", rdmsr(MSR_AMD_FSBASE), "gsb", rdmsr(MSR_AMD_GSBASE),
-	    " ds", rp->r_ds);
+	printf(fmt, "fsb", (uintptr_t)rdmsr(MSR_AMD_FSBASE), "gsb",
+	    (uintptr_t)rdmsr(MSR_AMD_GSBASE), " ds", rp->r_ds);
 	printf(fmt, " es", rp->r_es, " fs", rp->r_fs, " gs", rp->r_gs);
 
 	printf(fmt, "trp", rp->r_trapno, "err", rp->r_err, "rip", rp->r_rip);

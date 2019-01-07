@@ -51,12 +51,6 @@
  * squarely behind the fixed sized types.
  */
 
-#include <sys/feature_tests.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * Constants
  *
@@ -66,54 +60,20 @@ extern "C" {
  *	signedness. The suffix used for int64_t and uint64_t (ll and ull)
  *	are for examples only. Implementations are permitted to use other
  *	suffixes.
- *
- * The "CSTYLED" comments are flags to an internal code style analysis tool
- * telling it to silently accept the line which follows.  This internal
- * standard requires a space between arguments, but the historical,
- * non-ANSI-C ``method'' of concatenation can't tolerate those spaces.
  */
-/* CSTYLED */
 #define	__CONCAT__(A,B) A ## B
 
 #define	INT8_C(c)	(c)
 #define	INT16_C(c)	(c)
 #define	INT32_C(c)	(c)
-#ifdef  _LP64
-/* CSTYLED */
-#define	INT64_C(c)	__CONCAT__(c,l)
-#else   /* _ILP32 */
-/* CSTYLED */
-#define	INT64_C(c)	__CONCAT__(c,ll)
-#endif
+#define	INT64_C(c)	__CONCAT__(c,LL)
 
-/* CSTYLED */
-#define	UINT8_C(c)	__CONCAT__(c,u)
-/* CSTYLED */
-#define	UINT16_C(c)	__CONCAT__(c,u)
-/* CSTYLED */
-#define	UINT32_C(c)	__CONCAT__(c,u)
-#ifdef  _LP64
-/* CSTYLED */
-#define	UINT64_C(c)	__CONCAT__(c,ul)
-#else   /* _ILP32 */
-/* CSTYLED */
-#define	UINT64_C(c)	__CONCAT__(c,ull)
-#endif
+#define	UINT8_C(c)	(c)
+#define	UINT16_C(c)	(c)
+#define	UINT32_C(c)	__CONCAT__(c,U)
+#define	UINT64_C(c)	__CONCAT__(c,ULL)
 
-#ifdef  _LP64
-/* CSTYLED */
-#define	INTMAX_C(c)	__CONCAT__(c,l)
-/* CSTYLED */
-#define	UINTMAX_C(c)	__CONCAT__(c,ul)
-#else   /* _ILP32 */
-/* CSTYLED */
-#define	INTMAX_C(c)	__CONCAT__(c,ll)
-/* CSTYLED */
-#define	UINTMAX_C(c)	__CONCAT__(c,ull)
-#endif
-
-#ifdef __cplusplus
-}
-#endif
+#define	INTMAX_C(c)	__CONCAT__(c,LL)
+#define	UINTMAX_C(c)	__CONCAT__(c,ULL)
 
 #endif /* _SYS_INT_CONST_H */

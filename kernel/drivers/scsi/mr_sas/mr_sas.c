@@ -629,7 +629,7 @@ mrsas_attach(dev_info_t *dip, ddi_attach_cmd_t cmd)
 		if (reglength > DEFAULT_MFI_MEM_SZ) {
 			reglength = DEFAULT_MFI_MEM_SZ;
 			con_log(CL_DLEVEL1, (CE_NOTE,
-			    "mr_sas: register length to map is 0x%lx bytes",
+			    "mr_sas: register length to map is 0x%llx bytes",
 			    reglength));
 		}
 		if (ddi_regs_map_setup(instance->dip,

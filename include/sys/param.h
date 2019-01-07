@@ -253,13 +253,8 @@ extern "C" {
 #ifdef	_SYSCALL32
 #define	MAXOFF32_T	0x7fffffff
 #endif
-#ifdef	_LP64
-#define	MAXOFF_T	0x7fffffffffffffffl
-#define	MAXOFFSET_T	0x7fffffffffffffffl
-#else
 #define	MAXOFF_T	0x7fffffffffffffffLL
-#define	MAXOFFSET_T 	0x7fffffffffffffffLL
-#endif	/* _LP64 */
+#define	MAXOFFSET_T	MAXOFF_T
 
 #define	btodb(bytes)			/* calculates (bytes / DEV_BSIZE) */ \
 	((unsigned long)(bytes) >> DEV_BSHIFT)

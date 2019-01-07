@@ -677,7 +677,7 @@ free(struct inode *ip, daddr_t bno, off_t size, int flags)
 			mutex_exit(&ufsvfsp->vfs_lock);
 			brelse(bp);
 			(void) ufs_fault(ITOV(ip), "free: freeing free block, "
-			    "dev:0x%lx, block:%ld, ino:%lu, fs:%s",
+			    "dev:0x%lx, block:%ld, ino:%llu, fs:%s",
 			    ip->i_dev, bno, ip->i_number, fs->fs_fsmnt);
 			return;
 		}
@@ -710,7 +710,7 @@ free(struct inode *ip, daddr_t bno, off_t size, int flags)
 				(void) ufs_fault(ITOV(ip),
 				    "free: freeing free frag, "
 				    "dev:0x%lx, blk:%ld, cg:%d, "
-				    "ino:%lu, fs:%s",
+				    "ino:%llu, fs:%s",
 				    ip->i_dev,
 				    bno + i,
 				    cgp->cg_cgx,

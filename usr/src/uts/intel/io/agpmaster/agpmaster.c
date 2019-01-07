@@ -184,7 +184,7 @@ i965_apersize(agp_master_softc_t *agpmaster)
 	off_t apersize;
 
 	apersize = AGPM_READ(agpmaster, PGTBL_CTL);
-	AGPM_DEBUG((CE_NOTE, "i965_apersize: PGTBL_CTL = %lx", apersize));
+	AGPM_DEBUG((CE_NOTE, "i965_apersize: PGTBL_CTL = %llx", apersize));
 	switch (apersize & GTT_SIZE_MASK) {
 	case GTT_2MB:
 		apersize = 2048;
@@ -241,7 +241,7 @@ i3XX_apersize(ddi_acc_handle_t pci_acc_hdl)
 		AGPM_DEBUG((CE_WARN,
 		    "i3XX_apersize: no memory allocated for GTT"));
 	}
-	AGPM_DEBUG((CE_NOTE, "i3xx_apersize: apersize = %ldM", apersize));
+	AGPM_DEBUG((CE_NOTE, "i3xx_apersize: apersize = %lldM", apersize));
 	return (apersize);
 }
 
@@ -341,7 +341,7 @@ set_gtt_mmio(dev_info_t *devi, agp_master_softc_t *agpmaster,
 	/* get graphics memory base address from GMADR */
 	value = pci_config_get32(pci_acc_hdl, gmadr_off);
 	APER_BASE(agpmaster) = value & GTT_BASE_MASK;
-	AGPM_DEBUG((CE_NOTE, "set_gtt_mmio: aperbase = 0x%x, apersize = %ldM, "
+	AGPM_DEBUG((CE_NOTE, "set_gtt_mmio: aperbase = 0x%x, apersize = %lldM, "
 	    "gtt_addr = %p, mmio_base = %p", APER_BASE(agpmaster), apersize,
 	    (void *)GTT_ADDR(agpmaster), (void *)MMIO_BASE(agpmaster)));
 	return (0);

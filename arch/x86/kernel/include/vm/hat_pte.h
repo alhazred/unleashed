@@ -245,11 +245,11 @@ struct hat_mmu_info {
  * In the 64 bit kernel PTE loads are atomic, but need atomic_cas_64 on 32
  * bit kernel.
  */
+#define	FMT_PTE "0x%llx"
 #if defined(__amd64)
 
 #define	IN_VA_HOLE(va)	(mmu.hole_start <= (va) && (va) < mmu.hole_end)
 
-#define	FMT_PTE "0x%lx"
 #define	GET_PTE(ptr)		(*(x86pte_t *)(ptr))
 #define	SET_PTE(ptr, pte)	(*(x86pte_t *)(ptr) = pte)
 #define	CAS_PTE(ptr, x, y)	atomic_cas_64(ptr, x, y)
@@ -257,8 +257,6 @@ struct hat_mmu_info {
 #elif defined(__i386)
 
 #define	IN_VA_HOLE(va)	(__lintzero)
-
-#define	FMT_PTE "0x%llx"
 
 /* on 32 bit kernels, 64 bit loads aren't atomic, use get_pte64() */
 extern x86pte_t get_pte64(x86pte_t *ptr);

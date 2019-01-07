@@ -387,22 +387,6 @@ parse_resources_addr64(ACPI_RESOURCE *resource_ptr, struct regspec *io,
 			cmn_err(CE_NOTE, "!parse_resources() "\
 			    "ADDRESS 64 OTHER");
 		}
-#ifdef _LP64
-		cmn_err(CE_NOTE, "!parse_resources() "\
-		    "%s "\
-		    "MinAddressFixed 0x%X, "\
-		    "MaxAddressFixed 0x%X, "\
-		    "Minimum 0x%lX, "\
-		    "Maximum 0x%lX, "\
-		    "length: 0x%lX\n",
-		    addr64.ProducerConsumer == ACPI_CONSUMER ?
-		    "CONSUMER" : "PRODUCER",
-		    addr64.MinAddressFixed,
-		    addr64.MaxAddressFixed,
-		    addr64.Address.Minimum,
-		    addr64.Address.Maximum,
-		    addr64.Address.AddressLength);
-#else
 		cmn_err(CE_NOTE, "!parse_resources() "\
 		    "%s "\
 		    "MinAddressFixed 0x%X, "\
@@ -417,7 +401,6 @@ parse_resources_addr64(ACPI_RESOURCE *resource_ptr, struct regspec *io,
 		    addr64.Address.Minimum,
 		    addr64.Address.Maximum,
 		    addr64.Address.AddressLength);
-#endif
 	}
 	if (addr64.ProducerConsumer == ACPI_PRODUCER ||
 	    (addr64.ResourceType != ACPI_MEMORY_RANGE &&

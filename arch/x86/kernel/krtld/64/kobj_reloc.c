@@ -262,7 +262,8 @@ do_relocate(struct module *mp, char *reltbl, Word relshtype, int nreloc,
 		}
 #endif
 
-		if (do_reloc_krtld(rtype, (unsigned char *)off, &value,
+		if (do_reloc_krtld(rtype, (unsigned char *)off,
+		    (Xword *)&value,
 		    (const char *)mp->strings + symref->st_name,
 		    mp->filename) == 0)
 			err = 1;

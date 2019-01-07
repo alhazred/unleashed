@@ -20,6 +20,7 @@
  * CDDL HEADER END
  */
 /*
+ * Copyright 2019 Lauri Tirkkonen <lotheac@iki.fi>
  * Copyright 2014 Garrett D'Amore <garrett@damore.org>
  *
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
@@ -27,7 +28,7 @@
  */
 
 #ifndef _SYS_INT_LIMITS_H
-#define	_SYS_INT_LIMITS_H
+#define _SYS_INT_LIMITS_H
 
 /*
  * This file, <sys/int_limits.h>, is part of the Sun Microsystems implementation
@@ -55,10 +56,6 @@
 
 #include <sys/feature_tests.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * Limits
  *
@@ -80,83 +77,63 @@ extern "C" {
  * where the ABI specifies "char" as unsigned when the translation mode is
  * not ANSI-C.
  */
-#define	INT8_MAX	(127)
-#define	INT16_MAX	(32767)
-#define	INT32_MAX	(2147483647)
-#if defined(_LP64)
-#define	INT64_MAX	(9223372036854775807L)
-#else
-#define	INT64_MAX	(9223372036854775807LL)
-#endif
+#define INT8_MIN		(-0x7f - 1)
+#define INT16_MIN		(-0x7fff - 1)
+#define INT32_MIN		(-0x7fffffff - 1)
+#define INT64_MIN		(-0x7fffffffffffffffLL - 1)
 
-#define	UINT8_MAX	(255U)
-#define	UINT16_MAX	(65535U)
-#define	UINT32_MAX	(4294967295U)
-#if defined(_LP64)
-#define	UINT64_MAX	(18446744073709551615UL)
-#else
-#define	UINT64_MAX	(18446744073709551615ULL)
-#endif
+#define INT8_MAX		0x7f
+#define INT16_MAX		0x7fff
+#define INT32_MAX		0x7fffffff
+#define INT64_MAX		0x7fffffffffffffffLL
 
-#ifdef INT64_MAX
-#define	INTMAX_MAX	INT64_MAX
-#else
-#define	INTMAX_MAX	INT32_MAX
-#endif
+#define UINT8_MAX		0xff
+#define UINT16_MAX		0xffff
+#define UINT32_MAX		0xffffffffU
+#define UINT64_MAX		0xffffffffffffffffULL
 
-#ifdef UINT64_MAX
-#define	UINTMAX_MAX	UINT64_MAX
-#else
-#define	UINTMAX_MAX	UINT32_MAX
-#endif
+#define INT_LEAST8_MIN		INT8_MIN
+#define INT_LEAST16_MIN		INT16_MIN
+#define INT_LEAST32_MIN		INT32_MIN
+#define INT_LEAST64_MIN		INT64_MIN
 
-#define	INT_LEAST8_MAX	INT8_MAX
-#define	INT_LEAST16_MAX INT16_MAX
-#define	INT_LEAST32_MAX INT32_MAX
-#ifdef INT64_MAX
-#define	INT_LEAST64_MAX INT64_MAX
-#endif
+#define INT_LEAST8_MAX		INT8_MAX
+#define INT_LEAST16_MAX		INT16_MAX
+#define INT_LEAST32_MAX		INT32_MAX
+#define INT_LEAST64_MAX		INT64_MAX
 
-#define	UINT_LEAST8_MAX	UINT8_MAX
-#define	UINT_LEAST16_MAX UINT16_MAX
-#define	UINT_LEAST32_MAX UINT32_MAX
-#ifdef UINT64_MAX
-#define	UINT_LEAST64_MAX UINT64_MAX
-#endif
+#define UINT_LEAST8_MAX		UINT8_MAX
+#define UINT_LEAST16_MAX	UINT16_MAX
+#define UINT_LEAST32_MAX	UINT32_MAX
+#define UINT_LEAST64_MAX	UINT64_MAX
 
-#define	INT_FAST8_MAX	INT8_MAX
-#define	INT_FAST16_MAX INT16_MAX
-#define	INT_FAST32_MAX INT32_MAX
-#ifdef INT64_MAX
-#define	INT_FAST64_MAX INT64_MAX
-#endif
+#define INT_FAST8_MIN		INT8_MIN
+#define INT_FAST16_MIN		INT16_MIN
+#define INT_FAST32_MIN		INT32_MIN
+#define INT_FAST64_MIN		INT64_MIN
 
-#define	UINT_FAST8_MAX	UINT8_MAX
-#define	UINT_FAST16_MAX UINT16_MAX
-#define	UINT_FAST32_MAX UINT32_MAX
-#ifdef UINT64_MAX
-#define	UINT_FAST64_MAX UINT64_MAX
-#endif
+#define INT_FAST8_MAX		INT8_MAX
+#define INT_FAST16_MAX		INT16_MAX
+#define INT_FAST32_MAX		INT32_MAX
+#define INT_FAST64_MAX		INT64_MAX
 
-/*
- * The following 2 macros are provided for testing whether the types
- * intptr_t and uintptr_t (integers large enough to hold a void *) are
- * defined in this header. They are needed in case the architecture can't
- * represent a pointer in any standard integral type.
- */
+#define UINT_FAST8_MAX		UINT8_MAX
+#define UINT_FAST16_MAX		UINT16_MAX
+#define UINT_FAST32_MAX		UINT32_MAX
+#define UINT_FAST64_MAX		UINT64_MAX
+
+#define INTMAX_MIN		INT64_MIN
+#define INTMAX_MAX		INT64_MAX
+#define UINTMAX_MAX		UINT64_MAX
+
 #if defined(_LP64) || defined(_I32LPx)
-#define	INTPTR_MAX	INT64_MAX
-#define	UINTPTR_MAX	UINT64_MAX
+#define INTPTR_MIN		(-0x7fffffffffffffffL - 1)
+#define INTPTR_MAX		0x7fffffffffffffffL
+#define UINTPTR_MAX		0xffffffffffffffffUL
 #else
-#define	INTPTR_MAX	INT32_MAX
-#define	UINTPTR_MAX	UINT32_MAX
-#endif
-
-/* Maximum limits of ptrdiff_t defined in <sys/types.h> */
-#if defined(_LP64) || defined(_I32LPx)
-#define	PTRDIFF_MAX	9223372036854775807L
-#else
-#define	PTRDIFF_MAX	2147483647
+#define INTPTR_MIN		(-0x7fffffffL - 1)
+#define INTPTR_MAX		0x7fffffffL
+#define UINTPTR_MAX		0xffffffffUL
 #endif
 
 /*
@@ -166,104 +143,38 @@ extern "C" {
  * does <limits.h>. The value of SIZE_MAX should not deviate
  * from the value of ULONG_MAX defined <sys/types.h>.
  */
-#if defined(_LP64)
-#define	SIZE_MAX	18446744073709551615UL
-#else
-#define	SIZE_MAX	4294967295UL
-#endif
+#define SIZE_MAX		UINTPTR_MAX
 
-/* Maximum limit of sig_atomic_t defined in <sys/types.h> */
+/* Limits of ptrdiff_t defined in <sys/types.h> */
+#define PTRDIFF_MIN		INTPTR_MIN
+#define PTRDIFF_MAX		INTPTR_MAX
+
+/* Limits of sig_atomic_t defined in <sys/types.h> */
+#ifndef SIG_ATOMIC_MIN
+#define SIG_ATOMIC_MIN		INT32_MIN
+#endif
 #ifndef SIG_ATOMIC_MAX
-#define	SIG_ATOMIC_MAX	2147483647
+#define SIG_ATOMIC_MAX		INT32_MAX
 #endif
 
 /*
- * Maximum limit of wchar_t. The WCHAR_* macros are also
+ * Limits of wchar_t. The WCHAR_* macros are also
  * defined in <iso/wchar_iso.h>, but inclusion of that header
  * will break ISO/IEC C namespace.
  */
-#ifndef	WCHAR_MAX
-#define	WCHAR_MAX	2147483647
+#ifndef WCHAR_MIN
+#define WCHAR_MIN		INT32_MIN
+#endif
+#ifndef WCHAR_MAX
+#define WCHAR_MAX		INT32_MAX
 #endif
 
-/* Maximum limit of wint_t */
+/* Limits of wint_t */
+#ifndef WINT_MIN
+#define WINT_MIN		INT32_MIN
+#endif
 #ifndef WINT_MAX
-#define	WINT_MAX	2147483647
-#endif
-
-/*
- * It is probably a bug in the POSIX specification (IEEE-1003.1-1990) that
- * when including <limits.h> that the suffix _MAX is reserved but not the
- * suffix _MIN.  However, until that issue is resolved....
- */
-#if defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX) || defined(_XPG6)
-
-#define	INT8_MIN	(-128)
-#define	INT16_MIN	(-32767-1)
-#define	INT32_MIN	(-2147483647-1)
-#if defined(_LP64)
-#define	INT64_MIN	(-9223372036854775807L-1)
-#else
-#define	INT64_MIN	(-9223372036854775807LL-1)
-#endif
-
-#ifdef INT64_MIN
-#define	INTMAX_MIN	INT64_MIN
-#else
-#define	INTMAX_MIN	INT32_MIN
-#endif
-
-#define	INT_LEAST8_MIN	INT8_MIN
-#define	INT_LEAST16_MIN	INT16_MIN
-#define	INT_LEAST32_MIN INT32_MIN
-#ifdef INT64_MIN
-#define	INT_LEAST64_MIN	INT64_MIN
-#endif
-
-#define	INT_FAST8_MIN	INT8_MIN
-#define	INT_FAST16_MIN	INT16_MIN
-#define	INT_FAST32_MIN INT32_MIN
-#ifdef INT64_MIN
-#define	INT_FAST64_MIN	INT64_MIN
-#endif
-
-/* Minimum value of a pointer-holding signed integer type */
-#if defined(_LP64) || defined(_I32LPx)
-#define	INTPTR_MIN	INT64_MIN
-#else
-#define	INTPTR_MIN	INT32_MIN
-#endif
-
-/* Minimum limits of ptrdiff_t defined in <sys/types.h> */
-#if defined(_LP64) || defined(_I32LPx)
-#define	PTRDIFF_MIN	(-9223372036854775807L-1L)
-#else
-#define	PTRDIFF_MIN	(-2147483647-1)
-#endif
-
-/* Minimum limit of sig_atomic_t defined in <sys/types.h> */
-#ifndef	SIG_ATOMIC_MIN
-#define	SIG_ATOMIC_MIN	(-2147483647-1)
-#endif
-
-/*
- * Minimum limit of wchar_t. The WCHAR_* macros are also
- * defined in <iso/wchar_iso.h>, but inclusion of that header
- * will break ISO/IEC C namespace.
- */
-#ifndef	WCHAR_MIN
-#define	WCHAR_MIN	(-2147483647-1)
-#endif
-
-/* Minimum limit of wint_t */
-#ifndef	WINT_MIN
-#define	WINT_MIN	(-2147483647-1)
-#endif
-
-#endif	/* defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX) ... */
-
-#ifdef __cplusplus
-}
+#define WINT_MAX		INT32_MAX
 #endif
 
 #endif /* _SYS_INT_LIMITS_H */

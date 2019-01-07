@@ -2829,7 +2829,7 @@ dirmangled(
 static void
 dirbad(struct inode *ip, char *how, off_t offset)
 {
-	cmn_err(CE_NOTE, "%s: bad dir ino %d at offset %ld: %s",
+	cmn_err(CE_NOTE, "%s: bad dir ino %d at offset %lld: %s",
 	    ip->i_fs->fs_fsmnt, (int)ip->i_number, offset, how);
 }
 

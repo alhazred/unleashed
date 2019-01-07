@@ -948,7 +948,7 @@ unm_pci_map_setup(unm_adapter *adapter)
 			    0xA0 + ((adapter->ahw.pci_func - 4) * 0x10);
 		vector2M(adapter);
 	} else {
-		cmn_err(CE_WARN, "%s%d: invalid pci regs map size %ld\n",
+		cmn_err(CE_WARN, "%s%d: invalid pci regs map size %lld\n",
 		    adapter->name, adapter->instance, regsize);
 		ddi_regs_map_free(&adapter->regs_handle);
 		return (DDI_FAILURE);
