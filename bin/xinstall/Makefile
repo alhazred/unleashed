@@ -2,7 +2,7 @@
 
 PROG=		xinstall
 PROG_NAME=	install
-SRCS=		xinstall.c compat.c
+SRCS=		xinstall.c
 MAN=		install.1
 
 .include <bsd.prog.mk>

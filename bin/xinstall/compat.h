@@ -22,7 +22,4 @@
 
 typedef	uint32_t	u_int32_t;
 
-void	errc(int, int, const char *, ...);
-void	warnc(int, const char *, ...);
-
 #endif

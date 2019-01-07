@@ -1,4 +1,4 @@
-/*	$OpenBSD: xinstall.c,v 1.65 2016/05/13 17:51:15 jmc Exp $	*/
+/*	$OpenBSD: xinstall.c,v 1.67 2018/09/16 02:44:07 millert Exp $	*/
 /*	$NetBSD: xinstall.c,v 1.9 1995/12/20 10:25:17 jonathan Exp $	*/
 
 /*
@@ -113,7 +113,10 @@ main(int argc, char *argv[])
 			group = optarg;
 			break;
 		case 'm':
-			mode = strtol(optarg, NULL, 8);
+			if (!(set = setmode(optarg)))
+				errx(1, "%s: invalid file mode", optarg);
+			mode = getmode(set, 0);
+			free(set);
 			break;
 		case 'o':
 			owner = optarg;
@@ -217,8 +220,8 @@ install(char *from_name, char *to_name, u_long fset, u_int flags)
 	int devnull, from_fd, to_fd, serrno, files_match = 0;
 	char *p;
 
-	(void)memset(&from_sb, 0, sizeof(from_sb));
-	(void)memset(&to_sb, 0, sizeof(to_sb));
+	(void)memset((void *)&from_sb, 0, sizeof(from_sb));
+	(void)memset((void *)&to_sb, 0, sizeof(to_sb));
 
 	/* If try to install NULL file to a directory, fails. */
 	if (flags & DIRECTORY || strcmp(from_name, _PATH_DEVNULL)) {
@@ -536,11 +539,12 @@ strip(char *to_name)
 {
 	int serrno, status;
 	char * volatile path_strip;
+	pid_t pid;
 
 	if (issetugid() || (path_strip = getenv("STRIP")) == NULL)
 		path_strip = _PATH_STRIP;
 
-	switch (vfork()) {
+	switch ((pid = vfork())) {
 	case -1:
 		serrno = errno;
 		(void)unlink(to_name);
@@ -550,7 +554,11 @@ strip(char *to_name)
 		warn("%s", path_strip);
 		_exit(1);
 	default:
-		if (wait(&status) == -1 || !WIFEXITED(status))
+		while (waitpid(pid, &status, 0) == -1) {
+			if (errno != EINTR)
+				break;
+		}
+		if (!WIFEXITED(status))
 			(void)unlink(to_name);
 	}
 }
