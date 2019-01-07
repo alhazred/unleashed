@@ -38,7 +38,7 @@
 .Nd install binaries
 .Sh SYNOPSIS
 .Nm install
-.Op Fl bCcDdFpSs
+.Op Fl bCcDdFps
 .Op Fl B Ar suffix
 .Op Fl g Ar group
 .Op Fl m Ar mode
@@ -100,7 +100,7 @@ Create directories.
 Missing parent directories are created as required.
 This option cannot be used with the
 .Fl B , b , C , c ,
-.Fl p , S ,
+.Fl p ,
 or
 .Fl s
 options.
@@ -132,17 +132,6 @@ Copy the file, as if the
 (compare and copy) option is specified,
 except if the target file doesn't already exist or is different,
 then preserve the modification time of the file.
-.It Fl S
-Safe copy.
-Normally,
-.Nm
-unlinks an existing target before installing the new file.
-With the
-.Fl S
-flag a temporary file is used and then renamed to be
-the target.
-The reason this is safer is that if the copy or
-rename fails, the existing target is left untouched.
 .It Fl s
 .Nm
 exec's the command
@@ -173,18 +162,8 @@ Default is
 .Sh FILES
 .Bl -tag -width INS@XXXXXXXXXX -compact
 .It Pa INS@XXXXXXXXXX
-If either
-.Fl S
-option is specified, or the
-.Fl C
-or
-.Fl p
-option is used in conjunction with the
-.Fl s
-option, temporary files named INS@XXXXXXXXXX,
-where XXXXXXXXXX is decided by
-.Xr mkstemp 3 ,
-are created in the target directory.
+Temporary files created in the target directory by
+.Xr mkstemp 3 .
 .El
 .Sh EXIT STATUS
 .Ex -std install
@@ -205,9 +184,8 @@ The
 .Fl C ,
 .Fl D ,
 .Fl F ,
-.Fl p ,
 and
-.Fl S
+.Fl p
 flags are non-standard and should not be relied upon for portability.
 .Pp
 Temporary files may be left in the target directory if
