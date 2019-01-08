@@ -43,21 +43,6 @@ _SUBDIRUSE: .USE
 		${.MAKE} _THISDIR_="$${_nextdir_}" \
 		    ${.TARGET:S/realinstall/install/:S/.depend/depend/}) || exit 1; \
 	done
-
-${SUBDIR}::
-	@set -e; _r=${.CURDIR}/; \
-	if test -z "${.TARGET:M/*}"; then \
-		if test -d ${.CURDIR}/${.TARGET}.${MACHINE}; then \
-			_newdir_=${.TARGET}.${MACHINE}; \
-		else \
-			_newdir_=${.TARGET}; \
-		fi; \
-	else \
-		_r= _newdir_=${.TARGET}; \
-	fi; \
-	${ECHO_DIR} "===> $${_newdir_}"; \
-	cd $${_r}$${_newdir_}; \
-	${.MAKE} _THISDIR_="$${_newdir_}" all
 .endif
 
 .if !target(install)
@@ -89,9 +74,28 @@ SUBDIR_TARGETS += \
 	tags \
 	etags
 
+# this parallelizes, unlike _SUBDIRUSE, but is only in effect if the
+# SUBDIR_TARGETS target (eg. "all") has not been defined before (eg. in
+# prog.mk)
 .for t in ${SUBDIR_TARGETS:O:u}
-.if !target($t)
-$t: _SUBDIRUSE
+.if !target($t) && make($t)
+$t: ${SUBDIR}
+.for sd in ${SUBDIR}
+${sd}::
+	@set -e; _r=${.CURDIR}/; \
+	if test -z "${sd:M/*}"; then \
+		if test -d ${.CURDIR}/${sd}.${MACHINE}; then \
+			_newdir_=${sd}.${MACHINE}; \
+		else \
+			_newdir_=${sd}; \
+		fi; \
+	else \
+		_r= _newdir_=${sd}; \
+	fi; \
+	${ECHO_DIR} "===> $${_newdir_}"; \
+	cd $${_r}$${_newdir_}; \
+	${.MAKE} _THISDIR_="$${_newdir_}" ${t:S/realinstall/install/:S/.depend/depend/}
+.endfor
 .endif
 .endfor
 
