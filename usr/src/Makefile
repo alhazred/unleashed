@@ -122,10 +122,10 @@ clobber_local:
 # Declare what parts can be built in parallel
 #
 .PARALLEL: sysheaders libheaders cmdheaders
-.PARALLEL: uts lib
-.PARALLEL: boot cmd test
+.PARALLEL: uts lib boot cmd test _msg
 
 boot cmd test: lib
+_msg: cmd lib
 
 $(SUBDIRS) pkg: FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
