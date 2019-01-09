@@ -56,16 +56,6 @@ HDRSUBDIRS=	uts lib cmd
 #
 CHKHDRSUBDIRS=	uts lib
 
-#
-# Headers that can be built in parallel
-#
-PARALLEL_HEADERS = sysheaders libheaders cmdheaders
-
-#
-# Directories that can be built in parallel
-#
-PARALLEL_DIRS = uts lib
-
 # The check target also causes smf(5) service manifests to be validated.
 CHKMFSTSUBDIRS=	cmd
 
@@ -130,11 +120,12 @@ clobber_local:
 
 #
 # Declare what parts can be built in parallel
-# DUMMY at the end is used in case macro expansion produces an empty string to
-# prevent everything going in parallel
 #
-.PARALLEL: $(PARALLEL_HEADERS) DUMMY
-.PARALLEL: $(PARALLEL_DIRS) DUMMY
+.PARALLEL: sysheaders libheaders cmdheaders
+.PARALLEL: uts lib
+.PARALLEL: boot cmd test
+
+boot cmd test: lib
 
 $(SUBDIRS) pkg: FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
