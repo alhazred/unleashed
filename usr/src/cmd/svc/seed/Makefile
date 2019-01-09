@@ -126,36 +126,30 @@ $(SVCCFG): FRC
 	@cd ../milestone; pwd; $(MAKE) $(MFLAGS) console-login.xml
 
 common.db: $(COMMON_DESCRIPTIONS) $(CONFIGD) $(SVCCFG)
-	$(RM) -f common.db common.db-journal
-	for m in $(COMMON_DESCRIPTIONS); do \
-		echo $$m; \
-		SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
-		SVCCFG_REPOSITORY=$(SRC)/cmd/svc/seed/common.db \
-		SVCCFG_CONFIGD_PATH=$(CONFIGD) \
-		$(SVCCFG) import $$m; \
-	done
+	$(RM) -f common.db
+	mf=$$(mktemp /tmp/$@.XXXXXXXXXX);\
+	SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
+	SVCCFG_REPOSITORY=$$mf SVCCFG_CONFIGD_PATH=$(CONFIGD) \
+	$(SVCCFG) import $(COMMON_DESCRIPTIONS); \
+	mv $$mf $@
 
 global.db: common.db $(GLOBAL_ZONE_DESCRIPTIONS) $(CONFIGD) $(SVCCFG)
-	$(RM) -f global.db global.db-journal
-	$(CP) common.db global.db
-	for m in $(GLOBAL_ZONE_DESCRIPTIONS); do \
-		echo $$m; \
-		SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
-		SVCCFG_REPOSITORY=$(SRC)/cmd/svc/seed/global.db \
-		SVCCFG_CONFIGD_PATH=$(CONFIGD) \
-		$(SVCCFG) import $$m; \
-	done
+	$(RM) -f global.db
+	mf=$$(mktemp /tmp/$@.XXXXXXXXXX);\
+	$(CP) common.db $$mf; \
+	SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
+	SVCCFG_REPOSITORY=$$mf SVCCFG_CONFIGD_PATH=$(CONFIGD) \
+	$(SVCCFG) import $(GLOBAL_ZONE_DESCRIPTIONS); \
+	mv $$mf $@
 
 nonglobal.db: common.db $(NONGLOBAL_ZONE_DESCRIPTIONS) $(CONFIGD) $(SVCCFG)
-	$(RM) -f nonglobal.db nonglobal.db-journal
-	$(CP) common.db nonglobal.db
-	for m in $(NONGLOBAL_ZONE_DESCRIPTIONS); do \
-		echo $$m; \
-		SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
-		SVCCFG_REPOSITORY=$(SRC)/cmd/svc/seed/nonglobal.db \
-		SVCCFG_CONFIGD_PATH=$(CONFIGD) \
-		$(SVCCFG) import $$m; \
-	done
+	$(RM) -f nonglobal.db
+	mf=$$(mktemp /tmp/$@.XXXXXXXXXX);\
+	$(CP) common.db $$mf; \
+	SVCCFG_DTD=../dtd/service_bundle.dtd.1 \
+	SVCCFG_REPOSITORY=$$mf SVCCFG_CONFIGD_PATH=$(CONFIGD) \
+	$(SVCCFG) import $(NONGLOBAL_ZONE_DESCRIPTIONS); \
+	mv $$mf $@
 
 install: install_global install_nonglobal
 
