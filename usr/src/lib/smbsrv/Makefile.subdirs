@@ -35,6 +35,7 @@ install_h := TARGET = install_h
 
 all check clean clobber install install_h: $(SUBDIRS)
 
+.PARALLEL: $(SUBDIRS)
 $(SUBDIRS): FRC
 	@cd $@; pwd; VERSION='$(VERSION)' $(MAKE) $(TARGET)
 
