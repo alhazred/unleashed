@@ -329,7 +329,6 @@ usr/lib/libdll.so
 usr/lib/amd64/libdll.so			i386
 # libpp (a helper library needed by AST's msgcc)
 usr/lib/libpp.so
-usr/lib/locale/C/LC_MESSAGES/libpp
 # libshell
 usr/lib/libshell.so
 usr/lib/amd64/libshell.so		i386

@@ -54,8 +54,6 @@ OBJECTS= \
 	ppsearch.o \
 	pptrace.o
 
-include ../../Makefile.astmsg
-
 include ../../Makefile.lib
 
 # mapfile-vers does not live with the sources in in common/ to make

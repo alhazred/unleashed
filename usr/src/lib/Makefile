@@ -252,15 +252,12 @@ MSGSUBDIRS=		\
 	gss_mechs/mech_dh	\
 	gss_mechs/mech_krb5	\
 	krb5		\
-	libast		\
 	libc		\
 	libcfgadm	\
-	libcmd		\
 	libcontract	\
 	libdhcputil	\
 	libdiskmgt	\
 	libdladm	\
-	libdll		\
 	libgss		\
 	libidmap	\
 	libilb		\
@@ -272,17 +269,14 @@ MSGSUBDIRS=		\
 	libofmt		\
 	libpam		\
 	libpool		\
-	libpp		\
 	libreparse	\
 	libsasl		\
 	libscf		\
 	libsecdb	\
 	libshare	\
-	libshell	\
 	libsldap	\
 	libsmbfs	\
 	libsmedia	\
-	libsum		\
 	libvrrpadm	\
 	libvscan	\
 	libzfs		\
