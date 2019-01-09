@@ -37,6 +37,8 @@ SRCS +=	delay.c \
 
 OBJS=	$(SRCS:%.c=%.o)
 
+.PARALLEL:
+
 CPPFLAGS= -D_STANDALONE
 CFLAGS  = -O2
 

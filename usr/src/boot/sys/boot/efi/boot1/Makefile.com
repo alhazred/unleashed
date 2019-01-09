@@ -97,6 +97,8 @@ boot1.o: ../../../common/ufsread.c
 
 CLEANFILES= $(EFIPROG) $(PROG)
 
+.PARALLEL:
+
 $(PROG):	$(OBJS) $(DPADD)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDADD)
 

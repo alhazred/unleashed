@@ -50,6 +50,8 @@ CPPFLAGS +=	-DSKEIN_LOOP=111
 
 CLEANFILES +=    machine
 
+.PARALLEL:
+
 machine:
 	$(RM) machine
 	$(SYMLINK) ../../../$(MACHINE)/include machine

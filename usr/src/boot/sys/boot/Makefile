@@ -37,6 +37,8 @@ all clean clobber: $(SUBDIRS)
 #
 install: all .WAIT $(INSTDIRS)
 
+.PARALLEL: libstand libficl zfs
+
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)
 

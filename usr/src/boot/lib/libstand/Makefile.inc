@@ -195,3 +195,4 @@ OBJS +=	gzipfs.o
 OBJS += bzipfs.o
 OBJS += dosfs.o
 #
+.PARALLEL:

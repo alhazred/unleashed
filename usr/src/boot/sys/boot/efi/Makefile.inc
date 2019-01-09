@@ -31,3 +31,5 @@ CFLAGS +=	-std=gnu99 -Wno-pointer-sign -Wno-empty-body
 
 ASFLAGS +=	-fPIC
 # include ../Makefile.inc
+
+.PARALLEL:

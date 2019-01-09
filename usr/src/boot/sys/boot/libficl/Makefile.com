@@ -30,6 +30,8 @@ OBJECTS += hash.o callback.o word.o loader.o
 HEADERS= $(FICLDIR)/ficl.h $(FICLDIR)/ficlplatform/unix.h ../ficllocal.h
 #
 
+.PARALLEL:
+
 MAJOR = 4
 MINOR = 1.0
 

@@ -37,3 +37,5 @@ BTXCRT=		${BTXDIR}/lib/crt0.o
 
 $(ROOT_BOOT)/%: %
 	$(INS.file)
+
+.PARALLEL:

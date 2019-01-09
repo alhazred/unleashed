@@ -37,6 +37,7 @@ install	:=	TARGET = install
 boot1:	libefi
 loader:	libefi
 
+.PARALLEL:
 $(SUBDIRS): FRC
 	@cd $@; pwd; $(MAKE) $(MFLAGS) $(TARGET)
 

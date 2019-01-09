@@ -110,6 +110,7 @@ LIBEFI=		../../libefi/$(MACHINE)/libefi.a
 DPADD=		$(LIBFICL) $(LIBZFSBOOT) $(LIBEFI) $(LIBSTAND) $(LDSCRIPT)
 LDADD=		$(LIBFICL) $(LIBZFSBOOT) $(LIBEFI) $(LIBSTAND)
 
+.PARALLEL:
 
 loader.sym:	$(OBJS) $(DPADD)
 	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(LDADD)

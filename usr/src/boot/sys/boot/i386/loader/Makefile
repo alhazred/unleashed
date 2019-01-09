@@ -145,6 +145,8 @@ x86:
 
 OBJS=		$(SRCS:%.c=%.o)
 
+.PARALLEL:
+
 ${OBJS}: machine x86
 
 ${PROG}: ${OBJS} $(LDADD)
