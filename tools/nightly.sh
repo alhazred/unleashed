@@ -180,32 +180,12 @@ function build {
 
 	echo "\n==== Ended OS-Net source build at `date` ($LABEL) ====\n"
 
-	#
-	#	Building Packages
-	#
-	if [ "$p_FLAG" = "y" -a "$this_build_ok" = "y" ]; then
-		if [ -d $SRC/pkg ]; then
-			echo "\n==== Creating $LABEL packages at `date` ====\n"
-			echo "Clearing out $PKGARCHIVE ..."
-			rm -rf $PKGARCHIVE
-			mkdir -p $PKGARCHIVE
-
-			rm -f $SRC/pkg/${INSTALLOG}.out
-			cd $SRC/pkg
-			echo "\n==== dmake -C $SRC/pkg install ====\n" >&2
-			if ! /bin/time $MAKE -e install; then
-				build_extras_ok=n
-				this_build_ok=n
-			fi
-		else
-			#
-			# Handle it gracefully if -p was set but there so
-			# no pkg directory.
-			#
-			echo "\n==== No $LABEL packages to build ====\n"
+	if [ "$this_build_ok" = "y" ]; then
+		make -C ${SRCTOP}/tools/postbuild clean obj
+		if ! make -j$DMAKE_MAX_JOBS -C ${SRCTOP}/tools/postbuild; then
+			build_extras_ok=n
+			this_build_ok=n
 		fi
-	else
-		echo "\n==== Not creating $LABEL packages ====\n"
 	fi
 }
 
@@ -929,80 +909,6 @@ if [ "$build_ok" = "y" ]; then
 			fi
 		done
 	fi
-
-	if [ "$N_FLAG" != "y" -a -d $SRC/pkg ]; then
-		echo "\n==== Validating manifests against proto area (protocmp) ====\n" >&2
-		if ! ( cd $SRC/pkg ; /bin/time $MAKE -e protocmp ROOT="$ROOT" ) >&2; then
-			build_extras_ok=n
-		fi
-	fi
-fi
-
-#
-# ELF verification: ABI (-A) and runtime (-r) checks
-#
-if [ "$build_ok" = y -a '(' "$A_FLAG" = y -o "$r_FLAG" = y ')' ]; then
-	# Directory ELF-data.$MACH holds the files produced by these tests.
-	elf_ddir=$TMPDIR/ELF-data.$MACH
-	mkdir -p $elf_ddir
-
-	# Call find_elf to produce a list of the ELF objects in the proto area.
-	# This list is passed to check_rtime and interface_check, preventing
-	# them from separately calling find_elf to do the same work twice.
-	find_elf -fr $ROOT > $elf_ddir/object_list
-
-	if [[ $A_FLAG = y ]]; then
-		echo "\n==== Check versioning and ABI information (interface_check) ====\n" >&2
-
-		# Produce interface description for the proto. Report errors.
-		/bin/time interface_check -o -w $elf_ddir -f object_list \
-			-i interface -E interface.err
-		if [[ -s $elf_ddir/interface.err ]]; then
-			cat $elf_ddir/interface.err >&2
-			build_extras_ok=n
-		fi
-
-	fi
-
-	if [[ $r_FLAG = y ]]; then
-		echo "\n==== Check ELF runtime attributes (check_rtime) ====\n" >&2
-
-		# If we're doing a DEBUG build the proto area will be left
-		# with debuggable objects, thus don't assert -s.
-		if [[ $D_FLAG = y ]]; then
-			rtime_sflag=""
-		else
-			rtime_sflag="-s"
-		fi
-		/bin/time check_rtime -i -v $rtime_sflag -o -w $elf_ddir \
-			-D object_list  -f object_list -E runtime.err \
-			-I runtime.attr.raw
-		if (( $? != 0 )); then
-			build_extras_ok=n
-		fi
-
-		# Report errors
-		if [[ -s $elf_ddir/runtime.err ]]; then
-			cat $elf_ddir/runtime.err >&2
-			build_extras_ok=n
-		fi
-	fi
-fi
-
-# "make check" begins
-
-if [ "$i_CMD_LINE_FLAG" = "n" -a "$C_FLAG" = "y" ]; then
-	# remove old check.out
-	rm -f $SRC/check.out
-
-	rm -f $SRC/check-${MACH}.out
-	cd $SRC
-	echo "\n==== dmake check ====\n" >&2
-	if ! /bin/time $MAKE -ek check ROOT="$ROOT"; then
-		build_extras_ok=n
-	fi
-else
-	echo "\n==== No '$MAKE check' ====\n"
 fi
 
 echo "\n==== Find core files ====\n" >&2
