@@ -40,3 +40,4 @@ ROOTLIBDIR=	$(ROOT)/usr/lib/security
 ROOTLIBDIR64=	$(ROOT)/usr/lib/security/$(MACH64)
 
 .KEEP_STATE:
+.PARALLEL:
