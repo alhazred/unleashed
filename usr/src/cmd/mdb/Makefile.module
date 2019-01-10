@@ -35,7 +35,7 @@ include $(SRC)/cmd/mdb/Makefile.tools
 # Make sure we're getting a consistent execution environment for the
 # embedded scripts.
 #
-SHELL= /usr/bin/ksh93
+SHELL= /bin/sh
 
 $(KMOD_SOURCES_DIFFERENT)KMODSRCS = $(MODSRCS)
 $(KMOD_SOURCES_DIFFERENT)KMODASMSRCS = $(MODASMSRCS)

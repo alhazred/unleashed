@@ -90,7 +90,7 @@ BTXLD=		$(ONBLD_TOOLS)/bin/$(MACH)/btxld
 # only risk being if the shell falls back to $PATH.
 #
 # We specifically want an echo(1) that does interpolation of escape sequences,
-# which ksh93, /bin/sh, and bash will all provide.
+# which ksh, /bin/sh, and bash will all provide.
 ECHO=		echo
 TRUE=		true
 INS=		/usr/bin/install
@@ -106,7 +106,6 @@ DIFF=		/usr/bin/diff
 GREP=		/usr/bin/grep
 EGREP=		/usr/bin/egrep
 ELFWRAP=	/usr/bin/elfwrap
-KSH93=		/usr/bin/ksh93
 SED=		/usr/bin/sed
 AWK=		/usr/bin/nawk
 CP=		/usr/bin/cp -f
