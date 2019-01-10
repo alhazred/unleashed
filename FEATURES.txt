@@ -9,6 +9,8 @@ was changed.
 
 <next> release
 --------------
+ - ksh93 (/sbin/sh, /bin/ksh93, /bin/rksh93) and related libraries (libast,
+   libcmd, libdll, libpp, libshell, libsum) are no more.
  - nonstandard getgrent_r, fgetgrent_r removed from libc
  * removed posix.1c draft versions, and made default the standard versions, of
    the libc functions getgrgid_r, getgrnam_r, ttyname_r, getlogin_r
@@ -20,6 +22,7 @@ was changed.
  + all applications automatically use 64-bit files. using the LFS/"large file"
    interfaces _LARGEFILE_SOURCE, _LARGEFILE64_SOURCE and _FILE_OFFSET_BITS is
    no longer necessary.
+ + various improvements have been made to shorten the build time.
 
 1.2 release
 -----------
