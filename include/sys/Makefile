@@ -88,6 +88,7 @@ INCS=	${${CONFIG_MACH}_INCS}	\
 	cpc_impl.h		\
 	cpc_pcbe.h		\
 	cpr.h			\
+	cpu_uarray.h		\
 	cpupart.h		\
 	cpuvar.h		\
 	crc32.h			\
