@@ -31,6 +31,7 @@ DEFAULTFILES= init.dfl
 
 include ../Makefile.cmd
 
+CSTD = $(CSTD_GNU99)
 LDLIBS += -lpam -lcontract -lscf
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
@@ -50,6 +51,5 @@ test:
 	rtest $(PROG)
 
 clean:
-
 
 include ../Makefile.targ

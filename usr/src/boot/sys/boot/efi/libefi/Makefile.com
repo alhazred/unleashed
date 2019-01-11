@@ -40,7 +40,7 @@ OBJS=	$(SRCS:%.c=%.o)
 .PARALLEL:
 
 CPPFLAGS= -D_STANDALONE
-CFLAGS  = -O2
+CFLAGS  = -Os
 
 CPPFLAGS += -nostdinc -I. -I../../../../../include -I../../../..
 CPPFLAGS += -I$(SRC)/common/ficl -I../../../libficl
