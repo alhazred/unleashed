@@ -23,6 +23,7 @@ was changed.
    interfaces _LARGEFILE_SOURCE, _LARGEFILE64_SOURCE and _FILE_OFFSET_BITS is
    no longer necessary.
  + various improvements have been made to shorten the build time.
+ + the installer user interface has been simplified considerably.
 
 1.2 release
 -----------
