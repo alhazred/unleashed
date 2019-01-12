@@ -32,7 +32,7 @@ include $(SRC)/Makefile.master
 # Make sure we're getting a consistent execution environment for the
 # embedded scripts.
 #
-SHELL= /usr/bin/ksh93
+SHELL= /bin/sh
 
 #
 # To suppress package dependency generation on any system, regardless

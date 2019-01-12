@@ -319,23 +319,6 @@ usr/lib/amd64/libstanddisasm.so		i386
 #
 usr/include/nss.h
 #
-# AT&T AST (ksh93) files which are currently needed only to build OS/Net
-# (msgcc&co.)
-# libast
-usr/lib/libast.so
-usr/lib/amd64/libast.so			i386
-# libdll
-usr/lib/libdll.so
-usr/lib/amd64/libdll.so			i386
-# libpp (a helper library needed by AST's msgcc)
-usr/lib/libpp.so
-# libshell
-usr/lib/libshell.so
-usr/lib/amd64/libshell.so		i386
-# libsum
-usr/lib/libsum.so
-usr/lib/amd64/libsum.so			i386
-#
 # These files are used by the iSCSI Target and the iSCSI Initiator
 #
 usr/include/sys/iscsi_protocol.h

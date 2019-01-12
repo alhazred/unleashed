@@ -82,14 +82,12 @@ SUBDIRS +=				\
 	libads		\
 	libadutils	\
 	libaio		\
-	libast		\
 	libavl		\
 	libbe		\
 	libbrand	\
 	libbsdmalloc	\
 	libc_db		\
 	libcfgadm	\
-	libcmd		\
 	libcmdutils	\
 	libcommputil	\
 	libcontract	\
@@ -161,7 +159,6 @@ SUBDIRS +=				\
 	libpcidb	\
 	libpctx		\
 	libpool		\
-	libpp		\
 	libproc		\
 	libproject	\
 	libpthread	\
@@ -294,10 +291,8 @@ HDRSUBDIRS=				\
 	hal		\
 	hbaapi		\
 	libads		\
-	libast		\
 	libbrand	\
 	libc		\
-	libcmd		\
 	libcmdutils	\
 	libcommputil	\
 	libcontract	\
@@ -351,7 +346,6 @@ HDRSUBDIRS=				\
 	libpcidb	\
 	libpctx		\
 	libpool		\
-	libpp		\
 	libproc		\
 	libraidcfg	\
 	librcm		\
@@ -475,7 +469,6 @@ krb5:		gss_mechs/mech_krb5 libtecla libldap5
 libadutils:	libldap5 libresolv2
 libbe:		libzfs libzonecfg libuuid libgen libdevinfo libefi libficl
 libcfgadm:	libdevinfo
-libcmd:		libsum libast
 libcmdutils:	libavl
 libcpc:		libpctx
 libcrypt:	libgen
@@ -488,7 +481,6 @@ libdiskmgt:	libdevid libdevinfo libadm libefi libkstat libsysevent
 $(INTEL_BLD)libdiskmgt: libfdisk
 libdladm:	libdevinfo libinetutil libscf librcm libexacct libkstat \
 		libpool
-libdll:		libast
 libdlpi:	libinetutil libdladm
 libdtrace:	libproc libgen libctf libmapmalloc
 libefi:		libuuid libsmbios
@@ -513,7 +505,6 @@ libnisdb:	libldap5
 libnwam:	libscf libdladm libipadm
 libpctx:	libproc
 libpool:	libscf libexacct
-libpp:		libast
 libproc:	../cmd/sgs/librtld_db ../cmd/sgs/libelf libctf
 $(INTEL_BLD)libproc: libsaveargs
 libproject:	libpool libproc libsecdb
@@ -525,14 +516,12 @@ libscf:		libgen libsmbios
 libsec:		libavl libidmap
 libsff:		libnvpair
 libshare:	libscf libzfs libuuid libfsmgt libsecdb libumem libsmbfs
-libshell:	libast libcmd libdll libsecdb
 libsip:		libmd5
 libsldap:	libldap5 libscf
 libsmbfs:	libkrb5 libsec libidmap pkcs11
 libsmbios:	libdevinfo
 libsrpt:	libstmf
 libstmf:	libscf
-libsum:		libast
 libsun_ima:	libdevinfo libsysevent
 libsysevent:	libsecdb
 libuuid:	libdlpi

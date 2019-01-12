@@ -57,7 +57,7 @@ install:= FILEMODE =	0444
 .xmlgenksh.xml:
 	$(RM) $@
 	$(CAT) ../common/xmlgen-header-new.xml > $@
-	$(KSH93) $< >> $@
+	/bin/sh $< >> $@
 	
 %.xml: ../common/%.xml
 	$(RM) $@

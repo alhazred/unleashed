@@ -27,7 +27,7 @@ PROG= pfexec
 SRCS= $(PROG:%=%.c)
 PFEXEC= pfexec
 
-BINSHELLS = bash ksh ksh93 rksh rksh93 sh zsh
+BINSHELLS = bash ksh rksh sh zsh
 
 include ../Makefile.cmd
 

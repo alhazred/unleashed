@@ -23,7 +23,7 @@
 #
 # Copyright 2010, Richard Lowe
 
-SHELL=/usr/bin/ksh93
+SHELL=/bin/sh
 
 SHFILES= \
 	Install \
@@ -121,7 +121,7 @@ clean:
 
 bldenv.1: bldenv
 	$(RM) "$@"
-	(set +o errexit ; ksh93 $? --nroff ; true) 2>&1 | \
+	(set +o errexit ; sh $? --nroff ; true) 2>&1 | \
 	sed -e 's/\.DS/.nf/g;s/\.DE/.fi/' \
 	-e 's/\.TH BLDENV 1/.TH BLDENV 1ONBLD/' \
 	-e 's/(1)/(1ONBLD)/' > "$@"

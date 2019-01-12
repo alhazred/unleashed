@@ -99,7 +99,7 @@ mystpcpy(char *s1, const char *s2)
 int
 wordexp(const char *word, wordexp_t *wp, int flags)
 {
-	const char *path = "/usr/bin/ksh93";
+	const char *path = "/bin/sh";
 	wordexp_t wptmp;
 	size_t si;
 	pid_t pid;
