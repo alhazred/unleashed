@@ -888,7 +888,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 112 */ SYSENT_CI("priocntlsys",	priocntlsys,	5),
 	/* 113 */ SYSENT_CI("pathconf",		pathconf,	2),
 	/* 114 */ SYSENT_CI("mincore",		mincore,	3),
-	/* 115 */ SYSENT_CI("mmap",		smmap32,	6),
+	/* 115 */ SYSENT_AP("mmap",		smmaplf32,	7),
 	/* 116 */ SYSENT_CI("mprotect",		mprotect,	3),
 	/* 117 */ SYSENT_CI("munmap",		munmap,		2),
 	/* 118 */ SYSENT_CI("fpathconf",	fpathconf,	2),
