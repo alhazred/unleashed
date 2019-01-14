@@ -25,7 +25,7 @@
 # ident	"%Z%%M%	%I%	%E% SMI"
 #
 
-SUBDIRS = storage acpi network-devices cpufreq
+SUBDIRS = storage acpi cpufreq
 
 all :=		TARGET= all
 install :=	TARGET= install

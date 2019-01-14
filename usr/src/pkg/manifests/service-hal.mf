@@ -108,13 +108,9 @@ file path=etc/hal/fdi/preprobe/10osvendor/20-ignore-lofi.fdi mode=0444 \
     variant.opensolaris.zone=global
 file path=etc/hal/fdi/preprobe/10osvendor/20-printers.fdi mode=0444 \
     variant.opensolaris.zone=global
-file path=lib/svc/manifest/network/network-discovery.xml group=sys mode=0444 \
-    variant.opensolaris.zone=global
 file path=lib/svc/manifest/system/hal.xml group=sys mode=0444 \
     variant.opensolaris.zone=global
 file path=lib/svc/method/svc-hal mode=0555 variant.opensolaris.zone=global
-file path=lib/svc/method/svc-network-discovery mode=0555 \
-    variant.opensolaris.zone=global
 file path=usr/lib/$(ARCH64)/libhal-storage.so.1.0.0
 file path=usr/lib/$(ARCH64)/libhal.so.1.0.0
 file path=usr/lib/$(ARCH64)/pkgconfig/hal-storage.pc
@@ -138,10 +134,8 @@ file path=usr/lib/hal/hal-system-power-suspend mode=0555
 file path=usr/lib/hal/hald mode=0555
 file path=usr/lib/hal/hald-addon-acpi mode=0555
 file path=usr/lib/hal/hald-addon-cpufreq mode=0555
-file path=usr/lib/hal/hald-addon-network-discovery mode=0555
 file path=usr/lib/hal/hald-addon-storage mode=0555
 file path=usr/lib/hal/hald-probe-acpi mode=0555
-file path=usr/lib/hal/hald-probe-network-printer mode=0555
 file path=usr/lib/hal/hald-probe-printer mode=0555
 file path=usr/lib/hal/hald-probe-storage mode=0555
 file path=usr/lib/hal/hald-probe-volume mode=0555

@@ -93,7 +93,6 @@ MANIFEST_SUBDIRS=			\
 	fs.d/nfs/svc			\
 	fs.d/smbclnt/svc		\
 	gss/gssd			\
-	hal/addons/network-devices	\
 	hal/hald/solaris		\
 	halt/smf.$(MACH)		\
 	hostid/smf			\
