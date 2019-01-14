@@ -173,7 +173,7 @@ netbios-dgm	138/udp				# NETBIOS Datagram Service
 netbios-ssn	139/tcp				# NETBIOS Session Service
 netbios-ssn	139/udp				# NETBIOS Session Service
 NeWS		144/tcp		news		# Window System
-snmpd		161/udp		snmp		# Net-SNMP snmp daemon
+snmp		161/udp				# Simple Network Management Protocol
 slp		427/tcp		slp		# Service Location Protocol, V2
 slp		427/udp		slp		# Service Location Protocol, V2
 mobile-ip	434/udp		mobile-ip	# Mobile-IP

@@ -24,8 +24,7 @@
 #
 
 SUBDIRS = \
-	smtp-notify \
-	snmp-notify
+	smtp-notify
 
 include ./Makefile.subdirs
 include ../../Makefile.cmd

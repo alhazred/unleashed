@@ -133,8 +133,6 @@ DIRS= \
 	/etc/dhcp	\
 	/etc/lib  \
 	/etc/mail  \
-	/etc/net-snmp \
-	/etc/net-snmp/snmp \
 	/etc/opt  \
 	/etc/rc0.d  \
 	/etc/rc1.d  \

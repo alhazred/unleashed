@@ -116,7 +116,6 @@ solaris.smf.manage.autofs:::Manage Automount Service States::help=SmfAutofsState
 solaris.smf.manage.bind:::Manage DNS Service States::help=BindStates.html
 solaris.smf.manage.coreadm:::Manage Coreadm Service States::help=SmfCoreadmStates.html
 solaris.smf.manage.cron:::Manage Cron Service States::help=SmfCronStates.html
-solaris.smf.manage.discovery.printers.snmp:::Manage Network Attached Device Discovery Service States::help=SmfNADDStates.html
 solaris.smf.manage.extended-accounting.flow:::Manage Flow Extended Accounting Service States::help=SmfExAcctFlowStates.html
 solaris.smf.manage.extended-accounting.process:::Manage Process Extended Accounting Service States::help=SmfExAcctProcessStates.html
 solaris.smf.manage.extended-accounting.flow:::Manage Task Extended Accounting Service States::help=SmfExAcctTaskStates.html
@@ -139,7 +138,6 @@ solaris.smf.manage.routing:::Manage Routing Service States::help=SmfRoutingState
 solaris.smf.manage.rpc.bind:::Manage RPC Program number mapper::help=SmfRPCBind.html
 solaris.smf.manage.sendmail:::Manage Sendmail Service States::help=SmfSendmailStates.html
 solaris.smf.manage.smtp-notify:::Manage Email Event Notification Agent::
-solaris.smf.manage.snmp-notify:::Manage SNMP Event Notification Agent::
 solaris.smf.manage.ssh:::Manage Secure Shell Service States::help=SmfSshStates.html
 solaris.smf.manage.stmf:::Manage STMF Service States::help=SmfSTMFStates.html
 solaris.smf.manage.system-log:::Manage Syslog Service States::help=SmfSyslogStates.html
@@ -151,7 +149,6 @@ solaris.smf.manage.ndmp:::Manage NDMP Service States::help=SmfNDMPStates.html
 solaris.smf.value.:::Change Values of SMF Service Properties::help=SmfValueHeader.html
 solaris.smf.value.audit:::Configure the Audit Service::help=SmfValueAudit.html
 solaris.smf.value.coreadm:::Change Values of SMF Coreadm Properties::help=SmfValueCoreadm.html
-solaris.smf.value.discovery.printers.snmp:::Manage Network Attached Device Discovery Service Properties::help=SmfValueNADD.html
 solaris.smf.value.extended-accounting.flow:::Change Values of Flow Extended Accounting Service Properties::help=SmfValueExAcctFlow.html
 solaris.smf.value.extended-accounting.process:::Change Values of Process Extended Accounting Service Properties::help=SmfValueExAcctProcess.html
 solaris.smf.value.extended-accounting.task:::Change Values of Task Extended Accounting Service Properties::help=SmfValueExAcctTask.html
@@ -165,7 +162,6 @@ solaris.smf.value.process-security:::Change Values of Process Security propertie
 solaris.smf.value.smb:::Change Values of SMB Service Properties::help=SmfValueSMB.html
 solaris.smf.read.smb:::Read permission for protected SMF SMB Service Properties::help=AuthReadSMB.html
 solaris.smf.value.smtp-notify:::Change values of Email Event Notification Agent properties::
-solaris.smf.value.snmp-notify:::Change values of SNMP Event Notification Agent properties::
 solaris.smf.read.stmf:::Read STMF Provider Private Data::help=SmfSTMFRead.html
 solaris.smf.value.routing:::Change Values of SMF Routing Properties::help=SmfValueRouting.html
 solaris.smf.value.vscan:::Change Values of VSCAN Properties::help=SmfValueVscan.html

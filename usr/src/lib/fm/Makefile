@@ -33,7 +33,6 @@ common_SUBDIRS = \
 	libfmd_adm \
 	libfmd_log \
 	libfmd_msg \
-	libfmd_snmp \
 	libfmevent \
 	.WAIT \
 	libfmnotify \
@@ -44,8 +43,7 @@ i386_SUBDIRS =
 SUBDIRS = $(common_SUBDIRS) $($(MACH)_SUBDIRS)
 
 libldom: libmdesc libfmd_agent
-
-libfmd_snmp: libfmd_adm topo
+libfmevent: topo
 
 topo: $($(MACH)_SUBDIRS) libfmd_agent libdiskstatus
 

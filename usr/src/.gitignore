@@ -851,7 +851,6 @@ cmd/fm/modules/common/zfs-diagnosis/zfs-diagnosis.so
 cmd/fm/modules/common/zfs-retire/zfs-retire.so
 cmd/fm/notify/smtp-notify/i386/process_msg_template.sh
 cmd/fm/notify/smtp-notify/i386/smtp-notify
-cmd/fm/notify/snmp-notify/i386/snmp-notify
 cmd/fm/schemes/cpu/amd64/cpu.so
 cmd/fm/schemes/cpu/i386/cpu.so
 cmd/fm/schemes/dev/amd64/dev.so
@@ -3128,10 +3127,6 @@ lib/fm/libfmd_msg/amd64/libfmd_msg.so.1
 lib/fm/libfmd_msg/amd64/pics/
 lib/fm/libfmd_msg/i386/libfmd_msg.so.1
 lib/fm/libfmd_msg/i386/pics/
-lib/fm/libfmd_snmp/amd64/libfmd_snmp.so.1
-lib/fm/libfmd_snmp/amd64/pics/
-lib/fm/libfmd_snmp/i386/libfmd_snmp.so.1
-lib/fm/libfmd_snmp/i386/pics/
 lib/fm/libfmevent/amd64/libfmevent.so.1
 lib/fm/libfmevent/amd64/pics/
 lib/fm/libfmevent/common/fmev_errstring.c

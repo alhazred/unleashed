@@ -39,8 +39,6 @@ set name=variant.arch value=$(ARCH)
 #
 # Start by describing our directory structure.
 #
-# The snmp mibs are common to global and non-global zones
-#
 dir path=etc group=sys variant.opensolaris.zone=__NODEFAULT
 dir path=etc/fm group=sys variant.opensolaris.zone=__NODEFAULT
 dir path=etc/fm/fmd group=sys variant.opensolaris.zone=__NODEFAULT
@@ -48,9 +46,6 @@ dir path=etc/fm/fmd group=sys variant.opensolaris.zone=__NODEFAULT
 # Our additional /etc/logadm.conf entries are common to global and local zones
 #
 dir path=etc/logadm.d group=sys variant.opensolaris.zone=__NODEFAULT
-dir path=etc/net-snmp variant.opensolaris.zone=__NODEFAULT
-dir path=etc/net-snmp/snmp variant.opensolaris.zone=__NODEFAULT
-dir path=etc/net-snmp/snmp/mibs variant.opensolaris.zone=__NODEFAULT
 #
 # Our kernel driver is global zone only
 #
@@ -137,13 +132,6 @@ file path=etc/logadm.d/fmd.logadm.conf group=sys mode=0444 \
 #
 # Now for our file and link payloads
 #
-# snmp MIBs are common to both global and non-global zones
-#
-file path=etc/net-snmp/snmp/mibs/SUN-FM-MIB.mib \
-    variant.opensolaris.zone=__NODEFAULT
-file path=etc/net-snmp/snmp/mibs/SUN-IREPORT-MIB.mib \
-    variant.opensolaris.zone=__NODEFAULT
-#
 # driver is global-zone only
 #
 file path=kernel/drv/fm group=sys
@@ -174,7 +162,6 @@ file path=usr/include/fm/fmd_api.h mode=0644
 file path=usr/include/fm/fmd_fmri.h mode=0644
 file path=usr/include/fm/fmd_log.h mode=0644
 file path=usr/include/fm/fmd_msg.h mode=0644
-file path=usr/include/fm/fmd_snmp.h mode=0644
 file path=usr/include/fm/libdiskstatus.h mode=0644
 file path=usr/include/fm/libfmevent.h mode=0644
 file path=usr/include/fm/libfmevent_ruleset.h mode=0644
@@ -198,8 +185,6 @@ file path=usr/lib/fm/$(ARCH64)/libfmd_agent.so.1 \
 file path=usr/lib/fm/$(ARCH64)/libfmd_log.so.1 \
     variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/$(ARCH64)/libfmd_msg.so.1 \
-    variant.opensolaris.zone=__NODEFAULT
-file path=usr/lib/fm/$(ARCH64)/libfmd_snmp.so.1 \
     variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/$(ARCH64)/libfmnotify.so.1 \
     variant.opensolaris.zone=__NODEFAULT
@@ -374,7 +359,6 @@ file path=usr/lib/fm/libfmd_adm.so.1 variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/libfmd_agent.so.1 variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/libfmd_log.so.1 variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/libfmd_msg.so.1 variant.opensolaris.zone=__NODEFAULT
-file path=usr/lib/fm/libfmd_snmp.so.1 variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/libfmnotify.so.1 variant.opensolaris.zone=__NODEFAULT
 file path=usr/lib/fm/libseslog.so.1
 file path=usr/lib/fm/libtopo.so.1 variant.opensolaris.zone=__NODEFAULT
@@ -513,8 +497,6 @@ link path=usr/lib/fm/$(ARCH64)/libfmd_log.so target=./libfmd_log.so.1 \
     variant.opensolaris.zone=__NODEFAULT
 link path=usr/lib/fm/$(ARCH64)/libfmd_msg.so target=./libfmd_msg.so.1 \
     variant.opensolaris.zone=__NODEFAULT
-link path=usr/lib/fm/$(ARCH64)/libfmd_snmp.so target=./libfmd_snmp.so.1 \
-    variant.opensolaris.zone=__NODEFAULT
 link path=usr/lib/fm/$(ARCH64)/libfmevent.so \
     target=../../../../lib/fm/$(ARCH64)/libfmevent.so.1 \
     variant.opensolaris.zone=__NODEFAULT
@@ -540,8 +522,6 @@ link path=usr/lib/fm/libfmd_agent.so target=libfmd_agent.so.1 \
 link path=usr/lib/fm/libfmd_log.so target=libfmd_log.so.1 \
     variant.opensolaris.zone=__NODEFAULT
 link path=usr/lib/fm/libfmd_msg.so target=libfmd_msg.so.1 \
-    variant.opensolaris.zone=__NODEFAULT
-link path=usr/lib/fm/libfmd_snmp.so target=libfmd_snmp.so.1 \
     variant.opensolaris.zone=__NODEFAULT
 link path=usr/lib/fm/libfmevent.so target=../../../lib/fm/libfmevent.so.1 \
     variant.opensolaris.zone=__NODEFAULT
