@@ -101,7 +101,7 @@ static int	nfs3_accessx(void *, int, cred_t *);
 static int	nfs3lookup_dnlc(vnode_t *, char *, vnode_t **, cred_t *);
 static int	nfs3lookup_otw(vnode_t *, char *, vnode_t **, cred_t *, int);
 static int	nfs3create(vnode_t *, char *, struct vattr *, enum vcexcl,
-			int, vnode_t **, cred_t *, int);
+			int, vnode_t **, cred_t *);
 static int	nfs3excl_create_settimes(vnode_t *, struct vattr *, cred_t *);
 static int	nfs3mknod(vnode_t *, char *, struct vattr *, enum vcexcl,
 			int, vnode_t **, cred_t *);
@@ -2219,7 +2219,7 @@ static int nfs3_create_misses = 0;
 /* ARGSUSED */
 static int
 nfs3_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
-	int mode, vnode_t **vpp, cred_t *cr, int lfaware, caller_context_t *ct,
+	int mode, vnode_t **vpp, cred_t *cr, int flags, caller_context_t *ct,
 	vsecattr_t *vsecp)
 {
 	int error;
@@ -2330,8 +2330,7 @@ top:
 			nfs_rw_exit(&drp->r_rwlock);
 			return (EACCES);
 		}
-		error = nfs3create(dvp, nm, &vattr, exclusive, mode, vpp, cr,
-		    lfaware);
+		error = nfs3create(dvp, nm, &vattr, exclusive, mode, vpp, cr);
 		/*
 		 * If this is not an exclusive create, then the CREATE
 		 * request will be made with the GUARDED mode set.  This
@@ -2378,7 +2377,7 @@ top:
 /* ARGSUSED */
 static int
 nfs3create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
-	int mode, vnode_t **vpp, cred_t *cr, int lfaware)
+	int mode, vnode_t **vpp, cred_t *cr)
 {
 	int error;
 	CREATE3args args;

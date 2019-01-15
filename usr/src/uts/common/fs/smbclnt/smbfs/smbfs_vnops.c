@@ -2513,7 +2513,7 @@ smbfslookup_cache(vnode_t *dvp, char *nm, int nmlen,
 /* ARGSUSED */
 static int
 smbfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
-	int mode, vnode_t **vpp, cred_t *cr, int lfaware, caller_context_t *ct,
+	int mode, vnode_t **vpp, cred_t *cr, int flags, caller_context_t *ct,
 	vsecattr_t *vsecp)
 {
 	int		error;
