@@ -137,7 +137,7 @@ main(int argc, char *argv[])
 		usage("No filename specified", 1);
 	fname = argv[0];
 
-	if ((fd = open(fname, O_LARGEFILE | O_RDWR | O_CREAT | O_SYNC,
+	if ((fd = open(fname, O_RDWR | O_CREAT | O_SYNC,
 	    00666)) < 0) {
 		perror("open failed");
 		exit(1);

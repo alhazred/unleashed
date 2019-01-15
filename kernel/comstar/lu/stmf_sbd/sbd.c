@@ -1495,9 +1495,9 @@ sbd_open_data_file(sbd_lu_t *sl, uint32_t *err_ret, int lu_size_valid,
 		return (EINVAL);
 	}
 	if (sl->sl_flags & SL_WRITE_PROTECTED) {
-		flag = FREAD | FOFFMAX;
+		flag = FREAD;
 	} else {
-		flag = FREAD | FWRITE | FOFFMAX | FEXCL;
+		flag = FREAD | FWRITE | FEXCL;
 	}
 	if ((ret = vn_open(sl->sl_data_filename, UIO_SYSSPACE, flag, 0,
 	    &sl->sl_data_vp, 0, 0)) != 0) {
@@ -1614,7 +1614,7 @@ sbd_close_lu(sbd_lu_t *sl)
 				sl->sl_zfs_meta = NULL;
 			}
 		} else {
-			flag = FREAD | FWRITE | FOFFMAX | FEXCL;
+			flag = FREAD | FWRITE | FEXCL;
 			(void) fop_close(sl->sl_meta_vp, flag, 1, 0,
 			    CRED(), NULL);
 			VN_RELE(sl->sl_meta_vp);
@@ -1623,9 +1623,9 @@ sbd_close_lu(sbd_lu_t *sl)
 	}
 	if (sl->sl_flags & SL_MEDIA_LOADED) {
 		if (sl->sl_flags & SL_WRITE_PROTECTED) {
-			flag = FREAD | FOFFMAX;
+			flag = FREAD;
 		} else {
-			flag = FREAD | FWRITE | FOFFMAX | FEXCL;
+			flag = FREAD | FWRITE | FEXCL;
 		}
 		(void) fop_close(sl->sl_data_vp, flag, 1, 0, CRED(), NULL);
 		VN_RELE(sl->sl_data_vp);
@@ -1932,7 +1932,7 @@ sbd_create_register_lu(sbd_create_and_reg_lu_t *slu, int struct_sz,
 	} else {
 		sl->sl_meta_blocksize_shift = 9;
 	}
-	flag = FREAD | FWRITE | FOFFMAX | FEXCL;
+	flag = FREAD | FWRITE | FEXCL;
 	if ((ret = vn_open(sl->sl_meta_filename, UIO_SYSSPACE, flag, 0,
 	    &sl->sl_meta_vp, 0, 0)) != 0) {
 		*err_ret = SBD_RET_META_FILE_OPEN_FAILED;
@@ -2350,7 +2350,7 @@ sbd_import_lu(sbd_import_lu_t *ilu, int struct_sz, uint32_t *err_ret,
 	}
 	if (!(sl->sl_flags & SL_ZFS_META)) {
 		/* metadata is always writable */
-		flag = FREAD | FWRITE | FOFFMAX | FEXCL;
+		flag = FREAD | FWRITE | FEXCL;
 		if ((ret = vn_open(sl->sl_meta_filename, UIO_SYSSPACE, flag, 0,
 		    &sl->sl_meta_vp, 0, 0)) != 0) {
 			*err_ret = SBD_RET_META_FILE_OPEN_FAILED;

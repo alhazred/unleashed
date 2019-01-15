@@ -870,27 +870,6 @@ top:
 		}
 
 		/*
-		 * Get the attributes to check whether file is large.
-		 * We do this only if the FOFFMAX flag is not set and
-		 * only for regular files.
-		 */
-
-		if (!(filemode & FOFFMAX) && (vp->v_type == VREG)) {
-			vattr.va_mask = VATTR_SIZE;
-			if ((error = fop_getattr(vp, &vattr, 0,
-			    CRED(), NULL))) {
-				goto out;
-			}
-			if (vattr.va_size > (uoff_t)MAXOFF32_T) {
-				/*
-				 * Large File API - regular open fails
-				 * if FOFFMAX flag is set in file mode
-				 */
-				error = EOVERFLOW;
-				goto out;
-			}
-		}
-		/*
 		 * Can't write directories, active texts, or
 		 * read-only filesystems.  Can't truncate files
 		 * on which mandatory locking is in effect.
@@ -1343,24 +1322,6 @@ top:
 			 * the old (vp) upon exit.
 			 */
 			goto out;
-		}
-
-		/*
-		 * Large File API - non-large open (FOFFMAX flag not set)
-		 * of regular file fails if the file size exceeds MAXOFF32_T.
-		 */
-		if (why != CRMKDIR &&
-		    !(flag & FOFFMAX) &&
-		    (vp->v_type == VREG)) {
-			vattr.va_mask = VATTR_SIZE;
-			if ((error = fop_getattr(vp, &vattr, 0,
-			    CRED(), NULL))) {
-				goto out;
-			}
-			if ((vattr.va_size > (uoff_t)MAXOFF32_T)) {
-				error = EOVERFLOW;
-				goto out;
-			}
 		}
 	}
 

@@ -51,8 +51,7 @@ opendir(const char *filename)
 	int fd;
 	DIR *dirp;
 
-	if ((fd = openat(AT_FDCWD, filename,
-	    O_RDONLY | O_NDELAY | O_LARGEFILE, 0)) < 0)
+	if ((fd = openat(AT_FDCWD, filename, O_RDONLY | O_NDELAY, 0)) < 0)
 		return (NULL);
 	if ((dirp = fdopendir(fd)) == NULL)
 		(void) close(fd);

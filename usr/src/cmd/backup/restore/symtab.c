@@ -706,7 +706,7 @@ initsymtable(filename)
 		ep->e_flags |= NEW;
 		return;
 	}
-	if ((fd = open(filename, O_RDONLY|O_LARGEFILE)) < 0) {
+	if ((fd = open(filename, O_RDONLY)) < 0) {
 		perror("open");
 		(void) fprintf(stderr,
 		    gettext("cannot open symbol table file %s\n"), filename);

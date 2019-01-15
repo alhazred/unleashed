@@ -148,7 +148,7 @@ spa_config_write(spa_config_dirent_t *dp, nvlist_t *nvl)
 	size_t buflen;
 	char *buf;
 	vnode_t *vp;
-	int oflags = FWRITE | FTRUNC | FCREAT | FOFFMAX;
+	int oflags = FWRITE | FTRUNC | FCREAT;
 	char *temp;
 	int err;
 

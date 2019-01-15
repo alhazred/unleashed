@@ -58,7 +58,7 @@
 static int
 ctfs_endpoint_open(ctfs_endpoint_t *endpt, ct_equeue_t *q, int flag)
 {
-	if ((flag & ~FNONBLOCK) != (FREAD | FOFFMAX))
+	if ((flag & ~FNONBLOCK) != (FREAD))
 		return (EINVAL);
 
 	mutex_enter(&endpt->ctfs_endpt_lock);

@@ -255,8 +255,8 @@ create_core_file(char *fp, enum core_types core_type, vnode_t **vpp)
 		file = pn.pn_path;
 	}
 	error =  vn_openat(file, UIO_SYSSPACE,
-	    FWRITE | FTRUNC | FEXCL | FCREAT | FOFFMAX,
-	    perms, &vp, CRCREAT, PTOU(curproc)->u_cmask, dvp, -1);
+	    FWRITE | FTRUNC | FEXCL | FCREAT, perms, &vp, CRCREAT,
+	    PTOU(curproc)->u_cmask, dvp, -1);
 	if (core_type != CORE_PROC) {
 		VN_RELE(dvp);
 		pn_free(&pn);

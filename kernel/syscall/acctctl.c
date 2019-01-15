@@ -242,7 +242,7 @@ ac_file_set(ac_info_t *info, void *ubuf, size_t bufsz)
 	mutex_enter(&info->ac_lock);
 
 	if ((error = vn_open(namebuf, UIO_SYSSPACE,
-	    FCREAT | FWRITE | FOFFMAX, 0600, &vp, CRCREAT, 0)) != 0) {
+	    FCREAT | FWRITE, 0600, &vp, CRCREAT, 0)) != 0) {
 		mutex_exit(&info->ac_lock);
 		kmem_free(namebuf, namelen);
 		kmem_free(hdr, hdrsize);

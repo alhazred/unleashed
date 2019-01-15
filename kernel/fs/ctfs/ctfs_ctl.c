@@ -114,7 +114,7 @@ ctfs_ctl_access(
 static int
 ctfs_ctl_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 {
-	if (flag != (FWRITE | FOFFMAX))
+	if (flag != (FWRITE))
 		return (EINVAL);
 
 	return (ctfs_ctl_access(*vpp, VWRITE, 0, cr, ct));

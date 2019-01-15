@@ -171,7 +171,7 @@ setup(void)
 
 	vprintf(stdout, gettext("Verify volume and initialize maps\n"));
 	if (archivefile) {
-		mt = open(archivefile, O_RDONLY|O_LARGEFILE);
+		mt = open(archivefile, O_RDONLY);
 		if (mt < 0) {
 			perror(archivefile);
 			done(1);
@@ -180,7 +180,7 @@ setup(void)
 	} else {
 		if (pipein)
 			mt = 0;
-		else if ((mt = open(magtape, O_RDONLY|O_LARGEFILE)) < 0) {
+		else if ((mt = open(magtape, O_RDONLY)) < 0) {
 			perror(magtape);
 			done(1);
 		}
@@ -521,7 +521,7 @@ with the last volume and work towards the first.\n"));
 		if (magtape[i - 1] == '\n')
 			magtape[i - 1] = '\0';
 	}
-	if ((mt = open(magtape, O_RDONLY|O_LARGEFILE)) == -1) {
+	if ((mt = open(magtape, O_RDONLY)) == -1) {
 		int error = errno;
 		(void) fprintf(stderr, gettext("Cannot open %s: %s\n"),
 		    magtape, strerror(error));
@@ -2029,7 +2029,7 @@ autoload_tape(void)
 		(void) fprintf(stderr,
 		    gettext("Attempting to autoload next volume\n"));
 		for (tries = 0; tries < autoload_tries; tries++) {
-			if ((fd = open(magtape, O_RDONLY|O_LARGEFILE,
+			if ((fd = open(magtape, O_RDONLY,
 			    0600)) >= 0) {
 				(void) close(fd);
 				result = 1;
@@ -2042,7 +2042,7 @@ autoload_tape(void)
 			(void) fprintf(stderr,
 			    gettext("Autoload timed out\n"));
 		} else {
-			if ((mt = open(magtape, O_RDONLY|O_LARGEFILE)) == -1) {
+			if ((mt = open(magtape, O_RDONLY)) == -1) {
 				(void) fprintf(stderr, gettext(
 				    "Autoload could not re-open tape\n"));
 				result = 0;

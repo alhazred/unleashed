@@ -58,15 +58,6 @@ size_t copyout_max_cached = COPYOUT_MAX_CACHE;	/* global so it's patchable */
 
 /*
  * read, write, pread, pwrite, readv, and writev syscalls.
- *
- * 64-bit open:	all open's are large file opens.
- * Large Files: the behaviour of read depends on whether the fd
- *		corresponds to large open or not.
- * 32-bit open:	FOFFMAX flag not set.
- *		read until MAXOFF32_T - 1 and read at MAXOFF32_T returns
- *		EOVERFLOW if count is non-zero and if size of file
- *		is > MAXOFF32_T. If size of file is <= MAXOFF32_T read
- *		at >= MAXOFF32_T returns EOF.
  */
 
 /*
@@ -346,12 +337,7 @@ pread(int fdes, void *cbuf, size_t count, off_t offset)
 	ssize_t bcount;
 	int error = 0;
 	uoff_t fileoff = (uoff_t)(ulong_t)offset;
-#ifdef _SYSCALL32_IMPL
-	uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 ?
-	    MAXOFF32_T : MAXOFFSET_T;
-#else
-	const uoff_t maxoff = MAXOFF32_T;
-#endif
+	const uoff_t maxoff = MAXOFFSET_T;
 	int in_crit = 0;
 
 	if ((bcount = (ssize_t)count) < 0)
@@ -486,12 +472,7 @@ pwrite(int fdes, void *cbuf, size_t count, off_t offset)
 	ssize_t bcount;
 	int error = 0;
 	uoff_t fileoff = (uoff_t)(ulong_t)offset;
-#ifdef _SYSCALL32_IMPL
-	uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 ?
-	    MAXOFF32_T : MAXOFFSET_T;
-#else
-	const uoff_t maxoff = MAXOFF32_T;
-#endif
+	uoff_t maxoff = MAXOFFSET_T;
 	int in_crit = 0;
 
 	if ((bcount = (ssize_t)count) < 0)
@@ -1005,13 +986,7 @@ preadv(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 #else /* _SYSCALL32_IMPL || _ILP32 */
 	uoff_t fileoff = (uoff_t)(ulong_t)offset;
 #endif /* _SYSCALL32_IMPR || _ILP32 */
-#ifdef _SYSCALL32_IMPL
-	const uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 &&
-	    extended_offset == 0?
-	    MAXOFF32_T : MAXOFFSET_T;
-#else /* _SYSCALL32_IMPL */
-	const uoff_t maxoff = MAXOFF32_T;
-#endif /* _SYSCALL32_IMPL */
+	const uoff_t maxoff = MAXOFFSET_T;
 
 	int in_crit = 0;
 
@@ -1224,13 +1199,7 @@ pwritev(int fdes, struct iovec *iovp, int iovcnt, off_t offset,
 #else /* _SYSCALL32_IMPL || _ILP32 */
 	uoff_t fileoff = (uoff_t)(ulong_t)offset;
 #endif /* _SYSCALL32_IMPR || _ILP32 */
-#ifdef _SYSCALL32_IMPL
-	const uoff_t maxoff = get_udatamodel() == DATAMODEL_ILP32 &&
-	    extended_offset == 0?
-	    MAXOFF32_T : MAXOFFSET_T;
-#else /* _SYSCALL32_IMPL */
-	const uoff_t maxoff = MAXOFF32_T;
-#endif /* _SYSCALL32_IMPL */
+	const uoff_t maxoff = MAXOFFSET_T;
 
 	int in_crit = 0;
 

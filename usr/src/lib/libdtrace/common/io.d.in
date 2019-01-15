@@ -164,8 +164,6 @@ inline int O_DSYNC = @O_DSYNC@;
 #pragma D binding "1.1" O_DSYNC
 inline int O_EXCL = @O_EXCL@;
 #pragma D binding "1.1" O_EXCL
-inline int O_LARGEFILE = @O_LARGEFILE@;
-#pragma D binding "1.1" O_LARGEFILE
 inline int O_NOCTTY = @O_NOCTTY@;
 #pragma D binding "1.1" O_NOCTTY
 inline int O_NONBLOCK = @O_NONBLOCK@;

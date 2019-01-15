@@ -342,7 +342,7 @@ ctfs_common_getattr(vnode_t *vp, vattr_t *vap)
 int
 ctfs_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 {
-	if ((flag & (FOFFMAX | FWRITE)) != FOFFMAX)
+	if ((flag & (FWRITE)) != 0)
 		return (EINVAL);
 
 	return (0);

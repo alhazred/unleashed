@@ -91,9 +91,6 @@ extern "C" {
 #define	O_EXCL		0x00000400	/* exclusive open */
 #define	O_NOCTTY	0x00000800	/* don't allocate controlling tty (POSIX) */
 #define	O_ASYNC		0x00001000
-#ifdef	_LARGEFILE_SOURCE
-#define	O_LARGEFILE	0x00002000
-#endif
 #define	O_XATTR		0x00004000	/* extended attribute */
 #define	O_RSYNC		0x00008000	/* synchronized file update option
 					   defines read/write file integrity */
@@ -128,7 +125,6 @@ extern "C" {
 #define	FCNTLFLAGS	(O_APPEND|O_NDELAY|O_NONBLOCK|O_SYNC|O_DSYNC|O_RSYNC)
 
 #define	FREVOKED	0x00000020	/* Object reuse Revoked file */
-#define	FOFFMAX		0x00002000	/* large file */
 #define	FNODSYNC	0x00010000	/* fsync pseudo flag */
 #define	FIGNORECASE	0x00080000	/* request case-insensitive lookups */
 #define	FXATTRDIROPEN	0x00100000	/* only opening hidden attribute directory */

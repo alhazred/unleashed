@@ -2144,7 +2144,6 @@ static struct fcntl_flags {
 	FC_FL(FSYNC),
 	FC_FL(FDSYNC),
 	FC_FL(FRSYNC),
-	FC_FL(FOFFMAX),
 	FC_FL(FNONBLOCK),
 	FC_FL(FCREAT),
 	FC_FL(FTRUNC),

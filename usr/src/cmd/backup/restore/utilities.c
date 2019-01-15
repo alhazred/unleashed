@@ -599,7 +599,7 @@ safe_open(int dfd, const char *filename, int mode, int perms)
 	 * truncating it with the open.
 	 */
 	if ((fd = openat(dfd, filename,
-	    O_WRONLY|O_CREAT|O_TRUNC|O_EXCL|O_LARGEFILE, perms)) < 0) {
+	    O_WRONLY|O_CREAT|O_TRUNC|O_EXCL)) < 0) {
 		if (errno == EEXIST) {
 			if (fstatat(dfd, filename, &pre_lstat,
 						AT_SYMLINK_NOFOLLOW) < 0) {
@@ -617,7 +617,6 @@ safe_open(int dfd, const char *filename, int mode, int perms)
 			}
 
 			working_mode = mode & (O_WRONLY|O_RDWR|O_RDONLY);
-			working_mode |= O_LARGEFILE;
 
 			if ((fd = openat(dfd, filename, working_mode)) < 0) {
 				if (errno == ENOENT) {

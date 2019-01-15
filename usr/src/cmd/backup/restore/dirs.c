@@ -518,7 +518,7 @@ rst_initdirfile(char *name)
 	RST_DIR *dp;
 	int fd;
 
-	if ((fd = open(name, O_RDONLY | O_LARGEFILE)) == -1)
+	if ((fd = open(name, O_RDONLY)) == -1)
 		return ((RST_DIR *)0);
 	if ((dp = (RST_DIR *)malloc(sizeof (*dp))) == NULL) {
 		(void) close(fd);

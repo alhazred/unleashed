@@ -2289,29 +2289,14 @@ top:
 			if (!(error = fop_access(vp, mode, 0, cr, ct))) {
 				if ((vattr.va_mask & VATTR_SIZE) &&
 				    vp->v_type == VREG) {
-					rp = VTOR(vp);
-					/*
-					 * Check here for large file handled
-					 * by LF-unaware process (as
-					 * ufs_create() does)
-					 */
-					if (!(lfaware & FOFFMAX)) {
-						mutex_enter(&rp->r_statelock);
-						if (rp->r_size > MAXOFF32_T)
-							error = EOVERFLOW;
-						mutex_exit(&rp->r_statelock);
-					}
-					if (!error) {
-						vattr.va_mask = VATTR_SIZE;
-						error = nfs3setattr(vp,
-						    &vattr, 0, cr);
+					vattr.va_mask = VATTR_SIZE;
+					error = nfs3setattr(vp, &vattr, 0, cr);
 
-						/*
-						 * Existing file was truncated;
-						 * emit a create event.
-						 */
-						vnevent_create(vp, ct);
-					}
+					/*
+					 * Existing file was truncated; emit a
+					 * create event.
+					 */
+					vnevent_create(vp, ct);
 				}
 			}
 		}
@@ -2550,23 +2535,6 @@ nfs3create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 			dnlc_update(dvp, nm, vp);
 		}
 
-		rp = VTOR(vp);
-
-		/*
-		 * Check here for large file handled by
-		 * LF-unaware process (as ufs_create() does)
-		 */
-		if ((va->va_mask & VATTR_SIZE) && vp->v_type == VREG &&
-		    !(lfaware & FOFFMAX)) {
-			mutex_enter(&rp->r_statelock);
-			if (rp->r_size > MAXOFF32_T) {
-				mutex_exit(&rp->r_statelock);
-				VN_RELE(vp);
-				return (EOVERFLOW);
-			}
-			mutex_exit(&rp->r_statelock);
-		}
-
 		if (exclusive == EXCL &&
 		    (va->va_mask & ~(VATTR_GID | VATTR_SIZE))) {
 			/*
@@ -2609,6 +2577,7 @@ nfs3create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 			}
 		}
 
+		rp = VTOR(vp);
 		if (va->va_gid != rp->r_attr.va_gid) {
 			/*
 			 * If the gid on the file isn't right, then

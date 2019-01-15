@@ -75,7 +75,7 @@ ctfs_create_tmplnode(vnode_t *pvp)
 static int
 ctfs_tmpl_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 {
-	if (flag != (FREAD | FWRITE | FOFFMAX))
+	if (flag != (FREAD | FWRITE))
 		return (EINVAL);
 
 	return (0);
