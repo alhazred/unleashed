@@ -257,7 +257,7 @@ extern "C" {
 #define	MAXOFF_T	0x7fffffffffffffffl
 #define	MAXOFFSET_T	0x7fffffffffffffffl
 #else
-#define	MAXOFF_T	0x7fffffffl
+#define	MAXOFF_T	0x7fffffffffffffffLL
 #define	MAXOFFSET_T 	0x7fffffffffffffffLL
 #endif	/* _LP64 */
 
