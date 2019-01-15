@@ -327,8 +327,6 @@ propen(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 		}
 	}
 
-	pnp->pr_flags |= PR_OFFMAX;
-
 	/*
 	 * Do file-specific things.
 	 */
