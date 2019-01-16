@@ -1,6 +1,5 @@
-.\"	$OpenBSD: true.1,v 1.12 2010/09/29 07:44:56 jmc Exp $
-.\"
-.\" Copyright (c) 1983, 1985, 1990 The Regents of the University of California.
+.\"	$OpenBSD: false.1,v 1.11 2010/09/29 07:44:56 jmc Exp $
+.\" Copyright (c) 1983, 1990 The Regents of the University of California.
 .\" All rights reserved.
 .\"
 .\" This code is derived from software contributed to Berkeley by
@@ -30,27 +29,27 @@
 .\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 .\" SUCH DAMAGE.
 .\"
-.\"     from: @(#)true.1	6.4 (Berkeley) 6/27/91
+.\"	from: @(#)false.1	6.6 (Berkeley) 7/24/91
 .\"
 .Dd $Mdocdate: September 29 2010 $
-.Dt TRUE 1
+.Dt FALSE 1
 .Os
 .Sh NAME
-.Nm true
-.Nd return true value
+.Nm false
+.Nd return false value
 .Sh SYNOPSIS
-.Nm true
+.Nm false
 .Sh DESCRIPTION
 The
 .Nm
-utility always returns with exit code 0.
+utility always exits with a non-zero exit code.
 .Sh EXIT STATUS
 The
 .Nm
-utility always returns with exit code 0.
+utility always exits with a non-zero exit code.
 .Sh SEE ALSO
-.Xr false 1 ,
-.Xr ksh 1
+.Xr ksh 1 ,
+.Xr true 1
 .Sh STANDARDS
 The
 .Nm

@@ -1,6 +1,6 @@
+#	$OpenBSD: Makefile,v 1.5 2015/11/11 19:05:28 deraadt Exp $
+
+MAN=	false.1
 PROG=	false
 
-# Note: we don't have a manpage of our own - instead we share one with
-# true(1).
-
-.include <prog.mk>
+.include <bsd.prog.mk>

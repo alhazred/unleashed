@@ -54,6 +54,7 @@ file path=usr/share/man/man1/env.1
 file path=usr/share/man/man1/exec.1
 file path=usr/share/man/man1/exit.1
 file path=usr/share/man/man1/expr.1
+file path=usr/share/man/man1/false.1
 file path=usr/share/man/man1/fdformat.1
 file path=usr/share/man/man1/find.1
 file path=usr/share/man/man1/fmt.1
