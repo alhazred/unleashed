@@ -241,7 +241,7 @@ construct_symtab(dis_tgt_t *tgt)
 	Elf_Data *symdata;
 	int i;
 	GElf_Word *symshndx = NULL;
-	int symshndx_size;
+	int symshndx_size = 0;
 	sym_entry_t *sym;
 	sym_entry_t *p_symtab = NULL;
 	int nsym = 0; /* count of symbols we're not interested in */
@@ -610,7 +610,7 @@ dis_tgt_destroy(dis_tgt_t *tgt)
  * the section.
  */
 const char *
-dis_find_section(dis_tgt_t *tgt, uint64_t addr, off_t *offset)
+dis_find_section(dis_tgt_t *tgt, uint64_t addr, uint64_t *offset)
 {
 	int i;
 
@@ -638,7 +638,7 @@ dis_find_section(dis_tgt_t *tgt, uint64_t addr, off_t *offset)
  * as the majority of addresses stay within the current function.
  */
 const char *
-dis_tgt_lookup(dis_tgt_t *tgt, uint64_t addr, off_t *offset, int cache_result,
+dis_tgt_lookup(dis_tgt_t *tgt, uint64_t addr, uint64_t *offset, int cache_result,
     size_t *size, int *isfunc)
 {
 	int lo, hi, mid;
@@ -728,7 +728,7 @@ dis_tgt_lookup(dis_tgt_t *tgt, uint64_t addr, off_t *offset, int cache_result,
  * Given an address, return the starting offset of the next symbol in the file.
  * Only needed on variable length instruction architectures.
  */
-off_t
+uint64_t
 dis_tgt_next_symbol(dis_tgt_t *tgt, uint64_t addr)
 {
 	sym_entry_t *sym;

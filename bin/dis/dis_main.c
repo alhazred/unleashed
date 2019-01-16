@@ -78,7 +78,7 @@ typedef struct dis_buffer {
  * formatted symbol, based on the offset and current setttings.
  */
 void
-getsymname(uint64_t addr, const char *symbol, off_t offset, char *buf,
+getsymname(uint64_t addr, const char *symbol, uint64_t offset, char *buf,
     size_t buflen)
 {
 	if (symbol == NULL || g_numeric) {
@@ -93,9 +93,9 @@ getsymname(uint64_t addr, const char *symbol, off_t offset, char *buf,
 		if (offset == 0)
 			(void) snprintf(buf, buflen, "%s", symbol);
 		else if (g_flags & DIS_OCTAL)
-			(void) snprintf(buf, buflen, "%s+0%o", symbol, offset);
+			(void) snprintf(buf, buflen, "%s+0%llo", symbol, offset);
 		else
-			(void) snprintf(buf, buflen, "%s+0x%x", symbol, offset);
+			(void) snprintf(buf, buflen, "%s+0x%llx", symbol, offset);
 	}
 }
 
@@ -128,12 +128,12 @@ dis_data(dis_tgt_t *tgt, dis_handle_t *dhp, uint64_t addr, void *data,
 	char symbuf[BUFSIZE];
 	const char *symbol;
 	const char *last_symbol;
-	off_t symoffset;
+	uint64_t symoffset;
 	int i;
 	int bytesperline;
 	size_t symsize;
 	int isfunc;
-	size_t symwidth = 0;
+	int symwidth = 0;
 	int ret;
 	int insz = insn_size(dhp);
 
@@ -162,7 +162,7 @@ dis_data(dis_tgt_t *tgt, dis_handle_t *dhp, uint64_t addr, void *data,
 			db.db_nextaddr = addr + insz;
 
 		} else if (ret != 0) {
-			off_t next;
+			uint64_t next;
 
 			(void) snprintf(buf, sizeof (buf),
 			    "*** invalid opcode ***");
@@ -225,7 +225,7 @@ dis_data(dis_tgt_t *tgt, dis_handle_t *dhp, uint64_t addr, void *data,
 			(void) printf("%s()\n", symbol);
 
 		(void) printf("    %s:%*s ", symbuf,
-		    symwidth - strlen(symbuf), "");
+		    (int)(symwidth - strlen(symbuf)), "");
 
 		/* print bytes */
 		for (i = 0; i < MIN(bytesperline, (db.db_nextaddr - addr));
@@ -275,7 +275,7 @@ do_lookup(void *data, uint64_t addr, char *buf, size_t buflen, uint64_t *start,
 {
 	dis_buffer_t *db = data;
 	const char *symbol;
-	off_t offset;
+	uint64_t offset;
 	size_t size;
 
 	/*
@@ -349,7 +349,7 @@ dump_data(uint64_t addr, void *data, size_t datalen)
 		/*
 		 * Display leading address
 		 */
-		(void) printf("%0*x: ", width, curaddr);
+		(void) printf("%0*"PRIxPTR": ", width, curaddr);
 
 		/*
 		 * Print out data in two-byte chunks.  If the current address
