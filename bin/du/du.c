@@ -33,18 +33,20 @@
  *	du [-Adorx] [-a|-s] [-h|-k|-m] [-H|-L] [file...]
  */
 
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/avl.h>
-#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <dirent.h>
+#include <err.h>
+#include <fcntl.h>
+#include <libcmdutils.h>
 #include <limits.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <locale.h>
-#include <libcmdutils.h>
 
 
 static int		aflg = 0;
@@ -93,7 +95,8 @@ main(int argc, char **argv)
 	int		c;
 	extern int	optind;
 	char		*np;
-	pid_t		pid, wpid;
+	pid_t		pid = -1;
+	pid_t		wpid;
 	int		status, retcode = 0;
 	setbuf(stderr, NULL);
 	(void) setlocale(LC_ALL, "");
@@ -194,10 +197,8 @@ main(int argc, char **argv)
 	do {
 		if (optind < argc - 1) {
 			pid = fork();
-			if (pid == (pid_t)-1) {
-				perror(gettext("du: No more processes"));
-				exitdu(1);
-			}
+			if (pid == -1)
+				err(1, "fork");
 			if (pid != 0) {
 				while ((wpid = wait(&status)) != pid &&
 				    wpid != (pid_t)-1)
@@ -235,7 +236,7 @@ main(int argc, char **argv)
 			}
 			(void) strcpy(base, argv[optind]);
 			(void) strcpy(name, argv[optind]);
-			if (np = strrchr(name, '/')) {
+			if ((np = strrchr(name, '/')) != NULL) {
 				*np++ = '\0';
 				if (chdir(*name ? name : "/") < 0) {
 					if (rflg) {
@@ -446,7 +447,7 @@ descend(char *curname, int curfd, int *retcode, dev_t device)
 		level--;
 		return (0);
 	}
-	while (dp = readdir(dirp)) {
+	while ((dp = readdir(dirp)) != NULL) {
 		if ((strcmp(dp->d_name, ".") == 0) ||
 		    (strcmp(dp->d_name, "..") == 0))
 			continue;
