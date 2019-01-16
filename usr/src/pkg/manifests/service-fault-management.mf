@@ -421,9 +421,6 @@ file path=usr/platform/lib/fm/eft/gcpu.eft mode=0444
 file path=usr/platform/lib/fm/eft/gcpu_amd.eft mode=0444
 file path=usr/platform/lib/fm/eft/intel.eft mode=0444
 file \
-    path=usr/platform/lib/fm/topo/maps/Joyent-Compute-Platform-1101-disk-hc-topology.xml \
-    mode=0444
-file \
     path=usr/platform/lib/fm/topo/maps/Netra-X4200-M2-disk-hc-topology.xml \
     mode=0444
 file \

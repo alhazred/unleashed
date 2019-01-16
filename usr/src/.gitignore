@@ -3146,7 +3146,6 @@ lib/fm/topo/libtopo/common/topo_error.c
 lib/fm/topo/libtopo/common/topo_tables.c
 lib/fm/topo/libtopo/i386/libtopo.so.1
 lib/fm/topo/libtopo/i386/pics/
-lib/fm/topo/maps/Joyent,Joyent-Compute-Platform-1101/Joyent-Compute-Platform-1101-disk-hc-topology.xml
 lib/fm/topo/maps/SUNW,Netra-X4200-M2/Netra-X4200-M2-disk-hc-topology.xml
 lib/fm/topo/maps/SUNW,Sun-Fire-X4200-M2/Sun-Fire-X4200-M2-disk-hc-topology.xml
 lib/fm/topo/maps/SUNW,Sun-Fire-X4200-Server/Sun-Fire-X4200-Server-disk-hc-topology.xml
