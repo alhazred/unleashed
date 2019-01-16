@@ -97,7 +97,7 @@ static const char *ctfdump_fpenc[] = {
  * easier, we'll just always allow the code to print everything out, but only
  * output it if we have actually enabled that section.
  */
-static void
+static void __attribute__((__format__(printf, 2, 3)))
 ctfdump_printf(ctfdump_arg_t arg, const char *fmt, ...)
 {
 	va_list ap;
@@ -110,7 +110,7 @@ ctfdump_printf(ctfdump_arg_t arg, const char *fmt, ...)
 	va_end(ap);
 }
 
-static void
+static void __attribute__((__format__(printf, 1, 2)))
 ctfdump_warn(const char *fmt, ...)
 {
 	va_list ap;
@@ -121,7 +121,7 @@ ctfdump_warn(const char *fmt, ...)
 	va_end(ap);
 }
 
-static void
+static void __attribute__((__format__(printf, 1, 2)))
 ctfdump_fatal(const char *fmt, ...)
 {
 	va_list ap;
@@ -134,7 +134,7 @@ ctfdump_fatal(const char *fmt, ...)
 	exit(1);
 }
 
-static void
+static void __attribute__((__format__(printf, 1, 2)))
 ctfdump_usage(const char *fmt, ...)
 {
 	if (fmt != NULL) {
@@ -165,8 +165,8 @@ ctfdump_title(ctfdump_arg_t arg, const char *header)
 {
 	static const char line[] = "----------------------------------------"
 	    "----------------------------------------";
-	ctfdump_printf(arg, "\n- %s %.*s\n\n", header, (int)78 - strlen(header),
-	    line);
+	ctfdump_printf(arg, "\n- %s %.*s\n\n", header,
+	    (int)(78 - strlen(header)), line);
 }
 
 static int
@@ -174,8 +174,8 @@ ctfdump_objects_cb(const char *name, ctf_id_t id, ulong_t symidx, void *arg)
 {
 	int len;
 
-	len = snprintf(NULL, 0, "  [%u] %u", g_stats.cs_ndata, id);
-	ctfdump_printf(CTFDUMP_OBJECTS, "  [%u] %u %*s%s (%u)\n",
+	len = snprintf(NULL, 0, "  [%lu] %lu", g_stats.cs_ndata, id);
+	ctfdump_printf(CTFDUMP_OBJECTS, "  [%lu] %lu %*s%s (%lu)\n",
 	    g_stats.cs_ndata, id, MAX(15 - len, 0), "", name, symidx);
 	g_stats.cs_ndata++;
 	return (0);
@@ -218,7 +218,7 @@ ctfdump_functions_cb(const char *name, ulong_t symidx, ctf_funcinfo_t *ctc,
 	}
 
 	ctfdump_printf(CTFDUMP_FUNCTIONS,
-	    "  [%lu] %s (%lu) returns: %u args: (", g_stats.cs_nfuncs, name,
+	    "  [%lu] %s (%lu) returns: %lu args: (", g_stats.cs_nfuncs, name,
 	    symidx, ctc->ctc_return);
 	for (i = 0; i < ctc->ctc_argc; i++)
 		ctfdump_printf(CTFDUMP_FUNCTIONS, "%lu%s", g_fargc[i],
@@ -589,7 +589,7 @@ ctfdump_types_cb(ctf_id_t id, boolean_t root, void *arg)
 		if (size == CTF_ERR)
 			ctfdump_fatal("failed to get size of %s: %s\n", name,
 			    ctf_errmsg(ctf_errno(g_fp)));
-		ctfdump_printf(CTFDUMP_TYPES, "%s (%d bytes)\n", name, size);
+		ctfdump_printf(CTFDUMP_TYPES, "%s (%zd bytes)\n", name, size);
 		count = 0;
 		if (ctf_member_iter(g_fp, id, ctfdump_member_cb, &count) != 0)
 			ctfdump_fatal("failed to iterate members of %s: %s\n",

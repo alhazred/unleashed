@@ -1,4 +1,5 @@
 PROG=	ctfdump
+COPTS=	-Wall
 
 LDADD=	-lctf
 
