@@ -232,7 +232,8 @@ get_list(char *list)
 void
 b_cut(FILE *fp, char *fname)
 {
-	int ch, col;
+	int ch = 0;
+	int col;
 	char *pos;
 
 	for (;;) {
