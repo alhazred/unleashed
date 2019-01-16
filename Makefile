@@ -7,9 +7,14 @@ SUBDIR = bin \
 	 libexec \
 	 share
 
-.-include "cfgparam.mk"
+.if !make(gen-config)
+.if !exists(${.CURDIR}/cfgparam.mk)
+.error run make gen-config to generate cfgparam.mk
+.endif
+.include "cfgparam.mk"
+.endif
 
-.ifdef CONFIG_MACH64 && DESTDIR
+.ifdef DESTDIR
 build:
 	${.MAKE} obj
 	${.MAKE}
