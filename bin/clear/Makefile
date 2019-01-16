@@ -15,6 +15,7 @@ CFLAGS+=	-I.
 CFLAGS+=        -I${NCURSES_DIR}/include
 CFLAGS+=	-I${.CURDIR}
 CFLAGS+=	-I${.OBJDIR}
+CFLAGS+=	-Wall
 
 LDADD=          -lncurses
 
