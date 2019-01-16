@@ -1,10 +1,10 @@
-How to build unleashed
+How to build Unleashed
 ======================
 
-Install unleashed
+Install Unleashed
 -----------------
 
-Building unleashed requires unleashed, so first, download and install the
+Building Unleashed requires Unleashed, so first, download and install the
 latest snapshot from https://www.unleashed-os.org/snapshots/latest/
 
 Get the source
