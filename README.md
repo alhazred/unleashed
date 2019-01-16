@@ -4,18 +4,13 @@ How to build unleashed
 Install unleashed
 -----------------
 
-Building unleashed requires unleashed, so first you must install it (doing
-which is not documented at the time of writing).
+Building unleashed requires unleashed, so first, download and install the
+latest snapshot from https://www.unleashed-os.org/snapshots/latest/
 
 Get the source
 --------------
 
-Clone this repository from either:
-
-* git://repo.or.cz/unleashed.git
-* http://repo.or.cz/unleashed.git
-
-For example:
+Clone this repository:
 
 ```
 $ git clone git://repo.or.cz/unleashed.git
@@ -29,7 +24,7 @@ For a complete build, use 'tools/nightly.sh'. The user executing the build
 needs to be able to write to `/usr/obj`, so make sure you can do that first.
 
 ```
-# install -m 1777 -d /usr/obj
+# zfs create -o mountpoint=/usr/obj rpool/obj && install -m 1777 -d /usr/obj
 $ ./tools/nightly.sh
 ```
 
