@@ -2,6 +2,7 @@
 
 PROG=	cmp
 SRCS=	cmp.c misc.c regular.c special.c
+COPTS=	-Wall
 
 .include "compat.mk"
 .include <bsd.prog.mk>

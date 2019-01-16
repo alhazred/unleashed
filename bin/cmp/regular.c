@@ -47,7 +47,7 @@ void
 c_regular(int fd1, char *file1, off_t skip1, off_t len1,
     int fd2, char *file2, off_t skip2, off_t len2)
 {
-	u_char ch, *p1, *p2;
+	char ch, *p1, *p2;
 	off_t byte, length, line;
 	int dfound;
 
