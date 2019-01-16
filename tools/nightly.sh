@@ -302,18 +302,14 @@ if [ "$OPTHOME" = "" ]; then
 	export OPTHOME
 fi
 
-USAGE='Usage: nightly [-in] [-V VERS ] [env_file]
+USAGE='Usage: nightly [-in] [-V VERS ]
 
 Where:
 	-i	Fast incremental options (no clobber, check)
 	-V VERS set the build version string to VERS
 
-	<env_file>  file in Bourne shell syntax that sets and exports
-	variables that configure the operation of this script and many of
-	the scripts this one calls.
-
 non-DEBUG is the default build type. Build options can be set in the
-NIGHTLY_OPTIONS variable in the <env_file> as follows:
+NIGHTLY_OPTIONS variable in env.sh as follows:
 
 	-A	check for ABI differences in .so files
 	-C	check for cstyle/hdrchk errors
@@ -379,12 +375,7 @@ done
 # correct argument count after options
 shift `expr $OPTIND - 1`
 
-# test that the path to the environment-setting file was given
-if [ $# -ne 1 ]; then
-	envfile=$(dirname $0)/env.sh
-else
-	envfile=$1
-fi
+envfile=$(dirname $0)/env.sh
 
 #
 # force locale to C

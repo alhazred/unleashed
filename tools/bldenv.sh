@@ -25,9 +25,8 @@
 # Copyright 2011 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
-# Uses supplied "env" file, based on /opt/onbld/etc/env, to set shell variables
-# before spawning a shell for doing a release-style builds interactively
-# and incrementally.
+# Uses "env.sh" file to set shell variables before spawning a shell for doing a
+# release-style builds interactively and incrementally.
 #
 
 function fatal_error
@@ -38,7 +37,7 @@ function fatal_error
 
 function usage
 {
-    print -u2 "usage: ${progname} [-cfd] env_file"
+    print -u2 "usage: ${progname} [-cfd]"
     exit 2
 }
 
@@ -63,11 +62,6 @@ while getopts cfd OPT ; do
     esac
 done
 shift $((OPTIND-1))
-
-# test that the path to the environment-setting file was given
-if [ -z "$1" ] ; then
-	usage
-fi
 
 # force locale to C
 export \
@@ -112,6 +106,7 @@ unset \
 # Setup environment variables
 #
 
+set -- $(dirname $0)/env.sh
 if [[ -f "$1" ]]; then
 	if [[ "$1" == */* ]]; then
 		. "$1"

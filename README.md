@@ -52,7 +52,7 @@ To build a component under the legacy (dmake) build system, ie. things under
 the component are made, and then:
 
 ```
-$ ./tools/bldenv.sh tools/env.sh
+$ ./tools/bldenv.sh
 $ cd usr/src/cmd/w
 $ dmake install
 ```
