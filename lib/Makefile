@@ -3,11 +3,8 @@ SUBDIR=	libc libcrypto libdemangle-sys libedit libncurses libssl libtls libuutil
 .include "${.CURDIR:H}/cfgparam.mk"
 
 .ifdef DESTDIR
-# hack to build both 32/64 bit libs
-build:
-	${.MAKE} MACHINE=${CONFIG_MACH64} obj
-	${.MAKE} MACHINE=${CONFIG_MACH64}
-	${.MAKE} MACHINE=${CONFIG_MACH64} install
+# hack to build 32-bit stuff
+build32:
 	${.MAKE} MACHINE=${CONFIG_MACH32} obj
 	${.MAKE} MACHINE=${CONFIG_MACH32}
 	${.MAKE} MACHINE=${CONFIG_MACH32} install

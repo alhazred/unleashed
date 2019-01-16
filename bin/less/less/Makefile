@@ -22,6 +22,7 @@ HELPDIR=${SHAREDIR}/misc
 CFLAGS+=-I${.CURDIR}/.. -DSYSDIR=\"/etc\" -DHELPDIR=\"${HELPDIR}\"
 
 beforeinstall:
+	${INSTALL} -d ${DESTDIR}${HELPDIR}
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
 	    -m ${SHAREMODE} ${.CURDIR}/../less.hlp \
 	    ${DESTDIR}${HELPDIR}/less.help

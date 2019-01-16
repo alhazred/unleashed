@@ -12,6 +12,7 @@ was changed.
  - ksh93 (/sbin/sh, /bin/ksh93, /bin/rksh93) and related libraries (libast,
    libcmd, libdll, libpp, libshell, libsum) are no more.
  - nonstandard getgrent_r, fgetgrent_r removed from libc
+ - nightly.sh is no more; see README.md for updated build instructions
  * removed posix.1c draft versions, and made default the standard versions, of
    the libc functions getgrgid_r, getgrnam_r, ttyname_r, getlogin_r
  * removed non-posix versions of the libc functions shmdt, sigwait,

@@ -87,14 +87,18 @@ unset \
 # Setup environment variables
 #
 
-env=${dir}/env.sh
-if [[ -f "$env" ]]; then
-	. "$env"
+# make sure we are not outside of the git checkout when sourcing env.sh; it has
+# some git commands that rely on that
+cwd=$(pwd)
+cd $dir
+if [[ -f "env.sh" ]]; then
+	. ./env.sh
 else
 	printf \
-	    'Cannot find env file "%s"\n' "$env"
+	    'Cannot find env file env.sh\n'
 	exit 1
 fi
+cd $cwd
 
 # Check if we have sufficient data to continue...
 [[ -n "${SRCTOP}" ]] || fatal_error "Error: Variable SRCTOP not set."

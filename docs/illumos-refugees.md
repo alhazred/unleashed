@@ -10,11 +10,10 @@ Repository
 ----------
 
 * Building with Sun Studio and lint is *not* supported
-* `nightly`
-  - `nightly` is not shipped, just use `tools/nightly.sh` directly
-    - many of the nightly options were removed
+* `nightly` does not exist; use `make build`. see README.md for details
   - support for multi-proto and multiple builds was removed
-* `bldenv` is not shipped, just use `tools/bldenv.sh` directly
+* `bldenv` is not shipped, and does not take an envfile argument. Use
+  `tools/bldenv.sh`.
 
 ### illumos-gate to unleashed directory mapping
 
