@@ -38,6 +38,7 @@ extern int warnok;
 extern int warnings;
 
 void yyerror(const char *);
+int yylex(void);
 void errf(const char *, ...);
 void warn(const char *, ...);
 

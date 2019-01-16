@@ -1,4 +1,5 @@
 BINDIR?=	/usr/bin
+COPTS+=		-Werror-implicit-function-declaration
 
 .ifdef DESTDIR
 LIBCRT0=	${DESTDIR}/usr/lib/amd64/crt1.o
