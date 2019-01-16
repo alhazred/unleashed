@@ -1932,7 +1932,7 @@ pathconfname(int code)
 
 #define	ALL_O_FLAGS \
 	(O_NDELAY|O_APPEND|O_SYNC|O_DSYNC|O_NONBLOCK|O_CREAT|O_TRUNC\
-	|O_EXCL|O_NOCTTY|O_LARGEFILE|O_RSYNC|O_XATTR|O_NOFOLLOW|O_NOLINKS\
+	|O_EXCL|O_NOCTTY|O_RSYNC|O_XATTR|O_NOFOLLOW|O_NOLINKS\
 	|O_CLOEXEC|O_DIRECTORY|FXATTRDIROPEN)
 
 const char *
@@ -1981,8 +1981,6 @@ openarg(private_t *pri, int arg)
 		(void) strlcat(str, "|O_EXCL", sizeof (pri->code_buf));
 	if (arg & O_NOCTTY)
 		(void) strlcat(str, "|O_NOCTTY", sizeof (pri->code_buf));
-	if (arg & O_LARGEFILE)
-		(void) strlcat(str, "|O_LARGEFILE", sizeof (pri->code_buf));
 	if (arg & O_RSYNC)
 		(void) strlcat(str, "|O_RSYNC", sizeof (pri->code_buf));
 	if (arg & O_XATTR)

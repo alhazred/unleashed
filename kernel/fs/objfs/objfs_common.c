@@ -39,7 +39,7 @@ int
 objfs_dir_open(vnode_t **cpp, int flag, cred_t *cr,
     caller_context_t *ct)
 {
-	if ((flag & (FOFFMAX | FWRITE)) != FOFFMAX)
+	if ((flag & FWRITE) != 0)
 		return (EINVAL);
 
 	return (0);

@@ -1533,7 +1533,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	if (compressed_seg == NULL || uncompressed_seg == NULL)
 		die(gettext("No memory"));
 
-	if ((uncompfd = open64(filename, O_RDWR|O_LARGEFILE, 0)) == -1)
+	if ((uncompfd = open64(filename, O_RDWR, 0)) == -1)
 		die(gettext("open: %s"), filename);
 
 	lock.l_type = F_WRLCK;

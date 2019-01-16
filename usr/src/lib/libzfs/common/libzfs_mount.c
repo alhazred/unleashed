@@ -211,7 +211,7 @@ dir_is_empty_readdir(const char *dirname)
 	int dirfd;
 
 	if ((dirfd = openat(AT_FDCWD, dirname,
-	    O_RDONLY | O_NDELAY | O_LARGEFILE | O_CLOEXEC, 0)) < 0) {
+	    O_RDONLY | O_NDELAY | O_CLOEXEC, 0)) < 0) {
 		return (B_TRUE);
 	}
 

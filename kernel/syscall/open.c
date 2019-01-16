@@ -290,23 +290,14 @@ out:
 int
 openat(int fd, char *path, int omode, int cmode)
 {
-	return (copen(fd, path, FFLAGS(omode) |
-#if defined(_LP64)
-	    FOFFMAX,
-#else
-	    0,
-#endif
-	    cmode));
+	return (copen(fd, path, FFLAGS(omode), cmode));
 }
 
 #if defined(_ILP32) || defined(_SYSCALL32_IMPL)
-/*
- * Open for large files in 32-bit environment. Sets the FOFFMAX flag.
- */
 int
 openat64(int fd, char *path, int omode, int cmode)
 {
-	return (copen(fd, path, FFLAGS(omode) | FOFFMAX, cmode));
+	return (copen(fd, path, FFLAGS(omode), cmode));
 }
 #endif	/* _ILP32 || _SYSCALL32_IMPL */
 

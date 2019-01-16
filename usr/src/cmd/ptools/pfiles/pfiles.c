@@ -410,7 +410,7 @@ dofcntl(struct ps_prochandle *Pr, prfdinfo_t *info, int mandatory, int isdoor)
 
 #define	ALL_O_FLAGS	O_ACCMODE | O_NDELAY | O_NONBLOCK | O_APPEND | \
 			O_SYNC | O_DSYNC | O_RSYNC | O_XATTR | \
-			O_CREAT | O_TRUNC | O_EXCL | O_NOCTTY | O_LARGEFILE
+			O_CREAT | O_TRUNC | O_EXCL | O_NOCTTY
 
 static void
 show_fileflags(int flags)
@@ -459,8 +459,6 @@ show_fileflags(int flags)
 		(void) strcat(str, "|O_EXCL");
 	if (flags & O_NOCTTY)
 		(void) strcat(str, "|O_NOCTTY");
-	if (flags & O_LARGEFILE)
-		(void) strcat(str, "|O_LARGEFILE");
 	if (flags & O_XATTR)
 		(void) strcat(str, "|O_XATTR");
 	if (flags & ~(ALL_O_FLAGS))

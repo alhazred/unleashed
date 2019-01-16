@@ -92,18 +92,7 @@ typedef struct fpollinfo {
 #define	FLP64	DATAMODEL_LP64
 #define	FNATIVE	DATAMODEL_NATIVE
 
-/*
- * Large Files: The macro gets the offset maximum (refer to LFS API doc)
- * corresponding to a file descriptor. We had the choice of storing
- * this value in file descriptor. Right now we only have two
- * offset maximums one if MAXOFF_T and other is MAXOFFSET_T. It is
- * inefficient to store these two values in a separate member in
- * file descriptor. To avoid wasting spaces we define this macro.
- * The day there are more than two offset maximum we may want to
- * rewrite this macro.
- */
-
-#define	OFFSET_MAX(fd)	((fd->f_flag & FOFFMAX) ? MAXOFFSET_T : MAXOFF32_T)
+#define	OFFSET_MAX(fd)	(MAXOFFSET_T)
 
 /*
  * Fake flag => internal ioctl call for layered drivers.

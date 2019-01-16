@@ -6602,24 +6602,6 @@ top:
 			if ((vattr.va_mask & VATTR_SIZE) &&
 			    vp->v_type == VREG) {
 				rp = VTOR4(vp);
-				/*
-				 * Check here for large file handled
-				 * by LF-unaware process (as
-				 * ufs_create() does)
-				 */
-				if (!(flags & FOFFMAX)) {
-					mutex_enter(&rp->r_statelock);
-					if (rp->r_size > MAXOFF32_T)
-						error = EOVERFLOW;
-					mutex_exit(&rp->r_statelock);
-				}
-
-				/* if error is set then we need to return */
-				if (error) {
-					nfs_rw_exit(&drp->r_rwlock);
-					VN_RELE(vp);
-					return (error);
-				}
 
 				if (must_trunc) {
 					vattr.va_mask = VATTR_SIZE;

@@ -1399,7 +1399,7 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 	 * complaint below.  Otherwise, it does exist, so we won't be
 	 * truncating it with the open.
 	 */
-	if ((fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC|O_EXCL|O_LARGEFILE,
+	if ((fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC|O_EXCL,
 	    perms)) < 0) {
 		if (errno == EEXIST) {
 			if (lstat64(filename, &pre_lstat) < 0) {
@@ -1411,7 +1411,6 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 			}
 
 			working_mode = mode & (O_WRONLY|O_RDWR|O_RDONLY);
-			working_mode |= O_LARGEFILE;
 			if ((fd = open(filename, working_mode)) < 0) {
 				if (errno == ENOENT) {
 					errtext = gettext(

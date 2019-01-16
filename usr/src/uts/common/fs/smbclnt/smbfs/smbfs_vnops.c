@@ -2513,7 +2513,7 @@ smbfslookup_cache(vnode_t *dvp, char *nm, int nmlen,
 /* ARGSUSED */
 static int
 smbfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
-	int mode, vnode_t **vpp, cred_t *cr, int lfaware, caller_context_t *ct,
+	int mode, vnode_t **vpp, cred_t *cr, int flags, caller_context_t *ct,
 	vsecattr_t *vsecp)
 {
 	int		error;
@@ -2612,21 +2612,6 @@ smbfs_create(vnode_t *dvp, char *nm, struct vattr *va, enum vcexcl exclusive,
 		 * Truncate (if requested).
 		 */
 		if ((vattr.va_mask & VATTR_SIZE) && vp->v_type == VREG) {
-			np = VTOSMB(vp);
-			/*
-			 * Check here for large file truncation by
-			 * LF-unaware process, like ufs_create().
-			 */
-			if (!(lfaware & FOFFMAX)) {
-				mutex_enter(&np->r_statelock);
-				if (np->r_size > MAXOFF32_T)
-					error = EOVERFLOW;
-				mutex_exit(&np->r_statelock);
-			}
-			if (error) {
-				VN_RELE(vp);
-				goto out;
-			}
 			vattr.va_mask = VATTR_SIZE;
 			error = smbfssetattr(vp, &vattr, 0, cr);
 			if (error) {

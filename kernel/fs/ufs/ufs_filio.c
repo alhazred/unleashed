@@ -157,10 +157,8 @@ ufs_fioio(
 
 	/*
 	 *	Adapted from copen: get a file struct
-	 *	Large Files: We open this file descriptor with FOFFMAX flag
-	 *	set so that it will be like a large file open.
 	 */
-	if (falloc(NULL, (FREAD|FOFFMAX), &fpio, STRUCT_FADDR(fio, fio_fd)))
+	if (falloc(NULL, FREAD, &fpio, STRUCT_FADDR(fio, fio_fd)))
 		goto errout;
 
 	/*

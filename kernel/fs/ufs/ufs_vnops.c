@@ -3058,22 +3058,6 @@ again:
 				ip->i_seq++;
 				TRANS_INODE(ufsvfsp, ip);
 			} else {
-				/*
-				 * Large Files: Why this check here?
-				 * Though we do it in vn_create() we really
-				 * want to guarantee that we do not destroy
-				 * Large file data by atomically checking
-				 * the size while holding the contents
-				 * lock.
-				 */
-				if (flag && !(flag & FOFFMAX) &&
-				    ((ip->i_mode & IFMT) == IFREG) &&
-				    (ip->i_size > (offset_t)MAXOFF32_T)) {
-					rw_exit(&ip->i_contents);
-					rw_exit(&ufsvfsp->vfs_dqrwlock);
-					error = EOVERFLOW;
-					goto unlock;
-				}
 				if (TRANS_ISTRANS(ufsvfsp))
 					truncflag++;
 				else {

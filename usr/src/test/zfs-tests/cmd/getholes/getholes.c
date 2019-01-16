@@ -146,7 +146,7 @@ main(int argc, char *argv[])
 	if ((fname = argv[0]) == NULL)
 		usage("No filename provided.", 1);
 
-	if ((fd = open(fname, O_LARGEFILE | O_RDONLY)) < 0) {
+	if ((fd = open(fname, O_RDONLY)) < 0) {
 		perror("open failed");
 		exit(1);
 	}

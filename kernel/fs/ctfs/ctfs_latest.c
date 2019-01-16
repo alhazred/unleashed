@@ -125,7 +125,7 @@ ctfs_latest_open(vnode_t **vpp, int flag, cred_t *cr, caller_context_t *ct)
 {
 	vnode_t *nvp;
 
-	if (flag != (FREAD | FOFFMAX))
+	if (flag != (FREAD))
 		return (EINVAL);
 
 	if (nvp = ctfs_latest_nested_open(*vpp, cr)) {

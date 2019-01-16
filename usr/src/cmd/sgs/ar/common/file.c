@@ -1184,7 +1184,7 @@ writefile(Cmd_info *cmd_info)
 	 * into place.
 	 */
 	ar_outfile.path = new_archive ? name : make_tmpname(name);
-	ar_outfile.fd = open(ar_outfile.path, O_RDWR|O_CREAT|O_LARGEFILE, 0666);
+	ar_outfile.fd = open(ar_outfile.path, O_RDWR|O_CREAT, 0666);
 	if (ar_outfile.fd == -1) {
 		int err = errno;
 		(void) fprintf(stderr, MSG_INTL(MSG_SYS_OPEN),
