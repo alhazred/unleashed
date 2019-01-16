@@ -20,7 +20,7 @@ $ cd unleashed
 Build
 -----
 
-For a complete build, use 'tools/nightly.sh'. The user executing the build
+For a complete build, use `tools/nightly.sh`. The user executing the build
 needs to be able to write to `/usr/obj`, so make sure you can do that first.
 
 ```
@@ -43,12 +43,12 @@ $ make
 ```
 
 The component will be built against the running system and installed to /. To
-install to the proto area, pass DESTDIR=path to 'make install'. Building
+install to the proto area, pass `DESTDIR=path` to `make install`. Building
 against libraries and headers in the "proto area" or in object directories is
 not currently supported.
 
 To build a component under the legacy (dmake) build system, ie. things under
-'usr/src', first complete a full nightly build so that prerequisite objects for
+`usr/src`, first complete a full nightly build so that prerequisite objects for
 the component are made, and then:
 
 ```
@@ -57,4 +57,5 @@ $ cd usr/src/cmd/w
 $ dmake install
 ```
 
-The component will be built against the "proto area" and installed there.
+The component will be built against the "proto area" in `proto/root_i386` and
+installed there.
