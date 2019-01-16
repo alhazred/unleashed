@@ -1,4 +1,5 @@
 PROG=	ctfdiff
+COPTS=	-Wall
 
 LDADD=	-lctf
 
