@@ -37,7 +37,7 @@ function fatal_error
 
 function usage
 {
-    print -u2 "usage: ${progname} [-cfd]"
+    print -u2 "usage: ${progname} [-cfd] [command [args]]"
     exit 2
 }
 
@@ -47,6 +47,7 @@ flags_f=false
 flags_d=false
 
 progname="$(basename -- "${0}")"
+dir="$(dirname $0)"
 
 OPTIND=1
 
@@ -106,19 +107,14 @@ unset \
 # Setup environment variables
 #
 
-set -- $(dirname $0)/env.sh
-if [[ -f "$1" ]]; then
-	if [[ "$1" == */* ]]; then
-		. "$1"
-	else
-		. "./$1"
-	fi
+env=${dir}/env.sh
+if [[ -f "$env" ]]; then
+	. "$env"
 else
 	printf \
-	    'Cannot find env file "%s"\n' "$1"
+	    'Cannot find env file "%s"\n' "$env"
 	exit 1
 fi
-shift
 
 # Check if we have sufficient data to continue...
 [[ -n "${SRCTOP}" ]] || fatal_error "Error: Variable SRCTOP not set."
@@ -133,20 +129,6 @@ fi
 BUILD_DATE=$(LC_ALL=C date +%Y-%b-%d)
 BASEWSDIR=$(basename -- "${SRCTOP}")
 export RELEASE_DATE POUND_SIGN
-
-print 'Build type   is  \c'
-if ${flags_d} ; then
-	print 'DEBUG'
-	unset RELEASE_BUILD
-	unset EXTRA_OPTIONS
-	unset EXTRA_CFLAGS
-else
-	# default is a non-DEBUG build
-	print 'non-DEBUG'
-	export RELEASE_BUILD=
-	unset EXTRA_OPTIONS
-	unset EXTRA_CFLAGS
-fi
 
 # update build-type variables
 PKGARCHIVE="${PKGARCHIVE}"
@@ -214,6 +196,29 @@ export \
 	ENVCPPFLAGS4 \
         MAKEFLAGS
 
+#
+# place ourselves in a new task, respecting BUILD_PROJECT if set.
+#
+/usr/bin/newtask -c $$ ${BUILD_PROJECT:+-p$BUILD_PROJECT}
+
+if [ -n "$*" ]; then
+	exec "$@"
+fi
+
+print 'Build type   is  \c'
+if ${flags_d} ; then
+	print 'DEBUG'
+	unset RELEASE_BUILD
+	unset EXTRA_OPTIONS
+	unset EXTRA_CFLAGS
+else
+	# default is a non-DEBUG build
+	print 'non-DEBUG'
+	export RELEASE_BUILD=
+	unset EXTRA_OPTIONS
+	unset EXTRA_CFLAGS
+fi
+
 printf 'RELEASE      is %s\n'   "$RELEASE"
 printf 'VERSION      is %s\n'   "$VERSION"
 printf 'RELEASE_DATE is %s\n\n' "$RELEASE_DATE"
@@ -221,11 +226,6 @@ printf 'RELEASE_DATE is %s\n\n' "$RELEASE_DATE"
 print "Use 'bmake gen-config' target to generate config makefiles/headers."
 print "Use 'dmake setup' target to build legacy headers and tools."
 print ""
-
-#
-# place ourselves in a new task, respecting BUILD_PROJECT if set.
-#
-/usr/bin/newtask -c $$ ${BUILD_PROJECT:+-p$BUILD_PROJECT}
 
 SHELL=/bin/sh
 
