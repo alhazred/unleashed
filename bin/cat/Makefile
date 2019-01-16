@@ -1,5 +1,4 @@
 PROG=	cat
-
-CPPFLAGS += -DEUC -D_FILE_OFFSET_BITS=64
+COPTS=	-Wall
 
 .include <prog.mk>
