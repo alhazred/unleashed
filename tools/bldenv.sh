@@ -37,32 +37,12 @@ function fatal_error
 
 function usage
 {
-    print -u2 "usage: ${progname} [-cfd] [command [args]]"
+    print -u2 "usage: ${progname} [command [args]]"
     exit 2
 }
 
-# boolean flags (true/false)
-flags_c=false
-flags_f=false
-flags_d=false
-
 progname="$(basename -- "${0}")"
 dir="$(dirname $0)"
-
-OPTIND=1
-
-while getopts cfd OPT ; do 
-    case ${OPT} in
-	  c)	flags_c=true  ;;
-	  +c)	flags_c=false ;;
-	  f)	flags_f=true  ;;
-	  +f)	flags_f=false ;;
-	  d)	flags_d=true  ;;
-	  +d)	flags_d=false ;;
-	  \?)	usage ;;
-    esac
-done
-shift $((OPTIND-1))
 
 # force locale to C
 export \
@@ -196,57 +176,12 @@ export \
 	ENVCPPFLAGS4 \
         MAKEFLAGS
 
-#
-# place ourselves in a new task, respecting BUILD_PROJECT if set.
-#
-/usr/bin/newtask -c $$ ${BUILD_PROJECT:+-p$BUILD_PROJECT}
+export RELEASE_BUILD=
+unset EXTRA_OPTIONS
+unset EXTRA_CFLAGS
 
 if [ -n "$*" ]; then
 	exec "$@"
 fi
 
-print 'Build type   is  \c'
-if ${flags_d} ; then
-	print 'DEBUG'
-	unset RELEASE_BUILD
-	unset EXTRA_OPTIONS
-	unset EXTRA_CFLAGS
-else
-	# default is a non-DEBUG build
-	print 'non-DEBUG'
-	export RELEASE_BUILD=
-	unset EXTRA_OPTIONS
-	unset EXTRA_CFLAGS
-fi
-
-printf 'RELEASE      is %s\n'   "$RELEASE"
-printf 'VERSION      is %s\n'   "$VERSION"
-printf 'RELEASE_DATE is %s\n\n' "$RELEASE_DATE"
-
-print "Use 'bmake gen-config' target to generate config makefiles/headers."
-print "Use 'dmake setup' target to build legacy headers and tools."
-print ""
-
-SHELL=/bin/sh
-
-if [[ "${flags_c}" == "false" && -x "$SHELL" && \
-    "$(basename -- "${SHELL}")" != "csh" ]]; then
-	# $SHELL is set, and it's not csh.
-
-	if "${flags_f}" ; then
-		print 'WARNING: -f is ignored when $SHELL is not csh'
-	fi
-
-	printf 'Using %s as shell.\n' "$SHELL"
-	exec "$SHELL" ${@:+-c "$@"}
-
-elif "${flags_f}" ; then
-	print 'Using csh -f as shell.'
-	exec csh -f ${@:+-c "$@"}
-
-else
-	print 'Using csh as shell.'
-	exec csh ${@:+-c "$@"}
-fi
-
-# not reached
+ENV=${dir}/ksh.env exec /bin/ksh
