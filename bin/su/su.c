@@ -31,52 +31,42 @@
 
 /*
  *	su [-] [name [arg ...]] change userid, `-' changes environment.
- *	If SULOG is defined, all attempts to su to another user are
- *	logged there.
  *	If CONSOLE is defined, all successful attempts to su to uid 0
  *	are also logged there.
- *
- *	If su cannot create, open, or write entries into SULOG,
- *	(or on the CONSOLE, if defined), the entry will not
- *	be logged -- thus losing a record of the su's attempted
- *	during this period.
  */
 
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/param.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <crypt.h>
-#include <pwd.h>
-#include <shadow.h>
-#include <time.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <string.h>
-#include <locale.h>
-#include <syslog.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <sys/utsname.h>
 #include <sys/wait.h>
-#include <grp.h>
+#include <crypt.h>
 #include <deflt.h>
-#include <limits.h>
+#include <err.h>
 #include <errno.h>
-#include <stdarg.h>
-#include <user_attr.h>
+#include <fcntl.h>
+#include <grp.h>
+#include <limits.h>
+#include <locale.h>
 #include <priv.h>
+#include <pwd.h>
+#include <shadow.h>
+#include <signal.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <syslog.h>
+#include <time.h>
+#include <unistd.h>
+#include <user_attr.h>
 
 #include <security/pam_appl.h>
 
-#define	PATH	"/usr/bin:"		/* path for users other than root */
-#define	SUPATH	"/usr/sbin:/usr/bin"	/* path for root */
+#define	PATH	"/usr/bin:/usr/sbin:/sbin:/usr/gnu/bin"		/* path for users other than root */
+#define	SUPATH	"/usr/sbin:/sbin:/usr/bin"			/* path for root */
 #define	ELIM 128
-#define	ROOT 0
-#ifdef	DYNAMIC_SU
-#define	EMBEDDED_NAME	"embedded_su"
 #define	DEF_ATTEMPTS	3		/* attempts to change password */
-#endif	/* DYNAMIC_SU */
 
 #define	PW_FALSE	1		/* no password change */
 #define	PW_TRUE		2		/* successful password change */
@@ -85,30 +75,23 @@
 /*
  * Intervals to sleep after failed su
  */
-#ifndef SLEEPTIME
 #define	SLEEPTIME	4
-#endif
 
 #define	DEFAULT_LOGIN "/etc/default/login"
 #define	DEFFILE "/etc/default/su"
 
 
-char	*Sulog, *Console;
-char	*Path, *Supath;
+char *Path = PATH;
+char *Supath = SUPATH;
 
 /*
- * Locale variables to be propagated to "su -" environment
+ * Variables to be propagated to "su -" environment
  */
-static char *initvar;
-static char *initenv[] = {
-	"TZ", "LANG", "LC_CTYPE",
+static char *inherit[] = {
+	"TZ", "TERM", "LANG", "LC_CTYPE",
 	"LC_NUMERIC", "LC_TIME", "LC_COLLATE",
-	"LC_MONETARY", "LC_MESSAGES", "LC_ALL", 0};
-static char mail[30] = { "MAIL=/var/mail/" };
-
-static void envalt(void);
-static void log(char *, char *, int);
-static void to(int);
+	"LC_MONETARY", "LC_MESSAGES", "LC_ALL", NULL };
+static char *newenv[sizeof(inherit)/sizeof(inherit[0])];
 
 enum messagemode { USAGE, ERR, WARN };
 static void message(enum messagemode, char *, ...);
@@ -116,18 +99,11 @@ static void message(enum messagemode, char *, ...);
 static char *alloc_vsprintf(const char *, va_list);
 static char *tail(char *);
 
-#ifdef DYNAMIC_SU
 static void validate(char *, int *);
 static int legalenvvar(char *);
 static int su_conv(int, struct pam_message **, struct pam_response **, void *);
-static int emb_su_conv(int, struct pam_message **, struct pam_response **,
-    void *);
 static void freeresponse(int, struct pam_response **response);
 static struct pam_conv pam_conv = {su_conv, NULL};
-static struct pam_conv emb_pam_conv = {emb_su_conv, NULL};
-static void quotemsg(char *, ...);
-static void readinitblock(void);
-#endif	/* DYNAMIC_SU */
 
 static pam_handle_t	*pamh = NULL;	/* Authentication handle */
 struct	passwd pwd;
@@ -135,35 +111,18 @@ char	pwdbuf[1024];			/* buffer for getpwnam_r() */
 char	shell[] = "/bin/sh";		/* default shell */
 char	safe_shell[] = "/bin/sh";	/* "fallback" shell */
 char	su[PATH_MAX] = "su";		/* arg0 for exec of shprog */
-char	homedir[PATH_MAX] = "HOME=";
 char	logname[20] = "LOGNAME=";
-char	termtyp[PATH_MAX] = "TERM=";
 char	*term;
-char	shelltyp[PATH_MAX] = "SHELL=";
-char	*hz;
-char	tznam[PATH_MAX];
-char	hzname[10] = "HZ=";
-char	path[PATH_MAX] = "PATH=";
-char	supath[PATH_MAX] = "PATH=";
-char	*envinit[ELIM];
+char	*tzdef = NULL;
 extern	char **environ;
 char *ttyn;
 char *username;					/* the invoker */
-static	int	dosyslog = 0;			/* use syslog? */
 char	*myname;
-#ifdef	DYNAMIC_SU
 int pam_flags = 0;
-boolean_t embedded = B_FALSE;
-#endif	/* DYNAMIC_SU */
 
 int
 main(int argc, char **argv)
 {
-#ifndef DYNAMIC_SU
-	struct spwd sp;
-	char  spbuf[1024];		/* buffer for getspnam_r() */
-	char *password;
-#endif	/* !DYNAMIC_SU */
 	char *nptr;
 	char *pshell;
 	int eflag = 0;
@@ -173,13 +132,11 @@ main(int argc, char **argv)
 	char *dir, *shprog, *name;
 	char *ptr;
 	char *prog = argv[0];
-#ifdef DYNAMIC_SU
 	int sleeptime = SLEEPTIME;
 	char **pam_env = 0;
 	int flags = 0;
 	int retcode;
 	int idx = 0;
-#endif	/* DYNAMIC_SU */
 	int pw_change = PW_FALSE;
 	struct passwd *result;
 
@@ -190,15 +147,6 @@ main(int argc, char **argv)
 	(void) textdomain(TEXT_DOMAIN);
 
 	myname = tail(argv[0]);
-
-#ifdef	DYNAMIC_SU
-	if (strcmp(myname, EMBEDDED_NAME) == 0) {
-		embedded = B_TRUE;
-		setbuf(stdin, NULL);
-		setbuf(stdout, NULL);
-		readinitblock();
-	}
-#endif	/* DYNAMIC_SU */
 
 	if (argc > 1 && *argv[1] == '-') {
 		/* Explicitly check for just `-' (no trailing chars) */
@@ -233,24 +181,31 @@ main(int argc, char **argv)
 	} else
 		nptr = "root";		/* use default "root" username */
 
-	if (defopen(DEFFILE) == 0) {
+	openlog("su", LOG_CONS, LOG_AUTH);
 
-		if (Sulog = defread("SULOG="))
-			Sulog = strdup(Sulog);
-		if (Console = defread("CONSOLE="))
-			Console = strdup(Console);
-		if (Path = defread("PATH="))
+	if (defopen(DEFAULT_LOGIN) == 0) {
+		if ((ptr = defread("SLEEPTIME=")) != NULL) {
+			const char *errstr;
+			sleeptime = strtonum(ptr, 0, 60, &errstr);
+			if (sleeptime == 0 && errstr != NULL) {
+				syslog(LOG_ERR, "SLEEPTIME '%s' is %s; "
+				    "ignored.", ptr, errstr);
+				sleeptime = SLEEPTIME;
+			}
+		}
+
+		if ((ptr = defread("PASSREQ=")) != NULL &&
+		    strcasecmp("YES", ptr) == 0)
+			pam_flags |= PAM_DISALLOW_NULL_AUTHTOK;
+		if ((Path = defread("PATH=")) != NULL)
 			Path = strdup(Path);
-		if (Supath = defread("SUPATH="))
+		if ((Supath = defread("SUPATH=")) != NULL)
 			Supath = strdup(Supath);
-		if ((ptr = defread("SYSLOG=")) != NULL)
-			dosyslog = strcmp(ptr, "YES") == 0;
+		if ((tzdef = defread("TIMEZONE=")) != NULL)
+			tzdef = strdup(tzdef);
 
 		(void) defopen(NULL);
 	}
-	(void) strlcat(path, (Path) ? Path : PATH, sizeof (path));
-	(void) strlcat(supath, (Supath) ? Supath : SUPATH, sizeof (supath));
-
 	if ((ttyn = ttyname(0)) == NULL)
 		if ((ttyn = ttyname(1)) == NULL)
 			if ((ttyn = ttyname(2)) == NULL)
@@ -258,19 +213,7 @@ main(int argc, char **argv)
 	if ((username = cuserid(NULL)) == NULL)
 		username = "(null)";
 
-	/*
-	 * if Sulog defined, create SULOG, if it does not exist, with
-	 * mode read/write user. Change owner and group to root
-	 */
-	if (Sulog != NULL) {
-		(void) close(open(Sulog, O_WRONLY | O_APPEND | O_CREAT,
-		    (S_IRUSR|S_IWUSR)));
-		(void) chown(Sulog, (uid_t)ROOT, (gid_t)ROOT);
-	}
-
-#ifdef DYNAMIC_SU
-	if (pam_start(embedded ? EMBEDDED_NAME : "su", nptr,
-	    embedded ? &emb_pam_conv : &pam_conv, &pamh) != PAM_SUCCESS)
+	if (pam_start("su", nptr, &pam_conv, &pamh) != PAM_SUCCESS)
 		exit(1);
 	if (pam_set_item(pamh, PAM_TTY, ttyn) != PAM_SUCCESS)
 		exit(1);
@@ -278,31 +221,7 @@ main(int argc, char **argv)
 	if (!result ||
 	    pam_set_item(pamh, PAM_AUSER, pwd.pw_name) != PAM_SUCCESS)
 		exit(1);
-#endif	/* DYNAMIC_SU */
 
-	openlog("su", LOG_CONS, LOG_AUTH);
-
-#ifdef DYNAMIC_SU
-
-	/*
-	 * Use the same value of sleeptime and password required that
-	 * login(1) uses.
-	 * This is obtained by reading the file /etc/default/login
-	 * using the def*() functions
-	 */
-	if (defopen(DEFAULT_LOGIN) == 0) {
-		if ((ptr = defread("SLEEPTIME=")) != NULL) {
-			sleeptime = atoi(ptr);
-			if (sleeptime < 0 || sleeptime > 5)
-				sleeptime = SLEEPTIME;
-		}
-
-		if ((ptr = defread("PASSREQ=")) != NULL &&
-		    strcasecmp("YES", ptr) == 0)
-			pam_flags |= PAM_DISALLOW_NULL_AUTHTOK;
-
-		(void) defopen(NULL);
-	}
 	/*
 	 * Ignore SIGQUIT and SIGINT
 	 */
@@ -313,7 +232,7 @@ main(int argc, char **argv)
 	getpwnam_r(nptr, &pwd, pwdbuf, sizeof (pwdbuf), &result);
 	if (!result)
 		retcode = PAM_USER_UNKNOWN;
-	else if ((flags = (getuid() != (uid_t)ROOT)) != 0) {
+	else if ((flags = (getuid() != 0)) != 0) {
 		retcode = pam_authenticate(pamh, pam_flags);
 	} else /* root user does not need to authenticate */
 		retcode = PAM_SUCCESS;
@@ -332,11 +251,8 @@ main(int argc, char **argv)
 			break;
 
 		case PAM_AUTH_ERR:
-			if (Sulog != NULL)
-				log(Sulog, nptr, 0);	/* log entry */
-			if (dosyslog)
-				syslog(LOG_CRIT, "'su %s' failed for %s on %s",
-				    pwd.pw_name, username, ttyn);
+			syslog(LOG_CRIT, "'su %s' failed for %s on %s",
+			    pwd.pw_name, username, ttyn);
 			closelog();
 			(void) sleep(sleeptime);
 			message(ERR, gettext("Sorry"));
@@ -344,9 +260,8 @@ main(int argc, char **argv)
 
 		case PAM_CONV_ERR:
 		default:
-			if (dosyslog)
-				syslog(LOG_CRIT, "'su %s' failed for %s on %s",
-				    pwd.pw_name, username, ttyn);
+			syslog(LOG_CRIT, "'su %s' failed for %s on %s",
+			    pwd.pw_name, username, ttyn);
 			closelog();
 			(void) sleep(sleeptime);
 			message(ERR, gettext("Sorry"));
@@ -363,59 +278,17 @@ main(int argc, char **argv)
 		message(ERR, gettext("unable to set credentials"));
 		exit(2);
 	}
-	if (dosyslog)
-		syslog(pwd.pw_uid == 0 ? LOG_NOTICE : LOG_INFO,
-		    "'su %s' succeeded for %s on %s",
-		    pwd.pw_name, username, ttyn);
+	syslog(pwd.pw_uid == 0 ? LOG_NOTICE : LOG_INFO,
+	    "'su %s' succeeded for %s on %s", pwd.pw_name, username, ttyn);
 	closelog();
 	(void) signal(SIGQUIT, SIG_DFL);
 	(void) signal(SIGINT, SIG_DFL);
-#else	/* !DYNAMIC_SU */
-	getpwnam_r(nptr, &pwd, pwdbuf, sizeof (pwdbuf), &result);
-	if (!result ||
-	    (getspnam_r(nptr, &sp, spbuf, sizeof (spbuf)) == NULL)) {
-		message(ERR, gettext("Unknown id: %s"), nptr);
-		closelog();
-		exit(1);
-	}
-
-	/*
-	 * Prompt for password if invoking user is not root or
-	 * if specified(new) user requires a password
-	 */
-	if (sp.sp_pwdp[0] == '\0' || getuid() == (uid_t)ROOT)
-		goto ok;
-	password = getpass(gettext("Password:"));
-
-	if ((strcmp(sp.sp_pwdp, crypt(password, sp.sp_pwdp)) != 0)) {
-		/* clear password file entry */
-		(void) memset(spbuf, 0, sizeof (spbuf));
-		if (Sulog != NULL)
-			log(Sulog, nptr, 0);    /* log entry */
-		message(ERR, gettext("Sorry"));
-		if (dosyslog)
-			syslog(LOG_CRIT, "'su %s' failed for %s on %s",
-			    pwd.pw_name, username, ttyn);
-		closelog();
-		exit(2);
-	}
-	/* clear password file entry */
-	(void) memset(spbuf, 0, sizeof (spbuf));
-ok:
-	if (dosyslog)
-		syslog(pwd.pw_uid == 0 ? LOG_NOTICE : LOG_INFO,
-		    "'su %s' succeeded for %s on %s",
-		    pwd.pw_name, username, ttyn);
-#endif	/* DYNAMIC_SU */
 
 	uid = pwd.pw_uid;
 	gid = pwd.pw_gid;
 	dir = strdup(pwd.pw_dir);
 	shprog = strdup(pwd.pw_shell);
 	name = strdup(pwd.pw_name);
-
-	if (Sulog != NULL)
-		log(Sulog, nptr, 1);	/* log entry */
 
 	/* set user and group ids to specified user */
 
@@ -467,96 +340,54 @@ ok:
 	 */
 	if (eflag) {
 		int j;
-		char *var;
-
-		if (strlen(dir) == 0) {
-			(void) strcpy(dir, "/");
-			message(WARN, gettext("No directory! Using home=/"));
-		}
-		(void) strlcat(homedir, dir, sizeof (homedir));
-		(void) strlcat(logname, name, sizeof (logname));
-		if (hz = getenv("HZ"))
-			(void) strlcat(hzname, hz, sizeof (hzname));
-
-		(void) strlcat(shelltyp, pshell, sizeof (shelltyp));
-
-		if (chdir(dir) < 0) {
-			message(ERR, gettext("No directory!"));
-			exit(1);
-		}
-		envinit[envidx = 0] = homedir;
-		envinit[++envidx] = ((uid == (uid_t)ROOT) ? supath : path);
-		envinit[++envidx] = logname;
-		envinit[++envidx] = hzname;
-		if ((term = getenv("TERM")) != NULL) {
-			(void) strlcat(termtyp, term, sizeof (termtyp));
-			envinit[++envidx] = termtyp;
-		}
-		envinit[++envidx] = shelltyp;
-
-		(void) strlcat(mail, name, sizeof (mail));
-		envinit[++envidx] = mail;
 
 		/*
 		 * Fetch the relevant locale/TZ environment variables from
 		 * the inherited environment.
-		 *
-		 * We have a priority here for setting TZ. If TZ is set in
-		 * in the inherited environment, that value remains top
-		 * priority. If the file /etc/default/login has TIMEZONE set,
-		 * that has second highest priority.
 		 */
-		tznam[0] = '\0';
-		for (j = 0; initenv[j] != 0; j++) {
-			if (initvar = getenv(initenv[j])) {
-
+		for (j = 0; inherit[j] != NULL; j++) {
+			char *value;
+			if ((value = getenv(inherit[j])) != NULL) {
 				/*
 				 * Skip over values beginning with '/' for
 				 * security.
 				 */
-				if (initvar[0] == '/')  continue;
+				if (value[0] == '/')  continue;
 
-				if (strcmp(initenv[j], "TZ") == 0) {
-					(void) strcpy(tznam, "TZ=");
-					(void) strlcat(tznam, initvar,
-					    sizeof (tznam));
-
-				} else {
-					var = (char *)
-					    malloc(strlen(initenv[j])
-					    + strlen(initvar)
-					    + 2);
-					if (var == NULL) {
-						perror("malloc");
-						exit(4);
-					}
-					(void) strcpy(var, initenv[j]);
-					(void) strcat(var, "=");
-					(void) strcat(var, initvar);
-					envinit[++envidx] = var;
-				}
+				if ((newenv[j] = strdup(value)) == NULL)
+					err(4, "strdup");
 			}
 		}
 
-		/*
-		 * Check if TZ was found. If not then try to read it from
-		 * /etc/default/login.
-		 */
-		if (tznam[0] == '\0') {
-			if (defopen(DEFAULT_LOGIN) == 0) {
-				if (initvar = defread("TIMEZONE=")) {
-					(void) strcpy(tznam, "TZ=");
-					(void) strlcat(tznam, initvar,
-					    sizeof (tznam));
-				}
-				(void) defopen(NULL);
+		if (clearenv() != 0)
+			err(1, "clearenv");
+		if (tzdef && setenv("TZ", tzdef, 1) != 0)
+			err(1, "setenv");
+		/* if TZ is in newenv, it will override tznam */
+		for (j = 0; inherit[j] != NULL; j++) {
+			if(newenv[j]) {
+				if (setenv(inherit[j], newenv[j], 1) != 0)
+					err(1, "setenv");
+				free(newenv[j]);
 			}
 		}
 
-		if (tznam[0] != '\0')
-			envinit[++envidx] = tznam;
+		if (strlen(dir) == 0) {
+			(void) strcpy(dir, "/");
+			message(WARN, gettext("No directory! Using HOME=/"));
+		}
+		if (chdir(dir) < 0)
+			errx(1, "No directory!");
 
-#ifdef DYNAMIC_SU
+		if (setenv("HOME", dir, 1) != 0)
+			err(1, "setenv");
+		if (setenv("LOGNAME", name, 1) != 0)
+			err(1, "setenv");
+		if (setenv("SHELL", pshell, 1) != 0)
+			err(1, "setenv");
+		if (setenv("PATH", (uid == 0 ? Supath : Path), 1) != 0)
+			err(1, "setenv");
+
 		/*
 		 * set the PAM environment variables -
 		 * check for legal environment variables
@@ -565,14 +396,12 @@ ok:
 			while (pam_env[idx] != 0) {
 				if (envidx + 2 < ELIM &&
 				    legalenvvar(pam_env[idx])) {
-					envinit[++envidx] = pam_env[idx];
+					if (putenv(pam_env[idx]) != 0)
+						err(1, "putenv");
 				}
 				idx++;
 			}
 		}
-#endif	/* DYNAMIC_SU */
-		envinit[++envidx] = NULL;
-		environ = envinit;
 	} else {
 		char **pp = environ, **qq, *p;
 
@@ -587,26 +416,16 @@ ok:
 		}
 	}
 
-#ifdef DYNAMIC_SU
 	if (pamh)
 		(void) pam_end(pamh, PAM_SUCCESS);
-#endif	/* DYNAMIC_SU */
 
 	/*
 	 * if new user is root:
-	 *	if CONSOLE defined, log entry there;
 	 *	if eflag not set, change environment to that of root.
 	 */
-	if (uid == (uid_t)ROOT) {
-		if (Console != NULL)
-			if (strcmp(ttyn, Console) != 0) {
-				(void) signal(SIGALRM, to);
-				(void) alarm(30);
-				log(Console, nptr, 1);
-				(void) alarm(0);
-			}
-		if (!eflag)
-			envalt();
+	if (uid == 0 && !eflag) {
+		if (setenv("PATH", Supath, 1) != 0)
+			err(1, "setenv");
 	}
 
 	/*
@@ -617,17 +436,6 @@ ok:
 	 */
 	(void) signal(SIGXCPU, SIG_DFL);
 	(void) signal(SIGXFSZ, SIG_DFL);
-
-#ifdef	DYNAMIC_SU
-	if (embedded) {
-		(void) puts("SUCCESS");
-		/*
-		 * After this point, we're no longer talking the
-		 * embedded_su protocol, so turn it off.
-		 */
-		embedded = B_FALSE;
-	}
-#endif	/* DYNAMIC_SU */
 
 	/*
 	 * if additional arguments, exec shell program with array
@@ -646,7 +454,7 @@ ok:
 		argv[1] = su;
 		(void) execv(pshell, &argv[1]);
 	} else
-		(void) execl(pshell, su, 0);
+		(void) execl(pshell, su, NULL);
 
 
 	/*
@@ -654,7 +462,7 @@ ok:
 	 * configuring root's shell; if root's shell is other than /bin/sh,
 	 * try exec'ing /bin/sh instead.
 	 */
-	if ((uid == (uid_t)ROOT) && (strcmp(name, "root") == 0) &&
+	if ((uid == 0) && (strcmp(name, "root") == 0) &&
 	    (strcmp(safe_shell, pshell) != 0)) {
 		message(WARN,
 		    gettext("No shell %s.  Trying fallback shell %s."),
@@ -662,8 +470,7 @@ ok:
 
 		if (eflag) {
 			(void) strcpy(su, "-sh");
-			(void) strlcpy(shelltyp + strlen("SHELL="),
-			    safe_shell, sizeof (shelltyp) - strlen("SHELL="));
+			(void) setenv("SHELL", safe_shell, 1);
 		} else {
 			(void) strcpy(su, "sh");
 		}
@@ -672,7 +479,7 @@ ok:
 			argv[1] = su;
 			(void) execv(safe_shell, &argv[1]);
 		} else {
-			(void) execl(safe_shell, su, 0);
+			(void) execl(safe_shell, su, NULL);
 		}
 		message(ERR, gettext("Couldn't exec fallback shell %s: %s"),
 		    safe_shell, strerror(errno));
@@ -682,70 +489,6 @@ ok:
 	return (3);
 }
 
-/*
- * Environment altering routine -
- *	This routine is called when a user is su'ing to root
- *	without specifying the - flag.
- *	The user's PATH and PS1 variables are reset
- *	to the correct value for root.
- *	All of the user's other environment variables retain
- *	their current values after the su (if they are exported).
- */
-static void
-envalt(void)
-{
-	/*
-	 * If user has PATH variable in their environment, change its value
-	 *		to /bin:/etc:/usr/bin ;
-	 * if user does not have PATH variable, add it to the user's
-	 *		environment;
-	 * if either of the above fail, an error message is printed.
-	 */
-	if (putenv(supath) != 0) {
-		message(ERR,
-		    gettext("unable to obtain memory to expand environment"));
-		exit(4);
-	}
-}
-
-/*
- * Logging routine -
- *	where = SULOG or CONSOLE
- *	towho = specified user ( user being su'ed to )
- *	how = 0 if su attempt failed; 1 if su attempt succeeded
- */
-static void
-log(char *where, char *towho, int how)
-{
-	FILE *logf;
-	time_t now;
-	struct tm *tmp;
-
-	/*
-	 * open SULOG or CONSOLE - if open fails, return
-	 */
-	if ((logf = fopen(where, "a")) == NULL)
-		return;
-
-	now = time(0);
-	tmp = localtime(&now);
-
-	/*
-	 * write entry into SULOG or onto CONSOLE - if write fails, return
-	 */
-	(void) fprintf(logf, "SU %.2d/%.2d %.2d:%.2d %c %s %s-%s\n",
-	    tmp->tm_mon + 1, tmp->tm_mday, tmp->tm_hour, tmp->tm_min,
-	    how ? '+' : '-', ttyn + sizeof ("/dev/") - 1, username, towho);
-
-	(void) fclose(logf);	/* close SULOG or CONSOLE */
-}
-
-/*ARGSUSED*/
-static void
-to(int sig)
-{}
-
-#ifdef DYNAMIC_SU
 /*
  * su_conv():
  *	This is the conv (conversation) function called from
@@ -832,104 +575,6 @@ su_conv(int num_msg, struct pam_message **msg, struct pam_response **response,
 	return (PAM_SUCCESS);
 }
 
-/*
- * emb_su_conv():
- *	This is the conv (conversation) function called from
- *	a PAM authentication module to print error messages
- *	or garner information from the user.
- *	This version is used for embedded_su.
- */
-/*ARGSUSED*/
-static int
-emb_su_conv(int num_msg, struct pam_message **msg,
-    struct pam_response **response, void *appdata_ptr)
-{
-	struct pam_message	*m;
-	struct pam_response	*r;
-	char			*temp;
-	int			k;
-	char			respbuf[PAM_MAX_RESP_SIZE];
-
-	if (num_msg <= 0)
-		return (PAM_CONV_ERR);
-
-	*response = (struct pam_response *)calloc(num_msg,
-	    sizeof (struct pam_response));
-	if (*response == NULL)
-		return (PAM_BUF_ERR);
-
-	/* First, send the prompts */
-	(void) printf("CONV %d\n", num_msg);
-	k = num_msg;
-	m = *msg;
-	while (k--) {
-		switch (m->msg_style) {
-
-		case PAM_PROMPT_ECHO_OFF:
-			(void) puts("PAM_PROMPT_ECHO_OFF");
-			goto msg_common;
-
-		case PAM_PROMPT_ECHO_ON:
-			(void) puts("PAM_PROMPT_ECHO_ON");
-			goto msg_common;
-
-		case PAM_ERROR_MSG:
-			(void) puts("PAM_ERROR_MSG");
-			goto msg_common;
-
-		case PAM_TEXT_INFO:
-			(void) puts("PAM_TEXT_INFO");
-			/* fall through to msg_common */
-msg_common:
-			if (m->msg == NULL)
-				quotemsg(NULL);
-			else
-				quotemsg("%s", m->msg);
-			break;
-
-		default:
-			break;
-		}
-		m++;
-	}
-
-	/* Next, collect the responses */
-	k = num_msg;
-	m = *msg;
-	r = *response;
-	while (k--) {
-
-		switch (m->msg_style) {
-
-		case PAM_PROMPT_ECHO_OFF:
-		case PAM_PROMPT_ECHO_ON:
-			(void) fgets(respbuf, sizeof (respbuf), stdin);
-
-			temp = strchr(respbuf, '\n');
-			if (temp != NULL)
-				*temp = '\0';
-
-			r->resp = strdup(respbuf);
-			if (r->resp == NULL) {
-				freeresponse(num_msg, response);
-				return (PAM_BUF_ERR);
-			}
-
-			break;
-
-		case PAM_ERROR_MSG:
-		case PAM_TEXT_INFO:
-			break;
-
-		default:
-			break;
-		}
-		m++;
-		r++;
-	}
-	return (PAM_SUCCESS);
-}
-
 static void
 freeresponse(int num_msg, struct pam_response **response)
 {
@@ -950,44 +595,6 @@ freeresponse(int num_msg, struct pam_response **response)
 }
 
 /*
- * Print a message, applying quoting for lines starting with '.'.
- *
- * I18n note:  \n is "safe" in all locales, and all locales use
- * a high-bit-set character to start multibyte sequences, so
- * scanning for a \n followed by a '.' is safe.
- */
-static void
-quotemsg(char *fmt, ...)
-{
-	if (fmt != NULL) {
-		char *msg;
-		char *p;
-		boolean_t bol;
-		va_list v;
-
-		va_start(v, fmt);
-		msg = alloc_vsprintf(fmt, v);
-		va_end(v);
-
-		bol = B_TRUE;
-		for (p = msg; *p != '\0'; p++) {
-			if (bol) {
-				if (*p == '.')
-					(void) putchar('.');
-				bol = B_FALSE;
-			}
-			(void) putchar(*p);
-			if (*p == '\n')
-				bol = B_TRUE;
-		}
-		(void) putchar('\n');
-		free(msg);
-	}
-	(void) putchar('.');
-	(void) putchar('\n');
-}
-
-/*
  * validate - Check that the account is valid for switching to.
  */
 static void
@@ -997,8 +604,6 @@ validate(char *usernam, int *pw_change)
 	int tries;
 
 	if ((error = pam_acct_mgmt(pamh, pam_flags)) != PAM_SUCCESS) {
-		if (Sulog != NULL)
-			log(Sulog, pwd.pw_name, 0);    /* log entry */
 		if (error == PAM_NEW_AUTHTOK_REQD) {
 			tries = 0;
 			message(ERR, gettext("Password for user "
@@ -1011,10 +616,8 @@ validate(char *usernam, int *pw_change)
 					continue;
 				}
 				message(ERR, gettext("Sorry"));
-				if (dosyslog)
-					syslog(LOG_CRIT,
-					    "'su %s' failed for %s on %s",
-					    pwd.pw_name, usernam, ttyn);
+				syslog(LOG_CRIT, "'su %s' failed for %s on %s",
+				    pwd.pw_name, usernam, ttyn);
 				closelog();
 				exit(1);
 			}
@@ -1022,9 +625,8 @@ validate(char *usernam, int *pw_change)
 			return;
 		} else {
 			message(ERR, gettext("Sorry"));
-			if (dosyslog)
-				syslog(LOG_CRIT, "'su %s' failed for %s on %s",
-				    pwd.pw_name, usernam, ttyn);
+			syslog(LOG_CRIT, "'su %s' failed for %s on %s",
+			    pwd.pw_name, usernam, ttyn);
 			closelog();
 			exit(3);
 		}
@@ -1035,9 +637,6 @@ static char *illegal[] = {
 	"SHELL=",
 	"HOME=",
 	"LOGNAME=",
-#ifndef NO_MAIL
-	"MAIL=",
-#endif
 	"CDPATH=",
 	"IFS=",
 	"PATH=",
@@ -1067,39 +666,6 @@ legalenvvar(char *s)
 }
 
 /*
- * The embedded_su protocol allows the client application to supply
- * an initialization block terminated by a line with just a "." on it.
- *
- * This initialization block is currently unused, reserved for future
- * expansion.  Ignore it.  This is made very slightly more complex by
- * the desire to cleanly ignore input lines of any length, while still
- * correctly detecting a line with just a "." on it.
- *
- * I18n note:  It appears that none of the Solaris-supported locales
- * use 0x0a for any purpose other than newline, so looking for '\n'
- * seems safe.
- * All locales use high-bit-set leadin characters for their multi-byte
- * sequences, so a line consisting solely of ".\n" is what it appears
- * to be.
- */
-static void
-readinitblock(void)
-{
-	char buf[100];
-	boolean_t bol;
-
-	bol = B_TRUE;
-	for (;;) {
-		if (fgets(buf, sizeof (buf), stdin) == NULL)
-			return;
-		if (bol && strcmp(buf, ".\n") == 0)
-			return;
-		bol = (strchr(buf, '\n') != NULL);
-	}
-}
-#endif	/* DYNAMIC_SU */
-
-/*
  * Report an error, either a fatal one, a warning, or a usage message,
  * depending on the mode parameter.
  */
@@ -1114,29 +680,11 @@ message(enum messagemode mode, char *fmt, ...)
 	s = alloc_vsprintf(fmt, v);
 	va_end(v);
 
-#ifdef	DYNAMIC_SU
-	if (embedded) {
-		if (mode == WARN) {
-			(void) printf("CONV 1\n");
-			(void) printf("PAM_ERROR_MSG\n");
-		} else { /* ERR, USAGE */
-			(void) printf("ERROR\n");
-		}
-		if (mode == USAGE) {
-			quotemsg("%s", s);
-		} else { /* ERR, WARN */
-			quotemsg("%s: %s", myname, s);
-		}
-	} else {
-#endif	/* DYNAMIC_SU */
-		if (mode == USAGE) {
-			(void) fprintf(stderr, "%s\n", s);
-		} else { /* ERR, WARN */
-			(void) fprintf(stderr, "%s: %s\n", myname, s);
-		}
-#ifdef	DYNAMIC_SU
+	if (mode == USAGE) {
+		(void) fprintf(stderr, "%s\n", s);
+	} else { /* ERR, WARN */
+		(void) fprintf(stderr, "%s: %s\n", myname, s);
 	}
-#endif	/* DYNAMIC_SU */
 
 	free(s);
 }

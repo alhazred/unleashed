@@ -71,7 +71,6 @@ MAN = 6to4relay.8 \
       dumpadm.8 \
       edquota.8 \
       eeprom.8 \
-      embedded_su.8 \
       fcinfo.8 \
       fdetach.8 \
       fdisk.8 \
@@ -350,7 +349,6 @@ MAN = 6to4relay.8 \
       strclean.8 \
       strerr.8 \
       sttydefs.8 \
-      su.8 \
       sulogin.8 \
       svc.configd.8 \
       svc.ipfd.8 \

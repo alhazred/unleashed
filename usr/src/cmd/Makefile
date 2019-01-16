@@ -332,7 +332,6 @@ COMMON_SUBDIRS=		\
 	stmsboot	\
 	streams		\
 	strings		\
-	su		\
 	sulogin		\
 	sunpc		\
 	svc		\
@@ -550,7 +549,6 @@ MSGSUBDIRS=		\
 	stmfadm		\
 	stmsboot	\
 	strings		\
-	su		\
 	svc		\
 	swap		\
 	syseventadm	\

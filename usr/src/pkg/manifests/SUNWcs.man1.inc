@@ -145,6 +145,7 @@ file path=usr/share/man/man1/shift.1
 file path=usr/share/man/man1/sleep.1
 file path=usr/share/man/man1/strchg.1
 file path=usr/share/man/man1/stty.1
+file path=usr/share/man/man1/su.1
 file path=usr/share/man/man1/sum.1
 file path=usr/share/man/man1/suspend.1
 file path=usr/share/man/man1/svcprop.1

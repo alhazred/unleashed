@@ -3,8 +3,8 @@ SUBDIR=	awk banner beadm cat ctfconvert ctfdiff ctfdump ctfmerge clear cmp \
 	id infocmp join kill ksh less localedef logname \
 	mandoc make nc openssl \
 	paste pax puname pwd rev \
-	sed size sleep stat tabs \
-	tcpdump tee test tic time toe tput true tset tsort tzselect \
+	sed size sleep stat su \
+	tabs tcpdump tee test tic time toe tput true tset tsort tzselect \
 	uniq uudecode uuencode uadmin uname \
 	vtfontcvt wc which xinstall yacc yes zic
 

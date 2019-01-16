@@ -318,7 +318,6 @@ file path=etc/default/keyserv group=sys preserve=true
 file path=etc/default/login group=sys preserve=true
 file path=etc/default/nss group=sys preserve=true
 file path=etc/default/passwd group=sys preserve=true
-file path=etc/default/su group=sys preserve=true
 file path=etc/default/syslogd group=sys preserve=true
 file path=etc/default/tar group=sys preserve=true
 file path=etc/default/useradd group=sys preserve=true
@@ -574,7 +573,6 @@ file path=sbin/rc3 group=sys mode=0744
 file path=sbin/rcS group=sys mode=0744
 file path=sbin/route mode=0555
 file path=sbin/soconfig mode=0555
-file path=sbin/su.static group=sys mode=0555
 file path=sbin/sulogin mode=0555
 file path=sbin/swapadd group=sys mode=0744
 file path=sbin/sync mode=0555
@@ -1337,7 +1335,6 @@ link path=usr/bin/tar target=../sbin/tar
 link path=usr/lib/$(ARCH64)/ld.so.1 target=../../../lib/$(ARCH64)/ld.so.1
 link path=usr/lib/cron target=../../etc/cron.d
 link path=usr/lib/devfsadm/devfsadmd target=../../sbin/devfsadm
-link path=usr/lib/embedded_su target=../bin/su
 link path=usr/lib/fs/dev/mount target=../../../../etc/fs/dev/mount
 link path=usr/lib/fs/hsfs/mount target=../../../../etc/fs/hsfs/mount
 link path=usr/lib/fs/ufs/mount target=../../../../etc/fs/ufs/mount
