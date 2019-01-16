@@ -72,7 +72,7 @@ static void usage(void);
  */
 struct col_info {
 	const char *col_name;
-	size_t width;
+	int width;
 };
 
 /*
@@ -185,7 +185,7 @@ print_hdr(struct hdr_info *hdr_info)
 	for (i = 0; i < NUM_COLS; i++) {
 		struct col_info *col_info = &hdr_info->cols[i];
 		const char *name = col_info->col_name;
-		size_t width = col_info->width;
+		int width = col_info->width;
 		if (name == NULL)
 			continue;
 
@@ -494,7 +494,7 @@ print_fmt_nodes(const char *be_name, enum be_fmt be_fmt, boolean_t parsable,
 			active[ai] = 'R';
 
 		nicenum(used, buf, sizeof (buf));
-		if (be_fmt & BE_FMT_DATASET)
+		if (be_fmt & BE_FMT_DATASET) {
 			if (parsable)
 				(void) printf("%s;%s;%s;%s;%llu;%s;%ld\n",
 				    cur_be->be_node_name,
@@ -514,6 +514,7 @@ print_fmt_nodes(const char *be_name, enum be_fmt be_fmt, boolean_t parsable,
 				    hdr->cols[3].width, buf,
 				    hdr->cols[4].width, cur_be->be_policy_type,
 				    hdr->cols[5].width, datetime);
+		}
 
 		if (be_fmt & BE_FMT_SNAPSHOT)
 			print_be_snapshots(cur_be, hdr, parsable);
