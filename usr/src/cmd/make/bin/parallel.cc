@@ -606,15 +606,6 @@ distribute_process(char **commands, Property line)
 	 * Tell the user what DMake is doing.
 	 */
 	if (!silent && output_mode != txt2_mode) {
-		/*
-		 * Print local_host --> x job(s).
-		 */
-		(void) fprintf(stdout,
-		               gettext("%s --> %d %s\n"),
-		               local_host,
-		               parallel_process_cnt + 1,
-		               (parallel_process_cnt == 0) ? gettext("job") : gettext("jobs"));
-
 		/* Print command line(s). */
 		tmp_index = 0;
 		while (commands[tmp_index] != NULL) {
@@ -1323,11 +1314,6 @@ dump_out_file(char *filename, Boolean err)
 		      errmsg(errno));
 	}
 	if (!silent && output_mode != txt2_mode) {
-		(void) fprintf(err ? stderr : stdout,
-		               err ?
-				gettext("%s --> Job errors\n") :
-				gettext("%s --> Job output\n"),
-		               local_host);
 		(void) fflush(err ? stderr : stdout);
 	}
 	for (chars_read = read(fd, copybuf, BUFSIZ);
