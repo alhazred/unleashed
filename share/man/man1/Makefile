@@ -1,6 +1,5 @@
 MAN = acctcom.1 \
       adb.1 \
-      alias.1 \
       appcert.1 \
       apptrace.1 \
       ar.1 \
@@ -106,7 +105,6 @@ MAN = acctcom.1 \
       kmfcfg.1 \
       kpasswd.1 \
       krb5-config.1 \
-      ksh93.1 \
       ktutil.1 \
       kvmstat.1 \
       lari.1 \
@@ -147,12 +145,7 @@ MAN = acctcom.1 \
       mkmsgs.1 \
       mktemp.1 \
       mpss.so.1.1 \
-      msgcc.1 \
-      msgcpp.1 \
-      msgcvt.1 \
       msgfmt.1 \
-      msggen.1 \
-      msgget.1 \
       mt.1 \
       mv.1 \
       newform.1 \

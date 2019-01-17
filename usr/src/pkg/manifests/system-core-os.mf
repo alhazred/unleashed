@@ -1222,6 +1222,8 @@ hardlink path=usr/bin/mv target=../../usr/bin/cp
 hardlink path=usr/bin/newtask target=../../usr/lib/isaexec
 hardlink path=usr/bin/nohup target=../../usr/lib/isaexec
 hardlink path=usr/bin/pfbash target=../../usr/bin/pfexec
+hardlink path=usr/bin/pfksh target=../../usr/bin/pfexec
+hardlink path=usr/bin/pfrksh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfsh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pfzsh target=../../usr/bin/pfexec
 hardlink path=usr/bin/pkill target=../../usr/bin/pgrep
@@ -1324,7 +1326,6 @@ link path=etc/utmpx target=../var/adm/utmpx
 link path=etc/wtmpx target=../var/adm/wtmpx
 link path=sbin/in.mpathd target=../lib/inet/in.mpathd
 link path=sbin/pfsh target=../usr/bin/pfexec
-link path=sbin/su target=../usr/bin/su
 link path=usr/adm target=../var/adm
 link path=usr/bin/df target=../sbin/df
 link path=usr/bin/rmail target=./mail

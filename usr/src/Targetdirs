@@ -202,14 +202,11 @@ DIRS= \
 	/system/object \
 	/tmp \
 	/usr  \
-	/usr/ast \
-	/usr/ast/bin \
 	/usr/bin \
 	/usr/bin/$(MACH32) \
 	/usr/games \
 	/usr/include \
 	/usr/include/ads \
-	/usr/include/ast \
 	/usr/include/fm \
 	/usr/include/gssapi \
 	/usr/include/hal \
