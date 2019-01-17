@@ -26,8 +26,6 @@ build::
 	${.MAKE}
 	${.MAKE} install
 	${.MAKE} -C lib build32 # special multiarch target
-	${.MAKE} -C kernel all
-	${.MAKE} -C kernel install
 	${.MAKE} -C usr install # dmake expects libs to already be in DESTDIR
 	${.MAKE} -C tools/postbuild clean obj
 	${.MAKE} -C tools/postbuild
