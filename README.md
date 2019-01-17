@@ -56,7 +56,7 @@ $ make
 ```
 
 The component will be linked against the running system and installed to `/`.
-To install to an alternate directory (eg. `proto/root\_i386`), use `make install
+To install to an alternate directory (eg. `proto/root_i386`), use `make install
 DESTDIR=path`.
 
 To build a component under the legacy (dmake) build system, ie. things under
@@ -69,5 +69,5 @@ $ cd usr/src/cmd/w
 $ dmake install
 ```
 
-The component will be built against the "proto area" in `proto/root\_i386` and
+The component will be built against the "proto area" in `proto/root_i386` and
 installed there.
