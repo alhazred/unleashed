@@ -189,6 +189,7 @@ cmd/acpi/common/acpi.a
 cmd/acpi/common/objs/
 cmd/acpihpd/THIRDPARTYLICENSE
 cmd/acpihpd/i386/acpihpd
+cmd/ahciem/ahciem
 cmd/allocate/allocate
 cmd/allocate/allocate.po
 cmd/allocate/allocate3.po
@@ -670,6 +671,8 @@ cmd/dlmgmtd/dlmgmtd
 cmd/dlstat/dlstat
 cmd/dlstat/dlstat.po
 cmd/dlutil/dlled
+cmd/dlutil/dlrecv
+cmd/dlutil/dlsend
 cmd/dlutil/dltraninfo
 cmd/dmesg/dmesg
 cmd/dtrace/amd64/dtrace
@@ -720,6 +723,7 @@ cmd/dtrace/test/tst/i386/pid/tst.branch.exe
 cmd/dtrace/test/tst/i386/pid/tst.embedded.exe
 cmd/dtrace/test/tst/i386/pid/tst.ret.exe
 cmd/dtrace/test/tst/i386/pid/tst.retlist.exe
+cmd/dtrace/test/tst/i386/pid/tst.uregswrite.exe
 cmd/dtrace/test/tst/i386/ustack/tst.annotated.exe
 cmd/dtrace/test/tst/i386/ustack/tst.circstack.exe
 cmd/dtrace/test/tst/i386/ustack/tst.helper.exe
@@ -997,6 +1001,7 @@ cmd/fs.d/smbclnt/share/unshare.po
 cmd/fs.d/smbclnt/smbclnt.po
 cmd/fs.d/smbclnt/smbiod-svc/smbiod-svc
 cmd/fs.d/smbclnt/smbiod/smbiod
+cmd/fs.d/smbclnt/smbutil/discon.po
 cmd/fs.d/smbclnt/smbutil/info.po
 cmd/fs.d/smbclnt/smbutil/login.po
 cmd/fs.d/smbclnt/smbutil/lookup.po
@@ -1811,6 +1816,14 @@ cmd/mdb/tools/scripts/mdb
 cmd/mdb/tools/scripts/mkmodules
 cmd/mdb/tools/scripts/tigen
 cmd/mdb/tools/setdynflag/i386/setdynflag
+cmd/mdb/x86/modules/apix/amd64/dmod/
+cmd/mdb/x86/modules/apix/amd64/kmod/
+cmd/mdb/x86/modules/pcplusmp/amd64/dmod/
+cmd/mdb/x86/modules/pcplusmp/amd64/kmod/
+cmd/mdb/x86/modules/unix/amd64/dmod/
+cmd/mdb/x86/modules/unix/amd64/kmod/
+cmd/mdb/x86/modules/uppc/amd64/dmod/
+cmd/mdb/x86/modules/uppc/amd64/kmod/
 cmd/mesg/mesg
 cmd/mesg/mesg.po
 cmd/mkdir/common.po
@@ -3160,6 +3173,7 @@ lib/fm/topo/modules/common/fac_prov_mptsas/fac_prov_mptsas.so
 lib/fm/topo/modules/common/ipmi/ipmi.so
 lib/fm/topo/modules/common/nic/nic.so
 lib/fm/topo/modules/common/ses/ses.so
+lib/fm/topo/modules/common/smbios/smbios.so
 lib/fm/topo/modules/common/xfp/xfp.so
 lib/fm/topo/modules/i86pc/chip/chip.so
 lib/fm/topo/modules/i86pc/hostbridge/hostbridge.so
@@ -3373,6 +3387,8 @@ lib/libctf/amd64/libctf.so.1
 lib/libctf/amd64/pics/
 lib/libctf/i386/libctf.so.1
 lib/libctf/i386/pics/
+lib/libcustr/amd64/libcustr.so.1
+lib/libcustr/i386/libcustr.so.1
 lib/libdevice/amd64/libdevice.so.1
 lib/libdevice/amd64/pics/
 lib/libdevice/i386/libdevice.so.1
@@ -4482,6 +4498,17 @@ test/os-tests/tests/sockfs/nosignal
 test/os-tests/tests/sockfs/sockpair
 test/os-tests/tests/spoof-ras/spoof-ras
 test/os-tests/tests/stress/dladm-kstat
+test/smbclient-tests/cmd/abort_conn/abort_conn
+test/smbclient-tests/cmd/close_wr/close_wr
+test/smbclient-tests/cmd/cp_mmap/cp_mmap
+test/smbclient-tests/cmd/file_trunc/file_trunc
+test/smbclient-tests/cmd/mkfile_mmap/mkfile_mmap
+test/smbclient-tests/cmd/no_close/no_close
+test/smbclient-tests/cmd/prot_mmap/prot_mmap
+test/smbclient-tests/cmd/rw_mmap/rw_mmap
+test/util-tests/tests/demangle/afl-fast
+test/util-tests/tests/demangle/gcc-libstdc++
+test/util-tests/tests/demangle/llvm-stdcxxabi
 test/util-tests/tests/iconv/iconv_test
 test/util-tests/tests/libnvpair_json/print_json
 test/util-tests/tests/libsff/libsff_8472
