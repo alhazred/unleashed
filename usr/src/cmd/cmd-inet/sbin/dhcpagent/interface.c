@@ -620,7 +620,7 @@ remove_lif(dhcp_lif_t *lif)
 				lif->lif_declined = NULL;
 			}
 			if (lif->lif_dad_wait) {
-				lif->lif_dad_wait = _B_FALSE;
+				lif->lif_dad_wait = B_FALSE;
 				dlp->dl_smach->dsm_lif_wait--;
 			}
 			lif->lif_lease = NULL;
@@ -901,7 +901,7 @@ canonize_lif(dhcp_lif_t *lif, boolean_t dhcponly)
 
 	/* Clearing the address means that we're no longer waiting on DAD */
 	if (lif->lif_dad_wait) {
-		lif->lif_dad_wait = _B_FALSE;
+		lif->lif_dad_wait = B_FALSE;
 		lif->lif_lease->dl_smach->dsm_lif_wait--;
 	}
 

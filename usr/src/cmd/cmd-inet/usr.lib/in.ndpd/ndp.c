@@ -273,7 +273,7 @@ in_data(struct phyint *pi)
 		if (pi->pi_AdvSendAdvertisements)
 			verify_ra_consistency(pi, ra, len, &from);
 		else
-			incoming_ra(pi, ra, len, &from, _B_FALSE);
+			incoming_ra(pi, ra, len, &from, B_FALSE);
 		break;
 	}
 }
@@ -436,12 +436,12 @@ incoming_ra(struct phyint *pi, struct nd_router_advert *ra, int len,
 	struct nd_opt_hdr *opt;
 	int optlen;
 	struct lifreq lifr;
-	boolean_t set_needed = _B_FALSE;
+	boolean_t set_needed = B_FALSE;
 	struct router *dr;
 	uint16_t router_lifetime;
 	uint_t reachable, retrans;
-	boolean_t reachable_time_changed = _B_FALSE;
-	boolean_t slla_opt_present	 = _B_FALSE;
+	boolean_t reachable_time_changed = B_FALSE;
+	boolean_t slla_opt_present	 = B_FALSE;
 
 	if (no_loopback && loopback)
 		return;
@@ -453,7 +453,7 @@ incoming_ra(struct phyint *pi, struct nd_router_advert *ra, int len,
 	    ra->nd_ra_curhoplimit != pi->pi_CurHopLimit) {
 		pi->pi_CurHopLimit = ra->nd_ra_curhoplimit;
 		lifr.lifr_ifinfo.lir_maxhops = pi->pi_CurHopLimit;
-		set_needed = _B_TRUE;
+		set_needed = B_TRUE;
 
 		if (pi->pi_CurHopLimit < bad_hopcount_threshhold) {
 			char abuf[INET6_ADDRSTRLEN];
@@ -473,13 +473,13 @@ incoming_ra(struct phyint *pi, struct nd_router_advert *ra, int len,
 	if (reachable != 0 &&
 	    reachable != pi->pi_BaseReachableTime) {
 		pi->pi_BaseReachableTime = reachable;
-		reachable_time_changed = _B_TRUE;
+		reachable_time_changed = B_TRUE;
 	}
 
 	if (pi->pi_reach_time_since_random < MIN_REACH_RANDOM_INTERVAL ||
 	    reachable_time_changed) {
-		phyint_reach_random(pi, _B_FALSE);
-		set_needed = _B_TRUE;
+		phyint_reach_random(pi, B_FALSE);
+		set_needed = B_TRUE;
 	}
 	lifr.lifr_ifinfo.lir_reachtime = pi->pi_ReachableTime;
 
@@ -488,7 +488,7 @@ incoming_ra(struct phyint *pi, struct nd_router_advert *ra, int len,
 	    pi->pi_RetransTimer != retrans) {
 		pi->pi_RetransTimer = retrans;
 		lifr.lifr_ifinfo.lir_reachretrans = pi->pi_RetransTimer;
-		set_needed = _B_TRUE;
+		set_needed = B_TRUE;
 	}
 
 	if (set_needed) {
@@ -564,7 +564,7 @@ incoming_ra(struct phyint *pi, struct nd_router_advert *ra, int len,
 			if (!loopback) {
 				incoming_lla_opt(pi, (uchar_t *)opt,
 				    from, NDF_ISROUTER_ON);
-				slla_opt_present = _B_TRUE;
+				slla_opt_present = B_TRUE;
 			}
 			break;
 		default:
@@ -592,7 +592,7 @@ incoming_prefix_opt(struct phyint *pi, uchar_t *opt,
     struct sockaddr_in6 *from, boolean_t loopback)
 {
 	struct nd_opt_prefix_info *po = (struct nd_opt_prefix_info *)opt;
-	boolean_t	good_prefix = _B_TRUE;
+	boolean_t	good_prefix = B_TRUE;
 
 	if (8 * po->nd_opt_pi_len != sizeof (*po)) {
 		char abuf[INET6_ADDRSTRLEN];
@@ -645,7 +645,7 @@ incoming_prefix_onlink(struct phyint *pi, uchar_t *opt)
 	int plen;
 	struct prefix *pr;
 	uint32_t validtime;	/* Without 2 hour rule */
-	boolean_t found_one = _B_FALSE;
+	boolean_t found_one = B_FALSE;
 
 	plen = po->nd_opt_pi_prefix_len;
 	for (pr = pi->pi_prefix_list; pr != NULL; pr = pr->pr_next) {
@@ -654,7 +654,7 @@ incoming_prefix_onlink(struct phyint *pi, uchar_t *opt)
 			/* Exclude static prefixes */
 			if (pr->pr_state & PR_STATIC)
 				continue;
-			found_one = _B_TRUE;
+			found_one = B_TRUE;
 			incoming_prefix_onlink_process(pr, opt);
 		}
 	}
@@ -701,7 +701,7 @@ incoming_prefix_onlink_process(struct prefix *pr, uchar_t *opt)
 		else
 			pr->pr_OnLinkLifetime = validtime * MILLISEC;
 	}
-	pr->pr_OnLinkFlag = _B_TRUE;
+	pr->pr_OnLinkFlag = B_TRUE;
 	if (debug & (D_PREFIX|D_TMP)) {
 		logmsg(LOG_DEBUG, "incoming_prefix_onlink_process(%s, %s/%u) "
 		    "onlink %u state 0x%x, kstate 0x%x\n",
@@ -743,7 +743,7 @@ incoming_prefix_stateful(struct phyint *pi, uchar_t *opt)
 		    pi->pi_name, inet_ntop(AF_INET6,
 		    (void *)&po->nd_opt_pi_prefix, abuf, sizeof (abuf)),
 		    po->nd_opt_pi_prefix_len);
-	foundpref = _B_FALSE;
+	foundpref = B_FALSE;
 	for (pr = pi->pi_prefix_list; pr != NULL; pr = pr->pr_next) {
 		if (prefix_equal(po->nd_opt_pi_prefix, pr->pr_prefix,
 		    po->nd_opt_pi_prefix_len)) {
@@ -762,7 +762,7 @@ incoming_prefix_stateful(struct phyint *pi, uchar_t *opt)
 			if (pr->pr_prefix_len == po->nd_opt_pi_prefix_len &&
 			    (!(pr->pr_state & PR_STATIC) ||
 			    (pr->pr_flags & IFF_DHCPRUNNING)))
-				foundpref = _B_TRUE;
+				foundpref = B_TRUE;
 		}
 	}
 	/*
@@ -799,8 +799,8 @@ incoming_prefix_addrconf(struct phyint *pi, uchar_t *opt,
 	uint32_t validtime, preftime;	/* In seconds */
 	char abuf[INET6_ADDRSTRLEN];
 	char pbuf[INET6_ADDRSTRLEN];
-	boolean_t found_pub = _B_FALSE;
-	boolean_t found_tmp = _B_FALSE;
+	boolean_t found_pub = B_FALSE;
+	boolean_t found_tmp = B_FALSE;
 	boolean_t ret;
 
 	validtime = ntohl(po->nd_opt_pi_valid_time);
@@ -818,7 +818,7 @@ incoming_prefix_addrconf(struct phyint *pi, uchar_t *opt,
 		    "valid %u < pref %u ignored\n",
 		    pbuf, plen, abuf, pi->pi_name,
 		    validtime, preftime);
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	for (pr = pi->pi_prefix_list; pr != NULL; pr = pr->pr_next) {
@@ -839,12 +839,12 @@ incoming_prefix_addrconf(struct phyint *pi, uchar_t *opt,
 				if (!((pr->pr_flags & IFF_DEPRECATED) &&
 				    !token_equal(pi->pi_tmp_token,
 				    pr->pr_address, TMP_TOKEN_BITS)))
-					found_tmp = _B_TRUE;
+					found_tmp = B_TRUE;
 			} else {
-				found_pub = _B_TRUE;
+				found_pub = B_TRUE;
 			}
 			(void) incoming_prefix_addrconf_process(pi, pr, opt,
-			    from, loopback, _B_FALSE);
+			    from, loopback, B_FALSE);
 		}
 	}
 
@@ -855,29 +855,29 @@ incoming_prefix_addrconf(struct phyint *pi, uchar_t *opt,
 	 */
 	if (validtime == 0 ||
 	    (found_pub && (!pi->pi_TmpAddrsEnabled || found_tmp)))
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	if (!found_pub) {
 		pr = prefix_create(pi, po->nd_opt_pi_prefix, plen, 0);
 		if (pr == NULL)
-			return (_B_TRUE);
+			return (B_TRUE);
 		ret = incoming_prefix_addrconf_process(pi, pr, opt, from,
-		    loopback, _B_TRUE);
+		    loopback, B_TRUE);
 	}
 	/*
 	 * if processing of the public address failed,
 	 * don't bother with the temporary address.
 	 */
-	if (ret == _B_FALSE)
-		return (_B_FALSE);
+	if (ret == B_FALSE)
+		return (B_FALSE);
 
 	if (pi->pi_TmpAddrsEnabled && !found_tmp) {
 		pr = prefix_create(pi, po->nd_opt_pi_prefix, plen,
 		    IFF_TEMPORARY);
 		if (pr == NULL)
-			return (_B_TRUE);
+			return (B_TRUE);
 		ret = incoming_prefix_addrconf_process(pi, pr, opt, from,
-		    loopback, _B_TRUE);
+		    loopback, B_TRUE);
 	}
 
 	return (ret);
@@ -928,7 +928,7 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 			    "- ignored\n",
 			    pbuf, plen, abuf, pi->pi_name,
 			    validtime, recorded_validtime);
-			return (_B_TRUE);
+			return (B_TRUE);
 		} else {
 			/*
 			 * If the router clock runs slower than the
@@ -1001,10 +1001,10 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 			    pbuf, plen, abuf, pi->pi_name, preftime,
 			    pi->pi_TmpRegenAdvance);
 			if (new_prefix) {
-				prefix_update_ipadm_addrobj(pr, _B_FALSE);
+				prefix_update_ipadm_addrobj(pr, B_FALSE);
 				prefix_delete(pr);
 			}
-			return (_B_TRUE);
+			return (B_TRUE);
 		}
 	}
 	if (debug & D_TMP)
@@ -1021,7 +1021,7 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 			if (IN6_IS_ADDR_UNSPECIFIED(&pi->pi_tmp_token)) {
 				if (!tmptoken_create(pi)) {
 					prefix_delete(pr);
-					return (_B_TRUE);
+					return (B_TRUE);
 				}
 			}
 			tokenlen = TMP_TOKEN_BITS;
@@ -1041,7 +1041,7 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 			    "mismatched length %d token length %d\n",
 			    pbuf, plen, abuf, pi->pi_name,
 			    pr->pr_prefix_len, tokenlen);
-			return (_B_TRUE);
+			return (B_TRUE);
 		}
 		for (i = 0; i < 16; i++) {
 			/*
@@ -1068,9 +1068,9 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 			    "Prefix already exists in interface %s\n",
 			    other_pr->pr_physical->pi_name);
 			if (new_prefix) {
-				prefix_update_ipadm_addrobj(pr, _B_FALSE);
+				prefix_update_ipadm_addrobj(pr, B_FALSE);
 				prefix_delete(pr);
-				return (_B_FALSE);
+				return (B_FALSE);
 			}
 			/* Ignore for addrconf purposes */
 			validtime = preftime = 0;
@@ -1109,7 +1109,7 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 		pr->pr_PreferredLifetime = PREFIX_INFINITY - 1;
 	else
 		pr->pr_PreferredLifetime = preftime * MILLISEC;
-	pr->pr_AutonomousFlag = _B_TRUE;
+	pr->pr_AutonomousFlag = B_TRUE;
 
 	if (debug & D_PREFIX) {
 		logmsg(LOG_DEBUG, "incoming_prefix_addrconf_process(%s, %s/%u) "
@@ -1140,7 +1140,7 @@ incoming_prefix_addrconf_process(struct phyint *pi, struct prefix *pr,
 		}
 		prefix_update_k(pr);
 	}
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1502,7 +1502,7 @@ verify_opt_len(struct nd_opt_hdr *opt, int optlen,
 			logmsg(LOG_INFO, "Zero length option type 0x%x "
 			    "from %s on %s\n",
 			    opt->nd_opt_type, abuf, pi->pi_name);
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 		optlen -= 8 * opt->nd_opt_len;
 		if (optlen < 0) {
@@ -1516,12 +1516,12 @@ verify_opt_len(struct nd_opt_hdr *opt, int optlen,
 			    "from %s on %s\n",
 			    opt->nd_opt_type, opt->nd_opt_len,
 			    abuf, pi->pi_name);
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 		opt = (struct nd_opt_hdr *)((char *)opt +
 		    8 * opt->nd_opt_len);
 	}
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*

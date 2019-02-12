@@ -331,7 +331,7 @@ set_tracefile(const char *filename,
 				goto bad_file_type;
 			}
 			if (S_ISDIR(stbuf.st_mode))
-				allow_create = _B_TRUE;
+				allow_create = B_TRUE;
 		}
 
 		fn = filename;
@@ -371,7 +371,7 @@ set_tracefile(const char *filename,
 	}
 
 	tmsg("switch to trace file %s", fn);
-	trace_close(file_trace = _B_TRUE);
+	trace_close(file_trace = B_TRUE);
 	(void) dup2(nfd, STDOUT_FILENO);
 	(void) dup2(nfd, STDERR_FILENO);
 
@@ -827,8 +827,8 @@ trace_if(const char *act, struct interface *ifp)
 	    ifp->int_d_metric != 0)
 		(void) fprintf(ftrace, " fake_default=%d", ifp->int_d_metric);
 	(void) fputs("\n    ", ftrace);
-	trace_bits(if_bits, ifp->int_if_flags, _B_FALSE);
-	trace_bits(is_bits, ifp->int_state, _B_FALSE);
+	trace_bits(if_bits, ifp->int_if_flags, B_FALSE);
+	trace_bits(is_bits, ifp->int_state, B_FALSE);
 	(void) fputc('\n', ftrace);
 }
 
@@ -848,7 +848,7 @@ trace_khash(const struct khash *krt)
 		(void) fprintf(ftrace, "ifp NULL ");
 	(void) fprintf(ftrace, "%s ", ts(krt->k_keep));
 	(void) fprintf(ftrace, "%s ", ts(krt->k_redirect_time));
-	trace_bits(ks_bits, krt->k_state, _B_TRUE);
+	trace_bits(ks_bits, krt->k_state, B_TRUE);
 	(void) fputc('\n', ftrace);
 }
 
@@ -1015,7 +1015,7 @@ trace_change(struct rt_entry *rt,
 	    AGE_RT(rt->rt_state, new->rts_origin, new->rts_ifp)));
 	if (rt->rt_state != state) {
 		print_rtsorigin(origin_bits, new->rts_origin);
-		trace_bits(rs_bits, state, _B_TRUE);
+		trace_bits(rs_bits, state, B_TRUE);
 	}
 	(void) fputc('\n', ftrace);
 }
@@ -1034,7 +1034,7 @@ trace_add_del(const char *action, struct rt_entry *rt)
 	print_rts(rt->rt_spares, 0, 0, 0, 0, AGE_RT(rt->rt_state,
 	    rt->rt_spares->rts_origin, rt->rt_ifp));
 	print_rtsorigin(origin_bits, rt->rt_spares->rts_origin);
-	trace_bits(rs_bits, rt->rt_state, _B_FALSE);
+	trace_bits(rs_bits, rt->rt_state, B_FALSE);
 	(void) fputc('\n', ftrace);
 }
 
@@ -1053,7 +1053,7 @@ walk_trace(struct radix_node *rn,
 	print_rts(&RT->rt_spares[0], 0, 0, 0, 0,
 	    AGE_RT(RT->rt_state, RT->rt_spares[0].rts_origin, RT->rt_ifp));
 	print_rtsorigin(origin_bits, RT->rt_spares[0].rts_origin);
-	trace_bits(rs_bits, RT->rt_state, _B_FALSE);
+	trace_bits(rs_bits, RT->rt_state, B_FALSE);
 	if (RT->rt_poison_time >= now_garbage &&
 	    RT->rt_poison_metric < RT->rt_metric)
 		(void) fprintf(ftrace, "pm=%d@%s",

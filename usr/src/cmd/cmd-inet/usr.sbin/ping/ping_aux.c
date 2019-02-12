@@ -234,12 +234,12 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 	struct timeval tv;
 	int hlen, hlen1;
 	int64_t triptime;
-	boolean_t valid_reply = _B_FALSE;
-	boolean_t reply_matched_current_target = _B_FALSE; /* Is the source */
+	boolean_t valid_reply = B_FALSE;
+	boolean_t reply_matched_current_target = B_FALSE; /* Is the source */
 						/* address of this reply same */
 						/* as where we're sending */
 						/* currently? */
-	boolean_t last_reply_from_targetaddr = _B_FALSE; /* Is this stats, */
+	boolean_t last_reply_from_targetaddr = B_FALSE; /* Is this stats, */
 						/* probe all with npackets>0 */
 						/* and we received reply for */
 						/* the last probe sent to */
@@ -275,7 +275,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 	    "Time exceeded in transit",
 	    "Time exceeded during reassembly"
 	};
-	boolean_t print_newline = _B_FALSE;
+	boolean_t print_newline = B_FALSE;
 	int i;
 
 	/* decompose msghdr into useful pieces */
@@ -339,9 +339,9 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		    ip->ip_p == IPPROTO_UDP &&
 		    udp_src_port == up->uh_sport &&
 		    use_udp) {
-			valid_reply = _B_TRUE;
+			valid_reply = B_TRUE;
 		} else {
-			valid_reply = _B_FALSE;
+			valid_reply = B_FALSE;
 		}
 
 		if (valid_reply) {
@@ -351,14 +351,14 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			 * updates to targetaddr, so hold SIGALRMs.
 			 */
 			(void) sighold(SIGALRM);
-			is_alive = _B_TRUE;
+			is_alive = B_TRUE;
 			nreceived++;
 			reply_matched_current_target =
 			    seq_match(current_targetaddr->starting_seq_num,
 			    current_targetaddr->num_sent,
 			    ntohs(up->uh_dport));
 			if (reply_matched_current_target) {
-				current_targetaddr->got_reply = _B_TRUE;
+				current_targetaddr->got_reply = B_TRUE;
 				nreceived_last_target++;
 				/*
 				 * Determine if stats, probe-all, and
@@ -372,7 +372,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				    (MAX_PORT + 1) == ntohs(up->uh_dport)) &&
 				    (current_targetaddr->num_probes ==
 				    current_targetaddr->num_sent))
-					last_reply_from_targetaddr = _B_TRUE;
+					last_reply_from_targetaddr = B_TRUE;
 			} else {
 				/*
 				 * If it's just probe_all and we just received
@@ -382,7 +382,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				 * this reply.
 				 */
 				if (probe_all && !stats) {
-					valid_reply = _B_FALSE;
+					valid_reply = B_FALSE;
 					/*
 					 * Only if it's verbose, we get a
 					 * message regarding this reply,
@@ -405,7 +405,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			if (reply_matched_current_target) {
 				(void) alarm(0);	/* cancel alarm */
 				(void) sigset(SIGALRM, SIG_IGN);
-				current_targetaddr->probing_done = _B_TRUE;
+				current_targetaddr->probing_done = B_TRUE;
 			}
 			(void) sigrelse(SIGALRM);
 
@@ -450,7 +450,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			Printf("%d bytes from %s: ", cc,
 			    pr_name((char *)&from->sin_addr, AF_INET));
 			Printf("udp_port=%d. ", ntohs(up->uh_dport));
-			print_newline = _B_TRUE;
+			print_newline = B_TRUE;
 		} else if (is_a_target(ai_dst, &dst_addr) || verbose) {
 			if (icp->icmp_code >= A_CNT(unreach)) {
 				Printf("ICMP %d Unreachable from gateway %s\n",
@@ -468,7 +468,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			    ip->ip_p == IPPROTO_UDP) {
 				Printf(" port %d ", ntohs(up->uh_dport));
 			}
-			print_newline = _B_TRUE;
+			print_newline = B_TRUE;
 		}
 
 		/* if we are timing and the reply has a timeval */
@@ -486,7 +486,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				tmin = triptime;
 			if (triptime > tmax)
 				tmax = triptime;
-			print_newline = _B_TRUE;
+			print_newline = B_TRUE;
 		}
 		if (print_newline)
 			(void) putchar('\n');
@@ -498,7 +498,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		 */
 		if (last_reply_from_targetaddr) {
 			(void) alarm(0);	/* cancel alarm */
-			current_targetaddr->probing_done = _B_TRUE;
+			current_targetaddr->probing_done = B_TRUE;
 			(void) sigrelse(SIGALRM);
 			send_scheduled_probe();
 			schedule_sigalrm();
@@ -537,9 +537,9 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 	case ICMP_ECHOREPLY:
 		if (ntohs(icp->icmp_id) == ident) {
 			if (!use_udp && !use_icmp_ts)
-				valid_reply = _B_TRUE;
+				valid_reply = B_TRUE;
 			else
-				valid_reply = _B_FALSE;
+				valid_reply = B_FALSE;
 		} else {
 			return;
 		}
@@ -551,14 +551,14 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			 * updates to targetaddr, so hold SIGALRMs.
 			 */
 			(void) sighold(SIGALRM);
-			is_alive = _B_TRUE;
+			is_alive = B_TRUE;
 			nreceived++;
 			reply_matched_current_target =
 			    seq_match(current_targetaddr->starting_seq_num,
 			    current_targetaddr->num_sent,
 			    ntohs(icp->icmp_seq));
 			if (reply_matched_current_target) {
-				current_targetaddr->got_reply = _B_TRUE;
+				current_targetaddr->got_reply = B_TRUE;
 				nreceived_last_target++;
 				/*
 				 * Determine if stats, probe-all, and
@@ -573,7 +573,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				    ntohs(icp->icmp_seq)) &&
 				    (current_targetaddr->num_probes ==
 				    current_targetaddr->num_sent))
-					last_reply_from_targetaddr = _B_TRUE;
+					last_reply_from_targetaddr = B_TRUE;
 			} else {
 				/*
 				 * If it's just probe_all and we just received
@@ -583,7 +583,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				 * this reply.
 				 */
 				if (probe_all && !stats) {
-					valid_reply = _B_FALSE;
+					valid_reply = B_FALSE;
 					/*
 					 * Only if it's verbose, we get a
 					 * message regarding this reply,
@@ -605,7 +605,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			if (reply_matched_current_target) {
 				(void) alarm(0);	/* cancel alarm */
 				(void) sigset(SIGALRM, SIG_IGN);
-				current_targetaddr->probing_done = _B_TRUE;
+				current_targetaddr->probing_done = B_TRUE;
 			}
 			(void) sigrelse(SIGALRM);
 
@@ -697,7 +697,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		 */
 		if (last_reply_from_targetaddr) {
 			(void) alarm(0);	/* cancel alarm */
-			current_targetaddr->probing_done = _B_TRUE;
+			current_targetaddr->probing_done = B_TRUE;
 			(void) sigrelse(SIGALRM);
 			send_scheduled_probe();
 			schedule_sigalrm();
@@ -848,9 +848,9 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 
 		if (ntohs(icp->icmp_id) == ident) {
 			if (use_icmp_ts)
-				valid_reply = _B_TRUE;
+				valid_reply = B_TRUE;
 			else
-				valid_reply = _B_FALSE;
+				valid_reply = B_FALSE;
 		} else {
 			return;
 		}
@@ -862,14 +862,14 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			 * updates to targetaddr, so hold SIGALRMs.
 			 */
 			(void) sighold(SIGALRM);
-			is_alive = _B_TRUE;
+			is_alive = B_TRUE;
 			nreceived++;
 			reply_matched_current_target =
 			    seq_match(current_targetaddr->starting_seq_num,
 			    current_targetaddr->num_sent,
 			    ntohs(icp->icmp_seq));
 			if (reply_matched_current_target) {
-				current_targetaddr->got_reply = _B_TRUE;
+				current_targetaddr->got_reply = B_TRUE;
 				nreceived_last_target++;
 				/*
 				 * Determine if stats, probe-all, and
@@ -884,7 +884,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				    ntohs(icp->icmp_seq)) &&
 				    (current_targetaddr->num_probes ==
 				    current_targetaddr->num_sent))
-					last_reply_from_targetaddr = _B_TRUE;
+					last_reply_from_targetaddr = B_TRUE;
 			} else {
 				/*
 				 * If it's just probe_all and we just received
@@ -894,7 +894,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				 * this reply.
 				 */
 				if (probe_all && !stats) {
-					valid_reply = _B_FALSE;
+					valid_reply = B_FALSE;
 					/*
 					 * Only if it's verbose, we get a
 					 * message regarding this reply,
@@ -916,7 +916,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			if (reply_matched_current_target) {
 				(void) alarm(0);	/* cancel alarm */
 				(void) sigset(SIGALRM, SIG_IGN);
-				current_targetaddr->probing_done = _B_TRUE;
+				current_targetaddr->probing_done = B_TRUE;
 			}
 			(void) sigrelse(SIGALRM);
 
@@ -1019,7 +1019,7 @@ check_reply(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		 */
 		if (last_reply_from_targetaddr) {
 			(void) alarm(0);	/* cancel alarm */
-			current_targetaddr->probing_done = _B_TRUE;
+			current_targetaddr->probing_done = B_TRUE;
 			(void) sigrelse(SIGALRM);
 			send_scheduled_probe();
 			schedule_sigalrm();
@@ -1088,7 +1088,7 @@ pr_options(uchar_t *opt, int optlength)
 
 		case IPOPT_RR:
 			Printf(" <record route> ");
-			pr_rropt(opt, curlength, _B_TRUE);
+			pr_rropt(opt, curlength, B_TRUE);
 			break;
 
 		case IPOPT_TS:
@@ -1102,7 +1102,7 @@ pr_options(uchar_t *opt, int optlength)
 
 		case IPOPT_LSRR:
 			Printf(" <loose source route> ");
-			pr_rropt(opt, curlength, _B_FALSE);
+			pr_rropt(opt, curlength, B_FALSE);
 			break;
 
 		case IPOPT_SATID:
@@ -1111,7 +1111,7 @@ pr_options(uchar_t *opt, int optlength)
 
 		case IPOPT_SSRR:
 			Printf(" <strict source route> ");
-			pr_rropt(opt, curlength, _B_FALSE);
+			pr_rropt(opt, curlength, B_FALSE);
 			break;
 
 		default:
@@ -1128,7 +1128,7 @@ pr_options(uchar_t *opt, int optlength)
 }
 
 /*
- * Print out a recorded route option. If rrflag is _B_TRUE, it prints record
+ * Print out a recorded route option. If rrflag is B_TRUE, it prints record
  * route option, otherwise LSRR/SSRR.
  */
 static void
@@ -1186,20 +1186,20 @@ pr_tsopt(uchar_t *opt, int length)
 
 	switch (tsp->ipt_flg) {
 	case IPOPT_TS_TSONLY:
-		address_present = _B_FALSE;
+		address_present = B_FALSE;
 		data_len = sizeof (tsp->ipt_timestamp.ipt_time[0]);
-		rrflag = _B_TRUE;
+		rrflag = B_TRUE;
 		break;
 	case IPOPT_TS_TSANDADDR:
-		address_present = _B_TRUE;
+		address_present = B_TRUE;
 		data_len = sizeof (tsp->ipt_timestamp.ipt_ta[0]);
-		rrflag = _B_TRUE;
+		rrflag = B_TRUE;
 		break;
 	case IPOPT_TS_PRESPEC:
 	case 3:
-		address_present = _B_TRUE;
+		address_present = B_TRUE;
 		data_len = sizeof (tsp->ipt_timestamp.ipt_ta[0]);
-		rrflag = _B_FALSE;
+		rrflag = B_FALSE;
 		break;
 	default:
 		Printf("(Bad flag value: 0x%x)", tsp->ipt_flg);

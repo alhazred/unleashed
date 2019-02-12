@@ -63,7 +63,7 @@ getnet(const char *name,
 	if (NULL != (mname = strrchr(name, '/'))) {
 		i = (int)(mname - name);
 		if (i > (int)sizeof (hname)-1)	/* name too long */
-			return (_B_FALSE);
+			return (B_FALSE);
 		(void) memmove(hname, name, i);
 		hname[i] = '\0';
 		mname++;
@@ -76,7 +76,7 @@ getnet(const char *name,
 		else if ((np = getnetbyname(name)) != NULL)
 			in.s_addr = np->n_net;
 		else
-			return (_B_FALSE);
+			return (B_FALSE);
 	}
 	/* Left-align the host-byte-order result from above. */
 	if (0 == (in.s_addr & 0xff000000))
@@ -93,28 +93,28 @@ getnet(const char *name,
 	} else {
 		mask = (uint32_t)strtoul(mname, &p, 0);
 		if (*p != '\0' || mask > 32 || mname == p)
-			return (_B_FALSE);
+			return (B_FALSE);
 		if (mask != 0)
 			mask = HOST_MASK << (32-mask);
 	}
 
 	/* must have mask of 0 with default */
 	if (mask != 0 && in.s_addr == RIP_DEFAULT)
-		return (_B_FALSE);
+		return (B_FALSE);
 	/* no host bits allowed in a network number */
 	if ((~mask & in.s_addr) != 0)
-		return (_B_FALSE);
+		return (B_FALSE);
 	/* require non-zero network number */
 	if ((mask & in.s_addr) == 0 && in.s_addr != RIP_DEFAULT)
-		return (_B_FALSE);
+		return (B_FALSE);
 	if ((in.s_addr >> 24) == 0 && in.s_addr != RIP_DEFAULT)
-		return (_B_FALSE);
+		return (B_FALSE);
 	if ((in.s_addr >> 24) == 0xff)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	*netp = in.s_addr;
 	*maskp = mask;
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*

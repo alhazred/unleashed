@@ -162,10 +162,10 @@ phyint_link_notify(dlpi_handle_t dh, dlpi_notifyinfo_t *dnip, void *arg)
 	    bcmp(pi->pi_hwaddr, dnip->dni_physaddr, pi->pi_hwaddrlen) == 0)
 		return;
 
-	oduppi = phyint_lookup_hwaddr(pi, _B_FALSE);
+	oduppi = phyint_lookup_hwaddr(pi, B_FALSE);
 	pi->pi_hwaddrlen = dnip->dni_physaddrlen;
 	(void) memcpy(pi->pi_hwaddr, dnip->dni_physaddr, pi->pi_hwaddrlen);
-	duppi = phyint_lookup_hwaddr(pi, _B_FALSE);
+	duppi = phyint_lookup_hwaddr(pi, B_FALSE);
 
 	if (oduppi != NULL || pi->pi_hwaddrdup) {
 		/*
@@ -188,14 +188,14 @@ phyint_link_notify(dlpi_handle_t dh, dlpi_notifyinfo_t *dnip, void *arg)
 		 * Our new hardware address was a duplicate and we're not
 		 * yet flagged as a duplicate; bring us offline.
 		 */
-		pi->pi_hwaddrdup = _B_TRUE;
+		pi->pi_hwaddrdup = B_TRUE;
 		(void) phyint_offline(pi, 0);
 	}
 }
 
 /*
  * Initialize information about the underlying link for `pi', and set us
- * up to be notified about future changes.  Returns _B_TRUE on success.
+ * up to be notified about future changes.  Returns B_TRUE on success.
  */
 boolean_t
 phyint_link_init(struct phyint *pi)
@@ -242,14 +242,14 @@ phyint_link_init(struct phyint *pi)
 	if (retval == DLPI_SUCCESS && poll_add(dlpi_fd(pi->pi_dh)) == 0)
 		pi->pi_notes |= notes;
 
-	return (_B_TRUE);
+	return (B_TRUE);
 failed:
 	logerr("%s: %s: %s\n", pi->pi_name, errmsg, dlpi_strerror(retval));
 	if (pi->pi_dh != NULL) {
 		dlpi_close(pi->pi_dh);
 		pi->pi_dh = NULL;
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -519,7 +519,7 @@ phyint_group_create(const char *name)
 	pg->pg_sig = gensig();
 	pg->pg_fdt = user_failure_detection_time;
 	pg->pg_probeint = user_probe_interval;
-	pg->pg_in_use = _B_TRUE;
+	pg->pg_in_use = B_TRUE;
 
 	/*
 	 * Normal groups always start in the PG_FAILED state since they
@@ -609,7 +609,7 @@ retry:
 	pii = NULL;
 	pi = NULL;
 	pg = NULL;
-	pi_created = _B_FALSE;
+	pi_created = B_FALSE;
 
 	if (debug & D_PHYINT) {
 		logdebug("phyint_inst_init_from_k(%s %s)\n",
@@ -716,10 +716,10 @@ retry:
 			    " unable to create phyint %s\n", pi_name);
 			return (NULL);
 		}
-		pi_created = _B_TRUE;
+		pi_created = B_TRUE;
 	} else {
 		/* The phyint exists already. */
-		assert(pi_created == _B_FALSE);
+		assert(pi_created == B_FALSE);
 		/*
 		 * Normally we should see consistent values for the IPv4 and
 		 * IPv6 instances, for phyint properties. If we don't, it
@@ -794,8 +794,8 @@ retry:
 		 * If this phyint does not have a unique hardware address in its
 		 * group, offline it.
 		 */
-		if (phyint_lookup_hwaddr(pi, _B_TRUE) != NULL) {
-			pi->pi_hwaddrdup = _B_TRUE;
+		if (phyint_lookup_hwaddr(pi, B_TRUE) != NULL) {
+			pi->pi_hwaddrdup = B_TRUE;
 			(void) phyint_offline(pi, 0);
 		}
 	}
@@ -810,7 +810,7 @@ retry:
  * initializations by calling the protocol specific functions
  * phyint_inst_v{4,6}_sockinit() respectively.
  *
- * Return values: _B_TRUE/_B_FALSE for success or failure respectively.
+ * Return values: B_TRUE/B_FALSE for success or failure respectively.
  */
 boolean_t
 phyint_inst_sockinit(struct phyint_instance *pii)
@@ -832,7 +832,7 @@ phyint_inst_sockinit(struct phyint_instance *pii)
 	 * If the socket is already bound, close pii_probe_sock
 	 */
 	if (pii->pii_probe_sock != -1)
-		close_probe_socket(pii, _B_TRUE);
+		close_probe_socket(pii, B_TRUE);
 
 	/*
 	 * If the phyint is not part of a named group and track_all_phyints is
@@ -842,7 +842,7 @@ phyint_inst_sockinit(struct phyint_instance *pii)
 	if (pg == phyint_anongroup && !track_all_phyints) {
 		if (debug & D_PHYINT)
 			logdebug("phyint_inst_sockinit: no group\n");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/*
@@ -855,13 +855,13 @@ phyint_inst_sockinit(struct phyint_instance *pii)
 		success = phyint_inst_v4_sockinit(pii);
 
 	if (success && (poll_add(pii->pii_probe_sock) == 0))
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	/* Something failed, cleanup and return false */
 	if (pii->pii_probe_sock != -1)
-		close_probe_socket(pii, _B_FALSE);
+		close_probe_socket(pii, B_FALSE);
 
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -892,7 +892,7 @@ phyint_inst_v6_sockinit(struct phyint_instance *pii)
 	pii->pii_probe_sock = socket(pii->pii_af, SOCK_RAW, IPPROTO_ICMPV6);
 	if (pii->pii_probe_sock < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: socket");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/*
@@ -901,13 +901,13 @@ phyint_inst_v6_sockinit(struct phyint_instance *pii)
 	if ((flags = fcntl(pii->pii_probe_sock, F_GETFL, 0)) == -1) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: fcntl"
 		    " F_GETFL");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 	if (fcntl(pii->pii_probe_sock, F_SETFL,
 	    flags | O_NONBLOCK) == -1) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: fcntl"
 		    " F_SETFL O_NONBLOCK");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	bzero(&testaddr, sizeof (testaddr));
@@ -918,42 +918,42 @@ phyint_inst_v6_sockinit(struct phyint_instance *pii)
 	if (bind(pii->pii_probe_sock, (struct sockaddr *)&testaddr,
 	    sizeof (testaddr)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: IPv6 bind");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IPV6, IPV6_MULTICAST_IF,
 	    (char *)&pii->pii_ifindex, sizeof (uint_t)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " IPV6_MULTICAST_IF");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IPV6, IPV6_BOUND_IF,
 	    &pii->pii_ifindex, sizeof (uint_t)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " IPV6_BOUND_IF");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IPV6, IPV6_UNICAST_HOPS,
 	    (char *)&hopcount, sizeof (hopcount)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " IPV6_UNICAST_HOPS");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IPV6, IPV6_MULTICAST_HOPS,
 	    (char *)&hopcount, sizeof (hopcount)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " IPV6_MULTICAST_HOPS");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IPV6, IPV6_MULTICAST_LOOP,
 	    (char *)&off, sizeof (off)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " IPV6_MULTICAST_LOOP");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/*
@@ -966,7 +966,7 @@ phyint_inst_v6_sockinit(struct phyint_instance *pii)
 	    (char *)&filter, sizeof (filter)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " ICMP6_FILTER");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/* Enable receipt of hoplimit */
@@ -974,7 +974,7 @@ phyint_inst_v6_sockinit(struct phyint_instance *pii)
 	    &on, sizeof (on)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " IPV6_RECVHOPLIMIT");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/* Enable receipt of timestamp */
@@ -982,10 +982,10 @@ phyint_inst_v6_sockinit(struct phyint_instance *pii)
 	    &on, sizeof (on)) < 0) {
 		logperror_pii(pii, "phyint_inst_v6_sockinit: setsockopt"
 		    " SO_TIMESTAMP");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1015,7 +1015,7 @@ phyint_inst_v4_sockinit(struct phyint_instance *pii)
 	pii->pii_probe_sock = socket(pii->pii_af, SOCK_RAW, IPPROTO_ICMP);
 	if (pii->pii_probe_sock < 0) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: socket");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/*
@@ -1024,13 +1024,13 @@ phyint_inst_v4_sockinit(struct phyint_instance *pii)
 	if ((flags = fcntl(pii->pii_probe_sock, F_GETFL, 0)) == -1) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: fcntl"
 		    " F_GETFL");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 	if (fcntl(pii->pii_probe_sock, F_SETFL,
 	    flags | O_NONBLOCK) == -1) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: fcntl"
 		    " F_SETFL O_NONBLOCK");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	bzero(&testaddr, sizeof (testaddr));
@@ -1042,52 +1042,52 @@ phyint_inst_v4_sockinit(struct phyint_instance *pii)
 	if (bind(pii->pii_probe_sock, (struct sockaddr *)&testaddr,
 	    sizeof (testaddr)) < 0) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: IPv4 bind");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IP, IP_BOUND_IF,
 	    &pii->pii_ifindex, sizeof (uint_t)) < 0) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: setsockopt"
 		    " IP_BOUND_IF");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IP, IP_MULTICAST_IF,
 	    (char *)&testaddr.sin_addr, sizeof (struct in_addr)) < 0) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: setsockopt"
 		    " IP_MULTICAST_IF");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IP, IP_TTL,
 	    (char *)&ttl, sizeof (ttl)) < 0) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: setsockopt"
 		    " IP_TTL");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IP, IP_MULTICAST_LOOP,
 	    (char *)&char_off, sizeof (char_off)) == -1) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: setsockopt"
 		    " IP_MULTICAST_LOOP");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, IPPROTO_IP, IP_MULTICAST_TTL,
 	    (char *)&char_ttl, sizeof (char_ttl)) == -1) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: setsockopt"
 		    " IP_MULTICAST_TTL");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (setsockopt(pii->pii_probe_sock, SOL_SOCKET, SO_TIMESTAMP, &on,
 	    sizeof (on)) < 0) {
 		logperror_pii(pii, "phyint_inst_v4_sockinit: setsockopt"
 		    " SO_TIMESTAMP");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1181,11 +1181,11 @@ phyint_group_refresh_state(struct phyint_group *pg)
 		assert(origstate == PG_FAILED);
 		logerr("At least 1 IP interface (%s) in group %s is now "
 		    "usable\n", usablepi->pi_name, pg->pg_name);
-		pg->pg_failmsg_printed = _B_FALSE;
+		pg->pg_failmsg_printed = B_FALSE;
 	} else if (origstate != PG_FAILED && state == PG_FAILED) {
 		logerr("All IP interfaces in group %s are now unusable\n",
 		    pg->pg_name);
-		pg->pg_failmsg_printed = _B_TRUE;
+		pg->pg_failmsg_printed = B_TRUE;
 	}
 }
 
@@ -1379,7 +1379,7 @@ phyint_delete(struct phyint *pi)
 	 * it was a dup of `pi' -- and if so, online it.
 	 */
 	if (!pi->pi_hwaddrdup &&
-	    (pi2 = phyint_lookup_hwaddr(pi, _B_FALSE)) != NULL) {
+	    (pi2 = phyint_lookup_hwaddr(pi, B_FALSE)) != NULL) {
 		assert(pi2->pi_hwaddrdup);
 		(void) phyint_undo_offline(pi2);
 	}
@@ -1390,11 +1390,11 @@ phyint_delete(struct phyint *pi)
 	 * interface to compensate.
 	 */
 	if (pg != phyint_anongroup) {
-		active = _B_FALSE;
+		active = B_FALSE;
 		for (pi2 = pg->pg_phyint; pi2 != NULL; pi2 = pi2->pi_pgnext) {
 			if (phyint_is_functioning(pi2) &&
 			    !(pi2->pi_flags & IFF_INACTIVE)) {
-				active = _B_TRUE;
+				active = B_TRUE;
 				break;
 			}
 		}
@@ -1473,7 +1473,7 @@ phyint_offline(struct phyint *pi, uint_t minred)
 	 * hardware address from being online, bring that one online now.
 	 */
 	if (!pi->pi_hwaddrdup &&
-	    (pi2 = phyint_lookup_hwaddr(pi, _B_FALSE)) != NULL) {
+	    (pi2 = phyint_lookup_hwaddr(pi, B_FALSE)) != NULL) {
 		assert(pi2->pi_hwaddrdup);
 		(void) phyint_undo_offline(pi2);
 	}
@@ -1508,15 +1508,15 @@ phyint_undo_offline(struct phyint *pi)
 		return (IPMP_FAILURE);
 	}
 
-	if (phyint_lookup_hwaddr(pi, _B_TRUE) != NULL) {
-		pi->pi_hwaddrdup = _B_TRUE;
+	if (phyint_lookup_hwaddr(pi, B_TRUE) != NULL) {
+		pi->pi_hwaddrdup = B_TRUE;
 		return (IPMP_EHWADDRDUP);
 	}
 
 	if (pi->pi_hwaddrdup) {
 		logerr("IP interface %s now has a unique hardware address in "
 		    "group %s; onlining\n", pi->pi_name, pi->pi_group->pg_name);
-		pi->pi_hwaddrdup = _B_FALSE;
+		pi->pi_hwaddrdup = B_FALSE;
 	}
 
 	if (!change_pif_flags(pi, 0, IFF_OFFLINE))
@@ -1580,7 +1580,7 @@ phyint_inst_delete(struct phyint_instance *pii)
 	 * Close the socket used to send probes to targets from this phyint.
 	 */
 	if (pii->pii_probe_sock != -1)
-		close_probe_socket(pii, _B_TRUE);
+		close_probe_socket(pii, B_TRUE);
 
 	/*
 	 * Phyint instance must be in the list of all phyint instances.
@@ -1762,7 +1762,7 @@ logint_init_from_k(struct phyint_instance *pii, char *li_name)
 	struct sockaddr_in6	*sin6;
 	struct sockaddr_in	*sin;
 	char abuf[INET6_ADDRSTRLEN];
-	boolean_t  ptp = _B_FALSE;
+	boolean_t  ptp = B_FALSE;
 	struct in6_addr tgaddr;
 
 	if (debug & D_LOGINT) {
@@ -1874,7 +1874,7 @@ logint_init_from_k(struct phyint_instance *pii, char *li_name)
 			 * set pii_probe_logint to NULL.
 			 */
 			if (pii->pii_probe_sock != -1)
-				close_probe_socket(pii, _B_TRUE);
+				close_probe_socket(pii, B_TRUE);
 			pii->pii_probe_logint = NULL;
 		}
 	}
@@ -1947,7 +1947,7 @@ logint_delete(struct logint *li)
 	 */
 	if (pii->pii_probe_logint == li) {
 		if (pii->pii_probe_sock != -1)
-			close_probe_socket(pii, _B_TRUE);
+			close_probe_socket(pii, B_TRUE);
 		pii->pii_probe_logint = NULL;
 	}
 
@@ -2485,7 +2485,7 @@ target_delete(struct target *tg)
 	 * relevant any longer.
 	 */
 	assert(pii->pii_targets == NULL);
-	pii->pii_targets_are_routers = _B_FALSE;
+	pii->pii_targets_are_routers = B_FALSE;
 	clear_pii_probe_stats(pii);
 	pii_other = phyint_inst_other(pii);
 
@@ -2621,18 +2621,18 @@ prefix_equal(struct in6_addr p1, struct in6_addr p2, uint_t prefix_len)
 	int j;
 
 	if (prefix_len > IPV6_ABITS)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	for (j = 0; prefix_len > 8; prefix_len -= 8, j++)
 		if (p1.s6_addr[j] != p2.s6_addr[j])
-			return (_B_FALSE);
+			return (B_FALSE);
 
 	/* Make the N leftmost bits one */
 	mask = 0xff << (8 - prefix_len);
 	if ((p1.s6_addr[j] & mask) != (p2.s6_addr[j] & mask))
-		return (_B_FALSE);
+		return (B_FALSE);
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -2680,7 +2680,7 @@ boolean_t
 phyint_is_functioning(struct phyint *pi)
 {
 	if (pi->pi_state == PI_RUNNING)
-		return (_B_TRUE);
+		return (B_TRUE);
 	return (pi->pi_state == PI_NOTARGETS && !(pi->pi_flags & IFF_FAILED));
 }
 
@@ -2691,7 +2691,7 @@ boolean_t
 phyint_is_usable(struct phyint *pi)
 {
 	if (logint_upcount(pi) == 0)
-		return (_B_FALSE);
+		return (B_FALSE);
 	return (phyint_is_functioning(pi));
 }
 

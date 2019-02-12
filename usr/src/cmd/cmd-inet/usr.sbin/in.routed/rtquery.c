@@ -93,7 +93,7 @@ static	int	wtime = WTIME;
 static	int	auth_type = RIP_AUTH_NONE;
 char	passwd[RIP_AUTH_PW_LEN+1];
 static	ulong_t	keyid;
-static	boolean_t	ripv2 = _B_TRUE;		/* use RIP version 2 */
+static	boolean_t	ripv2 = B_TRUE;		/* use RIP version 2 */
 static	boolean_t	trace, not_trace;	/* send trace command or not */
 static	boolean_t	nflag;			/* numbers, no names */
 static	boolean_t	pflag;			/* play the `gated` game */
@@ -139,28 +139,28 @@ main(int argc, char *argv[])
 	while ((ch = getopt(argc, argv, "np1w:r:t:a:")) != -1)
 		switch (ch) {
 		case 'n':
-			not_trace = _B_TRUE;
-			nflag = _B_TRUE;
+			not_trace = B_TRUE;
+			nflag = B_TRUE;
 			break;
 
 		case 'p':
-			not_trace = _B_TRUE;
-			pflag = _B_TRUE;
+			not_trace = B_TRUE;
+			pflag = B_TRUE;
 			break;
 
 		case '1':
-			ripv2 = _B_FALSE;
+			ripv2 = B_FALSE;
 			break;
 
 		case 'w':
-			not_trace = _B_TRUE;
+			not_trace = B_TRUE;
 			wtime = (int)strtoul(optarg, &p, 0);
 			if (*p != '\0' || wtime <= 0 || p == optarg)
 				usage();
 			break;
 
 		case 'r':
-			not_trace = _B_TRUE;
+			not_trace = B_TRUE;
 			if (rflag)
 				usage();
 			rflag = getnet(optarg, &netaddr, &netmask);
@@ -181,12 +181,12 @@ main(int argc, char *argv[])
 				    sizeof (OMSG.rip_nets[0].n_dst));
 				OMSG.rip_nets[0].n_family = RIP_AF_INET;
 				OMSG.rip_nets[0].n_mask = INADDR_BROADCAST;
-				rflag = _B_TRUE;
+				rflag = B_TRUE;
 			}
 			break;
 
 		case 't':
-			trace = _B_TRUE;
+			trace = B_TRUE;
 			options = optarg;
 			while (*options != '\0') {
 				/* messy complications to make -W -Wall happy */
@@ -242,7 +242,7 @@ main(int argc, char *argv[])
 			break;
 
 		case 'a':
-			not_trace = _B_TRUE;
+			not_trace = B_TRUE;
 			p = strchr(optarg, '=');
 			if (p == NULL)
 				usage();

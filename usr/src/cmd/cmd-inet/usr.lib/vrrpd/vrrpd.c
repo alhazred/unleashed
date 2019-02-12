@@ -61,7 +61,7 @@
  * A VRRP router can be only start participating the VRRP protocol of a virtual
  * router when all the following conditions are met:
  *
- * - The VRRP router is enabled (vr->vvr_conf.vvc_enabled is _B_TRUE)
+ * - The VRRP router is enabled (vr->vvr_conf.vvc_enabled is B_TRUE)
  * - The RX socket is successfully created over the physical interface to
  *   receive the VRRP multicast advertisement. Note that one RX socket can
  *   be shared by several VRRP routers configured over the same physical
@@ -298,19 +298,19 @@ typedef struct vrrp_cmd_info_s {
 
 static vrrp_cmd_info_t vrrp_cmd_info_tbl[] = {
 	{VRRP_CMD_CREATE, sizeof (vrrp_cmd_create_t),
-	    sizeof (vrrp_ret_create_t), _B_TRUE, vrrpd_cmd_create},
+	    sizeof (vrrp_ret_create_t), B_TRUE, vrrpd_cmd_create},
 	{VRRP_CMD_DELETE, sizeof (vrrp_cmd_delete_t),
-	    sizeof (vrrp_ret_delete_t), _B_TRUE, vrrpd_cmd_delete},
+	    sizeof (vrrp_ret_delete_t), B_TRUE, vrrpd_cmd_delete},
 	{VRRP_CMD_ENABLE, sizeof (vrrp_cmd_enable_t),
-	    sizeof (vrrp_ret_enable_t), _B_TRUE, vrrpd_cmd_enable},
+	    sizeof (vrrp_ret_enable_t), B_TRUE, vrrpd_cmd_enable},
 	{VRRP_CMD_DISABLE, sizeof (vrrp_cmd_disable_t),
-	    sizeof (vrrp_ret_disable_t), _B_TRUE, vrrpd_cmd_disable},
+	    sizeof (vrrp_ret_disable_t), B_TRUE, vrrpd_cmd_disable},
 	{VRRP_CMD_MODIFY, sizeof (vrrp_cmd_modify_t),
-	    sizeof (vrrp_ret_modify_t), _B_TRUE, vrrpd_cmd_modify},
+	    sizeof (vrrp_ret_modify_t), B_TRUE, vrrpd_cmd_modify},
 	{VRRP_CMD_QUERY, sizeof (vrrp_cmd_query_t), 0,
-	    _B_FALSE, vrrpd_cmd_query},
+	    B_FALSE, vrrpd_cmd_query},
 	{VRRP_CMD_LIST, sizeof (vrrp_cmd_list_t), 0,
-	    _B_FALSE, vrrpd_cmd_list}
+	    B_FALSE, vrrpd_cmd_list}
 };
 
 #define	VRRP_DOOR_INFO_TABLE_SIZE	\
@@ -422,7 +422,7 @@ vrrpd_delete_if(vrrp_intf_t *intf, boolean_t update_vr)
 		 * to find all corresponding VRRP router and update their
 		 * states.
 		 */
-		vrrpd_remove_if(intf, _B_FALSE);
+		vrrpd_remove_if(intf, B_FALSE);
 	}
 
 	/*
@@ -448,7 +448,7 @@ vrrpd_create_ip(vrrp_intf_t *intf, const char *lifname, vrrp_addr_t *addr,
 	char		abuf[INET6_ADDRSTRLEN];
 
 	/* LINTED E_CONSTANT_CONDITION */
-	VRRPADDR2STR(intf->vvi_af, addr, abuf, INET6_ADDRSTRLEN, _B_FALSE);
+	VRRPADDR2STR(intf->vvi_af, addr, abuf, INET6_ADDRSTRLEN, B_FALSE);
 	vrrp_log(VRRP_DBG0, "vrrpd_create_ip(%s, %s, %s, 0x%x)",
 	    intf->vvi_ifname, lifname, abuf, flags);
 
@@ -482,7 +482,7 @@ vrrpd_delete_ip(vrrp_intf_t *intf, vrrp_ip_t *ip)
 	int	af = intf->vvi_af;
 
 	/* LINTED E_CONSTANT_CONDITION */
-	VRRPADDR2STR(af, &ip->vip_addr, abuf, sizeof (abuf), _B_FALSE);
+	VRRPADDR2STR(af, &ip->vip_addr, abuf, sizeof (abuf), B_FALSE);
 	vrrp_log(VRRP_DBG0, "vrrpd_delete_ip(%s, %s, %s) is %sprimary",
 	    intf->vvi_ifname, ip->vip_lifname, abuf,
 	    intf->vvi_pip == ip ? "" : "not ");
@@ -879,7 +879,7 @@ vrrpd_cleanup(void)
 
 	while (!TAILQ_EMPTY(&vrrp_intf_list)) {
 		intf = TAILQ_FIRST(&vrrp_intf_list);
-		vrrpd_delete_if(intf, _B_FALSE);
+		vrrpd_delete_if(intf, B_FALSE);
 	}
 
 	vrrpd_fini();
@@ -926,14 +926,14 @@ vrrpd_initconf()
 		 * No need to update the configuration since the VRRP router
 		 * created/enabled based on the existing configuration.
 		 */
-		if ((err = vrrpd_create(&conf, _B_FALSE)) != VRRP_SUCCESS) {
+		if ((err = vrrpd_create(&conf, B_FALSE)) != VRRP_SUCCESS) {
 			vrrp_log(VRRP_ERR, "VRRP router %s creation failed: "
 			    "%s", conf.vvc_name, vrrp_err2str(err));
 			continue;
 		}
 
 		if (conf.vvc_enabled &&
-		    ((err = vrrpd_enable(conf.vvc_name, _B_FALSE)) !=
+		    ((err = vrrpd_enable(conf.vvc_name, B_FALSE)) !=
 		    VRRP_SUCCESS)) {
 			vrrp_log(VRRP_ERR, "VRRP router %s enable failed: %s",
 			    conf.vvc_name, vrrp_err2str(err));
@@ -1097,7 +1097,7 @@ static vrrp_err_t
 vrrpd_ctlsock_create()
 {
 	int	s, s6;
-	int	on = _B_TRUE;
+	int	on = B_TRUE;
 
 	if ((s = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
 		vrrp_log(VRRP_ERR, "vrrpd_ctlsock_create(): socket(INET) "
@@ -1147,13 +1147,13 @@ vrrpd_cmd_create(void *arg1, void *arg2, size_t *arg2_sz)
 	vrrp_ret_create_t	*ret = (vrrp_ret_create_t *)arg2;
 	vrrp_err_t		err;
 
-	err = vrrpd_create(&cmd->vcc_conf, _B_TRUE);
+	err = vrrpd_create(&cmd->vcc_conf, B_TRUE);
 	if (err == VRRP_SUCCESS && cmd->vcc_conf.vvc_enabled) {
 		/*
 		 * No need to update the configuration since it is already
 		 * done in the above vrrpd_create() call
 		 */
-		err = vrrpd_enable(cmd->vcc_conf.vvc_name, _B_FALSE);
+		err = vrrpd_enable(cmd->vcc_conf.vvc_name, B_FALSE);
 		if (err != VRRP_SUCCESS)
 			(void) vrrpd_delete(cmd->vcc_conf.vvc_name);
 	}
@@ -1177,7 +1177,7 @@ vrrpd_cmd_enable(void *arg1, void *arg2, size_t *arg2_sz)
 	vrrp_cmd_enable_t	*cmd = (vrrp_cmd_enable_t *)arg1;
 	vrrp_ret_enable_t	*ret = (vrrp_ret_enable_t *)arg2;
 
-	ret->vrs_err = vrrpd_enable(cmd->vcs_name, _B_TRUE);
+	ret->vrs_err = vrrpd_enable(cmd->vcs_name, B_TRUE);
 }
 
 /*ARGSUSED*/
@@ -1225,12 +1225,12 @@ vrrp_auth_check(int connfd, vrrp_cmd_info_t *cinfo)
 	ucred_t		*cred = NULL;
 	uid_t		uid;
 	struct passwd	*pw;
-	boolean_t	success = _B_FALSE;
+	boolean_t	success = B_FALSE;
 
 	vrrp_log(VRRP_DBG0, "vrrp_auth_check()");
 
 	if (!cinfo->vi_setop)
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	/*
 	 * Validate the credential
@@ -1238,7 +1238,7 @@ vrrp_auth_check(int connfd, vrrp_cmd_info_t *cinfo)
 	if (getpeerucred(connfd, &cred) == (uid_t)-1) {
 		vrrp_log(VRRP_ERR, "vrrp_auth_check(): getpeerucred() "
 		    "failed: %s", strerror(errno));
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if ((uid = ucred_getruid((const ucred_t *)cred)) == (uid_t)-1) {
@@ -1404,7 +1404,7 @@ vrrpd_rtsock_handler(iu_eh_t *eh, int s, short events,
 	struct ifa_msghdr	*ifam;
 	int			nbytes;
 	int			af = *(int *)arg;
-	boolean_t		scanif = _B_FALSE;
+	boolean_t		scanif = B_FALSE;
 
 	for (;;) {
 		nbytes = read(s, buf, sizeof (buf));
@@ -1434,7 +1434,7 @@ vrrpd_rtsock_handler(iu_eh_t *eh, int s, short events,
 			 * brought up/down, re-initilialize the interface/IP
 			 * address list.
 			 */
-			scanif = _B_TRUE;
+			scanif = B_TRUE;
 			break;
 		default:
 			/* Not interesting */
@@ -1502,7 +1502,7 @@ vrrpd_init_ipcache(int af)
 		 * which causes the re-walk of all the interfaces (see
 		 * vrrpd_add_ipaddr()), and some interfaces are still marked
 		 * as new during the last walk. In this case, delete this
-		 * interface with the "update_vr" argument to be _B_FALSE,
+		 * interface with the "update_vr" argument to be B_FALSE,
 		 * since no VRRP router has been assoicated with this
 		 * interface yet (the association is done in
 		 * vrrpd_update_ipcache()).
@@ -1513,7 +1513,7 @@ vrrpd_init_ipcache(int af)
 			vrrp_log(VRRP_DBG0, "vrrpd_init_ipcache(): remove %s "
 			    "(%d), may be added later", intf->vvi_ifname,
 			    intf->vvi_ifindex);
-			vrrpd_delete_if(intf, _B_FALSE);
+			vrrpd_delete_if(intf, B_FALSE);
 			continue;
 		}
 
@@ -1522,7 +1522,7 @@ vrrpd_init_ipcache(int af)
 			nextip = TAILQ_NEXT(ip, vip_next);
 			/* LINTED E_CONSTANT_CONDITION */
 			VRRPADDR2STR(af, &ip->vip_addr, abuf,
-			    INET6_ADDRSTRLEN, _B_FALSE);
+			    INET6_ADDRSTRLEN, B_FALSE);
 
 			if (ip->vip_state != NODE_STATE_NEW) {
 				vrrp_log(VRRP_DBG0, "vrrpd_init_ipcache(%s/%d, "
@@ -1638,7 +1638,7 @@ vrrpd_add_ipaddr(char *lifname, int af, vrrp_addr_t *addr, int ifindex,
 	vrrp_err_t	err;
 
 	/* LINTED E_CONSTANT_CONDITION */
-	VRRPADDR2STR(af, addr, abuf, INET6_ADDRSTRLEN, _B_FALSE);
+	VRRPADDR2STR(af, addr, abuf, INET6_ADDRSTRLEN, B_FALSE);
 	vrrp_log(VRRP_DBG0, "vrrpd_add_ipaddr(%s, %s, %d, 0x%x)", lifname,
 	    abuf, ifindex, flags);
 
@@ -1673,7 +1673,7 @@ vrrpd_add_ipaddr(char *lifname, int af, vrrp_addr_t *addr, int ifindex,
 			 * interface has already been assoicated with
 			 * any VRRP routers.
 			 */
-			vrrpd_delete_if(intf, _B_TRUE);
+			vrrpd_delete_if(intf, B_TRUE);
 			return (VRRP_EAGAIN);
 		}
 	}
@@ -1729,7 +1729,7 @@ vrrpd_update_ipcache(int af)
 	char		abuf[INET6_ADDRSTRLEN];
 	boolean_t	primary_selected;
 	boolean_t	primary_now_selected;
-	boolean_t	need_reenable = _B_FALSE;
+	boolean_t	need_reenable = B_FALSE;
 
 	vrrp_log(VRRP_DBG0, "vrrpd_update_ipcache(%s)", af_str(af));
 
@@ -1756,7 +1756,7 @@ vrrpd_update_ipcache(int af)
 
 			/* LINTED E_CONSTANT_CONDITION */
 			VRRPADDR2STR(af, &ip->vip_addr, abuf, INET6_ADDRSTRLEN,
-			    _B_FALSE);
+			    B_FALSE);
 			vrrp_log(VRRP_DBG0, "vrrpd_update_ipcache(): IP %s "
 			    "is removed over %s", abuf, intf->vvi_ifname);
 			vrrpd_delete_ip(intf, ip);
@@ -1768,7 +1768,7 @@ vrrpd_update_ipcache(int af)
 		if (TAILQ_EMPTY(&intf->vvi_iplist)) {
 			vrrp_log(VRRP_DBG0, "vrrpd_update_ipcache(): "
 			    "no IP left over %s", intf->vvi_ifname);
-			vrrpd_delete_if(intf, _B_TRUE);
+			vrrpd_delete_if(intf, B_TRUE);
 			continue;
 		}
 
@@ -1787,7 +1787,7 @@ vrrpd_update_ipcache(int af)
 				vrrp_log(VRRP_DBG0, "vrrpd_update_ipcache() "
 				    "reselect primary IP on %s failed",
 				    intf->vvi_ifname);
-				vrrpd_remove_if(intf, _B_TRUE);
+				vrrpd_remove_if(intf, B_TRUE);
 			} else if (!primary_selected && primary_now_selected) {
 				/*
 				 * The primary IP address is successfully
@@ -1796,7 +1796,7 @@ vrrpd_update_ipcache(int af)
 				 * that is created on this physical interface
 				 * and see whether they can now be enabled.
 				 */
-				need_reenable = _B_TRUE;
+				need_reenable = B_TRUE;
 			}
 		}
 
@@ -1816,7 +1816,7 @@ vrrpd_update_ipcache(int af)
 			nextip = TAILQ_NEXT(ip, vip_next);
 			/* LINTED E_CONSTANT_CONDITION */
 			VRRPADDR2STR(af, &ip->vip_addr, abuf, INET6_ADDRSTRLEN,
-			    _B_FALSE);
+			    B_FALSE);
 			vrrp_log(VRRP_DBG0, "vrrpd_update_ipcache(): "
 			    "IP %s over %s%s", abuf, intf->vvi_ifname,
 			    ip->vip_state == NODE_STATE_NEW ? " is new" : "");
@@ -1851,7 +1851,7 @@ vrrpd_update_ipcache(int af)
 		if (TAILQ_EMPTY(&intf->vvi_iplist)) {
 			vrrp_log(VRRP_DBG0, "vrrpd_update_ipcache(): "
 			    "no IP left over %s", intf->vvi_ifname);
-			vrrpd_delete_if(intf, _B_TRUE);
+			vrrpd_delete_if(intf, B_TRUE);
 			continue;
 		}
 
@@ -1865,7 +1865,7 @@ vrrpd_update_ipcache(int af)
 			 * address or the new virtual IP addresses.
 			 */
 			intf->vvi_state = NODE_STATE_NONE;
-			need_reenable = _B_TRUE;
+			need_reenable = B_TRUE;
 		}
 	}
 
@@ -1896,7 +1896,7 @@ vrrpd_reselect_primary(vrrp_intf_t *intf)
 	if (ip != NULL) {
 		/* LINTED E_CONSTANT_CONDITION */
 		VRRPADDR2STR(intf->vvi_af, &ip->vip_addr, abuf,
-		    sizeof (abuf), _B_FALSE);
+		    sizeof (abuf), B_FALSE);
 		vrrp_log(VRRP_DBG0, "vrrpd_reselect_primary(%s): primary IP %s "
 		    "is no longer qualified", intf->vvi_ifname, abuf);
 	}
@@ -1907,7 +1907,7 @@ vrrpd_reselect_primary(vrrp_intf_t *intf)
 	if (ip != NULL) {
 		/* LINTED E_CONSTANT_CONDITION */
 		VRRPADDR2STR(intf->vvi_af, &ip->vip_addr, abuf,
-		    sizeof (abuf), _B_FALSE);
+		    sizeof (abuf), B_FALSE);
 		vrrp_log(VRRP_DBG0, "vrrpd_reselect_primary(%s): primary IP %s "
 		    "is selected", intf->vvi_ifname, abuf);
 	}
@@ -1931,7 +1931,7 @@ vrrpd_select_primary(vrrp_intf_t *pif)
 
 		/* LINTED E_CONSTANT_CONDITION */
 		VRRPADDR2STR(pif->vvi_af, &pip->vip_addr, abuf,
-		    INET6_ADDRSTRLEN, _B_FALSE);
+		    INET6_ADDRSTRLEN, B_FALSE);
 		vrrp_log(VRRP_DBG0, "vrrpd_select_primary(%s): %s is %s",
 		    pif->vvi_ifname, abuf,
 		    (pip->vip_flags & IFF_UP) ? "up" : "down");
@@ -1968,7 +1968,7 @@ vrrpd_reenable_all_vr()
 }
 
 /*
- * If primary_addr_gone is _B_TRUE, it means that we failed to select
+ * If primary_addr_gone is B_TRUE, it means that we failed to select
  * the primary IP address on this (physical) interface; otherwise,
  * it means the interface is no longer available.
  */
@@ -1998,7 +1998,7 @@ vrrpd_updateconf(vrrp_vr_conf_t *newconf, uint_t op)
 	int		nfd;
 	char		line[LINE_MAX];
 	char		newfile[MAXPATHLEN];
-	boolean_t	found = _B_FALSE;
+	boolean_t	found = B_FALSE;
 	vrrp_err_t	err = VRRP_SUCCESS;
 
 	vrrp_log(VRRP_DBG0, "vrrpd_updateconf(%s, %s)", newconf->vvc_name,
@@ -2065,7 +2065,7 @@ vrrpd_updateconf(vrrp_vr_conf_t *newconf, uint_t op)
 		/*
 		 * Otherwise, update/skip the line.
 		 */
-		found = _B_TRUE;
+		found = B_TRUE;
 		if (op == VRRP_CONF_DELETE)
 			continue;
 
@@ -2242,8 +2242,8 @@ vrrp_rd_prop_af(vrrp_vr_conf_t *conf, const char *str)
 	else if (strcasecmp(str, "AF_INET6") == 0)
 		conf->vvc_af = AF_INET6;
 	else
-		return (_B_FALSE);
-	return (_B_TRUE);
+		return (B_FALSE);
+	return (B_TRUE);
 }
 
 static boolean_t
@@ -2268,36 +2268,36 @@ static boolean_t
 vrrp_rd_prop_preempt(vrrp_vr_conf_t *conf, const char *str)
 {
 	if (strcasecmp(str, "true") == 0)
-		conf->vvc_preempt = _B_TRUE;
+		conf->vvc_preempt = B_TRUE;
 	else if (strcasecmp(str, "false") == 0)
-		conf->vvc_preempt = _B_FALSE;
+		conf->vvc_preempt = B_FALSE;
 	else
-		return (_B_FALSE);
-	return (_B_TRUE);
+		return (B_FALSE);
+	return (B_TRUE);
 }
 
 static boolean_t
 vrrp_rd_prop_accept(vrrp_vr_conf_t *conf, const char *str)
 {
 	if (strcasecmp(str, "true") == 0)
-		conf->vvc_accept = _B_TRUE;
+		conf->vvc_accept = B_TRUE;
 	else if (strcasecmp(str, "false") == 0)
-		conf->vvc_accept = _B_FALSE;
+		conf->vvc_accept = B_FALSE;
 	else
-		return (_B_FALSE);
-	return (_B_TRUE);
+		return (B_FALSE);
+	return (B_TRUE);
 }
 
 static boolean_t
 vrrp_rd_prop_enabled(vrrp_vr_conf_t *conf, const char *str)
 {
 	if (strcasecmp(str, "enabled") == 0)
-		conf->vvc_enabled = _B_TRUE;
+		conf->vvc_enabled = B_TRUE;
 	else if (strcasecmp(str, "disabled") == 0)
-		conf->vvc_enabled = _B_FALSE;
+		conf->vvc_enabled = B_FALSE;
 	else
-		return (_B_FALSE);
-	return (_B_TRUE);
+		return (B_FALSE);
+	return (B_TRUE);
 }
 
 static boolean_t
@@ -2396,7 +2396,7 @@ vrrpd_create_vr(vrrp_vr_conf_t *conf)
 	vr->vvr_timer_id = -1;
 	vrrpd_state_trans(VRRP_STATE_NONE, VRRP_STATE_INIT, vr);
 	(void) memcpy(&vr->vvr_conf, conf, sizeof (vrrp_vr_conf_t));
-	vr->vvr_conf.vvc_enabled = _B_FALSE;
+	vr->vvr_conf.vvc_enabled = B_FALSE;
 	TAILQ_INSERT_HEAD(&vrrp_vr_list, vr, vvr_next);
 	return (VRRP_SUCCESS);
 }
@@ -2406,7 +2406,7 @@ vrrpd_delete_vr(vrrp_vr_t *vr)
 {
 	vrrp_log(VRRP_DBG0, "vrrpd_delete_vr(%s)", vr->vvr_conf.vvc_name);
 	if (vr->vvr_conf.vvc_enabled)
-		vrrpd_disable_vr(vr, NULL, _B_FALSE);
+		vrrpd_disable_vr(vr, NULL, B_FALSE);
 	assert(vr->vvr_state == VRRP_STATE_INIT);
 	vrrpd_state_trans(VRRP_STATE_INIT, VRRP_STATE_NONE, vr);
 	TAILQ_REMOVE(&vrrp_vr_list, vr, vvr_next);
@@ -2518,7 +2518,7 @@ vrrpd_disable_vr(vrrp_vr_t *vr, vrrp_intf_t *intf, boolean_t primary_addr_gone)
 		 * stops participating VRRP.
 		 */
 		if (intf == NULL)
-			(void) vrrpd_send_adv(vr, _B_TRUE);
+			(void) vrrpd_send_adv(vr, B_TRUE);
 
 		vrrpd_state_m2i(vr);
 	} else  if (vr->vvr_state == VRRP_STATE_BACKUP) {
@@ -2703,7 +2703,7 @@ vrrpd_enable(const char *vn, boolean_t updateconf)
 	 * interface), we will still continue and mark this VRRP router
 	 * as "enabled".
 	 */
-	vr->vvr_conf.vvc_enabled = _B_TRUE;
+	vr->vvr_conf.vvc_enabled = B_TRUE;
 	if (updateconf && (err = vrrpd_updateconf(&vr->vvr_conf,
 	    VRRP_CONF_UPDATE)) != VRRP_SUCCESS) {
 		vrrp_log(VRRP_ERR, "vrrpd_enable(): failed to update "
@@ -2722,7 +2722,7 @@ vrrpd_enable(const char *vn, boolean_t updateconf)
 	return (VRRP_SUCCESS);
 
 fail:
-	vr->vvr_conf.vvc_enabled = _B_FALSE;
+	vr->vvr_conf.vvc_enabled = B_FALSE;
 	vr->vvr_vnic[0] = '\0';
 	return (err);
 }
@@ -2748,16 +2748,16 @@ vrrpd_disable(const char *vn)
 		return (VRRP_EALREADY);
 	}
 
-	vr->vvr_conf.vvc_enabled = _B_FALSE;
+	vr->vvr_conf.vvc_enabled = B_FALSE;
 	err = vrrpd_updateconf(&vr->vvr_conf, VRRP_CONF_UPDATE);
 	if (err != VRRP_SUCCESS) {
-		vr->vvr_conf.vvc_enabled = _B_TRUE;
+		vr->vvr_conf.vvc_enabled = B_TRUE;
 		vrrp_log(VRRP_ERR, "vrrpd_disable(): failed to update "
 		    "configuration for %s", vr->vvr_conf.vvc_name);
 		return (err);
 	}
 
-	vrrpd_disable_vr(vr, NULL, _B_FALSE);
+	vrrpd_disable_vr(vr, NULL, B_FALSE);
 	vr->vvr_vnic[0] = '\0';
 	return (VRRP_SUCCESS);
 }
@@ -2768,7 +2768,7 @@ vrrpd_modify(vrrp_vr_conf_t *conf, uint32_t mask)
 	vrrp_vr_t	*vr;
 	vrrp_vr_conf_t	savconf;
 	int		pri;
-	boolean_t	accept, set_accept = _B_FALSE;
+	boolean_t	accept, set_accept = B_FALSE;
 	vrrp_err_t	err;
 
 	vrrp_log(VRRP_DBG0, "vrrpd_modify(%s)", conf->vvc_name);
@@ -2821,7 +2821,7 @@ vrrpd_modify(vrrp_vr_conf_t *conf, uint32_t mask)
 			    vrrp_err2str(err));
 			return (err);
 		}
-		set_accept = _B_TRUE;
+		set_accept = B_TRUE;
 	}
 
 	/*
@@ -3247,7 +3247,7 @@ vrrpd_process_adv(vrrp_vr_t *vr, vrrp_addr_t *from, vrrp_pkt_t *vp)
 
 	/* LINTED E_CONSTANT_CONDITION */
 	VRRPADDR2STR(vr->vvr_conf.vvc_af, from, peer, INET6_ADDRSTRLEN,
-	    _B_FALSE);
+	    B_FALSE);
 	vrrp_log(VRRP_DBG1, "vrrpd_process_adv(%s) from %s", conf->vvc_name,
 	    peer);
 
@@ -3261,7 +3261,7 @@ vrrpd_process_adv(vrrp_vr_t *vr, vrrp_addr_t *from, vrrp_pkt_t *vp)
 
 	/* LINTED E_CONSTANT_CONDITION */
 	VRRPADDR2STR(vr->vvr_pif->vvi_af, &vr->vvr_pif->vvi_pip->vip_addr,
-	    local, INET6_ADDRSTRLEN, _B_FALSE);
+	    local, INET6_ADDRSTRLEN, B_FALSE);
 	vrrp_log(VRRP_DBG1, "vrrpd_process_adv(%s): local/state/pri"
 	    "(%s/%s/%d) peer/pri/intv(%s/%d/%d)", conf->vvc_name, local,
 	    vrrp_state2str(vr->vvr_state), conf->vvc_pri, peer,
@@ -3294,7 +3294,7 @@ vrrpd_process_adv(vrrp_vr_t *vr, vrrp_addr_t *from, vrrp_pkt_t *vp)
 	if (vr->vvr_state == VRRP_STATE_BACKUP) {
 		vr->vvr_master_adver_int = vr->vvr_peer_adver_int;
 		if ((vp->vp_prio == VRRP_PRIO_ZERO) ||
-		    (conf->vvc_preempt == _B_FALSE ||
+		    (conf->vvc_preempt == B_FALSE ||
 		    vp->vp_prio >= conf->vvc_pri)) {
 			(void) iu_cancel_timer(vrrpd_timerq,
 			    vr->vvr_timer_id, NULL);
@@ -3318,7 +3318,7 @@ vrrpd_process_adv(vrrp_vr_t *vr, vrrp_addr_t *from, vrrp_pkt_t *vp)
 		}
 	} else if (vr->vvr_state == VRRP_STATE_MASTER) {
 		if (vp->vp_prio == VRRP_PRIO_ZERO) {
-			(void) vrrpd_send_adv(vr, _B_FALSE);
+			(void) vrrpd_send_adv(vr, B_FALSE);
 			(void) iu_cancel_timer(vrrpd_timerq,
 			    vr->vvr_timer_id, NULL);
 			if ((vr->vvr_timer_id = iu_schedule_timer_ms(
@@ -3337,7 +3337,7 @@ vrrpd_process_adv(vrrp_vr_t *vr, vrrp_addr_t *from, vrrp_pkt_t *vp)
 			(void) vrrpd_state_m2b(vr);
 		}
 	} else {
-		assert(_B_FALSE);
+		assert(B_FALSE);
 	}
 }
 
@@ -3351,7 +3351,7 @@ vrrpd_process_vrrp(vrrp_intf_t *pif, vrrp_pkt_t *vp, size_t len,
 	char		peer[INET6_ADDRSTRLEN];
 
 	/* LINTED E_CONSTANT_CONDITION */
-	VRRPADDR2STR(pif->vvi_af, from, peer, INET6_ADDRSTRLEN, _B_FALSE);
+	VRRPADDR2STR(pif->vvi_af, from, peer, INET6_ADDRSTRLEN, B_FALSE);
 	vrrp_log(VRRP_DBG0, "vrrpd_process_vrrp(%s) from %s", pif->vvi_ifname,
 	    peer);
 
@@ -3774,7 +3774,7 @@ vrrpd_init_txsock(vrrp_vr_t *vr)
 	 * call this function when the VRRP router requires IFF_NOACCEPT.
 	 */
 	if (!vr->vvr_conf.vvc_accept)
-		err = vrrpd_set_noaccept(vr, _B_TRUE);
+		err = vrrpd_set_noaccept(vr, B_TRUE);
 
 done:
 	if (err != VRRP_SUCCESS) {
@@ -3848,7 +3848,7 @@ vrrpd_init_txsock_v4(vrrp_vr_t *vr)
 	vip = TAILQ_FIRST(&vif->vvi_iplist);
 	/* LINTED E_CONSTANT_CONDITION */
 	VRRPADDR2STR(vif->vvi_af, &vip->vip_addr, abuf, INET6_ADDRSTRLEN,
-	    _B_FALSE);
+	    B_FALSE);
 
 	/*
 	 * Set the output interface to send the VRRP packet.
@@ -3965,7 +3965,7 @@ vrrpd_fini_txsock(vrrp_vr_t *vr)
 
 	if (vif != NULL) {
 		if (!vr->vvr_conf.vvc_accept)
-			(void) vrrpd_set_noaccept(vr, _B_FALSE);
+			(void) vrrpd_set_noaccept(vr, B_FALSE);
 		(void) close(vif->vvi_sockfd);
 		vif->vvi_sockfd = -1;
 		vr->vvr_vif = NULL;
@@ -4104,10 +4104,10 @@ vrrpd_state_i2m(vrrp_vr_t *vr)
 	vrrp_log(VRRP_DBG1, "vrrpd_state_i2m(%s)", vr->vvr_conf.vvc_name);
 
 	vrrpd_state_trans(VRRP_STATE_INIT, VRRP_STATE_MASTER, vr);
-	if ((err = vrrpd_virtualip_update(vr, _B_FALSE)) != VRRP_SUCCESS)
+	if ((err = vrrpd_virtualip_update(vr, B_FALSE)) != VRRP_SUCCESS)
 		return (err);
 
-	(void) vrrpd_send_adv(vr, _B_FALSE);
+	(void) vrrpd_send_adv(vr, B_FALSE);
 
 	vr->vvr_err = VRRP_SUCCESS;
 	vr->vvr_timeout = vr->vvr_conf.vvc_adver_int;
@@ -4131,7 +4131,7 @@ vrrpd_state_i2b(vrrp_vr_t *vr)
 	vrrp_log(VRRP_DBG1, "vrrpd_state_i2b(%s)", vr->vvr_conf.vvc_name);
 
 	vrrpd_state_trans(VRRP_STATE_INIT, VRRP_STATE_BACKUP, vr);
-	if ((err = vrrpd_virtualip_update(vr, _B_FALSE)) != VRRP_SUCCESS)
+	if ((err = vrrpd_virtualip_update(vr, B_FALSE)) != VRRP_SUCCESS)
 		return (err);
 
 	/*
@@ -4159,7 +4159,7 @@ vrrpd_state_m2i(vrrp_vr_t *vr)
 	vrrp_log(VRRP_DBG1, "vrrpd_state_m2i(%s)", vr->vvr_conf.vvc_name);
 
 	vrrpd_state_trans(VRRP_STATE_MASTER, VRRP_STATE_INIT, vr);
-	(void) vrrpd_virtualip_update(vr, _B_TRUE);
+	(void) vrrpd_virtualip_update(vr, B_TRUE);
 	bzero(&vr->vvr_peer, sizeof (vrrp_peer_t));
 	(void) iu_cancel_timer(vrrpd_timerq, vr->vvr_timer_id, NULL);
 }
@@ -4172,7 +4172,7 @@ vrrpd_state_b2i(vrrp_vr_t *vr)
 	bzero(&vr->vvr_peer, sizeof (vrrp_peer_t));
 	(void) iu_cancel_timer(vrrpd_timerq, vr->vvr_timer_id, NULL);
 	vrrpd_state_trans(VRRP_STATE_BACKUP, VRRP_STATE_INIT, vr);
-	(void) vrrpd_virtualip_update(vr, _B_TRUE);
+	(void) vrrpd_virtualip_update(vr, B_TRUE);
 }
 
 /* ARGSUSED */
@@ -4193,7 +4193,7 @@ vrrp_adv_timeout(iu_tq_t *tq, void *arg)
 
 	vrrp_log(VRRP_DBG1, "vrrp_adv_timeout(%s)", vr->vvr_conf.vvc_name);
 
-	(void) vrrpd_send_adv(vr, _B_FALSE);
+	(void) vrrpd_send_adv(vr, B_FALSE);
 	if ((vr->vvr_timer_id = iu_schedule_timer_ms(vrrpd_timerq,
 	    vr->vvr_timeout, vrrp_adv_timeout, vr)) == -1) {
 		vrrp_log(VRRP_ERR, "vrrp_adv_timeout(%s): start timer failed",
@@ -4213,9 +4213,9 @@ vrrpd_state_b2m(vrrp_vr_t *vr)
 	vrrp_log(VRRP_DBG1, "vrrpd_state_b2m(%s)", vr->vvr_conf.vvc_name);
 
 	vrrpd_state_trans(VRRP_STATE_BACKUP, VRRP_STATE_MASTER, vr);
-	if ((err = vrrpd_virtualip_update(vr, _B_FALSE)) != VRRP_SUCCESS)
+	if ((err = vrrpd_virtualip_update(vr, B_FALSE)) != VRRP_SUCCESS)
 		return (err);
-	(void) vrrpd_send_adv(vr, _B_FALSE);
+	(void) vrrpd_send_adv(vr, B_FALSE);
 
 	vr->vvr_timeout = vr->vvr_conf.vvc_adver_int;
 	if ((vr->vvr_timer_id = iu_schedule_timer_ms(vrrpd_timerq,
@@ -4239,7 +4239,7 @@ vrrpd_state_m2b(vrrp_vr_t *vr)
 	vrrp_log(VRRP_DBG1, "vrrpd_state_m2b(%s)", vr->vvr_conf.vvc_name);
 
 	vrrpd_state_trans(VRRP_STATE_MASTER, VRRP_STATE_BACKUP, vr);
-	if ((err = vrrpd_virtualip_update(vr, _B_FALSE)) != VRRP_SUCCESS)
+	if ((err = vrrpd_virtualip_update(vr, B_FALSE)) != VRRP_SUCCESS)
 		return (err);
 
 	/*
@@ -4330,7 +4330,7 @@ vrrpd_virtualip_updateone(vrrp_intf_t *vif, vrrp_ip_t *ip, boolean_t checkonly)
 	assert(IS_VIRTUAL_INTF(vif));
 
 	/* LINTED E_CONSTANT_CONDITION */
-	VRRPADDR2STR(af, &ip->vip_addr, abuf, INET6_ADDRSTRLEN, _B_FALSE);
+	VRRPADDR2STR(af, &ip->vip_addr, abuf, INET6_ADDRSTRLEN, B_FALSE);
 	vrrp_log(VRRP_DBG1, "vrrpd_virtualip_updateone(%s, %s%s)",
 	    vif->vvi_ifname, abuf, checkonly ? ", checkonly" : "");
 
@@ -4394,11 +4394,11 @@ vrrpd_virtualip_update(vrrp_vr_t *vr, boolean_t checkonly)
 	vif->vvi_vr_state = state;
 	for (ip = TAILQ_FIRST(&vif->vvi_iplist); ip != NULL; ip = nextip) {
 		nextip = TAILQ_NEXT(ip, vip_next);
-		err = vrrpd_virtualip_updateone(vif, ip, _B_FALSE);
+		err = vrrpd_virtualip_updateone(vif, ip, B_FALSE);
 		if (!checkonly && err != VRRP_SUCCESS) {
 			/* LINTED E_CONSTANT_CONDITION */
 			VRRPADDR2STR(vif->vvi_af, &ip->vip_addr, abuf,
-			    INET6_ADDRSTRLEN, _B_FALSE);
+			    INET6_ADDRSTRLEN, B_FALSE);
 			vrrp_log(VRRP_DBG1, "vrrpd_virtualip_update() update "
 			    "%s over %s failed", abuf, vif->vvi_ifname);
 			vrrpd_delete_ip(vif, ip);
@@ -4412,7 +4412,7 @@ vrrpd_virtualip_update(vrrp_vr_t *vr, boolean_t checkonly)
 	if (!checkonly && TAILQ_EMPTY(&vif->vvi_iplist)) {
 		vrrp_log(VRRP_DBG0, "vrrpd_virtualip_update(): "
 		    "no IP left over %s", vif->vvi_ifname);
-		vrrpd_delete_if(vif, _B_TRUE);
+		vrrpd_delete_if(vif, B_TRUE);
 		return (VRRP_ENOVIRT);
 	}
 	return (VRRP_SUCCESS);

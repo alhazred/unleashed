@@ -133,8 +133,8 @@ phyint_create(char *name)
 	pi->pi_sock = -1;
 	pi->pi_stateless = pi->pi_StatelessAddrConf;
 	pi->pi_stateful = pi->pi_StatefulAddrConf;
-	pi->pi_autoconf = _B_TRUE;
-	pi->pi_default_token = _B_TRUE;
+	pi->pi_autoconf = B_TRUE;
+	pi->pi_default_token = B_TRUE;
 	if (phyint_init_from_k(pi) == -1) {
 		free(pi);
 		return (NULL);
@@ -189,9 +189,9 @@ start_over:
 			logperror_pi(pi, "phyint_init_from_k: socket");
 			return (-1);
 		}
-		newsock = _B_TRUE;
+		newsock = B_TRUE;
 	} else {
-		newsock = _B_FALSE;
+		newsock = B_FALSE;
 	}
 	fd = pi->pi_sock;
 
@@ -311,7 +311,7 @@ start_over:
 		pi->pi_LinkMTU = pi->pi_mtu;
 		pi->pi_CurHopLimit = 0;
 		pi->pi_BaseReachableTime = ND_REACHABLE_TIME;
-		phyint_reach_random(pi, _B_FALSE);
+		phyint_reach_random(pi, B_FALSE);
 		pi->pi_RetransTimer = ND_RETRANS_TIMER;
 
 		/* Setup socket for transmission and reception */
@@ -480,7 +480,7 @@ phyint_delete(struct phyint *pi)
 	while (pi->pi_router_list)
 		router_delete(pi->pi_router_list);
 	while (pi->pi_prefix_list) {
-		prefix_update_ipadm_addrobj(pi->pi_prefix_list, _B_FALSE);
+		prefix_update_ipadm_addrobj(pi->pi_prefix_list, B_FALSE);
 		prefix_delete(pi->pi_prefix_list);
 	}
 	while (pi->pi_adv_prefix_list)
@@ -562,7 +562,7 @@ phyint_timer(struct phyint *pi, uint_t elapsed)
 	    (pi->pi_sol_state != NO_SOLICIT))) {
 		pi->pi_reach_time_since_random += elapsed;
 		if (pi->pi_reach_time_since_random >= MAX_REACH_RANDOM_INTERVAL)
-			phyint_reach_random(pi, _B_TRUE);
+			phyint_reach_random(pi, B_TRUE);
 	}
 
 	return (next);
@@ -707,7 +707,7 @@ phyint_reach_random(struct phyint *pi, boolean_t set_needed)
  *
  * Called by tmptoken_create().
  *
- * Return _B_TRUE if token is valid (no match), _B_FALSE if not.
+ * Return B_TRUE if token is valid (no match), B_FALSE if not.
  */
 static boolean_t
 tmptoken_isvalid(struct in6_addr *token)
@@ -722,29 +722,29 @@ tmptoken_isvalid(struct in6_addr *token)
 				    0xff, 0xff, 0xff, 0x80 } } };
 
 	if (IN6_IS_ADDR_UNSPECIFIED(token))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	if (token->s6_addr[8] & 0x2)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	(void) memcpy(&mask, token, sizeof (mask));
 	mask._S6_un._S6_u32[3] = 0;
 	if (IN6_ARE_ADDR_EQUAL(&isatap, token))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	mask._S6_un._S6_u32[3] = token->_S6_un._S6_u32[3] & 0xffffff80;
 	if (IN6_ARE_ADDR_EQUAL(&anycast, token))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	for (pi = phyints; pi != NULL; pi = pi->pi_next) {
 		if (((pi->pi_token_length == TMP_TOKEN_BITS) &&
 		    IN6_ARE_ADDR_EQUAL(&pi->pi_token, token)) ||
 		    IN6_ARE_ADDR_EQUAL(&pi->pi_tmp_token, token))
-			return (_B_FALSE);
+			return (B_FALSE);
 	}
 
 	/* none of our tests failed, must be a good one! */
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -753,7 +753,7 @@ tmptoken_isvalid(struct in6_addr *token)
  * Called from incoming_prefix_addrconf_process() (when token is first
  * needed) and from tmptoken_timer() (when current token expires).
  *
- * Returns _B_TRUE if a token was successfully generated, _B_FALSE if not.
+ * Returns B_TRUE if a token was successfully generated, B_FALSE if not.
  */
 boolean_t
 tmptoken_create(struct phyint *pi)
@@ -794,7 +794,7 @@ no_token:
 		    "token; disabling temporary addresses on %s\n",
 		    pi->pi_name, pi->pi_name);
 		pi->pi_TmpAddrsEnabled = 0;
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	pi->pi_tmp_token = token;
@@ -809,7 +809,7 @@ no_token:
 	if (pi->pi_TmpRegenCountdown != 0)
 		timer_schedule(pi->pi_TmpRegenCountdown);
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -926,7 +926,7 @@ tmptoken_timer(struct phyint *pi, uint_t elapsed)
 		(void) memset(&sin6, 0, sizeof (sin6));
 
 		if (!incoming_prefix_addrconf_process(pi, newpr,
-		    (uchar_t *)&opt, &sin6, _B_FALSE, _B_TRUE)) {
+		    (uchar_t *)&opt, &sin6, B_FALSE, B_TRUE)) {
 			char pbuf[INET6_ADDRSTRLEN];
 			char tbuf[INET6_ADDRSTRLEN];
 			(void) inet_ntop(AF_INET6, &pr->pr_prefix, pbuf,
@@ -952,8 +952,8 @@ tmptoken_timer(struct phyint *pi, uint_t elapsed)
 
 /*
  * tlen specifies the token length in bits.  Compares the lower
- * tlen bits of the two addresses provided and returns _B_TRUE if
- * they match, _B_FALSE if not.  Also returns _B_FALSE for invalid
+ * tlen bits of the two addresses provided and returns B_TRUE if
+ * they match, B_FALSE if not.  Also returns B_FALSE for invalid
  * values of tlen.
  */
 boolean_t
@@ -963,7 +963,7 @@ token_equal(struct in6_addr t1, struct in6_addr t2, int tlen)
 	int j, abytes, tbytes, tbits;
 
 	if (tlen < 0 || tlen > IPV6_ABITS)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	abytes = IPV6_ABITS >> 3;
 	tbytes = tlen >> 3;
@@ -971,17 +971,17 @@ token_equal(struct in6_addr t1, struct in6_addr t2, int tlen)
 
 	for (j = abytes - 1; j >= abytes - tbytes; j--)
 		if (t1.s6_addr[j] != t2.s6_addr[j])
-			return (_B_FALSE);
+			return (B_FALSE);
 
 	if (tbits == 0)
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	/* We only care about the tbits rightmost bits */
 	mask = 0xff >> (8 - tbits);
 	if ((t1.s6_addr[j] & mask) != (t2.s6_addr[j] & mask))
-		return (_B_FALSE);
+		return (B_FALSE);
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1019,24 +1019,24 @@ prefix_equal(struct in6_addr p1, struct in6_addr p2, int plen)
 	int j, pbytes, pbits;
 
 	if (plen < 0 || plen > IPV6_ABITS)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	pbytes = plen >> 3;
 	pbits = plen & 7;
 
 	for (j = 0; j < pbytes; j++)
 		if (p1.s6_addr[j] != p2.s6_addr[j])
-			return (_B_FALSE);
+			return (B_FALSE);
 
 	if (pbits == 0)
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	/* Make the N leftmost bits one */
 	mask = 0xff << (8 - pbits);
 	if ((p1.s6_addr[j] & mask) != (p2.s6_addr[j] & mask))
-		return (_B_FALSE);
+		return (B_FALSE);
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1276,7 +1276,7 @@ prefix_init_from_k(struct prefix *pr)
 		 * addrobj for the DHCPv6 interface in ipmgmtd daemon's
 		 * in-memory aobjmap.
 		 */
-		prefix_update_ipadm_addrobj(pr, _B_TRUE);
+		prefix_update_ipadm_addrobj(pr, B_TRUE);
 	} else {
 		if (ioctl(sock, SIOCGLIFSUBNET, (char *)&lifr) < 0) {
 			logperror_pr(pr,
@@ -1617,7 +1617,7 @@ prefix_update_k(struct prefix *pr)
 		 * If this interface was created using ipadm, store the
 		 * addrobj for the prefix in ipmgmtd daemon's aobjmap.
 		 */
-		prefix_update_ipadm_addrobj(pr, _B_TRUE);
+		prefix_update_ipadm_addrobj(pr, B_TRUE);
 		if (pr->pr_state & PR_ONLINK) {
 			sin6->sin6_addr = pr->pr_prefix;
 			lifr.lifr_addrlen = pr->pr_prefix_len;
@@ -2255,7 +2255,7 @@ router_add_k(struct router *dr)
 		    "only %d for rlen (interface %s)\n", rlen, pi->pi_name);
 		return;
 	}
-	dr->dr_inkernel = _B_TRUE;
+	dr->dr_inkernel = B_TRUE;
 	pi->pi_num_k_routers++;
 }
 
@@ -2297,7 +2297,7 @@ router_delete_k(struct router *dr)
 		logmsg(LOG_ERR, "router_delete_k: write to routing socket got "
 		    "only %d for rlen (interface %s)\n", rlen, pi->pi_name);
 	}
-	dr->dr_inkernel = _B_FALSE;
+	dr->dr_inkernel = B_FALSE;
 	pi->pi_num_k_routers--;
 }
 

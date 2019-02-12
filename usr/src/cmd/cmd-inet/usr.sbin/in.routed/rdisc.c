@@ -165,16 +165,16 @@ get_rdisc_sock(void)
 		(void) memset(drs, 0, max_ads * sizeof (struct dr));
 		rdisc_sock = socket(PF_INET, SOCK_RAW, IPPROTO_ICMP);
 		if (rdisc_sock < 0)
-			BADERR(_B_TRUE, "rdisc_sock = socket()");
+			BADERR(B_TRUE, "rdisc_sock = socket()");
 		fix_sock(rdisc_sock, "rdisc_sock");
 
 		if (setsockopt(rdisc_sock, IPPROTO_IP, IP_RECVIF, &on,
 		    sizeof (on)))
-			BADERR(_B_FALSE, "setsockopt(IP_RECVIF)");
+			BADERR(B_FALSE, "setsockopt(IP_RECVIF)");
 
 		if (setsockopt(rdisc_sock, IPPROTO_IP, IP_MULTICAST_TTL,
 		    &ttl, sizeof (ttl)) < 0)
-			DBGERR(_B_TRUE,
+			DBGERR(B_TRUE,
 			    "rdisc_sock setsockopt(IP_MULTICAST_TTL)");
 
 		/*
@@ -184,7 +184,7 @@ get_rdisc_sock(void)
 
 		rdisc_mib_sock = socket(AF_UNIX, SOCK_DGRAM, 0);
 		if (rdisc_mib_sock < 0) {
-			BADERR(_B_TRUE, "rdisc_mib_sock = socket()");
+			BADERR(B_TRUE, "rdisc_mib_sock = socket()");
 		}
 
 		bzero(&laddr, sizeof (laddr));
@@ -197,11 +197,11 @@ get_rdisc_sock(void)
 		(void) unlink(RDISC_SNMP_SOCKET);
 
 		if (bind(rdisc_mib_sock, (struct sockaddr *)&laddr, len) < 0) {
-			BADERR(_B_TRUE, "bind(rdisc_mib_sock)");
+			BADERR(B_TRUE, "bind(rdisc_mib_sock)");
 		}
 
 		if (fcntl(rdisc_mib_sock, F_SETFL, O_NONBLOCK) < 0) {
-			BADERR(_B_TRUE, "rdisc_mib_sock fcntl O_NONBLOCK");
+			BADERR(B_TRUE, "rdisc_mib_sock fcntl O_NONBLOCK");
 		}
 
 		fix_select();
@@ -296,7 +296,7 @@ set_supplier(void)
 {
 	struct interface *ifp;
 	struct dr *drp;
-	static boolean_t supplystate = _B_FALSE;
+	static boolean_t supplystate = B_FALSE;
 
 	if (supplystate == (fwd_interfaces > 1))
 		return;
@@ -326,7 +326,7 @@ set_supplier(void)
 		 * Flush out all those advertisements we had sent by sending
 		 * one with lifetime=0.
 		 */
-		rdisc_adv(_B_TRUE);
+		rdisc_adv(B_TRUE);
 	}
 
 	/*
@@ -413,7 +413,7 @@ rdisc_age(in_addr_t bad_gate)
 
 			rdisc_sort();
 		}
-		rdisc_adv(_B_FALSE);
+		rdisc_adv(B_FALSE);
 	}
 
 	rdisc_sol();
@@ -597,12 +597,12 @@ rdisc_sort(void)
 	 *	remove any existing default routes with RO_RIP set.
 	 */
 	if (rt != NULL) {
-		spares_avail = _B_FALSE;
+		spares_avail = B_FALSE;
 		for (j = 0; j < rt->rt_num_spares; j++)  {
 			rts = &rt->rt_spares[j];
 			if (rts->rts_gate == 0 || rts->rts_origin != RO_RIP ||
 			    rts->rts_ifp == &dummy_ifp) {
-				spares_avail = _B_TRUE;
+				spares_avail = B_TRUE;
 				break;
 			}
 		}
@@ -621,7 +621,7 @@ rdisc_sort(void)
 				for (tmprts = rts, j = SPARE_INC;
 				    j != 0; j--, tmprts++)
 					tmprts->rts_metric = HOPCNT_INFINITY;
-				spares_avail = _B_TRUE;
+				spares_avail = B_TRUE;
 			} else {
 				return;
 			}
@@ -700,7 +700,7 @@ rdisc_sort(void)
 		/* Stop using RDISC routes if they are all bad */
 		if (new_drp == NULL) {
 			trace_act("turn off Router Discovery client");
-			rdisc_ok = _B_FALSE;
+			rdisc_ok = B_FALSE;
 
 		} else {
 			if (cur_drp == NULL) {
@@ -708,7 +708,7 @@ rdisc_sort(void)
 				    " using %s via %s",
 				    naddr_ntoa(new_drp->dr_gate),
 				    new_drp->dr_ifp->int_name);
-				rdisc_ok = _B_TRUE;
+				rdisc_ok = B_TRUE;
 			}
 
 			/* Prepare a spare entry for the new_drp */
@@ -766,7 +766,7 @@ rdisc_sort(void)
 		rt = rtget(RIP_DEFAULT, 0);
 
 		for (drp = drs; drp < &drs[max_ads]; drp++) {
-			boolean_t dr_done = _B_FALSE;
+			boolean_t dr_done = B_FALSE;
 			int slot = -1;
 
 			if (drp->dr_ts == 0)
@@ -804,7 +804,7 @@ rdisc_sort(void)
 					 * to check if this entry still belongs
 					 * in the table
 					 */
-					dr_done = _B_TRUE;
+					dr_done = B_TRUE;
 					break;
 				}
 			}
@@ -845,7 +845,7 @@ rdisc_sort(void)
 				}
 			}
 
-			if (slot >= 0 && (dr_done != _B_TRUE)) {
+			if (slot >= 0 && (dr_done != B_TRUE)) {
 				(void) memset(&new, 0, sizeof (new));
 				new.rts_ifp = drp->dr_ifp;
 				new.rts_gate = drp->dr_gate;
@@ -892,7 +892,7 @@ parse_ad(uint32_t from,
 	/*
 	 * ignore pointers to ourself and routes via unreachable networks
 	 */
-	if (ifwithaddr(gate, _B_TRUE, _B_FALSE) != 0) {
+	if (ifwithaddr(gate, B_TRUE, B_FALSE) != 0) {
 		trace_pkt("    discard Router Discovery Ad pointing at us");
 		return;
 	}
@@ -1082,7 +1082,7 @@ send_rdisc(union ad_u *p,
 			    inet_ntoa(sin.sin_addr),
 			    rip_strerror(errno));
 		if (ifp != NULL)
-			if_sick(ifp, _B_FALSE);
+			if_sick(ifp, B_FALSE);
 	}
 }
 
@@ -1271,7 +1271,7 @@ read_d(void)
 	union ad_u *p;
 	n_long *wp;
 	struct interface *ifp;
-	boolean_t needsort = _B_FALSE;
+	boolean_t needsort = B_FALSE;
 	struct msghdr msg;
 	struct iovec iov;
 	uint8_t ancillary_data[CONTROL_BUFSIZE];
@@ -1304,7 +1304,7 @@ read_d(void)
 		 * If we could tell the interface on which a packet from
 		 * address 0 arrived, we could deal with such solicitations.
 		 */
-		ifp = receiving_interface(&msg, _B_FALSE);
+		ifp = receiving_interface(&msg, B_FALSE);
 		ifp = ck_icmp("Recv", from.sin_addr.s_addr, ifp,
 		    buf.pkt.ip.ip_dst.s_addr, p, cc);
 		if (ifp == NULL)
@@ -1317,7 +1317,7 @@ read_d(void)
 		}
 
 		if (from.sin_addr.s_addr != 0 &&
-		    ifwithaddr(from.sin_addr.s_addr, _B_FALSE, _B_FALSE)) {
+		    ifwithaddr(from.sin_addr.s_addr, B_FALSE, B_FALSE)) {
 			trace_pkt("    "
 			    "discard our own Router Discovery message");
 			continue;
@@ -1357,7 +1357,7 @@ read_d(void)
 				continue;
 			}
 
-			needsort = _B_TRUE;
+			needsort = B_TRUE;
 			wp = &p->ad.icmp_ad_info[0].icmp_ad_addr;
 			for (n = 0; n < p->ad.icmp_ad_num; n++) {
 				parse_ad(from.sin_addr.s_addr,

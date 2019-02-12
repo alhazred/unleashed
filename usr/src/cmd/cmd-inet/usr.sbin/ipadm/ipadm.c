@@ -556,14 +556,14 @@ print_prop_cb(ofmt_arg_t *ofarg, char *buf, size_t bufsize)
 	show_prop_state_t	*statep = ofarg->ofmt_cbarg;
 	const char		*propname = statep->sps_pname;
 	uint_t			proto = statep->sps_proto;
-	boolean_t		cont = _B_TRUE;
+	boolean_t		cont = B_TRUE;
 
 	/*
 	 * Fail retrieving remaining fields, if you fail
 	 * to retrieve a field.
 	 */
 	if (statep->sps_status != IPADM_SUCCESS)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	switch (ofarg->ofmt_id) {
 	case IPADM_PROPFIELD_IFNAME:
@@ -595,7 +595,7 @@ print_prop_cb(ofmt_arg_t *ofarg, char *buf, size_t bufsize)
 		break;
 	}
 	if (statep->sps_status != IPADM_SUCCESS)
-		cont = _B_FALSE;
+		cont = B_FALSE;
 	return (cont);
 }
 
@@ -620,8 +620,8 @@ show_property(void *arg, const char *pname, uint_t proto)
 	 */
 	if (statep->sps_status == IPADM_NOTFOUND ||
 	    statep->sps_status == IPADM_NOTSUP)
-		return (_B_FALSE);
-	return (_B_TRUE);
+		return (B_FALSE);
+	return (B_TRUE);
 }
 
 /*
@@ -678,7 +678,7 @@ do_show_ifprop(int argc, char **argv, const char *use)
 	ofmt_status_t	oferr;
 	uint_t		ofmtflags = 0;
 	uint_t		proto;
-	boolean_t	m_arg = _B_FALSE;
+	boolean_t	m_arg = B_FALSE;
 	char		*protostr;
 	ipadm_if_info_t	*ifinfo, *ifp;
 	ipadm_status_t	status;
@@ -687,8 +687,8 @@ do_show_ifprop(int argc, char **argv, const char *use)
 	opterr = 0;
 	bzero(&state, sizeof (state));
 	state.sps_propval = NULL;
-	state.sps_parsable = _B_FALSE;
-	state.sps_ifprop = _B_TRUE;
+	state.sps_parsable = B_FALSE;
+	state.sps_ifprop = B_TRUE;
 	state.sps_status = state.sps_retstatus = IPADM_SUCCESS;
 	while ((option = getopt_long(argc, argv, ":p:m:co:",
 	    show_ifprop_longopts, NULL)) != -1) {
@@ -699,7 +699,7 @@ do_show_ifprop(int argc, char **argv, const char *use)
 				die("invalid interface properties specified");
 			break;
 		case 'c':
-			state.sps_parsable = _B_TRUE;
+			state.sps_parsable = B_TRUE;
 			break;
 		case 'o':
 			fields_str = optarg;
@@ -707,7 +707,7 @@ do_show_ifprop(int argc, char **argv, const char *use)
 		case 'm':
 			if (m_arg)
 				die("cannot specify more than one -m");
-			m_arg = _B_TRUE;
+			m_arg = B_TRUE;
 			protostr = optarg;
 			break;
 		default:
@@ -770,8 +770,8 @@ set_ifprop(int argc, char **argv, boolean_t reset, const char *use)
 {
 	int 			option;
 	ipadm_status_t 		status = IPADM_SUCCESS;
-	boolean_t 		p_arg = _B_FALSE;
-	boolean_t		m_arg = _B_FALSE;
+	boolean_t 		p_arg = B_FALSE;
+	boolean_t		m_arg = B_FALSE;
 	char 			*ifname, *nv, *protostr;
 	char			*prop_name, *prop_val;
 	uint_t			flags = IPADM_OPT_PERSIST;
@@ -784,7 +784,7 @@ set_ifprop(int argc, char **argv, boolean_t reset, const char *use)
 		case 'p':
 			if (p_arg)
 				die("-p must be specified once only");
-			p_arg = _B_TRUE;
+			p_arg = B_TRUE;
 
 			ipadm_check_propstr(optarg, reset, use);
 			nv = optarg;
@@ -792,7 +792,7 @@ set_ifprop(int argc, char **argv, boolean_t reset, const char *use)
 		case 'm':
 			if (m_arg)
 				die("-m must be specified once only");
-			m_arg = _B_TRUE;
+			m_arg = B_TRUE;
 			protostr = optarg;
 			break;
 		case 't':
@@ -837,13 +837,13 @@ done:
 static void
 do_set_ifprop(int argc, char **argv, const char *use)
 {
-	set_ifprop(argc, argv, _B_FALSE, use);
+	set_ifprop(argc, argv, B_FALSE, use);
 }
 
 static void
 do_reset_ifprop(int argc, char **argv, const char *use)
 {
-	set_ifprop(argc, argv, _B_TRUE, use);
+	set_ifprop(argc, argv, B_TRUE, use);
 }
 
 /*
@@ -862,13 +862,13 @@ do_show_prop(int argc, char **argv, const char *use)
 	ofmt_status_t		oferr;
 	uint_t			ofmtflags = 0;
 	uint_t			proto;
-	boolean_t		p_arg = _B_FALSE;
+	boolean_t		p_arg = B_FALSE;
 
 	opterr = 0;
 	bzero(&state, sizeof (state));
 	state.sps_propval = NULL;
-	state.sps_parsable = _B_FALSE;
-	state.sps_modprop = _B_TRUE;
+	state.sps_parsable = B_FALSE;
+	state.sps_modprop = B_TRUE;
 	state.sps_status = state.sps_retstatus = IPADM_SUCCESS;
 	while ((option = getopt_long(argc, argv, ":p:co:", show_prop_longopts,
 	    NULL)) != -1) {
@@ -876,13 +876,13 @@ do_show_prop(int argc, char **argv, const char *use)
 		case 'p':
 			if (p_arg)
 				die("-p must be specified once only");
-			p_arg = _B_TRUE;
+			p_arg = B_TRUE;
 			if (ipadm_str2nvlist(optarg, &proplist,
 			    IPADM_NORVAL) != 0)
 				die("invalid protocol properties specified");
 			break;
 		case 'c':
-			state.sps_parsable = _B_TRUE;
+			state.sps_parsable = B_TRUE;
 			break;
 		case 'o':
 			fields_str = optarg;
@@ -959,7 +959,7 @@ set_prop(int argc, char **argv, boolean_t reset, const char *use)
 	int 			option;
 	ipadm_status_t 		status = IPADM_SUCCESS;
 	char 			*protostr, *nv, *prop_name, *prop_val;
-	boolean_t 		p_arg = _B_FALSE;
+	boolean_t 		p_arg = B_FALSE;
 	uint_t 			proto;
 	uint_t			flags = IPADM_OPT_PERSIST;
 
@@ -970,7 +970,7 @@ set_prop(int argc, char **argv, boolean_t reset, const char *use)
 		case 'p':
 			if (p_arg)
 				die("-p must be specified once only");
-			p_arg = _B_TRUE;
+			p_arg = B_TRUE;
 
 			ipadm_check_propstr(optarg, reset, use);
 			nv = optarg;
@@ -1017,13 +1017,13 @@ done:
 static void
 do_set_prop(int argc, char **argv, const char *use)
 {
-	set_prop(argc, argv, _B_FALSE, use);
+	set_prop(argc, argv, B_FALSE, use);
 }
 
 static void
 do_reset_prop(int argc, char **argv, const char *use)
 {
-	set_prop(argc, argv,  _B_TRUE, use);
+	set_prop(argc, argv,  B_TRUE, use);
 }
 
 /* PRINTFLIKE1 */
@@ -1102,7 +1102,7 @@ process_static_addrargs(const char *use, char *addrarg, const char *aobjname)
 	char		*laddr = NULL;
 	char		*raddr = NULL;
 	char		*save_input_arg = addrarg;
-	boolean_t	found_mismatch = _B_FALSE;
+	boolean_t	found_mismatch = B_FALSE;
 	ipadm_status_t	status;
 	enum		{ A_LOCAL, A_REMOTE };
 	static char	*addr_optstr[] = {
@@ -1127,7 +1127,7 @@ process_static_addrargs(const char *use, char *addrarg, const char *aobjname)
 		default:
 			if (found_mismatch)
 				die("Invalid address provided\nusage: %s", use);
-			found_mismatch = _B_TRUE;
+			found_mismatch = B_TRUE;
 			break;
 		}
 	}
@@ -1176,9 +1176,9 @@ process_addrconf_addrargs(const char *use, char *addrarg)
 		NULL,
 	};
 	boolean_t	stateless;
-	boolean_t	stateless_arg = _B_FALSE;
+	boolean_t	stateless_arg = B_FALSE;
 	boolean_t	stateful;
-	boolean_t	stateful_arg = _B_FALSE;
+	boolean_t	stateful_arg = B_FALSE;
 	ipadm_status_t	status;
 
 	while (*addrarg != '\0') {
@@ -1190,12 +1190,12 @@ process_addrconf_addrargs(const char *use, char *addrarg)
 			if (val == NULL)
 				die("Invalid argument");
 			if (strcmp(val, "yes") == 0)
-				stateless = _B_TRUE;
+				stateless = B_TRUE;
 			else if (strcmp(val, "no") == 0)
-				stateless = _B_FALSE;
+				stateless = B_FALSE;
 			else
 				die("Invalid argument");
-			stateless_arg = _B_TRUE;
+			stateless_arg = B_TRUE;
 			break;
 		case P_STATEFUL:
 			if (stateful_arg)
@@ -1203,12 +1203,12 @@ process_addrconf_addrargs(const char *use, char *addrarg)
 			if (val == NULL)
 				die("Invalid argument");
 			if (strcmp(val, "yes") == 0)
-				stateful = _B_TRUE;
+				stateful = B_TRUE;
 			else if (strcmp(val, "no") == 0)
-				stateful = _B_FALSE;
+				stateful = B_FALSE;
 			else
 				die("Invalid argument");
-			stateful_arg = _B_TRUE;
+			stateful_arg = B_TRUE;
 			break;
 		default:
 			die_opterr(optopt, option, use);
@@ -1253,43 +1253,43 @@ do_create_addr(int argc, char *argv[], const char *use)
 	char		*interface_id = NULL;
 	char		*wait = NULL;
 	char		*reqhost = NULL;
-	boolean_t	s_opt = _B_FALSE;	/* static addr options */
-	boolean_t	auto_opt = _B_FALSE;	/* Addrconf options */
-	boolean_t	dhcp_opt = _B_FALSE;	/* dhcp options */
-	boolean_t	primary_opt = _B_FALSE;	/* dhcp primary option */
+	boolean_t	s_opt = B_FALSE;	/* static addr options */
+	boolean_t	auto_opt = B_FALSE;	/* Addrconf options */
+	boolean_t	dhcp_opt = B_FALSE;	/* dhcp options */
+	boolean_t	primary_opt = B_FALSE;	/* dhcp primary option */
 
 	opterr = 0;
 	while ((option = getopt_long(argc, argv, ":1T:a:dh:i:p:w:t",
 	    addr_longopts, NULL)) != -1) {
 		switch (option) {
 		case '1':
-			primary_opt = _B_TRUE;
+			primary_opt = B_TRUE;
 			break;
 		case 'T':
 			atype = optarg;
 			break;
 		case 'a':
 			static_arg = optarg;
-			s_opt = _B_TRUE;
+			s_opt = B_TRUE;
 			break;
 		case 'd':
 			flags &= ~IPADM_OPT_UP;
-			s_opt = _B_TRUE;
+			s_opt = B_TRUE;
 			break;
 		case 'h':
 			reqhost = optarg;
 			break;
 		case 'i':
 			interface_id = optarg;
-			auto_opt = _B_TRUE;
+			auto_opt = B_TRUE;
 			break;
 		case 'p':
 			addrconf_arg = optarg;
-			auto_opt = _B_TRUE;
+			auto_opt = B_TRUE;
 			break;
 		case 'w':
 			wait = optarg;
-			dhcp_opt = _B_TRUE;
+			dhcp_opt = B_TRUE;
 			break;
 		case 't':
 			flags &= ~IPADM_OPT_PERSIST;
@@ -1349,7 +1349,7 @@ do_create_addr(int argc, char *argv[], const char *use)
 			}
 		}
 		if (primary_opt) {
-			status = ipadm_set_primary(ipaddr, _B_TRUE);
+			status = ipadm_set_primary(ipaddr, B_TRUE);
 			if (status != IPADM_SUCCESS) {
 				die("Error in setting primary flag: %s",
 				    ipadm_status2str(status));
@@ -1587,7 +1587,7 @@ flags2str(uint64_t flags, fmask_t *tbl, boolean_t is_bits,
     char *buf, uint_t bufsize)
 {
 	int		i;
-	boolean_t	first = _B_TRUE;
+	boolean_t	first = B_TRUE;
 
 	if (is_bits) {
 		for (i = 0;  tbl[i].name; i++) {
@@ -1602,7 +1602,7 @@ flags2str(uint64_t flags, fmask_t *tbl, boolean_t is_bits,
 				if (!first)
 					(void) strlcat(buf, ",", bufsize);
 				(void) strlcat(buf, tbl[i].name, bufsize);
-				first = _B_FALSE;
+				first = B_FALSE;
 			}
 		}
 	}
@@ -1617,19 +1617,19 @@ is_from_gz(const char *lifname)
 {
 	ipadm_if_info_t		*if_info;
 	char			phyname[LIFNAMSIZ], *cp;
-	boolean_t		ret = _B_FALSE;
+	boolean_t		ret = B_FALSE;
 	ipadm_status_t		status;
 	zoneid_t		zoneid;
 	ushort_t		zflags;
 
 	if ((zoneid = getzoneid()) == GLOBAL_ZONEID)
-		return (_B_FALSE); /* from-gz only  makes sense in a NGZ */
+		return (B_FALSE); /* from-gz only  makes sense in a NGZ */
 
 	if (zone_getattr(zoneid, ZONE_ATTR_FLAGS, &zflags, sizeof (zflags)) < 0)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	if (!(zflags & ZF_NET_EXCL))
-		return (_B_TRUE);  /* everything is from the GZ for shared-ip */
+		return (B_TRUE);  /* everything is from the GZ for shared-ip */
 
 	(void) strncpy(phyname, lifname, sizeof (phyname));
 	if ((cp = strchr(phyname, ':')) != NULL)
@@ -1639,7 +1639,7 @@ is_from_gz(const char *lifname)
 		return (ret);
 
 	if (if_info->ifi_cflags & IFIF_L3PROTECT)
-		ret = _B_TRUE;
+		ret = B_TRUE;
 	if (if_info)
 		ipadm_free_if_info(if_info);
 	return (ret);
@@ -1705,21 +1705,21 @@ print_sa_cb(ofmt_arg_t *ofarg, char *buf, uint_t bufsize)
 		}
 		break;
 	case SA_STATE:
-		flags2str(ainfo->ia_state, addr_state, _B_FALSE,
+		flags2str(ainfo->ia_state, addr_state, B_FALSE,
 		    buf, bufsize);
 		break;
 	case SA_TYPE:
 		if (is_from_gz(ifa->ifa_name))
 			(void) snprintf(buf, bufsize, "from-gz");
 		else
-			flags2str(ainfo->ia_atype, type, _B_FALSE, buf,
+			flags2str(ainfo->ia_atype, type, B_FALSE, buf,
 			    bufsize);
 		break;
 	case SA_CURRENT:
-		flags2str(ainfo->ia_cflags, cflags_mask, _B_TRUE, buf, bufsize);
+		flags2str(ainfo->ia_cflags, cflags_mask, B_TRUE, buf, bufsize);
 		break;
 	case SA_PERSISTENT:
-		flags2str(ainfo->ia_pflags, pflags_mask, _B_TRUE, buf, bufsize);
+		flags2str(ainfo->ia_pflags, pflags_mask, B_TRUE, buf, bufsize);
 		break;
 	case SA_ADDR:
 		af = ifa->ifa_addr->sa_family;
@@ -1791,7 +1791,7 @@ print_sa_cb(ofmt_arg_t *ofarg, char *buf, uint_t bufsize)
 		break;
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1815,16 +1815,16 @@ do_show_addr(int argc, char *argv[], const char *use)
 	char			*aname;
 	char			*ifname = NULL;
 	char			*cp;
-	boolean_t		found = _B_FALSE;
+	boolean_t		found = B_FALSE;
 
 	opterr = 0;
-	state.sa_parsable = _B_FALSE;
-	state.sa_persist = _B_FALSE;
+	state.sa_parsable = B_FALSE;
+	state.sa_persist = B_FALSE;
 	while ((option = getopt_long(argc, argv, "po:", show_addr_longopts,
 	    NULL)) != -1) {
 		switch (option) {
 		case 'p':
-			state.sa_parsable = _B_TRUE;
+			state.sa_parsable = B_TRUE;
 			break;
 		case 'o':
 			fields_str = optarg;
@@ -1880,7 +1880,7 @@ do_show_addr(int argc, char *argv[], const char *use)
 		if (aname != NULL) {
 			if (strcmp(sargs.sa_info->ia_aobjname, aname) != 0)
 				continue;
-			found = _B_TRUE;
+			found = B_TRUE;
 		}
 		ofmt_print(state.sa_ofmt, &sargs);
 	}
@@ -1932,15 +1932,15 @@ print_si_cb(ofmt_arg_t *ofarg, char *buf, uint_t bufsize)
 		(void) snprintf(buf, bufsize, "%s", ifname);
 		break;
 	case SI_STATE:
-		flags2str(ifinfo->ifi_state, intf_state, _B_FALSE,
+		flags2str(ifinfo->ifi_state, intf_state, B_FALSE,
 		    buf, bufsize);
 		break;
 	case SI_CURRENT:
-		flags2str(ifinfo->ifi_cflags, intf_cflags, _B_TRUE,
+		flags2str(ifinfo->ifi_cflags, intf_cflags, B_TRUE,
 		    buf, bufsize);
 		break;
 	case SI_PERSISTENT:
-		flags2str(ifinfo->ifi_pflags, intf_pflags, _B_TRUE,
+		flags2str(ifinfo->ifi_pflags, intf_pflags, B_TRUE,
 		    buf, bufsize);
 		break;
 	default:
@@ -1948,7 +1948,7 @@ print_si_cb(ofmt_arg_t *ofarg, char *buf, uint_t bufsize)
 		break;
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1970,13 +1970,13 @@ do_show_if(int argc, char *argv[], const char *use)
 	char			*ifname = NULL;
 
 	opterr = 0;
-	state.si_parsable = _B_FALSE;
+	state.si_parsable = B_FALSE;
 
 	while ((option = getopt_long(argc, argv, "po:", show_if_longopts,
 	    NULL)) != -1) {
 		switch (option) {
 		case 'p':
-			state.si_parsable = _B_TRUE;
+			state.si_parsable = B_TRUE;
 			break;
 		case 'o':
 			fields_str = optarg;
@@ -2022,7 +2022,7 @@ set_addrprop(int argc, char **argv, boolean_t reset, const char *use)
 {
 	int 			option;
 	ipadm_status_t 		status = IPADM_SUCCESS;
-	boolean_t 		p_arg = _B_FALSE;
+	boolean_t 		p_arg = B_FALSE;
 	char 			*nv, *aobjname;
 	char			*prop_name, *prop_val;
 	uint_t			flags = IPADM_OPT_ACTIVE|IPADM_OPT_PERSIST;
@@ -2034,7 +2034,7 @@ set_addrprop(int argc, char **argv, boolean_t reset, const char *use)
 		case 'p':
 			if (p_arg)
 				die("-p must be specified once only");
-			p_arg = _B_TRUE;
+			p_arg = B_TRUE;
 
 			ipadm_check_propstr(optarg, reset, use);
 			nv = optarg;
@@ -2074,7 +2074,7 @@ set_addrprop(int argc, char **argv, boolean_t reset, const char *use)
 static void
 do_set_addrprop(int argc, char **argv, const char *use)
 {
-	set_addrprop(argc, argv, _B_FALSE, use);
+	set_addrprop(argc, argv, B_FALSE, use);
 }
 
 /*
@@ -2083,7 +2083,7 @@ do_set_addrprop(int argc, char **argv, const char *use)
 static void
 do_reset_addrprop(int argc, char **argv, const char *use)
 {
-	set_addrprop(argc, argv,  _B_TRUE, use);
+	set_addrprop(argc, argv,  B_TRUE, use);
 }
 
 /*
@@ -2106,13 +2106,13 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 	ipadm_addr_info_t	*ainfop = NULL;
 	ipadm_addr_info_t	*ptr;
 	ipadm_status_t		status;
-	boolean_t		found = _B_FALSE;
+	boolean_t		found = B_FALSE;
 
 	opterr = 0;
 	bzero(&state, sizeof (state));
 	state.sps_propval = NULL;
-	state.sps_parsable = _B_FALSE;
-	state.sps_addrprop = _B_TRUE;
+	state.sps_parsable = B_FALSE;
+	state.sps_addrprop = B_TRUE;
 	state.sps_proto = MOD_PROTO_NONE;
 	state.sps_status = state.sps_retstatus = IPADM_SUCCESS;
 	while ((option = getopt_long(argc, argv, ":p:i:cPo:",
@@ -2124,7 +2124,7 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 				die("invalid addrobj properties specified");
 			break;
 		case 'c':
-			state.sps_parsable = _B_TRUE;
+			state.sps_parsable = B_TRUE;
 			break;
 		case 'o':
 			fields_str = optarg;
@@ -2168,7 +2168,7 @@ do_show_addrprop(int argc, char *argv[], const char *use)
 			continue;
 		if (aobjname != NULL) {
 			if (strcmp(aobjname, taobjname) == 0)
-				found = _B_TRUE;
+				found = B_TRUE;
 			else
 				continue;
 		}

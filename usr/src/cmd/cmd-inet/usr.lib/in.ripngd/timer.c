@@ -52,7 +52,7 @@ timer(void)
 {
 	struct rthash *rh;
 	struct rt_entry *rt;
-	boolean_t timetomulticast = _B_FALSE;
+	boolean_t timetomulticast = B_FALSE;
 	int i;
 	static int iftime;		/* interface timer */
 	static int mtime;		/* periodic mcast supply timer */
@@ -92,7 +92,7 @@ timer(void)
 	mtime += alarmtime;
 	if (mtime >= supplyinterval) {
 		if (supplier)
-			timetomulticast = _B_TRUE;
+			timetomulticast = B_TRUE;
 		mtime = 0;
 		supplyinterval = GET_RANDOM(MIN_SUPPLY_TIME, MAX_SUPPLY_TIME);
 	}
@@ -133,11 +133,11 @@ timer(void)
 	}
 
 	if (timetomulticast) {
-		supplyall(&allrouters, 0, NULL, _B_TRUE);
+		supplyall(&allrouters, 0, NULL, B_TRUE);
 		(void) gettimeofday(&now, NULL);
 		lastmcast = now;
 		lastfullupdate = now;
-		needupdate = _B_FALSE;	/* cancel any pending dynamic update */
+		needupdate = B_FALSE;	/* cancel any pending dynamic update */
 		nextmcast.tv_sec = 0;
 	}
 	(void) sigrelse(SIGUSR2);
@@ -175,7 +175,7 @@ term(void)
 			}
 		}
 	}
-	supplyall(&allrouters, 0, NULL, _B_TRUE);
+	supplyall(&allrouters, 0, NULL, B_TRUE);
 	(void) unlink(PATH_PID);
 	exit(EXIT_SUCCESS);
 }

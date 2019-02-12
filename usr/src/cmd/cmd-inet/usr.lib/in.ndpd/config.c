@@ -155,7 +155,7 @@ static int	lineno;
 static void
 check_var_consistency(struct confvar *cv, void *save, int size)
 {
-	boolean_t rollback = _B_FALSE;
+	boolean_t rollback = B_FALSE;
 	int prefl, prefe, valid;
 
 	prefl = cv[I_AdvPreferredLifetime].cf_value;
@@ -165,13 +165,13 @@ check_var_consistency(struct confvar *cv, void *save, int size)
 	if (prefl > valid) {
 		conferr("AdvPreferredLifetime (%u) is greater than "
 		    "valid lifetime (%u)\n", prefl, valid);
-		rollback = _B_TRUE;
+		rollback = B_TRUE;
 	}
 
 	if (prefe > valid) {
 		conferr("AdvPreferredExpiration (%u) is greater than "
 		    "valid lifetime (%u)\n", prefe, valid);
-		rollback = _B_TRUE;
+		rollback = B_TRUE;
 	}
 
 	if (rollback) {
@@ -185,7 +185,7 @@ check_var_consistency(struct confvar *cv, void *save, int size)
 static void
 check_if_var_consistency(struct confvar *cv, void *save, int size)
 {
-	boolean_t rollback = _B_FALSE;
+	boolean_t rollback = B_FALSE;
 	int tpref, tvalid, tdesync, tregen;
 
 	tpref = cv[I_TmpPreferredLifetime].cf_value;
@@ -202,19 +202,19 @@ check_if_var_consistency(struct confvar *cv, void *save, int size)
 	if (tdesync > tpref) {
 		conferr("TmpDesyncFactor (%u) is greater than "
 		    "TmpPreferredLifetime (%u)\n", tdesync, tpref);
-		rollback = _B_TRUE;
+		rollback = B_TRUE;
 	}
 
 	if (tpref > tvalid) {
 		conferr("TmpPreferredLifetime (%u) is greater than "
 		    "TmpValidLifetime (%u)\n", tpref, tvalid);
-		rollback = _B_TRUE;
+		rollback = B_TRUE;
 	}
 
 	if (tregen > tvalid) {
 		conferr("TmpRegenAdvance (%u) is greater than "
 		    "TmpValidLifetime (%u)\n", tregen, tvalid);
-		rollback = _B_TRUE;
+		rollback = B_TRUE;
 	}
 
 	if (rollback) {
@@ -329,11 +329,11 @@ set_protocol_defaults(void)
 		logmsg(LOG_DEBUG, "extract_protocol_defaults\n");
 	for (cip = iflist; cip->ci_name != NULL; cip++) {
 		ifdefaults[cip->ci_index].cf_value = cip->ci_default;
-		ifdefaults[cip->ci_index].cf_notdefault = _B_FALSE;
+		ifdefaults[cip->ci_index].cf_notdefault = B_FALSE;
 	}
 	for (cip = prefixlist; cip->ci_name != NULL; cip++) {
 		prefixdefaults[cip->ci_index].cf_value = cip->ci_default;
-		prefixdefaults[cip->ci_index].cf_notdefault = _B_FALSE;
+		prefixdefaults[cip->ci_index].cf_notdefault = B_FALSE;
 	}
 }
 
@@ -420,8 +420,8 @@ parse_line(char *line, char *argvec[], int argcount)
 {
 	int i = 0;
 	char *cp;
-	boolean_t insingle_quote = _B_FALSE;
-	boolean_t indouble_quote = _B_FALSE;
+	boolean_t insingle_quote = B_FALSE;
+	boolean_t indouble_quote = B_FALSE;
 
 	/* Truncate at the beginning of a comment */
 	cp = strchr(line, '#');
@@ -437,12 +437,12 @@ parse_line(char *line, char *argvec[], int argcount)
 			line++;
 			if (*line == '\0')
 				return (i);
-			insingle_quote = _B_TRUE;
+			insingle_quote = B_TRUE;
 		} else if (*line == '"') {
 			line++;
 			if (*line == '\0')
 				return (i);
-			indouble_quote = _B_TRUE;
+			indouble_quote = B_TRUE;
 		}
 		argvec[i] = line;
 		if (*line == '\0')
@@ -461,7 +461,7 @@ parse_line(char *line, char *argvec[], int argcount)
 				    argvec[i]);
 				return (i);
 			}
-			insingle_quote = _B_FALSE;
+			insingle_quote = B_FALSE;
 		} else if (indouble_quote) {
 			while (*line != '"' && *line != '\0')
 				line++;
@@ -474,7 +474,7 @@ parse_line(char *line, char *argvec[], int argcount)
 				    argvec[i]);
 				return (i);
 			}
-			indouble_quote = _B_FALSE;
+			indouble_quote = B_FALSE;
 		} else {
 			while (!isspace(*line) && *line != '\0')
 				line++;
@@ -560,7 +560,7 @@ parse_var_value(config_type_t type, struct configinfo *list, char *varstr,
 		}
 	}
 	confvar[cip->ci_index].cf_value = val;
-	confvar[cip->ci_index].cf_notdefault = _B_TRUE;
+	confvar[cip->ci_index].cf_notdefault = B_TRUE;
 
 	/* Derive dynamic/relative variables based on this one */
 	if (type == CONFIG_IF) {
@@ -722,25 +722,25 @@ parse_onoff(char *str, uint_t *resp)
 {
 	if (strcasecmp(str, "on") == 0) {
 		*resp = 1;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 	if (strcasecmp(str, "off") == 0) {
 		*resp = 0;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 	if (strcasecmp(str, "true") == 0) {
 		*resp = 1;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 	if (strcasecmp(str, "false") == 0) {
 		*resp = 0;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 	if (parse_int(str, resp)) {
 		if (*resp == 0 || *resp == 1)
-			return (_B_TRUE);
+			return (B_TRUE);
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -754,9 +754,9 @@ parse_int(char *str, uint_t *resp)
 
 	res = strtoul(str, &end, 0);
 	if (end == str)
-		return (_B_FALSE);
+		return (B_FALSE);
 	*resp = res;
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -812,10 +812,10 @@ parse_ms(char *str, uint_t *resp)
 	}
 
 	if (!parse_int(str2, resp))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	*resp *= multiplier;
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -858,10 +858,10 @@ parse_s(char *str, uint_t *resp)
 		break;
 	}
 	if (!parse_int(str2, resp))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	*resp *= multiplier;
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -919,14 +919,14 @@ parse_date(char *str, uint_t *resp)
 
 	if (gettimeofday(&tvs, NULL) < 0) {
 		logperror("gettimeofday");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 	time = tvs.tv_sec;
 	tm = getdate(str);
 	if (tm == NULL) {
 		logmsg(LOG_ERR, "Bad date <%s> (error %d)\n",
 		    str, getdate_err);
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	ntime = mktime(tm);
@@ -941,10 +941,10 @@ parse_date(char *str, uint_t *resp)
 	if (ntime < time) {
 		conferr("Date in the past <%s>\n", str);
 		*resp = 0;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 	*resp = (ntime - time);
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /* PRINTFLIKE1 */

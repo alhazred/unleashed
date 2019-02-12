@@ -133,26 +133,26 @@ static struct sockaddr_in6 to6;
 static union any_in_addr gw_IP_list[MAX_GWS];	/* gateways */
 static union any_in_addr gw_IP_list6[MAX_GWS6];
 static int if_index = 0;		/* outgoing interface index */
-boolean_t is_alive = _B_FALSE;		/* is target host alive */
+boolean_t is_alive = B_FALSE;		/* is target host alive */
 struct targetaddr *current_targetaddr;	/* current target IP address to probe */
 static struct targetaddr *targetaddr_list; /* list of IP addresses to probe */
 static int num_targetaddrs;		/* no of target addresses to probe */
 static int num_v4 = 0;			/* count of IPv4 addresses */
 static int num_v6 = 0;			/* count of IPv6 addresses */
-boolean_t verbose = _B_FALSE;		/* verbose output */
-boolean_t stats = _B_FALSE;		/* display statistics */
-static boolean_t settos = _B_FALSE;	/* set type-of-service value */
-boolean_t rr_option = _B_FALSE;		/* true if using record route */
-boolean_t send_reply = _B_FALSE;	/* Send an ICMP_{ECHO|TSTAMP}REPLY */
+boolean_t verbose = B_FALSE;		/* verbose output */
+boolean_t stats = B_FALSE;		/* display statistics */
+static boolean_t settos = B_FALSE;	/* set type-of-service value */
+boolean_t rr_option = B_FALSE;		/* true if using record route */
+boolean_t send_reply = B_FALSE;	/* Send an ICMP_{ECHO|TSTAMP}REPLY */
 					/* that goes to target and comes back */
 					/* to the the sender via src routing. */
-boolean_t strict = _B_FALSE;		/* true if using strict source route */
-boolean_t ts_option = _B_FALSE;		/* true if using timestamp option */
-boolean_t use_icmp_ts = _B_FALSE;	/* Use ICMP timestamp request */
-boolean_t use_udp = _B_FALSE;		/* Use UDP instead of ICMP */
-boolean_t probe_all = _B_FALSE;		/* probe all the IP addresses */
-boolean_t nflag = _B_FALSE;		/* do not reverse lookup addresses */
-boolean_t bypass = _B_FALSE;		/* bypass IPsec policy */
+boolean_t strict = B_FALSE;		/* true if using strict source route */
+boolean_t ts_option = B_FALSE;		/* true if using timestamp option */
+boolean_t use_icmp_ts = B_FALSE;	/* Use ICMP timestamp request */
+boolean_t use_udp = B_FALSE;		/* Use UDP instead of ICMP */
+boolean_t probe_all = B_FALSE;		/* probe all the IP addresses */
+boolean_t nflag = B_FALSE;		/* do not reverse lookup addresses */
+boolean_t bypass = B_FALSE;		/* bypass IPsec policy */
 static int family_input = AF_UNSPEC;	/* address family supplied by user */
 int datalen = DEFAULT_DATALEN;		/* How much data */
 int ts_flag;				/* timestamp flag value */
@@ -173,7 +173,7 @@ static struct if_entry out_if;		/* interface argument */
 int ident;				/* ID for this ping run */
 static hrtime_t t_last_probe_sent;	/* the time we sent the last probe */
 static timer_t timer;			/* timer for waiting */
-static volatile boolean_t timer_done = _B_FALSE; /* timer finished? */
+static volatile boolean_t timer_done = B_FALSE; /* timer finished? */
 static struct itimerspec interval = { { 0, 0 }, { 1, 0 } }; /* Interval for */
 					/* -I. The default interval is 1s. */
 static hrtime_t mintime = NSEC2MSEC(500);	/* minimum time between pings */
@@ -183,7 +183,7 @@ static hrtime_t mintime = NSEC2MSEC(500);	/* minimum time between pings */
  * this exists.
  */
 static mutex_t ns_lock = ERRORCHECKMUTEX; /* Protects the following data */
-static boolean_t ns_active = _B_FALSE;	/* Lookup is going on */
+static boolean_t ns_active = B_FALSE;	/* Lookup is going on */
 static hrtime_t ns_starttime;		/* Time the lookup started */
 static int ns_sleeptime = 2;		/* Time in seconds between checks */
 static int ns_warntime = 2;		/* Time in seconds before warning */
@@ -311,7 +311,7 @@ main(int argc, char *argv[])
 			break;
 
 		case 'a':
-			probe_all = _B_TRUE;
+			probe_all = B_TRUE;
 			break;
 
 		case 'c':
@@ -333,7 +333,7 @@ main(int argc, char *argv[])
 			break;
 
 		case 'b':
-			bypass = _B_TRUE;
+			bypass = B_TRUE;
 			break;
 
 		case 'F':
@@ -347,7 +347,7 @@ main(int argc, char *argv[])
 			break;
 
 		case 'I':
-			stats = _B_TRUE;
+			stats = B_TRUE;
 			parse_interval(optarg);
 			break;
 
@@ -380,16 +380,16 @@ main(int argc, char *argv[])
 			break;
 
 		case 'l':
-			send_reply = _B_TRUE;
-			strict = _B_FALSE;
+			send_reply = B_TRUE;
+			strict = B_FALSE;
 			break;
 
 		case 'n':
-			nflag = _B_TRUE;
+			nflag = B_TRUE;
 			break;
 
 		case 'P':
-			settos = _B_TRUE;
+			settos = B_TRUE;
 			i = int_arg(optarg, "type-of-service");
 			if (i > MAX_TOS) {
 				Fprintf(stderr, "%s: tos value %d out of "
@@ -414,20 +414,20 @@ main(int argc, char *argv[])
 			break;
 
 		case 'R':
-			rr_option = _B_TRUE;
+			rr_option = B_TRUE;
 			break;
 
 		case 'S':
-			send_reply = _B_TRUE;
-			strict = _B_TRUE;
+			send_reply = B_TRUE;
+			strict = B_TRUE;
 			break;
 
 		case 's':
-			stats = _B_TRUE;
+			stats = B_TRUE;
 			break;
 
 		case 'T':
-			ts_option = _B_TRUE;
+			ts_option = B_TRUE;
 			break;
 
 		case 't':
@@ -441,12 +441,12 @@ main(int argc, char *argv[])
 			break;
 
 		case 'U':
-			use_udp = _B_TRUE;
-			use_icmp_ts = _B_FALSE;
+			use_udp = B_TRUE;
+			use_icmp_ts = B_FALSE;
 			break;
 
 		case 'v':
-			verbose = _B_TRUE;
+			verbose = B_TRUE;
 			break;
 		/*
 		 * 'x' and 'X' has been undocumented flags for source routing.
@@ -457,7 +457,7 @@ main(int argc, char *argv[])
 		 */
 		case 'x':
 		case 'g':
-			strict = _B_FALSE;
+			strict = B_FALSE;
 			if (num_gw > MAXMAX_GWS) {
 				Fprintf(stderr, "%s: too many gateways\n",
 				    progname);
@@ -468,7 +468,7 @@ main(int argc, char *argv[])
 
 		case 'X':
 		case 'G':
-			strict = _B_TRUE;
+			strict = B_TRUE;
 			if (num_gw > MAXMAX_GWS) {
 				Fprintf(stderr, "%s: too many gateways\n",
 				    progname);
@@ -487,8 +487,8 @@ main(int argc, char *argv[])
 			break;
 
 		case 'Y':
-			use_icmp_ts = _B_TRUE;
-			use_udp = _B_FALSE;
+			use_icmp_ts = B_TRUE;
+			use_udp = B_FALSE;
 			break;
 
 		case '0':
@@ -520,10 +520,10 @@ main(int argc, char *argv[])
 	 * doesn't work with UDP
 	 */
 	if (use_udp)
-		send_reply = _B_FALSE;
+		send_reply = B_FALSE;
 
 	if (getenv("MACHINE_THAT_GOES_PING") != NULL)
-		stats = _B_TRUE;
+		stats = B_TRUE;
 
 	targethost = argv[optind];
 	optind++;
@@ -836,8 +836,8 @@ create_targetaddr_item(int family, union any_in_addr *dst_addr,
 		targetaddr->num_probes = timeout;
 	}
 	targetaddr->num_sent = 0;
-	targetaddr->got_reply = _B_FALSE;
-	targetaddr->probing_done = _B_FALSE;
+	targetaddr->got_reply = B_FALSE;
+	targetaddr->probing_done = B_FALSE;
 	targetaddr->starting_seq_num = 0; /* actual value will be set later */
 	targetaddr->next = NULL;	/* actual value will be set later */
 
@@ -941,7 +941,7 @@ get_gwaddrs(char **gw_list, int family, union any_in_addr *gwIPlist,
     union any_in_addr *gwIPlist6, int *resolved, int *resolved6)
 {
 	int i;
-	boolean_t check_v4 = _B_TRUE, check_v6 = _B_TRUE;
+	boolean_t check_v4 = B_TRUE, check_v6 = B_TRUE;
 	struct addrinfo	*ai = NULL;
 	struct addrinfo	*aip = NULL;
 
@@ -950,21 +950,21 @@ get_gwaddrs(char **gw_list, int family, union any_in_addr *gwIPlist,
 	case AF_UNSPEC:
 		break;
 	case AF_INET:
-		check_v6 = _B_FALSE;
+		check_v6 = B_FALSE;
 		break;
 	case AF_INET6:
-		check_v4 = _B_FALSE;
+		check_v4 = B_FALSE;
 		break;
 	default:
 		return;
 	}
 
 	if (check_v4 && num_gw >= MAX_GWS) {
-		check_v4 = _B_FALSE;
+		check_v4 = B_FALSE;
 		Fprintf(stderr, "%s: too many IPv4 gateways\n", progname);
 	}
 	if (check_v6 && num_gw > MAX_GWS6) {
-		check_v6 = _B_FALSE;
+		check_v6 = B_FALSE;
 		Fprintf(stderr, "%s: too many IPv6 gateways\n", progname);
 	}
 
@@ -987,7 +987,7 @@ get_gwaddrs(char **gw_list, int family, union any_in_addr *gwIPlist,
 				}
 			}
 		} else if (check_v4) {
-			check_v4 = _B_FALSE;
+			check_v4 = B_FALSE;
 		}
 		if (check_v6 && num_v6 != 0) {
 			for (aip = ai; aip != NULL; aip = aip->ai_next) {
@@ -1002,7 +1002,7 @@ get_gwaddrs(char **gw_list, int family, union any_in_addr *gwIPlist,
 				}
 			}
 		} else if (check_v6) {
-			check_v6 = _B_FALSE;
+			check_v6 = B_FALSE;
 		}
 	}
 	freeaddrinfo(ai);
@@ -1049,9 +1049,9 @@ get_hostinfo(char *host, int family, struct addrinfo **aipp)
 
 	/* check if broadcast */
 	if (strcmp(host, "255.255.255.255") == 0)
-		broadcast = _B_TRUE;
+		broadcast = B_TRUE;
 	else
-		broadcast = _B_FALSE;
+		broadcast = B_FALSE;
 
 	/* check if IPv4-mapped address or broadcast */
 	if (((inet_pton(AF_INET6, host, &addr6) > 0) &&
@@ -1303,7 +1303,7 @@ set_nexthop(int family, struct addrinfo	*ai_nexthop, int sock)
 
 /*
  * Setup the socket for the given address family.
- * Returns _B_TRUE on success, _B_FALSE on failure. Failure is the case when no
+ * Returns B_TRUE on success, B_FALSE on failure. Failure is the case when no
  * interface can be found, or the specified interface (-i) is not found. On
  * library call failures, it exit()s.
  */
@@ -1556,7 +1556,7 @@ setup_socket(int family, int *send_sockp, int *recv_sockp, int *if_index,
 			Fprintf(stderr, "%s: can't find any %s interface\n",
 			    progname, (family == AF_INET) ? "IPv4" : "IPv6");
 
-			return (_B_FALSE);	/* failure */
+			return (B_FALSE);	/* failure */
 		}
 
 		/* locate the specified interface */
@@ -1566,7 +1566,7 @@ setup_socket(int family, int *send_sockp, int *recv_sockp, int *if_index,
 			    progname, out_if.str,
 			    (family == AF_INET) ? "IPv4" : "IPv6");
 
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 
 		if (family == AF_INET) {
@@ -1663,7 +1663,7 @@ setup_socket(int family, int *send_sockp, int *recv_sockp, int *if_index,
 	*recv_sockp = recv_sock;
 
 	/* successful */
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1678,7 +1678,7 @@ find_if(struct ifaddrlist *al, int num_ifs)
 	int i;
 
 	i = 0;
-	found = _B_FALSE;
+	found = B_FALSE;
 
 	while (i < num_ifs && !found) {
 		tmp_if = al[i];
@@ -1693,25 +1693,25 @@ find_if(struct ifaddrlist *al, int num_ifs)
 		switch (out_if.id_type) {
 		case IF_INDEX:
 			if (out_if.id.index == tmp_if.index)
-				found = _B_TRUE;
+				found = B_TRUE;
 			break;
 
 		case IF_NAME:
 			if (strcmp(out_if.id.name, tmp_if.device) == 0)
-				found = _B_TRUE;
+				found = B_TRUE;
 			break;
 
 		case IF_ADDR:
 			if (out_if.id.addr.addr.s_addr ==
 			    tmp_if.addr.addr.s_addr) {
-				found = _B_TRUE;
+				found = B_TRUE;
 			}
 			break;
 
 		case IF_ADDR6:
 			if (IN6_ARE_ADDR_EQUAL(&out_if.id.addr.addr6,
 			    &tmp_if.addr.addr6)) {
-				found = _B_TRUE;
+				found = B_TRUE;
 			}
 			break;
 
@@ -1739,7 +1739,7 @@ sigalrm_handler(void)
 	 * If we've been told that we're done, the timer should be cancelled
 	 * and not rescheduled, just return.
 	 */
-	if (timer_done == _B_TRUE)
+	if (timer_done == B_TRUE)
 		return;
 
 	/*
@@ -1797,13 +1797,13 @@ void
 send_scheduled_probe()
 {
 	static struct msghdr msg6;
-	static boolean_t first_probe = _B_TRUE;
+	static boolean_t first_probe = B_TRUE;
 	char tmp_buf[INET6_ADDRSTRLEN];
 
 	/*
 	 * We are about to move to next targetaddr if it's either we sent
 	 * all the probes, or somebody set the probing_done flag to
-	 * _B_TRUE prompting us to move on.
+	 * B_TRUE prompting us to move on.
 	 */
 	if (current_targetaddr->num_sent == current_targetaddr->num_probes ||
 	    current_targetaddr->probing_done) {
@@ -1823,8 +1823,8 @@ send_scheduled_probe()
 		/*
 		 * Before we move onto next item, let's do some clean up.
 		 */
-		current_targetaddr->got_reply = _B_FALSE;
-		current_targetaddr->probing_done = _B_FALSE;
+		current_targetaddr->got_reply = B_FALSE;
+		current_targetaddr->probing_done = B_FALSE;
 		/*
 		 * If this is probe-all without stats mode, then we need to
 		 * preserve this count. This is needed when we try to map an
@@ -1840,7 +1840,7 @@ send_scheduled_probe()
 		 * Did we reach the end of road?
 		 */
 		if (current_targetaddr == NULL) {
-			timer_done = _B_TRUE;
+			timer_done = B_TRUE;
 			if (stats)
 				finish();
 			if (is_alive)
@@ -1881,7 +1881,7 @@ send_scheduled_probe()
 			}
 			set_ancillary_data(&msg6, hoplimit, gw_IP_list6,
 			    eff_num_gw, if_index);
-			first_probe = _B_FALSE;
+			first_probe = B_FALSE;
 		}
 		pinger(send_sock6, (struct sockaddr *)&to6, &msg6, AF_INET6);
 	} else {
@@ -1933,7 +1933,7 @@ recv_icmp_packet(struct addrinfo *ai_dst, int recv_sock6, int recv_sock,
 	fd_set fds;
 	int result;
 	int cc;
-	boolean_t always_true = _B_TRUE; /* lint doesn't like while(_B_TRUE) */
+	boolean_t always_true = B_TRUE; /* lint doesn't like while(B_TRUE) */
 
 	while (always_true) {
 		(void) FD_ZERO(&fds);
@@ -2001,7 +2001,7 @@ recv_icmp_packet(struct addrinfo *ai_dst, int recv_sock6, int recv_sock,
 		 */
 		if ((npackets > 0) && (current_targetaddr->next == NULL) &&
 		    (nreceived_last_target == npackets)) {
-			timer_done = _B_TRUE;
+			timer_done = B_TRUE;
 			finish();
 		}
 	} /* infinite loop */
@@ -2030,16 +2030,16 @@ is_a_target(struct addrinfo *ai, union any_in_addr *addr)
 			/* LINTED E_BAD_PTR_CAST_ALIGN */
 			if (IN6_ARE_ADDR_EQUAL(&((struct sockaddr_in6 *)
 			    aip->ai_addr)->sin6_addr, &addr->addr6))
-				return (_B_TRUE);
+				return (B_TRUE);
 		} else {
 			/* LINTED E_BAD_PTR_CAST_ALIGN */
 			if (((struct sockaddr_in *)
 			    aip->ai_addr)->sin_addr.s_addr == addr->addr.s_addr)
-				return (_B_TRUE);
+				return (B_TRUE);
 		}
 	}
 
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -2213,7 +2213,7 @@ pr_name(char *addr, int family)
 	if (memcmp(addr, &prev_addr, alen) != 0) {
 		int flags = (nflag) ? NI_NUMERICHOST : NI_NAMEREQD;
 		mutex_enter(&ns_lock);
-		ns_active = _B_TRUE;
+		ns_active = B_TRUE;
 		ns_starttime = gethrtime();
 		mutex_exit(&ns_lock);
 		if (getnameinfo(sa, slen, buf, sizeof (buf),
@@ -2231,7 +2231,7 @@ pr_name(char *addr, int family)
 			    sizeof (abuf)));
 		}
 		mutex_enter(&ns_lock);
-		ns_active = _B_FALSE;
+		ns_active = B_FALSE;
 		mutex_exit(&ns_lock);
 
 		/* LINTED E_BAD_PTR_CAST_ALIGN */
@@ -2293,9 +2293,9 @@ seq_match(ushort_t seq_begin, int seq_len, ushort_t value)
 
 	if (PINGSEQ_LEQ(seq_begin, value) &&
 	    PINGSEQ_LEQ(value, (seq_begin + seq_len - 1) % (MAX_ICMP_SEQ + 1)))
-		return (_B_TRUE);
+		return (B_TRUE);
 	else
-		return (_B_FALSE);
+		return (B_FALSE);
 }
 
 /*
@@ -2595,7 +2595,7 @@ ns_warning_thr(void *unused)
 		(void) sleep(ns_sleeptime);
 		now = gethrtime();
 		mutex_enter(&ns_lock);
-		if (ns_active == _B_TRUE &&
+		if (ns_active == B_TRUE &&
 		    now - ns_starttime >= ns_warntime * NANOSEC) {
 			Fprintf(stderr, "%s: warning: ICMP responses "
 			    "received, but name service lookups are "

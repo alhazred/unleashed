@@ -51,16 +51,16 @@
 int		stopint;
 boolean_t	supplier;	/* supply or broadcast updates */
 boolean_t	supplier_set;
-/* -S option. _B_TRUE=treat all RIP speakers as default routers. */
-boolean_t	save_space = _B_FALSE;
+/* -S option. B_TRUE=treat all RIP speakers as default routers. */
+boolean_t	save_space = B_FALSE;
 
-static boolean_t default_gateway;	/* _B_TRUE=advertise default */
-static boolean_t background = _B_TRUE;
-boolean_t	ridhosts;	/* _B_TRUE=reduce host routes */
-boolean_t	mhome;		/* _B_TRUE=want multi-homed host route */
-boolean_t	advertise_mhome;  /* _B_TRUE=must continue advertising it */
-boolean_t	auth_ok = _B_TRUE; /* _B_TRUE=ignore auth if we don't care */
-boolean_t	no_install;	/* _B_TRUE=don't install in kernel */
+static boolean_t default_gateway;	/* B_TRUE=advertise default */
+static boolean_t background = B_TRUE;
+boolean_t	ridhosts;	/* B_TRUE=reduce host routes */
+boolean_t	mhome;		/* B_TRUE=want multi-homed host route */
+boolean_t	advertise_mhome;  /* B_TRUE=must continue advertising it */
+boolean_t	auth_ok = B_TRUE; /* B_TRUE=ignore auth if we don't care */
+boolean_t	no_install;	/* B_TRUE=don't install in kernel */
 
 struct timeval epoch;		/* when started */
 struct timeval clk;
@@ -113,8 +113,8 @@ main(int argc, char *argv[])
 	in_addr_t p_net, p_mask;
 	struct parm parm;
 	char *tracename = NULL;
-	boolean_t vflag = _B_FALSE;
-	boolean_t version = _B_FALSE;
+	boolean_t vflag = B_FALSE;
+	boolean_t version = B_FALSE;
 	int sigerr = 0;
 	FILE *pidfp;
 	mode_t pidmode = (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); /* 0644 */
@@ -137,7 +137,7 @@ main(int argc, char *argv[])
 	ftrace = stdout;
 
 	if (gettimeofday(&clk, 0) == -1) {
-		logbad(_B_FALSE, "gettimeofday: %s", rip_strerror(errno));
+		logbad(B_FALSE, "gettimeofday: %s", rip_strerror(errno));
 	}
 	prev_clk = clk;
 	epoch = clk;
@@ -155,17 +155,17 @@ main(int argc, char *argv[])
 			 * Ignore authentication if we do not care.
 			 * Crazy as it is, that is what RFC 2453 requires.
 			 */
-			auth_ok = _B_FALSE;
+			auth_ok = B_FALSE;
 			break;
 
 		case 't':
 			if (new_tracelevel < 2)
 				new_tracelevel = 2;
-			background = _B_FALSE;
+			background = B_FALSE;
 			break;
 
 		case 'd':	/* put in.routed in foreground */
-			background = _B_FALSE;
+			background = B_FALSE;
 			break;
 
 		case 'F':		/* minimal routes for SLIP */
@@ -200,28 +200,28 @@ main(int argc, char *argv[])
 			if (cp != NULL)
 				msglog(gettext("bad -g: %s"), cp);
 			else
-				default_gateway = _B_TRUE;
+				default_gateway = B_TRUE;
 			break;
 
 		case 'h':		/* suppress extra host routes */
-			ridhosts = _B_TRUE;
+			ridhosts = B_TRUE;
 			break;
 
 		case 'm':		/* advertise host route */
-			mhome = _B_TRUE;	/* on multi-homed hosts */
+			mhome = B_TRUE;	/* on multi-homed hosts */
 			break;
 
 		case 'n':	/* No-install mode */
-			no_install = _B_TRUE;
+			no_install = B_TRUE;
 			break;
 
 		case 'P':
 			/* handle arbitrary parameters. */
 			q = strdup(optarg);
 			if (q == NULL)
-				logbad(_B_FALSE, "strdup: %s",
+				logbad(B_FALSE, "strdup: %s",
 				    rip_strerror(errno));
-			cp = parse_parms(q, _B_FALSE);
+			cp = parse_parms(q, B_FALSE);
 			if (cp != NULL)
 				msglog(gettext("%1$s in \"-P %2$s\""), cp,
 				    optarg);
@@ -229,17 +229,17 @@ main(int argc, char *argv[])
 			break;
 
 		case 'q':
-			supplier = _B_FALSE;
-			supplier_set = _B_TRUE;
+			supplier = B_FALSE;
+			supplier_set = B_TRUE;
 			break;
 
 		case 's':
-			supplier = _B_TRUE;
-			supplier_set = _B_TRUE;
+			supplier = B_TRUE;
+			supplier_set = B_TRUE;
 			break;
 
 		case 'S':	/* save-space option */
-			save_space = _B_TRUE;
+			save_space = B_TRUE;
 			break;
 
 		case 'T':
@@ -248,14 +248,14 @@ main(int argc, char *argv[])
 
 		case 'V':
 			/* display version */
-			version = _B_TRUE;
+			version = B_TRUE;
 			msglog(gettext("version " IN_ROUTED_VERSION));
 			break;
 
 		case 'v':
 			/* display route changes to supplied logfile */
 			new_tracelevel = 1;
-			vflag = _B_TRUE;
+			vflag = B_TRUE;
 			break;
 
 		case 'z':	/* increase debug-level */
@@ -284,7 +284,7 @@ usage:
 		    "[-T <tracefile>]\n"));
 		(void) fprintf(stderr,
 		    gettext("\t[-F <net>[/<mask>][,<metric>]] [-P <parms>]\n"));
-		logbad(_B_FALSE, gettext("excess arguments"));
+		logbad(B_FALSE, gettext("excess arguments"));
 	}
 	if (geteuid() != 0) {
 		/*
@@ -294,15 +294,15 @@ usage:
 		 */
 		if (version)
 			exit(EXIT_SUCCESS);
-		logbad(_B_FALSE, gettext("requires UID 0"));
+		logbad(B_FALSE, gettext("requires UID 0"));
 	}
 
 	if (default_gateway) {
 		if (supplier_set && !supplier) {
 			msglog(gettext("-g and -q are incompatible"));
 		} else {
-			supplier = _B_TRUE;
-			supplier_set = _B_TRUE;
+			supplier = B_TRUE;
+			supplier_set = B_TRUE;
 		}
 	}
 
@@ -328,7 +328,7 @@ usage:
 
 	/* get into the background */
 	if (background && daemon(0, 0) < 0)
-		BADERR(_B_FALSE, "daemon()");
+		BADERR(B_FALSE, "daemon()");
 
 	/* Store our process id, blow away any existing file if it exists. */
 	if ((pidfp = fopen(PATH_PID, "w")) == NULL) {
@@ -349,9 +349,9 @@ usage:
 	/* prepare socket connected to the kernel. */
 	rt_sock = socket(PF_ROUTE, SOCK_RAW, AF_INET);
 	if (rt_sock < 0)
-		BADERR(_B_TRUE, "rt_sock = socket()");
+		BADERR(B_TRUE, "rt_sock = socket()");
 	if (fcntl(rt_sock, F_SETFL, O_NONBLOCK) == -1)
-		logbad(_B_TRUE, "fcntl(rt_sock) O_NONBLOCK: %s",
+		logbad(B_TRUE, "fcntl(rt_sock) O_NONBLOCK: %s",
 		    rip_strerror(errno));
 	off = 0;
 	if (setsockopt(rt_sock, SOL_SOCKET, SO_USELOOPBACK,
@@ -424,7 +424,7 @@ usage:
 	for (;;) {
 		prev_clk = clk;
 		if (gettimeofday(&clk, 0) == -1) {
-			logbad(_B_FALSE, "gettimeofday: %s",
+			logbad(B_FALSE, "gettimeofday: %s",
 			    rip_strerror(errno));
 		}
 		if (prev_clk.tv_sec == clk.tv_sec &&
@@ -588,7 +588,7 @@ usage:
 		n = select(sock_max, &ibits, 0, 0, &select_timeout);
 		if (n <= 0) {
 			if (n < 0 && errno != EINTR && errno != EAGAIN)
-				BADERR(_B_TRUE, "select");
+				BADERR(B_TRUE, "select");
 			continue;
 		}
 
@@ -606,7 +606,7 @@ usage:
 		}
 		if (rip_sock >= 0 && FD_ISSET(rip_sock, &ibits)) {
 			if (read_rip() == -1) {
-				rip_enabled = _B_FALSE;
+				rip_enabled = B_FALSE;
 				trace_off("main rip socket failed");
 				(void) close(rip_sock);
 				rip_sock = -1;
@@ -617,7 +617,7 @@ usage:
 		}
 	}
 	rip_bcast(0);
-	rdisc_adv(_B_FALSE);
+	rdisc_adv(B_FALSE);
 	(void) unlink(PATH_PID);
 	return (stopint | 128);
 }
@@ -681,7 +681,7 @@ fix_sock(int sock,
 	static int rbuf;
 
 	if (fcntl(sock, F_SETFL, O_NONBLOCK) == -1)
-		logbad(_B_TRUE, "fcntl(%s) O_NONBLOCK: %s", name,
+		logbad(B_TRUE, "fcntl(%s) O_NONBLOCK: %s", name,
 		    rip_strerror(errno));
 	on = 1;
 	if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST, &on, sizeof (on)) < 0)
@@ -724,24 +724,24 @@ open_rip_sock()
 
 
 	if ((s = socket(PF_INET, SOCK_DGRAM, 0)) < 0)
-		BADERR(_B_TRUE, "rip_sock = socket()");
+		BADERR(B_TRUE, "rip_sock = socket()");
 
 	(void) memset(&sin, 0, sizeof (sin));
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(RIP_PORT);
 	sin.sin_addr.s_addr = INADDR_ANY;
 	if (bind(s, (struct sockaddr *)&sin, sizeof (sin)) < 0) {
-		BADERR(_B_FALSE, "bind(rip_sock)");
+		BADERR(B_FALSE, "bind(rip_sock)");
 	}
 	fix_sock(s, "rip_sock");
 
 	ttl = 1;
 	if (setsockopt(s, IPPROTO_IP, IP_MULTICAST_TTL,
 	    &ttl, sizeof (ttl)) < 0)
-		DBGERR(_B_TRUE, "rip_sock setsockopt(IP_MULTICAST_TTL)");
+		DBGERR(B_TRUE, "rip_sock setsockopt(IP_MULTICAST_TTL)");
 
 	if (setsockopt(s, IPPROTO_IP, IP_RECVIF, &on, sizeof (on)))
-		BADERR(_B_FALSE, "setsockopt(IP_RECVIF)");
+		BADERR(B_FALSE, "setsockopt(IP_RECVIF)");
 
 	return (s);
 }
@@ -790,7 +790,7 @@ rip_off(void)
 					    rip_strerror(errno));
 			}
 		}
-		rip_enabled = _B_FALSE;
+		rip_enabled = B_FALSE;
 
 		age(0);
 	}
@@ -861,7 +861,7 @@ rip_on(struct interface *ifp)
 	if (rip_interfaces > 0 && (!rdisc_ok || rip_interfaces > 1)) {
 		trace_act("turn on RIP");
 
-		rip_enabled = _B_TRUE;
+		rip_enabled = B_TRUE;
 		rip_sock_interface = NULL;
 
 		/* Do not advertise anything until we have heard something */
@@ -886,7 +886,7 @@ rtmalloc(size_t size,
 {
 	void *p = malloc(size);
 	if (p == NULL)
-		logbad(_B_TRUE, "malloc(%lu) failed in %s: %s", (ulong_t)size,
+		logbad(B_TRUE, "malloc(%lu) failed in %s: %s", (ulong_t)size,
 		    msg, rip_strerror(errno));
 	return (p);
 }
@@ -932,7 +932,7 @@ timevalsub(struct timeval *t1,
 static void
 do_openlog(void)
 {
-	openlog_done = _B_TRUE;
+	openlog_done = B_TRUE;
 	openlog("in.routed", LOG_PID | LOG_ODELAY, LOG_DAEMON);
 }
 

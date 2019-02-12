@@ -363,7 +363,7 @@ supply_write(struct ws_buf *wb)
 			end_md5_auth(wb, ws.a);
 		if (output(wb->type, &ws.to, ws.ifp, wb->buf,
 		    ((char *)wb->n - (char *)wb->buf)) < 0 && ws.ifp != NULL)
-			if_sick(ws.ifp, _B_FALSE);
+			if_sick(ws.ifp, B_FALSE);
 		ws.npackets++;
 		break;
 	}
@@ -469,7 +469,7 @@ supply_out(struct ag_info *ag)
 			    (ag->ag_nhop != ws.ifp->int_addr &&
 			    on_net(ag->ag_nhop, ws.ifp->int_net,
 			    ws.ifp->int_mask)) &&
-			    ifwithaddr(ag->ag_nhop, _B_FALSE, _B_FALSE) ==
+			    ifwithaddr(ag->ag_nhop, B_FALSE, B_FALSE) ==
 			    NULL))
 				wb->n->n_nhop = ag->ag_nhop;
 			wb->n->n_mask = htonl(mask);
@@ -916,7 +916,7 @@ rip_bcast(int flash)
 	struct timeval rtime;
 
 
-	need_flash = _B_FALSE;
+	need_flash = B_FALSE;
 	intvl_random(&rtime, MIN_WAITTIME, MAX_WAITTIME);
 	no_flash = rtime;
 	timevaladd(&no_flash, &now);
@@ -967,7 +967,7 @@ rip_bcast(int flash)
 		    !(ifp->int_state & IS_NO_RIP_MCAST))
 			type = OUT_MULTICAST;
 
-		supply(&dst, ifp, type, flash, vers, _B_TRUE);
+		supply(&dst, ifp, type, flash, vers, B_TRUE);
 	}
 
 	update_seqno++;			/* all routes are up to date */
@@ -1051,6 +1051,6 @@ rip_query(void)
 
 		ifp->int_query_time = now.tv_sec+SUPPLY_INTERVAL;
 		if (output(type, &dst, ifp, &buf, sizeof (buf)) < 0)
-			if_sick(ifp, _B_FALSE);
+			if_sick(ifp, B_FALSE);
 	}
 }

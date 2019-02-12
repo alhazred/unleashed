@@ -271,7 +271,7 @@ set_ancillary_data(struct msghdr *msgp, int hoplimit,
 /*
  * Parses the given msg->msg_control to find the IPV6_HOPLIMIT ancillary data
  * and update the hoplimit.
- * Returns _B_FALSE if it can't find IPV6_HOPLIMIT ancillary data, _B_TRUE
+ * Returns B_FALSE if it can't find IPV6_HOPLIMIT ancillary data, B_TRUE
  * otherwise.
  */
 static boolean_t
@@ -287,11 +287,11 @@ update_hoplimit_ancillary_data(struct msghdr *msg, int hoplimit)
 			/* LINTED E_BAD_PTR_CAST_ALIGN */
 			intp = (int *)(CMSG_DATA(cmsg));
 			*intp = hoplimit;
-			return (_B_TRUE);
+			return (B_TRUE);
 		}
 	}
 
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -682,25 +682,25 @@ print_addr6(uchar_t *buf, int cc, struct sockaddr *from)
 
 /*
  * ICMP6 messages which doesn't mean we got the target, or we got a gateway, are
- * processed here. It returns _B_TRUE if it's some sort of 'unreachable'.
+ * processed here. It returns B_TRUE if it's some sort of 'unreachable'.
  */
 boolean_t
 print_icmp_other6(uchar_t type, uchar_t code)
 {
-	boolean_t unreach = _B_FALSE;
+	boolean_t unreach = B_FALSE;
 
 	switch (type) {
 
 	/* this corresponds to "ICMP_UNREACH_NEEDFRAG" in ICMP */
 	case ICMP6_PACKET_TOO_BIG:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !B");
 		break;
 
 	case ICMP6_PARAM_PROB:
 		/* this corresponds to "ICMP_UNREACH_PROTOCOL" in ICMP */
 		if (code == ICMP6_PARAMPROB_NEXTHEADER) {
-			unreach = _B_TRUE;
+			unreach = B_TRUE;
 			Printf(" !R");
 		}
 		break;
@@ -711,27 +711,27 @@ print_icmp_other6(uchar_t type, uchar_t code)
 			break;
 
 		case ICMP6_DST_UNREACH_NOROUTE:
-			unreach = _B_TRUE;
+			unreach = B_TRUE;
 			Printf(" !H");
 			break;
 
 		case ICMP6_DST_UNREACH_ADMIN:
-			unreach = _B_TRUE;
+			unreach = B_TRUE;
 			Printf(" !X");
 			break;
 
 		case ICMP6_DST_UNREACH_ADDR:
-			unreach = _B_TRUE;
+			unreach = B_TRUE;
 			Printf(" !A");
 			break;
 
 		case ICMP6_DST_UNREACH_NOTNEIGHBOR:
-			unreach = _B_TRUE;
+			unreach = B_TRUE;
 			Printf(" !E");
 			break;
 
 		default:
-			unreach = _B_TRUE;
+			unreach = B_TRUE;
 			Printf(" !<%d>", code);
 			break;
 		}

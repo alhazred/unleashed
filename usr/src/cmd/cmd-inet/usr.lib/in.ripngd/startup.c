@@ -61,7 +61,7 @@ initifs(void)
 	struct interface ifs;
 	struct interface *ifp;
 	int netmaskchange = 0;
-	boolean_t changes = _B_FALSE;
+	boolean_t changes = B_FALSE;
 
 	lifn.lifn_family = AF_INET6;
 	lifn.lifn_flags = 0;
@@ -133,7 +133,7 @@ initifs(void)
 					 * increment the counter.
 					 */
 					ifp->int_transitions++;
-					changes = _B_TRUE;
+					changes = B_TRUE;
 				}
 				if_purge(ifp);
 			}
@@ -336,7 +336,7 @@ initifs(void)
 			traceinit(ifp);
 		}
 		addrouteforif(ifp);
-		changes = _B_TRUE;
+		changes = B_TRUE;
 	}
 
 	/*
@@ -348,7 +348,7 @@ initifs(void)
 		    (RIP6_IFF_MARKED | RIP6_IFF_UP)) {
 			if_purge(ifp);
 			ifp->int_flags &= ~RIP6_IFF_MARKED;
-			changes = _B_TRUE;
+			changes = B_TRUE;
 		}
 	}
 	if (netmaskchange)
@@ -376,7 +376,7 @@ addrouteforif(struct interface *ifp)
 		rtdelete(rt);
 	}
 	rtadd(dst, &ifp->int_addr, ifp->int_prefix_length, ifp->int_metric, 0,
-	    _B_TRUE, ifp);
+	    B_TRUE, ifp);
 }
 
 static int

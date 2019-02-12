@@ -99,7 +99,7 @@ static char		name[LIFNAMSIZ];
 /* foreach interface saved name */
 static char		origname[LIFNAMSIZ];
 static int		setaddr;
-static boolean_t	setaddr_done = _B_FALSE;
+static boolean_t	setaddr_done = B_FALSE;
 static boolean_t	ipsec_policy_set;
 static boolean_t	ipsec_auth_covered;
 static ipadm_handle_t	iph;
@@ -609,7 +609,7 @@ plumball(int argc, char *argv[], int64_t onflags, int64_t offflags,
 static void
 ifconfig(int argc, char *argv[], int af, struct ifaddrs *ifa)
 {
-	static boolean_t scan_netmask = _B_FALSE;
+	static boolean_t scan_netmask = B_FALSE;
 	int ret;
 	ipadm_status_t istatus;
 	struct lifreq lifr;
@@ -669,7 +669,7 @@ ifconfig(int argc, char *argv[], int af, struct ifaddrs *ifa)
 		char	**largv;
 
 		/* Only go thru the command list once to find the netmask. */
-		scan_netmask = _B_TRUE;
+		scan_netmask = B_TRUE;
 
 		/*
 		 * Currently, if multiple netmask commands are specified, the
@@ -700,7 +700,7 @@ ifconfig(int argc, char *argv[], int af, struct ifaddrs *ifa)
 		if (debug)
 			(void) printf("ifconfig: argv %s\n", *argv);
 
-		found_cmd = _B_FALSE;
+		found_cmd = B_FALSE;
 		for (p = cmds; p->c_func; p++) {
 			if (p->c_name) {
 				if (strcmp(*argv, p->c_name) == 0) {
@@ -709,7 +709,7 @@ ifconfig(int argc, char *argv[], int af, struct ifaddrs *ifa)
 					 * found and check to see if
 					 * the address family is valid
 					 */
-					found_cmd = _B_TRUE;
+					found_cmd = B_TRUE;
 					if (p->c_af == AF_ANY ||
 					    af == p->c_af)
 						break;
@@ -762,7 +762,7 @@ ifconfig(int argc, char *argv[], int af, struct ifaddrs *ifa)
 				goto createfailed;
 			ipadm_destroy_addrobj(ipaddr);
 			ipaddr = NULL;
-			setaddr_done = _B_TRUE;
+			setaddr_done = B_TRUE;
 			if (p->c_name == 0) {
 				/* move parser along */
 				argc--, argv++;
@@ -835,7 +835,7 @@ ifconfig(int argc, char *argv[], int af, struct ifaddrs *ifa)
 			goto createfailed;
 		ipadm_destroy_addrobj(ipaddr);
 		ipaddr = NULL;
-		setaddr_done = _B_TRUE;
+		setaddr_done = B_TRUE;
 	}
 
 	/* Check to see if there's a security hole in the tunnel setup. */
@@ -897,7 +897,7 @@ set_mask_lifreq(struct lifreq *lifr, struct sockaddr_storage *addr,
 		 */
 		assert(afp->af_af == AF_INET);
 		g_netmask = *addr;
-		if (!in_getmask((struct sockaddr_in *)&g_netmask, _B_TRUE)) {
+		if (!in_getmask((struct sockaddr_in *)&g_netmask, B_TRUE)) {
 			lifr->lifr_addr = *mask;
 			g_netmask_set = G_NETMASK_NIL;
 		} else {
@@ -1187,7 +1187,7 @@ enum ipsec_alg_type { ESP_ENCR_ALG = 1, ESP_AUTH_ALG, AH_AUTH_ALG };
 static int
 set_tun_algs(int which_alg, int alg)
 {
-	boolean_t	encr_alg_set = _B_FALSE;
+	boolean_t	encr_alg_set = B_FALSE;
 	iptun_params_t	params;
 	dladm_status_t	status;
 	ipsec_req_t	*ipsr;
@@ -1222,11 +1222,11 @@ set_tun_algs(int which_alg, int alg)
 
 			/* Let the user specify NULL encryption implicitly. */
 			if (ipsr->ipsr_esp_auth_alg != SADB_AALG_NONE) {
-				encr_alg_set = _B_TRUE;
+				encr_alg_set = B_TRUE;
 				ipsr->ipsr_esp_alg = SADB_EALG_NULL;
 			}
 		} else {
-			encr_alg_set = _B_TRUE;
+			encr_alg_set = B_TRUE;
 			ipsr->ipsr_esp_req =
 			    IPSEC_PREF_REQUIRED | IPSEC_PREF_UNIQUE;
 			ipsr->ipsr_esp_alg = alg;
@@ -1269,12 +1269,12 @@ done:
 	if (status != DLADM_STATUS_OK)
 		dladmerr_exit(status, name);
 	else {
-		ipsec_policy_set = _B_TRUE;
+		ipsec_policy_set = B_TRUE;
 		if ((ipsr->ipsr_esp_req != 0 &&
 		    ipsr->ipsr_esp_auth_alg != SADB_AALG_NONE) ||
 		    (ipsr->ipsr_ah_req != 0 &&
 		    ipsr->ipsr_auth_alg != SADB_AALG_NONE))
-			ipsec_auth_covered = _B_TRUE;
+			ipsec_auth_covered = B_TRUE;
 	}
 	return (0);
 }
@@ -1366,7 +1366,7 @@ setifnetmask(char *addr, int64_t param)
 	assert(afp->af_af != AF_INET6);
 
 	if (strcmp(addr, "+") == 0) {
-		if (!in_getmask(&netmask, _B_FALSE))
+		if (!in_getmask(&netmask, B_FALSE))
 			return (0);
 		(void) printf("Setting netmask of %s to %s\n", name,
 		    inet_ntoa(netmask.sin_addr));
@@ -1390,7 +1390,7 @@ setifprefixlen(char *addr, int64_t param)
 	int prefixlen;
 	int af = afp->af_af;
 
-	prefixlen = in_getprefixlen(addr, _B_TRUE,
+	prefixlen = in_getprefixlen(addr, B_TRUE,
 	    (af == AF_INET) ? IP_ABITS : IPV6_ABITS);
 	if (prefixlen < 0) {
 		(void) fprintf(stderr,
@@ -1486,7 +1486,7 @@ static int
 setifflags(char *val, int64_t value)
 {
 	struct lifreq lifrl;	/* local lifreq struct */
-	boolean_t bringup = _B_FALSE;
+	boolean_t bringup = B_FALSE;
 
 	(void) strncpy(lifr.lifr_name, name, sizeof (lifr.lifr_name));
 	if (ioctl(s, SIOCGLIFFLAGS, (caddr_t)&lifr) < 0)
@@ -1504,7 +1504,7 @@ setifflags(char *val, int64_t value)
 			 */
 			lifr.lifr_flags &= ~IFF_UP;
 			(void) ioctl(s, SIOCSLIFFLAGS, (caddr_t)&lifr);
-			bringup = _B_TRUE;
+			bringup = B_TRUE;
 		}
 
 		lifr.lifr_flags &= ~value;
@@ -2111,7 +2111,7 @@ setifgroupname(char *grname, int64_t param)
 			 * The group doesn't yet exist; create it and repeat.
 			 */
 			af = afp->af_af;
-			if (create_ipmp(grname, af, NULL, _B_TRUE) == -1) {
+			if (create_ipmp(grname, af, NULL, B_TRUE) == -1) {
 				if (errno == EEXIST)
 					continue;
 
@@ -2156,7 +2156,7 @@ setifgroupname(char *grname, int64_t param)
 
 			af = lifgr.gi_v4 ? AF_INET6 : AF_INET;
 			if (create_ipmp(grname, af, lifgr.gi_grifname,
-			    _B_TRUE) == -1) {
+			    B_TRUE) == -1) {
 				if (errno == EEXIST)
 					continue;
 
@@ -2291,20 +2291,20 @@ modcheck(const char *ifname)
 
 	if (ioctl(s, SIOCGLIFFLAGS, &lifr) < 0) {
 		Perror0("SIOCGLIFFLAGS");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	if (lifr.lifr_flags & IFF_IPMP) {
 		(void) fprintf(stderr, "ifconfig: %s: module operations not"
 		    " supported on IPMP interfaces\n", ifname);
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 	if (lifr.lifr_flags & IFF_VIRTUAL) {
 		(void) fprintf(stderr, "ifconfig: %s: module operations not"
 		    " supported on virtual IP interfaces\n", ifname);
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -3139,7 +3139,7 @@ tun_status(datalink_id_t linkid)
 	char		propval[DLADM_PROP_VAL_MAX];
 	char		*valptr[1];
 	uint_t		valcnt = 1;
-	boolean_t	tabbed = _B_FALSE;
+	boolean_t	tabbed = B_FALSE;
 
 	params.iptun_param_linkid = linkid;
 
@@ -3181,7 +3181,7 @@ tun_status(datalink_id_t linkid)
 	if (dladm_get_linkprop(dlh, linkid, DLADM_PROP_VAL_CURRENT, "hoplimit",
 	    (char **)valptr, &valcnt) == DLADM_STATUS_OK) {
 		(void) printf("\ttunnel hop limit %s ", propval);
-		tabbed = _B_TRUE;
+		tabbed = B_TRUE;
 	}
 
 	if (dladm_get_linkprop(dlh, linkid, DLADM_PROP_VAL_CURRENT,
@@ -3190,7 +3190,7 @@ tun_status(datalink_id_t linkid)
 
 		if (!tabbed) {
 			(void) putchar('\t');
-			tabbed = _B_TRUE;
+			tabbed = B_TRUE;
 		}
 		elim = strtol(propval, NULL, 10);
 		if (elim > 0)
@@ -3658,7 +3658,7 @@ inetipmp(char *arg, int64_t param)
 	if (strchr(name, ':') != NULL)
 		retval = inetplumb(arg, param);
 	else
-		retval = create_ipmp(name, afp->af_af, name, _B_FALSE);
+		retval = create_ipmp(name, afp->af_af, name, B_FALSE);
 
 	/*
 	 * We'd return -1, but foreachinterface() doesn't propagate the error
@@ -3798,7 +3798,7 @@ ifaddr_op(ifaddrlistx_t *ifaddrp, boolean_t up)
 	(void) memset(&lifrl, 0, sizeof (lifrl));
 	(void) strlcpy(lifrl.lifr_name, ifaddrp->ia_name, LIFNAMSIZ);
 	if (ioctl(fd, SIOCGLIFFLAGS, &lifrl) == -1)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	if (up)
 		lifrl.lifr_flags |= IFF_UP;
@@ -3806,7 +3806,7 @@ ifaddr_op(ifaddrlistx_t *ifaddrp, boolean_t up)
 		lifrl.lifr_flags &= ~IFF_UP;
 
 	if (ioctl(fd, SIOCSLIFFLAGS, &lifrl) == -1)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	/*
 	 * If we're trying to bring the address down, ensure that DAD activity
@@ -3816,22 +3816,22 @@ ifaddr_op(ifaddrlistx_t *ifaddrp, boolean_t up)
 	    lifrl.lifr_flags & IFF_DUPLICATE) {
 		if (ioctl(fd, SIOCGLIFADDR, &lifrl) == -1 ||
 		    ioctl(fd, SIOCSLIFADDR, &lifrl) == -1) {
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 	}
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 static boolean_t
 ifaddr_up(ifaddrlistx_t *ifaddrp)
 {
-	return (ifaddr_op(ifaddrp, _B_TRUE));
+	return (ifaddr_op(ifaddrp, B_TRUE));
 }
 
 static boolean_t
 ifaddr_down(ifaddrlistx_t *ifaddrp)
 {
-	return (ifaddr_op(ifaddrp, _B_FALSE));
+	return (ifaddr_op(ifaddrp, B_FALSE));
 }
 
 /*
@@ -3850,7 +3850,7 @@ ifconfig_dladm_open(const char *name, datalink_class_t reqclass,
 	if (!dlh_opened) {
 		if ((status = dladm_open(&dlh)) != DLADM_STATUS_OK)
 			return (status);
-		dlh_opened = _B_TRUE;
+		dlh_opened = B_TRUE;
 	}
 	if (name != NULL) {
 		status = dladm_name2info(dlh, name, linkid, NULL, &class, NULL);
@@ -3995,7 +3995,7 @@ in_getaddr(char *s, struct sockaddr *saddr, int *plenp)
 	if (plenp != NULL) {
 		char *cp;
 
-		*plenp = in_getprefixlen(str, _B_TRUE, IP_ABITS);
+		*plenp = in_getprefixlen(str, B_TRUE, IP_ABITS);
 		if (*plenp == BAD_ADDR)
 			return;
 		cp = strchr(str, '/');
@@ -4063,7 +4063,7 @@ in6_getaddr(char *s, struct sockaddr *saddr, int *plenp)
 	if (plenp != NULL) {
 		char *cp;
 
-		*plenp = in_getprefixlen(str, _B_TRUE, IPV6_ABITS);
+		*plenp = in_getprefixlen(str, B_TRUE, IPV6_ABITS);
 		if (*plenp == BAD_ADDR)
 			return;
 		cp = strchr(str, '/');
@@ -4149,7 +4149,7 @@ in_prefixlentomask(int prefixlen, int maxlen, uchar_t *mask)
 static void
 print_flags(uint64_t flags)
 {
-	boolean_t first = _B_TRUE;
+	boolean_t first = B_TRUE;
 	int cnt, i;
 
 	(void) printf("flags=%llx", flags);
@@ -4158,7 +4158,7 @@ print_flags(uint64_t flags)
 		if (flags & if_flags_tbl[i].iff_value) {
 			if (first) {
 				(void) printf("<");
-				first = _B_FALSE;
+				first = B_FALSE;
 			} else {
 				/*
 				 * It has to be here and not with the
@@ -4211,7 +4211,7 @@ in_getmask(struct sockaddr_in *saddr, boolean_t addr_set)
 				(void) fprintf(stderr, "Need net number for "
 				    "mask\n");
 			}
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 		ifaddr = *((struct sockaddr_in *)&lifr.lifr_addr);
 	} else {
@@ -4219,9 +4219,9 @@ in_getmask(struct sockaddr_in *saddr, boolean_t addr_set)
 	}
 	if (getnetmaskbyaddr(ifaddr.sin_addr, &saddr->sin_addr) == 0) {
 		saddr->sin_family = AF_INET;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 static int
@@ -4273,14 +4273,14 @@ ni_entry(const char *linkname, void *arg)
 	(void) dladm_name2info(arg, linkname, NULL, NULL, &class, NULL);
 
 	if (class == DATALINK_CLASS_ETHERSTUB)
-		return (_B_FALSE);
+		return (B_FALSE);
 	if (dlpi_open(linkname, &dh, 0) != DLPI_SUCCESS)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	add_ni(linkname);
 
 	dlpi_close(dh);
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -4295,13 +4295,13 @@ setifdhcp(const char *caller, const char *ifname, int argc, char *argv[])
 	int			timeout = DHCP_IPC_WAIT_DEFAULT;
 	dhcp_ipc_type_t		type	= DHCP_START;
 	int			error;
-	boolean_t		is_primary = _B_FALSE;
-	boolean_t		started = _B_FALSE;
+	boolean_t		is_primary = B_FALSE;
+	boolean_t		started = B_FALSE;
 
 	for (argv++; --argc > 0; argv++) {
 
 		if (strcmp(*argv, "primary") == 0) {
-			is_primary = _B_TRUE;
+			is_primary = B_TRUE;
 			continue;
 		}
 
@@ -4346,7 +4346,7 @@ setifdhcp(const char *caller, const char *ifname, int argc, char *argv[])
 			    caller, DHCP_AGENT_PATH);
 			return (DHCP_EXIT_FAILURE);
 		}
-		started = _B_TRUE;
+		started = B_TRUE;
 	}
 
 	if (is_primary)

@@ -38,7 +38,7 @@
 
 struct		sockaddr_in6 allrouters;
 char		*control;
-boolean_t	dopoison = _B_TRUE;	/* Do poison reverse */
+boolean_t	dopoison = B_TRUE;	/* Do poison reverse */
 int		iocsoc;
 struct		timeval lastfullupdate;	/* last time full table multicast */
 struct		timeval lastmcast;	/* last time all/changes multicast */
@@ -51,7 +51,7 @@ char		*packet;
 struct		pollfd *poll_ifs = NULL;
 int		poll_ifs_num = 0;
 int		rip6_port;
-boolean_t	supplier = _B_TRUE;	/* process should supply updates */
+boolean_t	supplier = B_TRUE;	/* process should supply updates */
 
 struct		in6_addr allrouters_in6 = { { {
 	0xff, 0x2, 0x0, 0x0,
@@ -80,7 +80,7 @@ main(int argc, char *argv[])
 	int c;
 	struct timeval waittime;
 	int timeout;
-	boolean_t daemon = _B_TRUE;	/* Fork off a detached daemon */
+	boolean_t daemon = B_TRUE;	/* Fork off a detached daemon */
 	FILE *pidfp;
 	mode_t pidmode = (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); /* 0644 */
 
@@ -92,29 +92,29 @@ main(int argc, char *argv[])
 	while ((c = getopt(argc, argv, "nsqvTtdgPp:")) != EOF) {
 		switch (c) {
 		case 'n':
-			install = _B_FALSE;
+			install = B_FALSE;
 			break;
 		case 's':
-			supplier = _B_TRUE;
+			supplier = B_TRUE;
 			break;
 		case 'q':
-			supplier = _B_FALSE;
+			supplier = B_FALSE;
 			break;
 		case 'v':
 			tracing |= ACTION_BIT;
 			break;
 		case 'T':
-			daemon = _B_FALSE;
+			daemon = B_FALSE;
 			break;
 		case 't':
-			tracepackets = _B_TRUE;
-			daemon = _B_FALSE;
+			tracepackets = B_TRUE;
+			daemon = B_FALSE;
 			tracing |= (INPUT_BIT | OUTPUT_BIT);
 			break;
 		case 'd':
 			break;
 		case 'P':
-			dopoison = _B_FALSE;
+			dopoison = B_FALSE;
 			break;
 		case 'p':
 			rip6_port = htons(atoi(optarg));
@@ -206,7 +206,7 @@ main(int argc, char *argv[])
 	solicitall(&allrouters);
 
 	if (supplier)
-		supplyall(&allrouters, 0, NULL, _B_TRUE);
+		supplyall(&allrouters, 0, NULL, B_TRUE);
 
 	(void) sigset(SIGALRM, (void (*)(int))timer);
 	(void) sigset(SIGHUP, (void (*)(int))initifs);
@@ -257,9 +257,9 @@ main(int argc, char *argv[])
 				    NULL);
 				(void) gettimeofday(&now, NULL);
 				supplyall(&allrouters, RTS_CHANGED, NULL,
-				    _B_TRUE);
+				    B_TRUE);
 				lastmcast = now;
-				needupdate = _B_FALSE;
+				needupdate = B_FALSE;
 				nextmcast.tv_sec = 0;
 			}
 			(void) sigrelse(SIGHUP);

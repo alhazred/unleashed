@@ -40,12 +40,6 @@
 extern "C" {
 #endif
 
-/*
- * Things (unfortunately) required because we're in an XPG environment.
- */
-#define	B_TRUE	_B_TRUE
-#define	B_FALSE	_B_FALSE
-
 struct dhcp_smach_s;
 typedef struct dhcp_smach_s dhcp_smach_t;
 struct dhcp_lease_s;

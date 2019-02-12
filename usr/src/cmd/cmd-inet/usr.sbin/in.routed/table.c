@@ -60,8 +60,8 @@ static struct interface *lifp_iflookup(in_addr_t, const char *);
 
 struct radix_node_head *rhead;		/* root of the radix tree */
 
-/* Flash update needed.  _B_TRUE to suppress the 1st. */
-boolean_t need_flash = _B_TRUE;
+/* Flash update needed.  B_TRUE to suppress the 1st. */
+boolean_t need_flash = B_TRUE;
 
 struct timeval age_timer;		/* next check of old routes */
 struct timeval need_kern = {		/* need to update kernel table */
@@ -109,7 +109,7 @@ static struct ag_info ag_slots[NUM_AG_SLOTS], *ag_avail, *ag_corsest,
 		acnt++;						\
 	if (acnt != NUM_AG_SLOTS)				\
 		abort();					\
-} while (_B_FALSE)
+} while (B_FALSE)
 #else
 #define	CHECK_AG()	(void)0
 #endif
@@ -754,7 +754,7 @@ dump_rt_msg(const char *act, struct rt_msghdr *rtm, int mlen)
 		trace_misc("ifm: msglen %d version %d type %d addrs %X",
 		    ifm->ifm_msglen, ifm->ifm_version, ifm->ifm_type,
 		    ifm->ifm_addrs);
-		ibs = if_bit_string(ifm->ifm_flags, _B_TRUE);
+		ibs = if_bit_string(ifm->ifm_flags, B_TRUE);
 		if (ibs == NULL) {
 			trace_misc("ifm: flags %#x index %d", ifm->ifm_flags,
 			    ifm->ifm_index);
@@ -1308,7 +1308,7 @@ get_info_gate(struct sockaddr_storage **ssp, struct sockaddr_in *sin)
 	if ((sdl)->sdl_family != AF_LINK)
 		return (0);
 
-	ifp = ifwithindex(sdl->sdl_index, _B_TRUE);
+	ifp = ifwithindex(sdl->sdl_index, B_TRUE);
 	if (ifp == NULL)
 		return (0);
 
@@ -1608,7 +1608,7 @@ read_rt(void)
 		if (m.r.rtm.rtm_type == RTM_IFINFO ||
 		    m.r.rtm.rtm_type == RTM_NEWADDR ||
 		    m.r.rtm.rtm_type == RTM_DELADDR) {
-			strp = if_bit_string(m.ifm.ifm_flags, _B_TRUE);
+			strp = if_bit_string(m.ifm.ifm_flags, B_TRUE);
 			if (strp == NULL) {
 				strp = str;
 				(void) sprintf(str, "%#x", m.ifm.ifm_flags);
@@ -2262,7 +2262,7 @@ static void
 set_need_flash(void)
 {
 	if (!need_flash) {
-		need_flash = _B_TRUE;
+		need_flash = B_TRUE;
 		/*
 		 * Do not send the flash update immediately.  Wait a little
 		 * while to hear from other routers.
@@ -2820,7 +2820,7 @@ age(in_addr_t bad_gate)
 
 		/* Restore remote interface that has become reachable */
 		if (ifp->int_state & IS_BROKE)
-			if_ok(ifp, "remote ", _B_FALSE);
+			if_ok(ifp, "remote ", B_FALSE);
 
 		if (ifp->int_act_time != NEVER &&
 		    now.tv_sec - ifp->int_act_time > EXPIRE_TIME) {
@@ -2831,7 +2831,7 @@ age(in_addr_t bad_gate)
 			    naddr_ntoa(ifp->int_dstaddr),
 			    (now.tv_sec - ifp->int_act_time)/60,
 			    (now.tv_sec - ifp->int_act_time)%60);
-			if_sick(ifp, _B_FALSE);
+			if_sick(ifp, B_FALSE);
 		}
 
 		/*

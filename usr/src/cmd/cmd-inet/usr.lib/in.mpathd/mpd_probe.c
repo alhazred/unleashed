@@ -220,7 +220,7 @@ probe(struct phyint_instance *pii, uint_t probe_type, hrtime_t start_hrtime)
 	struct sockaddr_storage targ;	/* target address */
 	uint_t	targaddrlen;		/* targed address length */
 	int	pr_ndx;			/* probe index in pii->pii_probes[] */
-	boolean_t sent = _B_FALSE;
+	boolean_t sent = B_FALSE;
 	int	rval;
 
 	if (debug & D_TARGET) {
@@ -307,7 +307,7 @@ probe(struct phyint_instance *pii, uint_t probe_type, hrtime_t start_hrtime)
 	 */
 	if (rval == sizeof (probe_pkt) ||
 	    (rval == -1 && errno == EWOULDBLOCK)) {
-		sent = _B_TRUE;
+		sent = B_TRUE;
 	} else {
 		logperror_pii(pii, "probe: probe sendto");
 	}
@@ -662,7 +662,7 @@ incoming_rtt_reply(struct phyint_instance *pii, struct pr_icmp *reply,
 	 * many times. The regular rtt update will be handled by
 	 * incoming_echo_reply() and will take care of any rtt increase.
 	 */
-	pi_set_crtt(target, m, _B_FALSE);
+	pi_set_crtt(target, m, B_FALSE);
 	if ((target->tg_crtt < (pg->pg_probeint / LOWER_FDT_TRIGGER)) &&
 	    (user_failure_detection_time < pg->pg_fdt) &&
 	    (last_fdt_bumpup_time + MIN_SETTLING_TIME < gethrtime())) {
@@ -852,7 +852,7 @@ incoming_echo_reply(struct phyint_instance *pii, struct pr_icmp *reply,
 	 * Always update the rtt. This is a failure detection probe
 	 * and we want to measure both increase / decrease in rtt.
 	 */
-	pi_set_crtt(target, m, _B_TRUE);
+	pi_set_crtt(target, m, B_TRUE);
 
 	/*
 	 * If the crtt exceeds the average time between probes,
@@ -1007,10 +1007,10 @@ highest_ack_tg(uint16_t seq, struct target *tg)
 		if (pii->pii_probes[pr_ndx].pr_target == tg &&
 		    pii->pii_probes[pr_ndx].pr_status == PR_ACKED) {
 			if (SEQ_GT(pr_seq, seq))
-				return (_B_FALSE);
+				return (B_FALSE);
 		}
 	}
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1033,15 +1033,15 @@ check_pg_crtt_improved(struct phyint_group *pg)
 	for (pi = pg->pg_phyint; pi != NULL; pi = pi->pi_pgnext) {
 		if (!check_pii_crtt_improved(pi->pi_v4) ||
 		    !check_pii_crtt_improved(pi->pi_v6))
-			return (_B_FALSE);
+			return (B_FALSE);
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
  * Check whether the crtt has improved substantially on this phyint_instance.
- * Returns _B_TRUE if there's no crtt information available, because pii
+ * Returns B_TRUE if there's no crtt information available, because pii
  * is NULL or the phyint_instance is not capable of probing.
  */
 boolean_t
@@ -1049,22 +1049,22 @@ check_pii_crtt_improved(struct phyint_instance *pii) {
 	struct 	target *tg;
 
 	if (pii == NULL)
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	if (!PROBE_CAPABLE(pii) ||
 	    pii->pii_phyint->pi_state == PI_FAILED)
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	for (tg = pii->pii_targets; tg != NULL; tg = tg->tg_next) {
 		if (tg->tg_status != TG_ACTIVE)
 			continue;
 		if (tg->tg_crtt > (pii->pii_phyint->pi_group->pg_probeint /
 		    LOWER_FDT_TRIGGER)) {
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1090,7 +1090,7 @@ check_exception_target(struct phyint_instance *pii, struct target *target)
 	 * to make a good judgement. Otherwise don't drop this target.
 	 */
 	if (pii->pii_ntargets <  MIN_PROBE_TARGETS + 1)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	/*
 	 * Determine whether only this particular target is slow.
@@ -1104,12 +1104,12 @@ check_exception_target(struct phyint_instance *pii, struct target *target)
 			if (tg->tg_crtt >
 			    pii->pii_phyint->pi_group->pg_probeint /
 			    EXCEPTION_FACTOR) {
-				return (_B_FALSE);
+				return (B_FALSE);
 			}
 		}
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1173,11 +1173,11 @@ incoming_mcast_reply(struct phyint_instance *pii, struct pr_icmp *reply,
 	 */
 	pi = pii->pii_phyint;
 	if (pi->pi_group == phyint_anongroup) {
-		target_add(pii, fromaddr, _B_FALSE);
+		target_add(pii, fromaddr, B_FALSE);
 	} else {
 		pi = pi->pi_group->pg_phyint;
 		for (; pi != NULL; pi = pi->pi_pgnext)
-			target_add(PHYINT_INSTANCE(pi, af), fromaddr, _B_FALSE);
+			target_add(PHYINT_INSTANCE(pi, af), fromaddr, B_FALSE);
 	}
 }
 
@@ -2286,8 +2286,8 @@ probe_success_info(struct phyint_instance *pii, struct target *cur_tg,
 	struct probe_stats *pr_statp;
 	uint_t most_recent;
 	uint_t second_most_recent;
-	boolean_t pi_found_failure = _B_FALSE;
-	boolean_t tg_found_failure = _B_FALSE;
+	boolean_t pi_found_failure = B_FALSE;
+	boolean_t tg_found_failure = B_FALSE;
 	uint_t now;
 	uint_t timeout;
 	struct target *tg;
@@ -2340,14 +2340,14 @@ probe_success_info(struct phyint_instance *pii, struct target *cur_tg,
 				 */
 				pr_statp->pr_time_lost = timeout;
 				probe_chstate(pr_statp, pii, PR_LOST);
-				pi_found_failure = _B_TRUE;
+				pi_found_failure = B_TRUE;
 				if (cur_tg != NULL && tg == cur_tg) {
 					/*
 					 * We hit a failure for the desired
 					 * target. Latch the number of recent
 					 * consecutive successes for this target
 					 */
-					tg_found_failure = _B_TRUE;
+					tg_found_failure = B_TRUE;
 				}
 			}
 			break;
@@ -2372,7 +2372,7 @@ probe_success_info(struct phyint_instance *pii, struct target *cur_tg,
 			if (!psinfo->ps_tls_valid) {
 				psinfo->ps_tls =
 				    ns2ms(pr_statp->pr_hrtime_ackproc);
-				psinfo->ps_tls_valid = _B_TRUE;
+				psinfo->ps_tls_valid = B_TRUE;
 			}
 			break;
 
@@ -2381,14 +2381,14 @@ probe_success_info(struct phyint_instance *pii, struct target *cur_tg,
 			 * We hit a failure. Latch the total number of
 			 * recent consecutive successes.
 			 */
-			pi_found_failure = _B_TRUE;
+			pi_found_failure = B_TRUE;
 			if (cur_tg != NULL && pr_statp->pr_target == cur_tg) {
 				/*
 				 * We hit a failure for the desired target.
 				 * Latch the number of recent consecutive
 				 * successes for this target
 				 */
-				tg_found_failure = _B_TRUE;
+				tg_found_failure = B_TRUE;
 			}
 			break;
 
@@ -2410,8 +2410,8 @@ probe_fail_info(struct phyint_instance *pii, struct target *cur_tg,
 {
 	int	i;
 	struct probe_stats *pr_statp;
-	boolean_t	tg_found_success = _B_FALSE;
-	boolean_t	pi_found_success = _B_FALSE;
+	boolean_t	tg_found_success = B_FALSE;
+	boolean_t	pi_found_success = B_FALSE;
 	int	most_recent;
 	int	second_most_recent;
 	uint_t	now;
@@ -2487,14 +2487,14 @@ probe_fail_info(struct phyint_instance *pii, struct target *cur_tg,
 			 * We hit a success or unused slot. Latch the
 			 * total number of recent consecutive failures.
 			 */
-			pi_found_success = _B_TRUE;
+			pi_found_success = B_TRUE;
 			if (cur_tg != NULL && pr_statp->pr_target == cur_tg) {
 				/*
 				 * We hit a success for the desired target.
 				 * Latch the number of recent consecutive
 				 * failures for this target
 				 */
-				tg_found_success = _B_TRUE;
+				tg_found_success = B_TRUE;
 			}
 		}
 	}
@@ -2533,7 +2533,7 @@ phyint_repaired(struct phyint *pi)
 		logdebug("phyint_repaired(%s)\n", pi->pi_name);
 
 	if (LINK_DOWN(pi))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	/*
 	 * If we don't have any test addresses and the link is up, then
@@ -2547,7 +2547,7 @@ phyint_repaired(struct phyint *pi)
 		if ((pi->pi_whenup[pi->pi_whendx] == 0 ||
 		    (cur_time - pi->pi_whenup[pi->pi_whendx]) > MSEC_PERMIN)) {
 			pi->pi_lfmsg_printed = 0;
-			return (_B_TRUE);
+			return (B_TRUE);
 		}
 		if (!pi->pi_lfmsg_printed) {
 			logerr("The link has come up on %s more than %d times "
@@ -2556,7 +2556,7 @@ phyint_repaired(struct phyint *pi)
 			pi->pi_lfmsg_printed = 1;
 		}
 
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	pii = pi->pi_v4;
@@ -2566,7 +2566,7 @@ phyint_repaired(struct phyint *pi)
 		probe_success_info(pii, cur_tg, &psinfo);
 		if (psinfo.ps_nsucc >= NUM_PROBE_REPAIRS ||
 		    psinfo.ps_nsucc_tg >= NUM_PROBE_REPAIRS)
-			return (_B_TRUE);
+			return (B_TRUE);
 	}
 
 	pii = pi->pi_v6;
@@ -2576,10 +2576,10 @@ phyint_repaired(struct phyint *pi)
 		probe_success_info(pii, cur_tg, &psinfo);
 		if (psinfo.ps_nsucc >= NUM_PROBE_REPAIRS ||
 		    psinfo.ps_nsucc_tg >= NUM_PROBE_REPAIRS)
-			return (_B_TRUE);
+			return (B_TRUE);
 	}
 
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -2612,7 +2612,7 @@ change_pif_flags(struct phyint *pi, uint64_t set, uint64_t clear)
 	if (ioctl(ifsock, SIOCGLIFFLAGS, (char *)&lifr) < 0) {
 		if (errno != ENXIO)
 			logperror("change_pif_flags: ioctl (get flags)");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	old_flags = lifr.lifr_flags;
@@ -2621,13 +2621,13 @@ change_pif_flags(struct phyint *pi, uint64_t set, uint64_t clear)
 
 	if (old_flags == lifr.lifr_flags) {
 		/* No change in the flags. No need to send ioctl */
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 
 	if (ioctl(ifsock, SIOCSLIFFLAGS, (char *)&lifr) < 0) {
 		if (errno != ENXIO)
 			logperror("change_pif_flags: ioctl (set flags)");
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/*
@@ -2643,7 +2643,7 @@ change_pif_flags(struct phyint *pi, uint64_t set, uint64_t clear)
 	if (pi->pi_v6 != NULL)
 		pi->pi_v6->pii_flags = pi->pi_flags;
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -2718,9 +2718,9 @@ own_address(struct in6_addr addr)
 	addr2storage(af, &addr, &ss);
 	for (addrp = localaddrs; addrp != NULL; addrp = addrp->al_next) {
 		if (sockaddrcmp(&ss, &addrp->al_addr))
-			return (_B_TRUE);
+			return (B_TRUE);
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 static int

@@ -39,7 +39,7 @@
  */
 #include "defs.h"
 
-boolean_t	install = _B_TRUE;	/* update kernel routing table */
+boolean_t	install = B_TRUE;	/* update kernel routing table */
 struct rthash	*net_hashes[IPV6_ABITS + 1];
 
 /*
@@ -325,9 +325,9 @@ void
 rtchange(struct rt_entry *rt, struct in6_addr *gate, short metric,
     struct interface *ifp)
 {
-	boolean_t dokern = _B_FALSE;
+	boolean_t dokern = B_FALSE;
 	boolean_t dokerndelete;
-	boolean_t metricchanged = _B_FALSE;
+	boolean_t metricchanged = B_FALSE;
 	int oldmetric;
 	struct rt_entry oldroute;
 	int rlen;
@@ -338,14 +338,14 @@ rtchange(struct rt_entry *rt, struct in6_addr *gate, short metric,
 	}
 
 	if (!IN6_ARE_ADDR_EQUAL(&rt->rt_router, gate) || rt->rt_ifp != ifp)
-		dokern = _B_TRUE;
+		dokern = B_TRUE;
 	oldmetric = rt->rt_metric;
 	if (oldmetric >= HOPCNT_INFINITY)
-		dokerndelete = _B_FALSE;
+		dokerndelete = B_FALSE;
 	else
 		dokerndelete = dokern;
 	if (metric != rt->rt_metric)
-		metricchanged = _B_TRUE;
+		metricchanged = B_TRUE;
 	rt->rt_timer = 0;
 	if (dokern || metricchanged) {
 		TRACE_ACTION("CHANGE FROM", rt);
@@ -562,26 +562,26 @@ rtdumpentry(FILE *fp, struct rt_entry *rt)
 	}
 	(void) fprintf(fp, " state");
 	c = ' ';
-	for (first = _B_TRUE, p = statebits; p->t_bits > 0; p++) {
+	for (first = B_TRUE, p = statebits; p->t_bits > 0; p++) {
 		if ((rt->rt_state & p->t_bits) == 0)
 			continue;
 		(void) fprintf(fp, "%c%s", c, p->t_name);
 		if (first) {
 			c = '|';
-			first = _B_FALSE;
+			first = B_FALSE;
 		}
 	}
 	if (first)
 		(void) fprintf(fp, " 0");
 	if (rt->rt_flags & (RTF_UP | RTF_GATEWAY)) {
 		c = ' ';
-		for (first = _B_TRUE, p = flagbits; p->t_bits > 0; p++) {
+		for (first = B_TRUE, p = flagbits; p->t_bits > 0; p++) {
 			if ((rt->rt_flags & p->t_bits) == 0)
 				continue;
 			(void) fprintf(fp, "%c%s", c, p->t_name);
 			if (first) {
 				c = '|';
-				first = _B_FALSE;
+				first = B_FALSE;
 			}
 		}
 	}

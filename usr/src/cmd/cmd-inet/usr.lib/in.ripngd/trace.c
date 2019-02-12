@@ -184,27 +184,27 @@ traceaction(FILE *fp, char *action, struct rt_entry *rt)
 		}
 		(void) fprintf(fp, " state");
 		c = ' ';
-		for (first = _B_TRUE, p = statebits; p->t_bits > 0; p++) {
+		for (first = B_TRUE, p = statebits; p->t_bits > 0; p++) {
 			if ((rt->rt_state & p->t_bits) == 0)
 				continue;
 			(void) fprintf(fp, "%c%s", c, p->t_name);
 			if (first) {
 				c = '|';
-				first = _B_FALSE;
+				first = B_FALSE;
 			}
 		}
 		if (first)
 			(void) fprintf(fp, " 0");
 		if (rt->rt_flags & (RTF_UP | RTF_GATEWAY)) {
 			c = ' ';
-			for (first = _B_TRUE, p = flagbits; p->t_bits > 0;
+			for (first = B_TRUE, p = flagbits; p->t_bits > 0;
 			    p++) {
 				if ((rt->rt_flags & p->t_bits) == 0)
 					continue;
 				(void) fprintf(fp, "%c%s", c, p->t_name);
 				if (first) {
 					c = '|';
-					first = _B_FALSE;
+					first = B_FALSE;
 				}
 			}
 		}

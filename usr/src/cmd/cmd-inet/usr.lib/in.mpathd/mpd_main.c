@@ -51,11 +51,11 @@ int	ifsock_v6 = -1;			/* IPv6 socket for ioctls  */
 static int	lsock_v4;		/* Listen socket to detect mpathd */
 static int	lsock_v6;		/* Listen socket to detect mpathd */
 static int	mibfd = -1;		/* fd to get mib info */
-static boolean_t force_mcast = _B_FALSE; /* Only for test purposes */
+static boolean_t force_mcast = B_FALSE; /* Only for test purposes */
 
 static uint_t	last_initifs_time;	/* Time when initifs was last run */
 static	char **argv0;			/* Saved for re-exec on SIGHUP */
-boolean_t handle_link_notifications = _B_TRUE;
+boolean_t handle_link_notifications = B_TRUE;
 static int	ipRouteEntrySize;	/* Size of IPv4 route entry */
 static int	ipv6RouteEntrySize;	/* Size of IPv6 route entry */
 
@@ -244,9 +244,9 @@ pii_process(int af, char *name, struct phyint_instance **pii_p)
 
 	*pii_p = pii;
 	if (pii != NULL)
-		return (pii->pii_in_use ? _B_TRUE : _B_FALSE);
+		return (pii->pii_in_use ? B_TRUE : B_FALSE);
 	else
-		return (_B_FALSE);
+		return (B_FALSE);
 }
 
 /*
@@ -304,7 +304,7 @@ initifs()
 	 * list since we'll iteratively recreate it below.
 	 */
 	for (pg = phyint_groups; pg != NULL; pg = pg->pg_next) {
-		pg->pg_in_use = _B_FALSE;
+		pg->pg_in_use = B_FALSE;
 		addrlist_free(&pg->pg_addrs);
 	}
 
@@ -398,7 +398,7 @@ again:
 				}
 				phyint_group_insert(pg);
 			}
-			pg->pg_in_use = _B_TRUE;
+			pg->pg_in_use = B_TRUE;
 
 			/*
 			 * Add this to the group's list of data addresses.
@@ -530,14 +530,14 @@ stop_probing(struct phyint *pi)
 	pii = pi->pi_v4;
 	if (pii != NULL) {
 		if (pii->pii_probe_sock != -1)
-			close_probe_socket(pii, _B_TRUE);
+			close_probe_socket(pii, B_TRUE);
 		pii->pii_probe_logint = NULL;
 	}
 
 	pii = pi->pi_v6;
 	if (pii != NULL) {
 		if (pii->pii_probe_sock != -1)
-			close_probe_socket(pii, _B_TRUE);
+			close_probe_socket(pii, B_TRUE);
 		pii->pii_probe_logint = NULL;
 	}
 
@@ -583,7 +583,7 @@ select_test_ifs(void)
 	struct phyint_instance	*next_pii;
 	struct logint		*li;
 	struct logint  		*probe_logint;
-	boolean_t		target_scan_reqd = _B_FALSE;
+	boolean_t		target_scan_reqd = B_FALSE;
 	int			rating;
 
 	if (debug & D_PHYINT)
@@ -674,7 +674,7 @@ select_test_ifs(void)
 		if (pii->pii_probe_logint != NULL &&
 		    pii->pii_probe_logint != probe_logint) {
 			if (pii->pii_probe_sock != -1)
-				close_probe_socket(pii, _B_TRUE);
+				close_probe_socket(pii, B_TRUE);
 			pii->pii_probe_logint = NULL;
 		}
 
@@ -744,7 +744,7 @@ select_test_ifs(void)
 		 * for all phyints it is done below the loop.
 		 */
 		if (pii->pii_targets == NULL)
-			target_scan_reqd = _B_TRUE;
+			target_scan_reqd = B_TRUE;
 
 		/*
 		 * Start the probe timer for this instance.
@@ -874,8 +874,8 @@ check_config(void)
 		if (pg == phyint_anongroup)
 			continue;
 
-		v4_in_group = _B_FALSE;
-		v6_in_group = _B_FALSE;
+		v4_in_group = B_FALSE;
+		v6_in_group = B_FALSE;
 		/*
 		 * 1st pass. Determine if at least 1 phyint in the group
 		 * has IPv4 plumbed and if so set v4_in_group to true.
@@ -883,9 +883,9 @@ check_config(void)
 		 */
 		for (pi = pg->pg_phyint; pi != NULL; pi = pi->pi_pgnext) {
 			if (pi->pi_v4 != NULL)
-				v4_in_group = _B_TRUE;
+				v4_in_group = B_TRUE;
 			if (pi->pi_v6 != NULL)
-				v6_in_group = _B_TRUE;
+				v6_in_group = B_TRUE;
 		}
 
 		/*
@@ -897,7 +897,7 @@ check_config(void)
 			if (pi->pi_flags & IFF_OFFLINE)
 				continue;
 
-			if (v4_in_group == _B_TRUE && pi->pi_v4 == NULL) {
+			if (v4_in_group == B_TRUE && pi->pi_v4 == NULL) {
 				if (!pi->pi_cfgmsg_printed) {
 					logerr("IP interface %s in group %s is"
 					    " not plumbed for IPv4, affecting"
@@ -906,7 +906,7 @@ check_config(void)
 					    pi->pi_group->pg_name);
 					pi->pi_cfgmsg_printed = 1;
 				}
-			} else if (v6_in_group == _B_TRUE &&
+			} else if (v6_in_group == B_TRUE &&
 			    pi->pi_v6 == NULL) {
 				if (!pi->pi_cfgmsg_printed) {
 					logerr("IP interface %s in group %s is"
@@ -946,7 +946,7 @@ check_config(void)
  * that can be passed for the delay parameter of timer_schedule()
  */
 static uint_t timer_next;	/* Currently scheduled timeout */
-static boolean_t timer_active = _B_FALSE; /* SIGALRM has not yet occurred */
+static boolean_t timer_active = B_FALSE; /* SIGALRM has not yet occurred */
 
 static void
 timer_init(void)
@@ -999,7 +999,7 @@ timer_schedule(uint_t delay)
 		    delay, itimerval.it_value.tv_sec,
 		    itimerval.it_value.tv_usec);
 	}
-	timer_active = _B_TRUE;
+	timer_active = B_TRUE;
 	if (setitimer(ITIMER_REAL, &itimerval, NULL) < 0) {
 		logperror("timer_schedule: setitimer");
 		exit(2);
@@ -1035,7 +1035,7 @@ run_timeouts(void)
 	/* assert that recursive timeouts don't happen. */
 	assert(!timeout_running);
 
-	timeout_running = _B_TRUE;
+	timeout_running = B_TRUE;
 
 	if (debug & D_TIMER)
 		logdebug("run_timeouts()\n");
@@ -1075,12 +1075,12 @@ run_timeouts(void)
 		logdebug("run_timeouts: %u ms\n", next);
 
 	timer_schedule(next);
-	timeout_running = _B_FALSE;
+	timeout_running = B_FALSE;
 }
 
 static int eventpipe_read = -1;	/* Used for synchronous signal delivery */
 static int eventpipe_write = -1;
-boolean_t cleanup_started = _B_FALSE;	/* true if we're going away */
+boolean_t cleanup_started = B_FALSE;	/* true if we're going away */
 
 /*
  * Ensure that signals are processed synchronously with the rest of
@@ -1147,7 +1147,7 @@ in_signal(int fd)
 			logdebug("in_signal(SIGALRM) delta %u\n",
 			    now - timer_next);
 		}
-		timer_active = _B_FALSE;
+		timer_active = B_FALSE;
 		run_timeouts();
 		break;
 	case SIGUSR1:
@@ -1232,7 +1232,7 @@ cleanup(void)
 	 * sig_handler() if any signal notably SIGALRM,
 	 * occurs after we close the eventpipe descriptor below
 	 */
-	cleanup_started = _B_TRUE;
+	cleanup_started = B_TRUE;
 
 	for (pii = phyint_instances; pii != NULL; pii = next_pii) {
 		next_pii = pii->pii_next;
@@ -1363,7 +1363,7 @@ process_rtm_ifinfo(if_msghdr_t *ifm, int type)
 	if (sdl->sdl_nlen >= sizeof (sdl->sdl_data)) {
 		if (debug & D_LINKNOTE)
 			logdebug("process_rtm_ifinfo: phyint name too long\n");
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 	sdl->sdl_data[sdl->sdl_nlen] = 0;
 
@@ -1372,7 +1372,7 @@ process_rtm_ifinfo(if_msghdr_t *ifm, int type)
 		if (debug & D_LINKNOTE)
 			logdebug("process_rtm_ifinfo: phyint lookup failed"
 			    " for %s\n", sdl->sdl_data);
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 
 	/*
@@ -1400,7 +1400,7 @@ process_rtm_ifinfo(if_msghdr_t *ifm, int type)
 		if (debug & D_LINKNOTE)
 			logdebug("process_rtm_ifinfo: no instance of address "
 			    "family %s for %s\n", AF_STR(type), pi->pi_name);
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 
 	old_flags = pii->pii_flags;
@@ -1433,10 +1433,10 @@ process_rtm_ifinfo(if_msghdr_t *ifm, int type)
 		pii_other = phyint_inst_other(pii);
 		if (pii_other != NULL)
 			pii_other->pii_flags = pii->pii_flags;
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -1452,9 +1452,9 @@ process_rtsock(int rtsock_v4, int rtsock_v6)
 	int	nbytes;
 	int64_t msg[2048 / 8];
 	struct rt_msghdr *rtm;
-	boolean_t need_if_scan = _B_FALSE;
-	boolean_t need_rt_scan = _B_FALSE;
-	boolean_t rtm_ifinfo_seen = _B_FALSE;
+	boolean_t need_if_scan = B_FALSE;
+	boolean_t need_rt_scan = B_FALSE;
+	boolean_t rtm_ifinfo_seen = B_FALSE;
 	int type;
 
 	/* Read as many messages as possible and try to empty the sockets */
@@ -1486,11 +1486,11 @@ process_rtsock(int rtsock_v4, int rtsock_v6)
 				 * have to scan everything to determine
 				 * what actually changed.
 				 */
-				need_if_scan = _B_TRUE;
+				need_if_scan = B_TRUE;
 				break;
 
 			case RTM_IFINFO:
-				rtm_ifinfo_seen = _B_TRUE;
+				rtm_ifinfo_seen = B_TRUE;
 				need_if_scan |= process_rtm_ifinfo(
 				    (if_msghdr_t *)rtm, type);
 				break;
@@ -1500,7 +1500,7 @@ process_rtsock(int rtsock_v4, int rtsock_v6)
 			case RTM_CHANGE:
 			case RTM_OLDADD:
 			case RTM_OLDDEL:
-				need_rt_scan = _B_TRUE;
+				need_rt_scan = B_TRUE;
 				break;
 
 			default:
@@ -1683,11 +1683,11 @@ router_add_common(int af, char *ifname, struct in6_addr nexthop)
 	 */
 	pi = pii->pii_phyint;
 	if (pi->pi_group == phyint_anongroup) {
-		target_add(pii, nexthop, _B_TRUE);
+		target_add(pii, nexthop, B_TRUE);
 	} else {
 		pi = pi->pi_group->pg_phyint;
 		for (; pi != NULL; pi = pi->pi_pgnext)
-			target_add(PHYINT_INSTANCE(pi, af), nexthop, _B_TRUE);
+			target_add(PHYINT_INSTANCE(pi, af), nexthop, B_TRUE);
 	}
 }
 
@@ -1860,7 +1860,7 @@ dup_host_targets(struct phyint_instance	 *desired_pii)
 		    pii->pii_targets_are_routers)
 			continue;
 		for (tg = pii->pii_targets; tg != NULL; tg = tg->tg_next) {
-			target_create(desired_pii, tg->tg_address, _B_FALSE);
+			target_create(desired_pii, tg->tg_address, B_FALSE);
 		}
 	}
 }
@@ -1909,10 +1909,10 @@ getdefault(char *name)
 /*
  * Command line options below
  */
-boolean_t	failback_enabled = _B_TRUE;	/* failback enabled/disabled */
-boolean_t	track_all_phyints = _B_FALSE;	/* track all IP interfaces */
-static boolean_t adopt = _B_FALSE;
-static boolean_t foreground = _B_FALSE;
+boolean_t	failback_enabled = B_TRUE;	/* failback enabled/disabled */
+boolean_t	track_all_phyints = B_FALSE;	/* track all IP interfaces */
+static boolean_t adopt = B_FALSE;
+static boolean_t foreground = B_FALSE;
 
 int
 main(int argc, char *argv[])
@@ -1984,14 +1984,14 @@ main(int argc, char *argv[])
 	value = getdefault("FAILBACK");
 	if (value != NULL) {
 		if (strcasecmp(value, "yes") == 0)
-			failback_enabled = _B_TRUE;
+			failback_enabled = B_TRUE;
 		else if (strcasecmp(value, "no") == 0)
-			failback_enabled = _B_FALSE;
+			failback_enabled = B_FALSE;
 		else
 			logerr("Invalid value for FAILBACK %s\n", value);
 		free(value);
 	} else {
-		failback_enabled = _B_TRUE;
+		failback_enabled = B_TRUE;
 	}
 
 	/*
@@ -2002,28 +2002,28 @@ main(int argc, char *argv[])
 	value = getdefault("TRACK_INTERFACES_ONLY_WITH_GROUPS");
 	if (value != NULL) {
 		if (strcasecmp(value, "yes") == 0)
-			track_all_phyints = _B_FALSE;
+			track_all_phyints = B_FALSE;
 		else if (strcasecmp(value, "no") == 0)
-			track_all_phyints = _B_TRUE;
+			track_all_phyints = B_TRUE;
 		else
 			logerr("Invalid value for "
 			    "TRACK_INTERFACES_ONLY_WITH_GROUPS %s\n", value);
 		free(value);
 	} else {
-		track_all_phyints = _B_FALSE;
+		track_all_phyints = B_FALSE;
 	}
 
 	while ((c = getopt(argc, argv, "adD:ml")) != EOF) {
 		switch (c) {
 		case 'a':
-			adopt = _B_TRUE;
+			adopt = B_TRUE;
 			break;
 		case 'm':
-			force_mcast = _B_TRUE;
+			force_mcast = B_TRUE;
 			break;
 		case 'd':
 			debug = D_ALL;
-			foreground = _B_TRUE;
+			foreground = B_TRUE;
 			break;
 		case 'D':
 			i = (int)strtol(optarg, NULL, 0);
@@ -2033,7 +2033,7 @@ main(int argc, char *argv[])
 				exit(1);
 			}
 			debug |= i;
-			foreground = _B_TRUE;
+			foreground = B_TRUE;
 			break;
 		case 'l':
 			/*
@@ -2041,7 +2041,7 @@ main(int argc, char *argv[])
 			 * Undocumented command line flag, for debugging
 			 * purposes.
 			 */
-			handle_link_notifications = _B_FALSE;
+			handle_link_notifications = B_FALSE;
 			break;
 		default:
 			usage(argv[0]);
@@ -2269,7 +2269,7 @@ loopback_cmd(int sock, int family)
 {
 	int newfd;
 	ssize_t len;
-	boolean_t is_priv = _B_FALSE;
+	boolean_t is_priv = B_FALSE;
 	struct sockaddr_storage	peer;
 	struct sockaddr_in	*peer_sin;
 	struct sockaddr_in6	*peer_sin6;
@@ -2658,7 +2658,7 @@ daemonize(void)
 {
 	switch (fork()) {
 	case -1:
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	case  0:
 		/*
@@ -2666,7 +2666,7 @@ daemonize(void)
 		 * leader and a process group leader.
 		 */
 		if (setsid() == -1)
-			return (_B_FALSE);
+			return (B_FALSE);
 
 		/*
 		 * Under POSIX, a session leader can accidentally (through
@@ -2676,7 +2676,7 @@ daemonize(void)
 		 */
 		switch (fork()) {
 		case -1:
-			return (_B_FALSE);
+			return (B_FALSE);
 
 		case 0:
 			(void) chdir("/");
@@ -2693,7 +2693,7 @@ daemonize(void)
 		_exit(EXIT_SUCCESS);
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -2816,14 +2816,14 @@ addrlist_add(addrlist_t **addrsp, const char *name, uint64_t flags,
 	addrlist_t *addrp;
 
 	if ((addrp = malloc(sizeof (addrlist_t))) == NULL)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	(void) strlcpy(addrp->al_name, name, LIFNAMSIZ);
 	addrp->al_flags = flags;
 	addrp->al_addr = *ssp;
 	addrp->al_next = *addrsp;
 	*addrsp = addrp;
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 void

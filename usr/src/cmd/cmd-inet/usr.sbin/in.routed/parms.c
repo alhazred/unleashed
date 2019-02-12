@@ -133,7 +133,7 @@ get_parms(struct interface *ifp)
 		writelog(LOG_WARNING, "RIPv1 input via %s"
 		    " will be accepted without authentication",
 		    ifp->int_name);
-		warned_auth_in = _B_TRUE;
+		warned_auth_in = B_TRUE;
 	}
 	if (!IS_RIP_OUT_OFF(ifp->int_state) &&
 	    ifp->int_auth[0].type != RIP_AUTH_NONE &&
@@ -142,7 +142,7 @@ get_parms(struct interface *ifp)
 			writelog(LOG_WARNING, "RIPv1 output via %s"
 			    " will be sent without authentication",
 			    ifp->int_name);
-			warned_auth_out = _B_TRUE;
+			warned_auth_out = B_TRUE;
 		}
 	}
 
@@ -294,7 +294,7 @@ gwkludge(void)
 			    lptr);
 			continue;
 		}
-		default_dst = _B_FALSE;
+		default_dst = B_FALSE;
 		if (strcasecmp(net_host, "host") == 0) {
 			if (!gethost(dname, &dst)) {
 				msglog("bad host \"%s\" in "PATH_GATEWAYS
@@ -390,7 +390,7 @@ gwkludge(void)
 			continue;
 		}
 
-		ifp = check_dup(NULL, gate, dst, netmask, 0, _B_FALSE);
+		ifp = check_dup(NULL, gate, dst, netmask, 0, B_FALSE);
 		if (ifp != NULL) {
 			msglog("duplicate "PATH_GATEWAYS" entry \"%s\"", lptr);
 			continue;

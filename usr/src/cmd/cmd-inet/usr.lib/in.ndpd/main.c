@@ -66,7 +66,7 @@ static char **argv0;		/* Saved for re-exec on SIGHUP */
 static uint64_t packet[(IP_MAXPACKET + 1)/8];
 
 static int	show_ifs = 0;
-static boolean_t	already_daemonized = _B_FALSE;
+static boolean_t	already_daemonized = B_FALSE;
 int		debug = 0;
 int		no_loopback = 0; /* Do not send RA packets to ourselves */
 
@@ -552,7 +552,7 @@ if_process(int s, char *ifname, boolean_t first)
 	}
 	/* Detect prefixes which are removed */
 	if (pr->pr_kernel_state != 0)
-		pr->pr_in_use = _B_TRUE;
+		pr->pr_in_use = B_TRUE;
 
 	if ((lifr.lifr_flags & IFF_DUPLICATE) &&
 	    !(lifr.lifr_flags & IFF_DHCPRUNNING) &&
@@ -660,7 +660,7 @@ initifs(boolean_t first)
 		 */
 		pi->pi_kernel_state &= ~PI_PRESENT;
 		for (pr = pi->pi_prefix_list; pr != NULL; pr = pr->pr_next) {
-			pr->pr_in_use = _B_FALSE;
+			pr->pr_in_use = B_FALSE;
 		}
 	}
 
@@ -828,9 +828,9 @@ advertise_event(struct phyint *pi, enum adv_events event, uint_t elapsed)
 	/* Send advertisement and calculate next time to send */
 	if (pi->pi_adv_state == FINAL_ADV) {
 		/* Omit the prefixes */
-		advertise(&v6allnodes, pi, _B_TRUE);
+		advertise(&v6allnodes, pi, B_TRUE);
 	} else {
-		advertise(&v6allnodes, pi, _B_FALSE);
+		advertise(&v6allnodes, pi, B_FALSE);
 	}
 	pi->pi_adv_time_since_sent = 0;
 
@@ -909,7 +909,7 @@ static void
 daemonize_ndpd(void)
 {
 	struct itimerval it;
-	boolean_t timerval = _B_TRUE;
+	boolean_t timerval = B_TRUE;
 
 	/*
 	 * Need to get current timer settings so they can be restored
@@ -920,7 +920,7 @@ daemonize_ndpd(void)
 		if (debug & D_TIMER)
 			logmsg(LOG_DEBUG,
 			    "daemonize_ndpd: failed to get itimerval\n");
-		timerval = _B_FALSE;
+		timerval = B_FALSE;
 	}
 
 	/* Daemonize. */
@@ -929,7 +929,7 @@ daemonize_ndpd(void)
 		exit(1);
 	}
 
-	already_daemonized = _B_TRUE;
+	already_daemonized = B_TRUE;
 
 	/*
 	 * Restore timer values, if we were able to save them; if not,
@@ -1215,10 +1215,10 @@ run_timeouts(void)
 	if (timeout_running) {
 		if (debug & D_TIMER)
 			logmsg(LOG_DEBUG, "run_timeouts: nested call\n");
-		do_retry = _B_TRUE;
+		do_retry = B_TRUE;
 		return;
 	}
-	timeout_running = _B_TRUE;
+	timeout_running = B_TRUE;
 retry:
 	/* How much time since the last time we were called? */
 	now = getcurrenttime();
@@ -1294,10 +1294,10 @@ retry:
 	if (do_retry) {
 		if (debug & D_TIMER)
 			logmsg(LOG_DEBUG, "run_timeouts: retry\n");
-		do_retry = _B_FALSE;
+		do_retry = B_FALSE;
 		goto retry;
 	}
-	timeout_running = _B_FALSE;
+	timeout_running = B_FALSE;
 }
 
 static int eventpipe_read = -1;	/* Used for synchronous signal delivery */
@@ -1586,8 +1586,8 @@ process_rtsock(int rtsock)
 	struct if_msghdr *ifm;
 	struct phyint *pi;
 	struct prefix *pr;
-	boolean_t need_initifs = _B_FALSE;
-	boolean_t need_ifscan = _B_FALSE;
+	boolean_t need_initifs = B_FALSE;
+	boolean_t need_ifscan = B_FALSE;
 	int64_t	ifscan_msg[10][MSG_SIZE];
 	int ifscan_index = 0;
 	int i;
@@ -1617,10 +1617,10 @@ process_rtsock(int rtsock)
 				logmsg(LOG_DEBUG, "process_rtsock: "
 				    "message %d\n", rtm->rtm_type);
 			}
-			need_initifs = _B_TRUE;
+			need_initifs = B_TRUE;
 			break;
 		case RTM_IFINFO:
-			need_ifscan = _B_TRUE;
+			need_ifscan = B_TRUE;
 			(void) memcpy(ifscan_msg[ifscan_index], rtm,
 			    sizeof (msg));
 			ifscan_index++;
@@ -1637,7 +1637,7 @@ process_rtsock(int rtsock)
 	 * done that as part of initifs.
 	 */
 	if (need_initifs) {
-		initifs(_B_FALSE);
+		initifs(B_FALSE);
 		return;
 	}
 
@@ -1656,7 +1656,7 @@ process_rtsock(int rtsock)
 			 * A new physical interface. Do a full scan of the
 			 * to catch any new logical interfaces.
 			 */
-			initifs(_B_FALSE);
+			initifs(B_FALSE);
 			return;
 		}
 
@@ -1679,7 +1679,7 @@ process_rtsock(int rtsock)
 		 */
 		pi->pi_kernel_state &= ~PI_PRESENT;
 		for (pr = pi->pi_prefix_list; pr != NULL; pr = pr->pr_next) {
-			pr->pr_in_use = _B_FALSE;
+			pr->pr_in_use = B_FALSE;
 		}
 
 		if (ifsock < 0) {
@@ -1689,9 +1689,9 @@ process_rtsock(int rtsock)
 				return;
 			}
 		}
-		if_process(ifsock, pi->pi_name, _B_FALSE);
+		if_process(ifsock, pi->pi_name, B_FALSE);
 		for (pr = pi->pi_prefix_list; pr != NULL; pr = pr->pr_next) {
-			if_process(ifsock, pr->pr_name, _B_FALSE);
+			if_process(ifsock, pr->pr_name, B_FALSE);
 		}
 		/*
 		 * If interface (still) exists in kernel, set
@@ -1835,7 +1835,7 @@ check_if_removed(struct phyint *pi)
 			/* Clear everything except PR_STATIC */
 			pr->pr_kernel_state &= PR_STATIC;
 			if (pr->pr_state & PR_STATIC)
-				prefix_update_ipadm_addrobj(pr, _B_FALSE);
+				prefix_update_ipadm_addrobj(pr, B_FALSE);
 			pr->pr_name[0] = '\0';
 			if (pr->pr_state & PR_STATIC) {
 				prefix_delete(pr);
@@ -1868,7 +1868,7 @@ check_if_removed(struct phyint *pi)
 		for (pr = pi->pi_prefix_list; pr != NULL; pr = next_pr) {
 			next_pr = pr->pr_next;
 			if (pr->pr_state & PR_AUTO)
-				prefix_update_ipadm_addrobj(pr, _B_FALSE);
+				prefix_update_ipadm_addrobj(pr, B_FALSE);
 			prefix_delete(pr);
 		}
 
@@ -1961,7 +1961,7 @@ loopback_ra_dequeue(void)
 
 		incoming_ra(raq->raq_pi,
 		    (struct nd_router_advert *)raq->raq_packet,
-		    raq->raq_packetlen, &from, _B_TRUE);
+		    raq->raq_packetlen, &from, B_TRUE);
 		free(raq->raq_packet);
 		free(raq);
 	}
@@ -1982,7 +1982,7 @@ main(int argc, char *argv[])
 	struct phyint *pi;
 	int c;
 	char *config_file = PATH_NDPD_CONF;
-	boolean_t file_required = _B_FALSE;
+	boolean_t file_required = B_FALSE;
 
 	argv0 = argv;
 	srandom(gethostid());
@@ -2020,7 +2020,7 @@ main(int argc, char *argv[])
 			break;
 		case 'f':
 			config_file = (char *)optarg;
-			file_required = _B_TRUE;
+			file_required = B_TRUE;
 			break;
 		case '?':
 			usage(argv[0]);
@@ -2042,7 +2042,7 @@ main(int argc, char *argv[])
 	rtsock = setup_rtsock();
 	mibsock = setup_mibsock();
 	timer_init();
-	initifs(_B_TRUE);
+	initifs(B_TRUE);
 
 	check_daemonize();
 
@@ -2096,12 +2096,12 @@ main(int argc, char *argv[])
  * LOGGER
  */
 
-static boolean_t logging = _B_FALSE;
+static boolean_t logging = B_FALSE;
 
 static void
 initlog(void)
 {
-	logging = _B_TRUE;
+	logging = B_TRUE;
 	openlog("in.ndpd", LOG_PID | LOG_CONS, LOG_DAEMON);
 }
 
@@ -2255,11 +2255,11 @@ ndpd_process_cmd(int newfd, ipadm_ndpd_msg_t *msg)
 	}
 	switch (msg->inm_cmd) {
 	case IPADM_DISABLE_AUTOCONF:
-		err = ndpd_set_autoconf(msg->inm_ifname, _B_FALSE);
+		err = ndpd_set_autoconf(msg->inm_ifname, B_FALSE);
 		break;
 
 	case IPADM_ENABLE_AUTOCONF:
-		err = ndpd_set_autoconf(msg->inm_ifname, _B_TRUE);
+		err = ndpd_set_autoconf(msg->inm_ifname, B_TRUE);
 		break;
 
 	case IPADM_CREATE_ADDRS:
@@ -2294,7 +2294,7 @@ ndpd_send_error(int fd, int error)
  * This is provided to support the legacy method of configuring IPv6
  * addresses. i.e. `ifconfig bge0 inet6 plumb` will plumb the interface
  * and start stateless and stateful autoconfiguration. If this function is
- * not called with enable=_B_FALSE, no autoconfiguration will be done until
+ * not called with enable=B_FALSE, no autoconfiguration will be done until
  * ndpd_create_addrs() is called with an Interface ID.
  */
 static int
@@ -2359,7 +2359,7 @@ ndpd_create_addrs(const char *ifname, struct sockaddr_in6 intfid, int intfidlen,
 	check_autoconf_var_consistency(pi, stateless, stateful);
 
 	if (intfidlen == 0) {
-		pi->pi_default_token = _B_TRUE;
+		pi->pi_default_token = B_TRUE;
 		if (ifsock < 0) {
 			ifsock = socket(AF_INET6, SOCK_DGRAM, 0);
 			if (ifsock < 0) {
@@ -2378,7 +2378,7 @@ ndpd_create_addrs(const char *ifname, struct sockaddr_in6 intfid, int intfidlen,
 		pi->pi_token = sin6->sin6_addr;
 		pi->pi_token_length = lifr.lifr_addrlen;
 	} else {
-		pi->pi_default_token = _B_FALSE;
+		pi->pi_default_token = B_FALSE;
 		pi->pi_token = intfid.sin6_addr;
 		pi->pi_token_length = intfidlen;
 	}
@@ -2388,7 +2388,7 @@ ndpd_create_addrs(const char *ifname, struct sockaddr_in6 intfid, int intfidlen,
 	    sizeof (pi->pi_ipadm_aobjname));
 
 	/* We can allow autoconfiguration now. */
-	pi->pi_autoconf = _B_TRUE;
+	pi->pi_autoconf = B_TRUE;
 
 	/* Restart the solicitations. */
 	if (pi->pi_sol_state == DONE_SOLICIT)
@@ -2451,7 +2451,7 @@ ndpd_delete_addrs(const char *ifname)
 		}
 		if ((lifr.lifr_flags & IFF_ADDRCONF) ||
 		    (lifr.lifr_flags & IFF_DHCPRUNNING)) {
-			prefix_update_ipadm_addrobj(pr, _B_FALSE);
+			prefix_update_ipadm_addrobj(pr, B_FALSE);
 		}
 		prefix_delete(pr);
 	}
@@ -2478,7 +2478,7 @@ ndpd_delete_addrs(const char *ifname)
 	 */
 	pi->pi_token = in6addr_any;
 	pi->pi_token_length = 0;
-	pi->pi_autoconf = _B_FALSE;
+	pi->pi_autoconf = B_FALSE;
 	pi->pi_ipadm_aobjname[0] = '\0';
 
 	/* Reset the stateless and stateful settings to default. */
@@ -2547,7 +2547,7 @@ phyint_check_ipadm_intfid(struct phyint *pi)
 		ipadm_close(iph);
 		return (-1);
 	}
-	pi->pi_autoconf = _B_TRUE;
+	pi->pi_autoconf = B_TRUE;
 	for (ainfop = addrinfo; ainfop != NULL; ainfop = IA_NEXT(ainfop)) {
 		ifap = &ainfop->ia_ifa;
 		if (ifap->ifa_addr->sa_family != AF_INET6 ||
@@ -2559,7 +2559,7 @@ phyint_check_ipadm_intfid(struct phyint *pi)
 				pi->pi_token = sin6->sin6_addr;
 				pi->pi_token._S6_un._S6_u32[0] = 0;
 				pi->pi_token._S6_un._S6_u32[1] = 0;
-				pi->pi_autoconf = _B_TRUE;
+				pi->pi_autoconf = B_TRUE;
 				(void) strlcpy(pi->pi_ipadm_aobjname,
 				    ainfop->ia_aobjname,
 				    sizeof (pi->pi_ipadm_aobjname));
@@ -2571,11 +2571,11 @@ phyint_check_ipadm_intfid(struct phyint *pi)
 			 * ipadm is explicitly used for autoconfiguration.
 			 */
 			if (ifap->ifa_flags & IFF_NOLINKLOCAL)
-				pi->pi_autoconf = _B_FALSE;
+				pi->pi_autoconf = B_FALSE;
 		} else if (IN6_IS_ADDR_UNSPECIFIED(&sin6->sin6_addr) &&
 		    strrchr(ifap->ifa_name, ':') == NULL) {
 			/* The interface was created using ipadm. */
-			pi->pi_autoconf = _B_FALSE;
+			pi->pi_autoconf = B_FALSE;
 		}
 	}
 	ipadm_free_addr_info(addrinfo);

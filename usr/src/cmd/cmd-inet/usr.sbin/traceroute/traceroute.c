@@ -160,19 +160,19 @@ ushort_t ident;			/* used to authenticate replies */
 ushort_t port = 32768 + 666;	/* start udp dest port # for probe packets */
 
 static int options = 0;		/* socket options */
-boolean_t verbose = _B_FALSE;	/* verbose output */
+boolean_t verbose = B_FALSE;	/* verbose output */
 static int waittime = 5;	/* time to wait for response (in seconds) */
 static struct timeval delay = {0, 0}; /* delay between consecutive probe */
-boolean_t nflag = _B_FALSE;	/* print addresses numerically */
-static boolean_t showttl = _B_FALSE; /* print the ttl(hop limit) of recvd pkt */
-boolean_t useicmp = _B_FALSE;  	/* use icmp echo instead of udp packets */
-boolean_t docksum = _B_TRUE;	/* calculate checksums */
-static boolean_t collect_stat = _B_FALSE;	/* print statistics */
-boolean_t settos = _B_FALSE;   	/* set type-of-service field */
+boolean_t nflag = B_FALSE;	/* print addresses numerically */
+static boolean_t showttl = B_FALSE; /* print the ttl(hop limit) of recvd pkt */
+boolean_t useicmp = B_FALSE;  	/* use icmp echo instead of udp packets */
+boolean_t docksum = B_TRUE;	/* calculate checksums */
+static boolean_t collect_stat = B_FALSE;	/* print statistics */
+boolean_t settos = B_FALSE;   	/* set type-of-service field */
 int dontfrag = 0;		/* IP*_DONTFRAG */
 static int max_timeout = 5;	/* quit after this consecutive timeouts */
-static boolean_t probe_all = _B_FALSE;	/* probe all the IFs of the target */
-static boolean_t pick_src = _B_FALSE;	/* traceroute picks the src address */
+static boolean_t probe_all = B_FALSE;	/* probe all the IFs of the target */
+static boolean_t pick_src = B_FALSE;	/* traceroute picks the src address */
 
 /*
  * flow and class are specific to IPv6, tos and off are specific to IPv4.
@@ -191,7 +191,7 @@ boolean_t raw_req;		/* if sndsock for IPv4 must be raw */
  * Name service lookup related data.
  */
 static mutex_t tr_nslock = ERRORCHECKMUTEX;
-static boolean_t tr_nsactive = _B_FALSE;	/* Lookup ongoing */
+static boolean_t tr_nsactive = B_FALSE;	/* Lookup ongoing */
 static hrtime_t tr_nsstarttime;			/* Start time */
 static int tr_nssleeptime = 2;			/* Interval between checks */
 static int tr_nswarntime = 2;			/* Interval to warn after */
@@ -261,10 +261,10 @@ main(int argc, char **argv)
 	/*
 	 * "probing_successful" indicates if we could successfully send probes,
 	 * not necessarily received reply from the target (this behavior is from
-	 * the original traceroute). It's _B_FALSE if packlen is invalid, or no
+	 * the original traceroute). It's B_FALSE if packlen is invalid, or no
 	 * interfaces found.
 	 */
-	boolean_t probing_successful = _B_FALSE;
+	boolean_t probing_successful = B_FALSE;
 	int longjmp_return;			/* return value from longjump */
 	int i = 0;
 	char *cp;
@@ -311,7 +311,7 @@ main(int argc, char **argv)
 			break;
 
 		case 'a':
-			probe_all = _B_TRUE;
+			probe_all = B_TRUE;
 			break;
 
 		case 'c':
@@ -356,7 +356,7 @@ main(int argc, char **argv)
 			break;
 
 		case 'l':
-			showttl = _B_TRUE;
+			showttl = B_TRUE;
 			break;
 
 		case 'i':
@@ -408,7 +408,7 @@ main(int argc, char **argv)
 			break;
 
 		case 'I':
-			useicmp = _B_TRUE;
+			useicmp = B_TRUE;
 			break;
 
 		case 'L':
@@ -421,7 +421,7 @@ main(int argc, char **argv)
 			break;
 
 		case 'n':
-			nflag = _B_TRUE;
+			nflag = B_TRUE;
 			break;
 
 		case 'P':
@@ -448,7 +448,7 @@ main(int argc, char **argv)
 			break;
 
 		case 'S':
-			collect_stat = _B_TRUE;
+			collect_stat = B_TRUE;
 			break;
 
 		case 's':
@@ -461,15 +461,15 @@ main(int argc, char **argv)
 
 		case 't':
 			tos = (uchar_t)str2int(optarg, "tos", 0, MAX_TOS);
-			settos = _B_TRUE;
+			settos = B_TRUE;
 			break;
 
 		case 'v':
-			verbose = _B_TRUE;
+			verbose = B_TRUE;
 			break;
 
 		case 'x':
-			docksum = _B_FALSE;
+			docksum = B_FALSE;
 			break;
 
 		case 'w':
@@ -637,7 +637,7 @@ main(int argc, char **argv)
 
 	if (num_ifs4 + num_ifs6 > 0) {
 		trace_it(ai_dst);
-		probing_successful = _B_TRUE;
+		probing_successful = B_TRUE;
 	}
 
 	(void) close(rcvsock4);
@@ -928,11 +928,11 @@ set_src_addr(struct pr_set *pr, struct ifaddrlist **alp)
 		}
 	}
 
-	pick_src = _B_FALSE;
+	pick_src = B_FALSE;
 
 	if (source == NULL) {			/* no -s used */
 		if (device == NULL) {		/* no -i used, no -s used */
-			pick_src = _B_TRUE;
+			pick_src = B_TRUE;
 		} else {			/* -i used, no -s used */
 			/*
 			 * -i used, but not -s, and it's IPv4: set the source
@@ -942,7 +942,7 @@ set_src_addr(struct pr_set *pr, struct ifaddrlist **alp)
 			if (pr->family == AF_INET)
 				set_sin(pr->from, &(tmp1_al->addr), pr->family);
 			else
-				pick_src = _B_TRUE;
+				pick_src = B_TRUE;
 		}
 	} else {				/* -s used */
 		if (device == NULL) {		/* no -i used, -s used */
@@ -1067,7 +1067,7 @@ find_device(struct ifaddrlist *al, int len, char *device)
 }
 
 /*
- * returns _B_TRUE if given hostinfo contains the given address
+ * returns B_TRUE if given hostinfo contains the given address
  */
 static boolean_t
 has_addr(struct addrinfo *ai, union any_in_addr *addr)
@@ -1086,9 +1086,9 @@ has_addr(struct addrinfo *ai, union any_in_addr *addr)
 	}
 
 	if (ai_tmp != NULL) {
-		return (_B_TRUE);
+		return (B_TRUE);
 	} else {
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 }
 
@@ -1105,7 +1105,7 @@ get_gwaddrs(char **gwlist, int family, union any_in_addr *gwIPlist,
     union any_in_addr *gwIPlist6, int *resolved, int *resolved6)
 {
 	int i;
-	boolean_t check_v4 = _B_TRUE, check_v6 = _B_TRUE;
+	boolean_t check_v4 = B_TRUE, check_v6 = B_TRUE;
 	struct addrinfo *ai = NULL;
 	struct addrinfo *aip = NULL;
 
@@ -1114,22 +1114,22 @@ get_gwaddrs(char **gwlist, int family, union any_in_addr *gwIPlist,
 	case AF_UNSPEC:
 		break;
 	case AF_INET:
-		check_v6 = _B_FALSE;
+		check_v6 = B_FALSE;
 		break;
 	case AF_INET6:
-		check_v4 = _B_FALSE;
+		check_v4 = B_FALSE;
 		break;
 	default:
 		return;
 	}
 
 	if (check_v4 && gw_count >= MAX_GWS) {
-		check_v4 = _B_FALSE;
+		check_v4 = B_FALSE;
 		Fprintf(stderr, "%s: too many IPv4 gateways\n", prog);
 		num_v4 = 0;
 	}
 	if (check_v6 && gw_count >= MAX_GWS6) {
-		check_v6 = _B_FALSE;
+		check_v6 = B_FALSE;
 		Fprintf(stderr, "%s: too many IPv6 gateways\n", prog);
 		num_v6 = 0;
 	}
@@ -1141,7 +1141,7 @@ get_gwaddrs(char **gwlist, int family, union any_in_addr *gwIPlist,
 		if (ai == NULL)
 			return;
 		if (check_v4 && num_v4 != 0) {
-			check_v4 = _B_FALSE;
+			check_v4 = B_FALSE;
 			for (aip = ai; aip != NULL; aip = aip->ai_next) {
 				if (aip->ai_family == AF_INET) {
 					/* LINTED E_BAD_PTR_CAST_ALIGN */
@@ -1150,15 +1150,15 @@ get_gwaddrs(char **gwlist, int family, union any_in_addr *gwIPlist,
 					    &gwIPlist[i].addr,
 					    aip->ai_addrlen);
 					(*resolved)++;
-					check_v4 = _B_TRUE;
+					check_v4 = B_TRUE;
 					break;
 				}
 			}
 		} else if (check_v4) {
-			check_v4 = _B_FALSE;
+			check_v4 = B_FALSE;
 		}
 		if (check_v6 && num_v6 != 0) {
-			check_v6 = _B_FALSE;
+			check_v6 = B_FALSE;
 			for (aip = ai; aip != NULL; aip = aip->ai_next) {
 				if (aip->ai_family == AF_INET6) {
 					/* LINTED E_BAD_PTR_CAST_ALIGN */
@@ -1167,12 +1167,12 @@ get_gwaddrs(char **gwlist, int family, union any_in_addr *gwIPlist,
 					    &gwIPlist6[i].addr6,
 					    aip->ai_addrlen);
 					(*resolved6)++;
-					check_v6 = _B_TRUE;
+					check_v6 = B_TRUE;
 					break;
 				}
 			}
 		} else if (check_v6) {
-			check_v6 = _B_FALSE;
+			check_v6 = B_FALSE;
 		}
 	}
 	freeaddrinfo(ai);
@@ -1418,7 +1418,7 @@ setup_socket(struct pr_set *pr, int packet_len)
 
 /*
  * If we are "probing all", this function calls traceroute() for each IP address
- * of the target, otherwise calls only once. Returns _B_FALSE if traceroute()
+ * of the target, otherwise calls only once. Returns B_FALSE if traceroute()
  * fails.
  */
 static void
@@ -1524,8 +1524,8 @@ traceroute(union any_in_addr *ip_addr, struct msghdr *msg6, struct pr_set *pr,
 	char abuf[INET6_ADDRSTRLEN];		/* use for inet_ntop() */
 	int longjmp_return;			/* return value from longjump */
 	struct ip *ip = (struct ip *)packet;
-	boolean_t got_there = _B_FALSE;		/* we hit the destination */
-	static boolean_t first_pkt = _B_TRUE;
+	boolean_t got_there = B_FALSE;		/* we hit the destination */
+	static boolean_t first_pkt = B_TRUE;
 	int hoplimit;				/* hoplimit for IPv6 packets */
 	struct in6_addr addr6;
 	int num_src_ifs;			/* excludes down and loopback */
@@ -1636,7 +1636,7 @@ traceroute(union any_in_addr *ip_addr, struct msghdr *msg6, struct pr_set *pr,
 		double rttsum, rttssq;
 		int unreachable;
 
-		got_there = _B_FALSE;
+		got_there = B_FALSE;
 		unreachable = 0;
 
 		/*
@@ -1670,7 +1670,7 @@ traceroute(union any_in_addr *ip_addr, struct msghdr *msg6, struct pr_set *pr,
 				if (delay.tv_usec > 0)
 					(void) usleep(delay.tv_usec);
 			} else {
-				first_pkt = _B_FALSE;
+				first_pkt = B_FALSE;
 			}
 
 			(void) gettimeofday(&t1, NULL);
@@ -1747,7 +1747,7 @@ traceroute(union any_in_addr *ip_addr, struct msghdr *msg6, struct pr_set *pr,
 				}
 
 				if (reply == REPLY_GOT_TARGET) {
-					got_there = _B_TRUE;
+					got_there = B_TRUE;
 
 					if (((pr->family == AF_INET) &&
 					    (ip->ip_ttl <= 1)) ||
@@ -1777,7 +1777,7 @@ traceroute(union any_in_addr *ip_addr, struct msghdr *msg6, struct pr_set *pr,
 				if (pr->family == AF_INET &&
 				    type == ICMP_UNREACH &&
 				    code == ICMP_UNREACH_PROTOCOL)
-					got_there = _B_TRUE;
+					got_there = B_TRUE;
 
 				break;
 			}
@@ -1969,7 +1969,7 @@ char *
 inet_name(union any_in_addr *in, int family)
 {
 	char *cp;
-	static boolean_t first = _B_TRUE;
+	static boolean_t first = B_TRUE;
 	static char domain[NI_MAXHOST + 1];
 	static char line[NI_MAXHOST + 1];	/* assuming		*/
 				/* (NI_MAXHOST + 1) >= INET6_ADDRSTRLEN */
@@ -2003,9 +2003,9 @@ inet_name(union any_in_addr *in, int family)
 
 	if (first && !nflag) {
 		/* find out the domain name */
-		first = _B_FALSE;
+		first = B_FALSE;
 		mutex_enter(&tr_nslock);
-		tr_nsactive = _B_TRUE;
+		tr_nsactive = B_TRUE;
 		tr_nsstarttime = gethrtime();
 		mutex_exit(&tr_nslock);
 		if (gethostname(domain, MAXHOSTNAMELEN) == 0 &&
@@ -2016,13 +2016,13 @@ inet_name(union any_in_addr *in, int family)
 			domain[0] = '\0';
 		}
 		mutex_enter(&tr_nslock);
-		tr_nsactive = _B_FALSE;
+		tr_nsactive = B_FALSE;
 		mutex_exit(&tr_nslock);
 	}
 
 	flags = (nflag) ? NI_NUMERICHOST : NI_NAMEREQD;
 	mutex_enter(&tr_nslock);
-	tr_nsactive = _B_TRUE;
+	tr_nsactive = B_TRUE;
 	tr_nsstarttime = gethrtime();
 	mutex_exit(&tr_nslock);
 	if (getnameinfo(sa, slen, hbuf, sizeof (hbuf), NULL, 0, flags) != 0) {
@@ -2034,7 +2034,7 @@ inet_name(union any_in_addr *in, int family)
 		*cp = '\0';
 	}
 	mutex_enter(&tr_nslock);
-	tr_nsactive = _B_FALSE;
+	tr_nsactive = B_FALSE;
 	mutex_exit(&tr_nslock);
 	(void) strlcpy(line, hbuf, sizeof (line));
 

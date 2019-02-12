@@ -77,7 +77,7 @@ receiving_interface(struct msghdr *msg, boolean_t findremote)
 		msglog("unable to retrieve IP_RECVIF");
 	} else {
 		ifindex = *(uint_t *)opt;
-		if ((ifp = ifwithindex(ifindex, _B_TRUE)) != NULL) {
+		if ((ifp = ifwithindex(ifindex, B_TRUE)) != NULL) {
 			/* Find the best match of the aliases */
 			ifp2 = NULL;
 			for (ifp1 = ifp; ifp1 != NULL;
@@ -142,7 +142,7 @@ read_rip()
 		/*
 		 * ifp is the interface via which the packet arrived.
 		 */
-		ifp = receiving_interface(&msg, _B_TRUE);
+		ifp = receiving_interface(&msg, B_TRUE);
 
 		input(&from, ifp, &inbuf.rip, cc);
 	}
@@ -169,7 +169,7 @@ input(struct sockaddr_in *from,		/* received from this IP address */
 	struct tgate *tg = NULL;
 	struct tgate_net *tn;
 	int i, j;
-	boolean_t poll_answer = _B_FALSE; /* Set to _B_TRUE if RIPCMD_POLL */
+	boolean_t poll_answer = B_FALSE; /* Set to B_TRUE if RIPCMD_POLL */
 	uint16_t rt_state = 0;	/* Extra route state to pass to input_route() */
 	uint8_t metric;
 
@@ -243,18 +243,18 @@ input(struct sockaddr_in *from,		/* received from this IP address */
 		 * silent processes and routers can respond to this
 		 * command.
 		 */
-		poll_answer = _B_TRUE;
+		poll_answer = B_TRUE;
 		/* FALLTHRU */
 	case RIPCMD_REQUEST:
 		/* Are we talking to ourself or a remote gateway? */
-		ifp1 = ifwithaddr(FROM_NADDR, _B_FALSE, _B_TRUE);
+		ifp1 = ifwithaddr(FROM_NADDR, B_FALSE, B_TRUE);
 		if (ifp1 != NULL) {
 			if (ifp1->int_state & IS_REMOTE) {
 				/* remote gateway */
 				ifp = ifp1;
 				if (check_remote(ifp)) {
 					ifp->int_act_time = now.tv_sec;
-					if_ok(ifp, "remote ", _B_FALSE);
+					if_ok(ifp, "remote ", B_FALSE);
 				}
 			} else if (from->sin_port == htons(RIP_PORT)) {
 				trace_pkt("    discard our own RIP request");
@@ -614,14 +614,14 @@ rte_done:
 		}
 
 		/* Are we talking to ourself or a remote gateway? */
-		ifp1 = ifwithaddr(FROM_NADDR, _B_FALSE, _B_TRUE);
+		ifp1 = ifwithaddr(FROM_NADDR, B_FALSE, B_TRUE);
 		if (ifp1 != NULL) {
 			if (ifp1->int_state & IS_REMOTE) {
 				/* remote gateway */
 				ifp = ifp1;
 				if (check_remote(ifp)) {
 					ifp->int_act_time = now.tv_sec;
-					if_ok(ifp, "remote ", _B_FALSE);
+					if_ok(ifp, "remote ", B_FALSE);
 				}
 			} else {
 				trace_pkt("    discard our own RIP response");
@@ -1073,7 +1073,7 @@ input_route(in_addr_t dst,			/* network order */
 	 * See if we can already get there by a working interface.  Ignore
 	 * if so.
 	 */
-	ifp1 = ifwithaddr(dst, _B_TRUE, _B_FALSE);
+	ifp1 = ifwithaddr(dst, B_TRUE, B_FALSE);
 	if (ifp1 != NULL && (ifp1->int_state & IS_PASSIVE))
 		return;
 
@@ -1090,7 +1090,7 @@ input_route(in_addr_t dst,			/* network order */
 
 		/* Ignore the route if it points to us */
 		if (n != NULL && n->n_nhop != 0 &&
-		    NULL != ifwithaddr(n->n_nhop, _B_TRUE, _B_FALSE))
+		    NULL != ifwithaddr(n->n_nhop, B_TRUE, B_FALSE))
 			return;
 
 		/*
@@ -1203,7 +1203,7 @@ input_route(in_addr_t dst,			/* network order */
 		 * Ignore the route if it points to us.
 		 */
 		if (n != NULL && n->n_nhop != 0 &&
-		    NULL != ifwithaddr(n->n_nhop, _B_TRUE, _B_FALSE))
+		    NULL != ifwithaddr(n->n_nhop, B_TRUE, B_FALSE))
 			return;
 
 		/* the loop above set rts0=worst spare */
@@ -1367,7 +1367,7 @@ age_peer_info(void)
 	}
 }
 
-static boolean_t		/* _B_FALSE if bad, _B_TRUE if good */
+static boolean_t		/* B_FALSE if bad, B_TRUE if good */
 ck_passwd(struct interface *aifp,
     struct rip *rip,
     uint8_t *lim,
@@ -1386,7 +1386,7 @@ ck_passwd(struct interface *aifp,
 	if ((uint8_t *)NA >= lim || NA->a_family != RIP_AF_AUTH) {
 		msglim(use_authp, from, "missing auth data from %s",
 		    naddr_ntoa(from));
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	/*
@@ -1429,7 +1429,7 @@ ck_passwd(struct interface *aifp,
 			msglim(use_authp, from,
 			    "discarding sequence %x (older than %x)",
 			    (unsigned)seqno, (unsigned)php->ph_seqno);
-			return (_B_FALSE);
+			return (B_FALSE);
 		}
 		php->ph_heard = now.tv_sec;
 		php->ph_seqno = seqno;
@@ -1446,7 +1446,7 @@ ck_passwd(struct interface *aifp,
 
 		if (NA->a_type == RIP_AUTH_PW) {
 			if (0 == memcmp(NA->au.au_pw, ap->key, RIP_AUTH_PW_LEN))
-				return (_B_TRUE);
+				return (B_TRUE);
 
 		} else {
 			/*
@@ -1463,7 +1463,7 @@ ck_passwd(struct interface *aifp,
 				    " instead of %d from %s",
 				    len, lim - (uint8_t *)rip - sizeof (*NA),
 				    naddr_ntoa(from));
-				return (_B_FALSE);
+				return (B_FALSE);
 			}
 			na2 = (struct netauth *)(rip->rip_nets +
 			    (len - 4) / sizeof (struct netinfo));
@@ -1506,12 +1506,12 @@ ck_passwd(struct interface *aifp,
 			MD5Update(&md5_ctx, ap->key, RIP_AUTH_MD5_LEN);
 			MD5Final(hash, &md5_ctx);
 			if (0 == memcmp(hash, na2->au.au_pw, sizeof (hash)))
-				return (_B_TRUE);
+				return (B_TRUE);
 		}
 	}
 
 	msglim(use_authp, from, "bad auth data from %s",
 	    naddr_ntoa(from));
-	return (_B_FALSE);
+	return (B_FALSE);
 #undef NA
 }

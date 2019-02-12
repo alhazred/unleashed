@@ -152,15 +152,15 @@ rn_refines(void* m_arg, void *n_arg)
 {
 	uint8_t *m = m_arg, *n = n_arg;
 	uint8_t *lim;
-	boolean_t masks_are_equal = _B_TRUE;
+	boolean_t masks_are_equal = B_TRUE;
 
 	lim = n + sizeof (struct sockaddr);
 
 	while (n < lim) {
 		if (*n & ~(*m))
-			return (_B_FALSE);
+			return (B_FALSE);
 		if (*n++ != *m++)
-			masks_are_equal = _B_FALSE;
+			masks_are_equal = B_FALSE;
 	}
 	return (!masks_are_equal);
 }
@@ -210,8 +210,8 @@ rn_satisfies_leaf(uint8_t *trial,
 	cp2 += skip;
 	for (cp += skip; cp < cplim; cp++, cp2++, cp3++)
 		if ((*cp ^ *cp2) & *cp3)
-			return (_B_FALSE);
-	return (_B_TRUE);
+			return (B_FALSE);
+	return (B_TRUE);
 }
 
 static struct radix_node *
@@ -380,11 +380,11 @@ rn_insert(void* v_arg, struct radix_node_head *head, boolean_t *dupentry,
 				goto found_differing_byte;
 		/* handle adding 255.255.255.255 */
 		if (!(t->rn_flags & RNF_ROOT) || *(cp2-1) == 0) {
-			*dupentry = _B_TRUE;
+			*dupentry = B_TRUE;
 			return (t);
 		}
 found_differing_byte:
-		*dupentry = _B_FALSE;
+		*dupentry = B_FALSE;
 		cmp_res = cp[-1] ^ cp2[-1];
 		for (b = (cp - v) << 3; cmp_res != 0; b--)
 			cmp_res >>= 1;
@@ -509,8 +509,8 @@ rn_lexobetter(void *m_arg, void *n_arg)
 	lim = mp + sizeof (struct sockaddr);
 	while (mp < lim)
 		if (*mp++ > *np++)
-			return (_B_TRUE);
-	return (_B_FALSE);
+			return (B_TRUE);
+	return (B_FALSE);
 }
 
 static struct radix_mask *

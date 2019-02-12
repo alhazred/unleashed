@@ -94,13 +94,13 @@ if_dump2(FILE *fp)
 
 		(void) fprintf(fp, "\tflags ");
 		c = ' ';
-		for (first = _B_TRUE, p = flagbits; p->t_bits > 0; p++) {
+		for (first = B_TRUE, p = flagbits; p->t_bits > 0; p++) {
 			if ((ifp->int_flags & p->t_bits) == 0)
 				continue;
 			(void) fprintf(fp, "%c%s", c, p->t_name);
 			if (first) {
 				c = '|';
-				first = _B_FALSE;
+				first = B_FALSE;
 			}
 		}
 		if (first)

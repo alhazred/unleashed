@@ -131,12 +131,12 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 	struct rt_entry *rt;
 	struct netinfo6 *n;
 	int newsize;
-	boolean_t changes = _B_FALSE;
+	boolean_t changes = B_FALSE;
 	int answer = supplier;
 	struct in6_addr prefix;
 	struct in6_addr nexthop;
 	struct in6_addr *gate;
-	boolean_t foundnexthop = _B_FALSE;
+	boolean_t foundnexthop = B_FALSE;
 	struct sioc_addrreq sa;
 	struct sockaddr_in6 *sin6;
 
@@ -328,7 +328,7 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 				 * of a next hop address.
 				 */
 				if (IN6_IS_ADDR_UNSPECIFIED(&n->rip6_prefix)) {
-					foundnexthop = _B_FALSE;
+					foundnexthop = B_FALSE;
 					continue;
 				}
 				/*
@@ -337,7 +337,7 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 				 * Trace this event if input tracing is enabled.
 				 */
 				if (!IN6_IS_ADDR_LINKLOCAL(&n->rip6_prefix)) {
-					foundnexthop = _B_FALSE;
+					foundnexthop = B_FALSE;
 					if (tracing & INPUT_BIT) {
 						(void) fprintf(ftrace,
 						    "Bad next hop %s in "
@@ -364,7 +364,7 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 					return;
 				}
 				if (sa.sa_res != 0) {
-					foundnexthop = _B_FALSE;
+					foundnexthop = B_FALSE;
 					if (tracing & INPUT_BIT) {
 						(void) fprintf(ftrace,
 						    "Bad next hop %s is self "
@@ -376,7 +376,7 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 					}
 					continue;
 				}
-				foundnexthop = _B_TRUE;
+				foundnexthop = B_TRUE;
 				nexthop = n->rip6_prefix;
 				continue;
 			}
@@ -433,8 +433,8 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 					rtadd(&prefix,
 					    gate, n->rip6_prefix_length,
 					    n->rip6_metric, n->rip6_route_tag,
-					    _B_FALSE, ifp);
-					changes = _B_TRUE;
+					    B_FALSE, ifp);
+					changes = B_TRUE;
 				}
 				continue;
 			}
@@ -466,7 +466,7 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 				if (n->rip6_metric != rt->rt_metric ||
 				    rt->rt_ifp != ifp) {
 					rtchange(rt, gate, n->rip6_metric, ifp);
-					changes = _B_TRUE;
+					changes = B_TRUE;
 				} else if (n->rip6_metric < HOPCNT_INFINITY) {
 					rt->rt_timer = 0;
 				}
@@ -474,7 +474,7 @@ rip_input(struct sockaddr_in6 *from, int size, uint_t hopcount,
 			    (rt->rt_timer > (EXPIRE_TIME / 2) &&
 				rt->rt_metric == n->rip6_metric)) {
 				rtchange(rt, gate, n->rip6_metric, ifp);
-				changes = _B_TRUE;
+				changes = B_TRUE;
 			}
 		}
 		if (changes && supplier)
@@ -518,12 +518,12 @@ dynamic_update(struct interface *ifp)
 	    timercmp(&nextmcast, &now, <)) {
 	    /* END CSTYLED */
 		TRACE_ACTION("send dynamic update", NULL);
-		supplyall(&allrouters, RTS_CHANGED, ifp, _B_TRUE);
+		supplyall(&allrouters, RTS_CHANGED, ifp, B_TRUE);
 		lastmcast = now;
-		needupdate = _B_FALSE;
+		needupdate = B_FALSE;
 		nextmcast.tv_sec = 0;
 	} else {
-		needupdate = _B_TRUE;
+		needupdate = B_TRUE;
 		TRACE_ACTION("delay dynamic update", NULL);
 	}
 

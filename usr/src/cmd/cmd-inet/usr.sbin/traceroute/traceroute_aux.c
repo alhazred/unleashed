@@ -493,19 +493,19 @@ print_addr(uchar_t *buf, int cc, struct sockaddr *from)
 
 /*
  * ICMP messages which doesn't mean we got the target, or we got a gateway, are
- * processed here. It returns _B_TRUE if it's some sort of 'unreachable'.
+ * processed here. It returns B_TRUE if it's some sort of 'unreachable'.
  */
 boolean_t
 print_icmp_other(uchar_t type, uchar_t code)
 {
-	boolean_t unreach = _B_FALSE;
+	boolean_t unreach = B_FALSE;
 
 	/*
 	 * this function only prints '!*' for ICMP unreachable messages,
 	 * ignores others.
 	 */
 	if (type != ICMP_UNREACH) {
-		return (_B_FALSE);
+		return (B_FALSE);
 	}
 
 	switch (code) {
@@ -514,13 +514,13 @@ print_icmp_other(uchar_t type, uchar_t code)
 
 	case ICMP_UNREACH_NET_UNKNOWN:
 	case ICMP_UNREACH_NET:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !N");
 		break;
 
 	case ICMP_UNREACH_HOST_UNKNOWN:
 	case ICMP_UNREACH_HOST:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !H");
 		break;
 
@@ -529,37 +529,37 @@ print_icmp_other(uchar_t type, uchar_t code)
 		break;
 
 	case ICMP_UNREACH_NEEDFRAG:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !F");
 		break;
 
 	case ICMP_UNREACH_SRCFAIL:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !S");
 		break;
 
 	case ICMP_UNREACH_FILTER_PROHIB:
 	case ICMP_UNREACH_NET_PROHIB:
 	case ICMP_UNREACH_HOST_PROHIB:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !X");
 		break;
 
 	case ICMP_UNREACH_TOSNET:
 	case ICMP_UNREACH_TOSHOST:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !T");
 		break;
 
 	case ICMP_UNREACH_ISOLATED:
 	case ICMP_UNREACH_HOST_PRECEDENCE:
 	case ICMP_UNREACH_PRECEDENCE_CUTOFF:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !U");
 		break;
 
 	default:
-		unreach = _B_TRUE;
+		unreach = B_TRUE;
 		Printf(" !<%d>", code);
 		break;
 	}

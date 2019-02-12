@@ -865,7 +865,7 @@ configure_v6_leases(dhcp_smach_t *dsmp)
 					insque(lif, dlp->dl_lifs);
 				}
 				lif->lif_lease = dlp;
-				lif->lif_dad_wait = _B_TRUE;
+				lif->lif_dad_wait = B_TRUE;
 				dsmp->dsm_lif_wait++;
 			} else {
 				/* If it was found, cancel timer */
@@ -1096,7 +1096,7 @@ configure_v4_lease(dhcp_smach_t *dsmp)
 	}
 
 	if (!lif->lif_dad_wait) {
-		lif->lif_dad_wait = _B_TRUE;
+		lif->lif_dad_wait = B_TRUE;
 		dsmp->dsm_lif_wait++;
 	}
 

@@ -123,13 +123,13 @@ unsigned parsedumplen = 0;
  * Setaddr, used to decide whether an address without a keyword
  * prefix is a source or destination address.
  */
-boolean_t setaddr = _B_FALSE;
+boolean_t setaddr = B_FALSE;
 
 /*
  * Some ifconfig commands are only valid on the first logical interface.
  * As soon as an "addif" command is seen, "addint" is set.
  */
-boolean_t addint = _B_FALSE;
+boolean_t addint = B_FALSE;
 
 /*
  * The parser table is based on that in ifconfig.  A command may or
@@ -334,7 +334,7 @@ parsedump(char *cmd, int param, int flags, char *arg)
 	 */
 	if ((flags & PARSEADD) != 0) {
 		flags |= PARSESET;
-		addint = _B_TRUE;
+		addint = B_TRUE;
 	}
 
 	/*
@@ -356,7 +356,7 @@ parsedump(char *cmd, int param, int flags, char *arg)
 			cmdname = "set";
 		else if (setaddr) {
 			cmdname = "destination";
-			setaddr = _B_FALSE;
+			setaddr = B_FALSE;
 		} else
 			cmdname = "";
 	} else {
@@ -369,7 +369,7 @@ parsedump(char *cmd, int param, int flags, char *arg)
 	 * address.
 	 */
 	if ((flags & PARSESET) != 0)
-		setaddr = _B_TRUE;
+		setaddr = B_TRUE;
 
 	/*
 	 * Dump the command straight to output?
@@ -454,7 +454,7 @@ ifparse(int argc, char *argv[], struct afswtch *afp)
 		struct cmd *p;
 		boolean_t found_cmd;
 
-		found_cmd = _B_FALSE;
+		found_cmd = B_FALSE;
 		for (p = cmds; ; p++) {
 			assert(p->c_parseflags != END_OF_TABLE);
 			if (p->c_name) {
@@ -464,7 +464,7 @@ ifparse(int argc, char *argv[], struct afswtch *afp)
 					 * found and check to see if
 					 * the address family is valid
 					 */
-					found_cmd = _B_TRUE;
+					found_cmd = B_TRUE;
 					if (p->c_af == AF_ANY ||
 					    af == p->c_af)
 						break;

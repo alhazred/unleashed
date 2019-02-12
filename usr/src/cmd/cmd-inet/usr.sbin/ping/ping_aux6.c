@@ -96,7 +96,7 @@ set_ancillary_data(struct msghdr *msgp, int hoplimit,
 	size_t bufspace;
 	struct cmsghdr *cmsgp;
 	uchar_t *cmsg_datap;
-	static boolean_t first = _B_TRUE;
+	static boolean_t first = B_TRUE;
 	int i;
 
 	if (hoplimit == -1 && gw_cnt == 0 && if_index == 0)
@@ -162,7 +162,7 @@ set_ancillary_data(struct msghdr *msgp, int hoplimit,
 	 * new memory, just reuse what msg6 points to.
 	 */
 	if (first) {
-		first = _B_FALSE;
+		first = B_FALSE;
 		msgp->msg_control = (struct cmsghdr *)malloc(bufspace);
 		if (msgp->msg_control == NULL) {
 			Fprintf(stderr, "%s: malloc %s\n",
@@ -272,12 +272,12 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 	struct timeval tv;
 	struct timeval *tp;
 	int64_t triptime;
-	boolean_t valid_reply = _B_FALSE;
-	boolean_t reply_matched_current_target = _B_FALSE; /* Is the source */
+	boolean_t valid_reply = B_FALSE;
+	boolean_t reply_matched_current_target = B_FALSE; /* Is the source */
 						/* address of this reply same */
 						/* as where we're sending */
 						/* currently? */
-	boolean_t last_reply_from_targetaddr = _B_FALSE; /* Is this stats, */
+	boolean_t last_reply_from_targetaddr = B_FALSE; /* Is this stats, */
 						/* probe all with npackets>0 */
 						/* and we received reply for */
 						/* the last probe sent to */
@@ -303,7 +303,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 	    "Unrecognized next header type encountered",
 	    "Unrecognized IPv6 option encountered"
 	};
-	boolean_t print_newline = _B_FALSE;
+	boolean_t print_newline = B_FALSE;
 
 	/* decompose msghdr into useful pieces */
 	buf = (uchar_t *)msg->msg_iov->iov_base;
@@ -375,9 +375,9 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		    last_hdr == IPPROTO_UDP &&
 		    udp_src_port == up->uh_sport &&
 		    use_udp) {
-			valid_reply = _B_TRUE;
+			valid_reply = B_TRUE;
 		} else {
-			valid_reply = _B_FALSE;
+			valid_reply = B_FALSE;
 		}
 
 		if (valid_reply) {
@@ -387,14 +387,14 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			 * updates to targetaddr, so hold SIGALRMs.
 			 */
 			(void) sighold(SIGALRM);
-			is_alive = _B_TRUE;
+			is_alive = B_TRUE;
 			nreceived++;
 			reply_matched_current_target =
 			    seq_match(current_targetaddr->starting_seq_num,
 			    current_targetaddr->num_sent,
 			    ntohs(up->uh_dport));
 			if (reply_matched_current_target) {
-				current_targetaddr->got_reply = _B_TRUE;
+				current_targetaddr->got_reply = B_TRUE;
 				nreceived_last_target++;
 				/*
 				 * Determine if stats, probe-all, and
@@ -408,7 +408,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				    (MAX_PORT + 1) == ntohs(up->uh_dport)) &&
 				    (current_targetaddr->num_probes ==
 				    current_targetaddr->num_sent))
-					last_reply_from_targetaddr = _B_TRUE;
+					last_reply_from_targetaddr = B_TRUE;
 			} else {
 				/*
 				 * If it's just probe_all and we just received
@@ -418,7 +418,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				 * this reply.
 				 */
 				if (probe_all && !stats) {
-					valid_reply = _B_FALSE;
+					valid_reply = B_FALSE;
 					/*
 					 * Only if it's verbose, we get a
 					 * message regarding this reply,
@@ -440,7 +440,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			if (reply_matched_current_target) {
 				(void) alarm(0);	/* cancel alarm */
 				(void) sigset(SIGALRM, SIG_IGN);
-				current_targetaddr->probing_done = _B_TRUE;
+				current_targetaddr->probing_done = B_TRUE;
 			}
 			(void) sigrelse(SIGALRM);
 
@@ -485,7 +485,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			Printf("%d bytes from %s: ", cc,
 			    pr_name((char *)&from6->sin6_addr, AF_INET6));
 			Printf("udp_port=%d. ", ntohs(up->uh_dport));
-			print_newline = _B_TRUE;
+			print_newline = B_TRUE;
 		} else if (is_a_target(ai_dst, &dst_addr)|| verbose) {
 			if (icmp6->icmp6_code >= A_CNT(unreach6)) {
 				Printf("ICMPv6 %d Unreachable from gateway "
@@ -504,7 +504,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			    AF_INET6));
 			if (last_hdr == IPPROTO_TCP || last_hdr == IPPROTO_UDP)
 				Printf(" port %d ", ntohs(up->uh_dport));
-			print_newline = _B_TRUE;
+			print_newline = B_TRUE;
 		}
 
 		/*
@@ -525,7 +525,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				tmin = triptime;
 			if (triptime > tmax)
 				tmax = triptime;
-			print_newline = _B_TRUE;
+			print_newline = B_TRUE;
 		}
 		if (print_newline)
 			(void) putchar('\n');
@@ -537,7 +537,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		 */
 		if (last_reply_from_targetaddr) {
 			(void) alarm(0);	/* cancel alarm */
-			current_targetaddr->probing_done = _B_TRUE;
+			current_targetaddr->probing_done = B_TRUE;
 			(void) sigrelse(SIGALRM);
 			send_scheduled_probe();
 			schedule_sigalrm();
@@ -676,9 +676,9 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 	case ICMP6_ECHO_REPLY:
 		if (ntohs(icmp6->icmp6_id) == ident) {
 			if (!use_udp)
-				valid_reply = _B_TRUE;
+				valid_reply = B_TRUE;
 			else
-				valid_reply = _B_FALSE;
+				valid_reply = B_FALSE;
 		} else {
 			return;
 		}
@@ -690,14 +690,14 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			 * updates to targetaddr, so hold SIGALRMs.
 			 */
 			(void) sighold(SIGALRM);
-			is_alive = _B_TRUE;
+			is_alive = B_TRUE;
 			nreceived++;
 			reply_matched_current_target =
 			    seq_match(current_targetaddr->starting_seq_num,
 			    current_targetaddr->num_sent,
 			    ntohs(icmp6->icmp6_seq));
 			if (reply_matched_current_target) {
-				current_targetaddr->got_reply = _B_TRUE;
+				current_targetaddr->got_reply = B_TRUE;
 				nreceived_last_target++;
 				/*
 				 * Determine if stats, probe-all, and
@@ -712,7 +712,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				    ntohs(icmp6->icmp6_seq)) &&
 				    (current_targetaddr->num_probes ==
 				    current_targetaddr->num_sent))
-					last_reply_from_targetaddr = _B_TRUE;
+					last_reply_from_targetaddr = B_TRUE;
 			} else {
 				/*
 				 * If it's just probe_all and we just received
@@ -722,7 +722,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 				 * this reply.
 				 */
 				if (probe_all && !stats) {
-					valid_reply = _B_FALSE;
+					valid_reply = B_FALSE;
 					/*
 					 * Only if it's verbose, we get a
 					 * message regarding this reply,
@@ -744,7 +744,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 			if (reply_matched_current_target) {
 				(void) alarm(0);	/* cancel alarm */
 				(void) sigset(SIGALRM, SIG_IGN);
-				current_targetaddr->probing_done = _B_TRUE;
+				current_targetaddr->probing_done = B_TRUE;
 			}
 			(void) sigrelse(SIGALRM);
 
@@ -837,7 +837,7 @@ check_reply6(struct addrinfo *ai_dst, struct msghdr *msg, int cc,
 		 */
 		if (last_reply_from_targetaddr) {
 			(void) alarm(0);	/* cancel alarm */
-			current_targetaddr->probing_done = _B_TRUE;
+			current_targetaddr->probing_done = B_TRUE;
 			(void) sigrelse(SIGALRM);
 			send_scheduled_probe();
 			schedule_sigalrm();
@@ -936,7 +936,7 @@ pr_type6(uchar_t icmp6_type)
 /*
  * Return the length of the IPv6 related headers (including extension headers).
  * It also sets the *last_hdr_rtrn to the first upper layer protocol header
- * following IPv6 header and extension headers. If print_flag is _B_TRUE, it
+ * following IPv6 header and extension headers. If print_flag is B_TRUE, it
  * prints extension headers.
  */
 static int

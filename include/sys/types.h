@@ -126,11 +126,7 @@ typedef fsfilcnt_t	fsfilcnt64_t;
 
 typedef int32_t		blksize_t;	/* used for block sizes */
 
-#if defined(__XOPEN_OR_POSIX)
-typedef enum { _B_FALSE, _B_TRUE } boolean_t;
-#else
 typedef enum { B_FALSE, B_TRUE } boolean_t;
-#endif /* defined(__XOPEN_OR_POSIX) */
 
 /*
  * The {u,}pad64_t types can be used in structures such that those structures

@@ -109,7 +109,7 @@ static void	htbl_grow(struct htbl *);
 static struct htbl ahash_tbl = {
     NULL, ahash, offsetof(struct interface, int_ahash),
     offsetof(struct interface, int_addr),
-    0, 0, 0, _B_TRUE };
+    0, 0, 0, B_TRUE };
 /*
  * Table of broadcast capable interfaces, hashed by interface broadcast
  * address.
@@ -117,7 +117,7 @@ static struct htbl ahash_tbl = {
 static struct htbl bhash_tbl = {
     NULL, ahash, offsetof(struct interface, int_bhash),
     offsetof(struct interface, int_brdaddr),
-    0, 0, 0, _B_TRUE };
+    0, 0, 0, B_TRUE };
 /*
  * Table of physical_interface structures (lists of interfaces by ifIndex),
  * hashed by interface index.
@@ -125,14 +125,14 @@ static struct htbl bhash_tbl = {
 static struct htbl ihash_tbl = {
     NULL, ihash, offsetof(struct physical_interface, phyi_link),
     offsetof(struct physical_interface, phyi_index),
-    0, 0, 0, _B_TRUE };
+    0, 0, 0, B_TRUE };
 /*
  * Table of all interfaces, hashed by interface name.
  */
 static struct htbl nhash_tbl = {
     NULL, nhash, offsetof(struct interface, int_nhash),
     offsetof(struct interface, int_name),
-    0, 0, 0, _B_TRUE };
+    0, 0, 0, B_TRUE };
 
 static struct physical_interface dummy_phyi;
 struct interface dummy_ifp;
@@ -250,7 +250,7 @@ iftbl_alloc(void)
 	nhash_tbl.htbl_ptrs = calloc(initial_size, sizeof (void *));
 
 	if (errno != 0)
-		BADERR(_B_FALSE, "Unable to allocate interface tables");
+		BADERR(B_FALSE, "Unable to allocate interface tables");
 
 	ahash_tbl.htbl_size = initial_size;
 	bhash_tbl.htbl_size = initial_size;
@@ -297,13 +297,13 @@ htbl_grow(struct htbl *htbl)
 	 * Go through the list of structures, and re-link each into
 	 * this new table.
 	 */
-	htbl->htbl_grow = _B_FALSE;
+	htbl->htbl_grow = B_FALSE;
 	while (old_size-- > 0) {
 		strp = *old_ptrs++;
 		HADD(htbl, strp);
 	}
 
-	htbl->htbl_grow = _B_TRUE;
+	htbl->htbl_grow = B_TRUE;
 	free(saved_old_ptrs);
 }
 
@@ -481,7 +481,7 @@ ifwithindex(ulong_t index,
 		 */
 		if (!rescan_ok || IF_RESCAN_DELAY())
 			return (NULL);
-		rescan_ok = _B_FALSE;
+		rescan_ok = B_FALSE;
 		ifscan();
 	}
 }
@@ -501,12 +501,12 @@ addr_on_ifp(in_addr_t addr, struct interface *ifp,
 	 * Don't use a duplicate interface since it is unusable for output.
 	 */
 	if (ifp->int_state & IS_DUP)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	if (ifp->int_if_flags & IFF_POINTOPOINT) {
 		if (ifp->int_dstaddr == addr) {
 			*best = NULL;
-			return (_B_TRUE);
+			return (B_TRUE);
 		}
 	} else {
 		if (ifp->int_addr == addr) {
@@ -515,7 +515,7 @@ addr_on_ifp(in_addr_t addr, struct interface *ifp,
 				    "returning passive intf %s",
 				    ifp->int_name);
 			*best = NULL;
-			return (_B_TRUE);
+			return (B_TRUE);
 		}
 
 		/* Look for the longest approximate match. */
@@ -525,7 +525,7 @@ addr_on_ifp(in_addr_t addr, struct interface *ifp,
 			*best = ifp;
 		}
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -649,14 +649,14 @@ ripv1_mask_host(in_addr_t addr,		/* in network byte order */
 
 
 /* See if a IP address looks reasonable as a destination */
-boolean_t			/* _B_FALSE=bad _B_TRUE=good */
+boolean_t			/* B_FALSE=bad B_TRUE=good */
 check_dst(in_addr_t addr)
 {
 	addr = ntohl(addr);
 
 	if (IN_CLASSA(addr)) {
 		if (addr == 0)
-			return (_B_TRUE);	/* default */
+			return (B_TRUE);	/* default */
 
 		addr >>= IN_CLASSA_NSHIFT;
 		return (addr != 0 && addr != IN_LOOPBACKNET);
@@ -664,15 +664,15 @@ check_dst(in_addr_t addr)
 
 	/* Must not allow destination to be link local address. */
 	if (IN_LINKLOCAL(addr))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	if (IN_CLASSB(addr) || IN_CLASSC(addr))
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	if (IN_CLASSD(addr))
-		return (_B_FALSE);
+		return (B_FALSE);
 
-	return (_B_TRUE);
+	return (B_TRUE);
 
 }
 
@@ -742,20 +742,20 @@ check_dup(const char *name,	/* Don't return this interface */
  * See that a remote gateway is reachable.
  *	Note that the answer can change as real interfaces come and go.
  */
-boolean_t			/* _B_FALSE=bad _B_TRUE=good */
+boolean_t			/* B_FALSE=bad B_TRUE=good */
 check_remote(struct interface *ifp)
 {
 	struct rt_entry *rt;
 
 	/* do not worry about other kinds */
 	if (!(ifp->int_state & IS_REMOTE))
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	rt = rtfind(ifp->int_addr);
 	if (rt != NULL &&
 	    rt->rt_ifp != NULL &&
 	    on_net(ifp->int_addr, rt->rt_ifp->int_net, rt->rt_ifp->int_mask)) {
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
 
 	/*
@@ -765,9 +765,9 @@ check_remote(struct interface *ifp)
 	if (!(ifp->int_state & IS_BROKE)) {
 		msglog("unreachable gateway %s in "PATH_GATEWAYS,
 		    naddr_ntoa(ifp->int_addr));
-		if_bad(ifp, _B_FALSE);
+		if_bad(ifp, B_FALSE);
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /* Delete an interface. */
@@ -803,11 +803,11 @@ ifdel(struct interface *ifp)
 	 * duplicates of this interface with an eye towards promoting
 	 * one of them.
 	 */
-	resurrected = _B_FALSE;
+	resurrected = B_FALSE;
 	if (!(ifp->int_state & IS_DUP) &&
 	    (wire.if_new = check_dup(ifp->int_name, ifp->int_addr,
 	    ifp->int_dstaddr, ifp->int_mask, ifp->int_if_flags,
-	    _B_TRUE)) != NULL &&
+	    B_TRUE)) != NULL &&
 	    !IS_IFF_QUIET(wire.if_new->int_if_flags)) {
 
 		trace_act("promoting duplicate %s in place of %s",
@@ -834,7 +834,7 @@ ifdel(struct interface *ifp)
 		rip_mcast_on(wire.if_new);
 
 		/* We came out ok; no need to clobber routes over this. */
-		resurrected = _B_TRUE;
+		resurrected = B_TRUE;
 	}
 
 	rip_mcast_off(ifp);
@@ -890,7 +890,7 @@ if_sick(struct interface *ifp, boolean_t recurse)
 			for (ifp1 = ifp->int_phys->phyi_interface;
 			    ifp1 != NULL; ifp1 = ifp1->int_ilist.hl_next) {
 				if (ifp1 != ifp)
-					if_sick(ifp1, _B_FALSE);
+					if_sick(ifp1, B_FALSE);
 			}
 		}
 	}
@@ -921,7 +921,7 @@ if_bad(struct interface *ifp, boolean_t recurse)
 		for (ifp1 = ifp->int_phys->phyi_interface;
 		    ifp1 != NULL; ifp1 = ifp1->int_ilist.hl_next) {
 			if (ifp1 != ifp)
-				if_bad(ifp1, _B_FALSE);
+				if_bad(ifp1, B_FALSE);
 		}
 	}
 
@@ -929,7 +929,7 @@ if_bad(struct interface *ifp, boolean_t recurse)
 	if (!(ifp->int_state & IS_DUP) &&
 	    (wire.if_new = check_dup(ifp->int_name, ifp->int_addr,
 	    ifp->int_dstaddr, ifp->int_mask, ifp->int_if_flags,
-	    _B_TRUE)) != NULL &&
+	    B_TRUE)) != NULL &&
 	    !IS_IFF_QUIET(wire.if_new->int_if_flags)) {
 		trace_act("promoting duplicate %s in place of %s",
 		    wire.if_new->int_name, ifp->int_name);
@@ -962,13 +962,13 @@ void
 if_ok(struct interface *ifp, const char *type, boolean_t recurse)
 {
 	struct interface *ifp1;
-	boolean_t wasbroken = _B_FALSE;
+	boolean_t wasbroken = B_FALSE;
 
 	if (ifp->int_state & IS_BROKE) {
 		writelog(LOG_WARNING, "%sinterface %s to %s restored",
 		    type, ifp->int_name, naddr_ntoa(ifp->int_dstaddr));
 		ifp->int_state &= ~(IS_BROKE | IS_SICK);
-		wasbroken = _B_TRUE;
+		wasbroken = B_TRUE;
 	} else if (ifp->int_state & IS_SICK) {
 		trace_act("%sinterface %s to %s working better",
 		    type, ifp->int_name, naddr_ntoa(ifp->int_dstaddr));
@@ -982,7 +982,7 @@ if_ok(struct interface *ifp, const char *type, boolean_t recurse)
 		for (ifp1 = ifp->int_phys->phyi_interface;
 		    ifp1 != NULL; ifp1 = ifp1->int_ilist.hl_next) {
 			if (ifp1 != ifp)
-				if_ok(ifp1, type, _B_FALSE);
+				if_ok(ifp1, type, B_FALSE);
 		}
 	}
 
@@ -1000,11 +1000,11 @@ remote_address_ok(struct interface *ifp, in_addr_t addr)
 {
 	if (ifp->int_if_flags & IFF_POINTOPOINT) {
 		if (addr == ifp->int_dstaddr)
-			return (_B_TRUE);
+			return (B_TRUE);
 	} else if (on_net(addr, ifp->int_net, ifp->int_mask)) {
-		return (_B_TRUE);
+		return (B_TRUE);
 	}
-	return (_B_FALSE);
+	return (B_FALSE);
 }
 
 /*
@@ -1058,7 +1058,7 @@ ifscan(void)
 
 	/* Fetch the size of the current interface list */
 	if ((sock = socket(PF_INET, SOCK_DGRAM, 0)) == -1)
-		BADERR(_B_TRUE, "ifscan: socket(SOCK_DGRAM)");
+		BADERR(B_TRUE, "ifscan: socket(SOCK_DGRAM)");
 	lifn.lifn_family = AF_INET;	/* Only count IPv4 interfaces */
 	/*
 	 * Include IFF_NOXMIT interfaces.  Such interfaces are exluded
@@ -1069,7 +1069,7 @@ ifscan(void)
 	lifn.lifn_flags = LIFC_NOXMIT;
 calculate_lifc_len:
 	if (ioctl(sock, SIOCGLIFNUM, &lifn) == -1) {
-		BADERR(_B_TRUE, "ifscan: ioctl(SIOCGLIFNUM)");
+		BADERR(B_TRUE, "ifscan: ioctl(SIOCGLIFNUM)");
 	}
 
 	/*
@@ -1107,7 +1107,7 @@ calculate_lifc_len:
 		 */
 		if (errno == EINVAL)
 			goto calculate_lifc_len;
-		BADERR(_B_TRUE, "ifscan: ioctl(SIOCGLIFCONF)");
+		BADERR(B_TRUE, "ifscan: ioctl(SIOCGLIFCONF)");
 	}
 
 	/*
@@ -1317,7 +1317,7 @@ calculate_lifc_len:
 			ifs.int_std_mask = std_mask(ifs.int_dstaddr);
 			ifs.int_net = ntohl(ifs.int_dstaddr);
 			if (!foundloopback) {
-				foundloopback = _B_TRUE;
+				foundloopback = B_TRUE;
 				loopaddr = ifs.int_addr;
 				loop_rts.rts_gate = loopaddr;
 				loop_rts.rts_router = loopaddr;
@@ -1345,7 +1345,7 @@ calculate_lifc_len:
 		 * packets.
 		 */
 		ifp = check_dup(ifs.int_name, ifs.int_addr, ifs.int_dstaddr,
-		    ifs.int_mask, ifs.int_if_flags, _B_FALSE);
+		    ifs.int_mask, ifs.int_if_flags, B_FALSE);
 		if (ifp != NULL) {
 			trace_misc("%s (%s%s%s) is a duplicate of %s (%s%s%s)",
 			    ifs.int_name,
@@ -1409,7 +1409,7 @@ calculate_lifc_len:
 					    "interface %s to %s turned off",
 					    ifp->int_name,
 					    naddr_ntoa(ifp->int_dstaddr));
-					if_bad(ifp, _B_FALSE);
+					if_bad(ifp, B_FALSE);
 					ifp->int_if_flags &= ~IFF_UP;
 				} else if (ifp->int_phys != NULL &&
 				    now.tv_sec > (ifp->int_phys->phyi_data.ts +
@@ -1426,7 +1426,7 @@ calculate_lifc_len:
 			/* or that were off and are now ok */
 			if (!IS_IFF_UP(ifp->int_if_flags)) {
 				ifp->int_if_flags |= IFF_UP;
-				if_ok(ifp, "", _B_FALSE);
+				if_ok(ifp, "", B_FALSE);
 			}
 
 			/*
@@ -1491,7 +1491,7 @@ calculate_lifc_len:
 					    ifp->int_name,
 					    naddr_ntoa(ifp->int_dstaddr),
 					    in, ierr, out, oerr);
-					if_sick(ifp, _B_TRUE);
+					if_sick(ifp, B_TRUE);
 					continue;
 				}
 				if (!(ifp->int_state & IS_BROKE)) {
@@ -1501,14 +1501,14 @@ calculate_lifc_len:
 					    ifp->int_name,
 					    naddr_ntoa(ifp->int_dstaddr),
 					    in, ierr, out, oerr);
-					if_bad(ifp, _B_TRUE);
+					if_bad(ifp, B_TRUE);
 				}
 				continue;
 			}
 
 			/* otherwise, it is active and healthy */
 			ifp->int_act_time = now.tv_sec;
-			if_ok(ifp, "", _B_TRUE);
+			if_ok(ifp, "", B_TRUE);
 			continue;
 		}
 
@@ -1628,20 +1628,20 @@ calculate_lifc_len:
 			 */
 			if (gethostname(myname, MAXHOSTNAMELEN) == -1) {
 				msglog("gethostname: %s", rip_strerror(errno));
-				advertise_mhome = _B_FALSE;
-				mhome = _B_FALSE;
+				advertise_mhome = B_FALSE;
+				mhome = B_FALSE;
 			} else if (gethost(myname, &myaddr) == 0) {
 				writelog(LOG_WARNING,
 				    "unable to resolve local hostname %s",
 				    myname);
-				advertise_mhome = _B_FALSE;
-				mhome = _B_FALSE;
+				advertise_mhome = B_FALSE;
+				mhome = B_FALSE;
 			}
 		}
 		if (myaddr != 0 &&
-		    (ifp = ifwithaddr(myaddr, _B_FALSE, _B_FALSE)) != NULL &&
+		    (ifp = ifwithaddr(myaddr, B_FALSE, B_FALSE)) != NULL &&
 		    foundloopback) {
-			advertise_mhome = _B_TRUE;
+			advertise_mhome = B_TRUE;
 			rt = rtget(myaddr, HOST_MASK);
 			if (rt != NULL) {
 				if (rt->rt_ifp != ifp ||
@@ -1687,9 +1687,9 @@ calculate_lifc_len:
 		 */
 		if (!(ifp->int_state & (IS_NO_RIPV1_OUT | IS_DUP)) &&
 		    should_supply(ifp))
-			have_ripv1_out = _B_TRUE;
+			have_ripv1_out = B_TRUE;
 		if (!(ifp->int_state & IS_NO_RIPV1_IN))
-			have_ripv1_in = _B_TRUE;
+			have_ripv1_in = B_TRUE;
 	}
 
 	for (ifp = ifnet; ifp != NULL; ifp = ifp->int_next) {
@@ -1812,7 +1812,7 @@ check_net_syn(struct interface *ifp)
  * Create route to other end if a point-to-point link,
  * otherwise a route to this (sub)network.
  */
-static boolean_t			/* _B_FALSE=bad interface */
+static boolean_t			/* B_FALSE=bad interface */
 addrouteforif(struct interface *ifp)
 {
 	struct rt_entry *rt;
@@ -1823,7 +1823,7 @@ addrouteforif(struct interface *ifp)
 
 	/* skip sick interfaces */
 	if (ifp->int_state & IS_BROKE)
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	/*
 	 * don't install routes for duplicate interfaces, or
@@ -1831,7 +1831,7 @@ addrouteforif(struct interface *ifp)
 	 */
 	if ((ifp->int_state & IS_DUP) ||
 	    ((ifp->int_if_flags & IFF_POINTOPOINT) && ifp->int_dstaddr == 0))
-		return (_B_TRUE);
+		return (B_TRUE);
 
 	/*
 	 * If the interface on a subnet, then install a RIPv1 route to
@@ -1863,7 +1863,7 @@ addrouteforif(struct interface *ifp)
 	if ((ifp->int_state & IS_REMOTE) &&
 	    !(ifp->int_state & IS_EXTERNAL) &&
 	    !check_remote(ifp))
-		return (_B_FALSE);
+		return (B_FALSE);
 
 	/*
 	 * We are finished if the correct main interface route exists.
@@ -1894,7 +1894,7 @@ addrouteforif(struct interface *ifp)
 		rtadd(dst, ifp->int_mask, rt_newstate, &new);
 	}
 
-	return (_B_TRUE);
+	return (B_TRUE);
 }
 
 /*
@@ -1986,7 +1986,7 @@ boolean_t
 should_supply(struct interface *ifp)
 {
 	if (ifp != NULL && !IS_IFF_ROUTING(ifp->int_if_flags))
-		return (_B_FALSE);
+		return (B_FALSE);
 	return ((supplier_set && supplier) ||
 	    (!supplier_set && fwd_interfaces > 1));
 }
