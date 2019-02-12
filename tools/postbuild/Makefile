@@ -35,7 +35,6 @@ pmodes:: stage-licenses
 
 packages:: pkg_check
 	rm -rf ${SRCTOP}/packages/i386/nightly/repo.redist
-	mkdir -p ${SRCTOP}/packages/i386/nightly/repo.redist
 	cd ${SRCTOP}/usr/src/pkg && ${SRCTOP}/tools/bldenv.sh dmake -e install
 
 UNLEASHED_OBJ?=		/usr/obj/${MACHINE}
