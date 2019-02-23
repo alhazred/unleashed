@@ -1,4 +1,4 @@
-/*	$OpenBSD: xinstall.c,v 1.67 2018/09/16 02:44:07 millert Exp $	*/
+/*	$OpenBSD: xinstall.c,v 1.71 2019/02/14 11:51:42 espie Exp $	*/
 /*	$NetBSD: xinstall.c,v 1.9 1995/12/20 10:25:17 jonathan Exp $	*/
 
 /*
@@ -124,6 +124,7 @@ main(int argc, char *argv[])
 			docompare = dopreserve = 1;
 			break;
 		case 'S':
+			/* For backwards compatibility. */
 			break;
 		case 's':
 			dostrip = 1;
@@ -213,6 +214,7 @@ install(char *from_name, char *to_name, u_long fset, u_int flags)
 	struct timespec ts[2];
 	int devnull, from_fd, to_fd, serrno, files_match = 0;
 	char *p;
+	char *target_name = tempfile;
 
 	(void)memset((void *)&from_sb, 0, sizeof(from_sb));
 	(void)memset((void *)&to_sb, 0, sizeof(to_sb));
@@ -302,10 +304,14 @@ install(char *from_name, char *to_name, u_long fset, u_int flags)
 			} else {
 				files_match = 1;
 				(void)unlink(tempfile);
+				target_name = to_name;
+				(void)close(temp_fd);
 			}
 		}
-		(void)close(to_fd);
-		to_fd = temp_fd;
+		if (!files_match) {
+			(void)close(to_fd);
+			to_fd = temp_fd;
+		}
 	}
 
 	/*
@@ -324,13 +330,15 @@ install(char *from_name, char *to_name, u_long fset, u_int flags)
 	if ((gid != (gid_t)-1 || uid != (uid_t)-1) &&
 	    fchown(to_fd, uid, gid)) {
 		serrno = errno;
-		(void)unlink(tempfile);
-		errx(1, "%s: chown/chgrp: %s", tempfile, strerror(serrno));
+		if (target_name == tempfile)
+			(void)unlink(target_name);
+		errx(1, "%s: chown/chgrp: %s", target_name, strerror(serrno));
 	}
 	if (fchmod(to_fd, mode)) {
 		serrno = errno;
-		(void)unlink(tempfile);
-		errx(1, "%s: chmod: %s", tempfile, strerror(serrno));
+		if (target_name == tempfile)
+			(void)unlink(target_name);
+		errx(1, "%s: chmod: %s", target_name, strerror(serrno));
 	}
 
 	if (flags & USEFSYNC)
@@ -340,8 +348,8 @@ install(char *from_name, char *to_name, u_long fset, u_int flags)
 		(void)close(from_fd);
 
 	/*
-	 * Move the new file into place if the files are different (or just not
-	 * compared).
+	 * Move the new file into place if the files are different
+	 * or were not compared.
 	 */
 	if (!files_match) {
 		if (dobackup) {
@@ -578,7 +586,7 @@ void
 usage(void)
 {
 	(void)fprintf(stderr, "\
-usage: install [-bCcDdFps] [-B suffix] [-f flags] [-g group] [-m mode] [-o owner]\n	       source ... target ...\n");
+usage: install [-bCcDdFpSs] [-B suffix] [-g group] [-m mode] [-o owner]\n	       source ... target ...\n");
 	exit(1);
 	/* NOTREACHED */
 }
