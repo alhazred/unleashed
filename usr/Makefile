@@ -8,6 +8,7 @@ all install:
 
 clean cleandir:
 	cd src && ${SRCTOP}/tools/bldenv.sh dmake -j ${.MAKE.JOBS:U1} clobber
+	find ${.CURDIR}/src -name .make.state'*' -delete
 
 includes obj:
 

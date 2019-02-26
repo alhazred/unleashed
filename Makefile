@@ -33,16 +33,19 @@ build::
 .include <unleashed.mk>
 .include <subdir.mk>
 
-cleandir: clean_artifacts clean_tools clean_cfgparam
+cleandir: clean_artifacts clean_tools clean_lib
 clean_artifacts::
 	rm -rf ${.CURDIR}/proto/root_i386 ${.CURDIR}/packages/i386/nightly/repo.redist
 # tools/ is not in SUBDIR
 clean_tools::
 	${.MAKE} -C tools cleandir
-# FIXME this is pretty dumb: we need cfgparam.mk to clean some subdirs. this is
-# because eg. include/ has additional subdirs based on some config...
-clean_cfgparam:: ${SUBDIR}
-	rm -f ${.CURDIR}/cfgparam.mk ${.CURDIR}/usr/src/Makefile.cfgparam ${.CURDIR}/include/sys/cfgparam.h
+clean_lib::
+	${.MAKE} -C lib cleanboth
+# FIXME pretty dumb, but we need cfgparam.mk to clean some subdirs. this is
+# because eg. include/ has additional subdirs based on some config. so do not
+# remove gen-config outputs even if cleandir is specified, for now.
+#clean_cfgparam::
+#	rm -f ${.CURDIR}/usr/src/Makefile.cfgparam ${.CURDIR}/include/sys/cfgparam.h
 
 #
 # Config related support
