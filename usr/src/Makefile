@@ -144,10 +144,7 @@ setup: bldtools sgs mapfiles
 bldtools:
 	@cd tools; pwd; $(MAKE) install
 
-# /var/mail/:saved is a special case because of the colon in the name.
-#
 rootdirs: $(ROOTDIRS)
-	$(INS) -d -m 775 $(ROOT)/var/mail/:saved
 
 _msgdirs:       $(MSGDIRS)
 

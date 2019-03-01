@@ -210,8 +210,6 @@ COMMON_SUBDIRS=		\
 	look		\
 	ls		\
 	luxadm		\
-	mail		\
-	mailx		\
 	make		\
 	mdb		\
 	mesg		\
@@ -487,7 +485,6 @@ MSGSUBDIRS=		\
 	logins		\
 	ls		\
 	luxadm		\
-	mailx		\
 	make		\
 	mesg		\
 	mkdir		\
@@ -646,7 +643,6 @@ _dc: $(DCSUBDIRS)
 #
 fs.d: fstyp
 ksh:	isaexec
-fmt:	mailx
 
 $(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS): FRC
 	@if [ -f $@/Makefile  ]; then \

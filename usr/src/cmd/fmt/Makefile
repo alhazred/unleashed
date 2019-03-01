@@ -27,8 +27,7 @@
 
 PROG= fmt
 
-OBJS= fmt.o
-HEAD= ../mailx/head.o
+OBJS= fmt.o head.o
 SRCS= $(OBJS:%.o=%.c)
 
 include ../Makefile.cmd
@@ -41,13 +40,9 @@ CERRWARN += -Wno-parentheses
 
 all: $(PROG)
 
-$(PROG): $(OBJS) $(HEAD)
-	$(LINK.c) $(OBJS) $(HEAD) -o $@ $(LDLIBS)
+$(PROG): $(OBJS)
+	$(LINK.c) $(OBJS) -o $@ $(LDLIBS)
 	$(POST_PROCESS)
-
-$(HEAD): FRC
-	cd $(@D); pwd; $(MAKE) $(@F)
-	@pwd
 
 install: all $(ROOTPROG)
 

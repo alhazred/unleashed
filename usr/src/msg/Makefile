@@ -47,7 +47,6 @@ MSGDIRFILES_LOCAL= \
 # by the $(MSGDIRFILES_REMOTE) rule below.
 #
 MSGDIRFILES_REMOTE= \
-	mailx.help \
 	priv_names
 
 MSGDIRFILES= $(MSGDIRFILES_LOCAL) $(MSGDIRFILES_REMOTE)
@@ -79,8 +78,6 @@ $(ROOTMSGDIR)/%: $(ROOTMSGDIR) %
 	$(INS.file)
 
 priv_names: $(ROOT)/etc/security/priv_names
-
-mailx.help: $(SRC)/cmd/mailx/misc/mailx.help
 
 $(MSGDIRFILES_REMOTE):
 	$(RM) $@; $(CP) $? $@

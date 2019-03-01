@@ -136,8 +136,6 @@ MAN = acctcom.1 \
       m4.1 \
       mac.1 \
       madv.so.1.1 \
-      mail.1 \
-      mailx.1 \
       mcs.1 \
       mdb.1 \
       mesg.1 \

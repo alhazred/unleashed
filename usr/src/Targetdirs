@@ -379,9 +379,6 @@ DIRS64= \
 	/usr/sbin/$(MACH64) \
 	/var/ld/$(MACH64)
 
-# /var/mail/:saved is built directly by the rootdirs target in
-# /usr/src/Makefile because of the colon in its name.
-
 # macros for symbolic links
 SYM.DIRS= \
 	/bin \
@@ -469,8 +466,6 @@ $(ROOT)/var/sadm/install/logs :=	DIRMODE= 555
 #
 $(ROOT)/dev/fd \
 $(ROOT)/home:=		DIRMODE= 555
-
-$(ROOT)/var/mail:=	DIRMODE=1777
 
 $(ROOT)/proc:=		DIRMODE= 555
 

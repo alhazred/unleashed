@@ -44,15 +44,27 @@
  */
 
 #include <err.h>
-
-#include "rcv.h"
+#include <errno.h>
+#include <libcustr.h>
+#include <string.h>
+#include <stdlib.h>
 
 /*
- * mailx -- a modified version of a University of California at Berkeley
- *	mail program
- *
- * Routines for processing and detecting headlines.
+ * Structure used to return a break down of a head
+ * line
  */
+
+typedef struct headline {
+	custr_t	*hl_from;	/* The name of the sender */
+	custr_t	*hl_tty;	/* Its tty string (if any) */
+	custr_t	*hl_date;	/* The entire date string */
+} headline_t;
+
+boolean_t is_headline(const char *);
+int headline_alloc(headline_t **);
+void headline_free(headline_t *);
+void headline_reset(headline_t *);
+int parse_headline(const char *, headline_t *);
 
 static int nextword(const char *, custr_t *, const char **);
 

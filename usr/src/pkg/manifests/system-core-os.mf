@@ -223,7 +223,6 @@ dir path=usr/sbin/$(ARCH32)
 dir path=usr/sbin/$(ARCH64)
 dir path=usr/share
 dir path=usr/share/lib
-dir path=usr/share/lib/mailx
 dir path=usr/share/lib/xml group=sys
 dir path=usr/share/lib/xml/dtd group=sys
 dir path=usr/share/man
@@ -249,8 +248,7 @@ dir path=var/ld
 dir path=var/ld/$(ARCH64)
 dir path=var/log group=sys
 dir path=var/logadm
-dir path=var/mail group=mail mode=1777
-dir path=var/mail/:saved group=mail mode=0775
+dir path=var/mail group=mail
 dir path=var/news
 dir path=var/opt group=sys
 dir path=var/preserve mode=1777
@@ -350,7 +348,7 @@ file path=etc/inittab group=sys preserve=true
 file path=etc/ioctl.syscon group=sys preserve=true
 file path=etc/logadm.conf group=sys preserve=true timestamp=19700101T000000Z
 file path=etc/logindevperm group=sys preserve=true
-file path=etc/mail/mailx.rc preserve=true
+file path=etc/mail.rc preserve=true
 file path=etc/mailcap preserve=true
 file path=etc/mime.types preserve=true
 file path=etc/mnttab group=root mode=0444 preserve=true
@@ -686,8 +684,7 @@ file path=usr/bin/logins mode=0750
 file path=usr/bin/logname mode=0555
 file path=usr/bin/ls mode=0555
 file path=usr/bin/m4 mode=0555
-file path=usr/bin/mail group=mail mode=2511
-file path=usr/bin/mailx group=mail mode=2511
+file path=usr/bin/mail mode=0555
 file path=usr/bin/mesg mode=0555
 file path=usr/bin/mkdir mode=0555
 file path=usr/bin/mkpwdict mode=0555
@@ -1178,12 +1175,12 @@ file path=usr/sbin/wall group=tty mode=2555
 file path=usr/sbin/whodo mode=4555
 file path=usr/sbin/zdump mode=0555
 file path=usr/sbin/zic mode=0555
-file path=usr/share/lib/mailx/mailx.help
-file path=usr/share/lib/mailx/mailx.help.~
 file path=usr/share/lib/unittab
 file path=usr/share/lib/xml/dtd/kmfpolicy.dtd
 file path=usr/share/lib/xml/dtd/service_bundle.dtd.1 group=sys
 file path=usr/share/misc/less.help
+file path=usr/share/misc/mail.help
+file path=usr/share/misc/mail.tildehelp
 file path=usr/share/misc/more.help
 file path=var/adm/aculog mode=0600 owner=uucp preserve=true
 file path=var/adm/spellhist mode=0666 preserve=true
@@ -1203,6 +1200,7 @@ hardlink path=usr/bin/$(ARCH32)/w target=uptime
 hardlink path=usr/bin/$(ARCH64)/encrypt target=decrypt
 hardlink path=usr/bin/$(ARCH64)/mac target=digest
 hardlink path=usr/bin/$(ARCH64)/w target=uptime
+hardlink path=usr/bin/Mail target=mail
 hardlink path=usr/bin/[ target=../../usr/bin/test
 hardlink path=usr/bin/bzegrep target=../../usr/bin/grep
 hardlink path=usr/bin/bzfgrep target=../../usr/bin/grep
@@ -1217,6 +1215,7 @@ hardlink path=usr/bin/lzegrep target=../../usr/bin/grep
 hardlink path=usr/bin/lzfgrep target=../../usr/bin/grep
 hardlink path=usr/bin/lzgrep target=../../usr/bin/grep
 hardlink path=usr/bin/mac target=../../usr/lib/isaexec
+hardlink path=usr/bin/mailx target=mail
 hardlink path=usr/bin/more target=less
 hardlink path=usr/bin/mv target=../../usr/bin/cp
 hardlink path=usr/bin/newtask target=../../usr/lib/isaexec
@@ -1328,7 +1327,6 @@ link path=sbin/in.mpathd target=../lib/inet/in.mpathd
 link path=sbin/pfsh target=../usr/bin/pfexec
 link path=usr/adm target=../var/adm
 link path=usr/bin/df target=../sbin/df
-link path=usr/bin/rmail target=./mail
 link path=usr/bin/strclean target=../sbin/strclean
 link path=usr/bin/strerr target=../sbin/strerr
 link path=usr/bin/sync target=../../sbin/sync
