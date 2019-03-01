@@ -17,10 +17,7 @@ SUBDIR = bin \
 .if make(build) && !defined(DESTDIR)
 .MAKEFLAGS+= DESTDIR=${.CURDIR}/proto/root_i386
 .endif
-build::
-.if !exists(${.CURDIR}/cfgparam.mk)
-	${.MAKE} gen-config
-.endif
+build:: tools gen-config
 	${.MAKE} obj
 	${.MAKE} -C include # kernel/ depends on these; build separately
 	${.MAKE}
@@ -63,9 +60,14 @@ CFGARCH=sparc
 
 CFGFILE=arch/${CFGARCH}/Sconfig
 
-gen-config::
+tools::
 	${.MAKE} -C tools obj
 	${.MAKE} -C tools
-	${.CURDIR}/tools/mkconfig/obj/mkconfig -I _SYS_CFGPARAM_H -H -o include/sys/cfgparam.h ${CFGFILE}
-	${.CURDIR}/tools/mkconfig/obj/mkconfig -m -o usr/src/Makefile.cfgparam ${CFGFILE}
-	${.CURDIR}/tools/mkconfig/obj/mkconfig -M -o cfgparam.mk ${CFGFILE}
+
+${.CURDIR}/include/sys/cfgparam.h: tools
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -I _SYS_CFGPARAM_H -H -o $@ ${CFGFILE}
+${.CURDIR}/usr/src/Makefile.cfgparam: tools
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -m -o $@ ${CFGFILE}
+${.CURDIR}/cfgparam.mk: tools
+	${.CURDIR}/tools/mkconfig/obj/mkconfig -M -o $@ ${CFGFILE}
+gen-config:: ${.CURDIR}/cfgparam.mk ${.CURDIR}/include/sys/cfgparam.h ${.CURDIR}/usr/src/Makefile.cfgparam
