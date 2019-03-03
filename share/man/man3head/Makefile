@@ -40,6 +40,7 @@ MAN = acct.h.3head \
       poll.h.3head \
       pthread.h.3head \
       pwd.h.3head \
+      queue.h.3head \
       regex.h.3head \
       resource.h.3head \
       sched.h.3head \
