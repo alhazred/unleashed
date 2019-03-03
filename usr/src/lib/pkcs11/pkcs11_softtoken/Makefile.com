@@ -22,6 +22,7 @@
 # Copyright (c) 2003, 2010, Oracle and/or its affiliates. All rights reserved.
 #
 # Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2018, Joyent, Inc.
 #
 # lib/pkcs11/pkcs11_softtoken/Makefile.com
 #
@@ -30,11 +31,11 @@ LIBRARY = pkcs11_softtoken.a
 VERS= .1
 
 LCL_OBJECTS = \
-	softGeneral.o 		\
-	softSlotToken.o 	\
-	softSession.o 		\
-	softObject.o 		\
-	softDigest.o	 	\
+	softGeneral.o		\
+	softSlotToken.o	\
+	softSession.o		\
+	softObject.o		\
+	softDigest.o		\
 	softSign.o 		\
 	softVerify.o 		\
 	softDualCrypt.o 	\
@@ -123,6 +124,7 @@ SRCS =	\
 LIBS    =       $(DYNLIB)
 LDLIBS  +=      -lc -lmd -lcryptoutil -lsoftcrypto -lgen
 
+CSTD =	$(CSTD_GNU99)
 
 CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-parentheses
