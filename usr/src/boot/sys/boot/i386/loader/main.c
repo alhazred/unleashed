@@ -1,4 +1,4 @@
-/*-
+/*
  * Copyright (c) 1998 Michael Smith <msmith@freebsd.org>
  * All rights reserved.
  *
@@ -46,10 +46,7 @@
 #include "libi386/libi386.h"
 #include "libi386/smbios.h"
 #include "btxv86.h"
-
-#ifdef LOADER_ZFS_SUPPORT
-#include "../zfs/libzfs.h"
-#endif
+#include "libzfs.h"
 
 CTASSERT(sizeof(struct bootargs) == BOOTARGS_SIZE);
 CTASSERT(offsetof(struct bootargs, bootinfo) == BA_BOOTINFO);
@@ -69,9 +66,7 @@ static void		extract_currdev(void);
 static int		isa_inb(int port);
 static void		isa_outb(int port, int value);
 void			exit(int code);
-#ifdef LOADER_ZFS_SUPPORT
 static void		i386_zfs_probe(void);
-#endif
 
 /* XXX debugging */
 extern char end[];
@@ -99,16 +94,12 @@ main(void)
      */
     bios_getmem();
 
-#if defined(LOADER_BZIP2_SUPPORT) || defined(LOADER_FIREWIRE_SUPPORT) || \
-    defined(LOADER_GPT_SUPPORT) || defined(LOADER_ZFS_SUPPORT)
     if (high_heap_size > 0) {
 	heap_top = PTOV(high_heap_base + high_heap_size);
 	heap_bottom = PTOV(high_heap_base);
 	if (high_heap_base < memtop_copyin)
 	    memtop_copyin = high_heap_base;
-    } else
-#endif
-    {
+    } else {
 	heap_top = (void *)PTOV(bios_basemem);
 	heap_bottom = (void *)end;
     }
@@ -161,9 +152,7 @@ main(void)
     archsw.arch_isainb = isa_inb;
     archsw.arch_isaoutb = isa_outb;
     archsw.arch_loadaddr = i386_loadaddr;
-#ifdef LOADER_ZFS_SUPPORT
     archsw.arch_zfs_probe = i386_zfs_probe;
-#endif
 
     /*
      * March through the device switch probing for things.
@@ -211,20 +200,18 @@ static void
 extract_currdev(void)
 {
     struct i386_devdesc		new_currdev;
-#ifdef LOADER_ZFS_SUPPORT
     struct zfs_boot_args	*zargs;
-#endif
     int				biosdev = -1;
 
     /* Assume we are booting from a BIOS disk by default */
-    new_currdev.dd.d_dev = &biosdisk;
+    new_currdev.dd.d_dev = &bioshd;
 
     /* new-style boot loaders such as pxeldr and cdldr */
     if (kargs->bootinfo == 0) {
         if ((kargs->bootflags & KARGS_FLAGS_CD) != 0) {
 	    /* we are booting from a CD with cdboot */
 	    new_currdev.dd.d_dev = &bioscd;
-	    new_currdev.dd.d_unit = bc_bios2unit(initial_bootdev);
+	    new_currdev.dd.d_unit = bd_bios2unit(initial_bootdev);
 	} else if ((kargs->bootflags & KARGS_FLAGS_PXE) != 0) {
 	    /* we are booting from pxeldr */
 	    new_currdev.dd.d_dev = &pxedisk;
@@ -235,7 +222,6 @@ extract_currdev(void)
 	    new_currdev.d_kind.biosdisk.partition = 0;
 	    biosdev = -1;
 	}
-#ifdef LOADER_ZFS_SUPPORT
     } else if ((kargs->bootflags & KARGS_FLAGS_ZFS) != 0) {
 	zargs = NULL;
 	/* check for new style extended argument */
@@ -253,7 +239,6 @@ extract_currdev(void)
 	    new_currdev.d_kind.zfs.root_guid = 0;
 	}
 	new_currdev.dd.d_dev = &zfs_dev;
-#endif
     } else if ((initial_bootdev & B_MAGICMASK) != B_DEVMAGIC) {
 	/* The passed-in boot device is bad */
 	new_currdev.d_kind.biosdisk.slice = -1;
@@ -278,7 +263,7 @@ extract_currdev(void)
      * If we are booting off of a BIOS disk and we didn't succeed in determining
      * which one we booted off of, just use disk0: as a reasonable default.
      */
-    if ((new_currdev.dd.d_dev->dv_type == biosdisk.dv_type) &&
+    if ((new_currdev.dd.d_dev->dv_type == bioshd.dv_type) &&
 	((new_currdev.dd.d_unit = bd_bios2unit(biosdev)) == -1)) {
 	printf("Can't work out which disk we are booting from.\n"
 	       "Guessed BIOS device 0x%x not found by probes, defaulting to disk0:\n", biosdev);
@@ -344,18 +329,16 @@ static void
 i386_zfs_probe(void)
 {
     char devname[32];
-    int unit;
+    struct i386_devdesc dev;
 
     /*
      * Open all the disks we can find and see if we can reconstruct
      * ZFS pools from them.
      */
-    for (unit = 0; unit < MAXBDDEV; unit++) {
-	if (bd_unit2bios(unit) == -1)
-	    break;
-	if (bd_unit2bios(unit) < 0x80)
-	    continue;
-	sprintf(devname, "disk%d:", unit);
+    dev.dd.d_dev = &bioshd;
+    for (dev.dd.d_unit = 0; bd_unit2bios(&dev) >= 0; dev.dd.d_unit++) {
+	snprintf(devname, sizeof (devname), "%s%d:", bioshd.dv_name,
+	    dev.dd.d_unit);
 	zfs_probe_dev(devname, NULL);
     }
 }
