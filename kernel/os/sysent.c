@@ -23,7 +23,7 @@
  * Copyright (c) 1988, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2012 Milan Jurik. All rights reserved.
  * Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved.
- * Copyright (c) 2015, Joyent, Inc.
+ * Copyright (c) 2018, Joyent, Inc.
  */
 
 /*	Copyright (c) 1984, 1986, 1987, 1988, 1989 AT&T	*/
@@ -483,7 +483,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 66 */ SYSENT_CI("fstatat",		fstatat,	4),
 	/* 67 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("fstatat64",	fstatat64, 	4)),
+			SYSENT_CI("fstatat64",	fstatat64,	4)),
 	/* 68 */ SYSENT_CI("openat",		openat,		4),
 	/* 69 */ IF_LP64(
 			SYSENT_NOSYS(),
@@ -550,7 +550,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 123 */ SYSENT_CL("preadv",		preadv,		5),
 	/* 124 */ SYSENT_CL("pwritev",		pwritev,	5),
 	/* 125 */ SYSENT_LOADABLE(),			/* (was fxstat) */
-	/* 126 */ SYSENT_CI("getrandom",	getrandom,	3),
+	/* 126 */ SYSENT_CL("getrandom",	getrandom,	3),
 	/* 127 */ SYSENT_CI("mmapobj",		mmapobjsys,	5),
 	/* 128 */ IF_LP64(
 			SYSENT_CI("setrlimit",	setrlimit64,	2),
@@ -617,7 +617,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 178 */ SYSENT_LOADABLE(),		/* kaio */
 	/* 179 */ SYSENT_LOADABLE(),		/* cpc */
 	/* 180 */ SYSENT_CI("lgrpsys",		lgrpsys,	3),
-	/* 181 */ SYSENT_CI("rusagesys",	rusagesys, 	5),
+	/* 181 */ SYSENT_CI("rusagesys",	rusagesys,	5),
 	/* 182 */ SYSENT_LOADABLE(),		/* portfs */
 	/* 183 */ SYSENT_CI("pollsys",		pollsys,	4),
 	/* 184 */ SYSENT_LOADABLE(),		/* (was labelsys) */
@@ -669,22 +669,22 @@ struct sysent sysent[NSYSCALL] =
 	/* 217 */ SYSENT_LOADABLE(),			/* (was fstat64) */
 	/* 218 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("statvfs64", 	statvfs64, 	2)),
+			SYSENT_CI("statvfs64",	statvfs64,	2)),
 	/* 219 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("fstatvfs64",	fstatvfs64, 	2)),
+			SYSENT_CI("fstatvfs64",	fstatvfs64,	2)),
 	/* 220 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("setrlimit64", setrlimit64, 	2)),
+			SYSENT_CI("setrlimit64", setrlimit64,	2)),
 	/* 221 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("getrlimit64", getrlimit64, 	2)),
+			SYSENT_CI("getrlimit64", getrlimit64,	2)),
 	/* 222 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("pread64",	pread64, 	5)),
+			SYSENT_CI("pread64",	pread64,	5)),
 	/* 223 */ IF_LP64(
 			SYSENT_NOSYS(),
-			SYSENT_CI("pwrite64", 	pwrite64, 	5)),
+			SYSENT_CI("pwrite64",	pwrite64,	5)),
 	/* 224 */ SYSENT_LOADABLE(),			/* (was creat64) */
 	/* 225 */ SYSENT_LOADABLE(),			/* (was open64) */
 	/* 226 */ SYSENT_LOADABLE(),		/* rpcsys */
@@ -838,7 +838,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 64 */ SYSENT_CI("renameat",		renameat,	4),
 	/* 65 */ SYSENT_CI("unlinkat",		unlinkat,	3),
 	/* 66 */ SYSENT_CI("fstatat",		fstatat64_32,	4),
-	/* 67 */ SYSENT_CI("fstatat64", 	fstatat64_32, 	4),
+	/* 67 */ SYSENT_CI("fstatat64",		fstatat64_32,	4),
 	/* 68 */ SYSENT_CI("openat",		openat64,	4),
 	/* 69 */ SYSENT_CI("openat64",		openat64,	4),
 	/* 70 */ SYSENT_CI("tasksys",		tasksys,	5),
@@ -992,16 +992,16 @@ struct sysent sysent32[NSYSCALL] =
 	 * Syscalls 213-225: 32-bit system call support for large files.
 	 */
 	/* 213 */ SYSENT_CI("getdents64",	getdents64,	3),
-	/* 214 */ SYSENT_AP("smmaplf32", 	smmaplf32, 	7),
+	/* 214 */ SYSENT_AP("smmaplf32",	smmaplf32,	7),
 	/* 215 */ SYSENT_LOADABLE32(),			/* (was stat64) */
 	/* 216 */ SYSENT_LOADABLE32(),			/* (was lstat64) */
 	/* 217 */ SYSENT_LOADABLE32(),			/* (was fstat64) */
-	/* 218 */ SYSENT_CI("statvfs64", 	statvfs64_32, 	2),
-	/* 219 */ SYSENT_CI("fstatvfs64", 	fstatvfs64_32, 	2),
-	/* 220 */ SYSENT_CI("setrlimit64", 	setrlimit64, 	2),
-	/* 221 */ SYSENT_CI("getrlimit64", 	getrlimit64, 	2),
-	/* 222 */ SYSENT_CI("pread64", 		pread64, 	5),
-	/* 223 */ SYSENT_CI("pwrite64", 	pwrite64, 	5),
+	/* 218 */ SYSENT_CI("statvfs64",	statvfs64_32,	2),
+	/* 219 */ SYSENT_CI("fstatvfs64",	fstatvfs64_32,	2),
+	/* 220 */ SYSENT_CI("setrlimit64",	setrlimit64,	2),
+	/* 221 */ SYSENT_CI("getrlimit64",	getrlimit64,	2),
+	/* 222 */ SYSENT_CI("pread64",		pread64,	5),
+	/* 223 */ SYSENT_CI("pwrite64",		pwrite64,	5),
 	/* 224 */ SYSENT_LOADABLE32(),			/* (was creat64) */
 	/* 225 */ SYSENT_LOADABLE32(),			/* (was open64) */
 	/* 226 */ SYSENT_LOADABLE32(),		/* rpcsys */

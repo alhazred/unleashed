@@ -36,6 +36,7 @@ MAN = Intro.2 \
       getpflags.2 \
       getpid.2 \
       getppriv.2 \
+      getrandom.2 \
       getrlimit.2 \
       getsid.2 \
       getuid.2 \
