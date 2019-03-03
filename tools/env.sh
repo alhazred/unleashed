@@ -46,7 +46,8 @@ export NIGHTLY_OPTIONS='-CAmpr'
 
 # SRCTOP - where is your workspace at
 #export SRCTOP="$HOME/ws/illumos-gate"
-export SRCTOP="`git rev-parse --show-toplevel`"
+[ -z "$SRCTOP" ] && SRCTOP="`git rev-parse --show-toplevel`"
+export SRCTOP
 
 # Maximum number of dmake jobs.  The recommended number is 2 + NCPUS,
 # where NCPUS is the number of logical CPUs on your build system.
@@ -98,7 +99,8 @@ export SRC="$SRCTOP/usr/src"
 # when the release slips (nah) or you move an environment file to a new
 # release
 #
-export VERSION="`git describe --dirty`"
+[ -z "$VERSION" ] && VERSION="`git describe --dirty`"
+export VERSION
 
 # Package creation variables.  You probably shouldn't change these,
 # either.
