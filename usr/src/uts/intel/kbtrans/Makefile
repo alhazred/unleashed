@@ -53,15 +53,6 @@ include $(UTSBASE)/intel/Makefile.intel
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 
-#
-# For now, disable these compiler warnings; maintainers should endeavor to
-# investigate and remove these for maximum coverage.  Please do not carry
-# these forward to new Makefiles.
-#
-
-CERRWARN	+= -Wno-empty-body
-CERRWARN	+= -Wno-unused-braces
-
 .KEEP_STATE:
 
 def:		$(DEF_DEPS)
