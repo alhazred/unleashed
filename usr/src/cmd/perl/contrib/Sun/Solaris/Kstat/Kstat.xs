@@ -972,6 +972,14 @@ read_kstats(HV *self, int refresh)
 	return (1);
 }
 
+static int
+read_kstats_wrap(HV *self, void *ptr)
+{
+	int refresh = (intptr_t)ptr;
+
+	return (read_kstats(self, refresh));
+}
+
 /*
  * The XS code exported to perl is below here.  Note that the XS preprocessor
  * has its own commenting syntax, so all comments from this point on are in
@@ -1136,7 +1144,7 @@ PPCODE:
 	 * that have already been read
 	 */
 	if (ret == 0) {
-		if (! apply_to_ties(self, (ATTCb_t)read_kstats, (void *)TRUE)) {
+		if (! apply_to_ties(self, read_kstats_wrap, (void *)TRUE)) {
 			if (GIMME_V == G_ARRAY) {
 				EXTEND(SP, 2);
 				PUSHs(sv_2mortal(newRV_noinc((SV *)add)));

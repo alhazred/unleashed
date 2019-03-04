@@ -34,7 +34,6 @@ COMMON_SUBDIRS=		\
 	installboot
 
 i386_SUBDIRS=		\
-	mbr		\
 	symdef
 
 sparc_SUBDIRS=

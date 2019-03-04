@@ -39,7 +39,6 @@ dir path=usr/lib/fs/ufs group=sys
 file path=boot/solaris/bootenv.rc group=sys preserve=renamenew
 file path=boot/solaris/devicedb/master group=sys preserve=true
 file path=boot/splashimage.xpm group=sys
-file path=usr/lib/fs/ufs/mboot mode=0444
 hardlink path=boot/solaris.xpm target=splashimage.xpm
 license cr_Sun license=cr_Sun
 license lic_CDDL license=lic_CDDL
