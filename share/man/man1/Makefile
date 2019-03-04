@@ -58,6 +58,7 @@ MAN = acctcom.1 \
       elfwrap.1 \
       encrypt.1 \
       enhance.1 \
+      etdump.1 \
       exec.1 \
       exit.1 \
       expand.1 \

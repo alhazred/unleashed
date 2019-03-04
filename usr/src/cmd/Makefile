@@ -117,6 +117,7 @@ COMMON_SUBDIRS=		\
 	eject		\
 	emul64ioctl	\
 	enhance		\
+	etdump		\
 	expand		\
 	expr		\
 	exstr		\
@@ -641,7 +642,7 @@ _dc: $(DCSUBDIRS)
 #
 # Dependencies
 #
-fs.d: fstyp
+fs.d:	fstyp
 ksh:	isaexec
 
 $(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS): FRC
@@ -650,4 +651,5 @@ $(FIRST_SUBDIRS) $(BWOSDIRS) $(SUBDIRS): FRC
 	else \
 		true; \
 	fi
+
 FRC:
