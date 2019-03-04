@@ -522,7 +522,6 @@ MAN = __fbufsize.3c \
       wmemcpy.3c \
       wmemmove.3c \
       wmemset.3c \
-      wordexp.3c \
       wsprintf.3c \
       wsscanf.3c \
       wstring.3c \

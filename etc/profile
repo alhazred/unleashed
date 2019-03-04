@@ -59,16 +59,6 @@ case "$0" in
 	if [ ! -f .hushlogin ]
 	then
 		/usr/sbin/quota
-
-		/bin/mail -E
-		case $? in
-		0)
-			echo "You have new mail."
-			;;
-		2)
-			echo "You have mail."
-			;;
-		esac
 	fi
 esac
 

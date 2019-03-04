@@ -45,7 +45,6 @@ extern "C" {
 #include <inetsvc.h>
 #include <librestart.h>
 #include <libuutil.h>
-#include <wordexp.h>
 
 
 /*
@@ -114,23 +113,9 @@ typedef enum {
 
 /* Collection of information pertaining to a method */
 typedef struct {
-	char *exec_path;	/* path passed to exec() */
-
-	/*
-	 * Structure returned from wordexp(3c) that contains an expansion of the
-	 * exec property into a form suitable for exec(2).
-	 */
-	wordexp_t	exec_args_we;
-
-	/*
-	 * Copy of the first argument of the above wordexp_t structure in the
-	 * event that an alternate arg0 is provided, and we replace the first
-	 * argument with the alternate arg0. This is necessary so the
-	 * contents of the wordexp_t structure can be returned to their
-	 * original form as returned from wordexp(3c), which is a requirement
-	 * for calling wordfree(3c), wordexp()'s associated cleanup routine.
-	 */
-	const char	*wordexp_arg0_backup;
+	char *execbuf;		/* buffer to hold the exec property and argv */
+	char *exec_path;	/* path passed to exec()  */
+	char *argv[16];
 
 	/* time a method can run for before being considered broken */
 	int		timeout;

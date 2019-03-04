@@ -235,7 +235,6 @@ is not being called to change the locale.
 .Xr pax 1 ,
 .Xr glob 3C ,
 .Xr setlocale 3C ,
-.Xr wordexp 3C ,
 .Xr attributes 5 ,
 .Xr fnmatch 5 ,
 .Xr standards 5

@@ -542,7 +542,6 @@ file path=usr/share/man/man3c/wmemcmp.3c
 file path=usr/share/man/man3c/wmemcpy.3c
 file path=usr/share/man/man3c/wmemmove.3c
 file path=usr/share/man/man3c/wmemset.3c
-file path=usr/share/man/man3c/wordexp.3c
 file path=usr/share/man/man3c/wsprintf.3c
 file path=usr/share/man/man3c/wsscanf.3c
 file path=usr/share/man/man3c/wstring.3c

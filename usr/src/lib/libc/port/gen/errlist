@@ -43,7 +43,7 @@
 4	Interrupted system call
 5	I/O error
 6	No such device or address
-7	Arg list too long
+7	Argument list too long
 8	Exec format error
 9	Bad file number
 10	No child processes

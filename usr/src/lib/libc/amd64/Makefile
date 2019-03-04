@@ -996,8 +996,7 @@ PORTREGEX=			\
 	regerror.o		\
 	regex.o			\
 	regexec.o		\
-	regfree.o		\
-	wordexp.o
+	regfree.o
 
 PORTSOCKET= _soutil.o sockatmark.o socket.o socketpair.o weaks.o
 

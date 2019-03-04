@@ -86,7 +86,6 @@ MAN = acct.h.3head \
       wait.h.3head \
       wchar.h.3head \
       wctype.h.3head \
-      wordexp.h.3head \
       xlocale.h.3head
 
 
