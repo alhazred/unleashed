@@ -814,8 +814,7 @@ l l .
 \fBwcwidth\fR	\fBwcwidth_l\fR
 \fBwmemchr\fR	\fBwmemcmp\fR
 \fBwmemcpy\fR	\fBwmemmove\fR
-\fBwmemset\fR	\fBwordexp\fR
-\fBwordfree\fR	\fBwprintf\fR
+\fBwmemset\fR	\fBwprintf\fR
 \fBwracct\fR	\fBwrite\fR
 \fBwritev\fR	\fBwscanf\fR
 \fBwscasecmp\fR	\fBwscat\fR

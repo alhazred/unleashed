@@ -177,7 +177,6 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	wchar_impl.h	\
 	wctype.h	\
 	widec.h		\
-	wordexp.h	\
 	xlocale.h	\
 	xti.h		\
 	xti_inet.h	\

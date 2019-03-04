@@ -1679,8 +1679,6 @@ SYMBOL_VERSION SUNW_0.8 {	# SunOS 5.4 (Solaris 2.4)
 	thr_yield;
 	vlfmt;
 	vpfmt;
-	wordexp;
-	wordfree;
 } SUNW_0.7;
 
 SYMBOL_VERSION SUNW_0.7 {	# SunOS 5.3 (Solaris 2.3)
