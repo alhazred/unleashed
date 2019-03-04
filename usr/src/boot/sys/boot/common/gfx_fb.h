@@ -16,9 +16,16 @@
 #ifndef _GFX_FB_H
 #define	_GFX_FB_H
 
+#include <stdbool.h>
+#include <sys/visual_io.h>
+#include <sys/multiboot2.h>
+#include <pnglite.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define	EDID_MAGIC	{ 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00 }
 
 struct edid_header {
 	uint8_t header[8];	/* fixed header pattern */
@@ -86,11 +93,23 @@ struct vesa_edid_info {
 	uint8_t checksum;
 } __packed;
 
-/* Global for EDID data */
-extern struct vesa_edid_info   edid_info;
+extern multiboot_tag_framebuffer_t gfx_fb;
 
-#ifdef __cplusplus
+void gfx_framework_init(struct visual_ops *);
+uint32_t gfx_fb_color_map(uint8_t);
+void gfx_fb_display_cursor(struct vis_conscursor *);
+void gfx_fb_setpixel(uint32_t, uint32_t);
+void gfx_fb_drawrect(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+void gfx_term_drawrect(uint32_t, uint32_t, uint32_t, uint32_t);
+void gfx_fb_line(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+void gfx_fb_bezier(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+	uint32_t);
+void plat_cons_update_mode(int);
+int gfx_fb_putimage(png_t *);
+
+bool gfx_parse_mode_str(char *, int *, int *, int *);
+#ifdef  __cplusplus
 }
 #endif
 
-#endif /* _GFX_FB_H */
+#endif  /* _GFX_FB_H */

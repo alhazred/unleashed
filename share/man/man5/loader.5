@@ -95,8 +95,8 @@ Then, devices are probed,
 and
 .Va loaddev
 are set, and
-.Va COLUMNS ,
-.Va LINES ,
+.Va screen-#cols ,
+.Va screen-#rows ,
 and
 .Va ISADIR
 are set.
@@ -274,7 +274,7 @@ as the pool.
 .Pp
 .It Ic more Ar file Op Ar
 Display the files specified, with a pause at each
-.Va LINES
+.Va screen-#rows
 displayed.
 .Pp
 .It Ic read Xo
@@ -399,32 +399,32 @@ will engage interactive mode only if
 has failed for some reason.
 .It Va boot_ask
 Will set
-.Xr kernel 8
+.Xr kernel 1M
 .Fl a
 option.
 .It Va boot_debug
 Will set
-.Xr kernel 8
+.Xr kernel 1M
 .Fl d
 option.
 .It Va boot_kmdb
 Will set
-.Xr kernel 8
+.Xr kernel 1M
 .Fl k
 option.
 .It Va boot_reconfigure
 Will set
-.Xr kernel 8
+.Xr kernel 1M
 .Fl r
 option.
 .It Va boot_single
 Will set
-.Xr kernel 8
+.Xr kernel 1M
 .Fl s
 option.
 .It Va boot_verbose
 Will set
-.Xr kernel 8
+.Xr kernel 1M
 .Fl v
 option.
 .It Va boot-args
@@ -444,7 +444,7 @@ Defines the current console or consoles.
 Multiple consoles may be specified.
 In that case, the first listed console will become the default console for
 the
-.Xr kernel 8 .
+.Xr kernel 1M .
 .It Va currdev
 Selects the default device.
 Syntax for devices is odd.
@@ -452,13 +452,13 @@ Syntax for devices is odd.
 Has the value
 .Dq Li ok
 if the Forth's current state is interpreting.
-.It Va LINES
+.It Va screen-#rows
 Define the number of lines on the screen, to be used by the pager.
 .It Va module_path
 Sets the list of directories which will be searched for modules
 named in a load command or implicitly required by a dependency.
 The default value for this variable is
-.Dq Li /platform/${ISADIR}
+.Dq Li /platform/i86pc/${ISADIR}
 .It Va prompt
 Value of
 .Nm Ns 's
@@ -471,7 +471,7 @@ is unset, the default prompt is
 .Ql > .
 .It Va os_console
 If set, the value is used to set
-.Xr kernel 8
+.Xr kernel 1M
 .Va console
 property.
 .El
@@ -646,7 +646,7 @@ Evaluates the remainder of the input buffer under a
 exception guard.
 .It Ic .#
 Works like
-.Ic "."
+.Ic \&.
 but without outputting a trailing space.
 .It Ic fclose Pq Ar fd --
 Closes a file.
@@ -772,8 +772,8 @@ Notice that a kernel must be loaded before any other
 .Ic load
 command is attempted.
 .Bd -literal -offset indent
-load /platform/kernel/amd64/unix
-load -t rootfs /platform/amd64/boot_archive
+load /platform/i86pc/kernel/amd64/unix
+load -t rootfs /platform/i86pc/amd64/boot_archive
 autoboot 5
 .Ed
 .Pp
@@ -790,7 +790,8 @@ The reason is, the beadm or menu selection will also instruct loader to clean up
 the currently set configuration and load configuration from the new boot
 environment.
 .Sh SEE ALSO
-.Xr boot 8 ,
+.Xr boot 1M ,
+.Xr btxld 1onbld ,
 .Xr loader.conf 4
 .Sh STANDARDS
 For the purposes of ANS Forth compliance, loader is an
