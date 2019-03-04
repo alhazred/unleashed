@@ -25,6 +25,7 @@
 # Copyright (c) 2013, OmniTI Computer Consulting, Inc. All rights reserved.
 # Copyright 2013 Garrett D'Amore <garrett@damore.org>
 # Copyright 2018 Nexenta Systems, Inc.
+# Copyright (c) 2019, Joyent, Inc.
 #
 
 LIBCBASE=	.
@@ -1080,6 +1081,9 @@ CERRWARN += -Wno-char-subscripts
 CERRWARN += -Wno-clobbered
 CERRWARN += -Wno-unused-function
 CERRWARN += -Wno-address
+
+# not linted
+SMATCH=off
 
 # Setting THREAD_DEBUG = -DTHREAD_DEBUG (make THREAD_DEBUG=-DTHREAD_DEBUG ...)
 # enables ASSERT() checking in the threads portion of the library.

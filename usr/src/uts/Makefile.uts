@@ -175,6 +175,12 @@ CERRWARN += -Wno-missing-field-initializers
 $(RELEASE_BUILD)CERRWARN += -Wno-unused
 $(RELEASE_BUILD)CERRWARN += -Wno-empty-body
 
+#
+# Unfortunately, _IOWR() is regularly used with a third argument of 0,
+# so we have to disable all these smatch checks.
+#
+SMOFF += sizeof
+
 CSTD = $(CSTD_GNU99)
 
 CFLAGS_uts		=

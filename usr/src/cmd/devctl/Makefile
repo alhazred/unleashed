@@ -23,6 +23,7 @@
 # Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# # Copyright (c) 2019, Joyent, Inc.
 
 PROG= devctl
 
@@ -31,7 +32,7 @@ include ../Makefile.cmd
 .KEEP_STATE:
 
 CERRWARN +=	-Wno-parentheses
-LDLIBS += -ldevice -l devinfo
+LDLIBS += -ldevice -ldevinfo
 
 all: $(PROG)
 
