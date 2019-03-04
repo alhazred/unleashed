@@ -117,7 +117,6 @@ COMMON_SUBDIRS=		\
 	eject		\
 	emul64ioctl	\
 	enhance		\
-	etdump		\
 	expand		\
 	expr		\
 	exstr		\
