@@ -24,26 +24,6 @@
 # Copyright 2015, OmniTI Computer Consulting, Inc. All rights reserved.
 #
 
-# Configuration variables for the runtime environment of the nightly
-# build script and other tools for construction and packaging of
-# releases.
-# This example is suitable for building an illumos workspace, which
-# will contain the resulting archives. It is based off the onnv
-# release. It sets NIGHTLY_OPTIONS to make nightly do:
-#       DEBUG build instead of non-DEBUG (-D)
-#       runs 'make check' (-C)
-#       checks for new interfaces in libraries (-A)
-#       sends mail on completion (-m and the MAILTO variable)
-#       creates packages for PIT/RE (-p)
-#       checks for changes in ELF runpaths (-r)
-#
-# - This file is sourced by "bldenv.sh" and "nightly.sh" and should not 
-#   be executed directly.
-# - This script is only interpreted by ksh93 and explicitly allows the
-#   use of ksh93 language extensions.
-#
-export NIGHTLY_OPTIONS='-CAmpr'
-
 # SRCTOP - where is your workspace at
 #export SRCTOP="$HOME/ws/illumos-gate"
 [ -z "$SRCTOP" ] && SRCTOP="`git rev-parse --show-toplevel`"
@@ -75,16 +55,6 @@ maxjobs()
 
 export DMAKE_MAX_JOBS=$(maxjobs)
 
-# Some scripts optionally send mail messages to MAILTO.
-export MAILTO="$LOGNAME"
-
-# The project (see project(4)) under which to run this build.  If not
-# specified, the build is simply run in a new task in the current project.
-export BUILD_PROJECT=''
-
-# You should not need to change the next three lines
-export ATLOG="$SRCTOP/log"
-export LOGFILE="$ATLOG/nightly.log"
 export MACH="$(uname -p)"
 if [ "$MACH" = "amd64" ]; then
     MACH=i386
@@ -114,14 +84,6 @@ export PKGARCHIVE="${SRCTOP}/packages/${MACH}/nightly"
 
 # Package manifest format version.
 export PKGFMT_OUTPUT='v1'
-
-# Set this flag to 'n' to disable the use of 'checkpaths'.  The default,
-# if the 'N' option is not specified, is to run this test.
-#CHECK_PATHS='y'
-
-# POST_NIGHTLY can be any command to be run at the end of nightly.  See
-# nightly(1) for interactions between environment variables and this command.
-#POST_NIGHTLY=
 
 # Don't build python 3 versions of libs.
 export BUILDPY3='#'
