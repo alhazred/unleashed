@@ -117,20 +117,7 @@ destroy_method_info(method_info_t *mi)
 	if (mi == NULL)
 		return;
 
-	if (mi->wordexp_arg0_backup != NULL) {
-		/*
-		 * Return the wordexp structure back to its original
-		 * state so it can be consumed by wordfree.
-		 */
-		free(mi->exec_args_we.we_wordv[0]);
-		mi->exec_args_we.we_wordv[0] =
-		    (char *)mi->wordexp_arg0_backup;
-	}
-
-	free(mi->exec_path);
-
-	wordfree(&mi->exec_args_we);
-
+	free(mi->execbuf);
 	free(mi);
 }
 
@@ -146,34 +133,41 @@ create_method_info(const inetd_prop_t *mprops, boolean_t *exec_invalid)
 {
 	method_info_t	*ret;
 	int		i;
+	char		*execstr;
+	char		**ap;
+	char		**lastarg;
 
 	if ((ret = calloc(1, sizeof (method_info_t))) == NULL)
 		goto alloc_fail;
 
-	/* Expand the exec string. */
-	if ((i = wordexp(get_prop_value_string(mprops, PR_EXEC_NAME),
-	    &ret->exec_args_we, WRDE_NOCMD|WRDE_UNDEF)) != 0) {
-		if (i == WRDE_NOSPACE)
-			goto alloc_fail;
-
+	ret->execbuf = strdup(get_prop_value_string(mprops, PR_EXEC_NAME));
+	if (!ret->execbuf) {
 		*exec_invalid = B_TRUE;
 		free(ret);
 		return (NULL);
 	}
+	execstr = ret->execbuf;
+	lastarg = ret->argv + (sizeof(ret->argv)/sizeof(ret->argv[0]));
+	for (ap = ret->argv; ap < lastarg && (*ap = strsep(&execstr, " \t")) !=
+	    NULL;) {
+		if (**ap != '\0')
+			ap++;
+	}
+	if (ap == lastarg) {
+		*exec_invalid = B_TRUE;
+		destroy_method_info(ret);
+		error_msg(strerror(E2BIG));
+		return (NULL);
+	}
+	*ap = NULL;
+	ret->exec_path = ret->argv[0];
 
-	if ((ret->exec_path = strdup(ret->exec_args_we.we_wordv[0])) == NULL)
-		goto alloc_fail;
-
-	if (mprops[MP_ARG0].ip_error == IVE_VALID) {	/* arg0 is set */
-		/*
-		 * Keep a copy of arg0 of the wordexp structure so that
-		 * wordfree() gets passed what wordexp() originally returned,
-		 * as documented as required in the man page.
-		 */
-		ret->wordexp_arg0_backup = ret->exec_args_we.we_wordv[0];
-		if ((ret->exec_args_we.we_wordv[0] =
-		    strdup(get_prop_value_string(mprops, PR_ARG0_NAME)))
-		    == NULL)
+	if (mprops[MP_ARG0].ip_error == IVE_VALID) {
+		/* replace argv[0]. the original (stored in execbuf) is still
+		 * used for exec_path */
+		ret->argv[0] = strdup(get_prop_value_string(mprops,
+		    PR_ARG0_NAME));
+		if (!ret->argv[0])
 			goto alloc_fail;
 	}
 
@@ -202,23 +196,24 @@ alloc_fail:
 boolean_t
 method_info_equal(const method_info_t *mi, const method_info_t *mi2)
 {
-	int		i;
+	char * const *ap;
+	char * const *ap2;
 
 	if ((mi == NULL) && (mi2 == NULL)) {
 		return (B_TRUE);
 	} else if (((mi == NULL) || (mi2 == NULL)) ||
-	    (mi->exec_args_we.we_wordc != mi2->exec_args_we.we_wordc) ||
 	    (strcmp(mi->exec_path, mi2->exec_path) != 0)) {
 		return (B_FALSE);
 	}
 
-	for (i = 0; i < mi->exec_args_we.we_wordc; i++) {
-		if (strcmp(mi->exec_args_we.we_wordv[i],
-		    mi2->exec_args_we.we_wordv[i]) != 0) {
+	ap = mi->argv;
+	ap2 = mi2->argv;
+	while (*ap != NULL && *ap2 != NULL) {
+		if (strcmp(*ap, *ap2) != 0)
 			return (B_FALSE);
-		}
 	}
-
+	if (*ap != NULL || *ap2 != NULL)
+		return (B_FALSE);
 	return (B_TRUE);
 }
 

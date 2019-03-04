@@ -598,7 +598,7 @@ tcp_wrappers_ok(instance_t *instance)
 	if (cfg->do_tcp_wrappers && !cfg->iswait && !cfg->istlx) {
 
 		daemon_name = instance->config->methods[
-		    IM_START]->exec_args_we.we_wordv[0];
+		    IM_START]->argv[0];
 		if (*daemon_name == '/')
 			daemon_name = strrchr(daemon_name, '/') + 1;
 
@@ -1203,56 +1203,6 @@ destroy_bound_fds(instance_t *instance)
 		cancel_bind_timer(instance);
 
 	instance->bind_retries_exceeded = B_FALSE;
-}
-
-/*
- * Perform %A address expansion and return a pointer to a static string
- * array containing crafted arguments. This expansion is provided for
- * compatibility with 4.2BSD daemons, and as such we've copied the logic of
- * the legacy inetd to maintain this compatibility as much as possible. This
- * logic is a bit scatty, but it dates back at least as far as SunOS 4.x.
- */
-static char **
-expand_address(instance_t *inst, const proto_info_t *pi)
-{
-	static char	addrbuf[sizeof ("ffffffff.65536")];
-	static char	*ret[3];
-	instance_cfg_t	*cfg = inst->config;
-	/*
-	 * We cast pi to a void so we can then go on to cast it to a
-	 * socket_info_t without lint complaining about alignment. This
-	 * is done because the x86 version of lint thinks a lint suppression
-	 * directive is unnecessary and flags it as such, yet the sparc
-	 * version complains if it's absent.
-	 */
-	const void	*p = pi;
-
-	/* set ret[0] to the basename of exec path */
-	if ((ret[0] = strrchr(cfg->methods[IM_START]->exec_path, '/'))
-	    != NULL) {
-		ret[0]++;
-	} else {
-		ret[0] = cfg->methods[IM_START]->exec_path;
-	}
-
-	if (!cfg->basic->istlx &&
-	    (((socket_info_t *)p)->type == SOCK_DGRAM)) {
-		ret[1] = NULL;
-	} else {
-		addrbuf[0] = '\0';
-		if (!cfg->basic->iswait &&
-		    (inst->remote_addr.ss_family == AF_INET)) {
-			struct sockaddr_in *sp;
-
-			sp = (struct sockaddr_in *)&(inst->remote_addr);
-			(void) snprintf(addrbuf, sizeof (addrbuf), "%x.%hu",
-			    ntohl(sp->sin_addr.s_addr), ntohs(sp->sin_port));
-		}
-		ret[1] = addrbuf;
-		ret[2] = NULL;
-	}
-
-	return (ret);
 }
 
 /*
@@ -2689,7 +2639,6 @@ static void
 exec_method(instance_t *instance, instance_method_t method, method_info_t *mi,
     struct method_context *mthd_ctxt, const proto_info_t *pi)
 {
-	char		**args;
 	char 		**env;
 	const char	*errf;
 	int		serrno;
@@ -2718,18 +2667,6 @@ exec_method(instance_t *instance, instance_method_t method, method_info_t *mi,
 	 */
 	(void) sigemptyset(&mtset);
 	(void) sigprocmask(SIG_SETMASK, &mtset, (sigset_t *)NULL);
-
-	/*
-	 * Setup exec arguments. Do this before the fd setup below, so our
-	 * logging related file fd doesn't get taken over before we call
-	 * expand_address().
-	 */
-	if ((method == IM_START) &&
-	    (strcmp(mi->exec_args_we.we_wordv[0], "%A") == 0)) {
-		args = expand_address(instance, pi);
-	} else {
-		args = mi->exec_args_we.we_wordv;
-	}
 
 	/*
 	 * Set method context before the fd setup below so we can output an
@@ -2835,7 +2772,7 @@ exec_method(instance_t *instance, instance_method_t method, method_info_t *mi,
 
 	if (env != NULL) {
 		do {
-			(void) execve(mi->exec_path, args, env);
+			(void) execve(mi->exec_path, mi->argv, env);
 		} while (errno == EINTR);
 	}
 
