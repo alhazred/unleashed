@@ -371,7 +371,7 @@ mail1(struct header *hp, int printheaders)
 		(void)savemail(expand(cp), mtf);
 	
 	/* Setup sendmail arguments. */
-        *ap++ = "send-mail";
+        *ap++ = "sendmail";
         *ap++ = "-i";
         *ap++ = "-t";
 	cp = hp->h_from ? hp->h_from : value("from");
