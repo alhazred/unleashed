@@ -21,7 +21,7 @@
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
 #
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -57,6 +57,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-unused-label
+
+# really broken
+SMOFF += logical_instead_of_bitwise,or_vs_and
 
 #
 #	Default build targets.

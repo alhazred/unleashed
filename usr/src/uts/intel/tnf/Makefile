@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	tnf (kernel trace driver) Makefile
@@ -63,6 +64,10 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/tnf_writer.o := SMOFF += all_func_returns
+
 #
 #	Default build targets.
 #

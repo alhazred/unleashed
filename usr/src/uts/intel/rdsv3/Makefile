@@ -21,6 +21,7 @@
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -48,6 +49,9 @@ CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+SMATCH=off
 
 #
 #	Define targets

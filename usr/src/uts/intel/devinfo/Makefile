@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the devinfo kernel
@@ -62,6 +63,9 @@ CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-clobbered
+
+# needs work
+$(OBJS_DIR)/devinfo.o := SMOFF += deref_check,strcpy_overflow
 
 #
 #	Default build targets.

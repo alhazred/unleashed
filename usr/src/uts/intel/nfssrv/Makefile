@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the nfs server-specific
@@ -74,6 +75,9 @@ CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-switch
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

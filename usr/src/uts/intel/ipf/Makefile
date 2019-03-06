@@ -24,13 +24,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# uts/intel/ipf/Makefile
-#
-#	This makefile drives the production of the ipf driver 
-#	kernel module.
-#
-#	intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -75,6 +69,9 @@ CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-empty-body
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

@@ -22,6 +22,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the kernel 
@@ -67,6 +68,9 @@ LDFLAGS	+= -dy -Nmisc/ibtl -Nmisc/ibcm
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

@@ -23,11 +23,8 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of the cmlb "misc"
-#	kernel module.
-#
-#	intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
+
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -73,6 +70,9 @@ CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/cmlb.o := SMOFF += signed
 
 #
 #	Default build targets.

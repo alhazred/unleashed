@@ -24,13 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#ident	"%Z%%M%	%I%	%E% SMI"
-#
-#	This makefile drives the production of the timod streams kernel
-#	module.
-#
-#	intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -60,6 +54,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
+
+# needs work
+SMOFF += indenting
 
 #
 #	Default build targets.

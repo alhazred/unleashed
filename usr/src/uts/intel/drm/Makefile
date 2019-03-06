@@ -23,6 +23,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the DRM (Direct Rendering
@@ -54,6 +55,9 @@ include $(UTSBASE)/intel/Makefile.intel
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-unused-variable
+
+# needs work
+SMOFF += precedence,indenting,deref_check,all_func_returns
 
 #
 #	Define targets

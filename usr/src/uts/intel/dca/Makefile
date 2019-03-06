@@ -25,6 +25,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the DCA kCF provider.
@@ -40,7 +41,7 @@ UTSBASE	= ../..
 #
 #	Define the module and object file sets.
 #
-MODULE		= dca	
+MODULE		= dca
 OBJECTS		= $(DCA_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/crypto/io
@@ -66,6 +67,9 @@ CFLAGS += $(CSTD_GNU99)
 #
 
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+$(OBJS_DIR)/dca_rsa.o := SMOFF += deref_check
 
 #
 #	Default build targets.

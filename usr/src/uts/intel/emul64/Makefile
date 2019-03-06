@@ -21,6 +21,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 # Copyright (c) 2011 Bayard G. Bell. All rights reserved.
+# Copyright (c) 2018, Joyent, Inc.
 #
 #	This makefile drives the production of the emul64 kernel
 #	driver to testing hotplugging operations
@@ -60,6 +61,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMOFF += indenting,shift_to_zero
 
 #
 # Depends on scsi

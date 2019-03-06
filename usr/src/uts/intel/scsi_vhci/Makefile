@@ -23,6 +23,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 # This makefile drives the production of SCSI vHCI Driver
@@ -50,6 +51,9 @@ include $(UTSBASE)/intel/Makefile.intel
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-unused-label
+
+# needs work
+SMATCH=off
 
 #
 # Define targets.

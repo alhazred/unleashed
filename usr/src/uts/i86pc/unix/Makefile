@@ -18,15 +18,10 @@
 #
 # CDDL HEADER END
 #
-
-#
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of unix (and unix.o).
-#
-#	i86pc implementation architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -139,6 +134,16 @@ CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-clobbered
 CERRWARN	+= -Wno-empty-body
 CERRWARN	+= -Wno-unused-value
+
+# false positives
+SMOFF += index_overflow
+
+# needs work
+SMOFF += all_func_returns,deref_check,signed
+
+$(OBJS_DIR)/fmsmb.o := SMOFF += indenting
+$(OBJS_DIR)/zutil.o := SMOFF += indenting
+$(OBJS_DIR)/bootrd_cpio.o := SMOFF += allocating_enough_data
 
 #
 #	Default build targets.

@@ -22,6 +22,8 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
+
 
 #
 #	Path to the base of the uts directory tree.
@@ -59,6 +61,9 @@ LDFLAGS		+= -dy -Nmisc/scsi -Nmisc/s1394 -Nmisc/sbp2
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/sbp2_driver.o := SMOFF += indenting
 
 #	Default build targets.
 #

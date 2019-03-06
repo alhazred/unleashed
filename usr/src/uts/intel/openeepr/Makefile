@@ -24,6 +24,7 @@
 # Use is subject to license terms.
 #
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -66,6 +67,9 @@ LDFLAGS +=	-dy -Ndacf/consconfig_dacf
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/openprom.o := SMOFF += cast_assign,strcpy_overflow
 
 #
 #	Default build targets.

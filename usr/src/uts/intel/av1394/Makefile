@@ -22,6 +22,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree.
@@ -60,6 +61,9 @@ DEBUG_DEFS_DBG32	+= -DTNF_DEBUG
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-type-limits
+
+# needs work
+$(OBJS_DIR)/av1394_isoch.o := SMOFF += signed
 
 #
 # depends on misc/s1394

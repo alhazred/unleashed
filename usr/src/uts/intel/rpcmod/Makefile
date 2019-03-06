@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the rpcmod streams kernel
@@ -80,6 +81,9 @@ CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-unused-function
+
+# needs work
+SMOFF += all_func_returns,indenting,no_if_block,deref_check
 
 #
 #	Default build targets.

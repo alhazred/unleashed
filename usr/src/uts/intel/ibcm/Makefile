@@ -22,11 +22,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# uts/intel/ibcm/Makefile
-#
-#	This makefile drives the production of the ibcm kernel
-#	module. SPARC architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -62,6 +58,9 @@ CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-unused-value
+
+# needs work
+SMATCH=off
 
 #
 #	depends on misc/ibtl and misc/ibmf

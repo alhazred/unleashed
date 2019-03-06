@@ -22,6 +22,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 UTSBASE	= ../..
 
@@ -41,6 +42,9 @@ include $(UTSBASE)/intel/Makefile.intel
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/dtrace.o := SMOFF += signed_integer_overflow_check,deref_check
 
 CPPFLAGS	+= -I$(SRC)/common/util
 

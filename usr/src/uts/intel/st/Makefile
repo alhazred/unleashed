@@ -24,11 +24,7 @@
 # Use is subject to license terms.
 # Copyright (c) 2011 Bayard G. Bell. All rights reserved.
 #
-#	This makefile drives the production of the st driver
-#	kernel module.
-#
-#	intel implementation architecture independent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -69,6 +65,9 @@ DEBUG_DEFS	+= $(DEBUG_FLGS)
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMATCH=off
 
 #
 # Depends on scsi

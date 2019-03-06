@@ -24,11 +24,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of the dadk "misc"
-#	kernel module.
-#
-#	intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -71,6 +67,9 @@ CPPFLAGS	+= -D_EXTVTOC
 #
 
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+SMOFF += all_func_returns,signed
 
 #
 #	Default build targets.

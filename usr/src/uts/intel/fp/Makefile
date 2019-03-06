@@ -23,12 +23,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# ident "@(#)Makefile 1.10	08/07/25 SMI"
-#
-# This makefile drives the production of fp driver kernel module.
-#
-# i86pc architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -68,6 +63,9 @@ LDFLAGS		+= -dy -Ndrv/fcp -Nmisc/fctl -Nmisc/scsi
 
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-unused-function
+
+# needs work
+$(OBJS_DIR)/fp.o := SMOFF += all_func_returns,deref_check
 
 #
 #	Default build targets.

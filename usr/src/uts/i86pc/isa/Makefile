@@ -23,7 +23,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# Copyright 2016 Joyent, Inc.
+# Copyright (c) 2018, Joyent, Inc.
 #
 #	This makefile drives the production of the ISA nexus driver
 #
@@ -53,6 +53,9 @@ include $(UTSBASE)/i86pc/Makefile.i86pc
 #
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
+
+# needs work
+$(OBJS_DIR)/i8237A.o := SMOFF += indenting
 
 #
 #       Dependency

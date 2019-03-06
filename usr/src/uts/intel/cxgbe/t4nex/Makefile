@@ -12,6 +12,7 @@
 #
 # Copyright (c) 2013 by Chelsio Communications, Inc. All rights reserved.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 # This makefile drives the production of the Chelsio Terminator 4 10G Ethernet
@@ -52,6 +53,9 @@ CFLAGS += $(CSTD_GNU99)
 # Driver depends
 #
 LDFLAGS += -dy -N misc/mac -N drv/ip
+
+# needs work
+SMATCH=off
 
 #
 # Default build targets.

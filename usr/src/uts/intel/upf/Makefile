@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright (c) 2014 Joyent, Inc.  All rights reserved.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -39,6 +39,9 @@ CERRWARN	+= -Wno-type-limits
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-label
+
+# needs work
+$(OBJS_DIR)/upf_usbgem.o := SMOFF += all_func_returns
 
 #
 #	Define targets

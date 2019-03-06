@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the tl driver
@@ -71,6 +72,9 @@ LDFLAGS += -dy -Ndrv/ip
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMOFF += deref_check
 
 #
 #	Default build targets.

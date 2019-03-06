@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright (c) 2015 Joyent, Inc.  All rights reserved.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -32,6 +32,9 @@ CONF_SRCDIR	= $(UTSBASE)/common/io
 include $(UTSBASE)/intel/Makefile.intel
 
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+SMOFF += all_func_returns
 
 #
 #	Define targets

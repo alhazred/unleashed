@@ -22,10 +22,12 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
+#
 # uts/intel/bpf/Makefile
 #
 #
-#	This makefile drives the production of the bpf driver 
+#	This makefile drives the production of the bpf driver
 #	kernel module.
 #
 #	intel architecture dependent
@@ -68,6 +70,9 @@ INC_PATH	+= -I$(UTSBASE)/common/io/bpf
 
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/bpf.o := SMOFF += all_func_returns
 
 #
 #	Default build targets.

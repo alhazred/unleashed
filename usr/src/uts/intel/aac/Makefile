@@ -23,6 +23,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the aac driver kernel module.
@@ -68,6 +69,9 @@ CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-unused-value
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-switch
+
+# needs work
+$(OBJS_DIR)/aac.o := SMOFF += shift_to_zero
 
 #
 #	Default build targets.

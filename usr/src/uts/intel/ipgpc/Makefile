@@ -22,6 +22,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the IP generic packet classifier
@@ -67,6 +68,9 @@ LDFLAGS += -dy -Ndrv/ip
 #
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/filters.o := SMOFF += deref_check
 
 #
 #	Default build targets.

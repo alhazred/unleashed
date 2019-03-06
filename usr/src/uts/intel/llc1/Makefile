@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the Sound-Blaster driver 
@@ -63,6 +64,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE) $(ROOT_CONFFILE)
 #
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/llc1.o := SMOFF += no_if_block,deref_check
 
 #
 #	Default build targets.

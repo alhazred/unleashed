@@ -23,10 +23,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-# This makefile drives the production of fcip driver kernel module.
-#
-# i86pc architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -62,6 +59,9 @@ LDFLAGS		+= -dy -Nmisc/fctl -Ndrv/ip
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-type-limits
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

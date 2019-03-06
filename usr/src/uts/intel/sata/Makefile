@@ -23,6 +23,8 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
+
 
 #
 # uts/intel/io/sata/Makefile
@@ -78,6 +80,9 @@ CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-empty-body
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

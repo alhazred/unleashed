@@ -21,7 +21,7 @@
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
 #
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -58,6 +58,9 @@ INCLUDE_PATH += -I$(SRCTOP)/include/sys/ib/clients/ofv/sol_ucma
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
+
+# needs work
+SMOFF += all_func_returns,logical_instead_of_bitwise
 
 #
 #	Default build targets.

@@ -22,11 +22,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-
-#	This makefile drives the production of the ibmf kernel module.
-#
-#	intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -65,6 +61,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

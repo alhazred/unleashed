@@ -23,12 +23,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of the kernel/misc/pcicfg module
-#	(PCI configurator module) for PCI hotplug support in PCI nexus
-#	drivers.
-#
-#	intel implementation architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -73,6 +68,9 @@ LDFLAGS		+= -dy -Nmisc/busra -Nmisc/pcie
 
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/pcicfg.o := SMOFF += deref_check
 
 #
 #	Default build targets.

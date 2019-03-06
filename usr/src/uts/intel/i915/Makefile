@@ -23,6 +23,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 # uts/intel/drm/Makefile
@@ -57,6 +58,9 @@ LDFLAGS	+= -dy -Nmisc/drm
 include $(UTSBASE)/intel/Makefile.intel
 
 CERRWARN	+= -Wno-unused-label
+
+# needs work
+SMATCH=off
 
 #
 #	Re-define targets

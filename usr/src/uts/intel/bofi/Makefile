@@ -22,6 +22,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the bofi driver 
@@ -67,6 +68,9 @@ CLEANFILES	+= $(MODSTUBS_O)
 CPPFLAGS	+= -I../../sun4
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/bofi.o := SMOFF += signed_integer_overflow_check,deref_check
 
 #
 # For now, disable these compiler warnings; maintainers should endeavor to

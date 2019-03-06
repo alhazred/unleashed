@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the s1394 kernel module.
@@ -73,6 +74,9 @@ CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+SMOFF += indenting
 
 #
 #	Default build targets.

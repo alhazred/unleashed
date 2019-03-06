@@ -25,8 +25,8 @@
 #
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
-#	This makefile drives the production of Abstract Control Model of
-#	USB Communication Devices Class dirver.
+# Copyright (c) 2018, Joyent, Inc.
+
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
 #
@@ -51,6 +51,9 @@ LDFLAGS         += -dy -Nmisc/usba -Nmisc/mac
 #
 ALL_TARGET	= $(BINARY)
 INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
+
+# needs work
+SMOFF += deref_check
 
 .KEEP_STATE:
 

@@ -22,6 +22,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the i8042 nexus driver
@@ -59,6 +60,9 @@ INSTALL_TARGET	= $(BINARY) $(ROOTMODULE)
 #
 
 CERRWARN	+= -Wno-unused-function
+
+# needs work
+$(OBJS_DIR)/i8042.o := SMOFF += all_func_returns
 
 #
 #	Default build targets.

@@ -22,8 +22,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of the fcoei driver for 
-#	LEADVILLE.
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -38,6 +37,9 @@ MODULE		= fcoei
 OBJECTS		= $(FCOEI_OBJS:%=$(OBJS_DIR)/%)
 ROOTMODULE	= $(ROOT_DRV_DIR)/$(MODULE)
 CONF_SRCDIR	= $(UTSBASE)/common/io/fibre-channel/fca/fcoei
+
+# needs work
+SMOFF += all_func_returns
 
 #
 #	Include common rules.

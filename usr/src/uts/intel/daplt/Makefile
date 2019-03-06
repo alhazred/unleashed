@@ -23,6 +23,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Paths to the base of the uts directory trees
@@ -68,6 +69,9 @@ CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-function
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/daplt.o := SMOFF += all_func_returns,deref_check
 
 #
 #	Default build targets.

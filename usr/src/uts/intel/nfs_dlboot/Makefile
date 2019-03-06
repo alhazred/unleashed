@@ -24,6 +24,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the dlboot_proto
@@ -69,6 +70,9 @@ LDFLAGS		+= -dy -Nmisc/strplumb -Nstrmod/rpcmod
 #
 
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+$(OBJS_DIR)/nfs_dlinet.o := SMOFF += indenting,all_func_returns
 
 #
 #	Default build targets.

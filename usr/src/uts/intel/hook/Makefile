@@ -24,6 +24,7 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the hook driver kernel module.
@@ -50,6 +51,9 @@ ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 include $(UTSBASE)/intel/Makefile.intel
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/hook.o := SMOFF += all_func_returns
 
 #
 #	Define targets

@@ -25,6 +25,7 @@
 #
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the usbvc driver kernel module.
@@ -70,6 +71,9 @@ LDFLAGS		+= -dy -Nmisc/usba
 #
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMOFF += deref_check
 
 #
 #	Default build targets.

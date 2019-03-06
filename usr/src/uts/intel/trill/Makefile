@@ -24,11 +24,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of the TRILL socket kernel
-#	module.
-#
-#	intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -48,6 +44,9 @@ ROOTMODULE	= $(ROOT_SOCK_DIR)/$(MODULE)
 include $(UTSBASE)/intel/Makefile.intel
 
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMOFF += all_func_returns
 
 #
 #	Define targets

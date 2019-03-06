@@ -23,9 +23,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#
-#	This makefile drives the production of the usbms driver kernel module.
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -69,6 +67,9 @@ LDFLAGS         += -dy -Nmisc/usba -Nmisc/hidparser
 
 CERRWARN	+= -Wno-parentheses
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+SMOFF += deref_check
 
 #
 #	Default build targets.

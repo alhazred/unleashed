@@ -23,9 +23,10 @@
 # Copyright 2007 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
-#	This makefile drives the production of the keysock driver 
+#	This makefile drives the production of the keysock driver
 #	kernel module.
 #
 #	intel implementation architecture dependent
@@ -68,6 +69,9 @@ LDFLAGS += -dy -Ndrv/ip
 #
 
 CERRWARN	+= -Wno-unused-variable
+
+# needs work
+$(OBJS_DIR)/keysockddi.o := SMOFF += index_overflow
 
 #
 #	Default build targets.

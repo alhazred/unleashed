@@ -23,6 +23,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the rsm kernel agent 
@@ -75,6 +76,9 @@ LDFLAGS		+= -dy -Nmisc/rsmops
 
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+SMATCH=off
 
 #
 #	Default build targets.

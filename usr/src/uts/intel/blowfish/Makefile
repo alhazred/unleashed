@@ -18,6 +18,8 @@
 #
 # CDDL HEADER END
 #
+# Copyright (c) 2018, Joyent, Inc.
+#
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
@@ -70,6 +72,9 @@ CPPFLAGS	+= -DCRYPTO_PROVIDER_NAME=\"$(MODULE)\"
 
 CERRWARN	+= -Wno-uninitialized
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+$(OBJS_DIR)/blowfish_impl.o := SMOFF += precedence
 
 #
 #	Default build targets.

@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright (c) 2014 Joyent, Inc.  All rights reserved.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 #
@@ -47,6 +47,9 @@ CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-unused-function
+
+# needs work
+SMOFF += all_func_returns
 
 LDFLAGS		+= -dy -N misc/mac -N drv/ip -N misc/usba
 

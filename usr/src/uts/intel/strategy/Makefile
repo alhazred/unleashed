@@ -25,6 +25,7 @@
 # Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	This makefile drives the production of the strategy "misc"
@@ -51,6 +52,9 @@ ROOTMODULE	= $(ROOT_MISC_DIR)/$(MODULE)
 include $(UTSBASE)/intel/Makefile.intel
 
 CERRWARN	+= -Wno-parentheses
+
+# needs work
+$(OBJS_DIR)/strategy.o := SMOFF += all_func_returns
 
 #
 #	Define targets

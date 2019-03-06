@@ -25,9 +25,7 @@
 #
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 #
-#	This makefile drives the production of the scsa2usb driver
-#	kernel module. intel architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -72,6 +70,9 @@ LDFLAGS		+= -dy -Nmisc/usba -Nmisc/scsi
 
 CERRWARN	+= -Wno-unused-label
 CERRWARN	+= -Wno-uninitialized
+
+# needs work
+$(OBJS_DIR)/scsa2usb.o := SMOFF += deref_check
 
 #
 #	Default build targets.

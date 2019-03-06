@@ -24,10 +24,7 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
-#	This makefile drives the production of the arp driver kernel module.
-#
-#	intel implementation architecture dependent
-#
+# Copyright (c) 2018, Joyent, Inc.
 
 #
 #	Path to the base of the uts directory tree (usually /usr/src/uts).
@@ -71,6 +68,9 @@ LDFLAGS		+= -dy -Ndrv/ip
 # investigate and remove these for maximum coverage.  Please do not carry
 # these forward to new Makefiles.
 #
+
+# false positive
+SMOFF += index_overflow
 
 #
 #	Default build targets.
