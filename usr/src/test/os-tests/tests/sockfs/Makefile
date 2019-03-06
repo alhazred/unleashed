@@ -12,6 +12,7 @@
 #
 # Copyright (c) 2012 by Delphix. All rights reserved.
 # Copyright 2017 Gordon W. Ross
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 include $(SRC)/cmd/Makefile.cmd
@@ -21,6 +22,9 @@ PROG = conn dgram drop_priv nosignal sockpair
 
 CSTD = $(CSTD_GNU99)
 CPPFLAGS += -D_XOPEN_SOURCE=600 -D__EXTENSIONS__
+
+# needs work
+SMOFF += all_func_returns
 
 nosignal := LDLIBS += -lnsl
 nosignal.ln := LDLIBS += -lnsl

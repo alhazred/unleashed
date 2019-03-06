@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2015 Joyent, Inc.
+# Copyright (c) 2018, Joyent, Inc.
 #
 
 LIBRARY=	libdwarf.a
@@ -82,6 +82,9 @@ SRCDIR =	../common
 CPPFLAGS +=	-I$(SRCDIR) -DELF_TARGET_ALL=1
 CERRWARN +=	-Wno-unused
 CERRWARN +=	-Wno-implicit-function-declaration
+
+# libdwarf not clean
+SMATCH=off
 
 .KEEP_STATE:
 
