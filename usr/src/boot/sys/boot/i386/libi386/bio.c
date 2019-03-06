@@ -1,6 +1,5 @@
-/*-
- * Copyright (c) 2010 Pawel Jakub Dawidek <pjd@FreeBSD.org>
- * All rights reserved.
+/*
+ * Copyright 2018 Toomas Soome <tsoome@me.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -11,10 +10,10 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHORS AND CONTRIBUTORS ``AS IS'' AND
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
  * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
  * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
  * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
@@ -22,25 +21,46 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
- * $FreeBSD$
  */
 
-#ifndef _DRV_H_
-#define _DRV_H_
+#include <sys/cdefs.h>
+#include <stand.h>
+#include <libi386.h>
 
-struct dsk {
-	unsigned int drive;
-	unsigned int type;
-	unsigned int unit;
-	unsigned int slice;
-	int part;
-	daddr_t start;
-	int init;
-};
+/*
+ * The idea is borrowed from pxe.c and zfsimpl.c. The original buffer
+ * space in pxe.c was 2x 0x2000. Allocating it from BSS will give us needed
+ * memory below 1MB and usable for real mode calls.
+ *
+ * Note the allocations and frees are to be done in reverse order (LIFO).
+ */
 
-int drvread(struct dsk *dskp, void *buf, daddr_t lba, unsigned nblk);
-int drvwrite(struct dsk *dskp, void *buf, daddr_t lba, unsigned nblk);
-uint64_t drvsize(struct dsk *dskp);
+#define	BIO_BUFFER_SIZE	0x4000
+static char bio_buffer[BIO_BUFFER_SIZE];
+static char *bio_buffer_end = bio_buffer + BIO_BUFFER_SIZE;
+static char *bio_buffer_ptr = bio_buffer;
 
-#endif	/* !_DRV_H_ */
+void *
+bio_alloc(size_t size)
+{
+	char *ptr;
+
+	ptr = bio_buffer_ptr;
+	if (ptr + size > bio_buffer_end)
+		return (NULL);
+	bio_buffer_ptr += size;
+
+	return (ptr);
+}
+
+void
+bio_free(void *ptr, size_t size)
+{
+
+	if (ptr == NULL)
+		return;
+
+	bio_buffer_ptr -= size;
+	if (bio_buffer_ptr != ptr)
+		panic("bio_alloc()/bio_free() mismatch\n");
+}
