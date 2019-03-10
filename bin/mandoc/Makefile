@@ -1,10 +1,10 @@
 PROG=	mandoc
 
-SRCS=	mandoc_aux.c mandoc_ohash.c mandoc.c mandoc_xr.c \
+SRCS=	mandoc_aux.c mandoc_msg.c mandoc_ohash.c mandoc.c mandoc_xr.c \
 	chars.c preconv.c read.c \
 	roff.c roff_validate.c tbl.c tbl_opts.c tbl_layout.c tbl_data.c eqn.c
 SRCS+=	mdoc_macro.c mdoc.c \
-	mdoc_argv.c mdoc_state.c mdoc_validate.c att.c msec.c st.c
+	mdoc_argv.c mdoc_state.c mdoc_validate.c arch.c att.c msec.c st.c
 SRCS+=	man_macro.c man.c man_validate.c
 SRCS+=	main.c out.c tag.c tree.c
 SRCS+=	term.c term_tab.c term_ascii.c term_ps.c
