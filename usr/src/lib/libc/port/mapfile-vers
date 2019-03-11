@@ -2885,7 +2885,6 @@ $endif
 	_getsp;
 	__gettsp;
 	getvmusage;
-	gtty;
 	__idmap_flush_kcache;
 	__idmap_reg;
 	__idmap_unreg;
@@ -3026,7 +3025,6 @@ $endif
 	str2passwd;
 	str2spwd;
 	__strptime_dontzero;
-	stty;
 	syscall;
 	_sysconfig;
 	__systemcall;

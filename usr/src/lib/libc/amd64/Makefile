@@ -220,7 +220,6 @@ COMSYSOBJS=			\
 	getrandom.o		\
 	getrlimit.o		\
 	getuid.o		\
-	gtty.o			\
 	install_utrap.o		\
 	ioctl.o			\
 	kaio.o			\
@@ -270,7 +269,6 @@ COMSYSOBJS=			\
 	sigsuspend.o		\
 	statfs.o		\
 	statvfs.o		\
-	stty.o			\
 	sync.o			\
 	sysconfig.o		\
 	sysfs.o			\

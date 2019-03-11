@@ -125,7 +125,6 @@ INCS=	$($(CONFIG_MACH)_INCS) \
 	search.h	\
 	semaphore.h	\
 	setjmp.h	\
-	sgtty.h		\
 	shadow.h	\
 	siginfo.h	\
 	signal.h	\

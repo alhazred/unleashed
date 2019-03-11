@@ -549,7 +549,6 @@ file path=usr/include/security/pkcs11f.h
 file path=usr/include/security/pkcs11t.h
 file path=usr/include/semaphore.h
 file path=usr/include/setjmp.h
-file path=usr/include/sgtty.h
 file path=usr/include/sha1.h
 file path=usr/include/sha2.h
 file path=usr/include/shadow.h
