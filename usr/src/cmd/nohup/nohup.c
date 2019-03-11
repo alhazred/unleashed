@@ -328,11 +328,9 @@ lwp_restartable(short syscall)
 	case SYS_read:
 	case SYS_readv:
 	case SYS_pread:
-	case SYS_pread64:
 	case SYS_write:
 	case SYS_writev:
 	case SYS_pwrite:
-	case SYS_pwrite64:
 	case SYS_ioctl:
 	case SYS_fcntl:
 	case SYS_getmsg:

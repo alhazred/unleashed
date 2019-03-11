@@ -162,9 +162,7 @@ extern "C" {
 #define	SYS_renameat	64
 #define	SYS_unlinkat	65
 #define	SYS_fstatat	66
-#define	SYS_fstatat64	67
 #define	SYS_openat	68
-#define	SYS_openat64	69
 #define	SYS_tasksys	70
 	/*
 	 * subcodes:
@@ -433,19 +431,6 @@ extern "C" {
 	 *	lwp_rwlock_trywrlock(...) :: syscall(212, 3, ...)
 	 *	lwp_rwlock_unlock(...)    :: syscall(212, 4, ...)
 	 */
-/* system calls for large file ( > 2 gigabyte) support */
-#define	SYS_getdents64		213
-#define	SYS_mmap64		214
-#define	SYS_stat64		215
-#define	SYS_lstat64		216
-#define	SYS_fstat64		217
-#define	SYS_statvfs64		218
-#define	SYS_fstatvfs64		219
-#define	SYS_setrlimit64		220
-#define	SYS_getrlimit64		221
-#define	SYS_pread64		222
-#define	SYS_pwrite64		223
-#define	SYS_open64		225
 #define	SYS_rpcsys		226
 #define	SYS_zone		227
 	/*
