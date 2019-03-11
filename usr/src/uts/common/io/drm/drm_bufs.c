@@ -763,12 +763,7 @@ drm_freebufs(DRM_IOCTL_ARGS)
 extern caddr_t smmap64(caddr_t, size_t, int, int, int, off_t);
 #define	drm_smmap	smmap64
 #else
-#if defined(_SYSCALL32_IMPL) || defined(_ILP32)
-extern caddr_t smmap32(caddr32_t, size32_t, int, int, int, off32_t);
-#define	drm_smmap smmap32
-#else
-#error "No define for _LP64, _SYSCALL32_IMPL or _ILP32"
-#endif
+#error "No define for _LP64"
 #endif
 
 

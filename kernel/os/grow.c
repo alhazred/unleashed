@@ -884,33 +884,6 @@ smmap64(caddr_t addr, size_t len, int prot, int flags, int fd, off_t pos)
 #if defined(_SYSCALL32_IMPL) || defined(_ILP32)
 
 /*
- * ILP32 mmap(2) system call: 32-bit offset, 32-bit address.
- */
-caddr_t
-smmap32(caddr32_t addr, size32_t len, int prot, int flags, int fd, off32_t pos)
-{
-	struct file *fp;
-	int error;
-	caddr_t a = (caddr_t)(uintptr_t)addr;
-
-	if (flags & _MAP_LOW32)
-		error = EINVAL;
-	else if (fd == -1 && (flags & MAP_ANON) != 0)
-		error = smmap_common(&a, (size_t)len, prot,
-		    flags | _MAP_LOW32, NULL, (offset_t)pos);
-	else if ((fp = getf(fd)) != NULL) {
-		error = smmap_common(&a, (size_t)len, prot,
-		    flags | _MAP_LOW32, fp, (offset_t)pos);
-		releasef(fd);
-	} else
-		error = EBADF;
-
-	ASSERT(error != 0 || (uintptr_t)(a + len) < (uintptr_t)UINT32_MAX);
-
-	return (error ? (caddr_t)(uintptr_t)set_errno(error) : a);
-}
-
-/*
  * ILP32 mmap64(2) system call: 64-bit offset, 32-bit address.
  *
  * Now things really get ugly because we can't use the C-style
