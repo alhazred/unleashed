@@ -256,10 +256,10 @@ Pzonename_live(struct ps_prochandle *P, char *s, size_t n, void *data)
 static int
 stat_exec(const char *path, void *arg)
 {
-	struct stat64 *stp = arg;
-	struct stat64 st;
+	struct stat *stp = arg;
+	struct stat st;
 
-	return (stat64(path, &st) == 0 && S_ISREG(st.st_mode) &&
+	return (stat(path, &st) == 0 && S_ISREG(st.st_mode) &&
 	    stp->st_dev == st.st_dev && stp->st_ino == st.st_ino);
 }
 
@@ -270,7 +270,7 @@ Pexecname_live(struct ps_prochandle *P, char *buf, size_t buflen, void *data)
 	char exec_name[PATH_MAX];
 	char cwd[PATH_MAX];
 	char proc_cwd[64];
-	struct stat64 st;
+	struct stat st;
 	int ret;
 
 	/*
@@ -291,7 +291,7 @@ Pexecname_live(struct ps_prochandle *P, char *buf, size_t buflen, void *data)
 	(void) snprintf(exec_name, sizeof (exec_name),
 	    "%s/%d/object/a.out", procfs_path, (int)P->pid);
 
-	if (stat64(exec_name, &st) != 0 || !S_ISREG(st.st_mode))
+	if (stat(exec_name, &st) != 0 || !S_ISREG(st.st_mode))
 		return (NULL);
 
 	/*
@@ -2880,14 +2880,14 @@ read_lfile(struct ps_prochandle *P, const char *lname)
 {
 	prheader_t *Lhp;
 	char lpath[PATH_MAX];
-	struct stat64 statb;
+	struct stat statb;
 	int fd;
 	size_t size;
 	ssize_t rval;
 
 	(void) snprintf(lpath, sizeof (lpath), "%s/%d/%s", procfs_path,
 	    (int)P->status.pr_pid, lname);
-	if ((fd = open(lpath, O_RDONLY)) < 0 || fstat64(fd, &statb) != 0) {
+	if ((fd = open(lpath, O_RDONLY)) < 0 || fstat(fd, &statb) != 0) {
 		if (fd >= 0)
 			(void) close(fd);
 		return (NULL);
@@ -3856,7 +3856,7 @@ Lalt_stack(struct ps_lwphandle *L, stack_t *stkp)
  * outside these two functions.
  */
 int
-Padd_mapping(struct ps_prochandle *P, off64_t off, file_info_t *fp,
+Padd_mapping(struct ps_prochandle *P, off_t off, file_info_t *fp,
     prmap_t *pmap)
 {
 	map_info_t *mp;

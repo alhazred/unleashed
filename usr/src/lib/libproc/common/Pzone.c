@@ -52,7 +52,7 @@ typedef struct path_node path_node_t;
 /*
  * Parameters of the lofs lookup cache.
  */
-static struct stat64 lofs_mstat; /* last stat() of MNTTAB */
+static struct stat lofs_mstat; /* last stat() of MNTTAB */
 static struct lofs_mnttab {	/* linked list of all lofs mount points */
 	struct lofs_mnttab *l_next;
 	char	*l_special;	/* extracted from MNTTAB */
@@ -311,7 +311,7 @@ char *
 Plofspath(const char *path, char *s, size_t n)
 {
 	char tmp[PATH_MAX + 1];
-	struct stat64 statb;
+	struct stat statb;
 	const char *special;
 	char *p, *p2;
 	int rv;
@@ -338,7 +338,7 @@ Plofspath(const char *path, char *s, size_t n)
 	 * If /etc/mnttab has been modified since the last time
 	 * we looked, then rebuild the lofs lookup cache.
 	 */
-	if (stat64(MNTTAB, &statb) == 0 &&
+	if (stat(MNTTAB, &statb) == 0 &&
 	    (statb.st_mtim.tv_sec != lofs_mstat.st_mtim.tv_sec ||
 	    statb.st_mtim.tv_nsec != lofs_mstat.st_mtim.tv_nsec ||
 	    statb.st_ctim.tv_sec != lofs_mstat.st_ctim.tv_sec ||
@@ -519,7 +519,7 @@ Pzonepath(struct ps_prochandle *P, const char *path, char *s, size_t n)
 {
 	char zroot[PATH_MAX], zpath[PATH_MAX], tmp[PATH_MAX], link[PATH_MAX];
 	path_node_t *pn_stack = NULL, *pn_links = NULL, *pn;
-	struct stat64 sb;
+	struct stat sb;
 	char *p;
 	int i, rv;
 
@@ -650,13 +650,13 @@ Pzonepath(struct ps_prochandle *P, const char *path, char *s, size_t n)
 		 */
 		(void) strlcpy(tmp, zroot, sizeof (tmp));
 		(void) strlcat(tmp, zpath, sizeof (tmp));
-		if (lstat64(tmp, &sb) != 0) {
+		if (lstat(tmp, &sb) != 0) {
 			pn_free2(&pn_stack, &pn_links);
 			return (NULL);
 		}
 		if (!S_ISLNK(sb.st_mode)) {
 			/*
-			 * Since the lstat64() above succeeded we know that
+			 * Since the lstat() above succeeded we know that
 			 * zpath exists, since this is not a symlink loop
 			 * around and check the next path component.
 			 */

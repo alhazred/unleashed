@@ -106,7 +106,7 @@ load_fdinfo(struct ps_prochandle *P)
 			fd_info_t	*fip;
 			prfdinfo_t	*info;
 			int		len;
-			struct stat64	stat;
+			struct stat	stat;
 
 			if (!isdigit(ent->d_name[0]))
 				continue;
@@ -117,7 +117,7 @@ load_fdinfo(struct ps_prochandle *P)
 			info = &fip->fd_info;
 			info->pr_fd = fd;
 
-			if (pr_fstat64(P, fd, &stat) == 0) {
+			if (pr_fstat(P, fd, &stat) == 0) {
 				info->pr_mode = stat.st_mode;
 				info->pr_uid = stat.st_uid;
 				info->pr_gid = stat.st_gid;

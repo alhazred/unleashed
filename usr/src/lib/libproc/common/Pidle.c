@@ -48,7 +48,7 @@ Pread_idle(struct ps_prochandle *P, void *buf, size_t n, uintptr_t addr,
 		map_info_t *mp;
 		uintptr_t mapoff;
 		ssize_t len;
-		off64_t off;
+		off_t off;
 
 		if ((mp = Paddr2mptr(P, addr)) == NULL)
 			break;
@@ -163,7 +163,7 @@ Pgrab_file(const char *fname, int *perr)
 	int fd;
 	int i;
 
-	if ((fd = open64(fname, O_RDONLY)) < 0) {
+	if ((fd = open(fname, O_RDONLY)) < 0) {
 		dprintf("couldn't open file");
 		*perr = (errno == ENOENT) ? G_NOEXEC : G_STRANGE;
 		return (NULL);

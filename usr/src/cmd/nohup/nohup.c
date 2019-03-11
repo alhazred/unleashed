@@ -254,7 +254,7 @@ fd_cb(void *data, int fd)
 	/*
 	 * See if this fd refers to the controlling tty.
 	 */
-	if (pr_fstat64(g_proc, fd, &sbuf) == -1 ||
+	if (pr_fstat(g_proc, fd, &sbuf) == -1 ||
 	    sbuf.st_rdev != Ppsinfo(g_proc)->pr_ttydev)
 		return (0);
 

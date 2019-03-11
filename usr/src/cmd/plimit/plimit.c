@@ -55,7 +55,7 @@ static	int	kbytes = FALSE;
 static	int	mbytes = FALSE;
 static	char	set_current[RLIM_NLIMITS];
 static	char	set_maximum[RLIM_NLIMITS];
-static	struct rlimit64 rlimit[RLIM_NLIMITS];
+static	struct rlimit rlimit[RLIM_NLIMITS];
 
 static	void	intr(int);
 static	int	parse_limits(int, char *);
@@ -235,10 +235,10 @@ intr(int sig)
  *	mm : ss		minutes and seconds (for CPU time only)
  */
 static int
-limit_value(int which, char *arg, rlim64_t *limit)
+limit_value(int which, char *arg, rlim_t *limit)
 {
-	rlim64_t value;
-	rlim64_t unit;
+	rlim_t value;
+	rlim_t unit;
 	char *lastc;
 
 	if (strcmp(arg, "unlimited") == 0) {
@@ -249,7 +249,7 @@ limit_value(int which, char *arg, rlim64_t *limit)
 	if (which == RLIMIT_CPU && strchr(arg, ':') != NULL) {
 		char *minutes = strtok_r(arg, " \t:", &lastc);
 		char *seconds = strtok_r(NULL, " \t", &lastc);
-		rlim64_t sec;
+		rlim_t sec;
 
 		if (seconds != NULL && strtok_r(NULL, " \t", &lastc) != NULL)
 			return (1);
@@ -319,7 +319,7 @@ parse_limits(int which, char *arg)
 	char *lastc;
 	char *soft = strtok_r(arg, " \t,", &lastc);
 	char *hard = strtok_r(NULL, " \t", &lastc);
-	struct rlimit64 *rp = &rlimit[which];
+	struct rlimit *rp = &rlimit[which];
 
 	if (hard != NULL && strtok_r(NULL, " \t", &lastc) != NULL)
 		return (1);
@@ -349,7 +349,7 @@ parse_limits(int which, char *arg)
 }
 
 static void
-limit_adjust(struct rlimit64 *rp, int units)
+limit_adjust(struct rlimit *rp, int units)
 {
 	if (rp->rlim_cur != RLIM64_INFINITY)
 		rp->rlim_cur /= units;
@@ -358,7 +358,7 @@ limit_adjust(struct rlimit64 *rp, int units)
 }
 
 static char *
-limit_values(struct rlimit64 *rp)
+limit_values(struct rlimit *rp)
 {
 	static char buffer[64];
 	char buf1[32];
@@ -388,7 +388,7 @@ limit_values(struct rlimit64 *rp)
 static void
 show_limits(struct ps_prochandle *Pr)
 {
-	struct rlimit64 rlim;
+	struct rlimit rlim;
 	int resource;
 	char buf[32];
 	char *s;
@@ -396,7 +396,7 @@ show_limits(struct ps_prochandle *Pr)
 	(void) printf("   resource\t\t current\t maximum\n");
 
 	for (resource = 0; resource < RLIM_NLIMITS; resource++) {
-		if (pr_getrlimit64(Pr, resource, &rlim) != 0)
+		if (pr_getrlimit(Pr, resource, &rlim) != 0)
 			continue;
 
 		switch (resource) {
@@ -468,15 +468,15 @@ show_limits(struct ps_prochandle *Pr)
 }
 
 static int
-set_one_limit(struct ps_prochandle *Pr, int which, rlim64_t cur, rlim64_t max)
+set_one_limit(struct ps_prochandle *Pr, int which, rlim_t cur, rlim_t max)
 {
-	struct rlimit64 rlim;
+	struct rlimit rlim;
 	int be_su = 0;
 	prpriv_t *old_prpriv = NULL, *new_prpriv = NULL;
 	priv_set_t *eset, *pset;
 	int ret = 0;
 
-	if (pr_getrlimit64(Pr, which, &rlim) != 0) {
+	if (pr_getrlimit(Pr, which, &rlim) != 0) {
 		(void) fprintf(stderr,
 		    "%s: unable to get process limit for pid %d: %s\n",
 		    command, Pstatus(Pr)->pr_pid, strerror(errno));
@@ -547,7 +547,7 @@ set_one_limit(struct ps_prochandle *Pr, int which, rlim64_t cur, rlim64_t max)
 		}
 	}
 
-	if (pr_setrlimit64(Pr, which, &rlim) != 0) {
+	if (pr_setrlimit(Pr, which, &rlim) != 0) {
 		(void) fprintf(stderr,
 		    "%s: cannot set resource limit for pid %d: %s\n",
 		    command, Pstatus(Pr)->pr_pid, strerror(errno));

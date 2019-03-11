@@ -128,7 +128,7 @@ typedef struct file_info {	/* symbol information for a mapped file */
 typedef struct map_info {	/* description of an address space mapping */
 	prmap_t	map_pmap;	/* /proc description of this mapping */
 	file_info_t *map_file;	/* pointer into list of mapped files */
-	off64_t map_offset;	/* offset into core file (if core) */
+	off_t map_offset;	/* offset into core file (if core) */
 	int map_relocate;	/* associated file_map needs to be relocated */
 } map_info_t;
 
@@ -156,7 +156,7 @@ typedef struct core_info {	/* information specific to core files */
 	plist_t core_lwp_head;	/* head of list of lwp info */
 	lwp_info_t *core_lwp;	/* current lwp information */
 	uint_t core_nlwp;	/* number of lwp's in list */
-	off64_t core_size;	/* size of core file in bytes */
+	off_t core_size;	/* size of core file in bytes */
 	char *core_platform;	/* platform string from core file */
 	struct utsname *core_uts;	/* uname(2) data from core file */
 	prcred_t *core_cred;	/* process credential from core file */
@@ -288,7 +288,7 @@ extern	fd_info_t *Pfd2info(struct ps_prochandle *, int);
 extern	char	*Pfindmap(struct ps_prochandle *, map_info_t *, char *,
 	size_t);
 
-extern	int	Padd_mapping(struct ps_prochandle *, off64_t, file_info_t *,
+extern	int	Padd_mapping(struct ps_prochandle *, off_t, file_info_t *,
     prmap_t *);
 extern	void	Psort_mappings(struct ps_prochandle *);
 
