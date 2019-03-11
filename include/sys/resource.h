@@ -112,23 +112,6 @@ typedef u_longlong_t	rlim_t;
 
 #endif	/* _LP64 */
 
-#if defined(_SYSCALL32)
-
-/* Kernel's view of user ILP32 rlimits */
-
-typedef	uint32_t	rlim32_t;
-
-#define	RLIM32_INFINITY		0x7fffffff
-#define	RLIM32_SAVED_MAX	0x7ffffffe
-#define	RLIM32_SAVED_CUR	0x7ffffffd
-
-struct rlimit32 {
-	rlim32_t	rlim_cur;	/* current limit */
-	rlim32_t	rlim_max;	/* maximum value for rlim_cur */
-};
-
-#endif /* _SYSCALL32 */
-
 struct rlimit {
 	rlim_t	rlim_cur;		/* current limit */
 	rlim_t	rlim_max;		/* maximum value for rlim_cur */
