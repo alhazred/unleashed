@@ -2369,7 +2369,6 @@ $endif
 	_rmdir;
 	scanf;
 	seekdir;
-	_seekdir;
 	semctl;
 	_semctl;
 	semget;
@@ -2504,7 +2503,6 @@ $endif
 	_tdelete;
 	tell;
 	telldir;
-	_telldir;
 	tempnam;
 	_tempnam;
 	tfind;
