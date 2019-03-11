@@ -645,10 +645,8 @@
 @ MSG_SYS_PAUSE				"[ pause ]"			# 29
 @ MSG_SYS_PAUSE_ALT			"pause"
 @ MSG_SYS_30				"30"				# 30 (u)
-@ MSG_SYS_STTY				"[ stty ]"			# 31
-@ MSG_SYS_STTY_ALT			"stty"
-@ MSG_SYS_GTTY				"[ gtty ]"			# 32
-@ MSG_SYS_GTTY_ALT			"gtty"
+@ MSG_SYS_31				"31"				# 31 (u)
+@ MSG_SYS_32				"32"				# 32 (u)
 @ MSG_SYS_ACCESS			"[ access ]"			# 33
 @ MSG_SYS_ACCESS_ALT			"access"
 @ MSG_SYS_NICE				"[ nice ]"			# 34

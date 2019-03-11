@@ -159,18 +159,3 @@ ioctl(int fdes, int cmd, intptr_t arg)
 	releasef(fdes);
 	return (rv);
 }
-
-/*
- * Old stty and gtty.  (Still.)
- */
-int
-stty(int fdes, intptr_t arg)
-{
-	return (ioctl(fdes, TIOCSETP, arg));
-}
-
-int
-gtty(int fdes, intptr_t arg)
-{
-	return (ioctl(fdes, TIOCGETP, arg));
-}

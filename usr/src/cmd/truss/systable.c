@@ -250,8 +250,8 @@ const struct systable systable[] = {
 {"fstat",	2, DEC, NOV, DEC, HEX},				/*  28 */
 {"pause",	0, DEC, NOV},					/*  29 */
 { NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
-{"stty",	2, DEC, NOV, DEC, DEC},				/*  31 */
-{"gtty",	2, DEC, NOV, DEC, DEC},				/*  32 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"access",	2, DEC, NOV, STG, ACC},				/*  33 */
 {"nice",	1, DEC, NOV, DEC},				/*  34 */
 {"statfs",	4, DEC, NOV, STG, HEX, DEC, DEC},		/*  35 */

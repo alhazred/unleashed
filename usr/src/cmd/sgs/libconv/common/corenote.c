@@ -207,7 +207,7 @@ conv_cnote_syscall(Word sysnum, Conv_fmt_flags_t fmt_flags,
 		MSG_SYS_STIME,			MSG_SYS_PCSAMPLE,
 		MSG_SYS_ALARM,			MSG_SYS_FSTAT,
 		MSG_SYS_PAUSE,			MSG_SYS_30,
-		MSG_SYS_STTY,			MSG_SYS_GTTY,
+		MSG_SYS_31,			MSG_SYS_32,
 		MSG_SYS_ACCESS,			MSG_SYS_NICE,
 		MSG_SYS_STATFS,			MSG_SYS_SYNC,
 		MSG_SYS_KILL,			MSG_SYS_FSTATFS,
@@ -1856,8 +1856,8 @@ conv_cnote_fltset(uint32_t *maskarr, int n_mask,
 	MSG_SYS_FSTAT_ALT_SIZE			/* 28 */ + \
 	MSG_SYS_PAUSE_ALT_SIZE			/* 29 */ + \
 	MSG_SYS_30_SIZE				/* 30 (unused) */ + \
-	MSG_SYS_STTY_ALT_SIZE			/* 31 */ + \
-	MSG_SYS_GTTY_ALT_SIZE			/* 32 */ + \
+	MSG_SYS_31_SIZE				/* 31 */ + \
+	MSG_SYS_32_SIZE				/* 32 */ + \
 	\
 	/* sysset_t[1] - System Calls [33 - 64] */ \
 	MSG_SYS_ACCESS_ALT_SIZE			/* 33 */ + \
@@ -2176,8 +2176,8 @@ conv_cnote_sysset(uint32_t *maskarr, int n_mask,
 		{ 0x08000000,	MSG_SYS_FSTAT_ALT },
 		{ 0x10000000,	MSG_SYS_PAUSE_ALT },
 		{ 0x20000000,	MSG_SYS_30 },
-		{ 0x40000000,	MSG_SYS_STTY_ALT },
-		{ 0x80000000,	MSG_SYS_GTTY_ALT },
+		{ 0x40000000,	MSG_SYS_31 },
+		{ 0x80000000,	MSG_SYS_32 },
 		{ 0,		0 }
 	};
 	static const Val_desc vda1[] = {	/* System Calls [33 - 64] */

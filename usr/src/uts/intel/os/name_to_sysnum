@@ -27,8 +27,6 @@ pcsample		26
 alarm			27
 fstat			28
 pause			29
-stty			31
-gtty			32
 access			33
 nice			34
 statfs			35

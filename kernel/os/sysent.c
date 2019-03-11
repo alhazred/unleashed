@@ -80,7 +80,6 @@ time_t	gtime();
 int	getloadavg(int *, int);
 int	rusagesys(int, void *, void *, void *, void *);
 int	getpagesizes(int, size_t *, int);
-int	gtty(int, intptr_t);
 #if defined(__i386) || defined(__amd64)
 int	hrtsys(struct hrtsysa *, rval_t *);
 #endif /* __i386 || __amd64 */
@@ -122,7 +121,6 @@ int	sigtimedwait(sigset_t *, siginfo_t *, timespec_t *);
 int	getsetcontext(int, void *);
 int	fstatat(int, char *, struct stat *, int);
 int	stime(time_t);
-int	stty(int, intptr_t);
 int	syssync();
 int	sysacct(char *);
 clock_t	times(struct tms *);
@@ -437,8 +435,8 @@ struct sysent sysent[NSYSCALL] =
 	/* 28 */ SYSENT_LOADABLE(),			/* (was fstat) */
 	/* 29 */ SYSENT_CI("pause",		pause,		0),
 	/* 30 */ SYSENT_LOADABLE(),			/* (was utime) */
-	/* 31 */ SYSENT_CI("stty",		stty,		2),
-	/* 32 */ SYSENT_CI("gtty",		gtty,		2),
+	/* 31 */ SYSENT_LOADABLE(),
+	/* 32 */ SYSENT_LOADABLE(),
 	/* 33 */ SYSENT_LOADABLE(),			/* (was access) */
 	/* 34 */ SYSENT_CI("nice",		nice,		1),
 	/* 35 */ IF_LP64(
@@ -800,8 +798,8 @@ struct sysent sysent32[NSYSCALL] =
 	/* 28 */ SYSENT_LOADABLE32(),			/* (was fstat) */
 	/* 29 */ SYSENT_CI("pause",		pause,		0),
 	/* 30 */ SYSENT_LOADABLE32(),			/* (was utime) */
-	/* 31 */ SYSENT_CI("stty",		stty,		2),
-	/* 32 */ SYSENT_CI("gtty",		gtty,		2),
+	/* 31 */ SYSENT_LOADABLE32(),
+	/* 32 */ SYSENT_LOADABLE32(),
 	/* 33 */ SYSENT_LOADABLE32(),			/* (was access) */
 	/* 34 */ SYSENT_CI("nice",		nice,		1),
 	/* 35 */ SYSENT_CI("statfs",		statfs32,	4),

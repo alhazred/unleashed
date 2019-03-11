@@ -142,8 +142,8 @@ static const char *const systable[] = {
 	"fstat",		/* 28 */
 	"pause",		/* 29 */
 	NULL,			/* 30 */
-	"stty",			/* 31 */
-	"gtty",			/* 32 */
+	NULL,			/* 31 */
+	NULL,			/* 32 */
 	"access",		/* 33 */
 	"nice",			/* 34 */
 	"statfs",		/* 35 */
