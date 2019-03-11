@@ -105,7 +105,7 @@ static struct db_info *
 load_db(const char *curloc, const char *catname, int *err)
 {
 	char pathname[PATH_MAX];
-	struct	stat64 sb;
+	struct	stat sb;
 	caddr_t	addr;
 	struct db_info *db;
 	int fd;
@@ -159,7 +159,7 @@ load_db(const char *curloc, const char *catname, int *err)
 		return (NULL);
 	}
 	if ((fd = open(pathname, O_RDONLY)) != -1 &&
-	    fstat64(fd, &sb) != -1 &&
+	    fstat(fd, &sb) != -1 &&
 	    (addr = mmap(NULL, (size_t)sb.st_size, PROT_READ, MAP_SHARED,
 	    fd, 0)) != MAP_FAILED) {
 		db->flag |= DB_EXIST;

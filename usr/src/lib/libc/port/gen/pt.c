@@ -74,7 +74,7 @@ static void itoa(int, char *);
 static dev_t
 ptsdev(int fd)
 {
-	struct stat64 status;
+	struct stat status;
 	struct strioctl istr;
 
 	istr.ic_cmd = ISPTM;
@@ -82,7 +82,7 @@ ptsdev(int fd)
 	istr.ic_timout = 0;
 	istr.ic_dp = NULL;
 
-	if (ioctl(fd, I_STR, &istr) < 0 || fstat64(fd, &status) < 0)
+	if (ioctl(fd, I_STR, &istr) < 0 || fstat(fd, &status) < 0)
 		return (NODEV);
 
 	return (minor(status.st_rdev));

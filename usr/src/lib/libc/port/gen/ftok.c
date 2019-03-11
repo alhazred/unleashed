@@ -43,12 +43,12 @@
 key_t
 ftok(const char *path, int id)
 {
-	struct stat64 st;
+	struct stat st;
 	nvlist_t *nvp;
 	uint32_t devpiece;
 	int error;
 
-	if (stat64(path, &st) < 0)
+	if (stat(path, &st) < 0)
 		return ((key_t)-1);
 
 	/*

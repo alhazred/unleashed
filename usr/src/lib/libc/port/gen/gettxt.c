@@ -84,7 +84,7 @@ gettxt(const char *msg_id, const char *dflt_str)
 	int	msgnum;			/* message number */
 	char	pathname[PATH_MAX];	/* full pathname to message file */
 	int	fd;
-	struct stat64	sb;
+	struct stat	sb;
 	void	*addr;
 	char	*tokp;
 	size_t	name_len;
@@ -173,7 +173,7 @@ try_C:
 		return (handle_return(dflt_str));
 	}
 	if ((fd = open(pathname, O_RDONLY)) == -1 ||
-	    fstat64(fd, &sb) == -1 ||
+	    fstat(fd, &sb) == -1 ||
 	    (addr = mmap(NULL, (size_t)sb.st_size, PROT_READ, MAP_SHARED,
 	    fd, 0L)) == MAP_FAILED) {
 		if (fd != -1)

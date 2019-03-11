@@ -124,14 +124,14 @@ system(const char *cmd)
 	int status;
 	int error;
 	sigset_t mask;
-	struct stat64 buf;
+	struct stat buf;
 	const char *shpath = _PATH_BSHELL;
 	char *argv[4];
 	posix_spawnattr_t attr;
 	static const char *shell = "sh";
 
 	if (cmd == NULL) {
-		if (stat64(shpath, &buf) != 0) {
+		if (stat(shpath, &buf) != 0) {
 			return (0);
 		} else if (getuid() == buf.st_uid) {
 			/* exec for user */

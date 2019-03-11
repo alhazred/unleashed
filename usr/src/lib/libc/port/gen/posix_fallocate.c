@@ -40,10 +40,10 @@
 static int
 fallocate_errno(int fd)
 {
-	struct stat64 statb;
+	struct stat statb;
 	int error;
 
-	if (fstat64(fd, &statb) != 0)		/* can't happen? */
+	if (fstat(fd, &statb) != 0)		/* can't happen? */
 		error = EBADF;
 	else if (S_ISFIFO(statb.st_mode))	/* pipe or FIFO */
 		error = ESPIPE;

@@ -1425,7 +1425,7 @@ load_zoneinfo(const char *name, state_t *sp)
 	prev_t	*prevp;
 /* LINTED */
 	struct	tzhead *tzhp;
-	struct	stat64	stbuf;
+	struct	stat	stbuf;
 	ttinfo_t	*most_recent_alt = NULL;
 	ttinfo_t	*most_recent_std = NULL;
 	ttinfo_t	*ttisp;
@@ -1452,7 +1452,7 @@ load_zoneinfo(const char *name, state_t *sp)
 	}
 	lfree(fullname, namelen);
 
-	if (fstat64(fid, &stbuf) == -1) {
+	if (fstat(fid, &stbuf) == -1) {
 		(void) close(fid);
 		return (-1);
 	}

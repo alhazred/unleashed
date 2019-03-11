@@ -386,12 +386,12 @@ rescan:
 static void
 isseekable(FILE *iop)
 {
-	struct stat64 fstatbuf;
+	struct stat fstatbuf;
 	int save_errno;
 
 	save_errno = errno;
 
-	if (fstat64(GET_FD(iop), &fstatbuf) != 0) {
+	if (fstat(GET_FD(iop), &fstatbuf) != 0) {
 		/*
 		 * when we don't know what it is we'll
 		 * do the old behaviour and flush

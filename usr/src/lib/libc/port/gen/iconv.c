@@ -278,7 +278,7 @@ iconv_search_alias(const char *tocode, const char *fromcode, char *ipath)
 	size_t	tolen, fromlen;
 	iconv_p	cv;
 	int	fd;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	caddr_t	addr;
 	size_t	buflen;
 
@@ -291,9 +291,9 @@ iconv_search_alias(const char *tocode, const char *fromcode, char *ipath)
 		errno = EINVAL;
 		return ((iconv_p)-1);
 	}
-	if (fstat64(fd, &statbuf) == -1) {
+	if (fstat(fd, &statbuf) == -1) {
 		(void) close(fd);
-		/* use errno set by fstat64 */
+		/* use errno set by fstat */
 		return ((iconv_p)-1);
 	}
 	buflen = (size_t)statbuf.st_size;

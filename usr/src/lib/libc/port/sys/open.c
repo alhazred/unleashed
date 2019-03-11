@@ -84,11 +84,11 @@ isptsfd(int fd)
 	char buf[TTYNAME_MAX];
 	char *str1 = buf;
 	const char *str2 = "/dev/pts/";
-	struct stat64 fsb, stb;
+	struct stat fsb, stb;
 	int oerrno = errno;
 	int rval = 0;
 
-	if (fstat64(fd, &fsb) == 0 && S_ISCHR(fsb.st_mode)) {
+	if (fstat(fd, &fsb) == 0 && S_ISCHR(fsb.st_mode)) {
 		/*
 		 * Do this without strcpy() or strlen(),
 		 * to avoid invoking the dynamic linker.
@@ -99,7 +99,7 @@ isptsfd(int fd)
 		 * Inline version of minor(dev), to avoid the dynamic linker.
 		 */
 		itoa(fsb.st_rdev & MAXMIN, str1);
-		if (stat64(buf, &stb) == 0)
+		if (stat(buf, &stb) == 0)
 			rval = (stb.st_rdev == fsb.st_rdev);
 	}
 	errno = oerrno;

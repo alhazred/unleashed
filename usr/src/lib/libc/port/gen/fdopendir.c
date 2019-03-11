@@ -53,7 +53,7 @@ fdopendir(int fd)
 	DIR *dirp = (DIR *)pdirp;
 	void *buf = lmalloc(DIRBUF);
 	int error = 0;
-	struct stat64 sbuf;
+	struct stat sbuf;
 
 	if (pdirp == NULL || buf == NULL)
 		goto fail;
@@ -63,7 +63,7 @@ fdopendir(int fd)
 	 */
 	if (fcntl(fd, F_SETFD, FD_CLOEXEC) < 0)
 		goto fail;
-	if (fstat64(fd, &sbuf) < 0)
+	if (fstat(fd, &sbuf) < 0)
 		goto fail;
 	if ((sbuf.st_mode & S_IFMT) != S_IFDIR) {
 		error = ENOTDIR;

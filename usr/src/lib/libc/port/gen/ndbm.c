@@ -159,7 +159,7 @@ dbm_flushdir(DBM *db)
 DBM *
 dbm_open(const char *file, int flags, mode_t mode)
 {
-	struct stat64 statb;
+	struct stat statb;
 	DBM *db;
 	int	serrno;
 
@@ -198,7 +198,7 @@ dbm_open(const char *file, int flags, mode_t mode)
 		serrno = errno;
 		goto bad1;
 	}
-	(void) fstat64(db->dbm_dirf, &statb);
+	(void) fstat(db->dbm_dirf, &statb);
 	db->dbm_maxbno = statb.st_size * BYTESIZ-1;
 	db->dbm_pagbno = db->dbm_dirbno = -1;
 	return (db);
@@ -493,11 +493,11 @@ datum
 dbm_slow_nextkey(DBM *db)
 {
 
-	struct stat64 statb;
+	struct stat statb;
 	datum item;
 	off64_t where;
 
-	if (dbm_error(db) || fstat64(db->dbm_pagf, &statb) < 0)
+	if (dbm_error(db) || fstat(db->dbm_pagf, &statb) < 0)
 		goto err;
 	statb.st_size /= PBLKSIZ;
 

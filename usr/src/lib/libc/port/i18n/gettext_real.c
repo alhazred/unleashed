@@ -1033,7 +1033,7 @@ handle_mo(struct msg_pack *mp)
 {
 	int	fd;
 	char	*result;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	Msg_node	*mnp;
 	Gettext_t	*gt = global_gt;
 
