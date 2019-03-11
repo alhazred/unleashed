@@ -74,7 +74,6 @@ typedef struct file_attr {
 } file_attr_t;
 
 #if defined(_LP64)
-#define	__open64	__open
 #define	getdents64	getdents
 #define	dirent64_t	dirent_t
 #else
@@ -110,7 +109,7 @@ spawn_closefrom(int lowfd, void *buf)
 	 */
 	(void) __close(lowfd++);
 
-	if ((procfd = __open64("/proc/self/fd", O_RDONLY, 0)) < 0) {
+	if ((procfd = __open("/proc/self/fd", O_RDONLY, 0)) < 0) {
 		/*
 		 * We could not open the /proc file descriptor directory.
 		 * Just fail and be done with it.

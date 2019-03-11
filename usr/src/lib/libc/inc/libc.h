@@ -120,9 +120,7 @@ extern enum fp_direction_type _QgetRD(void);
  * defined in open.c
  */
 extern	int	__open(const char *, int, mode_t);
-extern	int	__open64(const char *, int, mode_t);
 extern	int	__openat(int, const char *, int, mode_t);
-extern	int	__openat64(int, const char *, int, mode_t);
 
 /*
  * defined in hex_bin.c

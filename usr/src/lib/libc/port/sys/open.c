@@ -60,23 +60,6 @@ __open(const char *path, int oflag, mode_t mode)
 	return (__openat(AT_FDCWD, path, oflag, mode));
 }
 
-#if !defined(_LP64)
-
-int
-__openat64(int dfd, const char *path, int oflag, mode_t mode)
-{
-	int fd = syscall(SYS_openat64, dfd, path, oflag, mode);
-	return (xpg4_fixup(fd));
-}
-
-int
-__open64(const char *path, int oflag, mode_t mode)
-{
-	return (__openat64(AT_FDCWD, path, oflag, mode));
-}
-
-#endif	/* !_LP64 */
-
 /*
  * XPG4v2 requires that open of a slave pseudo terminal device
  * provides the process with an interface that is identical to
