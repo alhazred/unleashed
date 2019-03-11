@@ -85,8 +85,6 @@ syslist(char *str,			/* string of syscall names */
 	for (; name; name = strtok_r(NULL, sepr, &lasts)) {
 		int sys;
 		int sysx;
-		int sysxx;
-		int sys64;
 		char *next;
 
 		if (*name == '!') {	/* exclude remainder from set */
@@ -98,7 +96,7 @@ syslist(char *str,			/* string of syscall names */
 		}
 
 		sys = strtol(name, &next, 0);
-		sysx = sysxx = sys64 = 0;
+		sysx = 0;
 		if (sys < 0 || sys > PRMAXSYS || *next != '\0')
 			sys = 0;
 		if (sys == 0) {
@@ -115,92 +113,61 @@ syslist(char *str,			/* string of syscall names */
 		}
 		if (sys > 0 && sys <= PRMAXSYS) {
 			switch (sys) {
-			case SYS_fstatat:	/* set both if either */
-			case SYS_fstatat64:
+			case SYS_fstatat:
 				sys = SYS_fstatat;
-				sys64 = SYS_fstatat64;
 				goto def;
 
-			case SYS_stat:		/* set all if either */
-			case SYS_stat64:
+			case SYS_stat:
 				sys = SYS_stat;
-				sys64 = SYS_stat64;
 				sysx = SYS_fstatat;
-				sysxx = SYS_fstatat64;
 				goto def;
 
-			case SYS_lstat:		/* set all if either */
-			case SYS_lstat64:
+			case SYS_lstat:
 				sys = SYS_lstat;
-				sys64 = SYS_lstat64;
 				sysx = SYS_fstatat;
-				sysxx = SYS_fstatat64;
 				goto def;
 
-			case SYS_fstat:		/* set all if either */
-			case SYS_fstat64:
+			case SYS_fstat:
 				sys = SYS_fstat;
-				sys64 = SYS_fstat64;
 				sysx = SYS_fstatat;
-				sysxx = SYS_fstatat64;
 				goto def;
 
-			case SYS_getdents:	/* set both if either */
-			case SYS_getdents64:
+			case SYS_getdents:
 				sys = SYS_getdents;
-				sys64 = SYS_getdents64;
 				goto def;
 
-			case SYS_mmap:		/* set both if either */
-			case SYS_mmap64:
+			case SYS_mmap:
 				sys = SYS_mmap;
-				sys64 = SYS_mmap64;
 				goto def;
 
-			case SYS_statvfs:	/* set both if either */
-			case SYS_statvfs64:
+			case SYS_statvfs:
 				sys = SYS_statvfs;
-				sys64 = SYS_statvfs64;
 				goto def;
 
-			case SYS_fstatvfs:	/* set both if either */
-			case SYS_fstatvfs64:
+			case SYS_fstatvfs:
 				sys = SYS_fstatvfs;
-				sys64 = SYS_fstatvfs64;
 				goto def;
 
-			case SYS_setrlimit:	/* set both if either */
-			case SYS_setrlimit64:
+			case SYS_setrlimit:
 				sys = SYS_setrlimit;
-				sys64 = SYS_setrlimit64;
 				goto def;
 
-			case SYS_getrlimit:	/* set both if either */
-			case SYS_getrlimit64:
+			case SYS_getrlimit:
 				sys = SYS_getrlimit;
-				sys64 = SYS_getrlimit64;
 				goto def;
 
-			case SYS_pread:		/* set both if either */
-			case SYS_pread64:
+			case SYS_pread:
 				sys = SYS_pread;
-				sys64 = SYS_pread64;
 				goto def;
 
-			case SYS_pwrite:	/* set both if either */
-			case SYS_pwrite64:
+			case SYS_pwrite:
 				sys = SYS_pwrite;
-				sys64 = SYS_pwrite64;
 				goto def;
 
-			case SYS_openat:	/* set all if any */
-			case SYS_openat64:
+			case SYS_openat:
 			case SYS_open:
-			case SYS_open64:
 				sys = SYS_openat;
-				sys64 = SYS_openat64;
 				sysx = SYS_open;
-				sysxx = SYS_open64;
 				goto def;
 
 			case SYS_forksys:	/* set both if either */
@@ -271,18 +238,10 @@ syslist(char *str,			/* string of syscall names */
 					prdelset(setp, sys);
 					if (sysx)
 						prdelset(setp, sysx);
-					if (sysxx)
-						prdelset(setp, sysxx);
-					if (sys64)
-						prdelset(setp, sys64);
 				} else {
 					praddset(setp, sys);
 					if (sysx)
 						praddset(setp, sysx);
-					if (sysxx)
-						praddset(setp, sysxx);
-					if (sys64)
-						praddset(setp, sys64);
 				}
 				break;
 			}

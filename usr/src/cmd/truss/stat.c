@@ -41,118 +41,10 @@
 #include "ramdata.h"
 #include "proto.h"
 
-void	show_stat32(private_t *, long);
-#ifdef _LP64
-void	show_stat64(private_t *, long);
-#endif
-
 void
 show_stat(private_t *pri, long offset)
 {
-#ifdef _LP64
-	if (data_model == PR_MODEL_LP64)
-		show_stat64(pri, offset);
-	else
-		show_stat32(pri, offset);
-#else
-	show_stat32(pri, offset);
-#endif
-}
-
-void
-show_stat32(private_t *pri, long offset)
-{
-	struct stat32 statb;
-	timestruc_t ts;
-
-	if (offset != 0 &&
-	    Pread(Proc, &statb, sizeof (statb), offset) == sizeof (statb)) {
-		(void) printf(
-		    "%s    d=0x%.8X i=%-5u m=0%.6o l=%-2u u=%-5u g=%-5u",
-		    pri->pname,
-		    statb.st_dev,
-		    statb.st_ino,
-		    statb.st_mode,
-		    statb.st_nlink,
-		    statb.st_uid,
-		    statb.st_gid);
-
-		switch (statb.st_mode & S_IFMT) {
-		case S_IFCHR:
-		case S_IFBLK:
-			(void) printf(" rdev=0x%.8X\n", statb.st_rdev);
-			break;
-		default:
-			(void) printf(" sz=%u\n", statb.st_size);
-			break;
-		}
-
-		TIMESPEC32_TO_TIMESPEC(&ts, &statb.st_atim);
-		prtimestruc(pri, "at = ", &ts);
-		TIMESPEC32_TO_TIMESPEC(&ts, &statb.st_mtim);
-		prtimestruc(pri, "mt = ", &ts);
-		TIMESPEC32_TO_TIMESPEC(&ts, &statb.st_ctim);
-		prtimestruc(pri, "ct = ", &ts);
-
-		(void) printf(
-		    "%s    bsz=%-5d blks=%-5d fs=%.*s\n",
-		    pri->pname,
-		    statb.st_blksize,
-		    statb.st_blocks,
-		    _ST_FSTYPSZ,
-		    statb.st_fstype);
-	}
-}
-
-void
-show_stat64_32(private_t *pri, long offset)
-{
-	struct stat64_32 statb;
-	timestruc_t ts;
-
-	if (offset != 0 &&
-	    Pread(Proc, &statb, sizeof (statb), offset) == sizeof (statb)) {
-		(void) printf(
-		    "%s    d=0x%.8X i=%-5llu m=0%.6o l=%-2u u=%-5u g=%-5u",
-		    pri->pname,
-		    statb.st_dev,
-		    (u_longlong_t)statb.st_ino,
-		    statb.st_mode,
-		    statb.st_nlink,
-		    statb.st_uid,
-		    statb.st_gid);
-
-		switch (statb.st_mode & S_IFMT) {
-		case S_IFCHR:
-		case S_IFBLK:
-			(void) printf(" rdev=0x%.8X\n", statb.st_rdev);
-			break;
-		default:
-			(void) printf(" sz=%llu\n", (long long)statb.st_size);
-			break;
-		}
-
-		TIMESPEC32_TO_TIMESPEC(&ts, &statb.st_atim);
-		prtimestruc(pri, "at = ", &ts);
-		TIMESPEC32_TO_TIMESPEC(&ts, &statb.st_mtim);
-		prtimestruc(pri, "mt = ", &ts);
-		TIMESPEC32_TO_TIMESPEC(&ts, &statb.st_ctim);
-		prtimestruc(pri, "ct = ", &ts);
-
-		(void) printf("%s    bsz=%-5d blks=%-5lld fs=%.*s\n",
-		    pri->pname,
-		    statb.st_blksize,
-		    (longlong_t)statb.st_blocks,
-		    _ST_FSTYPSZ,
-		    statb.st_fstype);
-	}
-}
-
-#ifdef _LP64
-void
-show_stat64(private_t *pri, long offset)
-{
-	struct stat64 statb;
+	struct stat statb;
 
 	if (offset != 0 &&
 	    Pread(Proc, &statb, sizeof (statb), offset) == sizeof (statb)) {
@@ -189,4 +81,3 @@ show_stat64(private_t *pri, long offset)
 		    statb.st_fstype);
 	}
 }
-#endif	/* _LP64 */
