@@ -346,12 +346,6 @@ typedef int64_t	(*llfcn_t)();	/* for casting one-word returns */
 /*
  * Conditional constructors to build the tables without #ifdef clutter
  */
-#if defined(_LP64)
-#define	IF_LP64(true, false)	true
-#else
-#define	IF_LP64(true, false)	false
-#endif
-
 #define	IF_sparc(true, false)	false
 
 #if defined(__i386) && !defined(__amd64)
@@ -377,8 +371,11 @@ typedef int64_t	(*llfcn_t)();	/* for casting one-word returns */
  * or 64-bit integer - depending on how the kernel is itself compiled
  * e.g. read(2) returns 'ssize_t' in the kernel and in userland.
  */
-#define	SYSENT_CL(name, call, narg)	\
-	IF_LP64(SYSENT_C(name, call, narg), SYSENT_CI(name, call, narg))
+#ifdef _LP64
+#define SYSENT_CL(name, call, narg) SYSENT_C(name, call, narg)
+#else
+#define SYSENT_CL(name, call, narg) SYSENT_CI(name, call, narg)
+#endif
 
 /*
  * Initialization macro for loadable native system calls.
@@ -400,9 +397,7 @@ struct sysent nosys_ent = SYSENT_NOSYS();
  */
 struct sysent sysent[NSYSCALL] =
 {
-	/*  0 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_C("indir",	indir,		1)),
+	/*  0 */ SYSENT_NOSYS(),
 	/*  1 */ SYSENT_CI("exit",		rexit,		1),
 	/*  2 */ SYSENT_CI("psecflags",		psecflags,	3),
 	/*  3 */ SYSENT_CL("read",		read,		3),
@@ -421,9 +416,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 16 */ SYSENT_LOADABLE(),			/* (was chown) */
 	/* 17 */ SYSENT_CI("brk",		brk,		1),
 	/* 18 */ SYSENT_LOADABLE(),			/* (was stat) */
-	/* 19 */ IF_LP64(
-			SYSENT_CL("lseek",	lseek64,	3),
-			SYSENT_CL("lseek",	lseek32,	3)),
+	/* 19 */ SYSENT_CL("lseek",		lseek64,	3),
 	/* 20 */ SYSENT_2CI("getpid",		getpid,		0),
 	/* 21 */ SYSENT_AP("mount",		mount,		8),
 	/* 22 */ SYSENT_CL("readlinkat",	readlinkat,	4),
@@ -439,14 +432,10 @@ struct sysent sysent[NSYSCALL] =
 	/* 32 */ SYSENT_LOADABLE(),
 	/* 33 */ SYSENT_LOADABLE(),			/* (was access) */
 	/* 34 */ SYSENT_CI("nice",		nice,		1),
-	/* 35 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("statfs",	statfs32,	4)),
+	/* 35 */ SYSENT_NOSYS(),
 	/* 36 */ SYSENT_CI("sync",		syssync,	0),
 	/* 37 */ SYSENT_CI("kill",		kill,		2),
-	/* 38 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("fstatfs",	fstatfs32,	4)),
+	/* 38 */ SYSENT_NOSYS(),
 	/* 39 */ SYSENT_CI("setpgrp",		setpgrp,	3),
 	/* 40 */ SYSENT_CI("uucopystr",		uucopystr,	3),
 	/* 41 */ SYSENT_LOADABLE(),			/* (was dup) */
@@ -467,9 +456,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 54 */ SYSENT_CI("ioctl",		ioctl,		3),
 	/* 55 */ SYSENT_CI("uadmin",		uadmin,		3),
 	/* 56 */ SYSENT_CI("fchownat",		fchownat,	5),
-	/* 57 */ IF_LP64(
-			SYSENT_2CI("utssys",	utssys64,	4),
-			SYSENT_2CI("utssys",	utssys32,	4)),
+	/* 57 */ SYSENT_2CI("utssys",		utssys64,	4),
 	/* 58 */ SYSENT_CI("fdsync",		fdsync,		2),
 	/* 59 */ SYSENT_CI("exece",		exece,		3),
 	/* 60 */ SYSENT_CI("umask",		umask,		1),
@@ -479,13 +466,9 @@ struct sysent sysent[NSYSCALL] =
 	/* 64 */ SYSENT_CI("renameat",		renameat,	4),
 	/* 65 */ SYSENT_CI("unlinkat",		unlinkat,	3),
 	/* 66 */ SYSENT_CI("fstatat",		fstatat,	4),
-	/* 67 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("fstatat64",	fstatat64,	4)),
+	/* 67 */ SYSENT_NOSYS(),
 	/* 68 */ SYSENT_CI("openat",		openat,		4),
-	/* 69 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("openat64",	openat64,	4)),
+	/* 69 */ SYSENT_NOSYS(),
 	/* 70 */ SYSENT_CI("tasksys",		tasksys,	5),
 	/* 71 */ SYSENT_LOADABLE(),		/* acctctl */
 	/* 72 */ SYSENT_LOADABLE(),		/* exacct */
@@ -497,9 +480,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 78 */ SYSENT_CL("sendfilev",		sendfilev,	5),
 	/* 79 */ SYSENT_LOADABLE(),			/* (was rmdir) */
 	/* 80 */ SYSENT_LOADABLE(),			/* (was mkdir) */
-	/* 81 */ IF_LP64(
-			SYSENT_CI("getdents",	getdents64,	3),
-			SYSENT_CI("getdents",	getdents32,	3)),
+	/* 81 */ SYSENT_CI("getdents",		getdents64,	3),
 	/* 82 */ SYSENT_CI("privsys",		privsys,	6),
 	/* 83 */ SYSENT_CI("ucredsys",		ucredsys,	3),
 	/* 84 */ SYSENT_CI("sysfs",		sysfs,		3),
@@ -535,9 +516,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 112 */ SYSENT_CL("priocntlsys",	priocntlsys,	5),
 	/* 113 */ SYSENT_CL("pathconf",		pathconf,	2),
 	/* 114 */ SYSENT_CI("mincore",		mincore,	3),
-	/* 115 */ IF_LP64(
-			SYSENT_CL("mmap",	smmap64,	6),
-			SYSENT_CL("mmap",	smmap32,	6)),
+	/* 115 */ SYSENT_CL("mmap",		smmap64,	6),
 	/* 116 */ SYSENT_CI("mprotect",		mprotect,	3),
 	/* 117 */ SYSENT_CI("munmap",		munmap,		2),
 	/* 118 */ SYSENT_CL("fpathconf",	fpathconf,	2),
@@ -550,12 +529,8 @@ struct sysent sysent[NSYSCALL] =
 	/* 125 */ SYSENT_LOADABLE(),			/* (was fxstat) */
 	/* 126 */ SYSENT_CL("getrandom",	getrandom,	3),
 	/* 127 */ SYSENT_CI("mmapobj",		mmapobjsys,	5),
-	/* 128 */ IF_LP64(
-			SYSENT_CI("setrlimit",	setrlimit64,	2),
-			SYSENT_CI("setrlimit",	setrlimit32,	2)),
-	/* 129 */ IF_LP64(
-			SYSENT_CI("getrlimit",	getrlimit64,	2),
-			SYSENT_CI("getrlimit",	getrlimit32,	2)),
+	/* 128 */ SYSENT_CI("setrlimit",	setrlimit64,	2),
+	/* 129 */ SYSENT_CI("getrlimit",	getrlimit64,	2),
 	/* 130 */ SYSENT_LOADABLE(),			/* (was lchown) */
 	/* 131 */ SYSENT_CI("memcntl",		memcntl,	6),
 	/* 132 */ SYSENT_CI("getpmsg",		getpmsg,	5),
@@ -603,13 +578,7 @@ struct sysent sysent[NSYSCALL] =
 	/* 172 */ SYSENT_CI("lwp_cond_broadcast", lwp_cond_broadcast,	1),
 	/* 173 */ SYSENT_CL("pread",		pread,		4),
 	/* 174 */ SYSENT_CL("pwrite ",		pwrite,		4),
-	/*
-	 * The 64-bit C library maps llseek() to lseek(), so this
-	 * is needed as a native syscall only on the 32-bit kernel.
-	 */
-	/* 175 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_C("llseek",	llseek32,	4)),
+	/* 175 */ SYSENT_NOSYS(),
 	/* 176 */ SYSENT_LOADABLE(),		/* inst_sync */
 	/* 177 */ SYSENT_CI("brandsys",		brandsys,	6),
 	/* 178 */ SYSENT_LOADABLE(),		/* kaio */
@@ -649,40 +618,17 @@ struct sysent sysent[NSYSCALL] =
 	/* 210 */ SYSENT_CI("lwp_mutex_timedlock", lwp_mutex_timedlock,	3),
 	/* 211 */ SYSENT_CI("lwp_sema_timedwait", lwp_sema_timedwait,	3),
 	/* 212 */ SYSENT_CI("lwp_rwlock_sys",	lwp_rwlock_sys,	3),
-	/*
-	 * Syscalls 213-225: 32-bit system call support for large files.
-	 *
-	 * (The 64-bit C library transparently maps these system calls
-	 * back to their native versions, so almost all of them are only
-	 * needed as native syscalls on the 32-bit kernel).
-	 */
-	/* 213 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("getdents64",	getdents64,	3)),
-	/* 214 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_AP("smmaplf32",	smmaplf32,	7)),
+	/* 213 */ SYSENT_NOSYS(),
+	/* 214 */ SYSENT_NOSYS(),
 	/* 215 */ SYSENT_LOADABLE(),			/* (was stat64) */
 	/* 216 */ SYSENT_LOADABLE(),			/* (was lstat64) */
 	/* 217 */ SYSENT_LOADABLE(),			/* (was fstat64) */
-	/* 218 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("statvfs64",	statvfs64,	2)),
-	/* 219 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("fstatvfs64",	fstatvfs64,	2)),
-	/* 220 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("setrlimit64", setrlimit64,	2)),
-	/* 221 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("getrlimit64", getrlimit64,	2)),
-	/* 222 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("pread64",	pread64,	5)),
-	/* 223 */ IF_LP64(
-			SYSENT_NOSYS(),
-			SYSENT_CI("pwrite64",	pwrite64,	5)),
+	/* 218 */ SYSENT_NOSYS(),
+	/* 219 */ SYSENT_NOSYS(),
+	/* 220 */ SYSENT_NOSYS(),
+	/* 221 */ SYSENT_NOSYS(),
+	/* 222 */ SYSENT_NOSYS(),
+	/* 223 */ SYSENT_NOSYS(),
 	/* 224 */ SYSENT_LOADABLE(),			/* (was creat64) */
 	/* 225 */ SYSENT_LOADABLE(),			/* (was open64) */
 	/* 226 */ SYSENT_LOADABLE(),		/* rpcsys */
