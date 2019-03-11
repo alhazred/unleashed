@@ -771,9 +771,9 @@ struct sysent sysent32[NSYSCALL] =
 	/* 64 */ SYSENT_CI("renameat",		renameat,	4),
 	/* 65 */ SYSENT_CI("unlinkat",		unlinkat,	3),
 	/* 66 */ SYSENT_CI("fstatat",		fstatat64_32,	4),
-	/* 67 */ SYSENT_CI("fstatat64",		fstatat64_32,	4),
+	/* 67 */ SYSENT_NOSYS(),
 	/* 68 */ SYSENT_CI("openat",		openat64,	4),
-	/* 69 */ SYSENT_CI("openat64",		openat64,	4),
+	/* 69 */ SYSENT_NOSYS(),
 	/* 70 */ SYSENT_CI("tasksys",		tasksys,	5),
 	/* 71 */ SYSENT_LOADABLE32(),		/* acctctl */
 	/* 72 */ SYSENT_LOADABLE32(),		/* exacct */
@@ -921,20 +921,17 @@ struct sysent sysent32[NSYSCALL] =
 	/* 210 */ SYSENT_CI("lwp_mutex_timedlock", lwp_mutex_timedlock, 3),
 	/* 211 */ SYSENT_CI("lwp_sema_timedwait", lwp_sema_timedwait,	3),
 	/* 212 */ SYSENT_CI("lwp_rwlock_sys",	lwp_rwlock_sys,	3),
-	/*
-	 * Syscalls 213-225: 32-bit system call support for large files.
-	 */
-	/* 213 */ SYSENT_CI("getdents64",	getdents64,	3),
-	/* 214 */ SYSENT_AP("smmaplf32",	smmaplf32,	7),
+	/* 213 */ SYSENT_NOSYS(),
+	/* 214 */ SYSENT_NOSYS(),
 	/* 215 */ SYSENT_LOADABLE32(),			/* (was stat64) */
 	/* 216 */ SYSENT_LOADABLE32(),			/* (was lstat64) */
 	/* 217 */ SYSENT_LOADABLE32(),			/* (was fstat64) */
-	/* 218 */ SYSENT_CI("statvfs64",	statvfs64_32,	2),
-	/* 219 */ SYSENT_CI("fstatvfs64",	fstatvfs64_32,	2),
-	/* 220 */ SYSENT_CI("setrlimit64",	setrlimit64,	2),
-	/* 221 */ SYSENT_CI("getrlimit64",	getrlimit64,	2),
-	/* 222 */ SYSENT_CI("pread64",		pread64,	5),
-	/* 223 */ SYSENT_CI("pwrite64",		pwrite64,	5),
+	/* 218 */ SYSENT_NOSYS(),
+	/* 219 */ SYSENT_NOSYS(),
+	/* 220 */ SYSENT_NOSYS(),
+	/* 221 */ SYSENT_NOSYS(),
+	/* 222 */ SYSENT_NOSYS(),
+	/* 223 */ SYSENT_NOSYS(),
 	/* 224 */ SYSENT_LOADABLE32(),			/* (was creat64) */
 	/* 225 */ SYSENT_LOADABLE32(),			/* (was open64) */
 	/* 226 */ SYSENT_LOADABLE32(),		/* rpcsys */

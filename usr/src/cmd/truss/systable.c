@@ -286,9 +286,9 @@ const struct systable systable[] = {
 {"renameat",	4, DEC, NOV, ATC, STG, ATC, STG},		/*  64 */
 {"unlinkat",	3, DEC, NOV, ATC, STG, UAT},			/*  65 */
 {"fstatat",	4, DEC, NOV, ATC, STG, HEX, SNF},		/*  66 */
-{"fstatat64",	4, DEC, NOV, ATC, STG, HEX, SNF},		/*  67 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"openat",	4, DEC, NOV, ATC, STG, OPN, OCT},		/*  68 */
-{"openat64",	4, DEC, NOV, ATC, STG, OPN, OCT},		/*  69 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"tasksys",	5, DEC, NOV, DEC, DEC, DEC, HEX, DEC},		/*  70 */
 {"acctctl",	3, DEC, NOV, HEX, HEX, UNS},			/*  71 */
 {"exacctsys",	6, DEC, NOV, DEC, IDT, DEC, HEX, DEC, HEX},	/*  72 */
@@ -432,19 +432,19 @@ const struct systable systable[] = {
 {"lwp_mutex_timedlock", 3, DEC, NOV, HEX, HEX, HEX},		/* 210 */
 {"lwp_sema_timedwait", 3, DEC, NOV, HEX, HEX, DEC},		/* 211 */
 {"lwp_rwlock_sys", 3, DEC, NOV, DEC, HEX, HEX},			/* 212 */
-{"getdents64",	3, DEC, NOV, DEC, HEX, UNS},			/* 213 */
-{"mmap64",	7, HEX, NOV, HEX, UNS, MPR, MTY, DEC, LLO, HID}, /* 214 */
-{"stat64",	2, DEC, NOV, STG, HEX},				/* 215 */
-{"lstat64",	2, DEC, NOV, STG, HEX},				/* 216 */
-{"fstat64",	2, DEC, NOV, DEC, HEX},				/* 217 */
-{"statvfs64",	2, DEC, NOV, STG, HEX},				/* 218 */
-{"fstatvfs64",	2, DEC, NOV, DEC, HEX},				/* 219 */
-{"setrlimit64",	2, DEC, NOV, RLM, HEX},				/* 220 */
-{"getrlimit64",	2, DEC, NOV, RLM, HEX},				/* 221 */
-{"pread64",	5, DEC, NOV, DEC, IOB, UNS, LLO, HID},		/* 222 */
-{"pwrite64",	5, DEC, NOV, DEC, IOB, UNS, LLO, HID},		/* 223 */
 { NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
-{"open64",	3, DEC, NOV, STG, OPN, OCT},			/* 225 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"rpcmod",	3, DEC, NOV, DEC, HEX},				/* 226 */
 {"zone",	5, DEC, NOV, DEC, HEX, HEX, HEX, HEX},		/* 227 */
 {"autofssys",	2, DEC, NOV, DEC, HEX},				/* 228 */

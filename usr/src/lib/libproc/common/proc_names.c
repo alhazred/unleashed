@@ -178,9 +178,9 @@ static const char *const systable[] = {
 	"renameat",		/* 64 */
 	"unlinkat",		/* 65 */
 	"fstatat",		/* 66 */
-	"fstatat64",		/* 67 */
+	NULL,			/* 67 */
 	"openat",		/* 68 */
-	"openat64",		/* 69 */
+	NULL,			/* 69 */
 	"tasksys",		/* 70 */
 	"acctctl",		/* 71 */
 	"exacctsys",		/* 72 */
@@ -324,19 +324,19 @@ static const char *const systable[] = {
 	"lwp_mutex_timedlock",	/* 210 */
 	"lwp_sema_timedwait",	/* 211 */
 	"lwp_rwlock_sys",	/* 212 */
-	"getdents64",		/* 213 */
-	"mmap64",		/* 214 */
-	"stat64",		/* 215 */
-	"lstat64",		/* 216 */
-	"fstat64",		/* 217 */
-	"statvfs64",		/* 218 */
-	"fstatvfs64",		/* 219 */
-	"setrlimit64",		/* 220 */
-	"getrlimit64",		/* 221 */
-	"pread64",		/* 222 */
-	"pwrite64",		/* 223 */
+	NULL,			/* 213 */
+	NULL,			/* 214 */
+	NULL,			/* 215 */
+	NULL,			/* 216 */
+	NULL,			/* 217 */
+	NULL,			/* 218 */
+	NULL,			/* 219 */
+	NULL,			/* 220 */
+	NULL,			/* 221 */
+	NULL,			/* 222 */
+	NULL,			/* 223 */
 	NULL,			/* 224 */
-	"open64",		/* 225 */
+	NULL,			/* 225 */
 	"rpcmod",		/* 226 */
 	"zone",			/* 227 */
 	"autofssys",		/* 228 */

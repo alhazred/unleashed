@@ -713,12 +713,10 @@
 @ MSG_SYS_UNLINKAT_ALT			"unlinkat"
 @ MSG_SYS_FSTATAT			"[ fstatat ]"			# 66
 @ MSG_SYS_FSTATAT_ALT			"fstatat"
-@ MSG_SYS_FSTATAT64			"[ fstatat64 ]"			# 67
-@ MSG_SYS_FSTATAT64_ALT			"fstatat64"
+@ MSG_SYS_67				"67"
 @ MSG_SYS_OPENAT			"[ openat ]"			# 68
 @ MSG_SYS_OPENAT_ALT			"openat"
-@ MSG_SYS_OPENAT64			"[ openat64 ]"			# 69
-@ MSG_SYS_OPENAT64_ALT			"openat64"
+@ MSG_SYS_69				"69"
 @ MSG_SYS_TASKSYS			"[ tasksys ]"			# 70
 @ MSG_SYS_TASKSYS_ALT			"tasksys	"
 @ MSG_SYS_ACCTCTL			"[ acctctl ]"			# 71
@@ -991,31 +989,19 @@
 @ MSG_SYS_LWP_SEMA_TIMEDWAIT_ALT	"lwp_sema_timedwait"
 @ MSG_SYS_LWP_RWLOCK_SYS		"[ lwp_rwlock_sys ]"		# 212
 @ MSG_SYS_LWP_RWLOCK_SYS_ALT		"lwp_rwlock_sys"
-@ MSG_SYS_GETDENTS64			"[ getdents64 ]"		# 213
-@ MSG_SYS_GETDENTS64_ALT		"getdents64"
-@ MSG_SYS_MMAP64			"[ mmap64 ]"			# 214
-@ MSG_SYS_MMAP64_ALT			"mmap64"
-@ MSG_SYS_STAT64			"[ stat64 ]"			# 215
-@ MSG_SYS_STAT64_ALT			"stat64"
-@ MSG_SYS_LSTAT64			"[ lstat64 ]"			# 216
-@ MSG_SYS_LSTAT64_ALT			"lstat64"
-@ MSG_SYS_FSTAT64			"[ fstat64 ]"			# 217
-@ MSG_SYS_FSTAT64_ALT			"fstat64"
-@ MSG_SYS_STATVFS64			"[ statvfs64 ]"			# 218
-@ MSG_SYS_STATVFS64_ALT			"statvfs64"
-@ MSG_SYS_FSTATVFS64			"[ fstatvfs64 ]"		# 219
-@ MSG_SYS_FSTATVFS64_ALT		"fstatvfs64"
-@ MSG_SYS_SETRLIMIT64			"[ setrlimit64 ]"		# 220
-@ MSG_SYS_SETRLIMIT64_ALT		"setrlimit64"
-@ MSG_SYS_GETRLIMIT64			"[ getrlimit64 ]"		# 221
-@ MSG_SYS_GETRLIMIT64_ALT		"getrlimit64"
-@ MSG_SYS_PREAD64			"[ pread64 ]"			# 222
-@ MSG_SYS_PREAD64_ALT			"pread64"
-@ MSG_SYS_PWRITE64			"[ pwrite64 ]"			# 223
-@ MSG_SYS_PWRITE64_ALT			"pwrite64"
-@ MSG_SYS_224				"224"				# 224(u)
-@ MSG_SYS_OPEN64			"[ open64 ]"			# 225
-@ MSG_SYS_OPEN64_ALT			"open64"
+@ MSG_SYS_213				"213"
+@ MSG_SYS_214				"214"
+@ MSG_SYS_215				"215"
+@ MSG_SYS_216				"216"
+@ MSG_SYS_217				"217"
+@ MSG_SYS_218				"218"
+@ MSG_SYS_219				"219"
+@ MSG_SYS_220				"220"
+@ MSG_SYS_221				"221"
+@ MSG_SYS_222				"222"
+@ MSG_SYS_223				"223"
+@ MSG_SYS_224				"224"
+@ MSG_SYS_225				"225"
 @ MSG_SYS_RPCSYS			"[ rpcsys ]"			# 226
 @ MSG_SYS_RPCSYS_ALT			"rpcsys"
 @ MSG_SYS_ZONE				"[ zone ]"			# 227
