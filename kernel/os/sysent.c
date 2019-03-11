@@ -723,13 +723,9 @@ struct sysent sysent[NSYSCALL] =
 extern int ulimit32(int, int);
 extern ssize_t read32(int32_t, caddr32_t, size32_t);
 extern ssize_t write32(int32_t, caddr32_t, size32_t);
-extern ssize_t pread32(int32_t, caddr32_t, size32_t, off32_t);
-extern ssize_t pwrite32(int32_t, caddr32_t, size32_t, off32_t);
 extern ssize_t readv32(int32_t, caddr32_t, int32_t);
 extern ssize_t writev32(int32_t, caddr32_t, int32_t);
 extern ssize_t readlinkat32(int, caddr32_t, caddr32_t, size32_t);
-extern int openat32(int, char *, int, int);
-extern int fstatat32(int, char *, struct stat32 *, int);
 extern int fstatat64_32(int, char *, struct stat64_32 *, int);
 extern int getmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t *);
 extern int putmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t *);
@@ -738,8 +734,6 @@ extern int getpmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t *,
 extern int putpmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t,
     int32_t);
 extern int getsetcontext32(int, void *);
-extern int statvfs32(char *, struct statvfs32 *);
-extern int fstatvfs32(int, struct statvfs32 *);
 extern int statvfs64_32(char *, struct statvfs64_32 *);
 extern int fstatvfs64_32(int, struct statvfs64_32 *);
 extern int sigaction32(int, struct sigaction32 *, struct sigaction32 *);
