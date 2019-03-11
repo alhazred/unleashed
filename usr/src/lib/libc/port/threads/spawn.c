@@ -73,13 +73,6 @@ typedef struct file_attr {
 	int		fa_newfiledes;	/* new file descriptor for dup2() */
 } file_attr_t;
 
-#if defined(_LP64)
-#define	getdents64	getdents
-#define	dirent64_t	dirent_t
-#else
-extern int getdents64(int, dirent64_t *, size_t);
-#endif
-
 extern const char **_environ;
 
 /*
@@ -87,7 +80,7 @@ extern const char **_environ;
  * Close all open file descriptors greater than or equal to lowfd.
  * This is executed in the child of vfork(), so we must not call
  * opendir() / readdir() because that would alter the parent's
- * address space.  We use the low-level getdents64() system call.
+ * address space.  We use the low-level getdents() system call.
  * Return non-zero on error.
  */
 static int
@@ -96,8 +89,8 @@ spawn_closefrom(int lowfd, void *buf)
 	int procfd;
 	int fd;
 	int buflen;
-	dirent64_t *dp;
-	dirent64_t *dpend;
+	struct dirent *dp;
+	struct dirent *dpend;
 
 	if (lowfd <  0)
 		lowfd = 0;
@@ -122,19 +115,19 @@ spawn_closefrom(int lowfd, void *buf)
 		 * Collect a bunch of open file descriptors and close them.
 		 * Repeat until the directory is exhausted.
 		 */
-		dp = (dirent64_t *)buf;
-		if ((buflen = getdents64(procfd, dp, DIRBUF)) <= 0) {
+		dp = (struct dirent *)buf;
+		if ((buflen = getdents(procfd, dp, DIRBUF)) <= 0) {
 			(void) __close(procfd);
 			break;
 		}
-		dpend = (dirent64_t *)((uintptr_t)buf + buflen);
+		dpend = (struct dirent *)((uintptr_t)buf + buflen);
 		do {
 			/* skip '.', '..' and procfd */
 			if (dp->d_name[0] != '.' &&
 			    (fd = atoi(dp->d_name)) != procfd &&
 			    fd >= lowfd)
 				(void) __close(fd);
-			dp = (dirent64_t *)((uintptr_t)dp + dp->d_reclen);
+			dp = (struct dirent *)((uintptr_t)dp + dp->d_reclen);
 		} while (dp < dpend);
 	}
 
@@ -293,7 +286,7 @@ posix_spawn(
 
 	if (fap != NULL && fap->fa_need_dirbuf) {
 		/*
-		 * Preallocate the buffer for the call to getdents64() in
+		 * Preallocate the buffer for the call to getdents() in
 		 * spawn_closefrom() since we can't do it in the vfork() child.
 		 */
 		if ((dirbuf = lmalloc(DIRBUF)) == NULL)
@@ -397,7 +390,7 @@ posix_spawnp(
 
 	if (fap != NULL && fap->fa_need_dirbuf) {
 		/*
-		 * Preallocate the buffer for the call to getdents64() in
+		 * Preallocate the buffer for the call to getdents() in
 		 * spawn_closefrom() since we can't do it in the vfork() child.
 		 */
 		if ((dirbuf = lmalloc(DIRBUF)) == NULL)

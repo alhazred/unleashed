@@ -88,13 +88,6 @@ typedef struct {
 	mutex_t	dd_lock;
 } private_DIR;
 
-#if !defined(_LP64)
-/*
- * getdents64 transitional interface is intentionally internal to libc
- */
-extern int getdents64(int, struct dirent64 *, size_t);
-#endif
-
 extern int _scrwidth(wchar_t);
 
 extern int64_t __div64(int64_t, int64_t);
