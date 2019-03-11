@@ -328,7 +328,7 @@ do_core(char *fp, int sig, enum core_types core_type, struct core_globals *cg)
 {
 	proc_t *p = curproc;
 	cred_t *credp = CRED();
-	rlim64_t rlimit;
+	rlim_t rlimit;
 	vnode_t *vp;
 	int error = 0;
 	struct execsw *eswp;
@@ -564,7 +564,7 @@ expand_string(const char *pat, char *fp, int size, cred_t *cr)
 }
 
 static int
-dump_one_core(int sig, rlim64_t rlimit, enum core_types core_type,
+dump_one_core(int sig, rlim_t rlimit, enum core_types core_type,
     struct core_globals *cg, char **name)
 {
 	refstr_t *rp;
@@ -640,7 +640,7 @@ core(int sig, int ext)
 	int error3 = 1;
 	k_sigset_t sigmask;
 	k_sigset_t sighold;
-	rlim64_t rlimit;
+	rlim_t rlimit;
 	struct core_globals *my_cg, *global_cg;
 
 	global_cg = zone_getspecific(core_zone_key, global_zone);
@@ -791,7 +791,7 @@ clock_t	core_delay_usec = 10000;
  */
 int
 core_seg(proc_t *p, vnode_t *vp, offset_t offset, caddr_t addr, size_t size,
-    rlim64_t rlimit, cred_t *credp)
+    rlim_t rlimit, cred_t *credp)
 {
 	caddr_t eaddr;
 	caddr_t base;
@@ -839,7 +839,7 @@ core_seg(proc_t *p, vnode_t *vp, offset_t offset, caddr_t addr, size_t size,
  */
 int
 core_write(vnode_t *vp, enum uio_seg segflg, offset_t offset,
-    const void *buf, size_t len, rlim64_t rlimit, cred_t *credp)
+    const void *buf, size_t len, rlim_t rlimit, cred_t *credp)
 {
 	ssize_t resid = len;
 	int error = 0;

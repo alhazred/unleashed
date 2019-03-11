@@ -308,7 +308,7 @@ rwpcp(
 	int mapon, pagecreate;
 	int newpage;
 	int error = 0;
-	rlim64_t limit = uio->uio_llimit;
+	rlim_t limit = uio->uio_llimit;
 	int oresid = uio->uio_resid;
 
 	/*
@@ -330,7 +330,7 @@ rwpcp(
 	if (uio->uio_loffset < 0)
 		return (EINVAL);
 
-	if (limit == RLIM64_INFINITY || limit > MAXOFFSET_T)
+	if (limit == RLIM_INFINITY || limit > MAXOFFSET_T)
 		limit = MAXOFFSET_T;
 
 	if (uio->uio_loffset >= limit && rw == UIO_WRITE) {

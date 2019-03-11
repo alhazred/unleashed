@@ -695,7 +695,7 @@ sbd_read_meta(sbd_lu_t *sl, uint64_t offset, uint64_t size, uint8_t *buf)
 	} else {
 		vret = vn_rdwr(UIO_READ, vp, (caddr_t)io_buf, (ssize_t)io_size,
 		    (offset_t)starting_off, UIO_SYSSPACE, FRSYNC,
-		    RLIM64_INFINITY, CRED(), &resid);
+		    RLIM_INFINITY, CRED(), &resid);
 
 		if (vret || resid) {
 			ret = SBD_FILEIO_FAILURE | vret;
@@ -772,7 +772,7 @@ sbd_write_meta(sbd_lu_t *sl, uint64_t offset, uint64_t size, uint8_t *buf)
 	} else {
 		vret = vn_rdwr(UIO_WRITE, vp, (caddr_t)io_buf, (ssize_t)io_size,
 		    (offset_t)starting_off, UIO_SYSSPACE, FDSYNC,
-		    RLIM64_INFINITY, CRED(), &resid);
+		    RLIM_INFINITY, CRED(), &resid);
 
 		if (vret || resid) {
 			ret = SBD_FILEIO_FAILURE | vret;
@@ -3033,7 +3033,7 @@ sbd_data_read(sbd_lu_t *sl, struct scsi_task *task,
 		return (SBD_FAILURE);
 	}
 	ret = vn_rdwr(UIO_READ, sl->sl_data_vp, (caddr_t)buf, (ssize_t)size,
-	    (offset_t)offset, UIO_SYSSPACE, 0, RLIM64_INFINITY, CRED(),
+	    (offset_t)offset, UIO_SYSSPACE, 0, RLIM_INFINITY, CRED(),
 	    &resid);
 	rw_exit(&sl->sl_access_state_lock);
 
@@ -3089,7 +3089,7 @@ sbd_data_write(sbd_lu_t *sl, struct scsi_task *task,
 		return (SBD_FAILURE);
 	}
 	ret = vn_rdwr(UIO_WRITE, sl->sl_data_vp, (caddr_t)buf, (ssize_t)size,
-	    (offset_t)offset, UIO_SYSSPACE, ioflag, RLIM64_INFINITY, CRED(),
+	    (offset_t)offset, UIO_SYSSPACE, ioflag, RLIM_INFINITY, CRED(),
 	    &resid);
 	rw_exit(&sl->sl_access_state_lock);
 

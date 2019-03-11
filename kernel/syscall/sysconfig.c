@@ -78,7 +78,7 @@ sysconfig(int which)
 		 * Maximum number of open files (soft limit).
 		 */
 		{
-			rlim64_t fd_ctl;
+			rlim_t fd_ctl;
 			mutex_enter(&curproc->p_lock);
 			fd_ctl = rctl_enforced_value(
 			    rctlproc_legacy[RLIMIT_NOFILE], curproc->p_rctls,
@@ -146,7 +146,7 @@ sysconfig(int which)
 		 * Maximum number of outstanding queued signals.
 		 */
 		{
-			rlim64_t sigqsz_max;
+			rlim_t sigqsz_max;
 			mutex_enter(&curproc->p_lock);
 			sigqsz_max = rctl_enforced_value(rc_process_sigqueue,
 			    curproc->p_rctls, curproc);

@@ -1196,7 +1196,7 @@ int	vn_createat(char *pnamep, enum uio_seg seg, struct vattr *vap,
 		enum vcexcl excl, int mode, struct vnode **vpp,
 		enum create why, int flag, mode_t umask, struct vnode *startvp);
 int	vn_rdwr(enum uio_rw rw, struct vnode *vp, caddr_t base, ssize_t len,
-		offset_t offset, enum uio_seg seg, int ioflag, rlim64_t ulimit,
+		offset_t offset, enum uio_seg seg, int ioflag, rlim_t ulimit,
 		cred_t *cr, ssize_t *residp);
 void	vn_rele(struct vnode *vp);
 void	vn_rele_async(struct vnode *vp, struct taskq *taskq);

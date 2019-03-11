@@ -348,7 +348,7 @@ ufs_directio_write(struct inode *ip, uio_t *arg_uio, int ioflag, int rewrite,
 	long		resid, bytes_written;
 	uoff_t	size, uoff;
 	uio_t		*uio = arg_uio;
-	rlim64_t	limit = uio->uio_llimit;
+	rlim_t		limit = uio->uio_llimit;
 	int		on, n, error, newerror, len, has_holes;
 	daddr_t		bn;
 	size_t		nbytes;

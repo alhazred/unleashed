@@ -433,7 +433,7 @@ acct(char st)
 	if (fop_getattr(vp, &va, 0, kcred, NULL) == 0) {
 		error = vn_rdwr(UIO_WRITE, vp, (caddr_t)&ag->acctbuf,
 		    sizeof (ag->acctbuf), 0LL, UIO_SYSSPACE, FAPPEND,
-		    (rlim64_t)MAXOFF32_T, kcred, &resid);
+		    (rlim_t)MAXOFF32_T, kcred, &resid);
 		if (error || resid)
 			(void) fop_setattr(vp, &va, 0, kcred, NULL);
 	}

@@ -685,7 +685,7 @@ zfs_replay_write(void *arg1, void *arg2, boolean_t byteswap)
 	}
 
 	error = vn_rdwr(UIO_WRITE, ZTOV(zp), data, length, offset,
-	    UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, &resid);
+	    UIO_SYSSPACE, 0, RLIM_INFINITY, kcred, &resid);
 
 	VN_RELE(ZTOV(zp));
 	zfsvfs->z_replay_eof = 0;	/* safety */

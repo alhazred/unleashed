@@ -813,7 +813,7 @@ nfslog_write_logrecords(struct log_file *lfp,
 	uio.uio_loffset = 0;
 	uio.uio_segflg = (short)UIO_SYSSPACE;
 	uio.uio_resid = len;
-	uio.uio_llimit = (rlim64_t)MAXOFFSET_T;
+	uio.uio_llimit = (rlim_t)MAXOFFSET_T;
 	uio.uio_fmode = FWRITE;
 	uio.uio_extflg = UIO_COPY_DEFAULT;
 

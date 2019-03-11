@@ -143,7 +143,7 @@ setup_note_header(Phdr *v, proc_t *p)
 
 int
 write_elfnotes(proc_t *p, int sig, vnode_t *vp, offset_t offset,
-    rlim64_t rlimit, cred_t *credp, core_content_t content)
+    rlim_t rlimit, cred_t *credp, core_content_t content)
 {
 	union {
 		psinfo_t	psinfo;

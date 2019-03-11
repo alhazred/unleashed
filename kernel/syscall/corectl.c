@@ -178,7 +178,7 @@ core_init_zone(zoneid_t zoneid)
 	cg->core_file = NULL;
 	cg->core_options = CC_PROCESS_PATH;
 	cg->core_content = CC_CONTENT_DEFAULT;
-	cg->core_rlimit = RLIM64_INFINITY;
+	cg->core_rlimit = RLIM_INFINITY;
 	cg->core_default_path = corectl_path_alloc("core");
 	cg->core_default_content = corectl_content_alloc(CC_CONTENT_DEFAULT);
 

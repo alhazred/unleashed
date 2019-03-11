@@ -761,7 +761,7 @@ sbd_copy_rdwr(scsi_task_t *task, uint64_t laddr, stmf_data_buf_t *dbuf,
 	uio.uio_loffset = laddr;
 	uio.uio_segflg = (short)UIO_SYSSPACE;
 	uio.uio_resid = (uint64_t)len;
-	uio.uio_llimit = RLIM64_INFINITY;
+	uio.uio_llimit = RLIM_INFINITY;
 
 	if (is_read == B_TRUE) {
 		uio.uio_fmode = FREAD;

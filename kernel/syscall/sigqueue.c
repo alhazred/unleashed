@@ -133,7 +133,7 @@ sigqueue(pid_t pid, int sig, /* union sigval */ void *value,
 		return (set_errno(EINVAL));
 
 	if ((sqh = p->p_sigqhdr) == NULL) {
-		rlim64_t sigqsz_max;
+		rlim_t sigqsz_max;
 
 		mutex_enter(&p->p_lock);
 		sigqsz_max = rctl_enforced_value(rc_process_sigqueue,

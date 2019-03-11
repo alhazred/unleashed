@@ -327,10 +327,10 @@ typedef struct	proc {
 	kmutex_t	p_sc_lock;	/* protects p_pagep */
 	struct sc_page_ctl *p_pagep;	/* list of process's shared pages */
 	struct rctl_set	*p_rctls;	/* resource controls for this process */
-	rlim64_t	p_stk_ctl;	/* currently enforced stack size */
-	rlim64_t	p_fsz_ctl;	/* currently enforced file size */
-	rlim64_t	p_vmem_ctl;	/* currently enforced addr-space size */
-	rlim64_t	p_fno_ctl;	/* currently enforced file-desc limit */
+	rlim_t		p_stk_ctl;	/* currently enforced stack size */
+	rlim_t		p_fsz_ctl;	/* currently enforced file size */
+	rlim_t		p_vmem_ctl;	/* currently enforced addr-space size */
+	rlim_t		p_fno_ctl;	/* currently enforced file-desc limit */
 	pid_t		p_ancpid;	/* ancestor pid, used by exacct */
 	struct itimerval p_realitimer;	/* real interval timer */
 	timeout_id_t	p_itimerid;	/* real interval timer's timeout id */

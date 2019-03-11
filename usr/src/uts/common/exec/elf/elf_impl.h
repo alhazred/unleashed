@@ -114,15 +114,15 @@ typedef struct {
 
 #endif	/*	_ELF32_COMPAT	*/
 
-extern int elfnote(vnode_t *, offset_t *, int, int, void *, rlim64_t, cred_t *);
+extern int elfnote(vnode_t *, offset_t *, int, int, void *, rlim_t, cred_t *);
 extern void setup_old_note_header(Phdr *, proc_t *);
 extern void setup_note_header(Phdr *, proc_t *);
 
 extern int write_old_elfnotes(proc_t *, int, vnode_t *, offset_t,
-    rlim64_t, cred_t *);
+    rlim_t, cred_t *);
 
 extern int write_elfnotes(proc_t *, int, vnode_t *, offset_t,
-    rlim64_t, cred_t *, core_content_t);
+    rlim_t, cred_t *, core_content_t);
 
 #ifdef	__cplusplus
 }

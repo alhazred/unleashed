@@ -179,7 +179,7 @@ vdev_file_io_strategy(void *arg)
 
 	error = vn_rdwr((bp->b_flags & B_READ) ? UIO_READ : UIO_WRITE,
 	    vp, bp->b_un.b_addr, bp->b_bcount, ldbtob(bp->b_lblkno),
-	    UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, &resid);
+	    UIO_SYSSPACE, 0, RLIM_INFINITY, kcred, &resid);
 
 	if (error == 0) {
 		bp->b_resid = resid;

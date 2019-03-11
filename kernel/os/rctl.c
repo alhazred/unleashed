@@ -1465,7 +1465,7 @@ rctl_set_find(rctl_set_t *set, rctl_hndl_t hndl, rctl_t **rctl)
 }
 
 /*
- * rlim64_t rctl_enforced_value(rctl_hndl_t, rctl_set_t *, struct proc *)
+ * rlim_t rctl_enforced_value(rctl_hndl_t, rctl_set_t *, struct proc *)
  *
  * Overview
  *   Given a process, get the next enforced value on the rctl of the specified
@@ -1483,7 +1483,7 @@ rctl_qty_t
 rctl_enforced_value(rctl_hndl_t hndl, rctl_set_t *rset, struct proc *p)
 {
 	rctl_t *rctl;
-	rlim64_t ret;
+	rlim_t ret;
 
 	mutex_enter(&rset->rcs_lock);
 
@@ -2026,7 +2026,7 @@ rctl_local_replace(rctl_hndl_t hndl, rctl_val_t *oval, rctl_val_t *nval,
 }
 
 /*
- * int rctl_rlimit_get(rctl_hndl_t, struct proc *, struct rlimit64 *)
+ * int rctl_rlimit_get(rctl_hndl_t, struct proc *, struct rlimit *)
  *
  * Overview
  *   To support rlimit compatibility, we need a function which takes a 64-bit
@@ -2034,7 +2034,7 @@ rctl_local_replace(rctl_hndl_t hndl, rctl_val_t *oval, rctl_val_t *nval,
  *   This operation is only intended for legacy rlimits.
  */
 int
-rctl_rlimit_get(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64)
+rctl_rlimit_get(rctl_hndl_t rc, struct proc *p, struct rlimit *rlp64)
 {
 	rctl_t *rctl;
 	rctl_val_t *rval;
@@ -2081,7 +2081,7 @@ rctl_rlimit_get(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64)
 			    rctl->rc_dict_entry, p))
 				rlp64->rlim_cur = rval->rcv_value;
 			else
-				rlp64->rlim_cur = RLIM64_INFINITY;
+				rlp64->rlim_cur = RLIM_INFINITY;
 			soft_limit_seen = 1;
 
 			rval = rval->rcv_next;
@@ -2100,7 +2100,7 @@ rctl_rlimit_get(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64)
 		    p))
 			rlp64->rlim_max = rval->rcv_value;
 		else
-			rlp64->rlim_max = RLIM64_INFINITY;
+			rlp64->rlim_max = RLIM_INFINITY;
 		if (!soft_limit_seen)
 			rlp64->rlim_cur = rlp64->rlim_max;
 
@@ -2126,7 +2126,7 @@ rctl_rlimit_get(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64)
 	    rval->rcv_value < rctl_model_maximum(rctl->rc_dict_entry, p))
 		rlp64->rlim_max = rval->rcv_value;
 	else
-		rlp64->rlim_max = RLIM64_INFINITY;
+		rlp64->rlim_max = RLIM_INFINITY;
 
 	if (!soft_limit_seen)
 		rlp64->rlim_cur = rlp64->rlim_max;
@@ -2165,7 +2165,7 @@ rctl_rlimit_set_prealloc(uint_t n)
 }
 
 /*
- * int rctl_rlimit_set(rctl_hndl_t, struct proc *, struct rlimit64 *, int,
+ * int rctl_rlimit_set(rctl_hndl_t, struct proc *, struct rlimit *, int,
  *   int)
  *
  * Overview
@@ -2188,7 +2188,7 @@ rctl_rlimit_set_prealloc(uint_t n)
  */
 /*ARGSUSED*/
 int
-rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64,
+rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit *rlp64,
     rctl_alloc_gp_t *ragp, int flagaction, int signal, const cred_t *cr)
 {
 	rctl_t *rctl;
@@ -2196,7 +2196,7 @@ rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64,
 	rctl_set_t *rset = p->p_rctls;
 	rctl_qty_t max;
 	rctl_entity_p_t e;
-	struct rlimit64 cur_rl;
+	struct rlimit cur_rl;
 
 	e.rcep_t = RCENTITY_PROCESS;
 	e.rcep_p.proc = p;
@@ -2211,7 +2211,7 @@ rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64,
 	 * If we are not privileged, we can only lower the hard limit.
 	 */
 	if ((rlp64->rlim_max > cur_rl.rlim_max) &&
-	    cur_rl.rlim_max != RLIM64_INFINITY &&
+	    cur_rl.rlim_max != RLIM_INFINITY &&
 	    secpolicy_resource(cr) != 0)
 		return (EPERM);
 
@@ -2250,7 +2250,7 @@ rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64,
 
 	rval_priv->rcv_privilege = RCPRIV_PRIVILEGED;
 	rval_priv->rcv_flagaction = flagaction;
-	if (rlp64->rlim_max == RLIM64_INFINITY) {
+	if (rlp64->rlim_max == RLIM_INFINITY) {
 		rval_priv->rcv_flagaction |= RCTL_LOCAL_MAXIMAL;
 		max = rctl->rc_dict_entry->rcd_max_native;
 	} else {
@@ -2269,7 +2269,7 @@ rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64,
 	RCTLOP_SET(rctl, p, &e, rctl_model_value(rctl->rc_dict_entry, p,
 	    rctl->rc_cursor->rcv_value));
 
-	if (rlp64->rlim_cur != RLIM64_INFINITY && rlp64->rlim_cur < max) {
+	if (rlp64->rlim_cur != RLIM_INFINITY && rlp64->rlim_cur < max) {
 		rval_basic = rctl_gp_detach_val(ragp);
 
 		rval_basic->rcv_privilege = RCPRIV_BASIC;
@@ -2296,8 +2296,8 @@ rctl_rlimit_set(rctl_hndl_t rc, struct proc *p, struct rlimit64 *rlp64,
 
 
 /*
- * rctl_hndl_t rctl_register(const char *, rctl_entity_t, int, rlim64_t,
- *   rlim64_t, rctl_ops_t *)
+ * rctl_hndl_t rctl_register(const char *, rctl_entity_t, int, rlim_t,
+ *   rlim_t, rctl_ops_t *)
  *
  * Overview
  *   rctl_register() performs a look-up in the dictionary of rctls
@@ -2326,8 +2326,8 @@ rctl_register(
     const char *name,
     rctl_entity_t entity,
     int global_flags,
-    rlim64_t max_native,
-    rlim64_t max_ilp32,
+    rlim_t max_native,
+    rlim_t max_ilp32,
     rctl_ops_t *ops)
 {
 	rctl_t *rctl = kmem_cache_alloc(rctl_cache, KM_SLEEP);

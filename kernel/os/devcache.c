@@ -555,7 +555,7 @@ kfread(kfile_t *fp, char *buf, ssize_t bufsiz, ssize_t *ret_n)
 static int
 kfwrite(kfile_t *fp, char *buf, ssize_t bufsiz, ssize_t *ret_n)
 {
-	rlim64_t	rlimit;
+	rlim_t		rlimit;
 	ssize_t		resid;
 	int		err;
 	ssize_t		len;

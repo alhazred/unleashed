@@ -170,7 +170,7 @@ exacct_vn_write_impl(ac_info_t *info, void *buf, ssize_t bufsize)
 	error = fop_getattr(info->ac_vnode, &va, 0, kcred, NULL);
 	if (error == 0) {
 		error = vn_rdwr(UIO_WRITE, info->ac_vnode, (caddr_t)buf,
-		    bufsize, 0LL, UIO_SYSSPACE, FAPPEND, (rlim64_t)MAXOFFSET_T,
+		    bufsize, 0LL, UIO_SYSSPACE, FAPPEND, (rlim_t)MAXOFFSET_T,
 		    kcred, &resid);
 		if (error) {
 			(void) fop_setattr(info->ac_vnode, &va, 0, kcred, NULL);

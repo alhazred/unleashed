@@ -335,8 +335,8 @@ elfexec(vnode_t *vp, execa_t *uap, uarg_t *args, intpdata_t *idatap,
 	int		nshdrs, shstrndx, nphdrs;
 	char		*dlnp;
 	char		*pathbufp;
-	rlim64_t	limit;
-	rlim64_t	roundlimit;
+	rlim_t	limit;
+	rlim_t	roundlimit;
 
 	ASSERT(p->p_model == DATAMODEL_ILP32 || p->p_model == DATAMODEL_LP64);
 
@@ -1548,7 +1548,7 @@ bad:
 
 int
 elfnote(vnode_t *vp, offset_t *offsetp, int type, int descsz, void *desc,
-    rlim64_t rlimit, cred_t *credp)
+    rlim_t rlimit, cred_t *credp)
 {
 	Note note;
 	int error;
@@ -1588,7 +1588,7 @@ elfnote(vnode_t *vp, offset_t *offsetp, int type, int descsz, void *desc,
  */
 static void
 copy_scn(Shdr *src, vnode_t *src_vp, Shdr *dst, vnode_t *dst_vp, Off *doffset,
-    void *buf, size_t size, cred_t *credp, rlim64_t rlimit)
+    void *buf, size_t size, cred_t *credp, rlim_t rlimit)
 {
 	ssize_t resid;
 	size_t len, n = src->sh_size;
@@ -1630,7 +1630,7 @@ size_t elf_datasz_max = 1 * 1024 * 1024;
  */
 static int
 process_scns(core_content_t content, proc_t *p, cred_t *credp, vnode_t *vp,
-    Shdr *v, int nv, rlim64_t rlimit, Off *doffsetp, int *nshdrsp)
+    Shdr *v, int nv, rlim_t rlimit, Off *doffsetp, int *nshdrsp)
 {
 	vnode_t *lastvp = NULL;
 	struct seg *seg;
@@ -1913,7 +1913,7 @@ done:
 }
 
 int
-elfcore(vnode_t *vp, proc_t *p, cred_t *credp, rlim64_t rlimit, int sig,
+elfcore(vnode_t *vp, proc_t *p, cred_t *credp, rlim_t rlimit, int sig,
     core_content_t content)
 {
 	offset_t poffset, soffset;
@@ -2370,7 +2370,7 @@ extern int elf32exec(vnode_t *vp, execa_t *uap, uarg_t *args,
 			int setid, caddr_t exec_file, cred_t *cred,
 			int brand_action);
 extern int elf32core(vnode_t *vp, proc_t *p, cred_t *credp,
-			rlim64_t rlimit, int sig, core_content_t content);
+			rlim_t rlimit, int sig, core_content_t content);
 
 static struct execsw esw32 = {
 	elf32magicstr,

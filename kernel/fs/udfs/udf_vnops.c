@@ -3133,7 +3133,7 @@ ud_wrip(struct ud_inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 	uint64_t old_i_size;
 	uoff_t off;
 	long start_resid = uio->uio_resid, premove_resid;
-	rlim64_t limit = uio->uio_limit;
+	rlim_t limit = uio->uio_limit;
 
 
 	ASSERT(RW_WRITE_HELD(&ip->i_contents));
@@ -3193,7 +3193,7 @@ ud_wrip(struct ud_inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 				error = EFBIG;
 				goto out;
 			}
-			n = (int)(limit - (rlim64_t)uoff);
+			n = (int)(limit - (rlim_t)uoff);
 		}
 		if (uoff + n > ip->i_size) {
 			/*

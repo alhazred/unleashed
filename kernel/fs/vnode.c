@@ -602,7 +602,7 @@ vn_rdwr(
 	offset_t offset,
 	enum uio_seg seg,
 	int ioflag,
-	rlim64_t ulimit,	/* meaningful only if rw is UIO_WRITE */
+	rlim_t ulimit,	/* meaningful only if rw is UIO_WRITE */
 	cred_t *cr,
 	ssize_t *residp)
 {

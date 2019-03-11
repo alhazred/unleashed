@@ -653,7 +653,7 @@ static int
 zfs_write(vnode_t *vp, uio_t *uio, int ioflag, cred_t *cr, caller_context_t *ct)
 {
 	znode_t		*zp = VTOZ(vp);
-	rlim64_t	limit = uio->uio_llimit;
+	rlim_t		limit = uio->uio_llimit;
 	ssize_t		start_resid = uio->uio_resid;
 	ssize_t		tx_bytes;
 	uint64_t	end_size;
@@ -682,7 +682,7 @@ zfs_write(vnode_t *vp, uio_t *uio, int ioflag, cred_t *cr, caller_context_t *ct)
 	if (n == 0)
 		return (0);
 
-	if (limit == RLIM64_INFINITY || limit > MAXOFFSET_T)
+	if (limit == RLIM_INFINITY || limit > MAXOFFSET_T)
 		limit = MAXOFFSET_T;
 
 	ZFS_ENTER(zfsvfs);

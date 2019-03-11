@@ -973,7 +973,7 @@ lofi_rdwr(caddr_t bufaddr, offset_t offset, struct buf *bp,
 			error = 0;
 		} else {		/* RDWR_RAW */
 			error = vn_rdwr(UIO_READ, lsp->ls_vp, bufaddr, len,
-			    offset, UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred,
+			    offset, UIO_SYSSPACE, 0, RLIM_INFINITY, kcred,
 			    &resid);
 			bp->b_resid = resid;
 		}
@@ -1011,7 +1011,7 @@ lofi_rdwr(caddr_t bufaddr, offset_t offset, struct buf *bp,
 			error = 0;
 		} else {		/* RDWR_RAW */
 			error = vn_rdwr(UIO_WRITE, lsp->ls_vp, iobuf, len,
-			    offset, UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred,
+			    offset, UIO_SYSSPACE, 0, RLIM_INFINITY, kcred,
 			    &resid);
 			bp->b_resid = resid;
 		}
@@ -2381,7 +2381,7 @@ lofi_map_compressed_file(struct lofi_state *lsp, char *buf)
 	 */
 	rw = UIO_READ;
 	error = vn_rdwr(rw, lsp->ls_vp, lsp->ls_comp_index_data, index_sz,
-	    0, UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, &resid);
+	    0, UIO_SYSSPACE, 0, RLIM_INFINITY, kcred, &resid);
 
 	if (error != 0)
 		return (error);
@@ -2474,7 +2474,7 @@ lofi_init_crypto(struct lofi_state *lsp, struct lofi_ioctl *klip)
 	}
 
 	error = vn_rdwr(UIO_READ, lsp->ls_vp, buf, DEV_BSIZE,
-	    CRYOFF, UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, &resid);
+	    CRYOFF, UIO_SYSSPACE, 0, RLIM_INFINITY, kcred, &resid);
 	if (error != 0)
 		return (error);
 
@@ -2544,7 +2544,7 @@ lofi_init_crypto(struct lofi_state *lsp, struct lofi_ioctl *klip)
 
 	/* write the header */
 	error = vn_rdwr(UIO_WRITE, lsp->ls_vp, buf, DEV_BSIZE,
-	    CRYOFF, UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, &resid);
+	    CRYOFF, UIO_SYSSPACE, 0, RLIM_INFINITY, kcred, &resid);
 	if (error != 0)
 		return (error);
 
@@ -2585,7 +2585,7 @@ lofi_init_compress(struct lofi_state *lsp)
 	int error;
 
 	error = vn_rdwr(UIO_READ, lsp->ls_vp, buf, DEV_BSIZE, 0, UIO_SYSSPACE,
-	    0, RLIM64_INFINITY, kcred, &resid);
+	    0, RLIM_INFINITY, kcred, &resid);
 
 	if (error != 0)
 		return (error);

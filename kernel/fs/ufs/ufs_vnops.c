@@ -731,7 +731,7 @@ uint_t smallfile2_d = SMALLFILE2_D;
 int
 wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 {
-	rlim64_t limit = uio->uio_llimit;
+	rlim_t limit = uio->uio_llimit;
 	uoff_t off;
 	uoff_t old_i_size;
 	struct fs *fs;
@@ -784,7 +784,7 @@ wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 	 * the actual limit of UFS file size
 	 * is UFS_MAXOFFSET_T
 	 */
-	if (limit == RLIM64_INFINITY || limit > MAXOFFSET_T)
+	if (limit == RLIM_INFINITY || limit > MAXOFFSET_T)
 		limit = MAXOFFSET_T;
 
 	if (uio->uio_loffset >= limit) {
@@ -894,7 +894,7 @@ wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 			 * therefore n >= limit - uoff, and n is an int
 			 * so it is safe to cast it to an int
 			 */
-			n = (int)(limit - (rlim64_t)uoff);
+			n = (int)(limit - (rlim_t)uoff);
 		}
 		if (uoff + n > ip->i_size) {
 			/*

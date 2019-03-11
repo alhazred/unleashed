@@ -597,7 +597,7 @@ nfs_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	if (uiop->uio_loffset < 0 || offset > MAXOFF32_T)
 		return (EINVAL);
 
-	if (uiop->uio_llimit > (rlim64_t)MAXOFF32_T) {
+	if (uiop->uio_llimit > (rlim_t)MAXOFF32_T) {
 		limit = MAXOFF32_T;
 	} else {
 		limit = (rlim_t)uiop->uio_llimit;

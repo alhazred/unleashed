@@ -153,7 +153,7 @@ retry:
 			if (sp->s_vp != NULL)
 				(void) vn_rdwr(UIO_WRITE, sp->s_vp, body,
 				    len, 0LL, UIO_SYSSPACE, FAPPEND,
-				    (rlim64_t)LOG_HIWAT, kcred, &resid);
+				    (rlim_t)LOG_HIWAT, kcred, &resid);
 			tty_rele(sp);
 		}
 	}

@@ -61,7 +61,7 @@ ulimit(int cmd, long arg)
 
 	case UL_GFILLIM: /* Return current file size limit. */
 	{
-		rlim64_t filesize;
+		rlim_t filesize;
 
 		mutex_enter(&p->p_lock);
 		filesize = rctl_enforced_value(rctlproc_legacy[RLIMIT_FSIZE],
@@ -88,12 +88,12 @@ ulimit(int cmd, long arg)
 	case UL_SFILLIM: /* Set new file size limit. */
 	{
 		int error = 0;
-		rlim64_t lim = (rlim64_t)arg;
-		struct rlimit64 rl64;
+		rlim_t lim = (rlim_t)arg;
+		struct rlimit rl64;
 		rctl_alloc_gp_t *gp = rctl_rlimit_set_prealloc(1);
 
-		if (lim >= (((rlim64_t)MAXOFFSET_T) >> SCTRSHFT))
-			lim = (rlim64_t)RLIM64_INFINITY;
+		if (lim >= (((rlim_t)MAXOFFSET_T) >> SCTRSHFT))
+			lim = (rlim_t)RLIM_INFINITY;
 		else
 			lim <<= SCTRSHFT;
 
@@ -120,8 +120,8 @@ ulimit(int cmd, long arg)
 		caddr_t brkend;
 		caddr_t brkbase;
 		size_t size;
-		rlim64_t size_ctl;
-		rlim64_t vmem_ctl;
+		rlim_t size_ctl;
+		rlim_t vmem_ctl;
 
 		/*
 		 * Find the segment with a virtual address
@@ -228,7 +228,7 @@ ulimit(int cmd, long arg)
 
 	case UL_GDESLIM: /* Return approximate number of open files */
 	{
-		rlim64_t fdno_ctl;
+		rlim_t fdno_ctl;
 
 		mutex_enter(&curproc->p_lock);
 		fdno_ctl = rctl_enforced_value(rctlproc_legacy[RLIMIT_NOFILE],
@@ -257,9 +257,9 @@ ulimit32(int cmd, int arg)
 #endif	/* _SYSCALL32_IMPL */
 
 int
-getrlimit64(int resource, struct rlimit64 *rlp)
+getrlimit(int resource, struct rlimit *rlp)
 {
-	struct rlimit64 rlim64;
+	struct rlimit rlim64;
 	struct proc *p = ttoproc(curthread);
 
 	if (resource < 0 || resource >= RLIM_NLIMITS)
@@ -275,9 +275,9 @@ getrlimit64(int resource, struct rlimit64 *rlp)
 }
 
 int
-setrlimit64(int resource, struct rlimit64 *rlp)
+setrlimit(int resource, struct rlimit *rlp)
 {
-	struct rlimit64 rlim64;
+	struct rlimit rlim64;
 	struct proc *p = ttoproc(curthread);
 	int	error;
 	rctl_alloc_gp_t *gp;

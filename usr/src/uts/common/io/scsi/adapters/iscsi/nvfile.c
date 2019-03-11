@@ -1393,7 +1393,7 @@ nvf_rw(int fdes, void *cbuf, ssize_t count, enum uio_rw rw)
 	vp = fp->f_vnode;
 
 	if (nvf_errno = vn_rdwr(rw, vp, (caddr_t)cbuf, count, fp->f_offset,
-	    UIO_SYSSPACE, 0, RLIM64_INFINITY, kcred, &resid)) {
+	    UIO_SYSSPACE, 0, RLIM_INFINITY, kcred, &resid)) {
 		nvf_releasef(fdes);
 		return (-1);
 	}

@@ -1185,7 +1185,7 @@ pmcs_write_fwlog(pmcs_hw_t *pwp, pmcs_fw_event_hdr_t *fwlogp)
 {
 	struct vnode *vnp;
 	caddr_t fwlogfile, bufp;
-	rlim64_t rlimit;
+	rlim_t rlimit;
 	ssize_t resid;
 	offset_t offset = 0;
 	int error;

@@ -646,7 +646,7 @@ static int
 nfs3_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	caller_context_t *ct)
 {
-	rlim64_t limit = uiop->uio_llimit;
+	rlim_t limit = uiop->uio_llimit;
 	rnode_t *rp;
 	uoff_t off;
 	caddr_t base;
@@ -696,7 +696,7 @@ nfs3_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	if (uiop->uio_loffset < 0 || offset < 0)
 		return (EINVAL);
 
-	if (limit == RLIM64_INFINITY || limit > MAXOFFSET_T)
+	if (limit == RLIM_INFINITY || limit > MAXOFFSET_T)
 		limit = MAXOFFSET_T;
 
 	/*

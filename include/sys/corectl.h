@@ -118,7 +118,7 @@ struct core_globals {
 	refstr_t		*core_file;
 	uint32_t		core_options;
 	core_content_t		core_content;
-	rlim64_t		core_rlimit;
+	rlim_t			core_rlimit;
 	corectl_path_t		*core_default_path;
 	corectl_content_t	*core_default_content;
 };

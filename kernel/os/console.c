@@ -262,7 +262,7 @@ console_putmsg(console_msg_t *cm)
 
 	if (rconsvp == NULL || panicstr ||
 	    vn_rdwr(UIO_WRITE, console_vnode, cm->cm_text, strlen(cm->cm_text),
-	    0, UIO_SYSSPACE, FAPPEND, (rlim64_t)LOG_HIWAT, kcred, &res) != 0) {
+	    0, UIO_SYSSPACE, FAPPEND, (rlim_t)LOG_HIWAT, kcred, &res) != 0) {
 
 		busy = console_hold();
 		spl = console_enter(busy);

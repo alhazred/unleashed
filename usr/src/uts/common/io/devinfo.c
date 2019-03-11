@@ -3717,12 +3717,12 @@ header_plus_one_ok(struct di_all *all)
 static int
 chunk_write(struct vnode *vp, offset_t off, caddr_t buf, size_t len)
 {
-	rlim64_t	rlimit;
+	rlim_t		rlimit;
 	ssize_t		resid;
 	int		error = 0;
 
 
-	rlimit = RLIM64_INFINITY;
+	rlimit = RLIM_INFINITY;
 
 	while (len) {
 		resid = 0;

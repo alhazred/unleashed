@@ -324,9 +324,9 @@ int rctl_local_replace(rctl_hndl_t, rctl_val_t *, rctl_val_t *,
 /* tag declaration to appease the compiler */
 struct cred;
 rctl_alloc_gp_t *rctl_rlimit_set_prealloc(uint_t);
-int rctl_rlimit_set(rctl_hndl_t, struct proc *, struct rlimit64 *,
+int rctl_rlimit_set(rctl_hndl_t, struct proc *, struct rlimit *,
     rctl_alloc_gp_t *, int, int, const struct cred *);
-int rctl_rlimit_get(rctl_hndl_t, struct proc *, struct rlimit64 *);
+int rctl_rlimit_get(rctl_hndl_t, struct proc *, struct rlimit *);
 
 /* specific rctl utility functions */
 int rctl_incr_locked_mem(struct proc *, struct kproject *, rctl_qty_t,

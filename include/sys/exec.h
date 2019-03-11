@@ -178,7 +178,7 @@ struct execsw {
 		    long *execsz, int setid, caddr_t exec_file,
 		    struct cred *cred, int brand_action);
 	int	(*exec_core)(struct vnode *vp, struct proc *p,
-		    struct cred *cred, rlim64_t rlimit, int sig,
+		    struct cred *cred, rlim_t rlimit, int sig,
 		    core_content_t content);
 	krwlock_t	*exec_lock;
 };
@@ -245,10 +245,10 @@ extern int mapexec32_brand(vnode_t *, uarg_t *, Elf32_Ehdr *, Elf32_Addr *,
  * Utility functions for exec module core routines:
  */
 extern int core_seg(proc_t *, vnode_t *, offset_t, caddr_t,
-    size_t, rlim64_t, cred_t *);
+    size_t, rlim_t, cred_t *);
 
 extern int core_write(vnode_t *, enum uio_seg, offset_t,
-    const void *, size_t, rlim64_t, cred_t *);
+    const void *, size_t, rlim_t, cred_t *);
 
 /* a.out stuff */
 

@@ -911,7 +911,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 {
 	int error;
 	vnode_t *vp;
-	rlim64_t rlimit;
+	rlim_t rlimit;
 	struct vattr va;
 	struct uio uio;
 	struct iovec iov[MAX_IOVECS];
@@ -1027,7 +1027,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		uio.uio_llimit = curproc->p_fsz_ctl;
 		rlimit = uio.uio_llimit - wa->wa_offset;
-		if (rlimit < (rlim64_t)uio.uio_resid)
+		if (rlimit < (rlim_t)uio.uio_resid)
 			uio.uio_resid = (uint_t)rlimit;
 
 		/*
@@ -1070,7 +1070,7 @@ rfs_write_sync(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		uio.uio_llimit = curproc->p_fsz_ctl;
 		rlimit = uio.uio_llimit - wa->wa_offset;
-		if (rlimit < (rlim64_t)uio.uio_resid)
+		if (rlimit < (rlim_t)uio.uio_resid)
 			uio.uio_resid = (uint_t)rlimit;
 
 		/*
@@ -1161,7 +1161,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 {
 	int error;
 	vnode_t *vp;
-	rlim64_t rlimit;
+	rlim_t rlimit;
 	struct vattr va;
 	struct uio uio;
 	struct rfs_async_write_list *lp;
@@ -1559,7 +1559,7 @@ rfs_write(struct nfswriteargs *wa, struct nfsattrstat *ns,
 		 */
 		uio.uio_llimit = curproc->p_fsz_ctl;
 		rlimit = uio.uio_llimit - rp->wa->wa_offset;
-		if (rlimit < (rlim64_t)uio.uio_resid)
+		if (rlimit < (rlim_t)uio.uio_resid)
 			uio.uio_resid = (uint_t)rlimit;
 
 		/*

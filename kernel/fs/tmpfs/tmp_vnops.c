@@ -124,7 +124,7 @@ wrtmp(
 	int error = 0;
 	int	pagecreate;	/* == 1 if we allocated a page */
 	int	newpage;
-	rlim64_t limit = uio->uio_llimit;
+	rlim_t limit = uio->uio_llimit;
 	long oresid = uio->uio_resid;
 	timestruc_t now;
 
@@ -159,7 +159,7 @@ wrtmp(
 	if (uio->uio_loffset < 0)
 		return (EINVAL);
 
-	if (limit == RLIM64_INFINITY || limit > MAXOFFSET_T)
+	if (limit == RLIM_INFINITY || limit > MAXOFFSET_T)
 		limit = MAXOFFSET_T;
 
 	if (uio->uio_loffset >= limit) {

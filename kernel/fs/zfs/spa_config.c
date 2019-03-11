@@ -176,7 +176,7 @@ spa_config_write(spa_config_dirent_t *dp, nvlist_t *nvl)
 	err = vn_open(temp, UIO_SYSSPACE, oflags, 0644, &vp, CRCREAT, 0);
 	if (err == 0) {
 		err = vn_rdwr(UIO_WRITE, vp, buf, buflen, 0, UIO_SYSSPACE,
-		    0, RLIM64_INFINITY, kcred, NULL);
+		    0, RLIM_INFINITY, kcred, NULL);
 		if (err == 0)
 			err = fop_fsync(vp, FSYNC, kcred, NULL);
 		if (err == 0)

@@ -236,8 +236,8 @@ int	getdents64(int, void *, size_t);
 int	fstatat64(int, char *, struct stat64 *, int);
 int	statvfs64(char *, struct statvfs64 *);
 int	fstatvfs64(int, struct statvfs64 *);
-int	setrlimit64(int, struct rlimit64 *);
-int	getrlimit64(int, struct rlimit64 *);
+int	setrlimit(int, struct rlimit *);
+int	getrlimit(int, struct rlimit *);
 int	pread64(int, void *, size32_t, uint32_t, uint32_t);
 int	pwrite64(int, void *, size32_t, uint32_t, uint32_t);
 int	openat64(int, char *, int, int);
@@ -524,8 +524,8 @@ struct sysent sysent[NSYSCALL] =
 	/* 125 */ SYSENT_LOADABLE(),			/* (was fxstat) */
 	/* 126 */ SYSENT_CL("getrandom",	getrandom,	3),
 	/* 127 */ SYSENT_CI("mmapobj",		mmapobjsys,	5),
-	/* 128 */ SYSENT_CI("setrlimit",	setrlimit64,	2),
-	/* 129 */ SYSENT_CI("getrlimit",	getrlimit64,	2),
+	/* 128 */ SYSENT_CI("setrlimit",	setrlimit,	2),
+	/* 129 */ SYSENT_CI("getrlimit",	getrlimit,	2),
 	/* 130 */ SYSENT_LOADABLE(),			/* (was lchown) */
 	/* 131 */ SYSENT_CI("memcntl",		memcntl,	6),
 	/* 132 */ SYSENT_CI("getpmsg",		getpmsg,	5),
@@ -834,8 +834,8 @@ struct sysent sysent32[NSYSCALL] =
 	/* 125 */ SYSENT_LOADABLE32(),		/*	was fxstat32	*/
 	/* 126 */ SYSENT_CI("getrandom",	getrandom,	3),
 	/* 127 */ SYSENT_CI("mmapobj",		mmapobjsys,	5),
-	/* 128 */ SYSENT_CI("setrlimit",	setrlimit64,	2),
-	/* 129 */ SYSENT_CI("getrlimit",	getrlimit64,	2),
+	/* 128 */ SYSENT_CI("setrlimit",	setrlimit,	2),
+	/* 129 */ SYSENT_CI("getrlimit",	getrlimit,	2),
 	/* 130 */ SYSENT_LOADABLE32(),			/* (was lchown) */
 	/* 131 */ SYSENT_CI("memcntl",		memcntl,	6),
 	/* 132 */ SYSENT_CI("getpmsg",		getpmsg32,	5),

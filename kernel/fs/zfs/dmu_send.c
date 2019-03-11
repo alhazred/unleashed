@@ -118,7 +118,7 @@ dump_bytes(dmu_sendarg_t *dsp, void *buf, int len)
 
 	dsp->dsa_err = vn_rdwr(UIO_WRITE, dsp->dsa_vp,
 	    (caddr_t)buf, len,
-	    0, UIO_SYSSPACE, FAPPEND, RLIM64_INFINITY, CRED(), &resid);
+	    0, UIO_SYSSPACE, FAPPEND, RLIM_INFINITY, CRED(), &resid);
 
 	mutex_enter(&ds->ds_sendstream_lock);
 	*dsp->dsa_off += len;
@@ -1910,7 +1910,7 @@ receive_read(struct receive_arg *ra, int len, void *buf)
 		ra->err = vn_rdwr(UIO_READ, ra->vp,
 		    (char *)buf + done, len - done,
 		    ra->voff, UIO_SYSSPACE, FAPPEND,
-		    RLIM64_INFINITY, CRED(), &resid);
+		    RLIM_INFINITY, CRED(), &resid);
 
 		if (resid == len - done) {
 			/*

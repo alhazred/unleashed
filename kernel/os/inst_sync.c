@@ -207,7 +207,7 @@ in_write(struct vnode *vp, offset_t *vo, caddr_t buf, int count)
 {
 	int error;
 	ssize_t resid;
-	rlim64_t rlimit = *vo + count + 1;
+	rlim_t rlimit = *vo + count + 1;
 
 	error = vn_rdwr(UIO_WRITE, vp, buf, count, *vo,
 	    UIO_SYSSPACE, 0, rlimit, CRED(), &resid);

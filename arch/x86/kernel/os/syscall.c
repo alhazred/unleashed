@@ -737,10 +737,10 @@ sig_check:
 	 * stack checking by setting the size to 0.
 	 */
 	if (lwp->lwp_ustack != 0 && lwp->lwp_old_stk_ctl != 0) {
-		rlim64_t new_size;
+		rlim_t new_size;
 		caddr_t top;
 		stack_t stk;
-		struct rlimit64 rl;
+		struct rlimit rl;
 
 		mutex_enter(&p->p_lock);
 		new_size = p->p_stk_ctl;
@@ -748,7 +748,7 @@ sig_check:
 		(void) rctl_rlimit_get(rctlproc_legacy[RLIMIT_STACK], p, &rl);
 		mutex_exit(&p->p_lock);
 
-		if (rl.rlim_cur == RLIM64_INFINITY)
+		if (rl.rlim_cur == RLIM_INFINITY)
 			new_size = 0;
 
 		if (copyin((stack_t *)lwp->lwp_ustack, &stk,

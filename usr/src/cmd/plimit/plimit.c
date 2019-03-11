@@ -242,7 +242,7 @@ limit_value(int which, char *arg, rlim_t *limit)
 	char *lastc;
 
 	if (strcmp(arg, "unlimited") == 0) {
-		*limit = RLIM64_INFINITY;
+		*limit = RLIM_INFINITY;
 		return (0);
 	}
 
@@ -254,7 +254,7 @@ limit_value(int which, char *arg, rlim_t *limit)
 		if (seconds != NULL && strtok_r(NULL, " \t", &lastc) != NULL)
 			return (1);
 		value = strtoull(minutes, &lastc, 10);
-		if (*lastc != '\0' || value > RLIM64_INFINITY / 60)
+		if (*lastc != '\0' || value > RLIM_INFINITY / 60)
 			return (1);
 		if (seconds == NULL || *seconds == '\0')
 			sec = 0;
@@ -264,8 +264,8 @@ limit_value(int which, char *arg, rlim_t *limit)
 				return (1);
 		}
 		value = value * 60 + sec;
-		if (value > RLIM64_INFINITY)
-			value = RLIM64_INFINITY;
+		if (value > RLIM_INFINITY)
+			value = RLIM_INFINITY;
 		*limit = value;
 		return (0);
 	}
@@ -303,12 +303,12 @@ limit_value(int which, char *arg, rlim_t *limit)
 	}
 
 	value = strtoull(arg, &lastc, 10);
-	if (*lastc != '\0' || value > RLIM64_INFINITY / unit)
+	if (*lastc != '\0' || value > RLIM_INFINITY / unit)
 		return (1);
 
 	value *= unit;
-	if (value > RLIM64_INFINITY)
-		value = RLIM64_INFINITY;
+	if (value > RLIM_INFINITY)
+		value = RLIM_INFINITY;
 	*limit = value;
 	return (0);
 }
@@ -351,9 +351,9 @@ parse_limits(int which, char *arg)
 static void
 limit_adjust(struct rlimit *rp, int units)
 {
-	if (rp->rlim_cur != RLIM64_INFINITY)
+	if (rp->rlim_cur != RLIM_INFINITY)
 		rp->rlim_cur /= units;
-	if (rp->rlim_max != RLIM64_INFINITY)
+	if (rp->rlim_max != RLIM_INFINITY)
 		rp->rlim_max /= units;
 }
 
@@ -366,7 +366,7 @@ limit_values(struct rlimit *rp)
 	char *s1;
 	char *s2;
 
-	if (rp->rlim_cur == RLIM64_INFINITY)
+	if (rp->rlim_cur == RLIM_INFINITY)
 		s1 = "unlimited";
 	else {
 		(void) sprintf(s1 = buf1, "%lld", rp->rlim_cur);
@@ -374,7 +374,7 @@ limit_values(struct rlimit *rp)
 			(void) strcat(s1, "\t");
 	}
 
-	if (rp->rlim_max == RLIM64_INFINITY)
+	if (rp->rlim_max == RLIM_INFINITY)
 		s2 = "unlimited";
 	else {
 		(void) sprintf(s2 = buf2, "%lld", rp->rlim_max);

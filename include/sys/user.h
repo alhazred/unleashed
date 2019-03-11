@@ -242,7 +242,7 @@ typedef	struct	user {
 	 * preserve the behaviour associated with the RLIM_SAVED_CUR and
 	 * RLIM_SAVED_MAX tokens, we retain the "saved" rlimits.
 	 */
-	struct rlimit64	u_saved_rlimit[RLIM_NSAVED];
+	struct rlimit	u_saved_rlimit[RLIM_NSAVED];
 
 	uf_info_t	u_finfo;	/* open file information */
 } user_t;

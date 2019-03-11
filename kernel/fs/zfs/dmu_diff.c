@@ -59,7 +59,7 @@ write_record(struct diffarg *da)
 
 	da->da_err = vn_rdwr(UIO_WRITE, da->da_vp, (caddr_t)&da->da_ddr,
 	    sizeof (da->da_ddr), 0, UIO_SYSSPACE, FAPPEND,
-	    RLIM64_INFINITY, CRED(), &resid);
+	    RLIM_INFINITY, CRED(), &resid);
 	*da->da_offp += sizeof (da->da_ddr);
 	return (da->da_err);
 }

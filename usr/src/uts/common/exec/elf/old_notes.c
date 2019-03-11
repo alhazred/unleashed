@@ -84,7 +84,7 @@ setup_old_note_header(Phdr *v, proc_t *p)
 
 int
 write_old_elfnotes(proc_t *p, int sig, vnode_t *vp, offset_t offset,
-    rlim64_t rlimit, cred_t *credp)
+    rlim_t rlimit, cred_t *credp)
 {
 	union {
 		prpsinfo_t	psinfo;

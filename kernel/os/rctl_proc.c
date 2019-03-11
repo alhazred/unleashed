@@ -221,26 +221,26 @@ static rctl_ops_t proc_vmem_ops = {
 void
 rctlproc_default_init(struct proc *initp, rctl_alloc_gp_t *gp)
 {
-	struct rlimit64 rlp64;
+	struct rlimit rlp64;
 
 	/*
 	 * RLIMIT_CPU: deny never, sigtoproc(pp, NULL, SIGXCPU).
 	 */
-	rlp64.rlim_cur = rlp64.rlim_max = RLIM64_INFINITY;
+	rlp64.rlim_cur = rlp64.rlim_max = RLIM_INFINITY;
 	(void) rctl_rlimit_set(rctlproc_legacy[RLIMIT_CPU], initp, &rlp64, gp,
 	    RCTL_LOCAL_SIGNAL, SIGXCPU, kcred);
 
 	/*
 	 * RLIMIT_FSIZE: deny always, sigtoproc(pp, NULL, SIGXFSZ).
 	 */
-	rlp64.rlim_cur = rlp64.rlim_max = RLIM64_INFINITY;
+	rlp64.rlim_cur = rlp64.rlim_max = RLIM_INFINITY;
 	(void) rctl_rlimit_set(rctlproc_legacy[RLIMIT_FSIZE], initp, &rlp64, gp,
 	    RCTL_LOCAL_SIGNAL | RCTL_LOCAL_DENY, SIGXFSZ, kcred);
 
 	/*
 	 * RLIMIT_DATA: deny always, no default action.
 	 */
-	rlp64.rlim_cur = rlp64.rlim_max = RLIM64_INFINITY;
+	rlp64.rlim_cur = rlp64.rlim_max = RLIM_INFINITY;
 	(void) rctl_rlimit_set(rctlproc_legacy[RLIMIT_DATA], initp, &rlp64, gp,
 	    RCTL_LOCAL_DENY, 0, kcred);
 
@@ -255,7 +255,7 @@ rctlproc_default_init(struct proc *initp, rctl_alloc_gp_t *gp)
 	/*
 	 * RLIMIT_CORE: deny always, no default action.
 	 */
-	rlp64.rlim_cur = rlp64.rlim_max = RLIM64_INFINITY;
+	rlp64.rlim_cur = rlp64.rlim_max = RLIM_INFINITY;
 	(void) rctl_rlimit_set(rctlproc_legacy[RLIMIT_CORE], initp, &rlp64, gp,
 	    RCTL_LOCAL_DENY, 0, kcred);
 
@@ -270,7 +270,7 @@ rctlproc_default_init(struct proc *initp, rctl_alloc_gp_t *gp)
 	/*
 	 * RLIMIT_VMEM
 	 */
-	rlp64.rlim_cur = rlp64.rlim_max = RLIM64_INFINITY;
+	rlp64.rlim_cur = rlp64.rlim_max = RLIM_INFINITY;
 	(void) rctl_rlimit_set(rctlproc_legacy[RLIMIT_VMEM], initp, &rlp64, gp,
 	    RCTL_LOCAL_DENY, 0, kcred);
 }

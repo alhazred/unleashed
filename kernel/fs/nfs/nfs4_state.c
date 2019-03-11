@@ -1028,7 +1028,7 @@ rfs4_ss_clid_write_one(rfs4_client_t *cp, char *dss_path, char *leaf)
 	uio.uio_iovcnt = 4;
 	uio.uio_loffset = 0;
 	uio.uio_segflg = UIO_SYSSPACE;
-	uio.uio_llimit = (rlim64_t)MAXOFFSET_T;
+	uio.uio_llimit = (rlim_t)MAXOFFSET_T;
 	uio.uio_resid = cl_id4->id_len + sizeof (int) +
 	    NFS4_VERIFIER_SIZE + sizeof (uint_t);
 
