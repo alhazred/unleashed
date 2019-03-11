@@ -55,8 +55,6 @@ struct termio {
 struct	termcb	{
 	char	st_flgs;	/* term flags */
 	char	st_termt;	/* term type */
-	char	st_crow;	/* gtty only - current row */
-	char	st_ccol;	/* gtty only - current col */
 	char	st_vrow;	/* variable row */
 	char	st_lrow;	/* last row */
 };

@@ -698,8 +698,6 @@ show_termcb(private_t *pri, long offset)
 		    pri->pname,
 		    termcb.st_flgs&0xff,
 		    termcb.st_termt&0xff,
-		    termcb.st_crow&0xff,
-		    termcb.st_ccol&0xff,
 		    termcb.st_vrow&0xff,
 		    termcb.st_lrow&0xff);
 	}
