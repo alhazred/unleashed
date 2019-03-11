@@ -41,10 +41,10 @@
 #ifndef _SYS_RESOURCE_H
 #define	_SYS_RESOURCE_H
 
+#include <stdint.h>
 #include <sys/feature_tests.h>
-
-#include <sys/types.h>
 #include <sys/time.h>
+#include <sys/types.h>
 
 #ifdef	__cplusplus
 extern "C" {
@@ -78,87 +78,19 @@ extern "C" {
 
 #define	RLIM_NLIMITS	7		/* number of resource limits */
 
-#if defined(_LP64)
-
-typedef	unsigned long	rlim_t;
+typedef	uint64_t	rlim_t;
 
 #define	RLIM_INFINITY	((rlim_t)-3)
 #define	RLIM_SAVED_MAX	((rlim_t)-2)
 #define	RLIM_SAVED_CUR	((rlim_t)-1)
-
-#else	/* _LP64 */
-
-/*
- * The definitions of the following types and constants differ between the
- * regular and large file compilation environments.
- */
-#if _FILE_OFFSET_BITS == 32
-
-typedef unsigned long	rlim_t;
-
-#define	RLIM_INFINITY	0x7fffffff
-#define	RLIM_SAVED_MAX	0x7ffffffe
-#define	RLIM_SAVED_CUR	0x7ffffffd
-
-#else	/* _FILE_OFFSET_BITS == 32 */
-
-typedef u_longlong_t	rlim_t;
-
-#define	RLIM_INFINITY	((rlim_t)-3)
-#define	RLIM_SAVED_MAX	((rlim_t)-2)
-#define	RLIM_SAVED_CUR	((rlim_t)-1)
-
-#endif	/* _FILE_OFFSET_BITS == 32 */
-
-#endif	/* _LP64 */
 
 struct rlimit {
 	rlim_t	rlim_cur;		/* current limit */
 	rlim_t	rlim_max;		/* maximum value for rlim_cur */
 };
 
-/* transitional large file interface versions */
-#ifdef	_LARGEFILE64_SOURCE
-
-typedef u_longlong_t	rlim64_t;
-
-#define	RLIM64_INFINITY		((rlim64_t)-3)
-#define	RLIM64_SAVED_MAX	((rlim64_t)-2)
-#define	RLIM64_SAVED_CUR	((rlim64_t)-1)
-
-struct rlimit64 {
-	rlim64_t	rlim_cur;	/* current limit */
-	rlim64_t	rlim_max;	/* maximum value for rlim_cur */
-};
-
-#ifndef _KERNEL
-/*
- * FIXME: source compat: remove these after modifiyng software to use non-64
- * versions
- */
-int setrlimit64(int, const struct rlimit64 *);
-int getrlimit64(int, struct rlimit64 *);
-#endif
-
-#endif
-
-/*
- * Although the saved rlimits were initially introduced by the large file API,
- * they are now available for all resource limits on the 64-bit kernel and for
- * cpu time and file size limits on the 32-bit kernel.
- */
-#if defined(_LP64)
-
 #define	RLIM_SAVED(x)	(1)			/* save all resource limits */
 #define	RLIM_NSAVED	RLIM_NLIMITS		/* size of u_saved_rlimits[] */
-
-#else	/* _LP64 */
-
-#define	RLIM_SAVED(x)	(x <= RLIMIT_FSIZE)	/* cpu time and file size */
-#define	RLIM_NSAVED	(RLIMIT_FSIZE + 1)	/* size of u_saved_rlimits[] */
-
-#endif	/* _LP64 */
-
 
 struct	rusage {
 	struct timeval ru_utime;	/* user time used */
