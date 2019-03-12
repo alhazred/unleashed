@@ -57,7 +57,7 @@ _findbuf(FILE *iop)
 	Uchar *endbuf;
 	int tty = -1;
 
-	struct stat64 stbuf;		/* used to get file system block size */
+	struct stat stbuf;		/* used to get file system block size */
 
 	if (iop->_flag & _IONBF)	/* need a small buffer, at least */
 	{
@@ -82,7 +82,7 @@ _findbuf(FILE *iop)
 		 * avoid 0-size buffers as returned for some
 		 * special files (doors)
 		 */
-		if (fstat64(fd, &stbuf) == 0 && stbuf.st_blksize > 0)
+		if (fstat(fd, &stbuf) == 0 && stbuf.st_blksize > 0)
 			size = stbuf.st_blksize;
 
 		if ((buf = (Uchar *)malloc(sizeof (Uchar)*(size+_SMBFSZ))) !=

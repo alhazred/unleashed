@@ -59,13 +59,13 @@ __open_nc(const char *path, int oflag, mode_t mode)
 {
 	int		cancel_state;
 	int		val;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 
 	/*
 	 * Ensure path is not a symlink to somewhere else. This provides
 	 * a modest amount of protection against easy security attacks.
 	 */
-	if (lstat64(path, &statbuf) == 0) {
+	if (lstat(path, &statbuf) == 0) {
 		if (S_ISLNK(statbuf.st_mode)) {
 			errno = EINVAL;
 			return (-1);

@@ -587,11 +587,11 @@ prt_mft(private_t *pri, int raw, long val) /* print mount file system type */
 }
 
 #define	ISREAD(code) \
-	((code) == SYS_read || (code) == SYS_pread || (code) == SYS_pread64 || \
+	((code) == SYS_read || (code) == SYS_pread || \
 	(code) == SYS_recv || (code) == SYS_recvfrom)
 #define	ISWRITE(code) \
 	((code) == SYS_write || (code) == SYS_pwrite || \
-	(code) == SYS_pwrite64 || (code) == SYS_send || (code) == SYS_sendto)
+	(code) == SYS_send || (code) == SYS_sendto)
 
 /* print contents of read() or write() I/O buffer */
 void

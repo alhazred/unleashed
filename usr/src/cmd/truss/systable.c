@@ -250,8 +250,8 @@ const struct systable systable[] = {
 {"fstat",	2, DEC, NOV, DEC, HEX},				/*  28 */
 {"pause",	0, DEC, NOV},					/*  29 */
 { NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
-{"stty",	2, DEC, NOV, DEC, DEC},				/*  31 */
-{"gtty",	2, DEC, NOV, DEC, DEC},				/*  32 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"access",	2, DEC, NOV, STG, ACC},				/*  33 */
 {"nice",	1, DEC, NOV, DEC},				/*  34 */
 {"statfs",	4, DEC, NOV, STG, HEX, DEC, DEC},		/*  35 */
@@ -286,9 +286,9 @@ const struct systable systable[] = {
 {"renameat",	4, DEC, NOV, ATC, STG, ATC, STG},		/*  64 */
 {"unlinkat",	3, DEC, NOV, ATC, STG, UAT},			/*  65 */
 {"fstatat",	4, DEC, NOV, ATC, STG, HEX, SNF},		/*  66 */
-{"fstatat64",	4, DEC, NOV, ATC, STG, HEX, SNF},		/*  67 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"openat",	4, DEC, NOV, ATC, STG, OPN, OCT},		/*  68 */
-{"openat64",	4, DEC, NOV, ATC, STG, OPN, OCT},		/*  69 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"tasksys",	5, DEC, NOV, DEC, DEC, DEC, HEX, DEC},		/*  70 */
 {"acctctl",	3, DEC, NOV, HEX, HEX, UNS},			/*  71 */
 {"exacctsys",	6, DEC, NOV, DEC, IDT, DEC, HEX, DEC, HEX},	/*  72 */
@@ -432,19 +432,19 @@ const struct systable systable[] = {
 {"lwp_mutex_timedlock", 3, DEC, NOV, HEX, HEX, HEX},		/* 210 */
 {"lwp_sema_timedwait", 3, DEC, NOV, HEX, HEX, DEC},		/* 211 */
 {"lwp_rwlock_sys", 3, DEC, NOV, DEC, HEX, HEX},			/* 212 */
-{"getdents64",	3, DEC, NOV, DEC, HEX, UNS},			/* 213 */
-{"mmap64",	7, HEX, NOV, HEX, UNS, MPR, MTY, DEC, LLO, HID}, /* 214 */
-{"stat64",	2, DEC, NOV, STG, HEX},				/* 215 */
-{"lstat64",	2, DEC, NOV, STG, HEX},				/* 216 */
-{"fstat64",	2, DEC, NOV, DEC, HEX},				/* 217 */
-{"statvfs64",	2, DEC, NOV, STG, HEX},				/* 218 */
-{"fstatvfs64",	2, DEC, NOV, DEC, HEX},				/* 219 */
-{"setrlimit64",	2, DEC, NOV, RLM, HEX},				/* 220 */
-{"getrlimit64",	2, DEC, NOV, RLM, HEX},				/* 221 */
-{"pread64",	5, DEC, NOV, DEC, IOB, UNS, LLO, HID},		/* 222 */
-{"pwrite64",	5, DEC, NOV, DEC, IOB, UNS, LLO, HID},		/* 223 */
 { NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
-{"open64",	3, DEC, NOV, STG, OPN, OCT},			/* 225 */
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
+{ NULL,		8, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX, HEX},
 {"rpcmod",	3, DEC, NOV, DEC, HEX},				/* 226 */
 {"zone",	5, DEC, NOV, DEC, HEX, HEX, HEX, HEX},		/* 227 */
 {"autofssys",	2, DEC, NOV, DEC, HEX},				/* 228 */
@@ -559,14 +559,6 @@ const	struct systable	fstatattable[] = {
 };
 #define	NSTATCODE	(sizeof (fstatattable) / sizeof (struct systable))
 
-const	struct systable	fstatat64table[] = {
-{"fstatat64",	4, DEC, NOV, ATC, STG, HEX, SNF},		/*  0 */
-{"stat64",	3, DEC, NOV, HID, STG, HEX},			/*  1 */
-{"lstat64",	3, DEC, NOV, HID, STG, HEX},			/*  2 */
-{"fstat64",	3, DEC, NOV, DEC, HID, HEX},			/*  3 */
-};
-#define	NSTAT64CODE	(sizeof (fstatat64table) / sizeof (struct systable))
-
 const	struct systable openattable[] = {
 {"openat",	3, DEC, NOV, ATC, STG, OPN},			/* 0 */
 {"openat",	4, DEC, NOV, ATC, STG, OPN, OCT},		/* 1 */
@@ -575,25 +567,11 @@ const	struct systable openattable[] = {
 };
 #define	NOPENATCODE	(sizeof (openattable) / sizeof (struct systable))
 
-const	struct systable openat64table[] = {
-{"openat64",	3, DEC, NOV, ATC, STG, OPN},			/* 0 */
-{"openat64",	4, DEC, NOV, ATC, STG, OPN, OCT},		/* 1 */
-{"open64",	3, DEC, NOV, HID, STG, OPN},			/* 2 */
-{"open64",	4, DEC, NOV, HID, STG, OPN, OCT},		/* 3 */
-};
-#define	NOPENAT64CODE	(sizeof (openat64table) / sizeof (struct systable))
-
 const	struct systable opentable[] = {
 {"open",	2, DEC, NOV, STG, OPN},				/* 0 */
 {"open",	3, DEC, NOV, STG, OPN, OCT},			/* 1 */
 };
 #define	NOPENCODE	(sizeof (opentable) / sizeof (struct systable))
-
-const	struct systable open64table[] = {
-{"open64",	2, DEC, NOV, STG, OPN},				/* 0 */
-{"open64",	3, DEC, NOV, STG, OPN, OCT},			/* 1 */
-};
-#define	NOPEN64CODE	(sizeof (open64table) / sizeof (struct systable))
 
 const	struct systable fcntltable[] = {
 {"fcntl",	3, DEC, NOV, DEC, FCN, HEX},			/* 0: default */
@@ -1018,7 +996,6 @@ const	struct sysalias sysalias[] = {
 	{ "lwp_mutex_lock",	SYS_lwp_mutex_timedlock },
 	{ "sendfilev64",	SYS_sendfilev	},
 	{ "creat",		SYS_open	},
-	{ "creat64",		SYS_open64	},
 	{ "openattrdirat",	SYS_openat	},
 	{ "lgrpsys",		SYS_lgrpsys	},
 	{ "getrusage",		SYS_rusagesys	},
@@ -1115,25 +1092,13 @@ subsys(int syscall, int subcode)
 			if ((unsigned)subcode < NSTATCODE)
 				stp = &fstatattable[subcode];
 			break;
-		case SYS_fstatat64:
-			if ((unsigned)subcode < NSTAT64CODE)
-				stp = &fstatat64table[subcode];
-			break;
 		case SYS_openat:
 			if ((unsigned)subcode < NOPENATCODE)
 				stp = &openattable[subcode];
 			break;
-		case SYS_openat64:
-			if ((unsigned)subcode < NOPENAT64CODE)
-				stp = &openat64table[subcode];
-			break;
 		case SYS_open:
 			if ((unsigned)subcode < NOPENCODE)
 				stp = &opentable[subcode];
-			break;
-		case SYS_open64:
-			if ((unsigned)subcode < NOPEN64CODE)
-				stp = &open64table[subcode];
 			break;
 		case SYS_msgsys:	/* msgsys() */
 			if ((unsigned)subcode < NMSGCODE)
@@ -1402,7 +1367,6 @@ getsubcode(private_t *pri)
 				    1 : 0;
 			break;
 		case SYS_fstatat:
-		case SYS_fstatat64:
 			if (nsysarg > 1 && Lsp->pr_sysarg[1] == 0) {
 				subcode = 3;
 				break;
@@ -1416,15 +1380,14 @@ getsubcode(private_t *pri)
 				    (Lsp->pr_sysarg[3] == AT_SYMLINK_NOFOLLOW)?
 				    2 : 0;
 			break;
-		case SYS_openat:	/* openat() w/ and w/o AT_FDCWD */
-		case SYS_openat64:	/* and with and w/o O_CREAT */
+		case SYS_openat:	/* openat() w/ and w/o AT_FDCWD and
+					   with and w/o O_CREAT */
 			if (nsysarg > 2)
 				subcode = ((int)Lsp->pr_sysarg[0] == AT_FDCWD)?
 				    ((Lsp->pr_sysarg[2] & O_CREAT)? 3 : 2) :
 				    ((Lsp->pr_sysarg[2] & O_CREAT)? 1 : 0);
 			break;
 		case SYS_open:		/* open() w/ and w/o O_CREAT */
-		case SYS_open64:
 			if (nsysarg > 1)
 				subcode = (Lsp->pr_sysarg[1] & O_CREAT)? 1 : 0;
 			break;
@@ -1511,11 +1474,8 @@ maxsyscalls()
 	    + NSYMLINKCODE - 1
 	    + NREADLINKCODE - 1
 	    + NSTATCODE - 1
-	    + NSTAT64CODE - 1
 	    + NOPENATCODE - 1
-	    + NOPENAT64CODE - 1
 	    + NOPENCODE - 1
-	    + NOPEN64CODE - 1
 	    + NMSGCODE - 1
 	    + NSEMCODE - 1
 	    + NSHMCODE - 1
@@ -1578,16 +1538,10 @@ nsubcodes(int syscall)
 		return (NREADLINKCODE);
 	case SYS_fstatat:
 		return (NSTATCODE);
-	case SYS_fstatat64:
-		return (NSTAT64CODE);
 	case SYS_openat:
 		return (NOPENATCODE);
-	case SYS_openat64:
-		return (NOPENAT64CODE);
 	case SYS_open:
 		return (NOPENCODE);
-	case SYS_open64:
-		return (NOPEN64CODE);
 	case SYS_msgsys:
 		return (NMSGCODE);
 	case SYS_semsys:

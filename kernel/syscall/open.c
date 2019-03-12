@@ -300,14 +300,3 @@ openat64(int fd, char *path, int omode, int cmode)
 	return (copen(fd, path, FFLAGS(omode), cmode));
 }
 #endif	/* _ILP32 || _SYSCALL32_IMPL */
-
-#ifdef _SYSCALL32_IMPL
-/*
- * Open for 32-bit compatibility on 64-bit kernel
- */
-int
-openat32(int fd, char *path, int omode, int cmode)
-{
-	return (copen(fd, path, FFLAGS(omode), cmode));
-}
-#endif	/* _SYSCALL32_IMPL */

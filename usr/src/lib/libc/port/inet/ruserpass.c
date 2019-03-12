@@ -147,7 +147,7 @@ rnetrc(const char *host, char **aname, char **apass)
 	struct ruserdata *d = _ruserdata();
 	char *hdir, buf[PATH_MAX];
 	int t;
-	struct stat64 stb;
+	struct stat stb;
 
 	if (d == 0)
 		return;
@@ -197,7 +197,7 @@ next:
 				}
 			break;
 		case PASSWD:
-			if (fstat64(fileno(d->cfile), &stb) >= 0 &&
+			if (fstat(fileno(d->cfile), &stb) >= 0 &&
 			    (stb.st_mode & 077) != 0) {
 				(void) fprintf(stderr,
 				    dgettext(TEXT_DOMAIN,

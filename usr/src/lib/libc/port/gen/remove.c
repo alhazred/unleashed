@@ -38,14 +38,14 @@
 int
 remove(const char *filename)
 {
-	struct stat64	statb;
+	struct stat	statb;
 
 	/*
 	 * If filename is not a directory, call unlink(filename)
 	 * Otherwise, call rmdir(filename)
 	 */
 
-	if (lstat64(filename, &statb) != 0)
+	if (lstat(filename, &statb) != 0)
 		return (-1);
 	if ((statb.st_mode & S_IFMT) != S_IFDIR)
 		return (unlink(filename));

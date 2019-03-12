@@ -6,14 +6,11 @@
 #define __attribute__(x)
 #endif
 
-#if defined(__linux__) || defined(__MINT__)
-#define _GNU_SOURCE	/* See test-*.c what needs this. */
-#endif
-
 
 #define MAN_CONF_FILE "/etc/man.conf"
 #define MANPATH_BASE "/usr/share/man:/usr/X11R6/man"
 #define MANPATH_DEFAULT "/usr/share/man:/usr/X11R6/man:/usr/local/man"
+#define OSENUM MANDOC_OS_OTHER
 #define UTF8_LOCALE "en_US.UTF-8"
 #define EFTYPE EINVAL
 #define HAVE_CMSG_XPG42 0
@@ -25,6 +22,7 @@
 #define HAVE_GETLINE 1
 #define HAVE_GETSUBOPT 1
 #define HAVE_ISBLANK 1
+#define HAVE_LESS_T 1
 #define HAVE_MKDTEMP 1
 #define HAVE_NTOHL 1
 #define HAVE_PLEDGE 0

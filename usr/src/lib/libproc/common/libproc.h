@@ -360,11 +360,6 @@ extern	int	pr_fcntl(struct ps_prochandle *, int, int, void *);
 extern	int	pr_stat(struct ps_prochandle *, const char *, struct stat *);
 extern	int	pr_lstat(struct ps_prochandle *, const char *, struct stat *);
 extern	int	pr_fstat(struct ps_prochandle *, int, struct stat *);
-extern	int	pr_stat64(struct ps_prochandle *, const char *,
-			struct stat64 *);
-extern	int	pr_lstat64(struct ps_prochandle *, const char *,
-			struct stat64 *);
-extern	int	pr_fstat64(struct ps_prochandle *, int, struct stat64 *);
 extern	int	pr_statvfs(struct ps_prochandle *, const char *, statvfs_t *);
 extern	int	pr_fstatvfs(struct ps_prochandle *, int, statvfs_t *);
 extern	projid_t pr_getprojid(struct ps_prochandle *Pr);
@@ -382,12 +377,6 @@ extern	int	pr_setrlimit(struct ps_prochandle *,
 			int, const struct rlimit *);
 extern	int	pr_setprojrctl(struct ps_prochandle *, const char *,
 			rctlblk_t *, size_t, int);
-#if defined(_LARGEFILE64_SOURCE)
-extern	int	pr_getrlimit64(struct ps_prochandle *,
-			int, struct rlimit64 *);
-extern	int	pr_setrlimit64(struct ps_prochandle *,
-			int, const struct rlimit64 *);
-#endif	/* _LARGEFILE64_SOURCE */
 extern	int	pr_lwp_exit(struct ps_prochandle *);
 extern	int	pr_exit(struct ps_prochandle *, int);
 extern	int	pr_waitid(struct ps_prochandle *,

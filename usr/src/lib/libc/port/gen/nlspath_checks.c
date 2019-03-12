@@ -71,7 +71,7 @@ static int8_t nlspath_safe;
  * When the program specifies a pathname and doesn't
  * use NLSPATH, it should specify the "safe" flag as 1.
  * Most checks will be disabled then.
- * fstat64 is done here and the stat structure is returned
+ * fstat is done here and the stat structure is returned
  * to prevent duplication of system calls.
  *
  * The trust return value contains an indication of
@@ -80,7 +80,7 @@ static int8_t nlspath_safe;
  */
 
 int
-nls_safe_open(const char *path, struct stat64 *statbuf, int *trust, int safe)
+nls_safe_open(const char *path, struct stat *statbuf, int *trust, int safe)
 {
 	int	fd;
 	int	trust_path;
@@ -101,7 +101,7 @@ nls_safe_open(const char *path, struct stat64 *statbuf, int *trust, int safe)
 	if (fd < 0)
 		return (-1);
 
-	if (fstat64(fd, statbuf) == -1) {
+	if (fstat(fd, statbuf) == -1) {
 		(void) close(fd);
 		return (-1);
 	}

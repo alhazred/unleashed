@@ -61,7 +61,7 @@
 
 #if defined(_SYSCALL32_IMPL) || defined(_ILP32)
 /*
- * Workhorse for the 32-bit seek variants: lseek32 and llseek32
+ * Workhorse for 32-bit llseek32
  *
  * 'max' represents the maximum possible representation of offset
  * in the data type corresponding to lseek and llseek. It is
@@ -200,41 +200,6 @@ lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,
 	}
 out:
 	return (error);
-}
-
-off32_t
-lseek32(int32_t fdes, off32_t off, int32_t stype)
-{
-	file_t *fp;
-	int error;
-	offset_t retoff;
-
-	if ((fp = getf(fdes)) == NULL)
-		return ((off32_t)set_errno(EBADF));
-
-	/*
-	 * lseek32 returns EOVERFLOW if we cannot represent the resulting
-	 * offset from seek in a 32-bit off_t.
-	 * The following routines are sensitive to sign extensions and
-	 * calculations and if ever you change this make sure it works for
-	 * special files.
-	 *
-	 * When VREG is not set we do the check for stype != SEEK_SET
-	 * to send the unsigned value to lseek_common and not the sign
-	 * extended value. (The maximum representable value is not
-	 * checked by lseek_common for special files.)
-	 */
-	if (fp->f_vnode->v_type == VREG || stype != SEEK_SET)
-		error = lseek32_common(fp, stype, (offset_t)off,
-		    (offset_t)MAXOFF32_T, &retoff);
-	else if (stype == SEEK_SET)
-		error = lseek32_common(fp, stype, (offset_t)(uint_t)off,
-		    (offset_t)(uint_t)UINT_MAX, &retoff);
-
-	releasef(fdes);
-	if (!error)
-		return ((off32_t)retoff);
-	return ((off32_t)set_errno(error));
 }
 
 /*

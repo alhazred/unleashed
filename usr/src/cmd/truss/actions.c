@@ -338,11 +338,11 @@ setupsysargs(private_t *pri, int what)
 
 #define	ISREAD(code) \
 	((code) == SYS_read || (code) == SYS_pread || \
-	(code) == SYS_pread64 || (code) == SYS_readv || \
+	(code) == SYS_readv || \
 	(code) == SYS_recv || (code) == SYS_recvfrom)
 #define	ISWRITE(code) \
 	((code) == SYS_write || (code) == SYS_pwrite || \
-	(code) == SYS_pwrite64 || (code) == SYS_writev || \
+	(code) == SYS_writev || \
 	(code) == SYS_send || (code) == SYS_sendto)
 
 /*
@@ -389,11 +389,11 @@ sysentry(private_t *pri, int dotrace)
 
 	/*
 	 * Fetch and remember first argument if it's a string,
-	 * or second argument if SYS_openat or SYS_openat64.
+	 * or second argument if SYS_openat.
 	 */
 	pri->sys_valid = FALSE;
 	if ((nargs > 0 && stp->arg[0] == STG) ||
-	    (nargs > 1 && (what == SYS_openat || what == SYS_openat64))) {
+	    (nargs > 1 && what == SYS_openat)) {
 		long offset;
 		uint32_t offset32;
 
@@ -480,8 +480,8 @@ sysentry(private_t *pri, int dotrace)
 
 			if (!raw && pri->sys_valid &&
 			    ((i == 0 && x == STG) ||
-			    (i == 1 && (what == SYS_openat ||
-			    what == SYS_openat64)))) {	/* already fetched */
+			    (i == 1 && what == SYS_openat))) {
+				/* already fetched */
 				if (argprinted)
 					outstring(pri, ", ");
 				escape_string(pri, pri->sys_path);
@@ -561,8 +561,7 @@ sysexit(private_t *pri, int dotrace)
 		/* FALLTHROUGH */
 	default:
 		/* we called sysentry() in main() for these */
-		if (what == SYS_openat || what == SYS_openat64 ||
-		    what == SYS_open || what == SYS_open64)
+		if (what == SYS_openat || what == SYS_open)
 			istraced = dotrace && prismember(&trace, what);
 		else
 			istraced = sysentry(pri, dotrace) && dotrace;
@@ -587,8 +586,7 @@ sysexit(private_t *pri, int dotrace)
 		if (what == SYS_forksys && subcode >= 3)
 			scp += subcode - 3;
 		else if (subcode != -1 &&
-		    (what != SYS_openat && what != SYS_openat64 &&
-		    what != SYS_open && what != SYS_open64 &&
+		    (what != SYS_openat && what != SYS_open &&
 		    what != SYS_lwp_create))
 			scp += subcode;
 		scp->count++;
@@ -827,11 +825,11 @@ sysexit(private_t *pri, int dotrace)
 	}
 
 #define	ISREAD(code) \
-	((code) == SYS_read || (code) == SYS_pread || (code) == SYS_pread64 || \
+	((code) == SYS_read || (code) == SYS_pread || \
 	(code) == SYS_recv || (code) == SYS_recvfrom)
 #define	ISWRITE(code) \
 	((code) == SYS_write || (code) == SYS_pwrite || \
-	(code) == SYS_pwrite64 || (code) == SYS_send || (code) == SYS_sendto)
+	(code) == SYS_send || (code) == SYS_sendto)
 
 	if (!cflag && istraced) {
 		int fdp1 = (int)pri->sys_args[0] + 1; /* filedescriptor + 1 */
@@ -908,8 +906,7 @@ showpaths(private_t *pri, const struct systable *stp)
 
 			if (pri->sys_valid &&
 			    ((i == 0 && stp->arg[0] == STG) ||
-			    (i == 1 && (what == SYS_openat ||
-			    what == SYS_openat64))))	/* already fetched */
+			    (i == 1 && what == SYS_openat))) /* already fetched */
 				s = pri->sys_path;
 			else
 				s = fetchstring(pri, addr,

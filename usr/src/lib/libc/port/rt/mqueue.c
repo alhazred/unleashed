@@ -932,7 +932,7 @@ mq_notify(mqd_t mqdes, const struct sigevent *sigevp)
 	thread_communication_data_t *tcdp;
 	siginfo_t mq_siginfo;
 	struct sigevent sigevent;
-	struct stat64 statb;
+	struct stat statb;
 	port_notify_t *pn;
 	void *userval;
 	int rval = -1;
@@ -988,7 +988,7 @@ mq_notify(mqd_t mqdes, const struct sigevent *sigevp)
 			pn = sigevp->sigev_value.sival_ptr;
 			userval = pn->portnfy_user;
 			port = pn->portnfy_port;
-			if (fstat64(port, &statb) != 0 ||
+			if (fstat(port, &statb) != 0 ||
 			    !S_ISPORT(statb.st_mode)) {
 				errno = EBADF;
 				goto bad;

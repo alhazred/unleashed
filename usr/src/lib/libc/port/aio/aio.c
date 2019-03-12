@@ -338,7 +338,7 @@ _aiorw(int fd, caddr_t buf, int bufsz, offset_t offset, int whence,
 	aio_req_t *reqp;
 	aio_args_t *ap;
 	offset_t loffset;
-	struct stat64 stat64;
+	struct stat stat64;
 	int error = 0;
 	int kerr;
 	int umode;
@@ -355,7 +355,7 @@ _aiorw(int fd, caddr_t buf, int bufsz, offset_t offset, int whence,
 			loffset += offset;
 		break;
 	case SEEK_END:
-		if (fstat64(fd, &stat64) == -1)
+		if (fstat(fd, &stat64) == -1)
 			error = -1;
 		else
 			loffset = offset + stat64.st_size;

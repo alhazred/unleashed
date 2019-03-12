@@ -35,7 +35,7 @@
 extern "C" {
 #endif
 
-extern int nls_safe_open(const char *, struct stat64 *, int *, int);
+extern int nls_safe_open(const char *, struct stat *, int *, int);
 extern char *check_format(const char *, const char *, int);
 
 #ifdef __cplusplus

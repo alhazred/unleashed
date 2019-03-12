@@ -51,7 +51,7 @@
 int
 posix_fadvise(int fd, off_t offset, off_t len, int advice)
 {
-	struct stat64 statb;
+	struct stat statb;
 
 	switch (advice) {
 	case POSIX_FADV_NORMAL:
@@ -66,7 +66,7 @@ posix_fadvise(int fd, off_t offset, off_t len, int advice)
 	}
 	if (len < 0)
 		return (EINVAL);
-	if (fstat64(fd, &statb) != 0)
+	if (fstat(fd, &statb) != 0)
 		return (EBADF);
 	if (S_ISFIFO(statb.st_mode))
 		return (ESPIPE);

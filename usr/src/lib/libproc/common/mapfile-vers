@@ -174,7 +174,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	pr_exit;
 	pr_fcntl;
 	pr_fstat;
-	pr_fstat64;
 	pr_fstatvfs;
 	pr_getitimer;
 	pr_getpeername;
@@ -182,7 +181,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	pr_getprojid;
 	pr_getrctl;
 	pr_getrlimit;
-	pr_getrlimit64;
 	pr_getsockname;
 	pr_getsockopt;
 	pr_gettaskid;
@@ -192,7 +190,6 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	pr_llseek;
 	pr_lseek;
 	pr_lstat;
-	pr_lstat64;
 	pr_lwp_exit;
 	pr_memcntl;
 	pr_meminfo;
@@ -237,11 +234,9 @@ SYMBOL_VERSION SUNWprivate_1.1 {
 	pr_setprojrctl;
 	pr_setrctl;
 	pr_setrlimit;
-	pr_setrlimit64;
 	pr_settaskid;
 	pr_sigaction;
 	pr_stat;
-	pr_stat64;
 	pr_statvfs;
 	pr_unlink;
 	pr_waitid;

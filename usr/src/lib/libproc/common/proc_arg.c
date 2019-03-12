@@ -47,7 +47,7 @@ open_psinfo(const char *arg, int *perr)
 	 */
 	char *path = alloca(strlen(arg) + strlen(procfs_path) + 9);
 
-	struct stat64 st;
+	struct stat st;
 	int fd;
 
 	if (strchr(arg, '/') == NULL) {
@@ -63,8 +63,8 @@ open_psinfo(const char *arg, int *perr)
 	 * Attempt to open the psinfo file, and return the fd if we can
 	 * confirm this is a regular file provided by /proc.
 	 */
-	if ((fd = open64(path, O_RDONLY)) >= 0) {
-		if (fstat64(fd, &st) != 0 || !S_ISREG(st.st_mode) ||
+	if ((fd = open(path, O_RDONLY)) >= 0) {
+		if (fstat(fd, &st) != 0 || !S_ISREG(st.st_mode) ||
 		    strcmp(st.st_fstype, "proc") != 0) {
 			(void) close(fd);
 			fd = -1;
@@ -91,7 +91,7 @@ open_core(const char *arg, int *perr)
 	 * Attempt to open the core file, and return the fd if we can confirm
 	 * this is an ELF file of type ET_CORE.
 	 */
-	if ((fd = open64(arg, O_RDONLY)) >= 0) {
+	if ((fd = open(arg, O_RDONLY)) >= 0) {
 		if (read(fd, &ehdr, sizeof (ehdr)) != sizeof (ehdr)) {
 			(void) close(fd);
 			fd = -1;

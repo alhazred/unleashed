@@ -96,12 +96,12 @@ typedef struct special {
 } spcl_t;
 
 static int srch_dir(const entry_t path, int match_mask, int depth,
-    const entry_t skip_dirs[], struct stat64 *fsb);
+    const entry_t skip_dirs[], struct stat *fsb);
 static const entry_t *get_pri_dirs(void);
-static char *ispts(struct stat64 *fsb, int match_mask);
-static char *ispty(struct stat64 *fsb, int match_mask);
+static char *ispts(struct stat *fsb, int match_mask);
+static char *ispty(struct stat *fsb, int match_mask);
 static void itoa(int i, char *ptr);
-static char *_ttyname_common(struct stat64 *fsp, char *buffer,
+static char *_ttyname_common(struct stat *fsp, char *buffer,
     uint_t match_mask);
 
 
@@ -153,7 +153,7 @@ static	dev_t	ptsldev = NODEV;
 char *
 _ttyname_dev(dev_t rdev, char *buffer, size_t buflen)
 {
-	struct stat64 fsb;
+	struct stat fsb;
 
 	fsb.st_rdev = rdev;
 
@@ -169,12 +169,12 @@ _ttyname_dev(dev_t rdev, char *buffer, size_t buflen)
 int
 ttyname_r(int f, char *buffer, size_t buflen)
 {
-	struct stat64 fsb;	/* what we are searching for */
+	struct stat fsb;	/* what we are searching for */
 	/*
 	 * do we need to search anything at all? (is fildes a char special tty
 	 * file?)
 	 */
-	if (fstat64(f, &fsb) < 0) {
+	if (fstat(f, &fsb) < 0) {
 		errno = EBADF;
 		return errno;
 	}
@@ -198,9 +198,9 @@ ttyname_r(int f, char *buffer, size_t buflen)
 }
 
 static char *
-_ttyname_common(struct stat64 *fsp, char *buffer, uint_t match_mask)
+_ttyname_common(struct stat *fsp, char *buffer, uint_t match_mask)
 {
-	struct stat64 tfsb;
+	struct stat tfsb;
 	const entry_t *srch_dirs;	/* priority directories */
 	spcl_t *spclp;
 	int i;
@@ -223,7 +223,7 @@ _ttyname_common(struct stat64 *fsp, char *buffer, uint_t match_mask)
 	for (spclp = special_case, i = 0; i < NUMSPECIAL; spclp++, i++) {
 		if ((spclp->spcl_inum | spclp->spcl_fsdev |
 		    spclp->spcl_rdev) == 0) {
-			if (stat64(spclp->spcl_name, &tfsb) != 0)
+			if (stat(spclp->spcl_name, &tfsb) != 0)
 				continue;
 			spclp->spcl_rdev = tfsb.st_rdev;
 			spclp->spcl_fsdev = tfsb.st_dev;
@@ -249,7 +249,7 @@ _ttyname_common(struct stat64 *fsp, char *buffer, uint_t match_mask)
 	 */
 	spclp = &ptmspecial;
 	if ((spclp->spcl_inum | spclp->spcl_fsdev | spclp->spcl_rdev) == 0) {
-		if (stat64(spclp->spcl_name, &tfsb) == 0) {
+		if (stat(spclp->spcl_name, &tfsb) == 0) {
 			spclp->spcl_rdev = tfsb.st_rdev;
 			spclp->spcl_fsdev = tfsb.st_dev;
 			spclp->spcl_inum = tfsb.st_ino;
@@ -327,15 +327,15 @@ out:	retval = (retval ? strcpy(buffer, retval) : NULL);
  * Checks if the name is under /dev/pts directory
  */
 static char *
-ispts(struct stat64 *fsb, int match_mask)
+ispts(struct stat *fsb, int match_mask)
 {
 	static  char	buf[MAX_DEV_PATH];
-	struct	stat64	stb;
+	struct	stat	stb;
 
 	(void) strcpy(buf, "/dev/pts/");
 	itoa(minor(fsb->st_rdev), buf+strlen(buf));
 
-	if (stat64(buf, &stb) != 0)
+	if (stat(buf, &stb) != 0)
 		return (NULL);
 
 	if (match_mask == MATCH_MM) {
@@ -354,14 +354,14 @@ ispts(struct stat64 *fsb, int match_mask)
 #define	MAXDEFAULTPTY	48
 
 static char *
-ispty(struct stat64 *fsb, int match_mask)
+ispty(struct stat *fsb, int match_mask)
 {
 	static char	buf[16];	/* big enough for "/dev/XtyXX" */
-	struct	stat64	stb;
+	struct	stat	stb;
 	minor_t dmin;
 	char prefix;
 
-	if (ptsldev == NODEV && stat64("/dev/ttyp0", &stb) == 0)
+	if (ptsldev == NODEV && stat("/dev/ttyp0", &stb) == 0)
 		ptsldev = stb.st_rdev;
 
 	/*
@@ -372,7 +372,7 @@ ispty(struct stat64 *fsb, int match_mask)
 		/*
 		 * not a ptsl, check for a ptc
 		 */
-		if (ptcdev == NODEV && stat64("/dev/ptyp0", &stb) == 0)
+		if (ptcdev == NODEV && stat("/dev/ptyp0", &stb) == 0)
 			ptcdev = stb.st_rdev;
 
 		/*
@@ -396,7 +396,7 @@ ispty(struct stat64 *fsb, int match_mask)
 	(void) snprintf(buf, sizeof (buf), "/dev/%cty%c%c",
 	    prefix, 'p' + dmin / 16, "0123456789abcdef"[dmin % 16]);
 
-	if (stat64(buf, &stb) != 0)
+	if (stat(buf, &stb) != 0)
 		return (NULL);
 
 	if (match_mask == MATCH_MM) {
@@ -450,11 +450,11 @@ srch_dir(const entry_t path,	/* current path */
     int match_mask,		/* flags mask */
     int depth,			/* current depth (/dev = 0) */
     const entry_t skip_dirs[],	/* directories not needing searching */
-    struct stat64 *fsb)		/* the file being searched for */
+    struct stat *fsb)		/* the file being searched for */
 {
 	DIR *dirp;
 	struct dirent *direntp;
-	struct stat64 tsb;
+	struct stat tsb;
 	char file_name[MAX_DEV_PATH];
 	entry_t file;
 	char *last_comp;
@@ -507,7 +507,7 @@ srch_dir(const entry_t path,	/* current path */
 			continue;
 
 		(void) strcpy(last_comp, direntp->d_name);
-		if (stat64(file_name, &tsb) < 0)
+		if (stat(file_name, &tsb) < 0)
 			continue;
 
 		if (strcmp(file_name, "/dev/vt/active") == 0)
@@ -591,7 +591,7 @@ get_pri_dirs(void)
 	int fd, state;
 	size_t sz;
 	ssize_t size;
-	struct stat64 sb;
+	struct stat sb;
 	char *buf, *ebuf;
 	entry_t *vec;
 
@@ -601,7 +601,7 @@ get_pri_dirs(void)
 	if ((fd = open(TTYSRCH, O_RDONLY)) < 0)
 		return (def_srch_dirs);
 
-	if (fstat64(fd, &sb) < 0) {
+	if (fstat(fd, &sb) < 0) {
 		(void) close(fd);
 		return (def_srch_dirs);
 	}

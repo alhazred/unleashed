@@ -280,7 +280,7 @@ static nl_catd
 file_open(const char *name, int safe)
 {
 	int		fd;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	void		*addr;
 	struct _cat_hdr	*tmp;
 	nl_catd		tmp_catd;

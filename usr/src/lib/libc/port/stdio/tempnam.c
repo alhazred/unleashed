@@ -56,14 +56,14 @@ tempnam(const char *dir,	/* use this directory please (if non-NULL) */
 {
 	char *p, *q, *tdir;
 	size_t x = 0, y = 0, z;
-	struct stat64 statbuf;
+	struct stat statbuf;
 
 	z = sizeof (P_tmpdir) - 1;
 	if ((tdir = getenv("TMPDIR")) != NULL) {
 		x = strlen(tdir);
 	}
 	if (dir != NULL) {
-		if (stat64(dir, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
+		if (stat(dir, &statbuf) == 0 && S_ISDIR(statbuf.st_mode))
 			y = strlen(dir);
 	}
 	if ((p = malloc(max(max(x, y), z)+16)) == NULL)

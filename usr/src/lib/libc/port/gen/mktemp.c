@@ -112,7 +112,7 @@ libc_mktemps(char *as, int slen)
 	char		*first_x;
 	int		len;
 	uint_t		xcnt;
-	struct stat64	buf;
+	struct stat	buf;
 
 	if (as == NULL || *as == '\0')	/* If the string passed is null then */
 		return (as);	/* a pointer to a null string is returned. */
@@ -180,7 +180,7 @@ libc_mktemps(char *as, int slen)
 		xpid &= ((1 << pidshift) - 1);
 
 		if (xpid == pid &&
-		    lstat64(as, &buf) == -1 && errno == ENOENT) {
+		    lstat(as, &buf) == -1 && errno == ENOENT) {
 			lmutex_unlock(&mktemp_lock);
 			return (as);
 		}
@@ -205,7 +205,7 @@ libc_mktemps(char *as, int slen)
 			num >>= 6;
 		}
 
-		if (lstat64(as, &buf) == -1) {
+		if (lstat(as, &buf) == -1) {
 			if (errno != ENOENT)
 				break;		/* unrecoverable error */
 			/* remember where we left off for the next call */

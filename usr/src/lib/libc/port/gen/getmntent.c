@@ -58,7 +58,7 @@ static int getmntent_compat(FILE *fp, struct mnttab *mp);
 	    strcmp(mrefp->xx, mgetp->xx) != 0))
 
 #define	SDIFF(xx, typem, typer)\
-	((mgetp->xx == NULL) || (stat64(mgetp->xx, &statb) == -1) ||\
+	((mgetp->xx == NULL) || (stat(mgetp->xx, &statb) == -1) ||\
 	((statb.st_mode & S_IFMT) != typem) ||\
 	    (statb.st_rdev != typer))
 
@@ -108,14 +108,14 @@ getmntany_compat(FILE *fp, struct mnttab *mgetp, struct mnttab *mrefp)
 	int	ret, bstat;
 	mode_t	bmode;
 	dev_t	brdev;
-	struct stat64	statb;
+	struct stat	statb;
 
 	/*
 	 * Ignore specials that don't correspond to real devices to avoid doing
-	 * unnecessary lookups in stat64().
+	 * unnecessary lookups in stat().
 	 */
 	if (mrefp->mnt_special && mrefp->mnt_special[0] == '/' &&
-	    stat64(mrefp->mnt_special, &statb) == 0 &&
+	    stat(mrefp->mnt_special, &statb) == 0 &&
 	    ((bmode = (statb.st_mode & S_IFMT)) == S_IFBLK ||
 	    bmode == S_IFCHR)) {
 		bstat = 1;

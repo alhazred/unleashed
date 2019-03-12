@@ -69,7 +69,7 @@
  */
 static ssize_t
 core_rw(struct ps_prochandle *P, void *buf, size_t n, uintptr_t addr,
-    ssize_t (*prw)(int, void *, size_t, off64_t))
+    ssize_t (*prw)(int, void *, size_t, off_t))
 {
 	ssize_t resid = n;
 
@@ -78,7 +78,7 @@ core_rw(struct ps_prochandle *P, void *buf, size_t n, uintptr_t addr,
 
 		uintptr_t mapoff;
 		ssize_t len;
-		off64_t off;
+		off_t off;
 		int fd;
 
 		if (mp == NULL)
@@ -131,7 +131,7 @@ Pwrite_core(struct ps_prochandle *P, const void *buf, size_t n, uintptr_t addr,
     void *data)
 {
 	return (core_rw(P, (void *)buf, n, addr,
-	    (ssize_t (*)(int, void *, size_t, off64_t)) pwrite64));
+	    (ssize_t (*)(int, void *, size_t, off_t)) pwrite64));
 }
 
 /*ARGSUSED*/
@@ -1136,7 +1136,7 @@ core_report_mapping(struct ps_prochandle *P, GElf_Phdr *php)
 		int err = 0;
 
 		(void) pread64(P->asfd, &err,
-		    sizeof (err), (off64_t)php->p_offset);
+		    sizeof (err), (off_t)php->p_offset);
 
 		Perror_printf(P, errfmt, addr, strerror(err));
 		dprintf(errfmt, addr, strerror(err));
@@ -1149,7 +1149,7 @@ core_report_mapping(struct ps_prochandle *P, GElf_Phdr *php)
 	(void) memset(&killinfo, 0, sizeof (killinfo));
 
 	(void) pread64(P->asfd, &killinfo,
-	    sizeof (killinfo), (off64_t)php->p_offset);
+	    sizeof (killinfo), (off_t)php->p_offset);
 
 	/*
 	 * While there is (or at least should be) only one segment that has
@@ -1275,7 +1275,7 @@ fake_up_symtab(struct ps_prochandle *P, const elf_file_header_t *ehdr,
     GElf_Shdr *symtab, GElf_Shdr *strtab)
 {
 	size_t size;
-	off64_t off, base;
+	off_t off, base;
 	map_info_t *mp;
 	file_info_t *fp;
 	Elf_Scn *scn;
@@ -1727,7 +1727,7 @@ core_elf_open(elf_file_t *efp, const char *path, GElf_Half type, int *perr)
 {
 	(void) memset(efp, 0, sizeof (elf_file_t));
 
-	if ((efp->e_fd = open64(path, O_RDONLY)) >= 0) {
+	if ((efp->e_fd = open(path, O_RDONLY)) >= 0) {
 		if (core_elf_fdopen(efp, type, perr) == 0)
 			return (0);
 
@@ -2151,7 +2151,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 	char *interp;
 	int i, notes, pagesize;
 	uintptr_t addr, base_addr;
-	struct stat64 stbuf;
+	struct stat stbuf;
 	void *phbuf, *php;
 	size_t nbytes;
 #ifdef CONFIG_LINUX_CORE_SUPPORT
@@ -2221,7 +2221,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 	/*
 	 * Fstat and open the core file and make sure it is a valid ELF core.
 	 */
-	if (fstat64(P->asfd, &stbuf) == -1) {
+	if (fstat(P->asfd, &stbuf) == -1) {
 		*perr = G_STRANGE;
 		goto err;
 	}
@@ -2333,7 +2333,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 	/*
 	 * Advance the seek pointer to the start of the PT_NOTE data
 	 */
-	if (lseek64(P->asfd, note_phdr.p_offset, SEEK_SET) == (off64_t)-1) {
+	if (lseek64(P->asfd, note_phdr.p_offset, SEEK_SET) == (off_t)-1) {
 		dprintf("Pgrab_core: failed to lseek to PT_NOTE data\n");
 		*perr = G_STRANGE;
 		goto err;
@@ -2355,7 +2355,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 	 */
 	for (nleft = note_phdr.p_filesz; nleft > 0; ) {
 		Elf64_Nhdr nhdr;
-		off64_t off, namesz, descsz;
+		off_t off, namesz, descsz;
 
 		/*
 		 * Although <sys/elf.h> defines both Elf32_Nhdr and Elf64_Nhdr
@@ -2377,9 +2377,9 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		 * descriptions can assume only 4-byte alignment. We ignore
 		 * the name field and the padding to 4-byte alignment.
 		 */
-		namesz = P2ROUNDUP((off64_t)nhdr.n_namesz, (off64_t)4);
+		namesz = P2ROUNDUP((off_t)nhdr.n_namesz, (off_t)4);
 
-		if (lseek64(P->asfd, namesz, SEEK_CUR) == (off64_t)-1) {
+		if (lseek64(P->asfd, namesz, SEEK_CUR) == (off_t)-1) {
 			dprintf("failed to seek past name and padding\n");
 			*perr = G_STRANGE;
 			goto err;
@@ -2388,7 +2388,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		dprintf("Note hdr n_type=%u n_namesz=%u n_descsz=%u\n",
 		    nhdr.n_type, nhdr.n_namesz, nhdr.n_descsz);
 
-		off = lseek64(P->asfd, (off64_t)0L, SEEK_CUR);
+		off = lseek64(P->asfd, (off_t)0L, SEEK_CUR);
 
 		/*
 		 * Invoke the note handler function from our table
@@ -2416,8 +2416,8 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		/*
 		 * Seek past the current note data to the next Elf_Nhdr
 		 */
-		descsz = P2ROUNDUP((off64_t)nhdr.n_descsz, (off64_t)4);
-		if (lseek64(P->asfd, off + descsz, SEEK_SET) == (off64_t)-1) {
+		descsz = P2ROUNDUP((off_t)nhdr.n_descsz, (off_t)4);
+		if (lseek64(P->asfd, off + descsz, SEEK_SET) == (off_t)-1) {
 			dprintf("Pgrab_core: failed to seek to next nhdr\n");
 			*perr = G_STRANGE;
 			goto err;
@@ -2721,7 +2721,7 @@ Pgrab_core(const char *core, const char *aout, int gflag, int *perr)
 {
 	int fd, oflag = (gflag & PGRAB_RDONLY) ? O_RDONLY : O_RDWR;
 
-	if ((fd = open64(core, oflag)) >= 0)
+	if ((fd = open(core, oflag)) >= 0)
 		return (Pfgrab_core(fd, aout, perr));
 
 	if (errno != ENOENT)

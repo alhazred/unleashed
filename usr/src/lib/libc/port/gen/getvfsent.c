@@ -56,7 +56,7 @@
 	(vrefp->xx != NULL && (vgetp->xx == NULL ||\
 	    strcmp(vrefp->xx, vgetp->xx) != 0))
 #define	SDIFF(xx, typem, typer)\
-	(vgetp->xx == NULL || stat64(vgetp->xx, &statb) == -1 ||\
+	(vgetp->xx == NULL || stat(vgetp->xx, &statb) == -1 ||\
 	(statb.st_mode & S_IFMT) != typem ||\
 	    statb.st_rdev != typer)
 
@@ -71,10 +71,10 @@ getvfsspec(FILE *fd, struct vfstab *vgetp, char *special)
 	int	ret, bstat;
 	mode_t	bmode;
 	dev_t	brdev;
-	struct stat64	statb;
+	struct stat	statb;
 
 
-	if (special && stat64(special, &statb) == 0 &&
+	if (special && stat(special, &statb) == 0 &&
 	    ((bmode = (statb.st_mode & S_IFMT)) == S_IFBLK ||
 	    bmode == S_IFCHR)) {
 		bstat = 1;
@@ -88,7 +88,7 @@ getvfsspec(FILE *fd, struct vfstab *vgetp, char *special)
 	    strcmp(special, vgetp->vfs_special) != 0))) ||
 	    (bstat == 1 &&
 	    (vgetp->vfs_special == NULL ||
-	    stat64(vgetp->vfs_special, &statb) == -1 ||
+	    stat(vgetp->vfs_special, &statb) == -1 ||
 	    (statb.st_mode & S_IFMT) != bmode ||
 	    statb.st_rdev != brdev))))
 		;
@@ -111,7 +111,7 @@ getvfsany(FILE *fd, struct vfstab *vgetp, struct vfstab *vrefp)
 	int	ret, bstat, cstat;
 	mode_t	bmode, cmode;
 	dev_t	brdev, crdev;
-	struct stat64	statb;
+	struct stat	statb;
 	off_t start = ftello(fd);
 
 	/* Match by straight strcmp */
@@ -135,7 +135,7 @@ getvfsany(FILE *fd, struct vfstab *vgetp, struct vfstab *vrefp)
 	 */
 	(void) fseeko(fd, start, SEEK_SET);
 
-	if (vrefp->vfs_special && stat64(vrefp->vfs_special, &statb) == 0 &&
+	if (vrefp->vfs_special && stat(vrefp->vfs_special, &statb) == 0 &&
 	    ((bmode = (statb.st_mode & S_IFMT)) == S_IFBLK ||
 	    bmode == S_IFCHR)) {
 		bstat = 1;
@@ -143,7 +143,7 @@ getvfsany(FILE *fd, struct vfstab *vgetp, struct vfstab *vrefp)
 	} else
 		bstat = 0;
 
-	if (vrefp->vfs_fsckdev && stat64(vrefp->vfs_fsckdev, &statb) == 0 &&
+	if (vrefp->vfs_fsckdev && stat(vrefp->vfs_fsckdev, &statb) == 0 &&
 	    ((cmode = (statb.st_mode & S_IFMT)) == S_IFBLK ||
 	    cmode == S_IFCHR)) {
 		cstat = 1;

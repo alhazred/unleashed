@@ -72,13 +72,13 @@ scandir(const char *dirname, struct dirent *(*namelist[]),
 	struct dirent	*d, *p, **names = NULL;
 	size_t	nitems = 0;
 	size_t	arraysz, entlen;
-	struct stat64	stb;
+	struct stat	stb;
 	DIR	*dirp;
 	u_longlong_t	tmp_arraysz;
 
 	if ((dirp = opendir(dirname)) == NULL)
 		return (-1);
-	if (fstat64(dirp->dd_fd, &stb) < 0)
+	if (fstat(dirp->dd_fd, &stb) < 0)
 		goto fail;
 
 	/*

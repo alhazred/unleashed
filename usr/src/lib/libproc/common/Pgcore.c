@@ -79,9 +79,9 @@ typedef struct shstrtab {
 typedef struct {
 	struct ps_prochandle *P;
 	int		pgc_fd;
-	off64_t		*pgc_poff;
-	off64_t		*pgc_soff;
-	off64_t		*pgc_doff;
+	off_t		*pgc_poff;
+	off_t		*pgc_soff;
+	off_t		*pgc_doff;
 	core_content_t	pgc_content;
 	void		*pgc_chunk;
 	size_t		pgc_chunksz;
@@ -91,11 +91,11 @@ typedef struct {
 
 typedef struct {
 	int		fd_fd;
-	off64_t		*fd_doff;
+	off_t		*fd_doff;
 } fditer_t;
 
 static int
-gc_pwrite64(int fd, const void *buf, size_t len, off64_t off)
+gc_pwrite64(int fd, const void *buf, size_t len, off_t off)
 {
 	int err;
 
@@ -423,7 +423,7 @@ mkprpsinfo32(struct ps_prochandle *P, prpsinfo32_t *psp)
 #endif	/* _LP64 */
 
 static int
-write_note(int fd, uint_t type, const void *desc, size_t descsz, off64_t *offp)
+write_note(int fd, uint_t type, const void *desc, size_t descsz, off_t *offp)
 {
 	/*
 	 * Note headers are the same regardless of the data model of the
@@ -964,7 +964,7 @@ exclude:
 int
 write_shstrtab(struct ps_prochandle *P, pgcore_t *pgc)
 {
-	off64_t off = *pgc->pgc_doff;
+	off_t off = *pgc->pgc_doff;
 	size_t size = 0;
 	shstrtab_t *s = &pgc->pgc_shstrtab;
 	int i, ndx;
@@ -1042,7 +1042,7 @@ Pfgcore(struct ps_prochandle *P, int fd, core_content_t content)
 	char zonename[ZONENAME_MAX];
 	int platlen = -1;
 	pgcore_t pgc;
-	off64_t poff, soff, doff, boff;
+	off_t poff, soff, doff, boff;
 	struct utsname uts;
 	uint_t nphdrs, nshdrs;
 

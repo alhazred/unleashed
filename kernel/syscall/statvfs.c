@@ -282,47 +282,6 @@ cstatvfs64_32(struct vfs *vfsp, struct statvfs64_32 *ubp)
 }
 
 /*
- * ILP32 "small file" system calls on LP64 kernel
- */
-int
-statvfs32(char *fname, struct statvfs32 *sbp)
-{
-	vnode_t *vp;
-	int error;
-	int estale_retry = 0;
-
-lookup:
-	if (error = lookupname(fname, UIO_USERSPACE, FOLLOW, NULLVPP, &vp)) {
-		if ((error == ESTALE) && fs_need_estale_retry(estale_retry++))
-			goto lookup;
-		return (set_errno(error));
-	}
-	error = cstatvfs32(vp->v_vfsp, sbp);
-	VN_RELE(vp);
-	if (error) {
-		if ((error == ESTALE) && fs_need_estale_retry(estale_retry++))
-			goto lookup;
-		return (set_errno(error));
-	}
-	return (0);
-}
-
-int
-fstatvfs32(int fdes, struct statvfs32 *sbp)
-{
-	struct file *fp;
-	int error;
-
-	if ((fp = getf(fdes)) == NULL)
-		return (set_errno(EBADF));
-	error = cstatvfs32(fp->f_vnode->v_vfsp, sbp);
-	releasef(fdes);
-	if (error)
-		return (set_errno(error));
-	return (0);
-}
-
-/*
  * ILP32 Large File system calls on LP64 kernel
  */
 int

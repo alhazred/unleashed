@@ -59,7 +59,7 @@ sem_open(const char *path, int oflag, /* mode_t mode, int value */ ...)
 	va_list	ap;
 	mode_t	crmode = 0;
 	sem_t	*sem = NULL;
-	struct	stat64 statbuf;
+	struct	stat statbuf;
 	semaddr_t *next = NULL;
 	int	fd = 0;
 	int	error = 0;
@@ -103,7 +103,7 @@ sem_open(const char *path, int oflag, /* mode_t mode, int value */ ...)
 		cr_flag = DFILE_OPEN;
 
 	/* find out inode # for the opened file */
-	if (fstat64(fd, &statbuf) < 0)
+	if (fstat(fd, &statbuf) < 0)
 		goto out;
 
 	/* if created, acquire total_size in the file */

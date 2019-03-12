@@ -1689,7 +1689,7 @@ out:
  * down negative input values as such and let the downcall handle error
  * reporting. Functions covered by this comments are:
  *
- * rw.c:           read32, write32, pread32, pwrite32, readv32, writev32.
+ * rw.c:           read32, write32, readv32, writev32.
  * socksyscall.c:  recv32, recvfrom32, send32, sendto32.
  * readlink.c:     readlink32.
  */
@@ -1706,22 +1706,6 @@ write32(int32_t fdes, caddr32_t cbuf, size32_t count)
 {
 	return (write(fdes,
 	    (void *)(uintptr_t)cbuf, (ssize32_t)count));
-}
-
-ssize_t
-pread32(int32_t fdes, caddr32_t cbuf, size32_t count, off32_t offset)
-{
-	return (pread(fdes,
-	    (void *)(uintptr_t)cbuf, (ssize32_t)count,
-	    (off_t)(uint32_t)offset));
-}
-
-ssize_t
-pwrite32(int32_t fdes, caddr32_t cbuf, size32_t count, off32_t offset)
-{
-	return (pwrite(fdes,
-	    (void *)(uintptr_t)cbuf, (ssize32_t)count,
-	    (off_t)(uint32_t)offset));
 }
 
 ssize_t

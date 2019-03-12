@@ -27,8 +27,6 @@ pcsample		26
 alarm			27
 fstat			28
 pause			29
-stty			31
-gtty			32
 access			33
 nice			34
 statfs			35
@@ -62,9 +60,7 @@ ulimit			63
 renameat		64
 unlinkat		65
 fstatat			66
-fstatat64		67
 openat			68
-openat64		69
 tasksys			70
 acctctl			71
 exacctsys		72
@@ -197,18 +193,6 @@ resolvepath		209
 lwp_mutex_timedlock	210
 lwp_sema_timedwait	211
 lwp_rwlock_sys		212
-getdents64		213
-mmap64			214
-stat64			215
-lstat64			216
-fstat64			217
-statvfs64		218
-fstatvfs64		219
-setrlimit64		220
-getrlimit64		221
-pread64			222
-pwrite64		223
-open64			225
 rpcmod			226
 zone			227
 autofs			228

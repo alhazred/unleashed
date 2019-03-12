@@ -13,6 +13,7 @@ was changed.
    libcmd, libdll, libpp, libshell, libsum) are no more.
  - nonstandard getgrent_r, fgetgrent_r removed from libc
  - wordexp & wordfree removed from libc
+ - sgtty.h removed, including stty() and gtty()
  - nightly.sh is no more; see README.md for updated build instructions
  * removed posix.1c draft versions, and made default the standard versions, of
    the libc functions getgrgid_r, getgrnam_r, ttyname_r, getlogin_r

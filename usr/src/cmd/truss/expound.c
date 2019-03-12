@@ -698,8 +698,6 @@ show_termcb(private_t *pri, long offset)
 		    pri->pname,
 		    termcb.st_flgs&0xff,
 		    termcb.st_termt&0xff,
-		    termcb.st_crow&0xff,
-		    termcb.st_ccol&0xff,
 		    termcb.st_vrow&0xff,
 		    termcb.st_lrow&0xff);
 	}
@@ -1485,98 +1483,6 @@ show_statvfs(private_t *pri)
 	}
 }
 
-#ifdef _LP64
-void
-show_statvfs32(private_t *pri)
-{
-	long offset;
-	struct statvfs32 statvfs;
-	char *cp;
-
-	if (pri->sys_nargs > 1 && (offset = pri->sys_args[1]) != 0 &&
-	    Pread(Proc, &statvfs, sizeof (statvfs), offset)
-	    == sizeof (statvfs)) {
-		(void) printf(
-		    "%s\tbsize=%-10u frsize=%-9u blocks=%-8u bfree=%-9u\n",
-		    pri->pname,
-		    statvfs.f_bsize,
-		    statvfs.f_frsize,
-		    statvfs.f_blocks,
-		    statvfs.f_bfree);
-		(void) printf(
-		    "%s\tbavail=%-9u files=%-10u ffree=%-9u favail=%-9u\n",
-		    pri->pname,
-		    statvfs.f_bavail,
-		    statvfs.f_files,
-		    statvfs.f_ffree,
-		    statvfs.f_favail);
-		(void) printf(
-		    "%s\tfsid=0x%-9.4X basetype=%-7.16s namemax=%d\n",
-		    pri->pname,
-		    statvfs.f_fsid,
-		    statvfs.f_basetype,
-		    (int)statvfs.f_namemax);
-		(void) printf(
-		    "%s\tflag=%s\n",
-		    pri->pname,
-		    svfsflags(pri, (ulong_t)statvfs.f_flag));
-		cp = statvfs.f_fstr + strlen(statvfs.f_fstr);
-		if (cp < statvfs.f_fstr + sizeof (statvfs.f_fstr) - 1 &&
-		    *(cp+1) != '\0')
-			*cp = ' ';
-		(void) printf("%s\tfstr=\"%.*s\"\n",
-		    pri->pname,
-		    (int)sizeof (statvfs.f_fstr),
-		    statvfs.f_fstr);
-	}
-}
-#endif	/* _LP64 */
-
-void
-show_statvfs64(private_t *pri)
-{
-	long offset;
-	struct statvfs64_32 statvfs;
-	char *cp;
-
-	if (pri->sys_nargs > 1 && (offset = pri->sys_args[1]) != 0 &&
-	    Pread(Proc, &statvfs, sizeof (statvfs), offset)
-	    == sizeof (statvfs)) {
-		(void) printf(
-		    "%s\tbsize=%-10u frsize=%-9u blocks=%-8llu bfree=%-9llu\n",
-		    pri->pname,
-		    statvfs.f_bsize,
-		    statvfs.f_frsize,
-		    (u_longlong_t)statvfs.f_blocks,
-		    (u_longlong_t)statvfs.f_bfree);
-		(void) printf(
-		"%s\tbavail=%-9llu files=%-10llu ffree=%-9llu favail=%-9llu\n",
-		    pri->pname,
-		    (u_longlong_t)statvfs.f_bavail,
-		    (u_longlong_t)statvfs.f_files,
-		    (u_longlong_t)statvfs.f_ffree,
-		    (u_longlong_t)statvfs.f_favail);
-		(void) printf(
-		    "%s\tfsid=0x%-9.4X basetype=%-7.16s namemax=%d\n",
-		    pri->pname,
-		    statvfs.f_fsid,
-		    statvfs.f_basetype,
-		    (int)statvfs.f_namemax);
-		(void) printf(
-		    "%s\tflag=%s\n",
-		    pri->pname,
-		    svfsflags(pri, (ulong_t)statvfs.f_flag));
-		cp = statvfs.f_fstr + strlen(statvfs.f_fstr);
-		if (cp < statvfs.f_fstr + sizeof (statvfs.f_fstr) - 1 &&
-		    *(cp+1) != '\0')
-			*cp = ' ';
-		(void) printf("%s\tfstr=\"%.*s\"\n",
-		    pri->pname,
-		    (int)sizeof (statvfs.f_fstr),
-		    statvfs.f_fstr);
-	}
-}
-
 void
 show_statfs(private_t *pri)
 {
@@ -1601,33 +1507,6 @@ show_statfs(private_t *pri)
 		    statfs.f_fpack);
 	}
 }
-
-#ifdef _LP64
-void
-show_statfs32(private_t *pri)
-{
-	long offset;
-	struct statfs32 statfs;
-
-	if (pri->sys_nargs >= 2 && (offset = pri->sys_args[1]) != 0 &&
-	    Pread(Proc, &statfs, sizeof (statfs), offset) == sizeof (statfs)) {
-		(void) printf(
-		    "%s\tfty=%d bsz=%d fsz=%d blk=%d bfr=%d fil=%u ffr=%u\n",
-		    pri->pname,
-		    statfs.f_fstyp,
-		    statfs.f_bsize,
-		    statfs.f_frsize,
-		    statfs.f_blocks,
-		    statfs.f_bfree,
-		    statfs.f_files,
-		    statfs.f_ffree);
-		(void) printf("%s\t    fname=%.6s fpack=%.6s\n",
-		    pri->pname,
-		    statfs.f_fname,
-		    statfs.f_fpack);
-	}
-}
-#endif	/* _LP64 */
 
 void
 show_flock32(private_t *pri, long offset)
@@ -3197,68 +3076,10 @@ show_iovec(private_t *pri, long offset, long niov, int showbuf, long count)
 }
 
 void
-show_dents32(private_t *pri, long offset, long count)
-{
-	long buf[MYBUFSIZ / sizeof (long)];
-	struct dirent32 *dp;
-	int serial = (count > 100);
-
-	if (offset == 0)
-		return;
-
-	/* enter region of lengthy output */
-	if (serial)
-		Eserialize();
-
-	while (count > 0 && !interrupt) {
-		int nb = count < MYBUFSIZ? (int)count : MYBUFSIZ;
-
-		if ((nb = Pread(Proc, &buf[0], (size_t)nb, offset)) <= 0)
-			break;
-
-		dp = (struct dirent32 *)&buf[0];
-		if (nb < (int)(dp->d_name - (char *)dp))
-			break;
-		if ((unsigned)nb < dp->d_reclen) {
-			/* getdents() error? */
-			(void) printf(
-			    "%s    ino=%-5u off=%-4d rlen=%-3d\n",
-			    pri->pname,
-			    dp->d_ino,
-			    dp->d_off,
-			    dp->d_reclen);
-			break;
-		}
-
-		while (!interrupt &&
-		    nb >= (int)(dp->d_name - (char *)dp) &&
-		    (unsigned)nb >= dp->d_reclen) {
-			(void) printf(
-			    "%s    ino=%-5u off=%-4d rlen=%-3d \"%.*s\"\n",
-			    pri->pname,
-			    dp->d_ino,
-			    dp->d_off,
-			    dp->d_reclen,
-			    dp->d_reclen - (int)(dp->d_name - (char *)dp),
-			    dp->d_name);
-			nb -= dp->d_reclen;
-			count -= dp->d_reclen;
-			offset += dp->d_reclen;
-			/* LINTED improper alignment */
-			dp = (struct dirent32 *)((char *)dp + dp->d_reclen);
-		}
-	}
-
-	/* exit region of lengthy output */
-	if (serial)
-		Xserialize();
-}
-
-void
-show_dents64(private_t *pri, long offset, long count)
+show_dents(private_t *pri, long offset, long count)
 {
 	long long buf[MYBUFSIZ / sizeof (long long)];
-	struct dirent64 *dp;
+	struct dirent *dp;
 	int serial = (count > 100);
 
 	if (offset == 0)
@@ -3274,7 +3095,7 @@ show_dents64(private_t *pri, long offset, long count)
 		if ((nb = Pread(Proc, &buf[0], (size_t)nb, offset)) <= 0)
 			break;
 
-		dp = (struct dirent64 *)&buf[0];
+		dp = (struct dirent *)&buf[0];
 		if (nb < (int)(dp->d_name - (char *)dp))
 			break;
 		if ((unsigned)nb < dp->d_reclen) {
@@ -3303,7 +3124,7 @@ show_dents64(private_t *pri, long offset, long count)
 			count -= dp->d_reclen;
 			offset += dp->d_reclen;
 			/* LINTED improper alignment */
-			dp = (struct dirent64 *)((char *)dp + dp->d_reclen);
+			dp = (struct dirent *)((char *)dp + dp->d_reclen);
 		}
 	}
 
@@ -3313,61 +3134,22 @@ show_dents64(private_t *pri, long offset, long count)
 }
 
 void
-show_rlimit32(private_t *pri, long offset)
+show_rlimit(private_t *pri, long offset)
 {
-	struct rlimit32 rlimit;
+	struct rlimit rlimit;
 
 	if (offset != 0 &&
 	    Pread(Proc, &rlimit, sizeof (rlimit), offset) == sizeof (rlimit)) {
 		(void) printf("%s\t", pri->pname);
 		switch (rlimit.rlim_cur) {
-		case RLIM32_INFINITY:
+		case RLIM_INFINITY:
 			(void) fputs("cur = RLIM_INFINITY", stdout);
 			break;
-		case RLIM32_SAVED_MAX:
+		case RLIM_SAVED_MAX:
 			(void) fputs("cur = RLIM_SAVED_MAX", stdout);
 			break;
-		case RLIM32_SAVED_CUR:
+		case RLIM_SAVED_CUR:
 			(void) fputs("cur = RLIM_SAVED_CUR", stdout);
-			break;
-		default:
-			(void) printf("cur = %lu", (long)rlimit.rlim_cur);
-			break;
-		}
-		switch (rlimit.rlim_max) {
-		case RLIM32_INFINITY:
-			(void) fputs("  max = RLIM_INFINITY\n", stdout);
-			break;
-		case RLIM32_SAVED_MAX:
-			(void) fputs("  max = RLIM_SAVED_MAX\n", stdout);
-			break;
-		case RLIM32_SAVED_CUR:
-			(void) fputs("  max = RLIM_SAVED_CUR\n", stdout);
-			break;
-		default:
-			(void) printf("  max = %lu\n", (long)rlimit.rlim_max);
-			break;
-		}
-	}
-}
-
-void
-show_rlimit64(private_t *pri, long offset)
-{
-	struct rlimit64 rlimit;
-
-	if (offset != 0 &&
-	    Pread(Proc, &rlimit, sizeof (rlimit), offset) == sizeof (rlimit)) {
-		(void) printf("%s\t", pri->pname);
-		switch (rlimit.rlim_cur) {
-		case RLIM64_INFINITY:
-			(void) fputs("cur = RLIM64_INFINITY", stdout);
-			break;
-		case RLIM64_SAVED_MAX:
-			(void) fputs("cur = RLIM64_SAVED_MAX", stdout);
-			break;
-		case RLIM64_SAVED_CUR:
-			(void) fputs("cur = RLIM64_SAVED_CUR", stdout);
 			break;
 		default:
 			(void) printf("cur = %llu",
@@ -3375,14 +3157,14 @@ show_rlimit64(private_t *pri, long offset)
 			break;
 		}
 		switch (rlimit.rlim_max) {
-		case RLIM64_INFINITY:
-			(void) fputs("  max = RLIM64_INFINITY\n", stdout);
+		case RLIM_INFINITY:
+			(void) fputs("  max = RLIM_INFINITY\n", stdout);
 			break;
-		case RLIM64_SAVED_MAX:
-			(void) fputs("  max = RLIM64_SAVED_MAX\n", stdout);
+		case RLIM_SAVED_MAX:
+			(void) fputs("  max = RLIM_SAVED_MAX\n", stdout);
 			break;
-		case RLIM64_SAVED_CUR:
-			(void) fputs("  max = RLIM64_SAVED_CUR\n", stdout);
+		case RLIM_SAVED_CUR:
+			(void) fputs("  max = RLIM_SAVED_CUR\n", stdout);
 			break;
 		default:
 			(void) printf("  max = %llu\n",
@@ -5072,52 +4854,23 @@ expound(private_t *pri, long r0, int raw)
 		if (!err && pri->sys_nargs >= 3)
 			show_stat(pri, (long)pri->sys_args[2]);
 		break;
-	case SYS_fstatat64:
-		if (!err && pri->sys_nargs >= 3)
-			show_stat64_32(pri, (long)pri->sys_args[2]);
-		break;
 	case SYS_stat:
 	case SYS_fstat:
 	case SYS_lstat:
 		if (!err && pri->sys_nargs >= 2)
 			show_stat(pri, (long)pri->sys_args[1]);
 		break;
-	case SYS_stat64:
-	case SYS_fstat64:
-	case SYS_lstat64:
-		if (!err && pri->sys_nargs >= 2)
-			show_stat64_32(pri, (long)pri->sys_args[1]);
-		break;
 	case SYS_statvfs:
 	case SYS_fstatvfs:
 		if (err)
 			break;
-#ifdef _LP64
-		if (!lp64) {
-			show_statvfs32(pri);
-			break;
-		}
-#endif
 		show_statvfs(pri);
-		break;
-	case SYS_statvfs64:
-	case SYS_fstatvfs64:
-		if (err)
-			break;
-		show_statvfs64(pri);
 		break;
 	case SYS_statfs:
 	case SYS_fstatfs:
 		if (err)
 			break;
-#ifdef _LP64
-		if (lp64)
-			show_statfs(pri);
-		else
-			show_statfs32(pri);
-#else
 		show_statfs(pri);
-#endif
 		break;
 	case SYS_fcntl:
 		show_fcntl(pri);
@@ -5134,20 +4887,7 @@ expound(private_t *pri, long r0, int raw)
 	case SYS_getdents:
 		if (err || pri->sys_nargs <= 1 || r0 <= 0)
 			break;
-#ifdef _LP64
-		if (!lp64) {
-			show_dents32(pri, (long)pri->sys_args[1], r0);
-			break;
-		}
-#else
-		show_dents32(pri, (long)pri->sys_args[1], r0);
-		break;
-#endif
-		/* FALLTHROUGH */
-	case SYS_getdents64:
-		if (err || pri->sys_nargs <= 1 || r0 <= 0)
-			break;
-		show_dents64(pri, (long)pri->sys_args[1], r0);
+		show_dents(pri, (long)pri->sys_args[1], r0);
 		break;
 	case SYS_getmsg:
 		show_gp_msg(pri, what);
@@ -5261,24 +5001,7 @@ expound(private_t *pri, long r0, int raw)
 	case SYS_setrlimit:
 		if (pri->sys_nargs <= 1)
 			break;
-#ifdef _LP64
-		if (lp64)
-			show_rlimit64(pri, (long)pri->sys_args[1]);
-		else
-			show_rlimit32(pri, (long)pri->sys_args[1]);
-#else
-		show_rlimit32(pri, (long)pri->sys_args[1]);
-#endif
-		break;
-	case SYS_getrlimit64:
-		if (err)
-			break;
-		/*FALLTHROUGH*/
-	case SYS_setrlimit64:
-		if (pri->sys_nargs <= 1)
-			break;
-		show_rlimit64(pri, (long)pri->sys_args[1]);
-		break;
+		show_rlimit(pri, (long)pri->sys_args[1]);
 	case SYS_uname:
 		if (!err && pri->sys_nargs > 0)
 			show_uname(pri, (long)pri->sys_args[0]);

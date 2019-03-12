@@ -675,9 +675,7 @@ main(int argc, char *argv[])
 	praddset(&traceeven, SYS_lwp_exit);
 	praddset(&traceeven, SYS_execve);
 	praddset(&traceeven, SYS_openat);
-	praddset(&traceeven, SYS_openat64);
 	praddset(&traceeven, SYS_open);
-	praddset(&traceeven, SYS_open64);
 	praddset(&traceeven, SYS_vfork);
 	praddset(&traceeven, SYS_forksys);
 
@@ -686,7 +684,6 @@ main(int argc, char *argv[])
 		praddset(&traceeven, SYS_read);
 		praddset(&traceeven, SYS_readv);
 		praddset(&traceeven, SYS_pread);
-		praddset(&traceeven, SYS_pread64);
 		praddset(&traceeven, SYS_recv);
 		praddset(&traceeven, SYS_recvfrom);
 		praddset(&traceeven, SYS_recvmsg);
@@ -695,7 +692,6 @@ main(int argc, char *argv[])
 		praddset(&traceeven, SYS_write);
 		praddset(&traceeven, SYS_writev);
 		praddset(&traceeven, SYS_pwrite);
-		praddset(&traceeven, SYS_pwrite64);
 		praddset(&traceeven, SYS_send);
 		praddset(&traceeven, SYS_sendto);
 		praddset(&traceeven, SYS_sendmsg);
@@ -1156,20 +1152,17 @@ worker_thread(void *arg)
 			break;
 		case PR_SYSEXIT:
 			/* check for write open of a /proc file */
-			if (what == SYS_openat || what == SYS_openat64 ||
-			    what == SYS_open || what == SYS_open64) {
+			if (what == SYS_openat || what == SYS_open) {
 				int readonly;
 
 				(void) sysentry(pri, dotrace);
 				pri->Errno = Lsp->pr_errno;
 				pri->ErrPriv = Lsp->pr_errpriv;
 				readonly =
-				    ((what == SYS_openat ||
-				    what == SYS_openat64) &&
+				    (what == SYS_openat &&
 				    pri->sys_nargs > 2 &&
 				    (pri->sys_args[2]&0x3) == O_RDONLY) ||
-				    ((what == SYS_open ||
-				    what == SYS_open64) &&
+				    (what == SYS_open &&
 				    pri->sys_nargs > 1 &&
 				    (pri->sys_args[1]&0x3) == O_RDONLY);
 				if ((pri->Errno == 0 || pri->Errno == EBUSY) &&
