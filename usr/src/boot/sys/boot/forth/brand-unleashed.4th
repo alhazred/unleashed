@@ -1,5 +1,6 @@
 \ Copyright (c) 2006-2015 Devin Teske <dteske@FreeBSD.org>
 \ Copyright (c) 2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+\ Copyright (c) 2019 Holly Sipek <holly.sipek@gmail.com>
 \ All rights reserved.
 \
 \ Redistribution and use in source and binary forms, with or without
@@ -33,14 +34,14 @@
 	1+ \ increase y for next time we're called
 ;
 
-: brand ( x y -- ) \ "UNLEASHED" [wide] logo in B/W (6 rows x 72 columns)
+: brand ( x y -- ) \ "Unleashed" [wide] logo in B/W (6 rows x 48 columns)
 
-	s" #    #  #    #  #       ######    ##     ####   #    #  ######  ##### " brand+
-	s" #    #  ##   #  #       #        #  #   #       #    #  #       #    #" brand+
-	s" #    #  # #  #  #       #####   #    #   ####   ######  #####   #    #" brand+
-	s" #    #  #  # #  #       #       ######       #  #    #  #       #    #" brand+
-	s" #    #  #   ##  #       #       #    #  #    #  #    #  #       #    #" brand+
-	s"  ####   #    #  ######  ######  #    #   ####   #    #  ######  ##### " brand+
+	s"  _   _       _                 _              _ " brand+
+	s" | | | |     | |               | |            | |" brand+
+	s" | | | |_ __ | | ___  __ _  ___| |__   ___  __| |" brand+
+	s" | | | | '_ \| |/ _ \/  ' |/ __|  _ \ / _ \/    |" brand+
+	s" | |_| | | | | |  __|  (| |\__ \ | | |  __|  (| |" brand+
+	s"  \___/|_| |_|_|\___|\__._||___/_| |_|\___|\__._|" brand+
 
 	2drop
 ;
