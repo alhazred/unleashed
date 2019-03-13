@@ -111,7 +111,7 @@ union u_spcl {
                 time32_t c_ddate;
                 int32_t c_volume;
                 daddr32_t c_tapea;
-                ino32_t c_inumber;
+                ino_t   c_inumber;
                 int32_t c_magic;
                 int32_t c_checksum;
                 struct  dinode  c_dinode;
@@ -140,7 +140,7 @@ time32_t                   c_date;
 time32_t                   c_ddate;
 int32_t                    c_volume;
 daddr32_t                  c_tapea;
-ino32_t                    c_inumber;
+ino_t                      c_inumber;
 int32_t                    c_magic;
 int32_t                    c_checksum;
 struct dinode              c_dinode;

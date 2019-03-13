@@ -125,7 +125,7 @@ utssys_ustat32(dev_t dev, struct ustat32 *cbuf)
 		return (EOVERFLOW);
 
 	ust32.f_tfree = (daddr32_t)fsbc64;
-	ust32.f_tinode = (ino32_t)stvfs.f_ffree;
+	ust32.f_tinode = (ino_t)stvfs.f_ffree;
 
 	cp = stvfs.f_fstr;
 	cp2 = ust32.f_fname;

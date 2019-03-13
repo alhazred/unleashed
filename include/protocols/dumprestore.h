@@ -125,7 +125,7 @@ union u_spcl {
 		time32_t c_ddate;	    /* date of this dump */
 		int32_t	c_volume;	    /* dump volume number */
 		daddr32_t c_tapea;	    /* logical block of this record */
-		ino32_t	c_inumber;	    /* number of inode */
+		uint32_t	c_inumber;	    /* number of inode */
 		int32_t	c_magic;	    /* magic number (see above) */
 		int32_t	c_checksum;	    /* record checksum */
 		struct	dinode	c_dinode;   /* ownership and mode of inode */

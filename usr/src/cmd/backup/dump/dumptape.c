@@ -649,7 +649,7 @@ spclrec()
 		flags = BUF_SPCLREC;
 	spcl.c_tapea = *tapea;
 	/* LINTED for now, max inode # is 2**31 (ufs max size is 4TB) */
-	spcl.c_inumber = (ino32_t)ino;
+	spcl.c_inumber = (uint32_t)ino;
 	spcl.c_magic = (tp_bsize == TP_BSIZE_MIN) ? NFS_MAGIC : MTB_MAGIC;
 	spcl.c_checksum = 0;
 	ip = (int32_t *)&spcl;
@@ -812,7 +812,7 @@ void
 dospcl(ino_t inumber)
 {
 	/* LINTED for now, max inode # is 2**31 (ufs max size is 1TB) */
-	spcl.c_inumber = (ino32_t)inumber;
+	spcl.c_inumber = (uint32_t)inumber;
 	slp->sl_req->br_dblk = 0;
 	bcopy((char *)&spcl, (char *)slp->sl_req->br_spcl, tp_bsize);
 }

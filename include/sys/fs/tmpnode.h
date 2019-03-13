@@ -142,7 +142,7 @@ struct tdirent {
  */
 struct tfid {
 	uint16_t tfid_len;
-	ino32_t	tfid_ino;
+	uint32_t tfid_ino;
 	int32_t	tfid_gen;
 };
 

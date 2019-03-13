@@ -63,8 +63,8 @@ struct statfs32 {
 	int32_t f_frsize;
 	int32_t	f_blocks;
 	int32_t	f_bfree;
-	ino32_t	f_files;
-	ino32_t	f_ffree;
+	ino_t	f_files;
+	ino_t	f_ffree;
 	char	f_fname[6];
 	char	f_fpack[6];
 };

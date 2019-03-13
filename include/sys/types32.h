@@ -46,7 +46,6 @@ extern "C" {
  */
 typedef	uint32_t	caddr32_t;
 typedef	int32_t		daddr32_t;
-typedef	uint32_t	ino32_t;
 typedef	int32_t		blkcnt32_t;
 typedef uint32_t	fsblkcnt32_t;
 typedef	uint32_t	fsfilcnt32_t;

@@ -246,7 +246,7 @@ int lstat64(const char *_RESTRICT_KYWD, struct stat *_RESTRICT_KYWD);
 struct stat32 {
 	dev32_t		st_dev;
 	int32_t		st_pad1[3];
-	ino32_t		st_ino;
+	ino_t		st_ino;
 	mode32_t	st_mode;
 	nlink32_t	st_nlink;
 	uid32_t		st_uid;

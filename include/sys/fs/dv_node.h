@@ -121,7 +121,7 @@ struct devfs_data {
 /* dv_fid overlays the fid structure (for VFS_VGET) */
 struct dv_fid {
 	uint16_t	dvfid_len;
-	ino32_t		dvfid_ino;
+	uint32_t	dvfid_ino;
 	int32_t		dvfid_gen;
 };
 

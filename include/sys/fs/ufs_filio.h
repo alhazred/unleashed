@@ -53,7 +53,7 @@ struct fioio {
 #if defined(_SYSCALL32)
 
 struct fioio32 {
-	ino32_t	fio_ino;	/* input : inode number */
+	ino_t	fio_ino;	/* input : inode number */
 	int32_t	fio_gen;	/* input : generation number */
 	int32_t	fio_fd;		/* output: readonly file descriptor */
 };

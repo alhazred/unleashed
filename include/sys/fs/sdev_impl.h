@@ -319,7 +319,7 @@ struct sdev_data {
  */
 struct sdev_fid {
 	uint16_t	sdevfid_len;
-	ino32_t		sdevfid_ino;
+	uint32_t	sdevfid_ino;
 	int32_t		sdevfid_gen;
 };
 
