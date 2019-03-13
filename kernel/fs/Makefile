@@ -1,13 +1,4 @@
-.include <../../cfgparam.mk>
-
-SUBDIR_${CONFIG_FS_AUTOFS}	=  autofs
-SUBDIR_${CONFIG_FS_HSFS}	+= hsfs
-SUBDIR_${CONFIG_FS_LOFS}	+= lofs
-SUBDIR_${CONFIG_FS_NAMEFS}	+= namefs
-SUBDIR_${CONFIG_FS_PCFS}	+= pcfs
-SUBDIR_${CONFIG_FS_UDFS}	+= udfs
-
-SUBDIR = ${SUBDIR_y} \
+SUBDIR = autofs \
 	 bootfs \
 	 ctfs \
 	 dcfs \
@@ -16,13 +7,18 @@ SUBDIR = ${SUBDIR_y} \
 	 doorfs \
 	 fdfs \
 	 fifofs \
+	 hsfs \
+	 lofs \
 	 mntfs \
+	 namefs \
 	 nfs \
 	 objfs \
+	 pcfs \
 	 portfs \
 	 sockfs \
 	 specfs \
 	 tmpfs \
+	 udfs \
 	 ufs \
 	 zfs
 

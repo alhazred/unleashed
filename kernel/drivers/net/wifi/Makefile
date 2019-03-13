@@ -1,16 +1,11 @@
-.include <../../../../cfgparam.mk>
-
-SUBDIR_${CONFIG_IWH}		=  iwh
-SUBDIR_${CONFIG_IWI}		+= iwi
-SUBDIR_${CONFIG_IWK}		+= iwk
-SUBDIR_${CONFIG_IWN}		+= iwn
-SUBDIR_${CONFIG_IWP}		+= iwp
-SUBDIR_${CONFIG_ZYD}		+= zyd
-
-SUBDIR = ${SUBDIR_y} \
-	 arn \
+SUBDIR = arn \
 	 ath \
 	 atu \
+	 iwh \
+	 iwi \
+	 iwk \
+	 iwn \
+	 iwp \
 	 mwl \
 	 ral \
 	 rtw \
@@ -20,6 +15,7 @@ SUBDIR = ${SUBDIR_y} \
 	 uath \
 	 ural \
 	 urtw \
-	 wpi
+	 wpi \
+	 zyd
 
 .include <bsd.subdir.mk>
