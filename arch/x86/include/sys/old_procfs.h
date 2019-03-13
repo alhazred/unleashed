@@ -539,7 +539,7 @@ typedef struct prrun32 {
 typedef struct ioc_prmap32 {
 	caddr32_t	pr_vaddr;	/* Virtual address */
 	size32_t	pr_size;	/* Size of mapping in bytes */
-	off32_t		pr_off;		/* Offset into mapped object, if any */
+	int32_t		pr_off;		/* Offset into mapped object, if any */
 	uint32_t	pr_mflags;	/* Protection and attribute flags */
 	uint32_t	pr_pagesize;	/* pagesize (bytes) for this mapping */
 	int32_t		pr_filler[3];	/* Filler for future expansion */
@@ -587,7 +587,7 @@ typedef struct ioc_prpageheader32 {
 typedef struct ioc_prasmap32 {
 	caddr32_t	pr_vaddr;	/* virtual address */
 	size32_t	pr_npage;	/* number of pages in mapping */
-	off32_t		pr_off;		/* offset into mapped object, if any */
+	int32_t		pr_off;		/* offset into mapped object, if any */
 	uint32_t	pr_mflags;	/* protection and attribute flags */
 	uint32_t	pr_pagesize;	/* pagesize (bytes) for this mapping */
 	int32_t		pr_filler[3];	/* filler for future expansion */

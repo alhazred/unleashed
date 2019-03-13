@@ -2800,21 +2800,7 @@ vattr_to_nattr(struct vattr *vap, struct nfsfattr *na)
 	if (vap->va_nodeid != (u_longlong_t)na->na_nodeid)
 		return (EFBIG);
 	na->na_nlink = vap->va_nlink;
-
-	/*
-	 * Check for big files here, instead of at the caller.  See
-	 * comments in cstat for large special file explanation.
-	 */
-	if (vap->va_size > (u_longlong_t)MAXOFF32_T) {
-		if ((vap->va_type == VREG) || (vap->va_type == VDIR))
-			return (EFBIG);
-		if ((vap->va_type == VBLK) || (vap->va_type == VCHR)) {
-			/* UNKNOWN_SIZE | OVERFLOW */
-			na->na_size = MAXOFF32_T;
-		} else
-			na->na_size = vap->va_size;
-	} else
-		na->na_size = vap->va_size;
+	na->na_size = vap->va_size;
 
 	/*
 	 * If the vnode times overflow the 32-bit times that NFS2

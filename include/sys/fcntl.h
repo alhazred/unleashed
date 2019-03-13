@@ -295,8 +295,8 @@ typedef struct flock {
 typedef struct flock32 {
 	int16_t	l_type;
 	int16_t	l_whence;
-	off32_t	l_start;
-	off32_t	l_len;		/* len == 0 means until end of file */
+	off_t	l_start;
+	off_t	l_len;		/* len == 0 means until end of file */
 	int32_t	l_sysid;
 	pid32_t	l_pid;
 	int32_t	l_pad[4];		/* reserve area */

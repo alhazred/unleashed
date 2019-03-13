@@ -265,7 +265,7 @@ rfs4_get_pc_encode(vnode_t *vp, rfs4_pc_encode_t *pce, bitmap4 ar, cred_t *cr)
 		 * file system does not support _PC_FILESIZEBITS.
 		 */
 		if (pc_val == (ulong_t)-1) {
-			pce->maxfilesize = MAXOFF32_T;
+			pce->maxfilesize = MAXOFF_T;
 		} else {
 			if (pc_val >= (sizeof (uint64_t) * 8))
 				pce->maxfilesize = INT64_MAX;

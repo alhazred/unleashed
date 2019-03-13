@@ -3522,7 +3522,7 @@ rfs3_fsinfo(FSINFO3args *args, FSINFO3res *resp, struct exportinfo *exi,
 	 * _PC_FILESIZEBITS.
 	 */
 	if (l == (ulong_t)-1) {
-		resp->resok.maxfilesize = MAXOFF32_T;
+		resp->resok.maxfilesize = MAXOFF_T;
 	} else {
 		if (l >= (sizeof (uint64_t) * 8))
 			resp->resok.maxfilesize = INT64_MAX;

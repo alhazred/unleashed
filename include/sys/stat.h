@@ -253,7 +253,7 @@ struct stat32 {
 	gid32_t		st_gid;
 	dev32_t		st_rdev;
 	int32_t		st_pad2[2];
-	off32_t		st_size;
+	off_t		st_size;
 	int32_t		st_pad3;
 	timestruc32_t	st_atim;
 	timestruc32_t	st_mtim;

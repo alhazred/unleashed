@@ -825,7 +825,7 @@ nfslog_write_logrecords(struct log_file *lfp,
 
 	(void) fop_rwlock(vp, V_WRITELOCK_TRUE, NULL);  /* UIO_WRITE */
 	if ((error = fop_getattr(vp, &va, 0, CRED(), NULL)) == 0) {
-		if ((len + va.va_size) < (MAXOFF32_T)) {
+		if ((len + va.va_size) < (INT32_MAX)) {
 			error = fop_write(vp, &uio, ioflag, CRED(), NULL);
 			fop_rwunlock(vp, V_WRITELOCK_TRUE, NULL);
 			if (uio.uio_resid)

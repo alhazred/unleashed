@@ -256,7 +256,7 @@ fcntl(int fdes, int cmd, intptr_t arg)
 	datamodel = DATAMODEL_NATIVE;
 #if defined(_SYSCALL32_IMPL)
 	if ((datamodel = get_udatamodel()) == DATAMODEL_ILP32)
-		maxoffset = MAXOFF32_T;
+		maxoffset = INT32_MAX;
 #endif
 
 	vp = fp->f_vnode;
@@ -470,8 +470,8 @@ fcntl(int fdes, int cmd, intptr_t arg)
 #if defined(_SYSCALL32_IMPL)
 			else {
 				struct flock32 sbf32;
-				if (bf.l_start > MAXOFF32_T ||
-				    bf.l_len > MAXOFF32_T) {
+				if (bf.l_start > INT32_MAX ||
+				    bf.l_len > INT32_MAX) {
 					error = EOVERFLOW;
 					break;
 				}
@@ -479,8 +479,8 @@ fcntl(int fdes, int cmd, intptr_t arg)
 					sbf32.l_pad[i] = 0;
 				sbf32.l_type = (int16_t)bf.l_type;
 				sbf32.l_whence = (int16_t)bf.l_whence;
-				sbf32.l_start = (off32_t)bf.l_start;
-				sbf32.l_len = (off32_t)bf.l_len;
+				sbf32.l_start = (off_t)bf.l_start;
+				sbf32.l_len = (off_t)bf.l_len;
 				sbf32.l_sysid = (int32_t)bf.l_sysid;
 				sbf32.l_pid = (pid32_t)bf.l_pid;
 				if (copyout(&sbf32,

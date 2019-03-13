@@ -435,11 +435,11 @@ nfs_read(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 	if (uiop->uio_resid == 0)
 		return (0);
 
-	if (uiop->uio_loffset > MAXOFF32_T)
+	if (uiop->uio_loffset > INT32_MAX)
 		return (EFBIG);
 
 	if (uiop->uio_loffset < 0 ||
-	    uiop->uio_loffset + uiop->uio_resid > MAXOFF32_T)
+	    uiop->uio_loffset + uiop->uio_resid > INT32_MAX)
 		return (EINVAL);
 
 	/*
@@ -589,16 +589,16 @@ nfs_write(vnode_t *vp, struct uio *uiop, int ioflag, cred_t *cr,
 		uiop->uio_loffset = va.va_size;
 	}
 
-	if (uiop->uio_loffset > MAXOFF32_T)
+	if (uiop->uio_loffset > INT32_MAX)
 		return (EFBIG);
 
 	offset = uiop->uio_loffset + uiop->uio_resid;
 
-	if (uiop->uio_loffset < 0 || offset > MAXOFF32_T)
+	if (uiop->uio_loffset < 0 || offset > INT32_MAX)
 		return (EINVAL);
 
-	if (uiop->uio_llimit > (rlim_t)MAXOFF32_T) {
-		limit = MAXOFF32_T;
+	if (uiop->uio_llimit > (rlim_t)INT32_MAX) {
+		limit = INT32_MAX;
 	} else {
 		limit = (rlim_t)uiop->uio_llimit;
 	}
@@ -1149,7 +1149,7 @@ nfs_setattr(vnode_t *vp, struct vattr *vap, int flags, cred_t *cr,
 
 	if ((mask & VATTR_SIZE) &&
 	    vap->va_type == VREG &&
-	    vap->va_size > MAXOFF32_T)
+	    vap->va_size > INT32_MAX)
 		return (EFBIG);
 
 	if (nfs_zone() != VTOMI(vp)->mi_zone)
@@ -3599,7 +3599,7 @@ nfs_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, caller_context_t *ct)
 	 */
 	if (vp->v_type == VDIR)
 		return (0);
-	if (*noffp < 0 || *noffp > MAXOFF32_T)
+	if (*noffp < 0 || *noffp > INT32_MAX)
 		return (EINVAL);
 	return (0);
 }
@@ -3630,7 +3630,7 @@ nfs_getpage(vnode_t *vp, offset_t off, size_t len, uint_t *protp,
 	if (vp->v_flag & VNOMAP)
 		return (ENOSYS);
 
-	ASSERT(off <= MAXOFF32_T);
+	ASSERT(off <= INT32_MAX);
 	if (nfs_zone() != VTOMI(vp)->mi_zone)
 		return (EIO);
 	if (protp != NULL)
@@ -4090,7 +4090,7 @@ nfs_putpage(vnode_t *vp, offset_t off, size_t len, int flags, cred_t *cr,
 
 	if (!(flags & B_ASYNC) && nfs_zone() != VTOMI(vp)->mi_zone)
 		return (EIO);
-	ASSERT(off <= MAXOFF32_T);
+	ASSERT(off <= INT32_MAX);
 
 	rp = VTOR(vp);
 	mutex_enter(&rp->r_statelock);
@@ -4128,7 +4128,7 @@ nfs_putapage(vnode_t *vp, page_t *pp, uoff_t *offp, size_t *lenp,
 	rp = VTOR(vp);
 	ASSERT(rp->r_count > 0);
 
-	ASSERT(pp->p_offset <= MAXOFF32_T);
+	ASSERT(pp->p_offset <= INT32_MAX);
 
 	bsize = MAX(vp->v_vfsp->vfs_bsize, PAGESIZE);
 	lbn = pp->p_offset / bsize;
@@ -4306,7 +4306,7 @@ nfs_map(vnode_t *vp, offset_t off, struct as *as, caddr_t *addrp,
 	if (vp->v_flag & VNOMAP)
 		return (ENOSYS);
 
-	if (off > MAXOFF32_T)
+	if (off > INT32_MAX)
 		return (EFBIG);
 
 	if (off < 0 || off + len < 0)
@@ -4462,7 +4462,7 @@ nfs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 	/* check the validity of the lock range */
 	if (rc = flk_convert_lock_data(vp, bfp, &start, &end, offset))
 		return (rc);
-	if (rc = flk_check_lock_data(start, end, MAXOFF32_T))
+	if (rc = flk_check_lock_data(start, end, INT32_MAX))
 		return (rc);
 
 	/*
@@ -4470,7 +4470,7 @@ nfs_frlock(vnode_t *vp, int cmd, struct flock64 *bfp, int flag, offset_t offset,
 	 * request off to the local locking code.
 	 */
 	if (VTOMI(vp)->mi_flags & MI_LLOCK) {
-		if (offset > MAXOFF32_T)
+		if (offset > INT32_MAX)
 			return (EFBIG);
 		if (cmd == F_SETLK || cmd == F_SETLKW) {
 			/*
@@ -4586,11 +4586,11 @@ nfs_space(vnode_t *vp, int cmd, struct flock64 *bfp, int flag,
 	if (cmd != F_FREESP)
 		return (EINVAL);
 
-	if (offset > MAXOFF32_T)
+	if (offset > INT32_MAX)
 		return (EFBIG);
 
-	if ((bfp->l_start > MAXOFF32_T) || (bfp->l_end > MAXOFF32_T) ||
-	    (bfp->l_len > MAXOFF32_T))
+	if ((bfp->l_start > INT32_MAX) || (bfp->l_end > INT32_MAX) ||
+	    (bfp->l_len > INT32_MAX))
 		return (EFBIG);
 
 	if (nfs_zone() != VTOMI(vp)->mi_zone)
@@ -4933,7 +4933,7 @@ nfs_pageio(vnode_t *vp, page_t *pp, uoff_t io_off, size_t io_len,
 	if (pp == NULL)
 		return (EINVAL);
 
-	if (io_off > MAXOFF32_T)
+	if (io_off > INT32_MAX)
 		return (EFBIG);
 	if (nfs_zone() != VTOMI(vp)->mi_zone)
 		return (EIO);

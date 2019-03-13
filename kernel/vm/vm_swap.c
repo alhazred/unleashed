@@ -1162,16 +1162,16 @@ swapadd(struct vnode *vp, ulong_t lowblk, ulong_t nblks, char *swapname)
 #ifdef	_ILP32
 	/*
 	 * No support for large swap in 32-bit OS, if the size of the swap is
-	 * bigger than MAXOFF32_T then the size used by swapfs must be limited.
+	 * bigger than INT32_MAX then the size used by swapfs must be limited.
 	 * This limitation is imposed by the swap subsystem itself, a D_64BIT
 	 * driver as the target of swap operation should be able to field
 	 * the IO.
 	 */
-	if (vattr.va_size > MAXOFF32_T) {
+	if (vattr.va_size > INT32_MAX) {
 		cmn_err(CE_NOTE,
 		    "!swap device %s truncated from 0x%llx to 0x%x bytes",
-		    swapname, vattr.va_size, MAXOFF32_T);
-		vattr.va_size = MAXOFF32_T;
+		    swapname, vattr.va_size, INT32_MAX);
+		vattr.va_size = INT32_MAX;
 	}
 #endif	/* _ILP32 */
 

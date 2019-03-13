@@ -250,9 +250,6 @@ extern "C" {
 #define	DEV_BSIZE	512
 #define	DEV_BSHIFT	9		/* log2(DEV_BSIZE) */
 #define	MAXFRAG 	8
-#ifdef	_SYSCALL32
-#define	MAXOFF32_T	0x7fffffff
-#endif
 #define	MAXOFF_T	0x7fffffffffffffffLL
 #define	MAXOFFSET_T	MAXOFF_T
 

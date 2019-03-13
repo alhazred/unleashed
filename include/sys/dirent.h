@@ -54,7 +54,7 @@ typedef struct dirent {
 
 typedef	struct dirent32 {
 	ino32_t		d_ino;		/* "inode number" of entry */
-	off32_t		d_off;		/* offset of disk directory entry */
+	off_t		d_off;		/* offset of disk directory entry */
 	uint16_t	d_reclen;	/* length of this record */
 	char		d_name[1];	/* name of file */
 } dirent32_t;

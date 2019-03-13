@@ -65,13 +65,9 @@
  *
  * 'max' represents the maximum possible representation of offset
  * in the data type corresponding to lseek and llseek. It is
- * MAXOFF32_T for off32_t and MAXOFFSET_T for off64_t.
+ * MAXOFF_T for off_t.
  * We return EOVERFLOW if we cannot represent the resulting offset
  * in the data type.
- * We provide support for character devices to be seeked beyond MAXOFF32_T
- * by lseek. To maintain compatibility in such cases lseek passes
- * the arguments carefully to lseek_common when file is not regular.
- * (/dev/kmem is a good example of a > 2Gbyte seek!)
  */
 static int
 lseek32_common(file_t *fp, int stype, offset_t off, offset_t max,

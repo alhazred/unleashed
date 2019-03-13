@@ -83,14 +83,14 @@ typedef struct swaptable {
 
 typedef struct swapres32 {
 	caddr32_t sr_name;	/* pathname of the resource specified */
-	off32_t	sr_start;	/* starting offset of the swapping resource */
-	off32_t	sr_length;	/* length of the swap area */
+	off_t	sr_start;	/* starting offset of the swapping resource */
+	off_t	sr_length;	/* length of the swap area */
 } swapres32_t;
 
 typedef struct swapent32 {
 	caddr32_t ste_path;	/* get the name of the swap file */
-	off32_t	ste_start;	/* starting block for swapping */
-	off32_t	ste_length;	/* length of swap area */
+	off_t	ste_start;	/* starting block for swapping */
+	off_t	ste_length;	/* length of swap area */
 	int32_t	ste_pages;	/* numbers of pages for swapping */
 	int32_t	ste_free;	/* numbers of ste_pages free */
 	int32_t	ste_flags;	/* see below */

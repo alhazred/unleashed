@@ -185,29 +185,6 @@ cstat(vnode_t *vp, struct stat *ubp, int flag, cred_t *cr)
 	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if ((error = fop_getattr(vp, &vattr, flag, cr, NULL)) != 0)
 		return (error);
-#ifdef	_ILP32
-	/*
-	 * (32-bit kernel, 32-bit applications, 32-bit files)
-	 * NOTE: 32-bit kernel maintains a 64-bit unsigend va_size.
-	 *
-	 * st_size of devices (VBLK and VCHR special files) is a special case.
-	 * POSIX does not define size behavior for special files, so the
-	 * following Solaris specific behavior is not a violation. Solaris
-	 * returns the size of the device.
-	 *
-	 * For compatibility with 32-bit programs which happen to do stat() on
-	 * a (mknod) bigger than 2GB we suppress the large file EOVERFLOW and
-	 * instead we return the value MAXOFF32_T (LONG_MAX).
-	 *
-	 * 32-bit applications that care about the size of devices should be
-	 * built 64-bit or use a large file interface (lfcompile(5) or lf64(5)).
-	 */
-	if ((vattr.va_size > MAXOFF32_T) &&
-	    ((vp->v_type == VBLK) || (vp->v_type == VCHR))) {
-		/* OVERFLOW | UNKNOWN_SIZE */
-		vattr.va_size = MAXOFF32_T;
-	}
-#endif	/* _ILP32 */
 	if (vattr.va_size > MAXOFF_T || vattr.va_nblocks > LONG_MAX ||
 	    vattr.va_nodeid > ULONG_MAX)
 		return (EOVERFLOW);

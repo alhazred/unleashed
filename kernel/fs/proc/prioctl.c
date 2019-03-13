@@ -3593,7 +3593,7 @@ oprgetmap32(proc_t *p, list_t *iolhead)
 
 			mp->pr_vaddr = (caddr32_t)(uintptr_t)saddr;
 			mp->pr_size = (size32_t)(naddr - saddr);
-			mp->pr_off = (off32_t)segop_getoffset(seg, saddr);
+			mp->pr_off = (off_t)segop_getoffset(seg, saddr);
 			mp->pr_mflags = 0;
 			if (prot & PROT_READ)
 				mp->pr_mflags |= MA_READ;

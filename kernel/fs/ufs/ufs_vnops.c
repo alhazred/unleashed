@@ -804,7 +804,7 @@ wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 	if (ufsvfsp->vfs_lfflags & UFS_LARGEFILES)
 		limit = MIN(UFS_MAXOFFSET_T, limit);
 	else
-		limit = MIN(MAXOFF32_T, limit);
+		limit = MIN(INT32_MAX, limit);
 
 	if (uio->uio_loffset < 0) {
 		return (EINVAL);
@@ -1088,7 +1088,7 @@ wrip(struct inode *ip, struct uio *uio, int ioflag, struct cred *cr)
 			 * in superblock to indicate this, if it
 			 * is not already set.
 			 */
-			if ((ip->i_size > MAXOFF32_T) &&
+			if ((ip->i_size > INT32_MAX) &&
 			    !(fs->fs_flags & FSLARGEFILES)) {
 				ASSERT(ufsvfsp->vfs_lfflags & UFS_LARGEFILES);
 				mutex_enter(&ufsvfsp->vfs_lock);
@@ -3910,7 +3910,7 @@ ufs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cr, int *eofp,
 	ip = VTOI(vp);
 	ASSERT(RW_READ_HELD(&ip->i_rwlock));
 
-	if (uiop->uio_loffset >= MAXOFF32_T) {
+	if (uiop->uio_loffset >= INT32_MAX) {
 		if (eofp)
 			*eofp = 1;
 		return (0);
@@ -3941,7 +3941,7 @@ ufs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cr, int *eofp,
 
 	/* Large Files: directory files should not be "large" */
 
-	ASSERT(ip->i_size <= MAXOFF32_T);
+	ASSERT(ip->i_size <= INT32_MAX);
 
 	/* Force offset to be valid (to guard against bogus lseek() values) */
 	offset = (uint_t)uiop->uio_offset & ~(DIRBLKSIZ - 1);
@@ -4060,7 +4060,7 @@ nextblk:
 
 	/*
 	 * Large Files: casting i_size to int here is not a problem
-	 * because directory sizes are always less than MAXOFF32_T.
+	 * because directory sizes are always less than INT32_MAX.
 	 * See assertion above.
 	 */
 

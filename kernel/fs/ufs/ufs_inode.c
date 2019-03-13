@@ -1170,7 +1170,7 @@ ufs_itrunc(struct inode *oip, uoff_t length, int flags, cred_t *cr)
 	struct inode tip;
 	int err;
 	uoff_t maxoffset = (ufsvfsp->vfs_lfflags & UFS_LARGEFILES) ?
-	    (UFS_MAXOFFSET_T) : (MAXOFF32_T);
+	    (UFS_MAXOFFSET_T) : (INT32_MAX);
 
 	/*
 	 * Shadow inodes do not need to hold the vfs_dqrwlock lock. Most
@@ -1275,13 +1275,13 @@ ufs_itrunc(struct inode *oip, uoff_t length, int flags, cred_t *cr)
 			oip->i_seq++;
 			ITIMES_NOLOCK(oip);
 			/*
-			 * MAXOFF32_T is old 2GB size limit. If
+			 * INT32_MAX is old 2GB size limit. If
 			 * this operation caused a large file to be
 			 * created, turn on the superblock flag
 			 * and update the superblock, if the flag
 			 * is not already on.
 			 */
-			if ((length > (uoff_t)MAXOFF32_T) &&
+			if ((length > (uoff_t)INT32_MAX) &&
 			    !(fs->fs_flags & FSLARGEFILES)) {
 				ASSERT(ufsvfsp->vfs_lfflags & UFS_LARGEFILES);
 				mutex_enter(&ufsvfsp->vfs_lock);

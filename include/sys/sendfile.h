@@ -70,7 +70,7 @@ typedef struct sendfilevec64 {
 typedef struct ksendfilevec32 {
 	int		sfv_fd;
 	uint_t		sfv_flag;
-	off32_t		sfv_off;
+	off_t		sfv_off;
 	size32_t	sfv_len;
 } ksendfilevec32_t;
 

@@ -77,8 +77,8 @@ ulimit(int cmd, long arg)
 			 * so that applications that do not check errors
 			 * continue to work.
 			 */
-			if (filesize > MAXOFF32_T)
-				filesize = MAXOFF32_T;
+			if (filesize > INT32_MAX)
+				filesize = INT32_MAX;
 			retval = ((int)filesize >> SCTRSHFT);
 		} else
 			retval = filesize >> SCTRSHFT;

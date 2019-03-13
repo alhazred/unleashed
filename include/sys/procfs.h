@@ -791,9 +791,9 @@ typedef struct prwatch32 {
  * _ILP32 PCREAD/PCWRITE I/O interface.
  */
 typedef struct priovec32 {
-	caddr32_t pio_base;	/* buffer in controlling process */
-	size32_t pio_len;	/* size of read/write request */
-	off32_t	pio_offset;	/* virtual address in target process */
+	caddr32_t	pio_base;	/* buffer in controlling process */
+	size32_t	pio_len;	/* size of read/write request */
+	uint32_t	pio_offset;	/* virtual address in target process */
 } priovec32_t;
 
 /*

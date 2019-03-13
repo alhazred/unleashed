@@ -1700,7 +1700,7 @@ rfs4_fattr4_maxfilesize(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		 * file system does not support _PC_FILESIZEBITS.
 		 */
 		if (val == (ulong_t)-1) {
-			na->maxfilesize = MAXOFF32_T;
+			na->maxfilesize = MAXOFF_T;
 		} else {
 			if (val >= (sizeof (uint64_t) * 8))
 				na->maxfilesize = INT64_MAX;
@@ -1727,7 +1727,7 @@ rfs4_fattr4_maxfilesize(nfs4_attr_cmd_t cmd, struct nfs4_svgetit_arg *sarg,
 		 * file system does not support _PC_FILESIZEBITS.
 		 */
 		if (val == (ulong_t)-1) {
-			maxfilesize = MAXOFF32_T;
+			maxfilesize = MAXOFF_T;
 		} else {
 			if (val >= (sizeof (uint64_t) * 8))
 				maxfilesize = INT64_MAX;

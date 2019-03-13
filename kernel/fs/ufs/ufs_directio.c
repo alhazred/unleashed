@@ -559,7 +559,7 @@ ufs_directio_write(struct inode *ip, uio_t *arg_uio, int ioflag, int rewrite,
 		 * if file has grown larger than 2GB, set flag
 		 * in superblock if not already set
 		 */
-		if ((ip->i_size > MAXOFF32_T) &&
+		if ((ip->i_size > INT32_MAX) &&
 		    !(fs->fs_flags & FSLARGEFILES)) {
 			ASSERT(ufsvfsp->vfs_lfflags & UFS_LARGEFILES);
 			mutex_enter(&ufsvfsp->vfs_lock);

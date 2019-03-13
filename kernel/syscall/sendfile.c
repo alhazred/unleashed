@@ -404,9 +404,9 @@ sendvec_small_chunk(file_t *fp, uoff_t *fileoff, struct sendfilevec *sfv,
 #ifdef _SYSCALL32_IMPL
 	model_t model = get_udatamodel();
 	uoff_t maxoff = (model == DATAMODEL_ILP32) ?
-	    MAXOFF32_T : MAXOFFSET_T;
+	    INT32_MAX : MAXOFFSET_T;
 #else
-	const uoff_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = INT32_MAX;
 #endif
 	mblk_t *dmp = NULL;
 	int wroff;
@@ -694,9 +694,9 @@ sendvec_chunk(file_t *fp, uoff_t *fileoff, struct sendfilevec *sfv,
 #ifdef _SYSCALL32_IMPL
 	model_t model = get_udatamodel();
 	uoff_t maxoff = (model == DATAMODEL_ILP32) ?
-	    MAXOFF32_T : MAXOFFSET_T;
+	    INT32_MAX : MAXOFFSET_T;
 #else
-	const uoff_t maxoff = MAXOFF32_T;
+	const uoff_t maxoff = INT32_MAX;
 #endif
 	mblk_t	*dmp = NULL;
 	char	*buf = NULL;
