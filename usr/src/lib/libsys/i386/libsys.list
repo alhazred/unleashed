@@ -170,10 +170,6 @@ f 0 strerror
 f 0 strftime
 f 0 strxfrm
 f 0 system
-f 0 _fxstat
-f 0 _lxstat
-f 0 _xmknod
-f 0 _xstat
 f 0 _fpstart
 
 d 0 _altzone 1 long = 0;

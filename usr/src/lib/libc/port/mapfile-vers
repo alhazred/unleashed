@@ -2559,13 +2559,6 @@ $if _ELF32
 	_ptrace;
 $endif
 
-$if i386
-	_fxstat;
-	_lxstat;
-	_xmknod;
-	_xstat;
-$endif
-
 $if !sparc32
 	sbrk;
 $endif

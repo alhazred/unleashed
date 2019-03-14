@@ -435,13 +435,9 @@ $if _x86
 	__flt_rounds;
 	_fp_hw;
 	_fpstart;
-	_fxstat;
-	_lxstat;
 	_mmap;
 	_sbrk;
 	sbrk;
-	_xmknod;
-	_xstat;
 $endif
 
 
