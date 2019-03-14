@@ -39,12 +39,6 @@ comm_page_t comm_page;
 
 #else /* defined(_GENCTF) */
 
-/*
- * FIXME: this is a terrible hack, it should go away once we get rid of the
- * global symbol compatibility aliases.  (If we keep NBPW defined, we'll get
- * a duplicate definition in assym.h.
- */
-#undef NBPW
 #include "assym.h"
 
 /*

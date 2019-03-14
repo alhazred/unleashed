@@ -47,7 +47,7 @@
 #include "libc.h"
 
 #define	SIGSETSIZE	4
-#define	MAXBITNO (NBPW*8)
+#define	MAXBITNO (sizeof(int)*8)
 
 static sigset_t sigs;
 static int sigsinit;

@@ -122,7 +122,7 @@ static int	swapslot_free(struct vnode *, uoff_t, struct swapinfo *);
  * swap device bitmap allocation macros
  */
 #define	MAPSHIFT	5
-#define	NBBW		(NBPW * NBBY)	/* number of bits per word */
+#define	NBBW		(sizeof(int) * NBBY)	/* number of bits per word */
 #define	TESTBIT(map, i)		(((map)[(i) >> MAPSHIFT] & (1 << (i) % NBBW)))
 #define	SETBIT(map, i)		(((map)[(i) >> MAPSHIFT] |= (1 << (i) % NBBW)))
 #define	CLEARBIT(map, i)	(((map)[(i) >> MAPSHIFT] &= ~(1 << (i) % NBBW)))
@@ -227,7 +227,7 @@ swap_getoff(struct swapinfo *sip)
 
 	sip->si_alloccnt++;
 	for (sp = &sip->si_swapslots[sip->si_hint >> MAPSHIFT],
-	    ep = &sip->si_swapslots[sip->si_mapsize / NBPW]; sp < ep; sp++) {
+	    ep = &sip->si_swapslots[sip->si_mapsize / sizeof(int)]; sp < ep; sp++) {
 		if (*sp != (uint_t)0xffffffff)
 			goto foundentry;
 		else
