@@ -28,7 +28,7 @@
 
 #if defined(sparc)
 #define	EXCEPTION_FILE "/opt/onbld/etc/exception_list"
-#elif defined(i386)
+#elif defined(i386) || defined(__amd64)
 #define	EXCEPTION_FILE "/opt/onbld/etc/exception_list_i386"
 #elif defined(__ppc)
 #define	EXCEPTION_FILE "/opt/onbld/etc/exception_list_ppc"

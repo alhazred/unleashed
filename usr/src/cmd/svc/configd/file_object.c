@@ -1446,7 +1446,7 @@ static object_info_t info[] = {
 		propertygrp_delete_start,
 	},
 	{REP_PROTOCOL_ENTITY_PROPERTY},
-	{-1UL}
+	{-1U}
 };
 #define	NUM_INFO (sizeof (info) / sizeof (*info))
 

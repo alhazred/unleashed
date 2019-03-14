@@ -36,10 +36,10 @@ static void minmaxFunc(sqlite_func *context, int argc, const char **argv){
   const char *zBest; 
   int i;
   int (*xCompare)(const char*, const char*);
-  int mask;    /* 0 for min() or 0xffffffff for max() */
+  intptr_t mask;    /* 0 for min() or 0xffffffff for max() */
 
   if( argc==0 ) return;
-  mask = (int)sqlite_user_data(context);
+  mask = (intptr_t)sqlite_user_data(context);
   zBest = argv[0];
   if( zBest==0 ) return;
   if( argv[1][0]=='n' ){
@@ -620,7 +620,7 @@ struct MinMaxCtx {
 static void minmaxStep(sqlite_func *context, int argc, const char **argv){
   MinMaxCtx *p;
   int (*xCompare)(const char*, const char*);
-  int mask;    /* 0 for min() or 0xffffffff for max() */
+  intptr_t mask;    /* 0 for min() or 0xffffffff for max() */
 
   assert( argc==2 );
   if( argv[0]==0 ) return;  /* Ignore NULL values */
@@ -629,7 +629,7 @@ static void minmaxStep(sqlite_func *context, int argc, const char **argv){
   }else{
     xCompare = strcmp;
   }
-  mask = (int)sqlite_user_data(context);
+  mask = (intptr_t)sqlite_user_data(context);
   assert( mask==0 || mask==-1 );
   p = sqlite_aggregate_context(context, sizeof(*p));
   if( p==0 || argc<1 ) return;

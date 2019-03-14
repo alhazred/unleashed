@@ -91,7 +91,7 @@ extern "C" {
 
 #if defined(sparc)
 #define	P_ISA		P_SPARC
-#elif defined(i386)
+#elif defined(i386) || defined(__amd64)
 #define	P_ISA		P_I386
 #elif defined(__ppc)
 #define	P_ISA		P_PPC

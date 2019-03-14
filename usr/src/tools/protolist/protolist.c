@@ -81,7 +81,7 @@ visit_dir(const char *path, const struct stat *st,
 	 */
 #if defined(sparc)
 #define	ARCH_STR "sun"
-#elif defined(i386)
+#elif defined(i386) || defined(__amd64)
 #define	ARCH_STR "i86"
 #elif defined(__ppc)
 #define	ARCH_STR "prep"

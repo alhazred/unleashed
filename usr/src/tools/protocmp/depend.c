@@ -119,7 +119,7 @@ print_dependencies(const char *pkgname, pkg_list *dependlist)
 #endif
 
 static char *suffix_list[] = {
-#if defined(__i386)
+#if defined(__i386) || defined(__amd64)
 	".i",
 #elif defined(__sparc)
 	".c",

@@ -26,7 +26,7 @@
 
 #pragma ident	"%Z%%M%	%I%	%E% SMI"
 
-#if defined(i386)
+#if defined(i386) || defined(__amd64)
 #define	PROTO_EXT "_i386"
 #elif defined(sparc)
 #define	PROTO_EXT "_sparc"

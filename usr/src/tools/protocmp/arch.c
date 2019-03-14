@@ -57,7 +57,7 @@ assign_arch(const char *architecture)
 		arch = P_SUN4m;
 	else if (strcmp(architecture, "sparc.sun4v") == 0)
 		arch = P_SUN4v;
-#elif defined(__i386)
+#elif defined(__i386) || defined(__amd64)
 	if (strcmp(architecture, "i386") == 0)
 		arch = P_I386;
 	else if (strcmp(architecture, "ISA") == 0)

@@ -211,7 +211,7 @@ parse_line(char **v, elem *e)
 				e->arch = P_SUN4m;
 			else if (strncmp(e->symsrc, "sun4v/", 6) == 0)
 				e->arch = P_SUN4v;
-#elif defined(__i386)
+#elif defined(__i386) || defined(__amd64)
 			if (strncmp(e->symsrc, "i86pc/", 6) == 0)
 				e->arch = P_I86PC;
 #elif defined(__ppc)
