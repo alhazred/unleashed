@@ -320,8 +320,7 @@ SYSOBJS=			\
 	tls_get_addr.o		\
 	uadmin.o		\
 	umount.o		\
-	vforkx.o		\
-	xstat.o
+	vforkx.o
 
 # objects from source under $(LIBCDIR)/port
 PORTFP=				\
