@@ -184,7 +184,7 @@ $(ROOT_BOOT)/%: ../../forth/%
 $(ROOT_BOOT_DEFAULTS)/%: ../../forth/%
 	$(INS.file)
 
-$(ROOT_BOOT_FORTH)/%: ../../forth/%
+$(ROOT_BOOT_FORTH)/%: ../../forth/% $(ROOT_BOOT_FORTH)
 	$(INS.file)
 
 $(ROOT_BOOT_DEFAULTS) $(ROOT_BOOT_CONF) $(ROOT_BOOT_FORTH):
