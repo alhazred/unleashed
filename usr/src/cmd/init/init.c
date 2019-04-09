@@ -483,7 +483,7 @@ static char *SYSTTY	 = "/dev/systty";	/* System Console */
 static char *SYSCON	 = "/dev/syscon";	/* Virtual System console */
 static char *IOCTLSYSCON = "/etc/ioctl.syscon";	/* Last syscon modes */
 static char *ENVFILE	 = "/etc/default/init";	/* Default env. */
-static char *SU	= "/etc/sulogin";	/* Super-user program for single user */
+static char *SU	= "/sbin/sulogin";	/* Super-user program for single user */
 static char *SH	= "/bin/sh";		/* Standard shell */
 
 /*
