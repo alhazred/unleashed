@@ -1,5 +1,6 @@
 \ Copyright (c) 2006-2015 Devin Teske <dteske@FreeBSD.org>
 \ Copyright (c) 2017 Josef 'Jeff' Sipek <jeffpc@josefsipek.net>
+\ Copyright (c) 2019 Holly Sipek <holly.sipek@gmail.com>
 \ All rights reserved.
 \
 \ Redistribution and use in source and binary forms, with or without
@@ -25,7 +26,7 @@
 \
 \ $FreeBSD$
 
-46 logoX ! 7 logoY ! \ Initialize logo placement defaults
+41 logoX ! 8 logoY ! \ Initialize logo placement defaults
 
 : logo+ ( x y c-addr/u -- x y' )
 	2swap 2dup at-xy 2swap \ position the cursor
@@ -35,23 +36,22 @@
 
 : logo ( x y -- ) \ B/W unleashed logo placeholder (15 rows x 32 columns)
 
-
-
-        s" " logo+
-        s" " logo+
-	s"          |\         /|        " logo+
-	s"          | \       / |        " logo+
-	s"          |  \_____/  |        " logo+
-	s"          |   \   /   |        " logo+
-	s"         /             \       " logo+
-	s"         | <@ >  <@ >  |       " logo+
-	s"         |    |  |     |       " logo+
-	s"    -------    \/    -------   " logo+
-	s"    -------  __|__   -------   " logo+
-	s"          \__________/         " logo+
-        s" " logo+
-        s" " logo+
-        s" " logo+
+	s"       /\    ,                     " logo+
+	s"       |^\ _/^\                    " logo+
+	s"       /, vv ,/                    " logo+
+	s"       ((')('))                    " logo+
+	s"       (-=v=-;)                    " logo+
+	s"      //\_^_/ \\TMm                " logo+
+	s"        ; '  ,,;YYYYmm             " logo+
+	s"        \! .,,;;YYYYmMm            " logo+
+	s"         `\-,-;YYYYmmMmm           " logo+
+	s"           \;;/YYmmmMMMm           " logo+
+	s"            ;Y!YYYmmmmMM\          " logo+
+	s"            mn!YYYYYmmMMm\__       " logo+
+	s"           ;; !!!',,mMYYM###m.     " logo+
+	s"               ''''   ```  '##m.   " logo+
+	s"                           ,##m    " logo+
+	s"                           WW      " logo+
 
 	2drop
 ;
