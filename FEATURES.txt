@@ -9,6 +9,9 @@ was changed.
 
 <next> release
 --------------
+
+1.3 release
+-----------
  - ksh93 (/sbin/sh, /bin/ksh93, /bin/rksh93) and related libraries (libast,
    libcmd, libdll, libpp, libshell, libsum) are no more.
  - nonstandard getgrent_r, fgetgrent_r removed from libc
