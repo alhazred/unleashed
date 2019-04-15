@@ -285,11 +285,11 @@ typedef ushort_t o_ino_t;		/* old inode type	*/
  * POSIX and XOPEN Declarations
  */
 typedef	int		key_t;		/* IPC key type		*/
-typedef	unsigned int	mode_t;		/* file attribute type	*/
+typedef	uint32_t	mode_t;		/* file attribute type	*/
 
 #ifndef	_UID_T
 #define	_UID_T
-typedef	unsigned int uid_t;		/* UID type		*/
+typedef	uint32_t uid_t;			/* UID type		*/
 #endif	/* _UID_T */
 
 typedef	uid_t	gid_t;			/* GID type		*/
@@ -419,7 +419,7 @@ typedef struct {
 
 typedef ulong_t	dev_t;			/* expanded device type */
 
-typedef	unsigned int nlink_t;		/* file link type	*/
+typedef	uint32_t nlink_t;		/* file link type	*/
 typedef	int pid_t;			/* process id type	*/
 
 #if !defined(_SIZE_T) || __cplusplus >= 199711L

@@ -94,7 +94,7 @@ extern "C" {
 
 #ifndef _UID_T
 #define	_UID_T
-typedef	unsigned int	uid_t;		/* UID type		*/
+typedef	uint32_t	uid_t;		/* UID type		*/
 #endif	/* !_UID_T */
 
 extern int rand_r(unsigned int *);
