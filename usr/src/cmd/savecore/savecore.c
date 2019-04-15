@@ -292,7 +292,7 @@ typedef struct stat Stat_t;
 static void
 Fstat(int fd, Stat_t *sb, const char *fname)
 {
-	if (fstat64(fd, sb) != 0)
+	if (fstat(fd, sb) != 0)
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "fstat(\"%s\"): %s", fname,
 		    strerror(errno));
 }

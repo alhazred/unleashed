@@ -96,7 +96,7 @@ close(int filedes) {
 		}
 	}
 
-	if (inode_dev_valid != 0 && fstat64(filedes, &sb) == 0) {
+	if (inode_dev_valid != 0 && fstat(filedes, &sb) == 0) {
 		if (sb.st_ino == inode && sb.st_dev == dev) {
 			/* Keep open; pretend successful */
 			return (0);
@@ -311,7 +311,7 @@ main(argc, argv)
 
 		if (strcmp(infile, "-") != 0)
 			infp = fopen(infile, "r");
-		else if (fstat64(fileno(stdin), &statbuf) == -1) {
+		else if (fstat(fileno(stdin), &statbuf) == -1) {
 			fprintf(stderr, "makedbm: can't open stdin\n");
 			exit(1);
 		} else
@@ -330,7 +330,7 @@ main(argc, argv)
 
 		if (lockf(fileno(outfp), F_TLOCK, 0) == 0) {
 			/* Got exclusive access; save inode and dev */
-			if (fstat64(fileno(outfp), &statbuf) != 0) {
+			if (fstat(fileno(outfp), &statbuf) != 0) {
 				fprintf(stderr, "makedbm: can't fstat ");
 				perror(tmpdirbuf);
 				exit(1);

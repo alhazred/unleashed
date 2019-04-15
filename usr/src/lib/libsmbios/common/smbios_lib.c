@@ -203,7 +203,7 @@ smbios_fdopen(int fd, int version, int flags, int *errp)
 {
 	struct stat st1, st2;
 
-	if (stat64(SMB_BIOS_DEVICE, &st1) == 0 && fstat64(fd, &st2) == 0 &&
+	if (stat64(SMB_BIOS_DEVICE, &st1) == 0 && fstat(fd, &st2) == 0 &&
 	    S_ISCHR(st2.st_mode) && st1.st_rdev == st2.st_rdev)
 		return (smb_biosopen(fd, version, flags, errp));
 	else

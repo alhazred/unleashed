@@ -508,7 +508,7 @@ setuparchive(void)
 					errmsg = strerror(errno);
 				}
 
-				if (fstat64(archivefd, &stats) < 0)
+				if (fstat(archivefd, &stats) < 0)
 				    stats.st_size = -1;
 
 				/* cast to keep lint&printf happy */
@@ -1070,7 +1070,7 @@ isrewind(int f)
 	struct stat sbuf;
 	int	rewind;
 
-	if (fstat64(f, &sbuf) < 0) {
+	if (fstat(f, &sbuf) < 0) {
 		msg(gettext(
 		    "Cannot obtain status of output device `%s'\n"),
 		    tape);

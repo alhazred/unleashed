@@ -412,7 +412,7 @@ again:
 					continue;
 				}
 
-				if (fstat64(mapfd, &statbuf) != 0) {
+				if (fstat(mapfd, &statbuf) != 0) {
 					Prelease(Pr, prr_flags);
 					(void) close(mapfd);
 					(void) fprintf(stderr, "%s: cannot "
@@ -469,7 +469,7 @@ again:
 			if (Pstate(Pr) != PS_DEAD) {
 				struct stat newbuf;
 
-				if (fstat64(mapfd, &newbuf) != 0 ||
+				if (fstat(mapfd, &newbuf) != 0 ||
 				    memcmp(&newbuf.st_mtim, &statbuf.st_mtim,
 				    sizeof (newbuf.st_mtim)) != 0) {
 					if (stacks != NULL) {

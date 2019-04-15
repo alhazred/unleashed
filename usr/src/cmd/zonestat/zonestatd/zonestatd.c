@@ -2569,7 +2569,7 @@ retry:
 
 	if ((*fd = open64(path, O_RDONLY, 0)) >= 0 &&
 	    (oret = ea_fdopen(eaf, *fd, NULL, flags, O_RDONLY)) == 0)
-		ret = fstat64(*fd, stat);
+		ret = fstat(*fd, stat);
 
 	if (*fd < 0 || oret < 0 || ret < 0) {
 		struct timespec ts;

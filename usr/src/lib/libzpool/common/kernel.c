@@ -428,7 +428,7 @@ vn_open(char *path, int x1, int flags, int mode, vnode_t **vpp, int x2, int x3)
 		fd = open64(path, O_RDONLY);
 		if (fd == -1)
 			return (errno);
-		if (fstat64(fd, &st) == -1) {
+		if (fstat(fd, &st) == -1) {
 			close(fd);
 			return (errno);
 		}
@@ -470,7 +470,7 @@ vn_open(char *path, int x1, int flags, int mode, vnode_t **vpp, int x2, int x3)
 	if (fd == -1)
 		return (errno);
 
-	if (fstat64(fd, &st) == -1) {
+	if (fstat(fd, &st) == -1) {
 		close(fd);
 		return (errno);
 	}
@@ -561,7 +561,7 @@ fop_getattr_real(vnode_t *vp, vattr_t *vap)
 {
 	struct stat st;
 
-	if (fstat64(vp->v_fd, &st) == -1) {
+	if (fstat(vp->v_fd, &st) == -1) {
 		close(vp->v_fd);
 		return (errno);
 	}
@@ -784,7 +784,7 @@ kobj_get_filesize(struct _buf *file, uint64_t *size)
 	struct stat st;
 	vnode_t *vp = (vnode_t *)file->_fd;
 
-	if (fstat64(vp->v_fd, &st) == -1) {
+	if (fstat(vp->v_fd, &st) == -1) {
 		vn_close(vp);
 		return (errno);
 	}

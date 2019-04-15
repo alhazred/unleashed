@@ -241,7 +241,7 @@ repquota(char *fsdev, char *fsfile, char *qffile)
 		perror(qffile);
 		return (1);
 	}
-	if (fstat64(fileno(qf), &statb) < 0) {
+	if (fstat(fileno(qf), &statb) < 0) {
 		perror(qffile);
 		(void) fclose(qf);
 		return (1);

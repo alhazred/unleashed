@@ -1579,7 +1579,7 @@ zfs_get_hole_count(const char *path, uint64_t *count, uint64_t *bs)
 		return (err);
 	}
 
-	if (fstat64(fd, &ss) == -1) {
+	if (fstat(fd, &ss) == -1) {
 		err = errno;
 		(void) close(fd);
 		return (err);

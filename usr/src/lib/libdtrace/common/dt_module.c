@@ -1073,7 +1073,7 @@ dt_module_update(dtrace_hdl_t *dtp, const char *name)
 	(void) snprintf(fname, sizeof (fname),
 	    "%s/%s/object", OBJFS_ROOT, name);
 
-	if ((fd = open(fname, O_RDONLY)) == -1 || fstat64(fd, &st) == -1 ||
+	if ((fd = open(fname, O_RDONLY)) == -1 || fstat(fd, &st) == -1 ||
 	    (dmp = dt_module_create(dtp, name)) == NULL) {
 		dt_dprintf("failed to open %s: %s\n", fname, strerror(errno));
 		(void) close(fd);

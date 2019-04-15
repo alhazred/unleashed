@@ -393,7 +393,7 @@ fmd_log_open(int abi, const char *name, int *errp)
 		return (fmd_log_open_err(lp, errp, EFDL_NOMEM));
 
 	if ((lp->log_fd = open64(name, O_RDONLY)) == -1 ||
-	    fstat64(lp->log_fd, &lp->log_stat) == -1 ||
+	    fstat(lp->log_fd, &lp->log_stat) == -1 ||
 	    (fd = dup(lp->log_fd)) == -1)
 		return (fmd_log_open_err(lp, errp, errno));
 

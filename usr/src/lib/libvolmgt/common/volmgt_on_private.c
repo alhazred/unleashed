@@ -96,7 +96,7 @@ _dev_mounted(char *path)
 		goto dun;
 	}
 
-	if (fstat64(fd, &sb) < 0) {
+	if (fstat(fd, &sb) < 0) {
 		goto dun;
 	}
 
@@ -308,7 +308,7 @@ vol_getmntdev(FILE *fp, struct mnttab *mp, dev_t dev, struct dk_cinfo *ip)
 		}
 
 		/* stat the device */
-		if (fstat64(fd, &sb) < 0) {
+		if (fstat(fd, &sb) < 0) {
 			free(cn);
 			(void) close(fd);
 			continue;	/* ain't there: can't be a match */
@@ -435,7 +435,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 		goto dun;
 	}
 
-	if (fstat64(fd, &sb) < 0) {
+	if (fstat(fd, &sb) < 0) {
 		goto dun;
 	}
 

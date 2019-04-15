@@ -177,7 +177,7 @@ main(int argc, char **argv)
 				argc--;
 				continue;
 			}
-			if (fstat64(fd, &st) < 0) {
+			if (fstat(fd, &st) < 0) {
 				saverr = errno;
 				(void) fprintf(stderr, gettext(
 				    "Could not fstat64 %s: %s\n"),

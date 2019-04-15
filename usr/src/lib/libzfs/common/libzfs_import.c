@@ -853,7 +853,7 @@ zpool_read_label(int fd, nvlist_t **config)
 
 	*config = NULL;
 
-	if (fstat64(fd, &statbuf) == -1)
+	if (fstat(fd, &statbuf) == -1)
 		return (-1);
 	size = P2ALIGN_TYPED(statbuf.st_size, sizeof (vdev_label_t), uint64_t);
 
@@ -1034,7 +1034,7 @@ zpool_open_func(void *arg)
 	 * Ignore failed stats.  We only want regular
 	 * files, character devs and block devs.
 	 */
-	if (fstat64(fd, &statbuf) != 0 ||
+	if (fstat(fd, &statbuf) != 0 ||
 	    (!S_ISREG(statbuf.st_mode) &&
 	    !S_ISCHR(statbuf.st_mode) &&
 	    !S_ISBLK(statbuf.st_mode))) {
@@ -1075,7 +1075,7 @@ zpool_clear_label(int fd)
 	vdev_label_t *label;
 	uint64_t size;
 
-	if (fstat64(fd, &statbuf) == -1)
+	if (fstat(fd, &statbuf) == -1)
 		return (0);
 	size = P2ALIGN_TYPED(statbuf.st_size, sizeof (vdev_label_t), uint64_t);
 
@@ -1316,7 +1316,7 @@ zpool_find_import_cached(libzfs_handle_t *hdl, const char *cachefile,
 		return (NULL);
 	}
 
-	if (fstat64(fd, &statbuf) != 0) {
+	if (fstat(fd, &statbuf) != 0) {
 		zfs_error_aux(hdl, "%s", strerror(errno));
 		(void) close(fd);
 		(void) zfs_error(hdl, EZFS_BADCACHE,

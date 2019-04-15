@@ -134,7 +134,7 @@ check_utf8(const char *charset)
 		/* no alias file found */
 		return (0);
 	}
-	if (fstat64(fd, &statbuf) == -1) {
+	if (fstat(fd, &statbuf) == -1) {
 		(void) close(fd);
 		return (0);
 	}

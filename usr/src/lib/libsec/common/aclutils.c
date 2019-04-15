@@ -172,7 +172,7 @@ cacl_get(acl_inp inp, int get_flag, int type, acl_t **aclp)
 		error = acl(fname, getcmd, acl_info->acl_cnt,
 		    acl_info->acl_aclp);
 	} else {
-		stat_error = fstat64(fd, &statbuf);
+		stat_error = fstat(fd, &statbuf);
 		error = facl(fd, getcmd, acl_info->acl_cnt,
 		    acl_info->acl_aclp);
 	}
@@ -259,7 +259,7 @@ cacl_set(acl_inp *acl_inp, acl_t *aclp, int type)
 			return (-1);
 		acl_flavor_target = pathconf(acl_inp->file, _PC_ACL_ENABLED);
 	} else {
-		stat_error = fstat64(acl_inp->fd, &statbuf);
+		stat_error = fstat(acl_inp->fd, &statbuf);
 		if (stat_error)
 			return (-1);
 		acl_flavor_target = fpathconf(acl_inp->fd, _PC_ACL_ENABLED);

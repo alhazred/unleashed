@@ -453,7 +453,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 		close(fi);
 		return (1);
 	}
-	if (fstat64(fileno(qf), &statb) < 0) {
+	if (fstat(fileno(qf), &statb) < 0) {
 		perror(qffile);
 		fclose(qf);
 		close(fi);

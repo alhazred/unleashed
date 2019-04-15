@@ -151,7 +151,7 @@ fmd_ckpt_open(fmd_ckpt_t *ckp, fmd_module_t *mp)
 	if ((ckp->ckp_fd = open(ckp->ckp_src, O_RDONLY)) == -1)
 		return (-1); /* failed to open checkpoint file */
 
-	if (fstat64(ckp->ckp_fd, &st) == -1) {
+	if (fstat(ckp->ckp_fd, &st) == -1) {
 		err = errno;
 		(void) close(ckp->ckp_fd);
 		return (fmd_set_errno(err));

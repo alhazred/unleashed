@@ -235,7 +235,7 @@ read_psffm(char *file)
 		error(gettext(ERR_OPEN_FAILED), filename);
 		/* NOTREACHED */
 	}
-	if (fstat64(fd, &statbuf) == -1) {
+	if (fstat(fd, &statbuf) == -1) {
 		error(gettext(ERR_STAT_FAILED), filename);
 		/* NOTREACHED */
 	}

@@ -105,7 +105,7 @@ usmp_open(const void *target)
 		return (NULL);
 	}
 
-	if (fstat64(dp->ud_fd, &st) != 0) {
+	if (fstat(dp->ud_fd, &st) != 0) {
 		(void) smp_error(ESMP_BADTARGET,
 		    "failed to stat %s: %s", target_name, strerror(errno));
 		(void) close(dp->ud_fd);

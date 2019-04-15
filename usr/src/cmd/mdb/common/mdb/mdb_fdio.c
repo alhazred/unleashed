@@ -299,7 +299,7 @@ mdb_fdio_create(int fd)
 	 * If we are operating on a disk in raw mode, we must do our own
 	 * block-oriented i/o; otherwise we can just use read() and write().
 	 */
-	if (fstat64(fd, &st) == 0 && S_ISCHR(st.st_mode) &&
+	if (fstat(fd, &st) == 0 && S_ISCHR(st.st_mode) &&
 	    ioctl(fd, DKIOCINFO, &info) == 0)
 		io->io_ops = &fdio_bdev_ops;
 	else

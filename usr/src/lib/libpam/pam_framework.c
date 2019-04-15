@@ -1936,7 +1936,7 @@ open_pam_conf(struct pam_fh **pam_fh, pam_handle_t *pamh, char *config,
 		return (0);
 	}
 	/* Check the ownership and file modes */
-	if (fstat64(fd, &stb) < 0) {
+	if (fstat(fd, &stb) < 0) {
 		__pam_log(LOG_AUTH | LOG_ALERT,
 		    "open_pam_conf[%d:%s]: stat(%s) failed: %s",
 		    pamh->include_depth, pam_trace_cname(pamh), config,

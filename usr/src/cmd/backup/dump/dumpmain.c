@@ -1429,7 +1429,7 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 				return (-1);
 			}
 
-			if (fstat64(fd, &post_stat) < 0) {
+			if (fstat(fd, &post_stat) < 0) {
 				saverr = errno;
 				(void) close(fd);
 				errno = saverr;

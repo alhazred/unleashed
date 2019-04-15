@@ -148,7 +148,7 @@ opennewdgrptab(char **pname)	 /* A(ptr to temp filename's path) */
 		if ((fd = open(oldname, O_WRONLY)) == -1)
 			return (NULL);
 
-		if (fstat64(fd, &sbuf) == -1) {
+		if (fstat(fd, &sbuf) == -1) {
 			(void) close(fd);
 			return (NULL);
 		}

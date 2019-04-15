@@ -256,7 +256,7 @@ output_xattr_header(char *fname, char *aname, int fd,
 	if (section_name == NULL)
 		return (-TLM_NO_SCRATCH_SPACE);
 
-	if (fstat64(fd, attr) == -1) {
+	if (fstat(fd, attr) == -1) {
 		NDMP_LOG(LOG_DEBUG, "output_file_header stat failed.");
 		free(section_name);
 		return (-TLM_OPEN_ERR);

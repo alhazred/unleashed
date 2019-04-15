@@ -414,7 +414,7 @@ ctsort(ctid_t ctid, ps_t *p)
 
 	if ((fd = contract_open(ctid, "process", "status", O_RDONLY)) == -1)
 		return;
-	if (fstat64(fd, &st) == -1 || ct_status_read(fd, CTD_COMMON, &hdl)) {
+	if (fstat(fd, &st) == -1 || ct_status_read(fd, CTD_COMMON, &hdl)) {
 		(void) close(fd);
 		return;
 	}

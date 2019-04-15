@@ -1552,7 +1552,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	if (fcntl(uncompfd, F_SETLKW, &lock) == -1)
 		die(gettext("fcntl: %s"), filename);
 
-	if (fstat64(uncompfd, &statbuf) == -1) {
+	if (fstat(uncompfd, &statbuf) == -1) {
 		(void) close(uncompfd);
 		die(gettext("fstat: %s"), filename);
 	}
@@ -1743,7 +1743,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 			goto cleanup;
 	}
 
-	if (fstat64(compfd, &statbuf) == -1)
+	if (fstat(compfd, &statbuf) == -1)
 		goto cleanup;
 
 	/*
@@ -1818,7 +1818,7 @@ check_file_validity(const char *filename)
 	if (fd == -1) {
 		die(gettext("open: %s"), filename);
 	}
-	error = fstat64(fd, &buf);
+	error = fstat(fd, &buf);
 	if (error == -1) {
 		die(gettext("fstat: %s"), filename);
 	} else if (!S_ISLOFIABLE(buf.st_mode)) {

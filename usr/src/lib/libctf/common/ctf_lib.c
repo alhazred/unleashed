@@ -437,7 +437,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 	bzero(&strsect, sizeof (ctf_sect_t));
 	bzero(&hdr.ctf, sizeof (hdr));
 
-	if (fstat64(fd, &st) == -1)
+	if (fstat(fd, &st) == -1)
 		return (ctf_set_open_errno(errp, errno));
 
 	if ((nbytes = pread64(fd, &hdr.ctf, sizeof (hdr), 0)) <= 0)

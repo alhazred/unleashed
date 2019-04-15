@@ -712,7 +712,7 @@ initsymtable(filename)
 		    gettext("cannot open symbol table file %s\n"), filename);
 		done(1);
 	}
-	if (fstat64(fd, &stbuf) < 0) {
+	if (fstat(fd, &stbuf) < 0) {
 		perror("stat");
 		(void) fprintf(stderr,
 		    gettext("cannot stat symbol table file %s\n"), filename);

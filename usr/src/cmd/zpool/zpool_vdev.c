@@ -688,7 +688,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				 * this device altogether.
 				 */
 				if ((fd = open(path, O_RDONLY)) >= 0) {
-					err = fstat64(fd, &statbuf);
+					err = fstat(fd, &statbuf);
 					(void) close(fd);
 				} else {
 					err = stat64(path, &statbuf);

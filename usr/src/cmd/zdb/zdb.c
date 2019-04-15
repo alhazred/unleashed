@@ -2428,7 +2428,7 @@ dump_cachefile(const char *cachefile)
 		exit(1);
 	}
 
-	if (fstat64(fd, &statbuf) != 0) {
+	if (fstat(fd, &statbuf) != 0) {
 		(void) printf("failed to stat '%s': %s\n", cachefile,
 		    strerror(errno));
 		exit(1);
@@ -2622,7 +2622,7 @@ dump_label(const char *dev)
 		exit(1);
 	}
 
-	if (fstat64(fd, &statbuf) != 0) {
+	if (fstat(fd, &statbuf) != 0) {
 		(void) fprintf(stderr, "failed to stat '%s': %s\n", path,
 		    strerror(errno));
 		(void) close(fd);
