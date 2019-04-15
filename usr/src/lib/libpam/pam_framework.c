@@ -1026,9 +1026,9 @@ run_stack(pam_handle_t *pamh, int flags, int type, int def_err, int ind,
 		return (PAM_SYSTEM_ERR);
 	if ((err = read_pam_conf(pamh, service_file, service))
 	    != PAM_SUCCESS) {
-		pam_trace(PAM_DEBUG_CONF, "run_stack[%d:%s]: can't read "
+		pam_trace(PAM_DEBUG_CONF, "run_stack[%d]: can't read "
 		    "service-specific conf %s", pamh->include_depth,
-		    pam_trace_cname(pamh), modulep->module_path, service_file);
+		    pam_trace_cname(pamh), service_file);
 	}
 	free(service_file);
 	service_file = NULL;
@@ -1374,7 +1374,7 @@ pam_putenv(pam_handle_t *pamh, const char *name_value)
 	int		error = PAM_SYSTEM_ERR;
 	char		*equal_sign = 0;
 	char		*name = NULL, *value = NULL, *tmp_value = NULL;
-	env_list	*traverse, *trail;
+	env_list	*traverse = NULL, *trail;
 
 	pam_trace(PAM_DEBUG_DEFAULT,
 	    "pam_putenv(%p, %s)", (void *)pamh,

@@ -37,8 +37,6 @@ LDLIBS +=	-lc
 
 CPPFLAGS +=	-I $(SRCDIR)
 
-CERRWARN +=	-Wno-uninitialized
-
 .KEEP_STATE:
 
 all:		$(LIBS)
