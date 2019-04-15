@@ -203,11 +203,11 @@ check_map_existence(pname)
 	(void) strcpy(dbfile, pname);
 	(void) strcat(dbfile, dbm_dir);
 
-	if (stat64(dbfile, &filestat) != -1) {
+	if (stat(dbfile, &filestat) != -1) {
 		(void) strcpy(dbfile, pname);
 		(void) strcat(dbfile, dbm_pag);
 
-		if (stat64(dbfile, &filestat) != -1) {
+		if (stat(dbfile, &filestat) != -1) {
 			return (TRUE);
 		} else {
 

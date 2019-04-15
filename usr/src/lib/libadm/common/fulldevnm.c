@@ -154,7 +154,7 @@ test_if_blk(char *new_path, dev_t raw_dev)
 	struct stat	buf;
 
 	/* check if we got a char special file */
-	if (stat64(new_path, &buf) != 0)
+	if (stat(new_path, &buf) != 0)
 		return (0);
 
 	if (!S_ISBLK(buf.st_mode))
@@ -175,7 +175,7 @@ test_if_raw(char *new_path, dev_t blk_dev)
 	struct stat	buf;
 
 	/* check if we got a char special file */
-	if (stat64(new_path, &buf) != 0)
+	if (stat(new_path, &buf) != 0)
 		return (0);
 
 	if (!S_ISCHR(buf.st_mode))
@@ -352,7 +352,7 @@ getfullblkname(char *cp)
 	if (*cp == '\0')
 		return (cp);
 
-	if (stat64(cp, &buf) != 0) {
+	if (stat(cp, &buf) != 0) {
 		free(cp);
 		return (strdup(""));
 	}
@@ -434,7 +434,7 @@ getfullrawname(char *cp)
 	if (*cp == '\0')
 		return (cp);
 
-	if (stat64(cp, &buf) != 0) {
+	if (stat(cp, &buf) != 0) {
 		free(cp);
 		return (strdup(""));
 	}

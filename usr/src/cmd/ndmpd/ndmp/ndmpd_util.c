@@ -2100,7 +2100,7 @@ fs_is_valid_logvol(char *path)
 {
 	struct stat st;
 
-	if (stat64(path, &st) < 0)
+	if (stat(path, &st) < 0)
 		return (FALSE);
 
 	return (TRUE);
@@ -2205,7 +2205,7 @@ ndmp_is_chkpnt_root(char *path)
 {
 	struct stat st;
 
-	if (stat64(path, &st) != 0) {
+	if (stat(path, &st) != 0) {
 		NDMP_LOG(LOG_DEBUG, "Couldn't stat path \"%s\"", path);
 		return (TRUE);
 	}
@@ -2258,7 +2258,7 @@ ndmp_get_bk_dir_ino(ndmp_lbr_params_t *nlp)
 	int rv;
 	struct stat st;
 
-	if (stat64(nlp->nlp_backup_path, &st) != 0) {
+	if (stat(nlp->nlp_backup_path, &st) != 0) {
 		rv = -1;
 		NDMP_LOG(LOG_DEBUG, "Getting inode # of \"%s\"",
 		    nlp->nlp_backup_path);

@@ -826,7 +826,7 @@ extractfile(char *name)
 			struct stat s[1];
 
 			saverr = errno;
-			if ((stat64(rname, s)) ||
+			if ((stat(rname, s)) ||
 			    ((s->st_mode & S_IFMT) != (mode & S_IFMT)) ||
 			    (s->st_rdev != full_dev)) {
 				if (saverr != EPERM || !complained_mknod) {

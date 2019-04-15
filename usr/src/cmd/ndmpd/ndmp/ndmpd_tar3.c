@@ -658,7 +658,7 @@ is_valid_backup_dir_v3(ndmpd_module_params_t *params, char *bkpath)
 		    "Relative backup path not allowed \"%s\".\n", bkpath);
 		return (FALSE);
 	}
-	if (stat64(bkpath, &st) < 0) {
+	if (stat(bkpath, &st) < 0) {
 		msg = strerror(errno);
 		MOD_LOGV3(params, NDMP_LOG_ERROR, "\"%s\" %s.\n",
 		    bkpath, msg);

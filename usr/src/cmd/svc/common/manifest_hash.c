@@ -683,7 +683,7 @@ mhash_test_file(scf_handle_t *hndl, const char *file, uint_t is_profile,
 	}
 
 	do {
-		ret = stat64(file, &st);
+		ret = stat(file, &st);
 	} while (ret < 0 && errno == EINTR);
 	if (ret < 0) {
 		uu_free(pname);

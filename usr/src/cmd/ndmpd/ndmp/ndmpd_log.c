@@ -212,7 +212,7 @@ ndmp_log_open_file(boolean_t to_stderr, boolean_t override_debug)
 	if ((lpath == NULL) || (*lpath == '\0'))
 		lpath = LOG_PATH;
 
-	if (stat64(lpath, &st) < 0) {
+	if (stat(lpath, &st) < 0) {
 		if (mkdirp(lpath, 0755) < 0) {
 			(void) fprintf(stderr,
 			    "Could not create log path %s: %s\n",
@@ -234,7 +234,7 @@ ndmp_log_open_file(boolean_t to_stderr, boolean_t override_debug)
 		while (i >= 0) {
 			fname = mk_pathname(LOG_FNAME, lpath, i);
 			(void) strncpy(oldfname, fname, PATH_MAX);
-			if (stat64(oldfname, &st) == -1) {
+			if (stat(oldfname, &st) == -1) {
 				i--;
 				continue;
 			}

@@ -1825,7 +1825,7 @@ open_module(pam_handle_t *pamh, char *module_so)
 	fd_list		*traverse = 0;
 
 	/* Check the ownership and file modes */
-	if (stat64(module_so, &stb) < 0) {
+	if (stat(module_so, &stb) < 0) {
 		__pam_log(LOG_AUTH | LOG_ERR,
 		    "open_module[%d:%s]: stat(%s) failed: %s",
 		    pamh->include_depth, pam_trace_cname(pamh), module_so,

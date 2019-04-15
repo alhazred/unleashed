@@ -288,7 +288,7 @@ main(int argc, char *argv[])
 		argc -= optind;
 
 		/*
-		 * Obtain stat64 information for each argument before
+		 * Obtain stat information for each argument before
 		 * constructing the list of mounted file systems.  This
 		 * ordering forces the automounter to establish any
 		 * mounts required to access the arguments, so that the
@@ -320,7 +320,7 @@ main(int argc, char *argv[])
 					exit(1);
 				}
 			}
-			if (stat64(cp, &argstat[i]) < 0) {
+			if (stat(cp, &argstat[i]) < 0) {
 				errcode = errno;
 				/*
 				 * Mark as no longer interesting.
@@ -698,9 +698,9 @@ mpath(char *file)
 			continue;
 		}
 		if (strcmp(file, mnt.mnt_special) == 0) {
-			if (stat64(mnt.mnt_mountp, &mount_stat) != 0)
+			if (stat(mnt.mnt_mountp, &mount_stat) != 0)
 				continue;
-			if (stat64(mnt.mnt_special, &device_stat) != 0)
+			if (stat(mnt.mnt_special, &device_stat) != 0)
 				continue;
 
 			if (device_stat.st_rdev == mount_stat.st_dev) {
@@ -824,8 +824,8 @@ again:
 		if (mlp->mntl_dev == NODEV) {
 			struct stat fs_sb;
 
-			if (stat64(mnt->mnt_mountp, &fs_sb) < 0 &&
-			    chroot_stat(mnt->mnt_mountp, stat64, (char *)&fs_sb,
+			if (stat(mnt->mnt_mountp, &fs_sb) < 0 &&
+			    chroot_stat(mnt->mnt_mountp, stat, (char *)&fs_sb,
 			    (char **)NULL) < 0) {
 				continue;
 			}

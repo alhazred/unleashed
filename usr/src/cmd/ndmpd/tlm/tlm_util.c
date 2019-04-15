@@ -489,7 +489,7 @@ fs_volexist(char *path)
 	if ((p = get_volname(path)) == NULL)
 		return (FALSE);
 
-	if (stat64(p, &st) != 0) {
+	if (stat(p, &st) != 0) {
 		free(p);
 		return (FALSE);
 	}

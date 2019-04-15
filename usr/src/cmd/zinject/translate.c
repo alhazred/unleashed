@@ -109,7 +109,7 @@ parse_pathname(const char *inpath, char *dataset, char *relpath,
 		return (-1);
 	}
 
-	if (stat64(fullpath, statbuf) != 0) {
+	if (stat(fullpath, statbuf) != 0) {
 		(void) fprintf(stderr, "cannot open '%s': %s\n",
 		    fullpath, strerror(errno));
 		return (-1);

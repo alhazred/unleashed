@@ -300,7 +300,7 @@ Fstat(int fd, Stat_t *sb, const char *fname)
 static void
 Stat(const char *fname, Stat_t *sb)
 {
-	if (stat64(fname, sb) != 0) {
+	if (stat(fname, sb) != 0) {
 		have_dumpfile = B_FALSE;
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "failed to get status "
 		    "of file %s", fname);

@@ -105,17 +105,17 @@ kvm_open(const char *namelist, const char *corefile, const char *swapfile,
 	if (corefile == NULL)
 		corefile = "/dev/kmem";
 
-	if (stat64(corefile, &corestat) == -1)
+	if (stat(corefile, &corestat) == -1)
 		return (fail(kd, err, "cannot stat %s", corefile));
 
 	if (S_ISCHR(corestat.st_mode)) {
-		if (stat64("/dev/mem", &memstat) == -1)
+		if (stat("/dev/mem", &memstat) == -1)
 			return (fail(kd, err, "cannot stat /dev/mem"));
 
-		if (stat64("/dev/kmem", &kmemstat) == -1)
+		if (stat("/dev/kmem", &kmemstat) == -1)
 			return (fail(kd, err, "cannot stat /dev/kmem"));
 
-		if (stat64("/dev/allkmem", &allkmemstat) == -1)
+		if (stat("/dev/allkmem", &allkmemstat) == -1)
 			return (fail(kd, err, "cannot stat /dev/allkmem"));
 		if (corestat.st_rdev == memstat.st_rdev ||
 		    corestat.st_rdev == kmemstat.st_rdev ||

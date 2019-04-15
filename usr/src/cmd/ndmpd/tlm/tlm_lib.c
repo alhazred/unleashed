@@ -1241,7 +1241,7 @@ get_zfsvolname(char *volname, int len, char *path)
 	int rv;
 
 	*volname = '\0';
-	if (stat64(path, &stbuf) != 0) {
+	if (stat(path, &stbuf) != 0) {
 		return (-1);
 	}
 

@@ -1200,7 +1200,7 @@ restore_file(int *fp,
 				return (ret);
 		}
 
-		ret = stat64(real_name, (struct stat *)&attr);
+		ret = stat(real_name, (struct stat *)&attr);
 		if (ret < 0) {
 			/*EMPTY*/
 			/* new file */
@@ -1865,7 +1865,7 @@ create_directory(char *dir, tlm_job_stats_t *job_stats)
 		temp = *p;
 		if (temp == '/' || temp == 0) {
 			*p = 0;
-			if (stat64(dir, &attr) < 0) {
+			if (stat(dir, &attr) < 0) {
 				if (mkdir(dir, 0777) != 0 && errno != EEXIST) {
 					erc = errno;
 					job_stats->js_errors++;

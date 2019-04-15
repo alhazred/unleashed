@@ -699,7 +699,7 @@ check_sanity(char *filename)
 
 	(void) memset(found_magic, 0, sizeof (found_magic));
 
-	if (stat64(filename, &stbd) < 0) {
+	if (stat(filename, &stbd) < 0) {
 		(void) fprintf(stderr,
 		"ufs fsck: sanity check failed : cannot stat %s\n", filename);
 		exit(EXNOSTAT);
@@ -728,7 +728,7 @@ check_sanity(char *filename)
 					devname = vfsbuf.vfs_special;
 				else
 					devname = vfsbuf.vfs_fsckdev;
-				if (stat64(devname, &stbr) == 0) {
+				if (stat(devname, &stbr) == 0) {
 					if (stbr.st_rdev == stbd.st_rdev) {
 						found_magic[magic_cnt] = 1;
 						is_magic = magic_cnt;

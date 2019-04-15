@@ -377,7 +377,7 @@ wait_until_dev_complete(struct lofi_ioctl *li)
 	}
 
 	/* Check if links already present */
-	if (stat64(blkpath, &buf) == 0 && stat64(charpath, &buf) == 0)
+	if (stat(blkpath, &buf) == 0 && stat(charpath, &buf) == 0)
 		return;
 
 	/* First use di_devlink_init() */
@@ -392,17 +392,17 @@ wait_until_dev_complete(struct lofi_ioctl *li)
 	 * link creation via sysevents.
 	 */
 	for (cursleep = 0; cursleep < maxsleep; cursleep += sleeptime) {
-		if (stat64(blkpath, &buf) == 0 && stat64(charpath, &buf) == 0)
+		if (stat(blkpath, &buf) == 0 && stat(charpath, &buf) == 0)
 			return;
 		(void) sleep(sleeptime);
 	}
 
 	/* one last try */
 out:
-	if (stat64(blkpath, &buf) == -1) {
+	if (stat(blkpath, &buf) == -1) {
 		die(gettext("%s was not created"), blkpath);
 	}
-	if (stat64(charpath, &buf) == -1) {
+	if (stat(charpath, &buf) == -1) {
 		die(gettext("%s was not created"), charpath);
 	}
 }
@@ -1386,7 +1386,7 @@ lofi_uncompress(int lfd, const char *filename)
 		    filename);
 
 	/* Zero length files don't need to be uncompressed */
-	if (stat64(filename, &statbuf) == -1)
+	if (stat(filename, &statbuf) == -1)
 		die(gettext("stat: %s"), filename);
 	if (statbuf.st_size == 0)
 		return;

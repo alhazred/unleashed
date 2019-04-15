@@ -1084,7 +1084,7 @@ filecopy(char *dest, char *src)
 		return (-3);
 	}
 
-	if (stat64(src, &src_attr) < 0) {
+	if (stat(src, &src_attr) < 0) {
 		free(buf);
 		(void) fclose(src_fh);
 		(void) fclose(dst_fh);
@@ -1113,7 +1113,7 @@ filecopy(char *dest, char *src)
 		return (-4);
 	}
 
-	if (stat64(src, &dst_attr) < 0) {
+	if (stat(src, &dst_attr) < 0) {
 		free(buf);
 		return (-2);
 	}

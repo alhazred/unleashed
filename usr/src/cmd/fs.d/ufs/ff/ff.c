@@ -764,7 +764,7 @@ mod_time(char *file)
 {
 	struct stat	stat_buf;
 
-	if (stat64(file, &stat_buf) < 0) {
+	if (stat(file, &stat_buf) < 0) {
 		(void) fprintf(stderr, "ff: can't stat '%s' - ignored\n", file);
 		return (0);
 	}

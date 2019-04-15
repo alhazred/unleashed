@@ -135,7 +135,7 @@ partinfo(int fd, char *device)
 	struct extvtoc vtdata;
 	struct dk_gpt *efi;
 
-	i = stat64(device, &statbuf);
+	i = stat(device, &statbuf);
 	if (i < 0)
 		exit(DRERR);
 	maj = major(statbuf.st_rdev);

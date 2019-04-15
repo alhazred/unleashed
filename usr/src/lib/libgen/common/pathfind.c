@@ -180,7 +180,7 @@ fullck(char *name, mode_t mode, int nzflag)
 
 	if ((mode & 0177000) == 0 && nzflag == 0) /* no special info wanted */
 		return (1);
-	if (stat64(name, &sbuf) == -1)
+	if (stat(name, &sbuf) == -1)
 		return (0);
 	xor = (sbuf.st_mode ^ mode) & 077000;	/* see mknod(2) */
 	if ((mode & 0170000) == 0)

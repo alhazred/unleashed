@@ -54,7 +54,7 @@ partial_check()
 	struct mntent *mnt;
 	struct stat st;
 
-	if (stat64(disk, &st) < 0 ||
+	if (stat(disk, &st) < 0 ||
 	    (st.st_mode & S_IFMT) == S_IFCHR ||
 	    (st.st_mode & S_IFMT) == S_IFBLK)
 		return;
@@ -65,7 +65,7 @@ partial_check()
 	while (mnt = getmnttab()) {
 		st.st_dev = devfromopts(mnt);
 		if (st.st_dev == NODEV &&
-		    stat64(mnt->mnt_dir, &st) < 0)
+		    stat(mnt->mnt_dir, &st) < 0)
 			continue;
 		if (partial_dev == st.st_dev) {
 			if (disk_dynamic) {
@@ -118,7 +118,7 @@ partial_mark(argc, argv)
 	while (--argc >= 0) {
 		path = *argv++;
 
-		if (stat64(path, &st) < 0 ||
+		if (stat(path, &st) < 0 ||
 			st.st_dev != partial_dev) {
 			msg(gettext("`%s' is not on dump device `%s'\n"),
 				path, disk);
@@ -163,7 +163,7 @@ lf_mark_root(dev, path)
 
 	(void) strcpy(dotdot, path);
 
-	if (stat64(dotdot, &st) < 0)
+	if (stat(dotdot, &st) < 0)
 		return (1);
 
 	/* if target is a regular file, find directory */
@@ -181,7 +181,7 @@ lf_mark_root(dev, path)
 
 	/* keep marking parent until we hit mount point */
 	do {
-		if (stat64(dotdot, &st) < 0 ||
+		if (stat(dotdot, &st) < 0 ||
 			(st.st_mode & S_IFMT) != S_IFDIR ||
 			st.st_dev != dev)
 			return (1);

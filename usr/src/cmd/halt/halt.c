@@ -639,7 +639,7 @@ validate_disk(char *arg, char *mountpoint)
 	(void) snprintf(kernpath, MAXPATHLEN, "%s/platform/kernel/unix",
 	    mountpoint);
 
-	if (stat64(kernpath, &statbuf) != 0) {
+	if (stat(kernpath, &statbuf) != 0) {
 		(void) fprintf(stderr,
 		    gettext("%s: %s is not a root disk or dataset\n"),
 		    cmdname, arg);

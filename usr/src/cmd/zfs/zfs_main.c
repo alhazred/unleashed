@@ -6344,7 +6344,7 @@ unshare_unmount_path(int op, char *path, int flags, boolean_t is_manual)
 	 * or "//"), we stat() the path and search for the corresponding
 	 * (major,minor) device pair.
 	 */
-	if (stat64(path, &statbuf) != 0) {
+	if (stat(path, &statbuf) != 0) {
 		(void) fprintf(stderr, gettext("cannot %s '%s': %s\n"),
 		    cmdname, path, strerror(errno));
 		return (1);
@@ -6385,7 +6385,7 @@ unshare_unmount_path(int op, char *path, int flags, boolean_t is_manual)
 		return (1);
 
 	ret = 1;
-	if (stat64(entry.mnt_mountp, &statbuf) != 0) {
+	if (stat(entry.mnt_mountp, &statbuf) != 0) {
 		(void) fprintf(stderr, gettext("cannot %s '%s': %s\n"),
 		    cmdname, path, strerror(errno));
 		goto out;

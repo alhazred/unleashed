@@ -168,7 +168,7 @@ cacl_get(acl_inp inp, int get_flag, int type, acl_t **aclp)
 	}
 
 	if (type == ACL_PATH) {
-		stat_error = stat64(fname, &statbuf);
+		stat_error = stat(fname, &statbuf);
 		error = acl(fname, getcmd, acl_info->acl_cnt,
 		    acl_info->acl_aclp);
 	} else {
@@ -254,7 +254,7 @@ cacl_set(acl_inp *acl_inp, acl_t *aclp, int type)
 
 
 	if (type == ACL_PATH) {
-		stat_error = stat64(acl_inp->file, &statbuf);
+		stat_error = stat(acl_inp->file, &statbuf);
 		if (stat_error)
 			return (-1);
 		acl_flavor_target = pathconf(acl_inp->file, _PC_ACL_ENABLED);
@@ -398,7 +398,7 @@ acl_strip(const char *file, uid_t owner, gid_t group, mode_t mode)
 
 	acl_flavor = pathconf(file, _PC_ACL_ENABLED);
 
-	if (stat64(file, &statbuf) != 0) {
+	if (stat(file, &statbuf) != 0) {
 		error = 1;
 		return (error);
 	}

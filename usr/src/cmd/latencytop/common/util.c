@@ -304,7 +304,7 @@ lt_file_exist(const char *name)
 {
 	struct stat st;
 
-	if (stat64(name, &st) == 0) {
+	if (stat(name, &st) == 0) {
 		return (1);
 	} else {
 		return (0);

@@ -906,7 +906,7 @@ ndmpd_fhdir_v3_cb(lbr_fhlog_call_backs_t *cbp, char *dir, struct stat *stp)
 			(void) strlcpy(dirpath, dir, PATH_MAX);
 			(void) strlcat(dirpath, "/", PATH_MAX);
 			(void) strlcat(dirpath, nm, PATH_MAX);
-			err = stat64(dirpath, &ret_attr);
+			err = stat(dirpath, &ret_attr);
 			if (err != 0) {
 				NDMP_LOG(LOG_DEBUG,
 				    "Error looking up %s", nm);
@@ -1490,7 +1490,7 @@ ndmpd_file_history_dir(lbr_fhlog_call_backs_t *cbp, char *dir,
 			(void) strlcpy(dirpath, dir, PATH_MAX);
 			(void) strlcat(dirpath, "/", PATH_MAX);
 			(void) strlcat(dirpath, nm, PATH_MAX);
-			err = stat64(dirpath, &ret_attr);
+			err = stat(dirpath, &ret_attr);
 			if (err != 0) {
 				NDMP_LOG(LOG_DEBUG,
 				    "Error looking up %s", nm);

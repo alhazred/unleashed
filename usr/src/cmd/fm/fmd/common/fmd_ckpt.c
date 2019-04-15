@@ -794,7 +794,7 @@ fmd_ckpt_save(fmd_module_t *mp)
 	 * to mkdir(2) a new module checkpoint directory.  If this fails, we
 	 * have no choice but to abort the checkpoint and try again later.
 	 */
-	if (stat64(mp->mod_ckpt, &st) != 0 || !S_ISDIR(st.st_mode)) {
+	if (stat(mp->mod_ckpt, &st) != 0 || !S_ISDIR(st.st_mode)) {
 		(void) snprintf(path, sizeof (path), "%s-", mp->mod_ckpt);
 		(void) rename(mp->mod_ckpt, path);
 		(void) fmd_conf_getprop(fmd.d_conf, "ckpt.dirmode", &dirmode);

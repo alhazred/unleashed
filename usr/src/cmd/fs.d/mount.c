@@ -474,7 +474,7 @@ gettext("%s: Cannot use -p and -v with arguments\n"), myname);
 				specific_opts = vget.vfs_mntopts;
 			}
 		} else if (special == NULL) {
-			if (stat64(mountp, &stbuf) == -1) {
+			if (stat(mountp, &stbuf) == -1) {
 				fprintf(stderr, gettext("%s: cannot stat %s\n"),
 				    myname, mountp);
 				exit(2);
@@ -1597,7 +1597,7 @@ check_fields(char *fstype, char *mountp)
 	 * not exist now, but will be mounted before we get to it.
 	 * This is one of the quirks of "secondary mounting".
 	 */
-	if (!aflg && stat64(mountp, &stbuf) < 0) {
+	if (!aflg && stat(mountp, &stbuf) < 0) {
 		if (errno == ENOENT || errno == ENOTDIR)
 			fprintf(stderr,
 			    gettext("%s: Mount point %s does not exist.\n"),

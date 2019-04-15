@@ -517,7 +517,7 @@ main(int argc, char **argv)
 				tty[ntty].tdev = PRNODEV;
 				(void) strcpy(nambuf, "/dev/");
 				(void) strcat(nambuf, p);
-				if (stat64(nambuf, &s) == 0)
+				if (stat(nambuf, &s) == 0)
 					tty[ntty].tdev = s.st_rdev;
 				tty[ntty++].tname = p;
 			} while (*p1);

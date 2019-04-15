@@ -1595,7 +1595,7 @@ check_backup_dir_validity(ndmpd_module_params_t *params, char *bkpath)
 	struct stat st;
 
 	rv = NDMP_NO_ERR;
-	if (stat64(bkpath, &st) < 0) {
+	if (stat(bkpath, &st) < 0) {
 		msg = strerror(errno);
 		MOD_LOG(params, "Error: stat(%s): %s.\n", bkpath, msg);
 		rv = NDMP_ILLEGAL_ARGS_ERR;

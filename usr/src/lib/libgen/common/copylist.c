@@ -83,7 +83,7 @@ copylist64(const char *filenm, off64_t *szptr)
 	struct	stat	stbuf;
 
 	/* get size of file */
-	if (stat64(filenm, &stbuf) == -1) {
+	if (stat(filenm, &stbuf) == -1) {
 		return (NULL);
 	}
 	*szptr = stbuf.st_size;
@@ -98,7 +98,7 @@ copylist(const char *filenm, off_t *szptr)
 	struct	stat	stbuf;
 
 	/* get size of file */
-	if (stat64(filenm, &stbuf) == -1) {
+	if (stat(filenm, &stbuf) == -1) {
 		return (NULL);
 	}
 

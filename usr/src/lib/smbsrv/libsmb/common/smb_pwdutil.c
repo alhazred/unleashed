@@ -488,7 +488,7 @@ smb_pwd_update(const char *name, const char *password, int control)
 	if (err != SMB_PWE_SUCCESS)
 		return (err);
 
-	if (stat64(SMB_PASSWD, &stbuf) < 0) {
+	if (stat(SMB_PASSWD, &stbuf) < 0) {
 		err = SMB_PWE_STAT_FAILED;
 		goto passwd_exit;
 	}
@@ -943,7 +943,7 @@ smb_lucache_update(void)
 	 * smb_pwd_lock() is not called here so it can
 	 * be checked quickly whether an updated is needed
 	 */
-	if (stat64(SMB_PASSWD, &stbuf) < 0) {
+	if (stat(SMB_PASSWD, &stbuf) < 0) {
 		(void) mutex_unlock(&smb_uch.uc_mtx);
 		if (errno != ENOENT)
 			return;
@@ -975,7 +975,7 @@ smb_lucache_update(void)
 	rc = smb_lucache_do_update();
 
 	(void) mutex_lock(&smb_uch.uc_mtx);
-	if ((rc == SMB_PWE_SUCCESS) && (stat64(SMB_PASSWD, &stbuf) == 0))
+	if ((rc == SMB_PWE_SUCCESS) && (stat(SMB_PASSWD, &stbuf) == 0))
 		smb_uch.uc_timestamp = stbuf.st_mtim;
 	smb_uch.uc_state = SMB_UCHS_UPDATED;
 	smb_uch.uc_refcnt--;

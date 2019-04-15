@@ -4197,7 +4197,7 @@ checkdev(char *rdev, char *bdev)
 {
 	struct stat	statarea;
 
-	if (stat64(bdev, &statarea) < 0) {
+	if (stat(bdev, &statarea) < 0) {
 		(void) fprintf(stderr, gettext("can't check mount point; "));
 		(void) fprintf(stderr, gettext("can't stat %s\n"), bdev);
 		lockexit(32);
@@ -4208,7 +4208,7 @@ checkdev(char *rdev, char *bdev)
 		    bdev);
 		lockexit(32);
 	}
-	if (stat64(rdev, &statarea) < 0) {
+	if (stat(rdev, &statarea) < 0) {
 		(void) fprintf(stderr, gettext("can't stat %s\n"), rdev);
 		lockexit(32);
 	}
@@ -4226,12 +4226,12 @@ checkmount(struct mnttab *mntp, char *bdevname)
 	struct stat	statdev;
 
 	if (strcmp(bdevname, mntp->mnt_special) == 0) {
-		if (stat64(mntp->mnt_mountp, &statdir) == -1) {
+		if (stat(mntp->mnt_mountp, &statdir) == -1) {
 			(void) fprintf(stderr, gettext("can't stat %s\n"),
 			    mntp->mnt_mountp);
 			lockexit(32);
 		}
-		if (stat64(mntp->mnt_special, &statdev) == -1) {
+		if (stat(mntp->mnt_special, &statdev) == -1) {
 			(void) fprintf(stderr, gettext("can't stat %s\n"),
 			    mntp->mnt_special);
 			lockexit(32);

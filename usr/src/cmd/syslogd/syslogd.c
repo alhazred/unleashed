@@ -3485,7 +3485,7 @@ cfline(char *line, int lineno, struct filed *f)
 
 	case '/':
 		(void) strlcpy(f->f_un.f_fname, p, MAXPATHLEN);
-		if (stat64(p, &sbuf) < 0) {
+		if (stat(p, &sbuf) < 0) {
 			logerror(p);
 			break;
 		}

@@ -296,8 +296,8 @@ lf_linkit(char *existing, char *new, int type)
 	} else if (type == HARDLINK) {
 		if (link(name, new) < 0) {
 			int saverr = errno;
-			if ((stat64(name, s1) == 0) &&
-			    (stat64(new, s2) == 0) &&
+			if ((stat(name, s1) == 0) &&
+			    (stat(new, s2) == 0) &&
 			    (s1->st_dev == s2->st_dev) &&
 			    (s1->st_ino == s2->st_ino)) {
 				vprintf(stdout,

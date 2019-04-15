@@ -2605,7 +2605,7 @@ dump_label(const char *dev)
 			(void) snprintf(path, sizeof (path), "%s%s",
 			    ZFS_RDISK_ROOTD, dev + strlen(ZFS_DISK_ROOTD));
 		}
-	} else if (stat64(path, &statbuf) != 0) {
+	} else if (stat(path, &statbuf) != 0) {
 		char *s;
 
 		(void) snprintf(path, sizeof (path), "%s%s", ZFS_RDISK_ROOTD,

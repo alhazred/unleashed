@@ -268,7 +268,7 @@ work(char *arg, char *rmmount_opt)
 		}
 
 		if (do_query) {
-			if ((stat64(name, &sb) == 0) && S_ISDIR(sb.st_mode)) {
+			if ((stat(name, &sb) == 0) && S_ISDIR(sb.st_mode)) {
 				(void) fprintf(stderr,
 				    gettext("%s: no media\n"), name);
 				return (EJECT_NO_MEDIA);

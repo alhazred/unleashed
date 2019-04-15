@@ -946,7 +946,7 @@ _getdevrec(char	*device)			/* The device to search for */
 		_setdevtab();
 
 		/*  Status the file <device>.  If fails, invalid device */
-		if (stat64(device, &devstatbuf) != 0) errno = ENODEV;
+		if (stat(device, &devstatbuf) != 0) errno = ENODEV;
 		else {
 
 			/*
@@ -961,7 +961,7 @@ _getdevrec(char	*device)			/* The device to search for */
 			while (!found && (devrec = _getdevtabent())) {
 			    if (!devrec->comment &&
 				(devrec->cdevice != NULL))
-				if (stat64(devrec->cdevice, &tblstatbuf) == 0) {
+				if (stat(devrec->cdevice, &tblstatbuf) == 0) {
 				    if (samedev(tblstatbuf, devstatbuf))
 					found = TRUE;
 				} else {
@@ -984,7 +984,7 @@ _getdevrec(char	*device)			/* The device to search for */
 			while (!found && (devrec = _getdevtabent())) {
 			    if (!devrec->comment &&
 				(devrec->bdevice != NULL))
-				if (stat64(devrec->bdevice, &tblstatbuf) == 0) {
+				if (stat(devrec->bdevice, &tblstatbuf) == 0) {
 				    if (samedev(tblstatbuf, devstatbuf))
 					found = TRUE;
 				} else {
@@ -1007,7 +1007,7 @@ _getdevrec(char	*device)			/* The device to search for */
 			while (!found && (devrec = _getdevtabent())) {
 			    if (!devrec->comment &&
 				(devrec->pathname != NULL))
-				if (stat64(devrec->pathname,
+				if (stat(devrec->pathname,
 				    &tblstatbuf) == 0) {
 				    if (samedev(tblstatbuf, devstatbuf))
 					found = TRUE;

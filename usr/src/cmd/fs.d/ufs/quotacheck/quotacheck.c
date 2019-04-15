@@ -460,7 +460,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 		return (1);
 	}
 	quotadev = statb.st_dev;
-	if (stat64(fsdev, &statb) < 0) {
+	if (stat(fsdev, &statb) < 0) {
 		perror(fsdev);
 		fclose(qf);
 		close(fi);

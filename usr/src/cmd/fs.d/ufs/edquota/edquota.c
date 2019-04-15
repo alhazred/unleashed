@@ -669,14 +669,14 @@ setupfs(void)
 	while (getmntent(mtab, &mntp) == 0) {
 		if (strcmp(mntp.mnt_fstype, MNTTYPE_UFS) != 0)
 			continue;
-		if (stat64(mntp.mnt_special, &statb) < 0)
+		if (stat(mntp.mnt_special, &statb) < 0)
 			continue;
 		if ((statb.st_mode & S_IFMT) != S_IFBLK)
 			continue;
 		fsdev = statb.st_rdev;
 		(void) snprintf(qfilename, sizeof (qfilename), "%s/%s",
 			mntp.mnt_mountp, QFNAME);
-		if (stat64(qfilename, &statb) < 0 || statb.st_dev != fsdev)
+		if (stat(qfilename, &statb) < 0 || statb.st_dev != fsdev)
 			continue;
 		fsqp = malloc(sizeof (struct fsquot));
 		if (fsqp == NULL) {

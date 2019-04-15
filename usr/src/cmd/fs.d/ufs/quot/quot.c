@@ -470,7 +470,7 @@ getdev(char **devpp)
 
 	extern char *getfullrawname();
 
-	if (stat64(*devpp, &statb) < 0) {
+	if (stat(*devpp, &statb) < 0) {
 		perror(*devpp);
 		exit(32);
 	}

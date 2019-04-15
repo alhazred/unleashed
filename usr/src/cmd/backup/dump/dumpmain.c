@@ -1195,7 +1195,7 @@ rawname(char *cp)
 	char *dp;
 	extern char *getfullrawname();
 
-	if (stat64(cp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFBLK)
+	if (stat(cp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFBLK)
 		return (cp);
 
 	dp = getfullrawname(cp);
@@ -1206,7 +1206,7 @@ rawname(char *cp)
 		return (0);
 	}
 
-	if (stat64(dp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFCHR) {
+	if (stat(dp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFCHR) {
 		free(dp);
 		return (cp);
 	}
@@ -1406,7 +1406,7 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 				return (-1);
 			}
 
-			if (stat64(filename, &pre_stat) < 0) {
+			if (stat(filename, &pre_stat) < 0) {
 				return (-1);
 			}
 

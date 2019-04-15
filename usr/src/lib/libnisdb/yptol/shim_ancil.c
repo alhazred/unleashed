@@ -229,7 +229,7 @@ ypcheck_map_existence_yptol(char *pname)
 	(void) strcpy(dbfile, pname);
 	(void) strcat(dbfile, dbm_dir);
 
-	if (stat64(dbfile, &filestat) == -1) {
+	if (stat(dbfile, &filestat) == -1) {
 		if (errno != ENOENT) {
 			(void) fprintf(stderr,
 			    "ypserv:  Stat error on map file %s.\n",
@@ -242,7 +242,7 @@ ypcheck_map_existence_yptol(char *pname)
 	(void) strcpy(dbfile, pname);
 	(void) strcat(dbfile, dbm_pag);
 
-	if (stat64(dbfile, &filestat) == -1) {
+	if (stat(dbfile, &filestat) == -1) {
 		if (errno != ENOENT) {
 			(void) fprintf(stderr,
 			    "ypserv:  Stat error on map file %s.\n",
@@ -257,7 +257,7 @@ ypcheck_map_existence_yptol(char *pname)
 		(void) strcat(dbfile, TTL_POSTFIX);
 		(void) strcat(dbfile, dbm_dir);
 
-		if (stat64(dbfile, &filestat) == -1) {
+		if (stat(dbfile, &filestat) == -1) {
 			if (errno != ENOENT) {
 				(void) fprintf(stderr,
 				    "ypserv:  Stat error on map file %s.\n",
@@ -271,7 +271,7 @@ ypcheck_map_existence_yptol(char *pname)
 		(void) strcat(dbfile, TTL_POSTFIX);
 		(void) strcat(dbfile, dbm_pag);
 
-		if (stat64(dbfile, &filestat) == -1) {
+		if (stat(dbfile, &filestat) == -1) {
 			if (errno != ENOENT) {
 				(void) fprintf(stderr,
 				    "ypserv:  Stat error on map file %s.\n",

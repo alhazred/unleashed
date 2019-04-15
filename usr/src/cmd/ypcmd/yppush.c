@@ -283,7 +283,7 @@ main(int argc, char **argv)
 	else
 		sprintf(ypmapname, "%s/%s/%s.dir", ypdbpath, domain_alias,
 		    map_alias);
-	if (stat64(ypmapname, &sbuf) < 0) {
+	if (stat(ypmapname, &sbuf) < 0) {
 		fprintf(stderr, "yppush: Map does not exist.\n");
 		exit(1);
 	}

@@ -405,7 +405,7 @@ each_file(char *filename)
 
 	Elf_Cmd cmd;
 	errno = 0;
-	if (stat64(filename, &buf) == -1)	{
+	if (stat(filename, &buf) == -1)	{
 		(void) fprintf(stderr, "%s: ", prog_name);
 		perror(filename);
 		errflag++;

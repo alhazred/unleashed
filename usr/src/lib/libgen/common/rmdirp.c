@@ -58,7 +58,7 @@ rmdirp(char *d, char *d1)
 	char		*slash;
 
 	slash = strrchr(d, '/');
-	currstat = stat64(".", &cst);
+	currstat = stat(".", &cst);
 
 	/* Starts from right most element */
 
@@ -97,7 +97,7 @@ rmdirp(char *d, char *d1)
 
 			/* Stop if can not stat it */
 
-			if (stat64(d, &st) < 0) {
+			if (stat(d, &st) < 0) {
 				(void) strcpy(d1, d);
 				return (-1);
 			}

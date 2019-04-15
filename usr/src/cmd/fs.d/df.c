@@ -738,7 +738,7 @@ devid_matches(int i, dev_t devno)
 		if (dev == 0)
 			dev = NODEV;
 		if (dev == NODEV) {
-			if (stat64(mtp->mnt_mountp, &st) == -1) {
+			if (stat(mtp->mnt_mountp, &st) == -1) {
 				return (NULL);
 			} else {
 				dev = st.st_dev;
@@ -1803,7 +1803,7 @@ create_request_list(
 		 * and the mount point is eliminated.
 		 */
 		for (i = 0; i < argc; i++)
-			valid_stat[i] = (stat64(argv[i], &arg_stat[i]) == 0);
+			valid_stat[i] = (stat(argv[i], &arg_stat[i]) == 0);
 
 		mtab_read_file();
 
@@ -2084,7 +2084,7 @@ do_devnm(int argc, char *argv[])
 		char *file = argv[arg];
 		struct stat st;
 
-		if (stat64(file, &st) == -1) {
+		if (stat(file, &st) == -1) {
 			errmsg(ERR_PERROR, "%s: ", file);
 			errors++;
 			continue;

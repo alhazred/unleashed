@@ -922,7 +922,7 @@ files_update_shadow(char *name, struct spwd *spwd)
 	int err = PWU_SUCCESS;
 
 	/* Mode of the shadow file should be 400 or 000 */
-	if (stat64(SHADOW, &stbuf) < 0) {
+	if (stat(SHADOW, &stbuf) < 0) {
 		err = PWU_STAT_FAILED;
 		goto shadow_exit;
 	}
@@ -1025,7 +1025,7 @@ files_update_passwd(char *name, struct passwd *pwd)
 	int result;
 	int err = PWU_SUCCESS;
 
-	if (stat64(PASSWD, &stbuf) < 0) {
+	if (stat(PASSWD, &stbuf) < 0) {
 		err = PWU_STAT_FAILED;
 		goto passwd_exit;
 	}
@@ -1262,7 +1262,7 @@ files_update_history(char *name, struct spwd *spwd)
 
 	(void) unlink(OHISTORY);
 
-	if (stat64(OHISTORY, &statbuf) == 0 ||
+	if (stat(OHISTORY, &statbuf) == 0 ||
 	    ((src != NULL) && (link(HISTORY, OHISTORY) != 0)) ||
 	    rename(HISTEMP, HISTORY) != 0) {
 
