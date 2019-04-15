@@ -83,10 +83,10 @@ cstatat_getvp(int fd, char *name, int follow, vnode_t **vp, cred_t **cred)
 		char startchar;
 
 		if (copyin(name, &startchar, sizeof (char)))
-			return (EFAULT);
+			return EFAULT;
 		if (startchar != '/') {
 			if ((fp = getf(fd)) == NULL) {
-				return (EBADF);
+				return EBADF;
 			}
 			startvp = fp->f_vnode;
 			cr = fp->f_cred;
@@ -110,107 +110,48 @@ lookup:
 		if (startvp != NULL)
 			VN_RELE(startvp);
 		crfree(cr);
-		return (error);
+		return error;
 	}
 	if (startvp != NULL)
 		VN_RELE(startvp);
 
-	return (0);
+	return 0;
 }
 
-/*
- * Native syscall interfaces:
- *
- * N-bit kernel, N-bit applications, N-bit file offsets
- */
-
-static int cstatat(int, char *, struct stat *, int, int);
-static int cstat(vnode_t *vp, struct stat *, int, cred_t *);
-
-/*
- * fstat can and should be fast, do an inline implementation here.
- */
-#define	FSTAT_BODY(fd, sb, statfn)				\
-	{							\
-		file_t *fp;					\
-		int error;					\
-								\
-		if (fd == AT_FDCWD)				\
-			return (set_errno(EFAULT));		\
-		if ((fp = getf(fd)) == NULL)			\
-			return (set_errno(EBADF));		\
-		error = statfn(fp->f_vnode, sb, 0, fp->f_cred);	\
-		releasef(fd);					\
-		if (error)					\
-			return (set_errno(error));		\
-		return (0);					\
-	}
-
-static inline int
-fstat(int fd, struct stat *sb)
-{
-	FSTAT_BODY(fd, sb, cstat)
-}
-
-int
-fstatat(int fd, char *name, struct stat *sb, int flags)
-{
-	int followflag;
-	int csflags;
-
-	if (name == NULL)
-		return (fstat(fd, sb));
-
-	followflag = (flags & AT_SYMLINK_NOFOLLOW);
-	csflags = (flags & _AT_TRIGGER ? ATTR_TRIGGER : 0);
-	if (followflag == 0)
-		csflags |= ATTR_REAL;	/* flag for procfs lookups */
-
-	return (cstatat(fd, name, sb, followflag, csflags));
-}
-
-/*
- * Common code for stat(), lstat(), and fstat().
- * (32-bit kernel, 32-bit applications, 32-bit files)
- * (64-bit kernel, 64-bit applications, 64-bit files)
- */
 static int
-cstat(vnode_t *vp, struct stat *ubp, int flag, cred_t *cr)
+cstat(vnode_t *vp, struct stat *sb, int flag, cred_t *cr)
 {
 	struct vfssw *vswp;
-	struct stat sb;
 	vattr_t vattr;
 	int error;
 
 	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
 	if ((error = fop_getattr(vp, &vattr, flag, cr, NULL)) != 0)
-		return (error);
+		return error;
 	if (vattr.va_size > MAXOFF_T || vattr.va_nblocks > LONG_MAX ||
 	    vattr.va_nodeid > ULONG_MAX)
-		return (EOVERFLOW);
+		return EOVERFLOW;
 
-	bzero(&sb, sizeof (sb));
-	sb.st_dev = vattr.va_fsid;
-	sb.st_ino = (ino_t)vattr.va_nodeid;
-	sb.st_mode = VTTOIF(vattr.va_type) | vattr.va_mode;
-	sb.st_nlink = vattr.va_nlink;
-	sb.st_uid = vattr.va_uid;
-	sb.st_gid = vattr.va_gid;
-	sb.st_rdev = vattr.va_rdev;
-	sb.st_size = (off_t)vattr.va_size;
-	sb.st_atim = vattr.va_atime;
-	sb.st_mtim = vattr.va_mtime;
-	sb.st_ctim = vattr.va_ctime;
-	sb.st_blksize = vattr.va_blksize;
-	sb.st_blocks = (blkcnt_t)vattr.va_nblocks;
+	bzero(sb, sizeof (struct stat));
+	sb->st_dev = vattr.va_fsid;
+	sb->st_ino = (ino_t)vattr.va_nodeid;
+	sb->st_mode = VTTOIF(vattr.va_type) | vattr.va_mode;
+	sb->st_nlink = vattr.va_nlink;
+	sb->st_uid = vattr.va_uid;
+	sb->st_gid = vattr.va_gid;
+	sb->st_rdev = vattr.va_rdev;
+	sb->st_size = (off_t)vattr.va_size;
+	sb->st_atim = vattr.va_atime;
+	sb->st_mtim = vattr.va_mtime;
+	sb->st_ctim = vattr.va_ctime;
+	sb->st_blksize = vattr.va_blksize;
+	sb->st_blocks = (blkcnt_t)vattr.va_nblocks;
 	if (vp->v_vfsp != NULL) {
 		vswp = &vfssw[vp->v_vfsp->vfs_fstype];
 		if (vswp->vsw_name && *vswp->vsw_name)
-			(void) strcpy(sb.st_fstype, vswp->vsw_name);
+			(void) strcpy(sb->st_fstype, vswp->vsw_name);
 	}
-	if (copyout(&sb, ubp, sizeof (sb)))
-		return (EFAULT);
-	return (0);
+	return 0;
 }
 
 static int
@@ -225,7 +166,7 @@ cstatat(int fd, char *name, struct stat *sb, int follow, int flags)
 	link_follow = (follow == AT_SYMLINK_NOFOLLOW) ? NO_FOLLOW : FOLLOW;
 lookup:
 	if (error = cstatat_getvp(fd, name, link_follow, &vp, &cred))
-		return (set_errno(error));
+		return error;
 	error = cstat(vp, sb, flags, cred);
 	crfree(cred);
 	VN_RELE(vp);
@@ -233,210 +174,87 @@ lookup:
 		if (error == ESTALE &&
 		    fs_need_estale_retry(estale_retry++))
 			goto lookup;
-		return (set_errno(error));
+		return error;
 	}
-	return (0);
+	return 0;
 }
 
-#if defined(_ILP32)
-
-/*
- * 32-bit kernel, 32-bit applications, 64-bit file offsets.
- *
- * These routines are implemented differently on 64-bit kernels.
- */
-static int cstatat64(int, char *, struct stat64 *, int, int);
-static int cstat64(vnode_t *, struct stat64 *, int, cred_t *);
-
-static inline int
-fstat64(int fd, struct stat64 *sb)
+static int
+fstatat_nocopy(int fd, char *name, struct stat *sb, int flags)
 {
-	FSTAT_BODY(fd, sb, cstat64)
+	int ret;
+
+	if (name == NULL) {
+		file_t *fp;
+
+		if (fd == AT_FDCWD)
+			return EFAULT;
+		if ((fp = getf(fd)) == NULL)
+			return EBADF;
+		ret = cstat(fp->f_vnode, sb, 0, fp->f_cred);
+		releasef(fd);
+	} else {
+		int followflag = (flags & AT_SYMLINK_NOFOLLOW);
+		int csflags = (flags & _AT_TRIGGER ? ATTR_TRIGGER : 0);
+
+		if (followflag == 0)
+			csflags |= ATTR_REAL;	/* flag for procfs lookups */
+		ret = cstatat(fd, name, sb, followflag, csflags);
+	}
+
+	return ret;
 }
 
 int
-fstatat64(int fd, char *name, struct stat64 *sb, int flags)
+fstatat(int fd, char *name, struct stat *usb, int flags)
 {
-	int followflag;
-	int csflags;
+	int ret;
+	struct stat sb;
 
-	if (name == NULL)
-		return (fstat64(fd, sb));
-
-	followflag = (flags & AT_SYMLINK_NOFOLLOW);
-	csflags = (flags & _AT_TRIGGER ? ATTR_TRIGGER : 0);
-	if (followflag == 0)
-		csflags |= ATTR_REAL;	/* flag for procfs lookups */
-
-	return (cstatat64(fd, name, sb, followflag, csflags));
+	ret = fstatat_nocopy(fd, name, &sb, flags);
+	if (ret != 0)
+		return set_errno(ret);
+	if (copyout(&sb, usb, sizeof (sb)))
+		return EFAULT;
+	return 0;
 }
 
-static int
-cstat64(vnode_t *vp, struct stat64 *ubp, int flag, cred_t *cr)
-{
-	struct vfssw *vswp;
-	struct stat64 lsb;
-	vattr_t vattr;
-	int error;
-
-	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
-	if (error = fop_getattr(vp, &vattr, flag, cr, NULL))
-		return (error);
-
-	bzero(&lsb, sizeof (lsb));
-	lsb.st_dev = vattr.va_fsid;
-	lsb.st_ino = vattr.va_nodeid;
-	lsb.st_mode = VTTOIF(vattr.va_type) | vattr.va_mode;
-	lsb.st_nlink = vattr.va_nlink;
-	lsb.st_uid = vattr.va_uid;
-	lsb.st_gid = vattr.va_gid;
-	lsb.st_rdev = vattr.va_rdev;
-	lsb.st_size = vattr.va_size;
-	lsb.st_atim = vattr.va_atime;
-	lsb.st_mtim = vattr.va_mtime;
-	lsb.st_ctim = vattr.va_ctime;
-	lsb.st_blksize = vattr.va_blksize;
-	lsb.st_blocks = vattr.va_nblocks;
-	if (vp->v_vfsp != NULL) {
-		vswp = &vfssw[vp->v_vfsp->vfs_fstype];
-		if (vswp->vsw_name && *vswp->vsw_name)
-			(void) strcpy(lsb.st_fstype, vswp->vsw_name);
-	}
-	if (copyout(&lsb, ubp, sizeof (lsb)))
-		return (EFAULT);
-	return (0);
-}
-
-static int
-cstatat64(int fd, char *name, struct stat64 *sb, int follow, int flags)
-{
-	vnode_t *vp;
-	int error;
-	cred_t *cred;
-	int link_follow;
-	int estale_retry = 0;
-
-	link_follow = (follow == AT_SYMLINK_NOFOLLOW) ? NO_FOLLOW : FOLLOW;
-lookup:
-	if (error = cstatat_getvp(fd, name, link_follow, &vp, &cred))
-		return (set_errno(error));
-	error = cstat64(vp, sb, flags, cred);
-	crfree(cred);
-	VN_RELE(vp);
-	if (error != 0) {
-		if (error == ESTALE &&
-		    fs_need_estale_retry(estale_retry++))
-			goto lookup;
-		return (set_errno(error));
-	}
-	return (0);
-}
-
-#endif	/* _ILP32 */
-
-#if defined(_SYSCALL32_IMPL)
-
-/*
- * 64-bit kernel, 32-bit applications, 64-bit file offsets.
- *
- * We'd really like to call the "native" stat calls for these ones,
- * but the problem is that the 64-bit ABI defines the 'stat64' structure
- * differently from the way the 32-bit ABI defines it.
- */
-
-static int cstatat64_32(int, char *, struct stat64_32 *, int, int);
-static int cstat64_32(vnode_t *, struct stat64_32 *, int, cred_t *);
-
-static inline int
-fstat64_32(int fd, struct stat64_32 *sb)
-{
-	FSTAT_BODY(fd, sb, cstat64_32)
-}
-
+#ifdef _SYSCALL32_IMPL
 int
-fstatat64_32(int fd, char *name, struct stat64_32 *sb, int flags)
+fstatat_user32(int fd, char *name, struct stat32 *usb, int flags)
 {
-	int followflag;
-	int csflags;
+	int ret;
+	struct stat nsb;
+	struct stat32 sb;
 
-	if (name == NULL)
-		return (fstat64_32(fd, sb));
+	ret = fstatat_nocopy(fd, name, &nsb, flags);
+	if (ret != 0)
+		return set_errno(ret);
 
-	followflag = (flags & AT_SYMLINK_NOFOLLOW);
-	csflags = (flags & _AT_TRIGGER ? ATTR_TRIGGER : 0);
-	if (followflag == 0)
-		csflags |= ATTR_REAL;	/* flag for procfs lookups */
+	if (TIMESPEC_OVERFLOW(&(sb.st_atim)) ||
+	    TIMESPEC_OVERFLOW(&(sb.st_mtim)) ||
+	    TIMESPEC_OVERFLOW(&(sb.st_ctim)))
+		return set_errno(EOVERFLOW);
 
-	return (cstatat64_32(fd, name, sb, followflag, csflags));
+	bzero(&sb, sizeof(struct stat32));
+	if (!cmpldev(&(sb.st_dev), nsb.st_dev) ||
+	    !cmpldev(&(sb.st_rdev), nsb.st_rdev))
+		return set_errno(EOVERFLOW);
+	sb.st_ino = nsb.st_ino;
+	sb.st_mode = nsb.st_mode;
+	sb.st_nlink = nsb.st_nlink;
+	sb.st_uid = nsb.st_uid;
+	sb.st_gid = nsb.st_gid;
+	sb.st_size = nsb.st_size;
+	TIMESPEC_TO_TIMESPEC32(&(sb.st_atim), &(nsb.st_atim));
+	TIMESPEC_TO_TIMESPEC32(&(sb.st_mtim), &(nsb.st_mtim));
+	TIMESPEC_TO_TIMESPEC32(&(sb.st_ctim), &(nsb.st_ctim));
+	sb.st_blksize = nsb.st_blksize;
+	sb.st_blocks = nsb.st_blocks;
+	strlcpy(sb.st_fstype, nsb.st_fstype, sizeof(sb.st_fstype));
+
+	if (copyout(&sb, usb, sizeof (sb)))
+		return EFAULT;
+	return 0;
 }
-
-static int
-cstat64_32(vnode_t *vp, struct stat64_32 *ubp, int flag, cred_t *cr)
-{
-	struct vfssw *vswp;
-	struct stat64_32 lsb;
-	vattr_t vattr;
-	int error;
-	dev32_t st_dev, st_rdev;
-
-	vattr.va_mask = VATTR_STAT | VATTR_NBLOCKS | VATTR_BLKSIZE | VATTR_SIZE;
-	if (error = fop_getattr(vp, &vattr, flag, cr, NULL))
-		return (error);
-
-	if (!cmpldev(&st_dev, vattr.va_fsid) ||
-	    !cmpldev(&st_rdev, vattr.va_rdev) ||
-	    TIMESPEC_OVERFLOW(&(vattr.va_atime)) ||
-	    TIMESPEC_OVERFLOW(&(vattr.va_mtime)) ||
-	    TIMESPEC_OVERFLOW(&(vattr.va_ctime)))
-		return (EOVERFLOW);
-
-	bzero(&lsb, sizeof (lsb));
-	lsb.st_dev = st_dev;
-	lsb.st_ino = vattr.va_nodeid;
-	lsb.st_mode = VTTOIF(vattr.va_type) | vattr.va_mode;
-	lsb.st_nlink = vattr.va_nlink;
-	lsb.st_uid = vattr.va_uid;
-	lsb.st_gid = vattr.va_gid;
-	lsb.st_rdev = st_rdev;
-	lsb.st_size = vattr.va_size;
-	TIMESPEC_TO_TIMESPEC32(&(lsb.st_atim), &(vattr.va_atime));
-	TIMESPEC_TO_TIMESPEC32(&(lsb.st_mtim), &(vattr.va_mtime));
-	TIMESPEC_TO_TIMESPEC32(&(lsb.st_ctim), &(vattr.va_ctime));
-	lsb.st_blksize = vattr.va_blksize;
-	lsb.st_blocks = vattr.va_nblocks;
-	if (vp->v_vfsp != NULL) {
-		vswp = &vfssw[vp->v_vfsp->vfs_fstype];
-		if (vswp->vsw_name && *vswp->vsw_name)
-			(void) strcpy(lsb.st_fstype, vswp->vsw_name);
-	}
-	if (copyout(&lsb, ubp, sizeof (lsb)))
-		return (EFAULT);
-	return (0);
-}
-
-static int
-cstatat64_32(int fd, char *name, struct stat64_32 *sb, int follow, int flags)
-{
-	vnode_t  *vp;
-	int error;
-	cred_t *cred;
-	int link_follow;
-	int estale_retry = 0;
-
-	link_follow = (follow == AT_SYMLINK_NOFOLLOW) ? NO_FOLLOW : FOLLOW;
-lookup:
-	if (error = cstatat_getvp(fd, name, link_follow, &vp, &cred))
-		return (set_errno(error));
-	error = cstat64_32(vp, sb, flags, cred);
-	crfree(cred);
-	VN_RELE(vp);
-	if (error != 0) {
-		if (error == ESTALE &&
-		    fs_need_estale_retry(estale_retry++))
-			goto lookup;
-		return (set_errno(error));
-	}
-	return (0);
-}
-
-#endif /* _SYSCALL32_IMPL */
+#endif

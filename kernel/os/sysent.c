@@ -233,7 +233,7 @@ int	sigqueue(pid_t, int, void *, int, int);
 int	signotify(int, siginfo_t *, signotify_id_t *);
 
 int	getdents64(int, void *, size_t);
-int	fstatat64(int, char *, struct stat64 *, int);
+int	fstatat64(int, char *, struct stat *, int);
 int	statvfs64(char *, struct statvfs64 *);
 int	fstatvfs64(int, struct statvfs64 *);
 int	setrlimit(int, struct rlimit *);
@@ -667,7 +667,7 @@ extern ssize_t write32(int32_t, caddr32_t, size32_t);
 extern ssize_t readv32(int32_t, caddr32_t, int32_t);
 extern ssize_t writev32(int32_t, caddr32_t, int32_t);
 extern ssize_t readlinkat32(int, caddr32_t, caddr32_t, size32_t);
-extern int fstatat64_32(int, char *, struct stat64_32 *, int);
+extern int fstatat_user32(int, char *, struct stat32 *, int);
 extern int getmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t *);
 extern int putmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t *);
 extern int getpmsg32(int, struct strbuf32 *, struct strbuf32 *, int32_t *,
@@ -770,7 +770,7 @@ struct sysent sysent32[NSYSCALL] =
 	/* 63 */ SYSENT_CI("ulimit",		ulimit32,	2),
 	/* 64 */ SYSENT_CI("renameat",		renameat,	4),
 	/* 65 */ SYSENT_CI("unlinkat",		unlinkat,	3),
-	/* 66 */ SYSENT_CI("fstatat",		fstatat64_32,	4),
+	/* 66 */ SYSENT_CI("fstatat",		fstatat_user32,	4),
 	/* 67 */ SYSENT_NOSYS(),
 	/* 68 */ SYSENT_CI("openat",		openat64,	4),
 	/* 69 */ SYSENT_NOSYS(),

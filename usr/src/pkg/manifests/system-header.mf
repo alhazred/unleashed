@@ -1190,7 +1190,6 @@ file path=usr/include/sys/squeue.h
 file path=usr/include/sys/squeue_impl.h
 file path=usr/include/sys/stack.h
 file path=usr/include/sys/stat.h
-file path=usr/include/sys/stat_impl.h
 file path=usr/include/sys/statfs.h
 file path=usr/include/sys/statvfs.h
 file path=usr/include/sys/stdbool.h
