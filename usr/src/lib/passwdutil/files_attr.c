@@ -911,7 +911,7 @@ files_update(attrlist *items, pwu_repository_t *rep, void *buf)
 int
 files_update_shadow(char *name, struct spwd *spwd)
 {
-	struct stat64 stbuf;
+	struct stat stbuf;
 	FILE *dst;
 	FILE *src;
 	struct spwd cur;
@@ -1017,7 +1017,7 @@ shadow_exit:
 int
 files_update_passwd(char *name, struct passwd *pwd)
 {
-	struct stat64 stbuf;
+	struct stat stbuf;
 	FILE *src, *dst;
 	int tempfd;
 	struct passwd cur;
@@ -1155,7 +1155,7 @@ files_update_history(char *name, struct spwd *spwd)
 	int	tmpfd;
 	FILE	*src;	/* history database file */
 	FILE	*dst;	/* temp history database being updated */
-	struct	stat64 statbuf;
+	struct	stat statbuf;
 	char buf[MAX_LOGNAME + MAXHISTORY +
 	    (MAXHISTORY * CRYPT_MAXCIPHERTEXTLEN)+1];
 	int	found;

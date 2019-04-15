@@ -172,7 +172,7 @@ lf_ismounted(devname, dirname)
 	char	*devname;	/* name of device (raw or block) */
 	char	*dirname;	/* name of f/s mount point */
 {
-	struct stat64 st;
+	struct stat st;
 	char	*blockname;	/* name of block device */
 	dev_t	dev;
 	int	saverr;

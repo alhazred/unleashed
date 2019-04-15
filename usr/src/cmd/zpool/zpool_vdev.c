@@ -391,7 +391,7 @@ static nvlist_t *
 make_leaf_vdev(const char *arg, uint64_t is_log)
 {
 	char path[MAXPATHLEN];
-	struct stat64 statbuf;
+	struct stat statbuf;
 	nvlist_t *vdev = NULL;
 	char *type = NULL;
 	boolean_t wholedisk = B_FALSE;
@@ -617,7 +617,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 			for (c = 0; c < children; c++) {
 				nvlist_t *cnv = child[c];
 				char *path;
-				struct stat64 statbuf;
+				struct stat statbuf;
 				uint64_t size = -1ULL;
 				char *childtype;
 				int fd, err;

@@ -2098,7 +2098,7 @@ ndmp_new_job_name(char *jname)
 boolean_t
 fs_is_valid_logvol(char *path)
 {
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(path, &st) < 0)
 		return (FALSE);
@@ -2203,7 +2203,7 @@ ndmpd_make_bk_dir_path(char *buf, char *fname)
 boolean_t
 ndmp_is_chkpnt_root(char *path)
 {
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(path, &st) != 0) {
 		NDMP_LOG(LOG_DEBUG, "Couldn't stat path \"%s\"", path);
@@ -2256,7 +2256,7 @@ int
 ndmp_get_bk_dir_ino(ndmp_lbr_params_t *nlp)
 {
 	int rv;
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(nlp->nlp_backup_path, &st) != 0) {
 		rv = -1;

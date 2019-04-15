@@ -463,7 +463,7 @@ report()
 static int
 getdev(char **devpp)
 {
-	struct stat64 statb;
+	struct stat statb;
 	FILE *fstab;
 	struct mnttab mntp;
 	char *cp;	/* Pointer to raw device name */

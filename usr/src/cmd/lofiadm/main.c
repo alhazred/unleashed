@@ -363,7 +363,7 @@ make_blkdevname(struct lofi_ioctl *li, char *path, size_t len)
 static void
 wait_until_dev_complete(struct lofi_ioctl *li)
 {
-	struct stat64 buf;
+	struct stat buf;
 	int	cursleep;
 	char	blkpath[MAXPATHLEN];
 	char	charpath[MAXPATHLEN];
@@ -1369,7 +1369,7 @@ lofi_uncompress(int lfd, const char *filename)
 	char *dir = NULL;
 	char *file = NULL;
 	int minor = 0;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int compfd = -1;
 	int uncompfd = -1;
 	ssize_t rbytes;
@@ -1493,7 +1493,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	uint64_t *index = NULL;
 	uint64_t offset;
 	size_t real_segsize;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int compfd = -1, uncompfd = -1;
 	int tfd = -1;
 	ssize_t rbytes, wbytes, lastread;
@@ -1810,7 +1810,7 @@ check_algorithm_validity(const char *algname, int *compress_index)
 static void
 check_file_validity(const char *filename)
 {
-	struct stat64 buf;
+	struct stat buf;
 	int 	error;
 	int	fd;
 

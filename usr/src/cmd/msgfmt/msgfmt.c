@@ -204,7 +204,7 @@ read_psffm(char *file)
 	char	*mbuf, *addr;
 	size_t	fsize, ln_size, ll;
 	wchar_t	*linebufhead = NULL;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	char	*filename;
 
 	/*

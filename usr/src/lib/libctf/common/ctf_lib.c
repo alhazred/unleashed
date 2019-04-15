@@ -423,7 +423,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 	ctf_file_t *fp = NULL;
 	size_t shstrndx, shnum;
 
-	struct stat64 st;
+	struct stat st;
 	ssize_t nbytes;
 
 	union {

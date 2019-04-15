@@ -214,7 +214,7 @@ bool
 ypcheck_map_existence_yptol(char *pname)
 {
 	char dbfile[MAXNAMLEN + sizeof (TTL_POSTFIX) + 1];
-	struct stat64 filestat;
+	struct stat filestat;
 	int len;
 
 	if (!pname || ((len = (int)strlen(pname)) == 0) ||

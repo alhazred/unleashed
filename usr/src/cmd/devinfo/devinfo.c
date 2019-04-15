@@ -131,7 +131,7 @@ partinfo(int fd, char *device)
 	int	slice;
 	major_t maj;
 	minor_t min;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	struct extvtoc vtdata;
 	struct dk_gpt *efi;
 

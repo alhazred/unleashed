@@ -483,7 +483,7 @@ get_volname(char *path)
 boolean_t
 fs_volexist(char *path)
 {
-	struct stat64 st;
+	struct stat st;
 	char *p;
 
 	if ((p = get_volname(path)) == NULL)

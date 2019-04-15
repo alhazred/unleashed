@@ -302,7 +302,7 @@ lt_gpipe_readfd(void)
 int
 lt_file_exist(const char *name)
 {
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(name, &st) == 0) {
 		return (1);

@@ -259,7 +259,7 @@ int
 lf_linkit(char *existing, char *new, int type)
 {
 	char linkbuf[MAXPATHLEN];
-	struct stat64 s1[1], s2[1];
+	struct stat s1[1], s2[1];
 	char *name;
 	int dfd, l, result;
 

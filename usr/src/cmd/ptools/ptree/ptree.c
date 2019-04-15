@@ -404,7 +404,7 @@ ctsort(ctid_t ctid, ps_t *p)
 	ps_t *pp;
 	int fd, n;
 	ct_stathdl_t hdl;
-	struct stat64 st;
+	struct stat st;
 
 	for (n = 0; n < nctps; n++)
 		if (ctps[n]->ctid == ctid) {

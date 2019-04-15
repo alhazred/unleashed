@@ -3400,7 +3400,7 @@ cfline(char *line, int lineno, struct filed *f)
 	char buf[MAXLINE];
 	char ebuf[SYS_NMLN+1+40];
 	mode_t fmode, omode = O_WRONLY|O_APPEND|O_NOCTTY;
-	struct stat64 sbuf;
+	struct stat sbuf;
 	pthread_t mythreadno;
 
 	if (Debug) {

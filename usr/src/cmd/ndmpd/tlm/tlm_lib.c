@@ -488,7 +488,7 @@ lbrlog_callbacks_done(lbr_fhlog_call_backs_t *p)
  * Call back for file history directory info
  */
 int
-tlm_log_fhdir(tlm_job_stats_t *job_stats, char *dir, struct stat64 *stp,
+tlm_log_fhdir(tlm_job_stats_t *job_stats, char *dir, struct stat *stp,
     fs_fhandle_t *fhp)
 {
 	int rv;
@@ -517,7 +517,7 @@ tlm_log_fhdir(tlm_job_stats_t *job_stats, char *dir, struct stat64 *stp,
  */
 int
 tlm_log_fhnode(tlm_job_stats_t *job_stats, char *dir, char *file,
-    struct stat64 *stp, u_longlong_t off)
+    struct stat *stp, u_longlong_t off)
 {
 	int rv;
 	lbr_fhlog_call_backs_t *cbp; /* callbacks pointer */
@@ -547,7 +547,7 @@ tlm_log_fhnode(tlm_job_stats_t *job_stats, char *dir, char *file,
  */
 int
 tlm_log_fhpath_name(tlm_job_stats_t *job_stats, char *pathname,
-    struct stat64 *stp, u_longlong_t off)
+    struct stat *stp, u_longlong_t off)
 {
 	int rv;
 	lbr_fhlog_call_backs_t *cbp; /* callbacks pointer */
@@ -1235,7 +1235,7 @@ chkpnt_creationtime_bypattern(char *volname, char *pattern, time_t *tp)
 int
 get_zfsvolname(char *volname, int len, char *path)
 {
-	struct stat64 stbuf;
+	struct stat stbuf;
 	struct extmnttab ent;
 	FILE *mntfp;
 	int rv;

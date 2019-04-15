@@ -707,7 +707,7 @@ zfs_get_pool_handle(const zfs_handle_t *zhp)
 zfs_handle_t *
 zfs_path_to_zhandle(libzfs_handle_t *hdl, char *path, zfs_type_t argtype)
 {
-	struct stat64 statbuf;
+	struct stat statbuf;
 	struct extmnttab entry;
 	int ret;
 
@@ -1566,7 +1566,7 @@ int
 zfs_get_hole_count(const char *path, uint64_t *count, uint64_t *bs)
 {
 	int fd, err;
-	struct stat64 ss;
+	struct stat ss;
 	uint64_t fill;
 
 	fd = open(path, O_RDONLY);

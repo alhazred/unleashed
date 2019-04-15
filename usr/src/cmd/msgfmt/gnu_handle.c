@@ -121,7 +121,7 @@ static int
 check_utf8(const char *charset)
 {
 	int	fd;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	caddr_t	addr;
 	size_t	buflen, charset_len, utf8_len;
 	char	*c_charset, *c_utf8, *p;

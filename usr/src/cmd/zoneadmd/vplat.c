@@ -801,7 +801,7 @@ forkexec(zlog_t *zlogp, const char *path, char *const argv[])
 static int
 isregfile(const char *path)
 {
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(path, &st) == -1)
 		return (-1);
@@ -1224,7 +1224,7 @@ mount_one(zlog_t *zlogp, struct zone_fstab *fsptr, const char *rootpath,
 	 * time we get here.
 	 */
 	if (zonecfg_in_alt_root()) {
-		struct stat64 st;
+		struct stat st;
 
 		if (stat64(fsptr->zone_fs_special, &st) != -1 &&
 		    S_ISBLK(st.st_mode)) {
@@ -3720,7 +3720,7 @@ duplicate_zone_root(zlog_t *zlogp, const char *rootpath)
 static boolean_t
 duplicate_reachable_path(zlog_t *zlogp, const char *rootpath)
 {
-	struct stat64 rst, zst;
+	struct stat rst, zst;
 	struct mnttab *mnp;
 
 	if (stat64(rootpath, &rst) == -1) {

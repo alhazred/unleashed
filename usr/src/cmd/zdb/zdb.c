@@ -2418,7 +2418,7 @@ static void
 dump_cachefile(const char *cachefile)
 {
 	int fd;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	char *buf;
 	nvlist_t *config;
 
@@ -2594,7 +2594,7 @@ dump_label(const char *dev)
 	char path[MAXPATHLEN];
 	char *buf = label.vl_vdev_phys.vp_nvlist;
 	size_t buflen = sizeof (label.vl_vdev_phys.vp_nvlist);
-	struct stat64 statbuf;
+	struct stat statbuf;
 	uint64_t psize, ashift;
 	boolean_t label_found = B_FALSE;
 

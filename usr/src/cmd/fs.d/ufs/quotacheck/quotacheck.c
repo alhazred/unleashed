@@ -425,7 +425,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 	struct passwd *pw;
 	int cg, i;
 	char *rawdisk;
-	struct stat64 statb;
+	struct stat statb;
 	struct dqblk dqbuf;
 	extern char *getfullrawname();
 

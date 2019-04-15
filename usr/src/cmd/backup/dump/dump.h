@@ -354,7 +354,7 @@ extern int hasshortmeta(struct dinode **ip);
 extern int lftw(const char *,
 	int (*)(const char *, const struct stat *, int), int);
 extern int lf_lftw(const char *,
-	int (*)(const char *, const struct stat64 *, int), int);
+	int (*)(const char *, const struct stat *, int), int);
 /*
  * partial.c
  */

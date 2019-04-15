@@ -1499,7 +1499,7 @@ static int
 same_file_system(const char *path1, const char *path2)
 {
 	uint64_t fsid1, fsid2;
-	struct stat64 st1, st2;
+	struct stat st1, st2;
 	nvlist_t *nvl1 = NULL;
 	nvlist_t *nvl2 = NULL;
 

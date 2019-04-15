@@ -175,7 +175,7 @@ pathfind(const char *path, const char *name, const char *mode)
 static int
 fullck(char *name, mode_t mode, int nzflag)
 {
-	struct stat64 sbuf;
+	struct stat sbuf;
 	int xor;
 
 	if ((mode & 0177000) == 0 && nzflag == 0) /* no special info wanted */

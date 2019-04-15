@@ -4195,7 +4195,7 @@ growinit(char *devstr)
 void
 checkdev(char *rdev, char *bdev)
 {
-	struct stat64	statarea;
+	struct stat	statarea;
 
 	if (stat64(bdev, &statarea) < 0) {
 		(void) fprintf(stderr, gettext("can't check mount point; "));
@@ -4222,8 +4222,8 @@ checkdev(char *rdev, char *bdev)
 void
 checkmount(struct mnttab *mntp, char *bdevname)
 {
-	struct stat64	statdir;
-	struct stat64	statdev;
+	struct stat	statdir;
+	struct stat	statdev;
 
 	if (strcmp(bdevname, mntp->mnt_special) == 0) {
 		if (stat64(mntp->mnt_mountp, &statdir) == -1) {

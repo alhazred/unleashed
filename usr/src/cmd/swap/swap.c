@@ -371,7 +371,7 @@ list(int flag)
 	struct swaptable 	*st;
 	struct swapent	*swapent;
 	int	i;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	char		*path;
 	char		fullpath[MAXPATHLEN+1];
 	int		num;
@@ -657,7 +657,7 @@ add(char *path, off_t offset, off_t cnt, int flags)
 static int
 valid(char *pathname, off_t offset, off_t length)
 {
-	struct stat64		f;
+	struct stat		f;
 	struct statvfs64	fs;
 	off_t		need;
 

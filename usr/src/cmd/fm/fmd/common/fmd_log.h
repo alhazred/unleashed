@@ -40,7 +40,7 @@ typedef struct fmd_log {
 	char *log_name;			/* file pathname */
 	char *log_tag;			/* file content tag */
 	int log_fd;			/* file descriptor */
-	struct stat64 log_stat;		/* status of file at log_open() time */
+	struct stat log_stat;		/* status of file at log_open() time */
 	ea_file_t log_ea;		/* exacct file structure */
 	pthread_mutex_t log_lock;	/* lock for flags, refs, off, append */
 	pthread_cond_t log_cv;		/* condition variable for waiters */

@@ -401,7 +401,7 @@ each_file(char *filename)
 	int	fd;
 	Elf_Kind   file_type;
 
-	struct stat64 buf;
+	struct stat buf;
 
 	Elf_Cmd cmd;
 	errno = 0;

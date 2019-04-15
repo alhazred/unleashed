@@ -497,7 +497,7 @@ main(int argc, char **argv)
 			p1 = optarg;
 			do {
 				char nambuf[TSZ+6];	/* for "/dev/" + '\0' */
-				struct stat64 s;
+				struct stat s;
 				parg = getarg(&p1);
 				p = Realloc(NULL, TSZ+1);	/* for '\0' */
 				/* zero the buffer before using it */

@@ -596,7 +596,7 @@ mhash_test_file(scf_handle_t *hndl, const char *file, uint_t is_profile,
 {
 	apply_action_t action;
 	boolean_t do_hash;
-	struct stat64 st;
+	struct stat st;
 	char *cp;
 	char *data;
 	uchar_t stored_hash[MHASH_SIZE];

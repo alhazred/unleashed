@@ -137,7 +137,7 @@ fmd_ckpt_inval(fmd_ckpt_t *ckp, const char *format, ...)
 static int
 fmd_ckpt_open(fmd_ckpt_t *ckp, fmd_module_t *mp)
 {
-	struct stat64 st;
+	struct stat st;
 	uint64_t seclen;
 	uint_t i;
 	int err;
@@ -763,7 +763,7 @@ fmd_ckpt_save_module(fmd_ckpt_t *ckp, fmd_module_t *mp)
 void
 fmd_ckpt_save(fmd_module_t *mp)
 {
-	struct stat64 st;
+	struct stat st;
 	char path[PATH_MAX];
 	mode_t dirmode;
 

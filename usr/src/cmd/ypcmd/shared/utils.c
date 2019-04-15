@@ -191,7 +191,7 @@ check_map_existence(pname)
 	char *pname;
 {
 	char dbfile[MAXNAMLEN + 1];
-	struct stat64 filestat;
+	struct stat filestat;
 	int len;
 
 	if (!pname || ((len = strlen(pname)) == 0) ||

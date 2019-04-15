@@ -731,7 +731,7 @@ devid_matches(int i, dev_t devno)
 	 * either from the mnttab entry or by stat'ing the mount point.
 	 */
 	if (! mtep->mte_dev_is_valid) {
-		struct stat64 st;
+		struct stat st;
 		dev_t dev = NODEV;
 
 		dev = makedev(mtp->mnt_major, mtp->mnt_minor);
@@ -1781,10 +1781,10 @@ create_request_list(
 			dfrp->dfr_valid		= TRUE;
 		}
 	} else {
-		struct stat64 *arg_stat; /* array of stat structures	*/
+		struct stat *arg_stat; /* array of stat structures	*/
 		bool_int *valid_stat;	/* which structures are valid	*/
 
-		arg_stat = xmalloc(argc * sizeof (struct stat64));
+		arg_stat = xmalloc(argc * sizeof (struct stat));
 		valid_stat = xmalloc(argc * sizeof (bool_int));
 
 		/*
@@ -2082,7 +2082,7 @@ do_devnm(int argc, char *argv[])
 
 	for (arg = 1; arg < argc; arg++) {
 		char *file = argv[arg];
-		struct stat64 st;
+		struct stat st;
 
 		if (stat64(file, &st) == -1) {
 			errmsg(ERR_PERROR, "%s: ", file);

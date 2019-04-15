@@ -596,7 +596,7 @@ validate_disk(char *arg, char *mountpoint)
 {
 	static char root_dev_path[] = "/dev/dsk";
 	char kernpath[MAXPATHLEN];
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int rc = 0;
 
 	if (strlen(arg) > MAXPATHLEN) {

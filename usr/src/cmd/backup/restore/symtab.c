@@ -680,7 +680,7 @@ initsymtable(filename)
 	struct entry *ep;
 	struct entry *baseep, *lep;
 	struct symtableheader hdr;
-	struct stat64 stbuf;
+	struct stat stbuf;
 	uint_t i;
 	int fd;
 

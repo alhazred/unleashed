@@ -472,7 +472,7 @@ smb_pwd_iterclose(smb_pwditer_t *iter)
 static int
 smb_pwd_update(const char *name, const char *password, int control)
 {
-	struct stat64 stbuf;
+	struct stat stbuf;
 	FILE *src, *dst;
 	int tempfd;
 	int err = SMB_PWE_SUCCESS;
@@ -914,7 +914,7 @@ smb_lucache_cmp(const void *p1, const void *p2)
 static void
 smb_lucache_update(void)
 {
-	struct stat64 stbuf;
+	struct stat stbuf;
 	int rc;
 
 	(void) mutex_lock(&smb_uch.uc_mtx);

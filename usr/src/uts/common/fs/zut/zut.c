@@ -197,7 +197,7 @@ zutr_bail:
 }
 
 static int
-zut_stat64(vnode_t *vp, struct stat64 *sb, uint64_t *xvs, int flag, cred_t *cr)
+zut_stat64(vnode_t *vp, struct stat *sb, uint64_t *xvs, int flag, cred_t *cr)
 {
 	xoptattr_t *xoap = NULL;
 	xvattr_t xv = { 0 };

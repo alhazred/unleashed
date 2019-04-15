@@ -112,7 +112,7 @@ static	int		dtabrecnum = 0;
  */
 
 static int
-samedev(struct stat64 x, struct stat64 y)
+samedev(struct stat x, struct stat y)
 {
 	int	same;
 
@@ -910,8 +910,8 @@ _getdevrec(char	*device)			/* The device to search for */
 	 *  Automatic data
 	 */
 
-	struct stat64		devstatbuf;	/* Stat struct, <device> */
-	struct stat64		tblstatbuf;	/* Stat struct, tbl entry */
+	struct stat		devstatbuf;	/* Stat struct, <device> */
+	struct stat		tblstatbuf;	/* Stat struct, tbl entry */
 	struct devtabent	*devrec;	/* Pointer to current record */
 	int			found;		/* TRUE if record found */
 	int			olderrno;	/* Old value of errno */

@@ -623,7 +623,7 @@ getdiskquota(struct mnttab *mntp, uid_t uid, struct dqblk *dqp)
 {
 	int fd;
 	dev_t fsdev;
-	struct stat64 statb;
+	struct stat statb;
 	char qfilename[MAXPATHLEN];
 
 	if (stat64(mntp->mnt_special, &statb) < 0 ||

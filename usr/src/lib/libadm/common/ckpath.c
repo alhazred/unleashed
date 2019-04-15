@@ -157,7 +157,7 @@ ckpath_stx(int pflags)
 int
 ckpath_val(char *path, int pflags)
 {
-	struct stat64 status;
+	struct stat status;
 	int	fd;
 	char	*pt;
 

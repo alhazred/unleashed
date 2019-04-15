@@ -61,17 +61,17 @@ extern int oct_atoi(char *p);
 extern int tlm_log_fhnode(tlm_job_stats_t *,
     char *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 
 extern int tlm_log_fhdir(tlm_job_stats_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     struct fs_fhandle *);
 
 extern int tlm_log_fhpath_name(tlm_job_stats_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 
 extern boolean_t tlm_is_too_long(int,

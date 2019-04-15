@@ -229,7 +229,7 @@ main(int argc, char *argv[])
 	    *newargv[ARGV_MAX],	/* arg list for specific command */
 	    *farg = NULL, *Farg = NULL;
 	int	ii, ret, cc, fscnt;
-	struct stat64	stbuf;
+	struct stat	stbuf;
 	struct vfstab	vget, vref;
 	mode_t mode;
 	FILE	*fd;
@@ -1565,7 +1565,7 @@ cleanup(int asig)
 int
 check_fields(char *fstype, char *mountp)
 {
-	struct stat64 stbuf;
+	struct stat stbuf;
 
 	if (fstype == NULL) {
 		fprintf(stderr,

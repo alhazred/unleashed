@@ -165,7 +165,7 @@ opennewdevtab(char  **pname)		/* A(ptr to temp filename's path) */
 	char   *p;			/* Ptr to last '/' in devtab name */
 	int    fd;			/* Opened file descriptor */
 	FILE   *fp;			/* Opened file pointer */
-	struct stat64	sbuf;		/* stat buf for old devtab file */
+	struct stat	sbuf;		/* stat buf for old devtab file */
 
 	fp = NULL;
 	if (oldname = _devtabpath()) {

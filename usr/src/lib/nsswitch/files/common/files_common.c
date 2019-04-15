@@ -398,7 +398,7 @@ _nss_files_XY_hash(files_backend_ptr_t be, nss_XbyY_args_t *args,
 	/* LINTED E_FUNC_VAR_UNUSED */
 	nss_XbyY_args_t xargs;
 	/* LINTED E_FUNC_VAR_UNUSED */
-	struct stat64 st;
+	struct stat st;
 
 #ifndef PIC
 	return (_nss_files_XY_all(be, args, netdb, 0, check));

@@ -170,7 +170,7 @@ static int
 mod_nvl_data(topo_mod_t *mp, nvlist_t *out, const char *path)
 {
 	struct modinfo mi;
-	struct stat64 s;
+	struct stat s;
 	int id, e;
 
 	if (stat64(path, &s) < 0) {

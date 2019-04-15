@@ -53,7 +53,7 @@ static int dotdot(char *);
 int
 rmdirp(char *d, char *d1)
 {
-	struct stat64	st, cst;
+	struct stat	st, cst;
 	int		currstat;
 	char		*slash;
 

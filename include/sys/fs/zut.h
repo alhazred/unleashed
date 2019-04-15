@@ -64,7 +64,7 @@ typedef struct zut_lookup {
 	char	zl_xfile[MAXNAMELEN];
 	char	zl_real[MAXPATHLEN];	/* output */
 	uint64_t zl_xvattrs;		/* output */
-	struct stat64 zl_statbuf;	/* output */
+	struct stat zl_statbuf;	/* output */
 } zut_lookup_t;
 
 typedef struct zut_readdir {

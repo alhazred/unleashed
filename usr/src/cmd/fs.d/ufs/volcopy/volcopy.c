@@ -195,7 +195,7 @@ g_init(int *devtype, int *fdes)
 {
 	major_t maj;
 	int bufsize;
-	struct stat64 st_buf;
+	struct stat st_buf;
 	struct statvfs64 stfs_buf;
 
 	*devtype = G_NO_DEV;

@@ -196,7 +196,7 @@ ndmp_log_open_file(boolean_t to_stderr, boolean_t override_debug)
 {
 	char *fname, *mode, *lpath;
 	char oldfname[PATH_MAX];
-	struct stat64 st;
+	struct stat st;
 	int i;
 
 	log_to_stderr = to_stderr;

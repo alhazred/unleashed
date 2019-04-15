@@ -2012,7 +2012,7 @@ itadm_get_password(nvlist_t *nvl, char *key, char *passfile,
 	char		*pass;
 	char		buf[1024];
 	int		fd;
-	struct stat64	sbuf;
+	struct stat	sbuf;
 	size_t		rd;
 
 	if (!nvl || !key) {

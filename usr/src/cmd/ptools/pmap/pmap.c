@@ -198,7 +198,7 @@ main(int argc, char **argv)
 	const char *bar16 = "----------";
 	const char *bar;
 	struct rlimit rlim;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	char buf[128];
 	int mapfd;
 	int prg_gflags = PGRAB_RDONLY;
@@ -467,7 +467,7 @@ again:
 			 * Ensure mappings are consistent.
 			 */
 			if (Pstate(Pr) != PS_DEAD) {
-				struct stat64 newbuf;
+				struct stat newbuf;
 
 				if (fstat64(mapfd, &newbuf) != 0 ||
 				    memcmp(&newbuf.st_mtim, &statbuf.st_mtim,

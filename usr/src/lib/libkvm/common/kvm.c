@@ -90,7 +90,7 @@ kvm_open(const char *namelist, const char *corefile, const char *swapfile,
 	int flag, const char *err)
 {
 	kvm_t *kd;
-	struct stat64 memstat, kmemstat, allkmemstat, corestat;
+	struct stat memstat, kmemstat, allkmemstat, corestat;
 	struct nlist nl[3] = { { "kas" }, { "practive" }, { "" } };
 
 	if ((kd = calloc(1, sizeof (kvm_t))) == NULL)

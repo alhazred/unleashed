@@ -435,7 +435,7 @@ zpool_valid_proplist(libzfs_handle_t *hdl, const char *poolname,
 	char *strval;
 	uint64_t intval;
 	char *slash, *check;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	zpool_handle_t *zhp;
 
 	if (nvlist_alloc(&retprops, NV_UNIQUE_NAME, 0) != 0) {

@@ -275,7 +275,7 @@ mdb_fdio_create(int fd)
 	fd_data_t *fdp = mdb_alloc(sizeof (fd_data_t), UM_SLEEP);
 
 	struct dk_cinfo info;
-	struct stat64 st;
+	struct stat st;
 
 	switch (fd) {
 	case STDIN_FILENO:

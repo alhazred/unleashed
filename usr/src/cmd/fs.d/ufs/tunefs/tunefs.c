@@ -147,7 +147,7 @@ int
 main(int argc, char *argv[])
 {
 	char *special, *name, *mountpoint = NULL;
-	struct stat64 st;
+	struct stat st;
 	int i, mountfd;
 	int Aflag = 0;
 	char *chg[2];

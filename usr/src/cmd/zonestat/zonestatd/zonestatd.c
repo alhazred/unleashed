@@ -389,11 +389,11 @@ typedef struct zsd_ctl {
 	/* To track extended accounting */
 	int		zsctl_proc_fd;		/* Log currently being used */
 	ea_file_t	zsctl_proc_eaf;
-	struct stat64	zsctl_proc_stat;
+	struct stat	zsctl_proc_stat;
 	int		zsctl_proc_open;
 	int		zsctl_proc_fd_next;	/* Log file to use next */
 	ea_file_t	zsctl_proc_eaf_next;
-	struct stat64	zsctl_proc_stat_next;
+	struct stat	zsctl_proc_stat_next;
 	int		zsctl_proc_open_next;
 
 	/* pool configuration handle */
@@ -2520,7 +2520,7 @@ zsd_open_exacct(zsd_ctl_t *ctl, boolean_t init)
 	int ret, oret, state, trys = 0, flags;
 	int *fd, *open;
 	ea_file_t *eaf;
-	struct stat64 *stat;
+	struct stat *stat;
 	char path[MAXPATHLEN];
 
 	/*
@@ -2781,8 +2781,8 @@ zsd_refresh_procs(zsd_ctl_t *ctl, boolean_t init)
 		if (ret == EO_ERROR) {
 			if (ea_error() == EXR_EOF) {
 
-				struct stat64 *stat;
-				struct stat64 *stat_next;
+				struct stat *stat;
+				struct stat *stat_next;
 
 				/*
 				 * See if the next accounting file is the

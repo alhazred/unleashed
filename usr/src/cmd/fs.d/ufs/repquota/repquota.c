@@ -232,7 +232,7 @@ repquota(char *fsdev, char *fsfile, char *qffile)
 	FILE *qf;
 	uid_t uid;
 	struct dqblk dqbuf;
-	struct stat64 statb;
+	struct stat statb;
 
 	if (vflag || aflag)
 		(void) printf("%s (%s):\n", fsdev, fsfile);

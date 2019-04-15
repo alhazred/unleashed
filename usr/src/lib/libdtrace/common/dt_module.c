@@ -1060,7 +1060,7 @@ static void
 dt_module_update(dtrace_hdl_t *dtp, const char *name)
 {
 	char fname[MAXPATHLEN];
-	struct stat64 st;
+	struct stat st;
 	int fd, err, bits;
 
 	dt_module_t *dmp;

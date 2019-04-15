@@ -80,7 +80,7 @@ common_copylist(const char *filenm, off64_t size)
 char *
 copylist64(const char *filenm, off64_t *szptr)
 {
-	struct	stat64	stbuf;
+	struct	stat	stbuf;
 
 	/* get size of file */
 	if (stat64(filenm, &stbuf) == -1) {
@@ -95,7 +95,7 @@ copylist64(const char *filenm, off64_t *szptr)
 char *
 copylist(const char *filenm, off_t *szptr)
 {
-	struct	stat64	stbuf;
+	struct	stat	stbuf;
 
 	/* get size of file */
 	if (stat64(filenm, &stbuf) == -1) {

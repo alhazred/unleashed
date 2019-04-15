@@ -1817,7 +1817,7 @@ load_modules(pam_handle_t *pamh, int type, char *function_name,
 static void *
 open_module(pam_handle_t *pamh, char *module_so)
 {
-	struct stat64	stb;
+	struct stat	stb;
 	char		*errmsg;
 	void		*lfd;
 	fd_list		*module_fds = 0;
@@ -1924,7 +1924,7 @@ static int
 open_pam_conf(struct pam_fh **pam_fh, pam_handle_t *pamh, char *config,
     int shardfile)
 {
-	struct stat64	stb;
+	struct stat	stb;
 	int		fd;
 
 	if ((fd = open(config, O_RDONLY)) == -1) {

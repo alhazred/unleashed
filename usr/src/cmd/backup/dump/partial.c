@@ -35,7 +35,7 @@ static int partial;
 #ifdef __STDC__
 static dev_t devfromopts(struct mntent *);
 static int lf_mark_root(dev_t, char *);
-static int lf_ftw_mark(const char *, const struct stat64 *, int);
+static int lf_ftw_mark(const char *, const struct stat *, int);
 static void markino(ino_t);
 #else
 static dev_t devfromopts();
@@ -52,7 +52,7 @@ partial_check()
 #endif
 {
 	struct mntent *mnt;
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(disk, &st) < 0 ||
 	    (st.st_mode & S_IFMT) == S_IFCHR ||
@@ -110,7 +110,7 @@ partial_mark(argc, argv)
 	char **argv;
 {
 	char *path;
-	struct stat64 st;
+	struct stat st;
 
 	if (partial == 0)
 		return (1);
@@ -154,7 +154,7 @@ lf_mark_root(dev, path)
 	dev_t dev;
 	char *path;
 {
-	struct stat64 st;
+	struct stat st;
 	char dotdot[MAXPATHLEN + 16];
 	char *slash;
 
@@ -199,10 +199,10 @@ static int
 lf_ftw_mark(name, st, flag)
 #ifdef __STDC__
 	const char *name;
-	const struct stat64 *st;
+	const struct stat *st;
 #else
 	char *name;
-	struct stat64 *st;
+	struct stat *st;
 #endif
 	int flag;
 {

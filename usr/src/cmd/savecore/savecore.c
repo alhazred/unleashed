@@ -287,7 +287,7 @@ Fseek(offset_t off, FILE *f)
 		    strerror(errno));
 }
 
-typedef struct stat64 Stat_t;
+typedef struct stat Stat_t;
 
 static void
 Fstat(int fd, Stat_t *sb, const char *fname)

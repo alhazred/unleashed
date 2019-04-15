@@ -497,7 +497,7 @@ setuparchive(void)
 			if (archive && flags & BUF_ARCHIVE && !punt &&
 			    (size = write(archivefd, data, tp_bsize))
 			    != tp_bsize) {
-				struct stat64 stats;
+				struct stat stats;
 
 				if (size != -1) {
 					errmsg = strdup(gettext(
@@ -1067,7 +1067,7 @@ nextdevice()
 int
 isrewind(int f)
 {
-	struct stat64 sbuf;
+	struct stat sbuf;
 	int	rewind;
 
 	if (fstat64(f, &sbuf) < 0) {

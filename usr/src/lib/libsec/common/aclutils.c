@@ -106,7 +106,7 @@ cacl_get(acl_inp inp, int get_flag, int type, acl_t **aclp)
 	acl_t *acl_info;
 	int	save_errno;
 	int	stat_error;
-	struct stat64 statbuf;
+	struct stat statbuf;
 
 	*aclp = NULL;
 	if (type == ACL_PATH) {
@@ -248,7 +248,7 @@ cacl_set(acl_inp *acl_inp, acl_t *aclp, int type)
 {
 	int error = 0;
 	int acl_flavor_target;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int stat_error;
 	int isdir;
 
@@ -394,7 +394,7 @@ acl_strip(const char *file, uid_t owner, gid_t group, mode_t mode)
 	ace_t	*min_ace_acl;
 	int	acl_flavor;
 	int	aclcnt;
-	struct stat64 statbuf;
+	struct stat statbuf;
 
 	acl_flavor = pathconf(file, _PC_ACL_ENABLED);
 

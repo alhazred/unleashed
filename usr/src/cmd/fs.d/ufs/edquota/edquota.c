@@ -657,7 +657,7 @@ setupfs(void)
 {
 	struct mnttab mntp;
 	struct fsquot *fsqp;
-	struct stat64 statb;
+	struct stat statb;
 	dev_t fsdev;
 	FILE *mtab;
 	char qfilename[MAXPATHLEN];

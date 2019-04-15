@@ -762,7 +762,7 @@ cmp(int a, int b, int s)
 time_t
 mod_time(char *file)
 {
-	struct stat64	stat_buf;
+	struct stat	stat_buf;
 
 	if (stat64(file, &stat_buf) < 0) {
 		(void) fprintf(stderr, "ff: can't stat '%s' - ignored\n", file);

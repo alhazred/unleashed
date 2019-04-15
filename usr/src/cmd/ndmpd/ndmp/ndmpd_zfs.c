@@ -500,7 +500,7 @@ ndmpd_zfs_send_fhist(ndmpd_zfs_args_t *ndmpd_zfs_args)
 {
 	ndmpd_session_t *session = (ndmpd_session_t *)
 	    (ndmpd_zfs_params->mp_daemon_cookie);
-	struct stat64 st;
+	struct stat st;
 	char *envp;
 
 	envp = MOD_GETENV(ndmpd_zfs_params, "HIST");
@@ -515,7 +515,7 @@ ndmpd_zfs_send_fhist(ndmpd_zfs_args_t *ndmpd_zfs_args)
 	}
 
 	/* Build up a sample root dir stat */
-	(void) memset(&st, 0, sizeof (struct stat64));
+	(void) memset(&st, 0, sizeof (struct stat));
 	st.st_mode = S_IFDIR | 0777;
 	st.st_mtime = st.st_atime = st.st_ctime = time(NULL);
 	st.st_uid = st.st_gid = 0;

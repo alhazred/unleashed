@@ -712,7 +712,7 @@ static int
 process_raw_input(int stdin_fd, int appin_fd)
 {
 	int cc;
-	struct stat64 sb;
+	struct stat sb;
 	char ibuf[ZLOGIN_RDBUFSIZ];
 
 	/* Check how much data is already in the pipe */

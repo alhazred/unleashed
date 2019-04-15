@@ -1093,7 +1093,7 @@ make_dirs(char *dir)
 {
 	char c;
 	char *cp, *end;
-	struct stat64 st;
+	struct stat st;
 
 	cp = dir;
 	cp += strspn(cp, "/");
@@ -1126,7 +1126,7 @@ mkbasedir(char *path)
 {
 	int rv;
 	char *cp;
-	struct stat64 st;
+	struct stat st;
 
 	if (!path || !*path) {
 		NDMP_LOG(LOG_DEBUG, "Invalid argument");
@@ -1163,7 +1163,7 @@ restore_file(int *fp,
     tlm_job_stats_t *job_stats,
     long *size_left)
 {
-	struct stat64	attr;
+	struct stat	attr;
 	int	ret, rv;
 
 	*size_left = 0;
@@ -1200,7 +1200,7 @@ restore_file(int *fp,
 				return (ret);
 		}
 
-		ret = stat64(real_name, (struct stat64 *)&attr);
+		ret = stat64(real_name, (struct stat *)&attr);
 		if (ret < 0) {
 			/*EMPTY*/
 			/* new file */
@@ -1331,7 +1331,7 @@ restore_file(int *fp,
  * Set the extended attributes file attribute
  */
 static void
-set_xattr(int fd, struct stat64 st)
+set_xattr(int fd, struct stat st)
 {
 	struct timeval times[2];
 
@@ -1848,7 +1848,7 @@ get_long_name(int lib,
 static int
 create_directory(char *dir, tlm_job_stats_t *job_stats)
 {
-	struct stat64 attr;
+	struct stat attr;
 	char	*p;
 	char	temp;
 	int	erc;
@@ -1920,7 +1920,7 @@ create_sym_link(char *dst, char *target, tlm_acls_t *acls,
     tlm_job_stats_t *job_stats)
 {
 	int erc;
-	struct stat64 *st;
+	struct stat *st;
 
 	erc = mkbasedir(dst);
 	if (erc != 0)
@@ -2083,7 +2083,7 @@ set_attr(char *name, tlm_acls_t *acls)
 {
 	struct utimbuf tbuf;
 	boolean_t priv_all = FALSE;
-	struct stat64 *st;
+	struct stat *st;
 	uid_t uid;
 	gid_t gid;
 	struct passwd *pwd;

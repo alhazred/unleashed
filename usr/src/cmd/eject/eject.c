@@ -190,7 +190,7 @@ work(char *arg, char *rmmount_opt)
 {
 	char 		*name;
 	int		excode = EJECT_OK;
-	struct stat64	sb;
+	struct stat	sb;
 	char		*arg1, *arg2;
 	pid_t		pid;
 	int		status = 1;

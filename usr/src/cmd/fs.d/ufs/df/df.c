@@ -87,7 +87,7 @@ static  void		print_statvfs(struct statvfs64 *);
 static  int 		mdev(char *, struct mnttab **);
 static struct mntlist	*mkmntlist();
 static struct mnttab	*mntdup(struct mnttab *mnt);
-static struct mntlist	*findmntent(char *, struct stat64 *, struct mntlist *);
+static struct mntlist	*findmntent(char *, struct stat *, struct mntlist *);
 
 #define	bcopy(f, t, n)	memcpy(t, f, n)
 #define	bzero(s, n)	memset(s, 0, n)
@@ -279,7 +279,7 @@ main(int argc, char *argv[])
 	} else {
 		int i;
 		struct mntlist *mntl;
-		struct stat64    *argstat;
+		struct stat    *argstat;
 		char **devnames;
 		char *cp;
 
@@ -295,7 +295,7 @@ main(int argc, char *argv[])
 		 * corresponding mount table entries will exist when
 		 * we look for them.
 		 */
-		argstat = (struct stat64 *)xmalloc(argc * sizeof (*argstat));
+		argstat = (struct stat *)xmalloc(argc * sizeof (*argstat));
 		devnames = (char **)xmalloc(argc * sizeof (char *));
 		for (i = 0; i < argc; i++) {
 
@@ -685,7 +685,7 @@ mpath(char *file)
 {
 	struct mnttab mnt;
 	FILE *mnttab;
-	struct stat64 device_stat, mount_stat;
+	struct stat device_stat, mount_stat;
 	char *mname;
 
 	mnttab = fopen(MNTTAB, "r");
@@ -764,7 +764,7 @@ mdev(char *spec, struct mnttab **mntbp)
  * those resources are necessary for accessing path.
  */
 static struct mntlist *
-findmntent(char *path, struct stat64 *pstat, struct mntlist *mlist)
+findmntent(char *path, struct stat *pstat, struct mntlist *mlist)
 {
 	static char		cwd[MAXPATHLEN];
 	char			canon[MAXPATHLEN];
@@ -822,7 +822,7 @@ again:
 		 * containing the file by comparing device ids.
 		 */
 		if (mlp->mntl_dev == NODEV) {
-			struct stat64 fs_sb;
+			struct stat fs_sb;
 
 			if (stat64(mnt->mnt_mountp, &fs_sb) < 0 &&
 			    chroot_stat(mnt->mnt_mountp, stat64, (char *)&fs_sb,

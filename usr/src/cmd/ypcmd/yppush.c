@@ -259,7 +259,7 @@ int
 main(int argc, char **argv)
 {
 	unsigned long program;
-	struct stat64 sbuf;
+	struct stat sbuf;
 
 	get_command_line_args(argc, argv);
 

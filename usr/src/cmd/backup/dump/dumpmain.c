@@ -1191,7 +1191,7 @@ sigAbort(int sig)
 char *
 rawname(char *cp)
 {
-	struct stat64 st;
+	struct stat st;
 	char *dp;
 	extern char *getfullrawname();
 
@@ -1339,7 +1339,7 @@ timeclock(time32_t state)
 }
 
 static int
-statcmp(const struct stat64 *left, const struct stat64 *right)
+statcmp(const struct stat *left, const struct stat *right)
 {
 	int result = 1;
 
@@ -1378,8 +1378,8 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 	int working_mode;
 	int saverr;
 	char *errtext;
-	struct stat64 pre_stat, pre_lstat;
-	struct stat64 post_stat, post_lstat;
+	struct stat pre_stat, pre_lstat;
+	struct stat post_stat, post_lstat;
 
 	/*
 	 * Don't want to be spoofed into trashing something we

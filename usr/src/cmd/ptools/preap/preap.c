@@ -54,7 +54,7 @@ static int
 open_usage(pid_t pid, int *perr)
 {
 	char path[64];
-	struct stat64 st;
+	struct stat st;
 	int fd;
 
 	(void) snprintf(path, sizeof (path), "/proc/%d/usage", (int)pid);

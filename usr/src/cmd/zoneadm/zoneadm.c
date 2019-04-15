@@ -2160,7 +2160,7 @@ verify_pool(zone_dochandle_t handle)
 static int
 verify_fs_special(struct zone_fstab *fstab)
 {
-	struct stat64 st;
+	struct stat st;
 
 	/*
 	 * This validation is really intended for standard zone administration.
@@ -2199,7 +2199,7 @@ verify_fs_special(struct zone_fstab *fstab)
 static int
 isregfile(const char *path)
 {
-	struct stat64 st;
+	struct stat st;
 
 	if (stat64(path, &st) == -1)
 		return (-1);

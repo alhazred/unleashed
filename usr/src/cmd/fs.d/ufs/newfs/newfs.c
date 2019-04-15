@@ -154,7 +154,7 @@ int
 main(int argc, char *argv[])
 {
 	char *special, *name;
-	struct stat64 st;
+	struct stat st;
 	int status;
 	int option;
 	struct fs *sbp;	/* Pointer to superblock (if present) */
@@ -1014,7 +1014,7 @@ struct fs *
 read_sb(char *fsdev)
 {
 	static struct fs	sblock;
-	struct stat64		statb;
+	struct stat		statb;
 	int			dskfd;
 	char			*bufp = NULL;
 	int			bufsz = 0;

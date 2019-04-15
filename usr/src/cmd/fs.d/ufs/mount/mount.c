@@ -548,7 +548,7 @@ again:	if (mount(mnt->mnt_special, mnt->mnt_mountp, flags, fstype,
 	if (checkislog(mnt->mnt_mountp)) {
 		/* update mnttab file if necessary */
 		if (!mflg) {
-			struct stat64 statb;
+			struct stat statb;
 			struct mnttagdesc mtdesc;
 			int fd;
 

@@ -114,7 +114,7 @@ static int ndmp_syncfh = 0;
  */
 int
 ndmpd_api_file_history_path_v2(void *cookie, char *name,
-    struct stat64 *file_stat, u_longlong_t fh_info)
+    struct stat *file_stat, u_longlong_t fh_info)
 {
 	ndmpd_session_t *session = (ndmpd_session_t *)cookie;
 	ndmp_fh_unix_path *entry;
@@ -294,7 +294,7 @@ ndmpd_api_file_history_dir_v2(void *cookie, char *name, ulong_t node,
  */
 int
 ndmpd_api_file_history_node_v2(void *cookie, ulong_t node,
-    struct stat64 *file_stat, u_longlong_t fh_info)
+    struct stat *file_stat, u_longlong_t fh_info)
 {
 	ndmpd_session_t *session = (ndmpd_session_t *)cookie;
 	ndmp_fh_unix_node *entry;
@@ -388,7 +388,7 @@ ndmpd_api_file_history_node_v2(void *cookie, ulong_t node,
  */
 int
 ndmpd_api_file_history_file_v3(void *cookie, char *name,
-    struct stat64 *file_stat, u_longlong_t fh_info)
+    struct stat *file_stat, u_longlong_t fh_info)
 {
 	ndmpd_session_t *session = (ndmpd_session_t *)cookie;
 	ndmp_file_v3 *file_entry;
@@ -627,7 +627,7 @@ ndmpd_api_file_history_dir_v3(void *cookie, char *name, ulong_t node,
  */
 int
 ndmpd_api_file_history_node_v3(void *cookie, ulong_t node,
-    struct stat64 *file_stat, u_longlong_t fh_info)
+    struct stat *file_stat, u_longlong_t fh_info)
 {
 	ndmpd_session_t *session = (ndmpd_session_t *)cookie;
 	ndmp_node_v3 *node_entry;
@@ -730,7 +730,7 @@ ndmpd_api_file_history_node_v3(void *cookie, ulong_t node,
  * Callback function for file history path information
  */
 int
-ndmpd_fhpath_v3_cb(lbr_fhlog_call_backs_t *cbp, char *path, struct stat64 *stp,
+ndmpd_fhpath_v3_cb(lbr_fhlog_call_backs_t *cbp, char *path, struct stat *stp,
     u_longlong_t off)
 {
 	int err;
@@ -787,7 +787,7 @@ ndmpd_fhpath_v3_cb(lbr_fhlog_call_backs_t *cbp, char *path, struct stat64 *stp,
  * Callback function for file history dir information
  */
 int
-ndmpd_fhdir_v3_cb(lbr_fhlog_call_backs_t *cbp, char *dir, struct stat64 *stp)
+ndmpd_fhdir_v3_cb(lbr_fhlog_call_backs_t *cbp, char *dir, struct stat *stp)
 {
 	char nm[PATH_MAX+1];
 	int nml;
@@ -901,7 +901,7 @@ ndmpd_fhdir_v3_cb(lbr_fhlog_call_backs_t *cbp, char *dir, struct stat64 *stp)
 		 * backed up file.
 		 */
 		if (ndmp_fhinode) {
-			struct stat64 ret_attr;
+			struct stat ret_attr;
 
 			(void) strlcpy(dirpath, dir, PATH_MAX);
 			(void) strlcat(dirpath, "/", PATH_MAX);
@@ -937,7 +937,7 @@ ndmpd_fhdir_v3_cb(lbr_fhlog_call_backs_t *cbp, char *dir, struct stat64 *stp)
  */
 int
 ndmpd_fhnode_v3_cb(lbr_fhlog_call_backs_t *cbp, char *dir, char *file,
-    struct stat64 *stp, u_longlong_t off)
+    struct stat *stp, u_longlong_t off)
 {
 	int err;
 	ulong_t ino;
@@ -1038,7 +1038,7 @@ ndmp_send_recovery_stat_v3(ndmpd_module_params_t *params,
 /*ARGSUSED*/
 int
 ndmpd_path_restored_v3(lbr_fhlog_call_backs_t *cbp, char *name,
-    struct stat64 *st, u_longlong_t ll_idx)
+    struct stat *st, u_longlong_t ll_idx)
 {
 	int rv;
 	ndmp_lbr_params_t *nlp;
@@ -1330,7 +1330,7 @@ fh_requested(void *cookie)
 /*ARGSUSED*/
 int
 ndmpd_file_history_path(lbr_fhlog_call_backs_t *cbp, char *path,
-    struct stat64 *stp, u_longlong_t off)
+    struct stat *stp, u_longlong_t off)
 {
 	int err;
 	ndmpd_module_params_t *params;
@@ -1376,7 +1376,7 @@ ndmpd_file_history_path(lbr_fhlog_call_backs_t *cbp, char *path,
  */
 int
 ndmpd_file_history_dir(lbr_fhlog_call_backs_t *cbp, char *dir,
-    struct stat64 *stp)
+    struct stat *stp)
 {
 	char nm[PATH_MAX+1];
 	int nml;
@@ -1485,7 +1485,7 @@ ndmpd_file_history_dir(lbr_fhlog_call_backs_t *cbp, char *dir,
 		 * backed up file.
 		 */
 		if (ndmp_fhinode) {
-			struct stat64 ret_attr;
+			struct stat ret_attr;
 
 			(void) strlcpy(dirpath, dir, PATH_MAX);
 			(void) strlcat(dirpath, "/", PATH_MAX);
@@ -1522,7 +1522,7 @@ ndmpd_file_history_dir(lbr_fhlog_call_backs_t *cbp, char *dir,
 /*ARGSUSED*/
 int
 ndmpd_file_history_node(lbr_fhlog_call_backs_t *cbp, char *dir, char *file,
-    struct stat64 *stp, u_longlong_t off)
+    struct stat *stp, u_longlong_t off)
 {
 	int err;
 	ulong_t ino;
@@ -1585,7 +1585,7 @@ ndmpd_file_history_node(lbr_fhlog_call_backs_t *cbp, char *dir, char *file,
  */
 /*ARGSUSED*/
 int
-ndmpd_path_restored(lbr_fhlog_call_backs_t *cbp, char *name, struct stat64 *stp,
+ndmpd_path_restored(lbr_fhlog_call_backs_t *cbp, char *name, struct stat *stp,
     u_longlong_t ll_pos)
 {
 	int rv;

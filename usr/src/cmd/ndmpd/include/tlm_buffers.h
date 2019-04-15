@@ -168,7 +168,7 @@ typedef struct bk_selector {
 	void *bs_cookie;
 	int bs_level;
 	int bs_ldate;
-	boolean_t (*bs_fn)(struct bk_selector *bks, struct stat64 *s);
+	boolean_t (*bs_fn)(struct bk_selector *bks, struct stat *s);
 } bk_selector_t;
 
 
@@ -243,17 +243,17 @@ extern void tlm_cmd_signal(tlm_cmd_t *, uint32_t);
 
 typedef int (*path_hist_func_t)(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 
 typedef int (*dir_hist_func_t)(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *);
+    struct stat *);
 
 typedef int (*node_hist_func_t)(lbr_fhlog_call_backs_t *,
     char *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 
 lbr_fhlog_call_backs_t *lbrlog_callbacks_init(void *,

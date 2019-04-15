@@ -84,7 +84,7 @@ usmp_open(const void *target)
 	struct usmp_dev *dp;
 	const char *target_name = (const char *)target;
 
-	struct stat64 st;
+	struct stat st;
 	di_node_t root, smp;
 	struct di_walk_arg walk;
 

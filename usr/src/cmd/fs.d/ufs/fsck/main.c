@@ -684,7 +684,7 @@ recount:
 void
 check_sanity(char *filename)
 {
-	struct stat64 stbd, stbr;
+	struct stat stbd, stbr;
 	char *devname;
 	struct ustat usb;
 	char vfsfilename[MAXPATHLEN];

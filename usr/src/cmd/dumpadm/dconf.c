@@ -288,7 +288,7 @@ dconf_write(dumpconf_t *dcp)
 }
 
 static int
-open_stat64(const char *path, struct stat64 *stp)
+open_stat64(const char *path, struct stat *stp)
 {
 	int fd = open64(path, O_RDONLY);
 
@@ -304,7 +304,7 @@ open_stat64(const char *path, struct stat64 *stp)
 static int
 dconf_swap_compare(const swapent_t *s1, const swapent_t *s2)
 {
-	struct stat64 st1, st2;
+	struct stat st1, st2;
 
 	int prefer_s1 = -1;	/* Return value to move s1 left (s1 < s2) */
 	int prefer_s2 = 1;	/* Return value to move s2 left (s1 > s2) */
@@ -452,7 +452,7 @@ dconf_update(dumpconf_t *dcp, int checkinuse)
 		 * or if it is not big enough to hold the dump.
 		 */
 		if (dcp->dc_mode == DC_CURRENT) {
-			struct stat64 st;
+			struct stat st;
 			uint64_t d;
 
 			if (dconf_dev_ioctl(dcp, DIOCTRYDEV) == -1)

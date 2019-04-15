@@ -83,7 +83,7 @@ dev_t dev;
 int
 close(int filedes) {
 
-	struct stat64	sb;
+	struct stat	sb;
 	static int	(*fptr)() = 0;
 
 	if (fptr == 0) {
@@ -130,7 +130,7 @@ main(argc, argv)
 	char local_host[MAX_MASTER_NAME];
 	int cnt, i;
 	DBM *fdb;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int num_del_to_match = 0;
 	/* flag to indicate if matching char can be escaped */
 	int count_esp = 0;

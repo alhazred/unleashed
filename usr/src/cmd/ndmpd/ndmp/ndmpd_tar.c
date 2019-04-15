@@ -371,7 +371,7 @@ ndmp_write_utf8magic(tlm_cmd_t *cmd)
  */
 static boolean_t
 timecmp(bk_selector_t *bksp,
-		struct stat64 *attr)
+		struct stat *attr)
 {
 	ndmp_lbr_params_t *nlp;
 
@@ -503,7 +503,7 @@ get_dir_acl_info(char *dir, tlm_acls_t *tlm_acls, tlm_job_stats_t *js)
 		*spot = '/';
 	}
 	if (strcmp(root_dir, tlm_acls->acl_root_dir) != 0) {
-		struct stat64 attr;
+		struct stat attr;
 
 		erc = lstat64(root_dir, &attr);
 		if (erc != 0) {
@@ -643,7 +643,7 @@ backup_work(char *bk_path, tlm_job_stats_t *job_stats,
 {
 	struct full_dir_info dir_info; /* the blob to push/pop with cstack_t */
 	struct full_dir_info *t_dir_info, *p_dir_info;
-	struct stat64 ret_attr; /* attributes of current file name */
+	struct stat ret_attr; /* attributes of current file name */
 	fs_fhandle_t ret_fh;
 	char *first_name; /* where the first name is located */
 	char *dname;
@@ -1592,7 +1592,7 @@ check_backup_dir_validity(ndmpd_module_params_t *params, char *bkpath)
 {
 	char *msg;
 	int rv;
-	struct stat64 st;
+	struct stat st;
 
 	rv = NDMP_NO_ERR;
 	if (stat64(bkpath, &st) < 0) {
