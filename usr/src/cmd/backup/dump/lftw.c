@@ -118,7 +118,7 @@ lf_lftw(
 	if ((pwdfd = open(".", O_RDONLY)) < 0) {
 		return (-1);
 	} else {
-		rc = (lf_xftw(path, fn, depth, lstat64));
+		rc = (lf_xftw(path, fn, depth, lstat));
 		(void) close(pwdfd);
 		return (rc);
 	}

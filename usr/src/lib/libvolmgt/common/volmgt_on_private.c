@@ -502,7 +502,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 
 			(void) sprintf(lpath, "%s/%s", mnt_dir,
 			    dp->d_name);
-			if (lstat64(lpath, &sb) < 0) {
+			if (lstat(lpath, &sb) < 0) {
 				continue;	/* what? */
 			}
 			if (!S_ISLNK(sb.st_mode)) {

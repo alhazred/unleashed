@@ -1402,7 +1402,7 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 	if ((fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC|O_EXCL,
 	    perms)) < 0) {
 		if (errno == EEXIST) {
-			if (lstat64(filename, &pre_lstat) < 0) {
+			if (lstat(filename, &pre_lstat) < 0) {
 				return (-1);
 			}
 
@@ -1422,7 +1422,7 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 				return (-1);
 			}
 
-			if (lstat64(filename, &post_lstat) < 0) {
+			if (lstat(filename, &post_lstat) < 0) {
 				saverr = errno;
 				(void) close(fd);
 				errno = saverr;

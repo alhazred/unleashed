@@ -1659,7 +1659,7 @@ backup_dirv3(bk_param_v3_t *bpp, fst_node_t *pnp,
 
 	NDMP_LOG(LOG_DEBUG, "d(%s)", bpp->bp_tmp);
 
-	if (lstat64(bpp->bp_tmp, &st) != 0)
+	if (lstat(bpp->bp_tmp, &st) != 0)
 		return (0);
 
 	if (acl_get(bpp->bp_tmp, ACL_NO_TRIVIAL, &aclp) != 0) {
@@ -1733,7 +1733,7 @@ backup_filev3(bk_param_v3_t *bpp, fst_node_t *pnp,
 
 	NDMP_LOG(LOG_DEBUG, "f(%s)", bpp->bp_tmp);
 
-	if (lstat64(bpp->bp_tmp, &st) != 0)
+	if (lstat(bpp->bp_tmp, &st) != 0)
 		return (0);
 
 	if (!S_ISLNK(bpp->bp_tlmacl->acl_attr.st_mode)) {

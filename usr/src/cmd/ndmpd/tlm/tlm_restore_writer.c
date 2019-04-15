@@ -1102,7 +1102,7 @@ make_dirs(char *dir)
 		if (*cp == '\0' || *cp == '/') {
 			c = *cp;
 			*cp = '\0';
-			if (lstat64(dir, &st) < 0)
+			if (lstat(dir, &st) < 0)
 				if (mkdir(dir, 0777) < 0) {
 					NDMP_LOG(LOG_DEBUG, "Error %d"
 					    " creating directory %s",
@@ -1136,7 +1136,7 @@ mkbasedir(char *path)
 	cp = strrchr(path, '/');
 	if (cp)
 		*cp = '\0';
-	rv = lstat64(path, &st);
+	rv = lstat(path, &st);
 	if (rv < 0)	/* need new directories */
 		rv = make_dirs(path);
 	if (cp)

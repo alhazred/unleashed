@@ -440,7 +440,7 @@ get_acl_info(char *name, tlm_acls_t *tlm_acls)
 	acl_t *aclp = NULL;
 	char *acltp;
 
-	erc = lstat64(name, &tlm_acls->acl_attr);
+	erc = lstat(name, &tlm_acls->acl_attr);
 	if (erc != 0) {
 		NDMP_LOG(LOG_ERR, "Could not find file %s.", name);
 		erc = TLM_NO_SOURCE_FILE;
@@ -487,7 +487,7 @@ get_dir_acl_info(char *dir, tlm_acls_t *tlm_acls, tlm_job_stats_t *js)
 		    js->js_job_name);
 	else
 		fil = dir;
-	erc = lstat64(fil, &tlm_acls->acl_attr);
+	erc = lstat(fil, &tlm_acls->acl_attr);
 	if (erc != 0) {
 		NDMP_LOG(LOG_ERR, "Could not find directory %s.", dir);
 		free(checkpointed_dir);
@@ -505,7 +505,7 @@ get_dir_acl_info(char *dir, tlm_acls_t *tlm_acls, tlm_job_stats_t *js)
 	if (strcmp(root_dir, tlm_acls->acl_root_dir) != 0) {
 		struct stat attr;
 
-		erc = lstat64(root_dir, &attr);
+		erc = lstat(root_dir, &attr);
 		if (erc != 0) {
 			NDMP_LOG(LOG_ERR, "Cannot find root directory %s.",
 			    root_dir);

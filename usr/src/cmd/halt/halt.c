@@ -616,7 +616,7 @@ validate_disk(char *arg, char *mountpoint)
 	}
 
 	/* Create the directory if it doesn't already exist */
-	if (lstat64(mountpoint, &statbuf) != 0) {
+	if (lstat(mountpoint, &statbuf) != 0) {
 		if (mkdirp(mountpoint, 0755) != 0) {
 			(void) fprintf(stderr,
 			    gettext("Failed to create mountpoint %s\n"),
