@@ -207,7 +207,7 @@ g_init(int *devtype, int *fdes)
 		else {
 			/* find block size for this file system */
 			*devtype = G_FILE;
-			if (fstatvfs64(*fdes, &stfs_buf) < 0) {
+			if (fstatvfs(*fdes, &stfs_buf) < 0) {
 				bufsize = -1;
 				errno = ENODEV;
 			} else {

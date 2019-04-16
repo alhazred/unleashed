@@ -626,7 +626,7 @@ fmd_log_append(fmd_log_t *lp, fmd_event_t *e, fmd_case_t *cp)
 	 */
 	(void) pthread_mutex_lock(&lp->log_lock);
 
-	if (lp->log_minfree != 0 && fstatvfs64(lp->log_fd, &stv) == 0 &&
+	if (lp->log_minfree != 0 && fstatvfs(lp->log_fd, &stv) == 0 &&
 	    stv.f_bavail * stv.f_frsize < lp->log_minfree + easize) {
 
 		TRACE((FMD_DBG_LOG, "append %s crosses minfree", lp->log_tag));
