@@ -1828,7 +1828,7 @@ dt_preproc(dtrace_hdl_t *dtp, FILE *ifp)
 	 * We start cpp just prior to the \n at the end of this line so that
 	 * it still sees the newline, ensuring that #line values are correct.
 	 */
-	if (isatty(fileno(ifp)) == 0 && (off = ftello64(ifp)) != -1) {
+	if (isatty(fileno(ifp)) == 0 && (off = ftello(ifp)) != -1) {
 		if ((c = fgetc(ifp)) == '#' && (c = fgetc(ifp)) == '!') {
 			for (off += 2; c != '\n'; off++) {
 				if ((c = fgetc(ifp)) == EOF)

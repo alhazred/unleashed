@@ -485,7 +485,7 @@ flushent()
 	(void) fwrite(dirbuf, (size_t)dirloc, 1, df);
 	if (ferror(df))
 		panic("%s: %s\n", dirfile, strerror(errno));
-	g_seekpt = ftello64(df);
+	g_seekpt = ftello(df);
 	dirloc = 0;
 }
 
