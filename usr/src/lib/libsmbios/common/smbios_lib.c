@@ -58,7 +58,7 @@ smb_fileopen(int fd, int version, int flags, int *errp)
 	ssize_t n, elen;
 	void *stbuf;
 
-	if ((n = pread64(fd, ep, sizeof (*ep), 0)) != sizeof (*ep))
+	if ((n = pread(fd, ep, sizeof (*ep), 0)) != sizeof (*ep))
 		return (smb_open_error(shp, errp, n < 0 ? errno : ESMB_NOHDR));
 
 	if (strncmp(ep->ep21.smbe_eanchor, SMB_ENTRY_EANCHOR,
@@ -73,7 +73,7 @@ smb_fileopen(int fd, int version, int flags, int *errp)
 		return (smb_open_error(shp, errp, ESMB_HEADER));
 	}
 
-	if ((n = pread64(fd, ep, elen, 0)) != elen)
+	if ((n = pread(fd, ep, elen, 0)) != elen)
 		return (smb_open_error(shp, errp, n < 0 ? errno : ESMB_NOHDR));
 
 	if (ep_type == SMBIOS_ENTRY_POINT_21) {
@@ -88,7 +88,7 @@ smb_fileopen(int fd, int version, int flags, int *errp)
 	if (stbuf == NULL)
 		return (smb_open_error(shp, errp, ESMB_NOMEM));
 
-	if ((n = pread64(fd, stbuf, smbe_stlen, smbe_staddr)) != smbe_stlen) {
+	if ((n = pread(fd, stbuf, smbe_stlen, smbe_staddr)) != smbe_stlen) {
 		smb_free(stbuf, smbe_stlen);
 		return (smb_open_error(shp, errp, n < 0 ? errno : ESMB_NOSTAB));
 	}

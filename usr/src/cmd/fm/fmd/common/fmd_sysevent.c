@@ -285,7 +285,7 @@ sysev_replay(fmd_hdl_t *hdl, id_t id, void *arg)
 		hrtime_t hrt;
 		uint64_t ena;
 
-		if (pread64(fd, &ed, sizeof (ed), off) != sizeof (ed)) {
+		if (pread(fd, &ed, sizeof (ed), off) != sizeof (ed)) {
 			fmd_hdl_error(hdl, "failed to read from dump "
 			    "transport %s (pending events lost)", dumpdev);
 			break;
@@ -321,7 +321,7 @@ sysev_replay(fmd_hdl_t *hdl, id_t id, void *arg)
 			break;
 		}
 
-		if (pread64(fd, nvbuf, ed.ed_size,
+		if (pread(fd, nvbuf, ed.ed_size,
 		    off + sizeof (ed)) != ed.ed_size) {
 			fmd_hdl_error(hdl, "failed to read dump "
 			    "transport event (offset %llx)", (u_longlong_t)off);

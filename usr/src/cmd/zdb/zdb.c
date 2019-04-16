@@ -2648,7 +2648,7 @@ dump_label(const char *dev)
 			(void) printf("------------------------------------\n");
 		}
 
-		if (pread64(fd, &label, sizeof (label),
+		if (pread(fd, &label, sizeof (label),
 		    vdev_label_offset(psize, l, 0)) != sizeof (label)) {
 			if (!dump_opt['q'])
 				(void) printf("failed to read label %d\n", l);

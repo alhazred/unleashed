@@ -310,7 +310,7 @@ Stat(const char *fname, Stat_t *sb)
 static void
 Pread(int fd, void *buf, size_t size, offset_t off)
 {
-	ssize_t sz = pread64(fd, buf, size, off);
+	ssize_t sz = pread(fd, buf, size, off);
 
 	if (sz < 0)
 		logprint(SC_SL_ERR | SC_EXIT_ERR,

@@ -57,7 +57,7 @@ Pread_idle(struct ps_prochandle *P, void *buf, size_t n, uintptr_t addr,
 		len = MIN(resid, mp->map_pmap.pr_size - mapoff);
 		off = mp->map_offset + mapoff;
 
-		if ((len = pread64(P->asfd, buf, len, off)) <= 0)
+		if ((len = pread(P->asfd, buf, len, off)) <= 0)
 			break;
 
 		resid -= len;

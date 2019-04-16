@@ -62,7 +62,7 @@ struct _kvmd {
 	proc_t		kvm_proc;
 };
 
-#define	PREAD	(ssize_t (*)(int, void *, size_t, offset_t))pread64
+#define	PREAD	(ssize_t (*)(int, void *, size_t, offset_t))pread
 #define	PWRITE	(ssize_t (*)(int, void *, size_t, offset_t))pwrite64
 
 static int kvm_nlist_core(kvm_t *kd, struct nlist nl[], const char *err);
@@ -131,7 +131,7 @@ kvm_open(const char *namelist, const char *corefile, const char *swapfile,
 	} else {
 		if ((kd->kvm_corefd = open(corefile, flag)) == -1)
 			return (fail(kd, err, "cannot open %s", corefile));
-		if (pread64(kd->kvm_corefd, &kd->kvm_dump,
+		if (pread(kd->kvm_corefd, &kd->kvm_dump,
 		    sizeof (kd->kvm_dump), 0) != sizeof (kd->kvm_dump))
 			return (fail(kd, err, "cannot read dump header"));
 		if (kd->kvm_dump.dump_magic != DUMP_MAGIC)

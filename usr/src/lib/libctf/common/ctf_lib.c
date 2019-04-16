@@ -440,7 +440,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 	if (fstat(fd, &st) == -1)
 		return (ctf_set_open_errno(errp, errno));
 
-	if ((nbytes = pread64(fd, &hdr.ctf, sizeof (hdr), 0)) <= 0)
+	if ((nbytes = pread(fd, &hdr.ctf, sizeof (hdr), 0)) <= 0)
 		return (ctf_set_open_errno(errp, nbytes < 0? errno : ECTF_FMT));
 
 	/*
@@ -514,7 +514,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 			if (hdr.e32.e_ident[EI_CLASS] == ELFCLASS32) {
 				Elf32_Shdr x32;
 
-				if (pread64(fd, &x32, sizeof (x32),
+				if (pread(fd, &x32, sizeof (x32),
 				    hdr.e64.e_shoff) != sizeof (x32))
 					return (ctf_set_open_errno(errp,
 					    errno));
@@ -524,7 +524,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 			} else {
 				Elf64_Shdr x64;
 
-				if (pread64(fd, &x64, sizeof (x64),
+				if (pread(fd, &x64, sizeof (x64),
 				    hdr.e64.e_shoff) != sizeof (x64))
 					return (ctf_set_open_errno(errp,
 					    errno));
@@ -551,7 +551,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 
 			nbytes = sizeof (Elf32_Shdr) * shnum;
 
-			if ((sp32 = malloc(nbytes)) == NULL || pread64(fd,
+			if ((sp32 = malloc(nbytes)) == NULL || pread(fd,
 			    sp32, nbytes, hdr.e64.e_shoff) != nbytes) {
 				free(sp);
 				return (ctf_set_open_errno(errp, errno));
@@ -562,7 +562,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 
 			free(sp32);
 
-		} else if (pread64(fd, sp, nbytes, hdr.e64.e_shoff) != nbytes) {
+		} else if (pread(fd, sp, nbytes, hdr.e64.e_shoff) != nbytes) {
 			free(sp);
 			return (ctf_set_open_errno(errp, errno));
 		}

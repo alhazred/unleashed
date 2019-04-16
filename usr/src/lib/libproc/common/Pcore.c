@@ -109,7 +109,7 @@ core_rw(struct ps_prochandle *P, void *buf, size_t n, uintptr_t addr,
 	 * writing to an invalid address yields EIO; reading from an invalid
 	 * address falls through to returning success and zero bytes.
 	 */
-	if (resid == n && n != 0 && prw != pread64) {
+	if (resid == n && n != 0 && prw != pread) {
 		errno = EIO;
 		return (-1);
 	}
@@ -122,7 +122,7 @@ static ssize_t
 Pread_core(struct ps_prochandle *P, void *buf, size_t n, uintptr_t addr,
     void *data)
 {
-	return (core_rw(P, buf, n, addr, pread64));
+	return (core_rw(P, buf, n, addr, pread));
 }
 
 /*ARGSUSED*/
@@ -1135,7 +1135,7 @@ core_report_mapping(struct ps_prochandle *P, GElf_Phdr *php)
 	if (!(php->p_flags & PF_SUNW_KILLED)) {
 		int err = 0;
 
-		(void) pread64(P->asfd, &err,
+		(void) pread(P->asfd, &err,
 		    sizeof (err), (off_t)php->p_offset);
 
 		Perror_printf(P, errfmt, addr, strerror(err));
@@ -1148,7 +1148,7 @@ core_report_mapping(struct ps_prochandle *P, GElf_Phdr *php)
 
 	(void) memset(&killinfo, 0, sizeof (killinfo));
 
-	(void) pread64(P->asfd, &killinfo,
+	(void) pread(P->asfd, &killinfo,
 	    sizeof (killinfo), (off_t)php->p_offset);
 
 	/*
@@ -1327,7 +1327,7 @@ fake_up_symtab(struct ps_prochandle *P, const elf_file_header_t *ehdr,
 		b->shdr[1].sh_info =  symtab->sh_info;
 		b->shdr[1].sh_addralign = symtab->sh_addralign;
 
-		if (pread64(P->asfd, &b->data[off], b->shdr[1].sh_size,
+		if (pread(P->asfd, &b->data[off], b->shdr[1].sh_size,
 		    symtab->sh_offset) != b->shdr[1].sh_size) {
 			dprintf("fake_up_symtab: pread of symtab[1] failed\n");
 			free(b);
@@ -1343,7 +1343,7 @@ fake_up_symtab(struct ps_prochandle *P, const elf_file_header_t *ehdr,
 		b->shdr[2].sh_info =  strtab->sh_info;
 		b->shdr[2].sh_addralign = 1;
 
-		if (pread64(P->asfd, &b->data[off], b->shdr[2].sh_size,
+		if (pread(P->asfd, &b->data[off], b->shdr[2].sh_size,
 		    strtab->sh_offset) != b->shdr[2].sh_size) {
 			dprintf("fake_up_symtab: pread of symtab[2] failed\n");
 			free(b);
@@ -1393,7 +1393,7 @@ fake_up_symtab(struct ps_prochandle *P, const elf_file_header_t *ehdr,
 		b->shdr[1].sh_info =  symtab->sh_info;
 		b->shdr[1].sh_addralign = symtab->sh_addralign;
 
-		if (pread64(P->asfd, &b->data[off], b->shdr[1].sh_size,
+		if (pread(P->asfd, &b->data[off], b->shdr[1].sh_size,
 		    symtab->sh_offset) != b->shdr[1].sh_size) {
 			free(b);
 			return;
@@ -1408,7 +1408,7 @@ fake_up_symtab(struct ps_prochandle *P, const elf_file_header_t *ehdr,
 		b->shdr[2].sh_info =  strtab->sh_info;
 		b->shdr[2].sh_addralign = 1;
 
-		if (pread64(P->asfd, &b->data[off], b->shdr[2].sh_size,
+		if (pread(P->asfd, &b->data[off], b->shdr[2].sh_size,
 		    strtab->sh_offset) != b->shdr[2].sh_size) {
 			free(b);
 			return;
@@ -1498,7 +1498,7 @@ core_elf_fdopen(elf_file_t *efp, GElf_Half type, int *perr)
 	 * Because 32-bit libelf cannot deal with large files, we need to read,
 	 * check, and convert the file header manually in case type == ET_CORE.
 	 */
-	if (pread64(efp->e_fd, &e32, sizeof (e32), 0) != sizeof (e32)) {
+	if (pread(efp->e_fd, &e32, sizeof (e32), 0) != sizeof (e32)) {
 		if (perr != NULL)
 			*perr = G_FORMAT;
 		goto err;
@@ -1526,7 +1526,7 @@ core_elf_fdopen(elf_file_t *efp, GElf_Half type, int *perr)
 #ifdef _LP64
 		Elf64_Ehdr e64;
 
-		if (pread64(efp->e_fd, &e64, sizeof (e64), 0) != sizeof (e64)) {
+		if (pread(efp->e_fd, &e64, sizeof (e64), 0) != sizeof (e64)) {
 			if (perr != NULL)
 				*perr = G_FORMAT;
 			goto err;
@@ -1591,7 +1591,7 @@ core_elf_fdopen(elf_file_t *efp, GElf_Half type, int *perr)
 		if (efp->e_hdr.e_ident[EI_CLASS] == ELFCLASS32) {
 			Elf32_Shdr shdr32;
 
-			if (pread64(efp->e_fd, &shdr32, sizeof (shdr32),
+			if (pread(efp->e_fd, &shdr32, sizeof (shdr32),
 			    efp->e_hdr.e_shoff) != sizeof (shdr32)) {
 				if (perr != NULL)
 					*perr = G_FORMAT;
@@ -1600,7 +1600,7 @@ core_elf_fdopen(elf_file_t *efp, GElf_Half type, int *perr)
 
 			core_shdr_to_gelf(&shdr32, &shdr);
 		} else {
-			if (pread64(efp->e_fd, &shdr, sizeof (shdr),
+			if (pread(efp->e_fd, &shdr, sizeof (shdr),
 			    efp->e_hdr.e_shoff) != sizeof (shdr)) {
 				if (perr != NULL)
 					*perr = G_FORMAT;
@@ -1640,7 +1640,7 @@ core_elf_fdopen(elf_file_t *efp, GElf_Half type, int *perr)
 		if (efp->e_hdr.e_ident[EI_CLASS] == ELFCLASS32) {
 			Elf32_Phdr phdr32;
 
-			if (pread64(efp->e_fd, &phdr32, sizeof (phdr32),
+			if (pread(efp->e_fd, &phdr32, sizeof (phdr32),
 			    efp->e_hdr.e_phoff) != sizeof (phdr32)) {
 				if (perr != NULL)
 					*perr = G_FORMAT;
@@ -1649,7 +1649,7 @@ core_elf_fdopen(elf_file_t *efp, GElf_Half type, int *perr)
 
 			core_phdr_to_gelf(&phdr32, &phdr);
 		} else {
-			if (pread64(efp->e_fd, &phdr, sizeof (phdr),
+			if (pread(efp->e_fd, &phdr, sizeof (phdr),
 			    efp->e_hdr.e_phoff) != sizeof (phdr)) {
 				if (perr != NULL)
 					*perr = G_FORMAT;
@@ -2034,7 +2034,7 @@ core_load_shdrs(struct ps_prochandle *P, elf_file_t *efp)
 		goto out;
 	}
 
-	if (pread64(efp->e_fd, buf, nbytes, efp->e_hdr.e_shoff) != nbytes) {
+	if (pread(efp->e_fd, buf, nbytes, efp->e_hdr.e_shoff) != nbytes) {
 		dprintf("failed to read section headers at off %lld: %s\n",
 		    (longlong_t)efp->e_hdr.e_shoff, strerror(errno));
 		free(buf);
@@ -2066,7 +2066,7 @@ core_load_shdrs(struct ps_prochandle *P, elf_file_t *efp)
 		goto out;
 	}
 
-	if (pread64(efp->e_fd, shstrtab, shstrtabsz,
+	if (pread(efp->e_fd, shstrtab, shstrtabsz,
 	    shp->sh_offset) != shstrtabsz) {
 		dprintf("failed to read %lu bytes of shstrs at off %lld: %s\n",
 		    shstrtabsz, (longlong_t)shp->sh_offset, strerror(errno));
@@ -2111,7 +2111,7 @@ core_load_shdrs(struct ps_prochandle *P, elf_file_t *efp)
 			}
 
 			if ((buf = malloc(shp->sh_size)) == NULL ||
-			    pread64(efp->e_fd, buf, shp->sh_size,
+			    pread(efp->e_fd, buf, shp->sh_size,
 			    shp->sh_offset) != shp->sh_size) {
 				dprintf("skipping section %s [%d]: %s\n",
 				    name, i, strerror(errno));
@@ -2274,7 +2274,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		goto err;
 	}
 
-	if (pread64(core_fd, phbuf, nbytes, core.e_hdr.e_phoff) != nbytes) {
+	if (pread(core_fd, phbuf, nbytes, core.e_hdr.e_phoff) != nbytes) {
 		*perr = G_STRANGE;
 		free(phbuf);
 		goto err;

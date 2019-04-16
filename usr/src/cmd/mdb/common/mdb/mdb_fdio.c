@@ -193,7 +193,7 @@ fdio_bdev_read(mdb_io_t *io, void *buf, size_t nbytes)
 		size_t blkoff = off & (DEV_BSIZE - 1);
 		size_t len = MIN(resid, DEV_BSIZE - blkoff);
 
-		if (pread64(fdp->fd_fd, blk, DEV_BSIZE, devoff) != DEV_BSIZE)
+		if (pread(fdp->fd_fd, blk, DEV_BSIZE, devoff) != DEV_BSIZE)
 			break; /* errno is set for us, unless EOF */
 
 		bcopy(&blk[blkoff], buf, len);
@@ -234,7 +234,7 @@ fdio_bdev_write(mdb_io_t *io, const void *buf, size_t nbytes)
 		size_t blkoff = off & (DEV_BSIZE - 1);
 		size_t len = MIN(resid, DEV_BSIZE - blkoff);
 
-		if (pread64(fdp->fd_fd, blk, DEV_BSIZE, devoff) != DEV_BSIZE)
+		if (pread(fdp->fd_fd, blk, DEV_BSIZE, devoff) != DEV_BSIZE)
 			break; /* errno is set for us, unless EOF */
 
 		bcopy(buf, &blk[blkoff], len);
