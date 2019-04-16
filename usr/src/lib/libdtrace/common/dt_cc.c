@@ -1838,7 +1838,7 @@ dt_preproc(dtrace_hdl_t *dtp, FILE *ifp)
 				off--; /* start cpp just prior to \n */
 		}
 		(void) fflush(ifp);
-		(void) fseeko64(ifp, off, SEEK_SET);
+		(void) fseeko(ifp, off, SEEK_SET);
 	}
 
 	(void) snprintf(ipath, sizeof (ipath), "/dev/fd/%d", fileno(ifp));

@@ -571,7 +571,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 		if ((quotactl(Q_SETQUOTA, fsfile, uid, &dqbuf) < 0) &&
 		    (errno == ESRCH)) {
 			/* back up, overwrite the entry we just read */
-			(void) fseeko64(qf, (offset_t)dqoff(uid), 0);
+			(void) fseeko(qf, (offset_t)dqoff(uid), 0);
 			(void) fwrite(&dqbuf, sizeof (struct dqblk), 1, qf);
 			(void) fflush(qf);
 		}

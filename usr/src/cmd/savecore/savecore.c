@@ -282,7 +282,7 @@ Fwrite(void *buf, size_t size, FILE *f)
 static void
 Fseek(offset_t off, FILE *f)
 {
-	if (fseeko64(f, off, SEEK_SET) != 0)
+	if (fseeko(f, off, SEEK_SET) != 0)
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "fseeko64: %s",
 		    strerror(errno));
 }
