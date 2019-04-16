@@ -33,10 +33,6 @@
 #include <sys/ccompile.h>
 #include <sys/isa_defs.h>
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
 /*
  * The feature test macros __XOPEN_OR_POSIX, _STRICT_STDC, _STRICT_SYMBOLS,
  * and _STDC_C99 are Sun implementation specific macros created in order to
@@ -427,10 +423,6 @@ extern "C" {
 #else
 #define	_XOPEN_VERSION  3
 #endif
-#endif
-
-#ifdef	__cplusplus
-}
 #endif
 
 #endif	/* _SYS_FEATURE_TESTS_H */
