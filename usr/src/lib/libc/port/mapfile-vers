@@ -1126,7 +1126,6 @@ $if _ELF32
 $endif
 
 	attropen64 { FLAGS = NODYNSORT };
-	fstatat64 { FLAGS = NODYNSORT };
 	openat64 { FLAGS = NODYNSORT };
 } SUNW_1.20.4;
 
@@ -1525,7 +1524,6 @@ $endif
 	freopen64 { FLAGS = NODYNSORT };
 	fseeko64 { FLAGS = NODYNSORT };
 	fsetpos64 { FLAGS = NODYNSORT };
-	fstat64 { FLAGS = NODYNSORT };
 	fstatvfs64 { FLAGS = NODYNSORT };
 	ftello64 { FLAGS = NODYNSORT };
 	ftruncate64 { FLAGS = NODYNSORT };
@@ -1534,7 +1532,6 @@ $endif
 	getrlimit64 { FLAGS = NODYNSORT };
 	lockf64 { FLAGS = NODYNSORT };
 	lseek64 { FLAGS = NODYNSORT };
-	lstat64 { FLAGS = NODYNSORT };
 	mkstemp64 { FLAGS = NODYNSORT };
 	mmap64 { FLAGS = NODYNSORT };
 	nftw64 { FLAGS = NODYNSORT };
@@ -1544,7 +1541,6 @@ $endif
 	readdir64 { FLAGS = NODYNSORT };
 	readdir64_r { FLAGS = NODYNSORT };
 	setrlimit64 { FLAGS = NODYNSORT };
-	stat64 { FLAGS = NODYNSORT };
 	statvfs64 { FLAGS = NODYNSORT };
 	tell64 { FLAGS = NODYNSORT };
 	tmpfile64 { FLAGS = NODYNSORT };

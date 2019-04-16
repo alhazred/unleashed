@@ -32,11 +32,6 @@
 #include <sys/stat.h>
 #include <sys/fcntl.h>
 
-#pragma weak fstat64 = fstat
-#pragma weak fstatat64 = fstatat
-#pragma weak stat64 = stat
-#pragma weak lstat64 = lstat
-
 #pragma weak fstat_new = fstat
 #pragma weak fstatat_new = fstatat
 #pragma weak stat_new = stat
