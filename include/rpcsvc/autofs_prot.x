@@ -239,7 +239,7 @@ struct autofsrddir {
 	u_int	rddir_offset;		/* last offset in list */
 	u_int	rddir_size;		/* size in bytes of entries */
 	bool_t	rddir_eof;		/* TRUE if last entry in result */
-	struct dirent64 *rddir_entries;	/* variable number of entries */
+	struct dirent *rddir_entries;	/* variable number of entries */
 };
 
 /*

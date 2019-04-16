@@ -477,7 +477,7 @@ extern void sdev_stale(struct sdev_node *);
 extern int sdev_cleandir(struct sdev_node *, char *, uint_t);
 extern int sdev_rnmnode(struct sdev_node *, struct sdev_node *,
     struct sdev_node *, struct sdev_node **, char *, struct cred *);
-extern size_t add_dir_entry(dirent64_t *, char *, size_t, ino_t, offset_t);
+extern size_t add_dir_entry(dirent_t *, char *, size_t, ino_t, offset_t);
 extern struct vattr *sdev_getdefault_attr(enum vtype type);
 extern int sdev_to_vp(struct sdev_node *, struct vnode **);
 extern ino_t sdev_mkino(struct sdev_node *);

@@ -353,7 +353,7 @@ smb_mangle(const char *name, ino64_t fid, char *buf, size_t buflen)
  *
  * File systems which support VFSFT_EDIRENT_FLAGS will return the
  * directory entries as a buffer of edirent_t structure. Others will
- * return a buffer of dirent64_t structures. A union is used for the
+ * return a buffer of dirent_t structures. A union is used for the
  * the pointer into the buffer (bufptr, edp and dp).
  * The ed_name/d_name is NULL terminated by the file system.
  *
@@ -378,7 +378,7 @@ smb_unmangle(smb_node_t *dnode, char *name, char *namebuf,
 	union {
 		char		*u_bufptr;
 		edirent_t	*u_edp;
-		dirent64_t	*u_dp;
+		dirent_t	*u_dp;
 	} u;
 #define	bufptr		u.u_bufptr
 #define	edp		u.u_edp

@@ -976,7 +976,7 @@ zfsctl_snapdir_readdir_cb(vnode_t *vp, void *dp, int *eofp,
 		eodp->ed_ino = ZFSCTL_INO_SNAP(id);
 		eodp->ed_eflags = case_conflict ? ED_CASE_CONFLICT : 0;
 	} else {
-		struct dirent64 *odp = dp;
+		struct dirent *odp = dp;
 
 		(void) strcpy(odp->d_name, snapname);
 		odp->d_ino = ZFSCTL_INO_SNAP(id);

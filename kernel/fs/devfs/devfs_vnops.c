@@ -863,7 +863,7 @@ devfs_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
     caller_context_t *ct, int flags)
 {
 	struct dv_node *ddv, *dv;
-	struct dirent64 *de, *bufp;
+	struct dirent *de, *bufp;
 	offset_t diroff;
 	offset_t	soff;
 	size_t reclen, movesz;
@@ -915,7 +915,7 @@ devfs_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 	 */
 	diroff = 0;
 	if (soff == 0) {				/* . */
-		reclen = DIRENT64_RECLEN(strlen("."));
+		reclen = DIRENT_RECLEN(strlen("."));
 		if ((movesz + reclen) > bufsz)
 			goto full;
 		de->d_ino = (ino64_t)ddv->dv_ino;
@@ -924,16 +924,16 @@ devfs_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 
 		/* use strncpy(9f) to zero out uninitialized bytes */
 
-		(void) strncpy(de->d_name, ".", DIRENT64_NAMELEN(reclen));
+		(void) strncpy(de->d_name, ".", DIRENT_NAMELEN(reclen));
 		movesz += reclen;
-		de = (dirent64_t *)(intptr_t)((char *)de + reclen);
+		de = (dirent_t *)(intptr_t)((char *)de + reclen);
 		dcmn_err3(("devfs_readdir: A: diroff %lld, soff %lld: '%s' "
 		    "reclen %lu\n", diroff, soff, ".", reclen));
 	}
 
 	diroff++;
 	if (soff <= 1) {				/* .. */
-		reclen = DIRENT64_RECLEN(strlen(".."));
+		reclen = DIRENT_RECLEN(strlen(".."));
 		if ((movesz + reclen) > bufsz)
 			goto full;
 		de->d_ino = (ino64_t)ddv->dv_dotdot->dv_ino;
@@ -942,9 +942,9 @@ devfs_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 
 		/* use strncpy(9f) to zero out uninitialized bytes */
 
-		(void) strncpy(de->d_name, "..", DIRENT64_NAMELEN(reclen));
+		(void) strncpy(de->d_name, "..", DIRENT_NAMELEN(reclen));
 		movesz += reclen;
-		de = (dirent64_t *)(intptr_t)((char *)de + reclen);
+		de = (dirent_t *)(intptr_t)((char *)de + reclen);
 		dcmn_err3(("devfs_readdir: B: diroff %lld, soff %lld: '%s' "
 		    "reclen %lu\n", diroff, soff, "..", reclen));
 	}
@@ -971,7 +971,7 @@ devfs_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 		if ((dv->dv_flags & DV_INTERNAL) && (cred != kcred))
 			continue;
 
-		reclen = DIRENT64_RECLEN(strlen(dv->dv_name));
+		reclen = DIRENT_RECLEN(strlen(dv->dv_name));
 		if ((movesz + reclen) > bufsz) {
 			dcmn_err3(("devfs_readdir: C: diroff "
 			    "%lld, soff %lld: '%s' reclen %lu\n",
@@ -985,12 +985,12 @@ devfs_readdir(struct vnode *dvp, struct uio *uiop, struct cred *cred, int *eofp,
 		/* use strncpy(9f) to zero out uninitialized bytes */
 
 		ASSERT(strlen(dv->dv_name) + 1 <=
-		    DIRENT64_NAMELEN(reclen));
+		    DIRENT_NAMELEN(reclen));
 		(void) strncpy(de->d_name, dv->dv_name,
-		    DIRENT64_NAMELEN(reclen));
+		    DIRENT_NAMELEN(reclen));
 
 		movesz += reclen;
-		de = (dirent64_t *)(intptr_t)((char *)de + reclen);
+		de = (dirent_t *)(intptr_t)((char *)de + reclen);
 		dcmn_err4(("devfs_readdir: D: diroff "
 		    "%lld, soff %lld: '%s' reclen %lu\n", diroff, soff,
 		    dv->dv_name, reclen));

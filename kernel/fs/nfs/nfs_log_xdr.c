@@ -797,19 +797,19 @@ xdr_nfslog_READDIRPLUS3args(XDR *xdrs, READDIRPLUS3args *objp)
 #ifdef	nextdp
 #undef	nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 bool_t
 xdr_nfslog_READDIRPLUS3resok(XDR *xdrs, READDIRPLUS3resok *objp)
 {
 	bool_t t = TRUE;
 	bool_t f = FALSE;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	int nents;
 	char *name;
 	entryplus3_info *infop;
 
-	dp = (struct dirent64 *)objp->reply.entries;
+	dp = (struct dirent *)objp->reply.entries;
 	nents = objp->size;
 	infop = objp->infop;
 	while (nents > 0) {

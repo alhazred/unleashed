@@ -453,7 +453,7 @@ hsfs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cred, int *eofp,
 	struct hsnode	*dhp;
 	struct hsfs	*fsp;
 	struct hs_direntry hd;
-	struct dirent64	*nd;
+	struct dirent	*nd;
 	int		error;
 	uint_t		offset;		/* real offset in directory */
 	uint_t		dirsiz;		/* real size of directory */
@@ -486,10 +486,10 @@ hsfs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cred, int *eofp,
 
 	dname_size = fsp->hsfs_namemax + 1;	/* 1 for the ending NUL */
 	dname = kmem_alloc(dname_size, KM_SLEEP);
-	bufsize = uiop->uio_resid + sizeof (struct dirent64);
+	bufsize = uiop->uio_resid + sizeof (struct dirent);
 
 	outbuf = kmem_alloc(bufsize, KM_SLEEP);
-	nd = (struct dirent64 *)outbuf;
+	nd = (struct dirent *)outbuf;
 
 	while (offset < dirsiz) {
 		bytes_wanted = MIN(MAXBSIZE, dirsiz - (offset & MAXBMASK));
@@ -540,7 +540,7 @@ hsfs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cred, int *eofp,
 				/*
 				 * Determine if there is enough room
 				 */
-				ndlen = (long)DIRENT64_RECLEN((dnamelen));
+				ndlen = (long)DIRENT_RECLEN((dnamelen));
 
 				if ((ndlen + ((char *)nd - outbuf)) >
 				    uiop->uio_resid) {
@@ -575,13 +575,13 @@ hsfs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cred, int *eofp,
 				/* strncpy(9f) will zero uninitialized bytes */
 
 				ASSERT(strlen(dname) + 1 <=
-				    DIRENT64_NAMELEN(ndlen));
+				    DIRENT_NAMELEN(ndlen));
 				(void) strncpy(nd->d_name, dname,
-				    DIRENT64_NAMELEN(ndlen));
+				    DIRENT_NAMELEN(ndlen));
 				nd->d_reclen = (ushort_t)ndlen;
 				nd->d_off = (offset_t)diroff;
 				nd->d_ino = dirino;
-				nd = (struct dirent64 *)((char *)nd + ndlen);
+				nd = (struct dirent *)((char *)nd + ndlen);
 
 				/*
 				 * free up space allocated for symlink

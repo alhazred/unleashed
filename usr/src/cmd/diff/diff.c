@@ -1400,7 +1400,7 @@ static struct dir *
 setupdir(char *cp)
 {
 	struct dir *dp = 0, *ep;
-	struct dirent64 *rp;
+	struct dirent *rp;
 	int nitems;
 	int size;
 	DIR *dirp;

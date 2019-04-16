@@ -450,7 +450,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 		char		*mnt_dir;
 		int		mtype_len;
 		DIR		*dirp = NULL;
-		struct dirent64	*dp;
+		struct dirent	*dp;
 		char		*volname;
 
 

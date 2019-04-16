@@ -59,7 +59,7 @@ getdents64(int fd, void *buf, size_t count)
 	register int error;
 	int sink;
 
-	if (count < sizeof (struct dirent64))
+	if (count < sizeof (struct dirent))
 		return (set_errno(EINVAL));
 
 	/*

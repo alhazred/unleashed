@@ -199,7 +199,7 @@
  * The data in d_buf (that which is returned from the file system) can
  * be in one of two formats. If the file system supports extended directory
  * entries we request that the data be returned as edirent_t structures. If
- * it does not the data will be returned as dirent64_t structures. For
+ * it does not the data will be returned as dirent_t structures. For
  * convenience, when the next directory entry is read from d_buf by
  * smb_odir_next_odirent it is translated into an smb_odirent_t.
  *
@@ -1026,7 +1026,7 @@ smb_odir_delete(void *arg)
  *
  * File systems which support VFSFT_EDIRENT_FLAGS will return the
  * directory entries as a buffer of edirent_t structure. Others will
- * return a buffer of dirent64_t structures.  For simplicity translate
+ * return a buffer of dirent_t structures.  For simplicity translate
  * the data into an smb_odirent_t structure.
  * The ed_name/d_name in d_buf is NULL terminated by the file system.
  *
@@ -1045,7 +1045,7 @@ smb_odir_next_odirent(smb_odir_t *od, smb_odirent_t *odirent)
 	int		rc;
 	int		reclen;
 	int		eof;
-	dirent64_t	*dp;
+	dirent_t	*dp;
 	edirent_t	*edp;
 	char		*np;
 	uint32_t	abe_flag = 0;

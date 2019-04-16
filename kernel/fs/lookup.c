@@ -787,7 +787,7 @@ vnode_match(vnode_t *v1, vnode_t *v2, cred_t *cr)
  */
 int
 dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
-    size_t dlen, dirent64_t **rdp)
+    size_t dlen, dirent_t **rdp)
 {
 	size_t dbuflen;
 	struct iovec iov;
@@ -795,7 +795,7 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 	int error;
 	int eof;
 	vnode_t *cmpvp;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	pathname_t pnp;
 
 	ASSERT(dvp->v_type == VDIR);
@@ -831,14 +831,14 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 		if (error || dbuflen == 0)
 			break;
 
-		dp = (dirent64_t *)dbuf;
+		dp = (dirent_t *)dbuf;
 		while ((intptr_t)dp < (intptr_t)dbuf + dbuflen) {
 			/*
 			 * Ignore '.' and '..' entries
 			 */
 			if (strcmp(dp->d_name, ".") == 0 ||
 			    strcmp(dp->d_name, "..") == 0) {
-				dp = (dirent64_t *)((intptr_t)dp +
+				dp = (dirent_t *)((intptr_t)dp +
 				    dp->d_reclen);
 				continue;
 			}
@@ -864,7 +864,7 @@ dirfindvp(vnode_t *vrootp, vnode_t *dvp, vnode_t *tvp, cred_t *cr, char *dbuf,
 				return (error);
 			}
 
-			dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen);
+			dp = (dirent_t *)((intptr_t)dp + dp->d_reclen);
 		}
 	}
 
@@ -1071,9 +1071,9 @@ dirtopath(vnode_t *vrootp, vnode_t *vp, char *buf, size_t buflen, int flags,
 	vnode_t		*pvp = NULL, *startvp = vp;
 	int		err = 0;
 	size_t		complen;
-	dirent64_t	*dp;
+	dirent_t	*dp;
 	char		*bufloc, *dbuf;
-	const size_t	dlen = DIRENT64_RECLEN(MAXPATHLEN);
+	const size_t	dlen = DIRENT_RECLEN(MAXPATHLEN);
 	struct dirpath_walk *dw_chain = NULL, *dw_entry;
 
 	/* Operation only allowed on directories */

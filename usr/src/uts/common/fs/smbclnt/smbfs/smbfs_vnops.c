@@ -3387,12 +3387,12 @@ smbfs_readvdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 	 */
 	static const int limit = 1000;
 	/* Largest possible dirent size. */
-	static const size_t dbufsiz = DIRENT64_RECLEN(SMB_MAXFNAMELEN);
+	static const size_t dbufsiz = DIRENT_RECLEN(SMB_MAXFNAMELEN);
 	struct smb_cred scred;
 	vnode_t		*newvp;
 	struct smbnode	*np = VTOSMB(vp);
 	struct smbfs_fctx *ctx;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	ssize_t		save_resid;
 	offset_t	save_offset; /* 64 bits */
 	int		offset; /* yes, 32 bits */
@@ -3442,7 +3442,7 @@ smbfs_readvdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 		 * offset 0 is ".", offset 1 is ".."
 		 * so strlen of these is offset+1.
 		 */
-		reclen = DIRENT64_RECLEN(offset + 1);
+		reclen = DIRENT_RECLEN(offset + 1);
 		if (uio->uio_resid < reclen)
 			goto out;
 		bzero(dp, reclen);
@@ -3538,7 +3538,7 @@ smbfs_readvdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 				VN_RELE(newvp);
 		}
 
-		reclen = DIRENT64_RECLEN(nmlen);
+		reclen = DIRENT_RECLEN(nmlen);
 		bzero(dp, reclen);
 		dp->d_reclen = reclen;
 		bcopy(ctx->f_name, dp->d_name, nmlen);

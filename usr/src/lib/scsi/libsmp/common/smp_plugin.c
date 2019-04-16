@@ -266,7 +266,7 @@ smp_plugin_load_dir(smp_target_t *tp, const char *pluginroot)
 {
 	char path[PATH_MAX];
 	DIR *dirp;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *c_vendor, *vendor, *product, *revision;
 	char isa[257];
 

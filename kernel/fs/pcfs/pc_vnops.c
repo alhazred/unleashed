@@ -1345,7 +1345,7 @@ pcfs_readdir(
 		 */
 		if (offset == 0) {
 			(void) strcpy(ld->d_name, ".");
-			ld->d_reclen = DIRENT64_RECLEN(1);
+			ld->d_reclen = DIRENT_RECLEN(1);
 			ld->d_off = (off64_t)sizeof (struct pcdir);
 			ld->d_ino = (ino64_t)UINT_MAX;
 			if (ld->d_reclen > uiop->uio_resid) {
@@ -1358,7 +1358,7 @@ pcfs_readdir(
 		}
 		if (offset == sizeof (struct pcdir)) {
 			(void) strcpy(ld->d_name, "..");
-			ld->d_reclen = DIRENT64_RECLEN(2);
+			ld->d_reclen = DIRENT_RECLEN(2);
 			if (ld->d_reclen > uiop->uio_resid) {
 				pc_unlockfs(fsp);
 				return (ENOSPC);
@@ -2329,7 +2329,7 @@ pc_read_long_fn(struct vnode *dvp, struct uio *uiop, struct pc_dirent *ld,
 
 	ep = *epp;
 	uiop->uio_loffset += *offset - oldoffset;
-	ld->d_reclen = DIRENT64_RECLEN(strlen(ld->d_name));
+	ld->d_reclen = DIRENT_RECLEN(strlen(ld->d_name));
 	if (ld->d_reclen > uiop->uio_resid) {
 		uiop->uio_loffset = uiooffset;
 		return (ENOSPC);
@@ -2374,7 +2374,7 @@ pc_read_short_fn(struct vnode *dvp, struct uio *uiop, struct pc_dirent *ld,
 	error = pc_fname_ext_to_name(&ld->d_name[0], &ep->pcd_filename[0],
 	    &ep->pcd_ext[0], foldcase);
 	if (error == 0) {
-		ld->d_reclen = DIRENT64_RECLEN(strlen(ld->d_name));
+		ld->d_reclen = DIRENT_RECLEN(strlen(ld->d_name));
 		if (ld->d_reclen > uiop->uio_resid) {
 			uiop->uio_loffset = oldoffset;
 			return (ENOSPC);

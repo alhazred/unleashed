@@ -1406,8 +1406,8 @@ sdev_filldir_from_store(struct sdev_node *ddv, int dlen, struct cred *cred)
 	int eof;
 	struct iovec iov;
 	struct uio uio;
-	struct dirent64 *dp;
-	dirent64_t *dbuf;
+	struct dirent *dp;
+	dirent_t *dbuf;
 	size_t dbuflen;
 	struct vattr vattr;
 	char *link = NULL;
@@ -1448,7 +1448,7 @@ sdev_filldir_from_store(struct sdev_node *ddv, int dlen, struct cred *cred)
 
 		for (dp = dbuf; ((intptr_t)dp <
 		    (intptr_t)dbuf + dbuflen);
-		    dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen)) {
+		    dp = (dirent_t *)((intptr_t)dp + dp->d_reclen)) {
 			nm = dp->d_name;
 
 			if (strcmp(nm, ".") == 0 ||
@@ -2346,16 +2346,16 @@ sdev_cleandir(struct sdev_node *ddv, char *expr, uint_t flags)
  * a convenient wrapper for readdir() funcs
  */
 size_t
-add_dir_entry(dirent64_t *de, char *nm, size_t size, ino_t ino, offset_t off)
+add_dir_entry(dirent_t *de, char *nm, size_t size, ino_t ino, offset_t off)
 {
-	size_t reclen = DIRENT64_RECLEN(strlen(nm));
+	size_t reclen = DIRENT_RECLEN(strlen(nm));
 	if (reclen > size)
 		return (0);
 
 	de->d_ino = (ino64_t)ino;
 	de->d_off = (off64_t)off + 1;
 	de->d_reclen = (ushort_t)reclen;
-	(void) strncpy(de->d_name, nm, DIRENT64_NAMELEN(reclen));
+	(void) strncpy(de->d_name, nm, DIRENT_NAMELEN(reclen));
 	return (reclen);
 }
 
@@ -2382,7 +2382,7 @@ sdev_copyin_mountargs(struct mounta *uap, struct sdev_mountargs *args)
 #ifdef nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *) \
+#define	nextdp(dp)	((struct dirent *) \
 			    (intptr_t)((char *)(dp) + (dp)->d_reclen))
 
 /*
@@ -2394,7 +2394,7 @@ devname_readdir_func(vnode_t *vp, uio_t *uiop, cred_t *cred, int *eofp,
 {
 	struct sdev_node *ddv = VTOSDEV(vp);
 	struct sdev_node *dv;
-	dirent64_t	*dp;
+	dirent_t	*dp;
 	ulong_t		outcount = 0;
 	size_t		namelen;
 	ulong_t		alloc_count;
@@ -2503,7 +2503,7 @@ get_cache:
 	diroff = 0;
 	if (soff == 0) {
 		/* first time */
-		this_reclen = DIRENT64_RECLEN(1);
+		this_reclen = DIRENT_RECLEN(1);
 		if (alloc_count < this_reclen) {
 			error = EINVAL;
 			goto done;
@@ -2514,14 +2514,14 @@ get_cache:
 		dp->d_reclen = (ushort_t)this_reclen;
 
 		(void) strncpy(dp->d_name, ".",
-		    DIRENT64_NAMELEN(this_reclen));
+		    DIRENT_NAMELEN(this_reclen));
 		outcount += dp->d_reclen;
 		dp = nextdp(dp);
 	}
 
 	diroff++;
 	if (soff <= 1) {
-		this_reclen = DIRENT64_RECLEN(2);
+		this_reclen = DIRENT_RECLEN(2);
 		if (alloc_count < outcount + this_reclen) {
 			error = EINVAL;
 			goto done;
@@ -2532,7 +2532,7 @@ get_cache:
 		dp->d_off = (off64_t)2;
 
 		(void) strncpy(dp->d_name, "..",
-		    DIRENT64_NAMELEN(this_reclen));
+		    DIRENT_NAMELEN(this_reclen));
 		outcount += dp->d_reclen;
 
 		dp = nextdp(dp);
@@ -2586,7 +2586,7 @@ get_cache:
 		}
 
 		namelen = strlen(dv->sdev_name);
-		reclen = DIRENT64_RECLEN(namelen);
+		reclen = DIRENT_RECLEN(namelen);
 		if (outcount + reclen > alloc_count) {
 			goto full;
 		}
@@ -2594,7 +2594,7 @@ get_cache:
 		dp->d_ino = (ino64_t)dv->sdev_ino;
 		dp->d_off = (off64_t)diroff + 1;
 		(void) strncpy(dp->d_name, dv->sdev_name,
-		    DIRENT64_NAMELEN(reclen));
+		    DIRENT_NAMELEN(reclen));
 		outcount += reclen;
 		dp = nextdp(dp);
 	}
@@ -2787,7 +2787,7 @@ sdev_modctl_readdir(const char *dir, char ***dirlistp, int *npathsp,
 	char	**newlist = NULL;
 	int	npaths = 0;
 	int	npaths_alloc = 0;
-	dirent64_t *dbuf = NULL;
+	dirent_t *dbuf = NULL;
 	int	n;
 	char	*s;
 	int error;
@@ -2795,7 +2795,7 @@ sdev_modctl_readdir(const char *dir, char ***dirlistp, int *npathsp,
 	int eof;
 	struct iovec iov;
 	struct uio uio;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	size_t dlen;
 	size_t dbuflen;
 	int ndirents = 64;
@@ -2836,7 +2836,7 @@ sdev_modctl_readdir(const char *dir, char ***dirlistp, int *npathsp,
 			break;
 
 		for (dp = dbuf; ((intptr_t)dp < (intptr_t)dbuf + dbuflen);
-		    dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen)) {
+		    dp = (dirent_t *)((intptr_t)dp + dp->d_reclen)) {
 
 			nm = dp->d_name;
 

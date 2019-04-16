@@ -5130,8 +5130,8 @@ pr_readdir_fddir(prnode_t *pnp, uio_t *uiop, int *eofp)
 static int
 pr_readdir_pathdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 {
-	longlong_t bp[DIRENT64_RECLEN(64) / sizeof (longlong_t)];
-	dirent64_t *dirent = (dirent64_t *)bp;
+	longlong_t bp[DIRENT_RECLEN(64) / sizeof (longlong_t)];
+	dirent_t *dirent = (dirent_t *)bp;
 	int reclen;
 	ssize_t oresid;
 	offset_t off, idx;
@@ -5191,21 +5191,21 @@ pr_readdir_pathdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 			dirent->d_ino = pmkino(0, pslot, PR_PATHDIR);
 			dirent->d_name[0] = '.';
 			dirent->d_name[1] = '\0';
-			reclen = DIRENT64_RECLEN(1);
+			reclen = DIRENT_RECLEN(1);
 		} else if (idx == 1) {			/* ".." */
 			dirent->d_ino = pmkino(0, pslot, PR_PIDDIR);
 			dirent->d_name[0] = '.';
 			dirent->d_name[1] = '.';
 			dirent->d_name[2] = '\0';
-			reclen = DIRENT64_RECLEN(2);
+			reclen = DIRENT_RECLEN(2);
 		} else if (idx == 2) {			/* "root" */
 			dirent->d_ino = pmkino(idx, pslot, PR_PATH);
 			(void) strcpy(dirent->d_name, "root");
-			reclen = DIRENT64_RECLEN(4);
+			reclen = DIRENT_RECLEN(4);
 		} else if (idx == 3) {			/* "cwd" */
 			dirent->d_ino = pmkino(idx, pslot, PR_PATH);
 			(void) strcpy(dirent->d_name, "cwd");
-			reclen = DIRENT64_RECLEN(3);
+			reclen = DIRENT_RECLEN(3);
 		} else if (idx < 4 + fddirsize) {
 			/*
 			 * In this case, we have one of the file descriptors.
@@ -5215,7 +5215,7 @@ pr_readdir_pathdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 				continue;
 			dirent->d_ino = pmkino(idx, pslot, PR_PATH);
 			(void) pr_u32tos(fd, dirent->d_name, PLNSIZ+1);
-			reclen = DIRENT64_RECLEN(PLNSIZ);
+			reclen = DIRENT_RECLEN(PLNSIZ);
 		} else if (idx < 4 + fddirsize + objdirsize) {
 			if (fip != NULL) {
 				mutex_exit(&fip->fi_lock);
@@ -5249,7 +5249,7 @@ pr_readdir_pathdir(prnode_t *pnp, uio_t *uiop, int *eofp)
 			else
 				pr_object_name(dirent->d_name, vp, &vattr);
 			dirent->d_ino = pmkino(idx, pslot, PR_PATH);
-			reclen = DIRENT64_RECLEN(strlen(dirent->d_name));
+			reclen = DIRENT_RECLEN(strlen(dirent->d_name));
 		} else {
 			break;
 		}
@@ -5564,8 +5564,8 @@ prreadlink_lookup(prnode_t *pnp, char *buf, size_t size, cred_t *cr)
 	vnode_t *vp, *execvp, *vrootp;
 	int ret;
 	size_t len;
-	dirent64_t *dp;
-	size_t dlen = DIRENT64_RECLEN(MAXPATHLEN);
+	dirent_t *dp;
+	size_t dlen = DIRENT_RECLEN(MAXPATHLEN);
 	char *dbuf;
 
 	p = curproc;

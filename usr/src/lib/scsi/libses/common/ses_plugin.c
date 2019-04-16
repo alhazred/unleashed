@@ -279,7 +279,7 @@ ses_plugin_load_dir(ses_target_t *tp, const char *pluginroot)
 {
 	char path[PATH_MAX];
 	DIR *dirp;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *vendor, *product, *revision;
 	char isa[257];
 

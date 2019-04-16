@@ -112,7 +112,7 @@ ctfs_tdir_do_readdir(vnode_t *vp, void *dp, int *eofp,
 	uint64_t zuniqid;
 	ctid_t next;
 	ct_type_t *ty = ct_types[gfs_file_index(vp)];
-	struct dirent64 *odp = dp;
+	struct dirent *odp = dp;
 
 	ASSERT(!(flags & V_RDDIR_ENTFLAGS));
 

@@ -213,8 +213,8 @@ do_readdir(autofs_rddirargs *rda, autofs_rddirres *rd)
 }
 
 #define	roundtoint(x)	(((x) + sizeof (int) - 1) & ~(sizeof (int) - 1))
-#define	DIRENT64_RECLEN(namelen)	\
-	(((int)(((dirent64_t *)0)->d_name) + 1 + (namelen) + 7) & ~ 7)
+#define	DIRENT_RECLEN(namelen)	\
+	(((int)(((dirent_t *)0)->d_name) + 1 + (namelen) + 7) & ~ 7)
 
 static int
 create_dirents(
@@ -228,7 +228,7 @@ create_dirents(
 	int outcount = 0;
 	int namelen;
 	struct dir_entry *list = NULL, *l, *nl;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *outbuf;
 	struct off_tbl *offtp, *next = NULL;
 	int this_bucket = 0;
@@ -270,7 +270,7 @@ create_dirents(
 		trace_prt(1, "%s: offset searches (%d, %d)\n", rdcp->map, x, y);
 
 	total_bytes_wanted = res->rd_bufsize;
-	bufsize = total_bytes_wanted + sizeof (struct dirent64);
+	bufsize = total_bytes_wanted + sizeof (struct dirent);
 	outbuf = malloc(bufsize);
 	if (outbuf == NULL) {
 		syslog(LOG_ERR, "memory allocation error\n");
@@ -279,12 +279,12 @@ create_dirents(
 	}
 	memset(outbuf, 0, bufsize);
 	/* LINTED pointer alignment */
-	dp = (struct dirent64 *)outbuf;
+	dp = (struct dirent *)outbuf;
 
 	while (l) {
 		nl = l->next;
 		namelen = strlen(l->name);
-		this_reclen = DIRENT64_RECLEN(namelen);
+		this_reclen = DIRENT_RECLEN(namelen);
 		if (outcount + this_reclen > total_bytes_wanted) {
 			break;
 		}
@@ -304,7 +304,7 @@ create_dirents(
 		(void) strcpy(dp->d_name, l->name);
 		dp->d_reclen = (ushort_t)this_reclen;
 		outcount += dp->d_reclen;
-		dp = (struct dirent64 *)((int)dp + dp->d_reclen);
+		dp = (struct dirent *)((int)dp + dp->d_reclen);
 		assert(outcount <= total_bytes_wanted);
 		l = l->next;
 	}
@@ -316,7 +316,7 @@ create_dirents(
 		 */
 		res->rd_rddir.rddir_eof = (l == NULL);
 		/* LINTED pointer alignment */
-		res->rd_rddir.rddir_entries = (struct dirent64 *)outbuf;
+		res->rd_rddir.rddir_entries = (struct dirent *)outbuf;
 		error = 0;
 	} else {
 		/*

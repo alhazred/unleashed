@@ -2013,7 +2013,7 @@ xdr_READDIR3args(XDR *xdrs, READDIR3args *objp)
 #ifdef	nextdp
 #undef	nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 #ifdef	roundup
 #undef	roundup
 #endif
@@ -2025,7 +2025,7 @@ xdr_READDIR3args(XDR *xdrs, READDIR3args *objp)
 static bool_t
 xdr_putdirlist(XDR *xdrs, READDIR3resok *objp)
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *name;
 	int size;
 	int bufsize;
@@ -2055,7 +2055,7 @@ xdr_putdirlist(XDR *xdrs, READDIR3resok *objp)
 	bufsize = (1 + 1 + 2) * BYTES_PER_XDR_UNIT;
 	if (objp->dir_attributes.attributes)
 		bufsize += NFS3_SIZEOF_FATTR3 * BYTES_PER_XDR_UNIT;
-	for (size = objp->size, dp = (struct dirent64 *)objp->reply.entries;
+	for (size = objp->size, dp = (struct dirent *)objp->reply.entries;
 	    size > 0;
 	    size -= dp->d_reclen, dp = nextdp(dp)) {
 		if (dp->d_reclen == 0)
@@ -2144,7 +2144,7 @@ xdr_READDIR3res(XDR *xdrs, READDIR3res *objp)
 bool_t
 xdr_READDIR3vres(XDR *xdrs, READDIR3vres *objp)
 {
-	dirent64_t *dp;
+	dirent_t *dp;
 	uint_t entries_size;
 	int outcount = 0;
 
@@ -2207,7 +2207,7 @@ xdr_READDIR3vres(XDR *xdrs, READDIR3vres *objp)
 		 */
 		if (!XDR_GETINT32(xdrs, (int32_t *)&namlen))
 			return (FALSE);
-		this_reclen = DIRENT64_RECLEN(namlen);
+		this_reclen = DIRENT_RECLEN(namlen);
 
 		/*
 		 * If this will overflow buffer, stop decoding
@@ -2222,7 +2222,7 @@ xdr_READDIR3vres(XDR *xdrs, READDIR3vres *objp)
 		if (!xdr_opaque(xdrs, dp->d_name, namlen))
 			return (FALSE);
 		bzero(&dp->d_name[namlen],
-		    DIRENT64_NAMELEN(this_reclen) - namlen);
+		    DIRENT_NAMELEN(this_reclen) - namlen);
 
 		/*
 		 * cookie3 cookie
@@ -2232,7 +2232,7 @@ xdr_READDIR3vres(XDR *xdrs, READDIR3vres *objp)
 		objp->loff = dp->d_off;
 
 		outcount += this_reclen;
-		dp = (dirent64_t *)((intptr_t)dp + this_reclen);
+		dp = (dirent_t *)((intptr_t)dp + this_reclen);
 	}
 
 	objp->size = outcount;
@@ -2287,7 +2287,7 @@ xdr_READDIRPLUS3args(XDR *xdrs, READDIRPLUS3args *objp)
 static bool_t
 xdr_putdirpluslist(XDR *xdrs, READDIRPLUS3resok *objp)
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *name;
 	int nents;
 	bool_t t = TRUE;
@@ -2299,7 +2299,7 @@ xdr_putdirpluslist(XDR *xdrs, READDIRPLUS3resok *objp)
 	if (xdrs->x_op != XDR_ENCODE)
 		return (FALSE);
 
-	dp = (struct dirent64 *)objp->reply.entries;
+	dp = (struct dirent *)objp->reply.entries;
 	nents = objp->size;
 	infop = objp->infop;
 
@@ -2370,12 +2370,12 @@ xdr_READDIRPLUS3res(XDR *xdrs, READDIRPLUS3res *objp)
 }
 
 /*
- * Decode readdirplus directly into a dirent64_t and do the DNLC caching.
+ * Decode readdirplus directly into a dirent_t and do the DNLC caching.
  */
 bool_t
 xdr_READDIRPLUS3vres(XDR *xdrs, READDIRPLUS3vres *objp)
 {
-	dirent64_t *dp;
+	dirent_t *dp;
 	vnode_t *dvp;
 	uint_t entries_size;
 	int outcount = 0;
@@ -2452,7 +2452,7 @@ xdr_READDIRPLUS3vres(XDR *xdrs, READDIRPLUS3vres *objp)
 		 */
 		if (!XDR_GETINT32(xdrs, (int32_t *)&namlen))
 			return (FALSE);
-		this_reclen = DIRENT64_RECLEN(namlen);
+		this_reclen = DIRENT_RECLEN(namlen);
 
 		/*
 		 * If this will overflow buffer, stop decoding
@@ -2467,7 +2467,7 @@ xdr_READDIRPLUS3vres(XDR *xdrs, READDIRPLUS3vres *objp)
 		if (!xdr_opaque(xdrs, dp->d_name, namlen))
 			return (FALSE);
 		bzero(&dp->d_name[namlen],
-		    DIRENT64_NAMELEN(this_reclen) - namlen);
+		    DIRENT_NAMELEN(this_reclen) - namlen);
 
 		/*
 		 * cookie3 cookie
@@ -2528,7 +2528,7 @@ xdr_READDIRPLUS3vres(XDR *xdrs, READDIRPLUS3vres *objp)
 		}
 
 		outcount += this_reclen;
-		dp = (dirent64_t *)((intptr_t)dp + this_reclen);
+		dp = (dirent_t *)((intptr_t)dp + this_reclen);
 	}
 
 	objp->size = outcount;

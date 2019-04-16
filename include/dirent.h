@@ -104,9 +104,9 @@ extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
  * FIXME source compat: these are aliases to non-64 ones in libc (though the
  * arg types are differently named).
  */
-struct dirent64 *readdir64(DIR *);
-int readdir64_r(DIR *_RESTRICT_KYWD, struct dirent64 *_RESTRICT_KYWD,
-    struct dirent64 **_RESTRICT_KYWD);
+struct dirent *readdir64(DIR *);
+int readdir64_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
+    struct dirent **_RESTRICT_KYWD);
 
 #ifdef	__cplusplus
 }

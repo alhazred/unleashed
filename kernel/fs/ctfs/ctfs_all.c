@@ -124,7 +124,7 @@ ctfs_adir_do_readdir(vnode_t *vp, void *dp, int *eofp,
 {
 	uint64_t zuniqid;
 	ctid_t next;
-	struct dirent64 *odp = dp;
+	struct dirent *odp = dp;
 
 	ASSERT(!(flags & V_RDDIR_ENTFLAGS));
 

@@ -610,7 +610,7 @@ rfs4_ss_getstate(vnode_t *dvp, rfs4_ss_pn_t *ss_pn)
 #ifdef	nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 /*
  * Add entries from statedir to supplied oldstate list.
@@ -626,7 +626,7 @@ rfs4_ss_oldstate(rfs4_oldstate_t *oldstate, char *statedir, char *destdir)
 	vnode_t *dvp;
 	struct iovec iov;
 	struct uio uio;
-	struct dirent64 *dep;
+	struct dirent *dep;
 	offset_t dirchunk_offset = 0;
 
 	/*
@@ -664,7 +664,7 @@ rfs4_ss_oldstate(rfs4_oldstate_t *oldstate, char *statedir, char *destdir)
 		 * Process all the directory entries in this
 		 * readdir chunk
 		 */
-		for (dep = (struct dirent64 *)dirt; size > 0;
+		for (dep = (struct dirent *)dirt; size > 0;
 		    dep = nextdp(dep)) {
 
 			size -= dep->d_reclen;

@@ -1150,7 +1150,7 @@ struct READDIR4res_clnt {
 	nfsstat4 status;
 	verifier4 cookieverf;
 	bool_t eof;
-	struct dirent64 *dotp, *dotdotp;
+	struct dirent *dotp, *dotdotp;
 	struct rddir4_cache *rdc;
 };
 typedef struct READDIR4res_clnt READDIR4res_clnt;

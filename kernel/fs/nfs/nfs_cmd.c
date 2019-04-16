@@ -43,7 +43,7 @@
 #ifdef nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 kmutex_t	nfscmd_lock;
 door_handle_t   nfscmd_dh;
@@ -382,12 +382,12 @@ nfscmd_convdirent(struct sockaddr *ca, struct exportinfo *exi, char *data,
 
 	newdata = kmem_zalloc(size, KM_SLEEP);
 
-	nsize = strlen(((struct dirent64 *)data)->d_name);
+	nsize = strlen(((struct dirent *)data)->d_name);
 	count = size;
-	bcopy(data, newdata, sizeof (struct dirent64));
+	bcopy(data, newdata, sizeof (struct dirent));
 
-	iname = ((struct dirent64 *)data)->d_name;
-	oname = ((struct dirent64 *)newdata)->d_name;
+	iname = ((struct dirent *)data)->d_name;
+	oname = ((struct dirent *)newdata)->d_name;
 
 	ret = kiconv(charset->outbound, &iname, &nsize, &oname, &count, &err);
 	if (ret == (size_t)-1) {
@@ -400,9 +400,9 @@ nfscmd_convdirent(struct sockaddr *ca, struct exportinfo *exi, char *data,
 			newdata = data;
 		}
 	} else {
-		ret = strlen(((struct dirent64 *)newdata)->d_name);
-		((struct dirent64 *)newdata)->d_reclen =
-		    DIRENT64_RECLEN(ret + 1);
+		ret = strlen(((struct dirent *)newdata)->d_name);
+		((struct dirent *)newdata)->d_reclen =
+		    DIRENT_RECLEN(ret + 1);
 	}
 	return (newdata);
 }
@@ -419,8 +419,8 @@ nfscmd_convdirplus(struct sockaddr *ca, struct exportinfo *exi, char *data,
 {
 	char *newdata;
 	size_t nsize;
-	struct dirent64 *dp;
-	struct dirent64 *ndp;
+	struct dirent *dp;
+	struct dirent *ndp;
 	size_t i;
 	size_t ret;
 	char *iname;
@@ -440,8 +440,8 @@ nfscmd_convdirplus(struct sockaddr *ca, struct exportinfo *exi, char *data,
 	newdata = kmem_zalloc(maxsize, KM_SLEEP);
 	nsize = 0;
 
-	dp = (struct dirent64 *)data;
-	ndp = (struct dirent64 *)newdata;
+	dp = (struct dirent *)data;
+	ndp = (struct dirent *)newdata;
 
 	for (skipped = 0, i = 0; i < nents; i++) {
 		/*
@@ -476,7 +476,7 @@ nfscmd_convdirplus(struct sockaddr *ca, struct exportinfo *exi, char *data,
 		 * What to do with other errors?
 		 * For now, we return the unconverted string.
 		 */
-		ndp->d_reclen = DIRENT64_RECLEN(strlen(ndp->d_name) + 1);
+		ndp->d_reclen = DIRENT_RECLEN(strlen(ndp->d_name) + 1);
 		nsize += ndp->d_reclen;
 		dp = nextdp(dp);
 		ndp = nextdp(ndp);
@@ -495,7 +495,7 @@ nfscmd_convdirplus(struct sockaddr *ca, struct exportinfo *exi, char *data,
 size_t
 nfscmd_countents(char *data, size_t len)
 {
-	struct dirent64 *dp = (struct dirent64 *)data;
+	struct dirent *dp = (struct dirent *)data;
 	size_t curlen;
 	size_t reclen;
 	size_t nents;
@@ -515,7 +515,7 @@ nfscmd_countents(char *data, size_t len)
  */
 
 size_t
-nfscmd_dropped_entrysize(struct dirent64 *dir, size_t drop, size_t nents)
+nfscmd_dropped_entrysize(struct dirent *dir, size_t drop, size_t nents)
 {
 	size_t size;
 	size_t i;

@@ -931,7 +931,7 @@ static int autofs_nobrowse = 0;
 #ifdef nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 /* ARGSUSED */
 static int
@@ -947,7 +947,7 @@ auto_readdir(
 	autofs_rddirres rd;
 	fnnode_t *fnp = vntofn(vp);
 	fnnode_t *cfnp, *nfnp;
-	dirent64_t *dp;
+	dirent_t *dp;
 	ulong_t offset;
 	ulong_t outcount = 0, count = 0;
 	size_t namelen;
@@ -1029,8 +1029,8 @@ again:
 			goto done;
 		}
 		if (rd.rd_rddir.rddir_size) {
-			dirent64_t *odp = dp;   /* next in output buffer */
-			dirent64_t *cdp = dp;   /* current examined entry */
+			dirent_t *odp = dp;   /* next in output buffer */
+			dirent_t *cdp = dp;   /* current examined entry */
 
 			/*
 			 * Check for duplicates here
@@ -1065,7 +1065,7 @@ again:
 					}
 				}
 				count += this_reclen;
-				cdp = (struct dirent64 *)
+				cdp = (struct dirent *)
 				    ((char *)cdp + this_reclen);
 			} while (count < rd.rd_rddir.rddir_size);
 
@@ -1101,7 +1101,7 @@ again:
 		/*
 		 * first time: so fudge the . and ..
 		 */
-		this_reclen = DIRENT64_RECLEN(1);
+		this_reclen = DIRENT_RECLEN(1);
 		if (alloc_count < this_reclen) {
 			error = EINVAL;
 			goto done;
@@ -1113,11 +1113,11 @@ again:
 		/* use strncpy(9f) to zero out uninitialized bytes */
 
 		(void) strncpy(dp->d_name, ".",
-		    DIRENT64_NAMELEN(this_reclen));
+		    DIRENT_NAMELEN(this_reclen));
 		outcount += dp->d_reclen;
 		dp = nextdp(dp);
 
-		this_reclen = DIRENT64_RECLEN(2);
+		this_reclen = DIRENT_RECLEN(2);
 		if (alloc_count < outcount + this_reclen) {
 			error = EINVAL;
 			goto done;
@@ -1129,7 +1129,7 @@ again:
 		/* use strncpy(9f) to zero out uninitialized bytes */
 
 		(void) strncpy(dp->d_name, "..",
-		    DIRENT64_NAMELEN(this_reclen));
+		    DIRENT_NAMELEN(this_reclen));
 		outcount += dp->d_reclen;
 		dp = nextdp(dp);
 	}
@@ -1149,7 +1149,7 @@ again:
 			 * transient state (not being looked-up)
 			 */
 			namelen = strlen(cfnp->fn_name);
-			reclen = (int)DIRENT64_RECLEN(namelen);
+			reclen = (int)DIRENT_RECLEN(namelen);
 			if (outcount + reclen > alloc_count) {
 				reached_max = 1;
 				break;
@@ -1172,7 +1172,7 @@ again:
 			/* use strncpy(9f) to zero out uninitialized bytes */
 
 			(void) strncpy(dp->d_name, cfnp->fn_name,
-			    DIRENT64_NAMELEN(reclen));
+			    DIRENT_NAMELEN(reclen));
 			outcount += dp->d_reclen;
 			dp = nextdp(dp);
 		}

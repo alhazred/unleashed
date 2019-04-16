@@ -9279,7 +9279,7 @@ recov_retry:
 	 * If count < than the minimum required, we return no entries
 	 * and fail with EINVAL
 	 */
-	if (rargs->dircount < (DIRENT64_RECLEN(1) + DIRENT64_RECLEN(2))) {
+	if (rargs->dircount < (DIRENT_RECLEN(1) + DIRENT_RECLEN(2))) {
 		rdc->error = EINVAL;
 		goto out;
 	}

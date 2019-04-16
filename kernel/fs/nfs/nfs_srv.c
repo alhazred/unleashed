@@ -2605,7 +2605,7 @@ rfs_readdir(struct nfsrddirargs *rda, struct nfsrddirres *rd,
 		if (rd->rd_eof)
 			rd->rd_eof = FALSE;
 		dropbytes = nfscmd_dropped_entrysize(
-		    (struct dirent64 *)rd->rd_entries, nents, ret);
+		    (struct dirent *)rd->rd_entries, nents, ret);
 		rd->rd_size -= dropbytes;
 	}
 	if (ndata == NULL) {

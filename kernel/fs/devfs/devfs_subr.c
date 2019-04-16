@@ -1627,8 +1627,8 @@ devfs_remdrv_rmdir(vnode_t *dirvp, const char *dir, vnode_t *rvp)
 	int		eof;
 	struct iovec	iov;
 	struct uio	uio;
-	struct dirent64	*dp;
-	dirent64_t	*dbuf;
+	struct dirent	*dp;
+	dirent_t	*dbuf;
 	size_t		dlen;
 	size_t		dbuflen;
 	int		ndirents = 64;
@@ -1664,7 +1664,7 @@ devfs_remdrv_rmdir(vnode_t *dirvp, const char *dir, vnode_t *rvp)
 			break;
 
 		for (dp = dbuf; ((intptr_t)dp < (intptr_t)dbuf + dbuflen);
-		    dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen)) {
+		    dp = (dirent_t *)((intptr_t)dp + dp->d_reclen)) {
 
 			nm = dp->d_name;
 
@@ -1724,8 +1724,8 @@ devfs_remdrv_cleanup(const char *dir, const char *nodename)
 	int		eof;
 	struct iovec	iov;
 	struct uio	uio;
-	struct dirent64	*dp;
-	dirent64_t	*dbuf;
+	struct dirent	*dp;
+	dirent_t	*dbuf;
 	size_t		dlen;
 	size_t		dbuflen;
 	int		ndirents = 64;
@@ -1804,7 +1804,7 @@ devfs_remdrv_cleanup(const char *dir, const char *nodename)
 			break;
 
 		for (dp = dbuf; ((intptr_t)dp < (intptr_t)dbuf + dbuflen);
-		    dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen)) {
+		    dp = (dirent_t *)((intptr_t)dp + dp->d_reclen)) {
 
 			nm = dp->d_name;
 

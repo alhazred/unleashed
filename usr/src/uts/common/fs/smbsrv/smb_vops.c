@@ -953,7 +953,7 @@ smb_vop_setup_xvattr(smb_attr_t *smb_attr, xvattr_t *xvattr)
  * not literally stored on-disk in the format returned.
  * If the file system supports extended directory entries (has features
  * VFSFT_DIRENTFLAGS), set V_RDDIR_ENTFLAGS to cause the buffer to be
- * filled with edirent_t structures, instead of dirent64_t structures.
+ * filled with edirent_t structures, instead of dirent_t structures.
  * If the file system supports access based enumeration (abe), set
  * V_RDDIR_ACCFILTER to filter directory entries based on user cred.
  */
@@ -974,7 +974,7 @@ smb_vop_readdir(vnode_t *vp, uint32_t offset,
 		flags |= V_RDDIR_ENTFLAGS;
 		rdirent_size = sizeof (edirent_t);
 	} else {
-		rdirent_size = sizeof (dirent64_t);
+		rdirent_size = sizeof (dirent_t);
 	}
 
 	if (*count < rdirent_size)

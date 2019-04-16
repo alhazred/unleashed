@@ -101,7 +101,7 @@ extern int traverse(vnode_t **);
 extern int vnodetopath(vnode_t *, vnode_t *, char *, size_t, cred_t *);
 extern int dogetcwd(char *, size_t);
 extern int dirfindvp(vnode_t *, vnode_t *, vnode_t *, cred_t *, char *,
-		size_t, dirent64_t **);
+		size_t, dirent_t **);
 
 #ifdef	__cplusplus
 }

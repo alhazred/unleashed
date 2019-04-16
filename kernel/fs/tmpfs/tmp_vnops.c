@@ -1460,7 +1460,7 @@ tmp_readdir(
 	struct tdirent *tdp;
 	int error = 0;
 	size_t namelen;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	ulong_t offset;
 	ulong_t total_bytes_wanted;
 	long outcount = 0;
@@ -1501,10 +1501,10 @@ tmp_readdir(
 	 * Get space for multiple directory entries
 	 */
 	total_bytes_wanted = uiop->uio_iov->iov_len;
-	bufsize = total_bytes_wanted + sizeof (struct dirent64);
+	bufsize = total_bytes_wanted + sizeof (struct dirent);
 	outbuf = kmem_alloc(bufsize, KM_SLEEP);
 
-	dp = (struct dirent64 *)outbuf;
+	dp = (struct dirent *)outbuf;
 
 
 	offset = 0;
@@ -1513,7 +1513,7 @@ tmp_readdir(
 		namelen = strlen(tdp->td_name);	/* no +1 needed */
 		offset = tdp->td_offset;
 		if (offset >= uiop->uio_offset) {
-			reclen = (int)DIRENT64_RECLEN(namelen);
+			reclen = (int)DIRENT_RECLEN(namelen);
 			if (outcount + reclen > total_bytes_wanted) {
 				if (!outcount)
 					/*
@@ -1527,11 +1527,11 @@ tmp_readdir(
 			/* use strncpy(9f) to zero out uninitialized bytes */
 
 			(void) strncpy(dp->d_name, tdp->td_name,
-			    DIRENT64_NAMELEN(reclen));
+			    DIRENT_NAMELEN(reclen));
 			dp->d_reclen = (ushort_t)reclen;
 			dp->d_ino = (ino64_t)tdp->td_tmpnode->tn_nodeid;
 			dp->d_off = (offset_t)tdp->td_offset + 1;
-			dp = (struct dirent64 *)
+			dp = (struct dirent *)
 			    ((uintptr_t)dp + dp->d_reclen);
 			outcount += reclen;
 			ASSERT(outcount <= bufsize);

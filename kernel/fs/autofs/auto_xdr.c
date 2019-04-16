@@ -389,7 +389,7 @@ xdr_autofs_rddirargs(XDR *xdrs, autofs_rddirargs *objp)
 #ifdef nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 /*
  * ENCODE ONLY
@@ -397,7 +397,7 @@ xdr_autofs_rddirargs(XDR *xdrs, autofs_rddirargs *objp)
 bool_t
 xdr_autofs_putrddirres(XDR *xdrs, struct autofsrddir *rddir, uint_t reqsize)
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *name;
 	int size;
 	uint_t namlen;
@@ -450,7 +450,7 @@ xdr_autofs_putrddirres(XDR *xdrs, struct autofsrddir *rddir, uint_t reqsize)
 bool_t
 xdr_autofs_getrddirres(XDR *xdrs, struct autofsrddir *rddir)
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	uint_t namlen;
 	int size;
 	bool_t valid;
@@ -469,7 +469,7 @@ xdr_autofs_getrddirres(XDR *xdrs, struct autofsrddir *rddir)
 		if (!xdr_u_int(xdrs, &fileid) ||
 		    !xdr_u_int(xdrs, &namlen))
 			return (FALSE);
-		if (DIRENT64_RECLEN(namlen) > size) {
+		if (DIRENT_RECLEN(namlen) > size) {
 			rddir->rddir_eof = FALSE;
 			goto bufovflw;
 		}
@@ -477,9 +477,9 @@ xdr_autofs_getrddirres(XDR *xdrs, struct autofsrddir *rddir)
 		    !xdr_u_int(xdrs, &offset))
 			return (FALSE);
 		dp->d_ino = fileid;
-		dp->d_reclen = (ushort_t)DIRENT64_RECLEN(namlen);
+		dp->d_reclen = (ushort_t)DIRENT_RECLEN(namlen);
 		bzero(&dp->d_name[namlen],
-		    DIRENT64_NAMELEN(dp->d_reclen) - namlen);
+		    DIRENT_NAMELEN(dp->d_reclen) - namlen);
 		dp->d_off = offset;
 		size -= dp->d_reclen;
 		/* LINTED pointer alignment */

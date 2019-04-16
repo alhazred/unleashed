@@ -377,7 +377,7 @@ xdr_autofs_rddirargs(xdrs, objp)
 #ifdef nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 /*
  * ENCODE ONLY
@@ -390,7 +390,7 @@ xdr_autofs_putrddirres(xdrs, rddir, reqsize)
 {
 	bool_t t = TRUE;
 	bool_t f = FALSE;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *name;
 	int size;
 	uint_t namlen;
@@ -438,9 +438,9 @@ xdr_autofs_putrddirres(xdrs, rddir, reqsize)
 	return (TRUE);
 }
 
-#define	DIRENT64_RECLEN(namelen)	\
-	(((int)(((dirent64_t *)0)->d_name) + 1 + (namelen) + 7) & ~ 7)
-#define	reclen(namlen)	DIRENT64_RECLEN((namlen))
+#define	DIRENT_RECLEN(namelen)	\
+	(((int)(((dirent_t *)0)->d_name) + 1 + (namelen) + 7) & ~ 7)
+#define	reclen(namlen)	DIRENT_RECLEN((namlen))
 
 /*
  * DECODE ONLY
@@ -450,7 +450,7 @@ xdr_autofs_getrddirres(xdrs, rddir)
 	XDR *xdrs;
 	struct autofsrddir *rddir;
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	uint_t namlen;
 	int size;
 	bool_t valid;

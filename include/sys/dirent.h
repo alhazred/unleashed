@@ -48,43 +48,12 @@ typedef struct dirent {
 	char		d_name[1];	/* name of file */
 } dirent_t;
 
-#if defined(_SYSCALL32)
-
-/* kernel's view of user ILP32 dirent */
-
-typedef	struct dirent32 {
-	ino_t		d_ino;		/* "inode number" of entry */
-	off_t		d_off;		/* offset of disk directory entry */
-	uint16_t	d_reclen;	/* length of this record */
-	char		d_name[1];	/* name of file */
-} dirent32_t;
-
-#endif	/* _SYSCALL32 */
-
-#ifdef	_LARGEFILE64_SOURCE
-
-/*
- * transitional large file interface version AND kernel internal version
- */
-typedef struct dirent64 {
-	ino64_t		d_ino;		/* "inode number" of entry */
-	off64_t		d_off;		/* offset of disk directory entry */
-	unsigned short	d_reclen;	/* length of this record */
-	char		d_name[1];	/* name of file */
-} dirent64_t;
-
-#endif	/* _LARGEFILE64_SOURCE */
-
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 #if defined(_KERNEL)
-#define	DIRENT64_RECLEN(namelen)	\
-	((offsetof(dirent64_t, d_name[0]) + 1 + (namelen) + 7) & ~ 7)
-#define	DIRENT64_NAMELEN(reclen)	\
-	((reclen) - (offsetof(dirent64_t, d_name[0])))
-#define	DIRENT32_RECLEN(namelen)	\
-	((offsetof(dirent32_t, d_name[0]) + 1 + (namelen) + 3) & ~ 3)
-#define	DIRENT32_NAMELEN(reclen)	\
-	((reclen) - (offsetof(dirent32_t, d_name[0])))
+#define	DIRENT_RECLEN(namelen)	\
+	((offsetof(dirent_t, d_name[0]) + 1 + (namelen) + 7) & ~ 7)
+#define	DIRENT_NAMELEN(reclen)	\
+	((reclen) - (offsetof(dirent_t, d_name[0])))
 #endif
 
 /*
@@ -96,8 +65,6 @@ typedef struct dirent64 {
 #if !defined(_KERNEL)
 
 extern int getdents(int, struct dirent *, size_t);
-
-/* N.B.: transitional large file interface version deliberately not provided */
 
 #endif /* !defined(_KERNEL) */
 #endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */

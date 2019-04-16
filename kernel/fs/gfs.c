@@ -204,7 +204,7 @@ gfs_readdir_init(gfs_readdir_state_t *st, int name_max, int ureclen,
 	if (flags & V_RDDIR_ENTFLAGS)
 		dirent_size = EDIRENT_RECLEN(st->grd_namlen);
 	else
-		dirent_size = DIRENT64_RECLEN(st->grd_namlen);
+		dirent_size = DIRENT_RECLEN(st->grd_namlen);
 	st->grd_dirent = kmem_zalloc(dirent_size, KM_SLEEP);
 	st->grd_parent = parent;
 	st->grd_self = self;
@@ -225,7 +225,7 @@ static int
 gfs_readdir_emit_int(gfs_readdir_state_t *st, uio_t *uiop, offset_t next)
 {
 	int reclen;
-	dirent64_t *dp;
+	dirent_t *dp;
 	edirent_t *edp;
 
 	if (st->grd_flags & V_RDDIR_ENTFLAGS) {
@@ -233,7 +233,7 @@ gfs_readdir_emit_int(gfs_readdir_state_t *st, uio_t *uiop, offset_t next)
 		reclen = EDIRENT_RECLEN(strlen(edp->ed_name));
 	} else {
 		dp = st->grd_dirent;
-		reclen = DIRENT64_RECLEN(strlen(dp->d_name));
+		reclen = DIRENT_RECLEN(strlen(dp->d_name));
 	}
 
 	if (reclen > uiop->uio_resid) {
@@ -286,7 +286,7 @@ gfs_readdir_emit(gfs_readdir_state_t *st, uio_t *uiop, offset_t voff,
 		(void) strncpy(edp->ed_name, name, st->grd_namlen);
 		edp->ed_eflags = eflags;
 	} else {
-		dirent64_t *dp = st->grd_dirent;
+		dirent_t *dp = st->grd_dirent;
 
 		dp->d_ino = ino;
 		(void) strncpy(dp->d_name, name, st->grd_namlen);
@@ -367,7 +367,7 @@ gfs_readdir_fini(gfs_readdir_state_t *st, int error, int *eofp, int eof)
 	if (st->grd_flags & V_RDDIR_ENTFLAGS)
 		dirent_size = EDIRENT_RECLEN(st->grd_namlen);
 	else
-		dirent_size = DIRENT64_RECLEN(st->grd_namlen);
+		dirent_size = DIRENT_RECLEN(st->grd_namlen);
 	kmem_free(st->grd_dirent, dirent_size);
 	if (error > 0)
 		return (error);
@@ -953,7 +953,7 @@ out:
  *	vp	- directory vnode
  *	dp	- directory entry, sized according to maxlen given to
  *		  gfs_dir_create().  callback must fill in d_name and
- *		  d_ino (if a dirent64_t), or ed_name, ed_ino, and ed_eflags
+ *		  d_ino (if a dirent_t), or ed_name, ed_ino, and ed_eflags
  *		  (if an edirent_t). edirent_t is used if V_RDDIR_ENTFLAGS
  *		  is set in 'flags'.
  *	eofp	- callback must set to 1 when EOF has been reached

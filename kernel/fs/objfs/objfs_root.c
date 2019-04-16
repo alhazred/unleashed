@@ -112,7 +112,7 @@ objfs_root_do_readdir(vnode_t *vp, void *dp, int *eofp,
 {
 	struct modctl **mpp = data;
 	struct modctl *mp = *mpp;
-	struct dirent64 *odp = dp;
+	struct dirent *odp = dp;
 
 	ASSERT(!(flags & V_RDDIR_ENTFLAGS));
 

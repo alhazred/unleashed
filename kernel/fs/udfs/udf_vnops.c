@@ -1109,7 +1109,7 @@ udf_readdir(
 	int flags)
 {
 	struct ud_inode *ip;
-	struct dirent64 *nd;
+	struct dirent *nd;
 	struct udf_vfs *udf_vfsp;
 	int32_t error = 0, len, outcount = 0;
 	uint32_t dirsiz, offset;
@@ -1148,13 +1148,13 @@ udf_readdir(
 
 	outb = outbuf = kmem_alloc((uint32_t)bufsize, KM_SLEEP);
 	end_outb = outb + bufsize;
-	nd = (struct dirent64 *)outbuf;
+	nd = (struct dirent *)outbuf;
 
 	dname = kmem_zalloc(1024, KM_SLEEP);
 	buf = kmem_zalloc(udf_vfsp->udf_lbsize, KM_SLEEP);
 
 	if (offset == 0) {
-		len = DIRENT64_RECLEN(1);
+		len = DIRENT_RECLEN(1);
 		if (((caddr_t)nd + len) >= end_outb) {
 			error = EINVAL;
 			goto end;
@@ -1163,8 +1163,8 @@ udf_readdir(
 		nd->d_reclen = (uint16_t)len;
 		nd->d_off = 0x10;
 		nd->d_name[0] = '.';
-		bzero(&nd->d_name[1], DIRENT64_NAMELEN(len) - 1);
-		nd = (struct dirent64 *)((char *)nd + nd->d_reclen);
+		bzero(&nd->d_name[1], DIRENT_NAMELEN(len) - 1);
+		nd = (struct dirent *)((char *)nd + nd->d_reclen);
 		outcount++;
 	} else if (offset == 0x10) {
 		offset = 0;
@@ -1180,7 +1180,7 @@ udf_readdir(
 		if ((fid->fid_flags & FID_DELETED) == 0) {
 			if (fid->fid_flags & FID_PARENT) {
 
-				len = DIRENT64_RECLEN(2);
+				len = DIRENT_RECLEN(2);
 				if (((caddr_t)nd + len) >= end_outb) {
 					error = EINVAL;
 					break;
@@ -1192,8 +1192,8 @@ udf_readdir(
 				nd->d_name[0] = '.';
 				nd->d_name[1] = '.';
 				bzero(&nd->d_name[2],
-				    DIRENT64_NAMELEN(len) - 2);
-				nd = (struct dirent64 *)
+				    DIRENT_NAMELEN(len) - 2);
+				nd = (struct dirent *)
 				    ((char *)nd + nd->d_reclen);
 			} else {
 				if ((error = ud_uncompress(fid->fid_idlen,
@@ -1204,7 +1204,7 @@ udf_readdir(
 					offset += FID_LEN(fid);
 					continue;
 				}
-				len = DIRENT64_RECLEN(length);
+				len = DIRENT_RECLEN(length);
 				if (((caddr_t)nd + len) >= end_outb) {
 					if (!outcount) {
 						error = EINVAL;
@@ -1214,14 +1214,14 @@ udf_readdir(
 				(void) strncpy(nd->d_name,
 				    (caddr_t)dname, length);
 				bzero(&nd->d_name[length],
-				    DIRENT64_NAMELEN(len) - length);
+				    DIRENT_NAMELEN(len) - length);
 				nd->d_ino = ud_xlate_to_daddr(udf_vfsp,
 				    SWAP_16(fid->fid_icb.lad_ext_prn),
 				    SWAP_32(fid->fid_icb.lad_ext_loc), 1,
 				    &dummy);
 				nd->d_reclen = (uint16_t)len;
 				nd->d_off = offset + FID_LEN(fid);
-				nd = (struct dirent64 *)
+				nd = (struct dirent *)
 				    ((char *)nd + nd->d_reclen);
 			}
 			outcount++;

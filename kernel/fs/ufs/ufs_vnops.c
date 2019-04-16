@@ -3895,7 +3895,7 @@ ufs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cr, int *eofp,
 	struct iovec *iovp;
 	struct inode *ip;
 	struct direct *idp;
-	struct dirent64 *odp;
+	struct dirent *odp;
 	struct fbuf *fbp;
 	struct ufsvfs *ufsvfsp;
 	struct ulockfs *ulp;
@@ -3962,10 +3962,10 @@ ufs_readdir(struct vnode *vp, struct uio *uiop, struct cred *cr, int *eofp,
 	if (uiop->uio_segflg != UIO_SYSSPACE || uiop->uio_iovcnt != 1) {
 		bufsize = total_bytes_wanted;
 		outbuf = kmem_alloc(bufsize, KM_SLEEP);
-		odp = (struct dirent64 *)outbuf;
+		odp = (struct dirent *)outbuf;
 	} else {
 		bufsize = total_bytes_wanted;
-		odp = (struct dirent64 *)iovp->iov_base;
+		odp = (struct dirent *)iovp->iov_base;
 	}
 
 nextblk:
@@ -4017,7 +4017,7 @@ nextblk:
 		/* Skip to requested offset and skip empty entries */
 		if (idp->d_ino != 0 && offset >= (uint_t)uiop->uio_offset) {
 			ushort_t this_reclen =
-			    DIRENT64_RECLEN(idp->d_namlen);
+			    DIRENT_RECLEN(idp->d_namlen);
 			/* Buffer too small for any entries */
 			if (!outcount && this_reclen > bufsize) {
 				fbrelse(fbp, S_OTHER);
@@ -4036,11 +4036,11 @@ nextblk:
 			/* use strncpy(9f) to zero out uninitialized bytes */
 
 			ASSERT(strlen(idp->d_name) + 1 <=
-			    DIRENT64_NAMELEN(this_reclen));
+			    DIRENT_NAMELEN(this_reclen));
 			(void) strncpy(odp->d_name, idp->d_name,
-			    DIRENT64_NAMELEN(this_reclen));
+			    DIRENT_NAMELEN(this_reclen));
 			outcount += odp->d_reclen;
-			odp = (struct dirent64 *)
+			odp = (struct dirent *)
 			    ((intptr_t)odp + odp->d_reclen);
 			ASSERT(outcount <= bufsize);
 		}

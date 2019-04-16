@@ -228,8 +228,8 @@ fdreaddir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp, caller_context_t *ct,
     int flags)
 {
 	/* bp holds one dirent structure */
-	uoff_t bp[DIRENT64_RECLEN(FDNSIZE) / sizeof (uoff_t)];
-	struct dirent64 *dirent = (struct dirent64 *)bp;
+	uoff_t bp[DIRENT_RECLEN(FDNSIZE) / sizeof (uoff_t)];
+	struct dirent *dirent = (struct dirent *)bp;
 	int reclen, nentries;
 	rctl_qty_t fdno_ctl;
 	int  n;
@@ -255,13 +255,13 @@ fdreaddir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp, caller_context_t *ct,
 			dirent->d_ino = (ino64_t)FDROOTINO;
 			dirent->d_name[0] = '.';
 			dirent->d_name[1] = '\0';
-			reclen = DIRENT64_RECLEN(1);
+			reclen = DIRENT_RECLEN(1);
 		} else if (off == FDSDSIZE) {		/* ".." */
 			dirent->d_ino = (ino64_t)FDROOTINO;
 			dirent->d_name[0] = '.';
 			dirent->d_name[1] = '.';
 			dirent->d_name[2] = '\0';
-			reclen = DIRENT64_RECLEN(2);
+			reclen = DIRENT_RECLEN(2);
 		} else {
 			/*
 			 * Return entries corresponding to the allowable
@@ -271,7 +271,7 @@ fdreaddir(vnode_t *vp, uio_t *uiop, cred_t *cr, int *eofp, caller_context_t *ct,
 				break;
 			dirent->d_ino = (ino64_t)fdtoi(n);
 			numtos((ulong_t)n, dirent->d_name);
-			reclen = DIRENT64_RECLEN(strlen(dirent->d_name));
+			reclen = DIRENT_RECLEN(strlen(dirent->d_name));
 		}
 		dirent->d_off = (offset_t)(uiop->uio_offset + FDSDSIZE);
 		dirent->d_reclen = (ushort_t)reclen;

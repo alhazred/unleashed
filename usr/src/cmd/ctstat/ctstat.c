@@ -620,7 +620,7 @@ static void
 scan_type(int typeno)
 {
 	DIR *dir;
-	struct dirent64 *de;
+	struct dirent *de;
 	char path[PATH_MAX];
 
 	verbout_t *vo = cttypes[typeno].verbout;
@@ -666,7 +666,7 @@ static void
 scan_all(int *types, int ntypes, ctid_t *ids, int nids)
 {
 	DIR *dir;
-	struct dirent64 *de;
+	struct dirent *de;
 	const char *path = CTFS_ROOT "/all";
 	int key, test;
 

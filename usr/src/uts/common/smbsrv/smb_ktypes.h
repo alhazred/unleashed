@@ -1171,7 +1171,7 @@ typedef struct smb_odir {
 	union {
 		char		*u_bufptr;
 		struct edirent	*u_edp;
-		struct dirent64	*u_dp;
+		struct dirent	*u_dp;
 	} d_u;
 	uint32_t		d_last_cookie;
 	uint32_t		d_cookies[SMB_MAX_SEARCH];

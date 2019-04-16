@@ -2853,8 +2853,8 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 	 * Make sure that there is room to read at least one entry
 	 * if any are available.
 	 */
-	if (args->count < DIRENT64_RECLEN(MAXNAMELEN))
-		count = DIRENT64_RECLEN(MAXNAMELEN);
+	if (args->count < DIRENT_RECLEN(MAXNAMELEN))
+		count = DIRENT_RECLEN(MAXNAMELEN);
 	else
 		count = args->count;
 
@@ -2911,7 +2911,7 @@ rfs3_readdir(READDIR3args *args, READDIR3res *resp, struct exportinfo *exi,
 		 * rounded up to the nearest BYTES_PER_XDR_UNIT.
 		 */
 		if (count != uio.uio_resid) {
-			namlen = strlen(((struct dirent64 *)data)->d_name);
+			namlen = strlen(((struct dirent *)data)->d_name);
 			bufsize += (1 + 2 + 1 + 2) * BYTES_PER_XDR_UNIT +
 			    roundup(namlen, BYTES_PER_XDR_UNIT);
 		}
@@ -3011,7 +3011,7 @@ rfs3_readdir_free(READDIR3res *resp)
 #ifdef nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 /*
  * This macro computes the size of a response which contains
@@ -3052,7 +3052,7 @@ rfs3_readdirplus(READDIRPLUS3args *args, READDIRPLUS3res *resp,
 	struct uio uio;
 	char *data;
 	int iseof;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	vnode_t *nvp;
 	struct vattr *nvap;
 	struct vattr nva;
@@ -3109,8 +3109,8 @@ rfs3_readdirplus(READDIRPLUS3args *args, READDIRPLUS3res *resp,
 	 */
 	args->dircount = MIN(args->dircount, args->maxcount);
 
-	if (args->dircount < DIRENT64_RECLEN(MAXNAMELEN))
-		args->dircount = DIRENT64_RECLEN(MAXNAMELEN);
+	if (args->dircount < DIRENT_RECLEN(MAXNAMELEN))
+		args->dircount = DIRENT_RECLEN(MAXNAMELEN);
 
 	/*
 	 * This allocation relies on a minimum directory entry
@@ -3122,7 +3122,7 @@ rfs3_readdirplus(READDIRPLUS3args *args, READDIRPLUS3res *resp,
 
 	space_left = args->dircount;
 	data = kmem_alloc(args->dircount, KM_SLEEP);
-	dp = (struct dirent64 *)data;
+	dp = (struct dirent *)data;
 	uio.uio_iov = &iov;
 	uio.uio_iovcnt = 1;
 	uio.uio_segflg = UIO_SYSSPACE;
@@ -3240,7 +3240,7 @@ getmoredents:
 	if (!iseof &&
 	    (args->maxcount - bufsize) >= NFS3_READDIRPLUS_ENTRY(MAXNAMELEN)) {
 		space_left -= (prev_len - uio.uio_resid);
-		if (space_left >= DIRENT64_RECLEN(MAXNAMELEN))
+		if (space_left >= DIRENT_RECLEN(MAXNAMELEN))
 			goto getmoredents;
 
 		/* else, fall through */
@@ -3254,7 +3254,7 @@ good:
 	infop = kmem_alloc(nents * sizeof (struct entryplus3_info), KM_SLEEP);
 	resp->resok.infop = infop;
 
-	dp = (struct dirent64 *)data;
+	dp = (struct dirent *)data;
 	for (i = 0; i < nents; i++) {
 
 		if (dp->d_ino == 0) {
@@ -3308,7 +3308,7 @@ good:
 		if (iseof)
 			iseof = FALSE;
 
-		ret = nfscmd_dropped_entrysize((struct dirent64 *)data,
+		ret = nfscmd_dropped_entrysize((struct dirent *)data,
 		    nents, ret);
 	}
 

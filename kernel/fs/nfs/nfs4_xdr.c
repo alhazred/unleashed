@@ -2090,32 +2090,32 @@ char	*nfs4_dot_dot_entry;
 /*
  * Create the "." or ".." and pad the buffer once so they are
  * copied out as required into the user supplied buffer everytime.
- * DIRENT64_RECLEN(sizeof (".") - 1) = DIRENT64_RECLEN(1)
- * DIRENT64_RECLEN(sizeof ("..") - 1) = DIRENT64_RECLEN(2)
+ * DIRENT_RECLEN(sizeof (".") - 1) = DIRENT_RECLEN(1)
+ * DIRENT_RECLEN(sizeof ("..") - 1) = DIRENT_RECLEN(2)
  */
 void
 nfs4_init_dot_entries()
 {
-	struct dirent64 *odp;
+	struct dirent *odp;
 
 	/*
 	 * zalloc it so it zeros the buffer out. Need
 	 * to just do it once.
 	 */
-	nfs4_dot_entries = kmem_zalloc(DIRENT64_RECLEN(1) + DIRENT64_RECLEN(2),
+	nfs4_dot_entries = kmem_zalloc(DIRENT_RECLEN(1) + DIRENT_RECLEN(2),
 	    KM_SLEEP);
 
-	odp = (struct dirent64 *)nfs4_dot_entries;
+	odp = (struct dirent *)nfs4_dot_entries;
 	odp->d_off = 1; /* magic cookie for "." entry */
-	odp->d_reclen = DIRENT64_RECLEN(1);
+	odp->d_reclen = DIRENT_RECLEN(1);
 	odp->d_name[0] = '.';
 	odp->d_name[1] = '\0';
 
-	nfs4_dot_dot_entry = nfs4_dot_entries + DIRENT64_RECLEN(1);
-	odp = (struct dirent64 *)nfs4_dot_dot_entry;
+	nfs4_dot_dot_entry = nfs4_dot_entries + DIRENT_RECLEN(1);
+	odp = (struct dirent *)nfs4_dot_dot_entry;
 
 	odp->d_off = 2;
-	odp->d_reclen = DIRENT64_RECLEN(2);
+	odp->d_reclen = DIRENT_RECLEN(2);
 	odp->d_name[0] = '.';
 	odp->d_name[1] = '.';
 	odp->d_name[2] = '\0';
@@ -2125,8 +2125,8 @@ void
 nfs4_destroy_dot_entries()
 {
 	if (nfs4_dot_entries)
-		kmem_free(nfs4_dot_entries, DIRENT64_RECLEN(1) +
-		    DIRENT64_RECLEN(2));
+		kmem_free(nfs4_dot_entries, DIRENT_RECLEN(1) +
+		    DIRENT_RECLEN(2));
 
 	nfs4_dot_entries = nfs4_dot_dot_entry = NULL;
 }
@@ -2136,7 +2136,7 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 {
 	bool_t more_data;
 	rddir4_cache *rdc = aobjp->rdc;
-	dirent64_t *dp = NULL;
+	dirent_t *dp = NULL;
 	int entry_length = 0;
 	int space_left = 0;
 	bitmap4 resbmap;
@@ -2169,7 +2169,7 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 	/* READDIR4res_clnt_free needs to kmem_free this buffer */
 	rdc->entries = kmem_alloc(aobjp->dircount, KM_SLEEP);
 
-	dp = (dirent64_t *)rdc->entries;
+	dp = (dirent_t *)rdc->entries;
 	rdc->entlen = rdc->buflen = space_left = aobjp->dircount;
 
 	/* Fill in dot and dot-dot if needed */
@@ -2178,23 +2178,23 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 
 		if (rdc->nfs4_cookie == (nfs_cookie4)0) {
 			bcopy(nfs4_dot_entries, rdc->entries,
-			    DIRENT64_RECLEN(1) + DIRENT64_RECLEN(2));
+			    DIRENT_RECLEN(1) + DIRENT_RECLEN(2));
 			objp->dotp = dp;
-			dp = (struct dirent64 *)(((char *)dp) +
-			    DIRENT64_RECLEN(1));
+			dp = (struct dirent *)(((char *)dp) +
+			    DIRENT_RECLEN(1));
 			objp->dotdotp = dp;
-			dp = (struct dirent64 *)(((char *)dp) +
-			    DIRENT64_RECLEN(2));
-			space_left -= DIRENT64_RECLEN(1) + DIRENT64_RECLEN(2);
+			dp = (struct dirent *)(((char *)dp) +
+			    DIRENT_RECLEN(2));
+			space_left -= DIRENT_RECLEN(1) + DIRENT_RECLEN(2);
 
 		} else	{	/* for ".." entry */
 			bcopy(nfs4_dot_dot_entry, rdc->entries,
-			    DIRENT64_RECLEN(2));
+			    DIRENT_RECLEN(2));
 			objp->dotp = NULL;
 			objp->dotdotp = dp;
-			dp = (struct dirent64 *)(((char *)dp) +
-			    DIRENT64_RECLEN(2));
-			space_left -= DIRENT64_RECLEN(2);
+			dp = (struct dirent *)(((char *)dp) +
+			    DIRENT_RECLEN(2));
+			space_left -= DIRENT_RECLEN(2);
 		}
 		/* Magic NFSv4 number for entry after start */
 		last_cookie = 2;
@@ -2236,7 +2236,7 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 			 * the rest of the response as "skip" and
 			 * decode or skip the remaining data
 			 */
-			entry_length = DIRENT64_RECLEN(namelen);
+			entry_length = DIRENT_RECLEN(namelen);
 			if (space_left < entry_length)
 				skip_to_end = 1;
 		}
@@ -2246,7 +2246,7 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 			if (!xdr_opaque(xdrs, dp->d_name, namelen))
 				goto noentries;
 			bzero(&dp->d_name[namelen],
-			    DIRENT64_NAMELEN(entry_length) - namelen);
+			    DIRENT_NAMELEN(entry_length) - namelen);
 			dp->d_off = last_cookie = cookie;
 			dp->d_reclen = entry_length;
 		} else {
@@ -2313,7 +2313,7 @@ xdr_READDIR4res_clnt(XDR *xdrs, READDIR4res_clnt *objp, READDIR4args *aobjp)
 				VN_RELE(vp);
 			}
 
-			dp = (struct dirent64 *)(((caddr_t)dp) + dp->d_reclen);
+			dp = (struct dirent *)(((caddr_t)dp) + dp->d_reclen);
 
 			space_left -= entry_length;
 

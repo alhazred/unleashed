@@ -759,7 +759,7 @@ xdr_rddirargs(XDR *xdrs, struct nfsrddirargs *rda)
 #ifdef nextdp
 #undef	nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 #ifdef roundup
 #undef	roundup
 #endif
@@ -771,7 +771,7 @@ xdr_rddirargs(XDR *xdrs, struct nfsrddirargs *rda)
 bool_t
 xdr_putrddirres(XDR *xdrs, struct nfsrddirres *rd)
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	char *name;
 	int size;
 	uint_t namlen;
@@ -831,7 +831,7 @@ xdr_putrddirres(XDR *xdrs, struct nfsrddirres *rd)
 bool_t
 xdr_getrddirres(XDR *xdrs, struct nfsrddirres *rd)
 {
-	struct dirent64 *dp;
+	struct dirent *dp;
 	uint_t namlen;
 	int size;
 	bool_t valid;
@@ -857,7 +857,7 @@ xdr_getrddirres(XDR *xdrs, struct nfsrddirres *rd)
 		if (!xdr_u_int(xdrs, &fileid) ||
 		    !xdr_u_int(xdrs, &namlen))
 			return (FALSE);
-		this_reclen = DIRENT64_RECLEN(namlen);
+		this_reclen = DIRENT_RECLEN(namlen);
 		if (this_reclen > size) {
 			rd->rd_eof = FALSE;
 			goto bufovflw;
@@ -867,7 +867,7 @@ xdr_getrddirres(XDR *xdrs, struct nfsrddirres *rd)
 			return (FALSE);
 		}
 		bzero(&dp->d_name[namlen],
-		    DIRENT64_NAMELEN(this_reclen) - namlen);
+		    DIRENT_NAMELEN(this_reclen) - namlen);
 		dp->d_ino = (ino64_t)fileid;
 		dp->d_reclen = this_reclen;
 		dp->d_off = (off64_t)offset;

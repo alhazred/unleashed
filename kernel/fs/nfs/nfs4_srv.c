@@ -115,9 +115,9 @@ static int rdma_setup_read_data4(READ4args *, READ4res *);
  *
  * RFS4_MINLEN_RDDIR_BUF: minimum length of buffer server will provide to
  *	fop_readdir.  Its value is the size of the maximum possible dirent
- *	for solaris.  The DIRENT64_RECLEN macro returns	the size of dirent
+ *	for solaris.  The DIRENT_RECLEN macro returns	the size of dirent
  *	required for a given name length.  MAXNAMELEN is the maximum
- *	filename length allowed in Solaris.  The first two DIRENT64_RECLEN()
+ *	filename length allowed in Solaris.  The first two DIRENT_RECLEN()
  *	macros are to allow for . and .. entries -- just a minor tweak to try
  *	and guarantee that buffer we give to fop_readdir will be large enough
  *	to hold ., .., and the largest possible solaris dirent64.
@@ -125,7 +125,7 @@ static int rdma_setup_read_data4(READ4args *, READ4res *);
 #define	RFS4_MINLEN_ENTRY4 36
 #define	RFS4_MINLEN_RDDIR4 (4 + NFS4_VERIFIER_SIZE + 4 + RFS4_MINLEN_ENTRY4 + 4)
 #define	RFS4_MINLEN_RDDIR_BUF \
-	(DIRENT64_RECLEN(1) + DIRENT64_RECLEN(2) + DIRENT64_RECLEN(MAXNAMELEN))
+	(DIRENT_RECLEN(1) + DIRENT_RECLEN(2) + DIRENT_RECLEN(MAXNAMELEN))
 
 /*
  * It would be better to pad to 4 bytes since that's what XDR would do,
@@ -141,7 +141,7 @@ static int rdma_setup_read_data4(READ4args *, READ4res *);
  *
  */
 #define	DIRENT64_TO_DIRCOUNT(dp) \
-	(3 * BYTES_PER_XDR_UNIT + DIRENT64_NAMELEN((dp)->d_reclen))
+	(3 * BYTES_PER_XDR_UNIT + DIRENT_NAMELEN((dp)->d_reclen))
 
 time_t rfs4_start_time;			/* Initialized in rfs4_srvrinit */
 
@@ -468,7 +468,7 @@ extern void	rfs4_free_fs_locations4(fs_locations4 *);
 #ifdef	nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 fem_t deleg_rdops = {
 	.name = "deleg_rdops",

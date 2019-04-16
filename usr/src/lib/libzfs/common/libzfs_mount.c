@@ -207,7 +207,7 @@ static boolean_t
 dir_is_empty_readdir(const char *dirname)
 {
 	DIR *dirp;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	int dirfd;
 
 	if ((dirfd = openat(AT_FDCWD, dirname,

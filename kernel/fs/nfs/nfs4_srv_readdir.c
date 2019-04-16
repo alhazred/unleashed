@@ -79,9 +79,9 @@
  *
  * RFS4_MINLEN_RDDIR_BUF: minimum length of buffer server will provide to
  *	fop_readdir.  Its value is the size of the maximum possible dirent
- *	for solaris.  The DIRENT64_RECLEN macro returns	the size of dirent
+ *	for solaris.  The DIRENT_RECLEN macro returns	the size of dirent
  *	required for a given name length.  MAXNAMELEN is the maximum
- *	filename length allowed in Solaris.  The first two DIRENT64_RECLEN()
+ *	filename length allowed in Solaris.  The first two DIRENT_RECLEN()
  *	macros are to allow for . and .. entries -- just a minor tweak to try
  *	and guarantee that buffer we give to fop_readdir will be large enough
  *	to hold ., .., and the largest possible solaris dirent64.
@@ -89,13 +89,13 @@
 #define	RFS4_MINLEN_ENTRY4 36
 #define	RFS4_MINLEN_RDDIR4 (4 + NFS4_VERIFIER_SIZE + 4 + RFS4_MINLEN_ENTRY4 + 4)
 #define	RFS4_MINLEN_RDDIR_BUF \
-	(DIRENT64_RECLEN(1) + DIRENT64_RECLEN(2) + DIRENT64_RECLEN(MAXNAMELEN))
+	(DIRENT_RECLEN(1) + DIRENT_RECLEN(2) + DIRENT_RECLEN(MAXNAMELEN))
 
 
 #ifdef	nextdp
 #undef nextdp
 #endif
-#define	nextdp(dp)	((struct dirent64 *)((char *)(dp) + (dp)->d_reclen))
+#define	nextdp(dp)	((struct dirent *)((char *)(dp) + (dp)->d_reclen))
 
 verifier4	Readdir4verf = 0x0;
 
@@ -375,7 +375,7 @@ rfs4_op_readdir(nfs_argop4 *argop, nfs_resop4 *resop, struct svc_req *req,
 	vnode_t *dvp = cs->vp;
 	vnode_t *vp;
 	vattr_t va;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	rfs4_sb_encode_t dsbe, sbe;
 	int vfs_different;
 	int rddir_data_len, rddir_result_size;
@@ -663,7 +663,7 @@ readagain:
 
 	lastentry_ptr = ptr;
 	no_space = 0;
-	for (dp = (struct dirent64 *)rddir_data;
+	for (dp = (struct dirent *)rddir_data;
 	    !no_space && rddir_result_size > 0; dp = nextdp(dp)) {
 		bool_t fs_migrated = FALSE;
 
@@ -798,7 +798,7 @@ reencode_attrs:
 		 * However, use the regular DIRENT64 to match most
 		 * client's APIs.
 		 */
-		dircount -= DIRENT64_RECLEN(namelen);
+		dircount -= DIRENT_RECLEN(namelen);
 		if (nents != 0 && dircount < 0) {
 			no_space = TRUE;
 			continue;

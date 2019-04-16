@@ -477,8 +477,8 @@ walk_dir(struct vnode *dvp, void *arg, int (*callback)(char *, void *))
 	int eof, error;
 	struct iovec iov;
 	struct uio uio;
-	struct dirent64 *dp;
-	dirent64_t *dbuf;
+	struct dirent *dp;
+	dirent_t *dbuf;
 	size_t dbuflen, dlen;
 
 	ASSERT(dvp);
@@ -509,7 +509,7 @@ walk_dir(struct vnode *dvp, void *arg, int (*callback)(char *, void *))
 			break;
 		for (dp = dbuf; ((intptr_t)dp <
 		    (intptr_t)dbuf + dbuflen);
-		    dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen)) {
+		    dp = (dirent_t *)((intptr_t)dp + dp->d_reclen)) {
 			nm = dp->d_name;
 
 			if (strcmp(nm, ".") == 0 ||

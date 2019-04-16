@@ -207,7 +207,7 @@ bootfs_readdir(vnode_t *vp, struct uio *uiop, cred_t *cr, int *eofp,
     caller_context_t *ct, int flags)
 {
 	bootfs_node_t *bnp = (bootfs_node_t *)vp->v_data;
-	dirent64_t *dp;
+	dirent_t *dp;
 	void *buf;
 	ulong_t bsize, brem;
 	offset_t coff, roff;
@@ -243,7 +243,7 @@ bootfs_readdir(vnode_t *vp, struct uio *uiop, cred_t *cr, int *eofp,
 	 * what's actually stored when we update the offset in the structure.
 	 */
 	if (roff == 0) {
-		dlen = DIRENT64_RECLEN(1);
+		dlen = DIRENT_RECLEN(1);
 		if (first == B_TRUE) {
 			if (dlen > brem) {
 				kmem_free(buf, bsize);
@@ -254,13 +254,13 @@ bootfs_readdir(vnode_t *vp, struct uio *uiop, cred_t *cr, int *eofp,
 		dp->d_ino = (ino64_t)bnp->bvn_attr.va_nodeid;
 		dp->d_off = 0;
 		dp->d_reclen = (ushort_t)dlen;
-		(void) strncpy(dp->d_name, ".", DIRENT64_NAMELEN(dlen));
-		dp = (struct dirent64 *)((uintptr_t)dp + dp->d_reclen);
+		(void) strncpy(dp->d_name, ".", DIRENT_NAMELEN(dlen));
+		dp = (struct dirent *)((uintptr_t)dp + dp->d_reclen);
 		brem -= dlen;
 	}
 
 	if (roff <= 1) {
-		dlen = DIRENT64_RECLEN(2);
+		dlen = DIRENT_RECLEN(2);
 		if (first == B_TRUE) {
 			if (dlen > brem) {
 				kmem_free(buf, bsize);
@@ -271,8 +271,8 @@ bootfs_readdir(vnode_t *vp, struct uio *uiop, cred_t *cr, int *eofp,
 		dp->d_ino = (ino64_t)bnp->bvn_parent->bvn_attr.va_nodeid;
 		dp->d_off = 1;
 		dp->d_reclen = (ushort_t)dlen;
-		(void) strncpy(dp->d_name, "..", DIRENT64_NAMELEN(dlen));
-		dp = (struct dirent64 *)((uintptr_t)dp + dp->d_reclen);
+		(void) strncpy(dp->d_name, "..", DIRENT_NAMELEN(dlen));
+		dp = (struct dirent *)((uintptr_t)dp + dp->d_reclen);
 		brem -= dlen;
 	}
 
@@ -286,7 +286,7 @@ bootfs_readdir(vnode_t *vp, struct uio *uiop, cred_t *cr, int *eofp,
 			continue;
 		}
 
-		dlen = DIRENT64_RECLEN(nlen);
+		dlen = DIRENT_RECLEN(nlen);
 		if (dlen > brem) {
 			if (first == B_TRUE) {
 				kmem_free(buf, bsize);
@@ -300,8 +300,8 @@ bootfs_readdir(vnode_t *vp, struct uio *uiop, cred_t *cr, int *eofp,
 		dp->d_off = coff;
 		dp->d_reclen = (ushort_t)dlen;
 		(void) strncpy(dp->d_name, dnp->bvn_name,
-		    DIRENT64_NAMELEN(dlen));
-		dp = (struct dirent64 *)((uintptr_t)dp + dp->d_reclen);
+		    DIRENT_NAMELEN(dlen));
+		dp = (struct dirent *)((uintptr_t)dp + dp->d_reclen);
 		brem -= dlen;
 		coff += nlen;
 	}

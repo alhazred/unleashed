@@ -611,7 +611,7 @@ smb_rmdir_possible(smb_node_t *n, uint32_t flags)
 	union {
 		char		*u_bufptr;
 		struct edirent	*u_edp;
-		struct dirent64	*u_dp;
+		struct dirent	*u_dp;
 	} u;
 #define	bufptr	u.u_bufptr
 #define	extdp	u.u_edp

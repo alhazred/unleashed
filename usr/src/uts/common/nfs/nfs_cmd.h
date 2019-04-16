@@ -85,7 +85,7 @@ extern char *nfscmd_convdirent(struct sockaddr *, struct exportinfo *, char *,
 extern size_t nfscmd_convdirplus(struct sockaddr *, struct exportinfo *, char *,
     size_t, size_t, char **);
 extern size_t nfscmd_countents(char *, size_t);
-extern size_t nfscmd_dropped_entrysize(struct dirent64 *, size_t, size_t);
+extern size_t nfscmd_dropped_entrysize(struct dirent *, size_t, size_t);
 
 #endif
 

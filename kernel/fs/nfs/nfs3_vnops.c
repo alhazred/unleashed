@@ -4066,7 +4066,7 @@ nfs3readdir(vnode_t *vp, rddir_cache *rdc, cred_t *cr)
 	rdc->entries = kmem_alloc(rdc->buflen, KM_SLEEP);
 #endif
 
-	res.entries = (dirent64_t *)rdc->entries;
+	res.entries = (dirent_t *)rdc->entries;
 	res.entries_size = rdc->buflen;
 	res.dir_attributes.fres.vap = &dva;
 	res.dir_attributes.fres.vp = vp;
@@ -4176,7 +4176,7 @@ nfs3readdirplus(vnode_t *vp, rddir_cache *rdc, cred_t *cr)
 	rdc->entries = kmem_alloc(rdc->buflen, KM_SLEEP);
 #endif
 
-	res.entries = (dirent64_t *)rdc->entries;
+	res.entries = (dirent_t *)rdc->entries;
 	res.entries_size = rdc->buflen;
 	res.dir_attributes.fres.vap = &dva;
 	res.dir_attributes.fres.vp = vp;

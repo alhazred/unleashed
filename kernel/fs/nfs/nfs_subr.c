@@ -5102,7 +5102,7 @@ do_xattr_exists_check(vnode_t *vp, ulong_t *valp, cred_t *cr)
 	struct uio uio;
 	struct iovec iov;
 	char *dbuf;
-	struct dirent64 *dp;
+	struct dirent *dp;
 	size_t dlen = 8 * 1024;
 	size_t dbuflen;
 	int eof = 0;
@@ -5130,14 +5130,14 @@ do_xattr_exists_check(vnode_t *vp, ulong_t *valp, cred_t *cr)
 		return (error);
 	}
 
-	dp = (dirent64_t *)dbuf;
+	dp = (dirent_t *)dbuf;
 
 	while ((intptr_t)dp < (intptr_t)dbuf + dbuflen) {
 		if (strcmp(dp->d_name, ".") == 0 ||
 		    strcmp(dp->d_name, "..") == 0 || strcmp(dp->d_name,
 		    VIEW_READWRITE) == 0 || strcmp(dp->d_name,
 		    VIEW_READONLY) == 0) {
-			dp = (dirent64_t *)((intptr_t)dp + dp->d_reclen);
+			dp = (dirent_t *)((intptr_t)dp + dp->d_reclen);
 			continue;
 		}
 

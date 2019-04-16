@@ -72,7 +72,7 @@
 # define NAMLEN(dirent) strlen((dirent)->d_name)
 # if defined(_FILE_OFFSET_BITS) && defined(HAVE_STRUCT_DIRENT64)
 #  if !defined(_LP64) && (_FILE_OFFSET_BITS == 64)
-#   define	DIRENT	struct dirent64
+#   define	DIRENT	struct dirent
 #  else
 #   define	DIRENT	struct dirent
 #  endif

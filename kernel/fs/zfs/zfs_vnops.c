@@ -2206,7 +2206,7 @@ zfs_readdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 	znode_t		*zp = VTOZ(vp);
 	iovec_t		*iovp;
 	edirent_t	*eodp;
-	dirent64_t	*odp;
+	dirent_t	*odp;
 	zfsvfs_t	*zfsvfs = zp->z_zfsvfs;
 	objset_t	*os;
 	caddr_t		outbuf;
@@ -2282,11 +2282,11 @@ zfs_readdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 	if (uio->uio_segflg != UIO_SYSSPACE || uio->uio_iovcnt != 1) {
 		bufsize = bytes_wanted;
 		outbuf = kmem_alloc(bufsize, KM_SLEEP);
-		odp = (struct dirent64 *)outbuf;
+		odp = (struct dirent *)outbuf;
 	} else {
 		bufsize = bytes_wanted;
 		outbuf = NULL;
-		odp = (struct dirent64 *)iovp->iov_base;
+		odp = (struct dirent *)iovp->iov_base;
 	}
 	eodp = (struct edirent *)odp;
 
@@ -2375,7 +2375,7 @@ zfs_readdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 		if (flags & V_RDDIR_ENTFLAGS)
 			reclen = EDIRENT_RECLEN(strlen(zap.za_name));
 		else
-			reclen = DIRENT64_RECLEN(strlen(zap.za_name));
+			reclen = DIRENT_RECLEN(strlen(zap.za_name));
 
 		/*
 		 * Will this entry fit in the buffer?
@@ -2412,8 +2412,8 @@ zfs_readdir(vnode_t *vp, uio_t *uio, cred_t *cr, int *eofp,
 			/* NOTE: d_off is the offset for the *next* entry */
 			next = &(odp->d_off);
 			(void) strncpy(odp->d_name, zap.za_name,
-			    DIRENT64_NAMELEN(reclen));
-			odp = (dirent64_t *)((intptr_t)odp + reclen);
+			    DIRENT_NAMELEN(reclen));
+			odp = (dirent_t *)((intptr_t)odp + reclen);
 		}
 		outcount += reclen;
 

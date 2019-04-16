@@ -620,7 +620,7 @@ struct nfsrdok {
 	uint32_t rdok_offset;		/* next offset (opaque) */
 	uint32_t rdok_size;		/* size in bytes of entries */
 	bool_t	rdok_eof;		/* true if last entry is in result */
-	struct dirent64 *rdok_entries;	/* variable number of entries */
+	struct dirent *rdok_entries;	/* variable number of entries */
 };
 
 /*
@@ -1843,7 +1843,7 @@ struct READDIR3vres {
 	nfsstat3 status;
 	post_op_vattr dir_attributes;
 	cookieverf3 cookieverf;
-	dirent64_t *entries;			/* decoded dirent64s */
+	dirent_t *entries;			/* decoded dirent64s */
 	uint_t size;				/* actual size of entries */
 	uint_t entries_size;			/* max size of entries */
 	off64_t loff;				/* last offset/cookie */
@@ -1922,7 +1922,7 @@ struct READDIRPLUS3vres {
 	nfsstat3 status;
 	post_op_vattr dir_attributes;
 	cookieverf3 cookieverf;
-	dirent64_t *entries;			/* decoded dirent64s */
+	dirent_t *entries;			/* decoded dirent64s */
 	uint_t size;				/* actual size of entries */
 	uint_t entries_size;			/* max size of entries */
 	bool_t eof;				/* End of directory */
