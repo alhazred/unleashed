@@ -776,7 +776,7 @@ mmap(void *addr, size_t len, int prot, int flags, int fd, off_t pos)
  * mmap64 interpose
  */
 void *
-mmap64(void *addr, size_t len, int prot, int flags, int fd, off64_t pos)
+mmap(void *addr, size_t len, int prot, int flags, int fd, off64_t pos)
 {
 	static void *(*mmap64func)();
 	void *result;

@@ -825,7 +825,7 @@ size_t	cnt;
 		mapoff = filoff - displacement;
 		/* LINTED offset will fit into 32 bits */
 		len = (size_t)roundup(cnt + (filoff - mapoff), pagesize);
-		maddr = mmap64(NULL, len, PROT_READ, MAP_SHARED, mapfd, mapoff);
+		maddr = mmap(NULL, len, PROT_READ, MAP_SHARED, mapfd, mapoff);
 		if (maddr != MAP_FAILED) {
 			(void) memcpy(ba, maddr + displacement, cnt);
 			(void) munmap(maddr, len);

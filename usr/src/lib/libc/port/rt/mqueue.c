@@ -485,7 +485,7 @@ mq_open(const char *path, int oflag, /* mode_t mode, mq_attr *attr */ ...)
 	}
 	cr_flag |= ALLOC_MEM;
 
-	if ((ptr = mmap64(NULL, total_size, PROT_READ|PROT_WRITE,
+	if ((ptr = mmap(NULL, total_size, PROT_READ|PROT_WRITE,
 	    MAP_SHARED, fd, (off64_t)0)) == MAP_FAILED)
 		goto out;
 	mqhp = ptr;
@@ -507,7 +507,7 @@ mq_open(const char *path, int oflag, /* mode_t mode, mq_attr *attr */ ...)
 	if (ftruncate(fd, (off64_t)sizeof (struct mq_dn)) < 0)
 		goto out;
 
-	if ((ptr = mmap64(NULL, sizeof (struct mq_dn),
+	if ((ptr = mmap(NULL, sizeof (struct mq_dn),
 	    PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off64_t)0)) == MAP_FAILED)
 		goto out;
 	mqdnp = ptr;

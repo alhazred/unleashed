@@ -389,7 +389,7 @@ ctf_sect_mmap(ctf_sect_t *sp, int fd)
 {
 	size_t pageoff = sp->cts_offset & ~_PAGEMASK;
 
-	caddr_t base = mmap64(NULL, sp->cts_size + pageoff, PROT_READ,
+	caddr_t base = mmap(NULL, sp->cts_size + pageoff, PROT_READ,
 	    MAP_PRIVATE, fd, sp->cts_offset & _PAGEMASK);
 
 	if (base != MAP_FAILED)
@@ -455,7 +455,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 		if (hdr.ctf.ctp_version > CTF_VERSION)
 			return (ctf_set_open_errno(errp, ECTF_CTFVERS));
 
-		ctfsect.cts_data = mmap64(NULL, st.st_size, PROT_READ,
+		ctfsect.cts_data = mmap(NULL, st.st_size, PROT_READ,
 		    MAP_PRIVATE, fd, 0);
 
 		if (ctfsect.cts_data == MAP_FAILED)
@@ -574,7 +574,7 @@ ctf_fdcreate_int(int fd, int *errp, ctf_sect_t *ctfp)
 		strs_mapsz = sp[shstrndx].sh_size +
 		    (sp[shstrndx].sh_offset & ~_PAGEMASK);
 
-		strs_map = mmap64(NULL, strs_mapsz, PROT_READ, MAP_PRIVATE,
+		strs_map = mmap(NULL, strs_mapsz, PROT_READ, MAP_PRIVATE,
 		    fd, sp[shstrndx].sh_offset & _PAGEMASK);
 
 		strs = (const char *)strs_map +
