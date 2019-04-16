@@ -1174,7 +1174,7 @@ zpool_find_import_impl(libzfs_handle_t *hdl, importargs_t *iarg)
 		/*
 		 * This is not MT-safe, but we have no MT consumers of libzfs
 		 */
-		while ((dp = readdir64(dirp)) != NULL) {
+		while ((dp = readdir(dirp)) != NULL) {
 			const char *name = dp->d_name;
 			if (name[0] == '.' &&
 			    (name[1] == 0 || (name[1] == '.' && name[2] == 0)))

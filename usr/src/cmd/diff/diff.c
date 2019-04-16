@@ -1416,7 +1416,7 @@ setupdir(char *cp)
 	if (dp == 0)
 		error(gettext(NO_MEM_ERR));
 
-	while (rp = readdir64(dirp)) {
+	while (rp = readdir(dirp)) {
 		ep = &dp[nitems++];
 		ep->d_reclen = rp->d_reclen;
 		ep->d_entry = 0;

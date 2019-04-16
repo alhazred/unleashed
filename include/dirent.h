@@ -100,14 +100,6 @@ extern int		closedir(DIR *);
 extern int readdir_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
 	struct dirent **_RESTRICT_KYWD);
 
-/*
- * FIXME source compat: these are aliases to non-64 ones in libc (though the
- * arg types are differently named).
- */
-struct dirent *readdir64(DIR *);
-int readdir64_r(DIR *_RESTRICT_KYWD, struct dirent *_RESTRICT_KYWD,
-    struct dirent **_RESTRICT_KYWD);
-
 #ifdef	__cplusplus
 }
 #endif

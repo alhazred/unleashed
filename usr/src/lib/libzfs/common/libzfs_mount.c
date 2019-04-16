@@ -220,7 +220,7 @@ dir_is_empty_readdir(const char *dirname)
 		return (B_TRUE);
 	}
 
-	while ((dp = readdir64(dirp)) != NULL) {
+	while ((dp = readdir(dirp)) != NULL) {
 
 		if (strcmp(dp->d_name, ".") == 0 ||
 		    strcmp(dp->d_name, "..") == 0)

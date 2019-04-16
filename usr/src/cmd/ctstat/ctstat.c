@@ -629,7 +629,7 @@ scan_type(int typeno)
 	if (snprintf(path, PATH_MAX, CTFS_ROOT "/%s", type) >= PATH_MAX ||
 	    (dir = opendir(path)) == NULL)
 		uu_die(gettext("bad contract type: %s\n"), type);
-	while ((de = readdir64(dir)) != NULL) {
+	while ((de = readdir(dir)) != NULL) {
 		/*
 		 * Eliminate special files (e.g. '.', '..').
 		 */
@@ -672,7 +672,7 @@ scan_all(int *types, int ntypes, ctid_t *ids, int nids)
 
 	if ((dir = opendir(path)) == NULL)
 		uu_die(gettext("could not open %s"), path);
-	while ((de = readdir64(dir)) != NULL) {
+	while ((de = readdir(dir)) != NULL) {
 		/*
 		 * Eliminate special files (e.g. '.', '..').
 		 */

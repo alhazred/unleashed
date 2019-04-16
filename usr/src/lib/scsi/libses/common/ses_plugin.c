@@ -294,7 +294,7 @@ ses_plugin_load_dir(ses_target_t *tp, const char *pluginroot)
 #endif
 
 	if ((dirp = opendir(path)) != NULL) {
-		while ((dp = readdir64(dirp)) != NULL) {
+		while ((dp = readdir(dirp)) != NULL) {
 			if (strcmp(dp->d_name, ".") == 0 ||
 			    strcmp(dp->d_name, "..") == 0)
 				continue;

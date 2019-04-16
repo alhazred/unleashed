@@ -489,7 +489,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 			goto dun;
 		}
 		mtype_len = strlen(mtype);
-		while ((dp = readdir64(dirp)) != NULL) {
+		while ((dp = readdir(dirp)) != NULL) {
 			char		lpath[2 * (MAXNAMELEN+1)];
 			char		linkbuf[MAXPATHLEN+4];
 			int		lb_len;
