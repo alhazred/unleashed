@@ -164,7 +164,7 @@ lf_xftw(char *path, int (*fn)(), int depth, int (*statfn)())
 	 *	Check for presence of attributes on file
 	 */
 	if (pathconf(path, _PC_XATTR_EXISTS) == 1) {
-		attrfd = attropen64(path, ".", O_RDONLY|O_NONBLOCK);
+		attrfd = attropen(path, ".", O_RDONLY|O_NONBLOCK);
 	} else {
 		attrfd = -1;
 	}
