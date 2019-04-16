@@ -666,7 +666,7 @@ setdirmodes()
 	/* XXX if modefile[0] == '#', shouldn't we just bail here? */
 	/* XXX why isn't it set already? */
 	INIT_MODEFILE();
-	smf = fopen64(modefile, "r");
+	smf = fopen(modefile, "r");
 	if (smf == NULL) {
 		perror("fopen");
 		(void) fprintf(stderr,

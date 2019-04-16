@@ -744,7 +744,7 @@ safe_open(int dfd, const char *filename, int mode, int perms)
 }
 
 /*
- * STDIO version of safe_open.  Equivalent to fopen64(...).
+ * STDIO version of safe_open.  Equivalent to fopen(...).
  */
 FILE *
 safe_fopen(const char *filename, const char *smode, int perms)

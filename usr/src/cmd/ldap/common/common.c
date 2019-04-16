@@ -2479,7 +2479,7 @@ FILE *
 ldaptool_open_file(const char *filename, const char *mode)
 {
 #ifdef _LARGEFILE64_SOURCE
-	return fopen64(filename, mode);
+	return fopen(filename, mode);
 #else
 	return fopen(filename, mode);
 #endif

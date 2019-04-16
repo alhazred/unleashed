@@ -236,7 +236,7 @@ repquota(char *fsdev, char *fsfile, char *qffile)
 
 	if (vflag || aflag)
 		(void) printf("%s (%s):\n", fsdev, fsfile);
-	qf = fopen64(qffile, "r");
+	qf = fopen(qffile, "r");
 	if (qf == NULL) {
 		perror(qffile);
 		return (1);

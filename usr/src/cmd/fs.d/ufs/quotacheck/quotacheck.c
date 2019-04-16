@@ -447,7 +447,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 		perror(rawdisk);
 		return (1);
 	}
-	qf = fopen64(qffile, "r+");
+	qf = fopen(qffile, "r+");
 	if (qf == NULL) {
 		perror(qffile);
 		close(fi);

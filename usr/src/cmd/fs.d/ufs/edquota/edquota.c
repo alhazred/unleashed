@@ -325,7 +325,7 @@ getprivs(uid_t uid)
 	FILE *fd;
 
 	getdiscq(uid);
-	if ((fd = fopen64(tmpfil, "w")) == NULL) {
+	if ((fd = fopen(tmpfil, "w")) == NULL) {
 		(void) fprintf(stderr, "edquota: ");
 		perror(tmpfil);
 		(void) unlink(tmpfil);
@@ -354,7 +354,7 @@ putprivs(uid_t uid)
 	uint32_t max_limit;
 	int	quota_entry_printed;
 
-	fd = fopen64(tmpfil, "r");
+	fd = fopen(tmpfil, "r");
 	if (fd == NULL) {
 		(void) fprintf(stderr, "Can't re-read temp file!!\n");
 		return;
@@ -500,7 +500,7 @@ gettimes(uid_t uid)
 	char btime[80], ftime[80];
 
 	getdiscq(uid);
-	if ((fd = fopen64(tmpfil, "w")) == NULL) {
+	if ((fd = fopen(tmpfil, "w")) == NULL) {
 		(void) fprintf(stderr, "edquota: ");
 		perror(tmpfil);
 		(void) unlink(tmpfil);
@@ -525,7 +525,7 @@ puttimes(uid_t uid)
 	double btimelimit, ftimelimit;
 	char bunits[80], funits[80];
 
-	fd = fopen64(tmpfil, "r");
+	fd = fopen(tmpfil, "r");
 	if (fd == NULL) {
 		(void) fprintf(stderr, "Can't re-read temp file!!\n");
 		return;
