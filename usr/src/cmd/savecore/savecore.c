@@ -323,7 +323,7 @@ Pread(int fd, void *buf, size_t size, offset_t off)
 static void
 Pwrite(int fd, void *buf, size_t size, off64_t off)
 {
-	if (pwrite64(fd, buf, size, off) != size)
+	if (pwrite(fd, buf, size, off) != size)
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "pwrite: %s",
 		    strerror(errno));
 }

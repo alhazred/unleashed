@@ -63,7 +63,7 @@ struct _kvmd {
 };
 
 #define	PREAD	(ssize_t (*)(int, void *, size_t, offset_t))pread
-#define	PWRITE	(ssize_t (*)(int, void *, size_t, offset_t))pwrite64
+#define	PWRITE	(ssize_t (*)(int, void *, size_t, offset_t))pwrite
 
 static int kvm_nlist_core(kvm_t *kd, struct nlist nl[], const char *err);
 

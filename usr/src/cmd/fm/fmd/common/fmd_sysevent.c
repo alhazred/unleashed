@@ -393,7 +393,7 @@ next:
 		 */
 		ed.ed_magic = 0;
 
-		if (pwrite64(fd, &ed, sizeof (ed), off) != sizeof (ed)) {
+		if (pwrite(fd, &ed, sizeof (ed), off) != sizeof (ed)) {
 			fmd_hdl_error(hdl, "failed to mark dump "
 			    "transport event (offset %llx)", (u_longlong_t)off);
 		}

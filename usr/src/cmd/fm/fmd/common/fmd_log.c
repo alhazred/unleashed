@@ -716,9 +716,9 @@ exerr:
  * Commit an event to the log permanently, indicating that it should not be
  * replayed on restart.  This is done by overwriting the event group's catalog
  * code with EXD_GROUP_FMA (from EXD_GROUP_RFMA used in fmd_log_append()).  We
- * use pwrite64() to update the existing word directly, using somewhat guilty
+ * use pwrite() to update the existing word directly, using somewhat guilty
  * knowledge that exacct stores the 32-bit catalog word first for each object.
- * Since we are overwriting an existing log location using pwrite64() and hold
+ * Since we are overwriting an existing log location using pwrite() and hold
  * the event lock, we do not need to hold the log_lock during the i/o.
  */
 void
@@ -737,7 +737,7 @@ fmd_log_commit(fmd_log_t *lp, fmd_event_t *e)
 	c = CAT_FMA_GROUP;
 	exacct_order32(&c);
 
-	if (pwrite64(lp->log_fd, &c, sizeof (c), ep->ev_off) == sizeof (c)) {
+	if (pwrite(lp->log_fd, &c, sizeof (c), ep->ev_off) == sizeof (c)) {
 		TRACE((FMD_DBG_LOG, "commit %s %p", lp->log_tag, (void *)ep));
 		ep->ev_flags &= ~FMD_EVF_REPLAY;
 
@@ -992,7 +992,7 @@ fmd_log_update(fmd_log_t *lp)
 		(void) ea_pack_object(&toc, buf, size);
 		ASSERT(lp->log_toc + size == lp->log_beg);
 
-		if (pwrite64(lp->log_fd, buf, size, lp->log_toc) == size) {
+		if (pwrite(lp->log_fd, buf, size, lp->log_toc) == size) {
 			TRACE((FMD_DBG_LOG, "updated skip to %llx", skip));
 		} else {
 			fmd_error(EFMD_LOG_UPDATE,

@@ -239,7 +239,7 @@ fdio_bdev_write(mdb_io_t *io, const void *buf, size_t nbytes)
 
 		bcopy(buf, &blk[blkoff], len);
 
-		if (pwrite64(fdp->fd_fd, blk, DEV_BSIZE, devoff) != DEV_BSIZE)
+		if (pwrite(fdp->fd_fd, blk, DEV_BSIZE, devoff) != DEV_BSIZE)
 			break; /* errno is set for us, unless EOF */
 
 		resid -= len;

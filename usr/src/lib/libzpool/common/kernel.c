@@ -517,7 +517,7 @@ vn_rdwr(int uio, vnode_t *vp, void *addr, ssize_t len, offset_t offset,
 		iolen = pread(vp->v_fd, addr, len, offset);
 		if (vp->v_dump_fd != -1) {
 			int status =
-			    pwrite64(vp->v_dump_fd, addr, iolen, offset);
+			    pwrite(vp->v_dump_fd, addr, iolen, offset);
 			ASSERT(status != -1);
 		}
 	} else {
@@ -528,8 +528,8 @@ vn_rdwr(int uio, vnode_t *vp, void *addr, ssize_t len, offset_t offset,
 		int sectors = len >> SPA_MINBLOCKSHIFT;
 		split = (sectors > 0 ? rand() % sectors : 0) <<
 		    SPA_MINBLOCKSHIFT;
-		iolen = pwrite64(vp->v_fd, addr, split, offset);
-		iolen += pwrite64(vp->v_fd, (char *)addr + split,
+		iolen = pwrite(vp->v_fd, addr, split, offset);
+		iolen += pwrite(vp->v_fd, (char *)addr + split,
 		    len - split, offset + split);
 	}
 

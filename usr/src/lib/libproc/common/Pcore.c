@@ -131,7 +131,7 @@ Pwrite_core(struct ps_prochandle *P, const void *buf, size_t n, uintptr_t addr,
     void *data)
 {
 	return (core_rw(P, (void *)buf, n, addr,
-	    (ssize_t (*)(int, void *, size_t, off_t)) pwrite64));
+	    (ssize_t (*)(int, void *, size_t, off_t)) pwrite));
 }
 
 /*ARGSUSED*/

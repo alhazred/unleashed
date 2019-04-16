@@ -99,7 +99,7 @@ gc_pwrite64(int fd, const void *buf, size_t len, off_t off)
 {
 	int err;
 
-	err = pwrite64(fd, buf, len, off);
+	err = pwrite(fd, buf, len, off);
 
 	if (err < 0)
 		return (err);
