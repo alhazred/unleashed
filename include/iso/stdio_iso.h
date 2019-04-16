@@ -92,11 +92,7 @@ typedef unsigned int	size_t;		/* (historical version) */
 #endif
 #endif	/* !_SIZE_T */
 
-#if defined(_LP64) || _FILE_OFFSET_BITS == 32
-typedef long		fpos_t;
-#else
-typedef	__longlong_t	fpos_t;
-#endif
+typedef	long long	fpos_t;
 
 #if __cplusplus >= 199711L
 }
@@ -207,10 +203,8 @@ extern size_t	fread(void *_RESTRICT_KYWD, size_t, size_t,
 	FILE *_RESTRICT_KYWD);
 extern size_t	fwrite(const void *_RESTRICT_KYWD, size_t, size_t,
 	FILE *_RESTRICT_KYWD);
-#if !defined(__lint) || defined(_LP64) || _FILE_OFFSET_BITS == 32
 extern int	fgetpos(FILE *_RESTRICT_KYWD, fpos_t *_RESTRICT_KYWD);
 extern int	fsetpos(FILE *, const fpos_t *);
-#endif
 extern int	fseek(FILE *, long, int);
 extern long	ftell(FILE *);
 extern void	rewind(FILE *);

@@ -29,7 +29,6 @@ PROG= dd
 include ../Makefile.cmd
 
 CERRWARN += -Wno-uninitialized
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:
 

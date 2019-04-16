@@ -30,7 +30,6 @@ include ../Makefile.cmd
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
 XGETFLAGS += -a -x $(PROG).xcl
-CPPFLAGS +=  -D_FILE_OFFSET_BITS=64
 
 LDLIBS += -lcmdutils -lsec
 

@@ -31,7 +31,6 @@ PROG= touch
 include ../Makefile.cmd
 
 XGETFLAGS += -a -x touch.xcl
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:
 

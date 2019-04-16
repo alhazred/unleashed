@@ -48,7 +48,7 @@ SRCS=	\
 
 # All commands using the common avltree interfaces must
 # be largefile aware.
-CPPFLAGS +=	-I.. -I../../common/inc -D_FILE_OFFSET_BITS=64
+CPPFLAGS +=	-I.. -I../../common/inc
 
 .KEEP_STATE:
 

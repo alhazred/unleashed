@@ -1549,8 +1549,7 @@ update_dircache(const char *path, int flags)
 
 		/*
 		 * libelf and gelf would be a cleaner and easier way to handle
-		 * this, but libelf fails compilation if _ILP32 is defined &&
-		 * _FILE_OFFSET_BITS is != 32 ...
+		 * this, but libelf fails compilation if _ILP32 is defined ...
 		 */
 		if (read(fd, (void *)&elf, sizeof (_elfhdr)) < 0) {
 			bam_error(_("read failed for file: %s: %s\n"),

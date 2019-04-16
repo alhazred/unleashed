@@ -6,7 +6,7 @@ AWKSRC=	${SRCTOP}/contrib/awk
 PROG=	awk
 SRCS=	awkgram.y b.c lex.c lib.c main.c parse.c proctab.c run.c tran.c ytab.h
 
-CFLAGS+= -DHAS_ISBLANK -I. -I${AWKSRC} -D_FILE_OFFSET_BITS=64 
+CFLAGS+= -DHAS_ISBLANK -I. -I${AWKSRC}
 
 LDADD=	-lm
 

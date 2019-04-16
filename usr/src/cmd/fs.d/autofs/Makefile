@@ -83,7 +83,6 @@ $(AUTO) := 	LDLIBS += -lsldap -lscf
 $(MOUNT):=	LDLIBS += -lscf
 $(TYPEPROG) :=	LDLIBS += -lrpcsvc -lsldap -lkstat -lscf
 
-CFLAGS +=	-D_FILE_OFFSET_BITS=64
 CPPFLAGS=	-I. -I.. -I../nfs/lib $(CPPFLAGS.master) \
 			$(MALLOC_DEBUG)
 

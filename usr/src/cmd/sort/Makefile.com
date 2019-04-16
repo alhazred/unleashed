@@ -76,7 +76,6 @@ DCFILE = 	$(PROG).dc
 
 CFLAGS +=	$(SORT_DEBUG)
 CFLAGS64 +=	$(SORT_DEBUG)
-CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized

@@ -24,10 +24,6 @@
  * Use is subject to license terms.
  */
 
-#ifdef _FILE_OFFSET_BITS
-#undef _FILE_OFFSET_BITS
-#endif /* _FILE_OFFSET_BITS */
-
 #include <sys/contract/process.h>
 #include <sys/ctfs.h>
 #include <sys/types.h>

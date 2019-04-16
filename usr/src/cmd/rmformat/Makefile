@@ -36,7 +36,6 @@ LDLIBS +=	-lsmedia -lvolmgt -ladm -lefi
 
 CERRWARN += -Wno-uninitialized
 
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 $(ROOTBIN)/rmformat := FILEMODE = 04555
 

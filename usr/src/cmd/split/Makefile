@@ -29,7 +29,6 @@
 PROG= split
 
 include ../Makefile.cmd
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:
 

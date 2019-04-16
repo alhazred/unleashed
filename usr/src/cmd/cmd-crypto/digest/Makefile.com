@@ -34,8 +34,6 @@ SRCS = $(OBJS:%.o=../%.c)
 
 include ../../../Makefile.cmd
 
-CPPFLAGS +=-D_FILE_OFFSET_BITS=64
-
 CERRWARN += -Wno-uninitialized
 
 LDLIBS += -lkmf -lpkcs11 -lcryptoutil

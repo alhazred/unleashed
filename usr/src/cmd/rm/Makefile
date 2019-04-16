@@ -32,7 +32,7 @@ include ../Makefile.cmd
 
 CERRWARN += -Wno-parentheses
 CFLAGS += -DXPG4
-CPPFLAGS += -D_FILE_OFFSET_BITS=64  -I $(SRC)/common/util
+CPPFLAGS +=  -I $(SRC)/common/util
 .KEEP_STATE:
 
 all: $(PROG)

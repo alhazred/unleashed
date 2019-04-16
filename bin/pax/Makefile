@@ -12,7 +12,7 @@ SRCS+=	pwcache.c strmode.c dprintf.c
 CPPFLAGS+=	-D_POSIX_PTHREAD_SEMANTICS
 # XXX for the time being we also need to specify we want to work with 64-bit
 # files.
-CPPFLAGS+=	-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+CPPFLAGS+=	-D_LARGEFILE_SOURCE
 
 # For now, our tar(1) and cpio(1) don't come from here.
 #MAN=	pax.1 tar.1 cpio.1

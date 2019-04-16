@@ -76,11 +76,7 @@
 /*
  * Special kludge for off_t being a signed quantity.
  */
-#if _FILE_OFFSET_BITS == 64
 typedef	u_longlong_t	u_off_t;
-#else
-typedef	ulong_t		u_off_t;
-#endif
 
 #define	SECMODE	0xe080
 

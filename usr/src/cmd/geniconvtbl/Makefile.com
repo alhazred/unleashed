@@ -86,7 +86,6 @@ CERRWARN	+= -Wno-switch
 CERRWARN	+= -Wno-unused-variable
 CERRWARN	+= -Wno-implicit-function-declaration
 YFLAGS		+= -d -v
-CFLAGS 		+= -D_FILE_OFFSET_BITS=64
 
 # dump_expr() is too hairy
 SMATCH=off
@@ -97,7 +96,7 @@ $(ITM) :=	sparcv9_CFLAGS += -mno-app-regs
 
 LDLIBS += -lgen
 
-MY_NATIVE_CPPFLAGS = -D_FILE_OFFSET_BITS=64 -I. -I..
+MY_NATIVE_CPPFLAGS = -I. -I..
 MY_NATIVE_LDFLAGS = $(MAPFILE.PGA:%=-Wl,-M%)
 MY_NATIVE_LDLIBS = -lgen
 

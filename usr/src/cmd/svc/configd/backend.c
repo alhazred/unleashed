@@ -24,12 +24,6 @@
  * Use is subject to license terms.
  */
 
-/*
- * sqlite is not compatible with _FILE_OFFSET_BITS=64, but we need to
- * be able to statvfs(2) possibly large systems.  This define gives us
- * access to the transitional interfaces.  See lfcompile64(5) for how
- * _LARGEFILE64_SOURCE works.
- */
 #define	_LARGEFILE64_SOURCE
 
 #include <assert.h>

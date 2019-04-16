@@ -30,7 +30,7 @@ SRCS=		$(OBJS1:%.o=%.c) $(SRC)/common/util/getresponse.c
 
 include ../Makefile.cmd
 
-CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
+CPPFLAGS += -I $(SRC)/common/util
 DCFILE= $(PROG).dc
 
 LDLIBS += -lsec -lcmdutils -lnvpair

@@ -34,8 +34,7 @@ SRCS =		$(OBJS:%.o=%.c)
 
 include ../../../Makefile.cmd
 
-CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 \
-		-I$(SRC)/lib/gss_mechs/mech_krb5/include \
+CPPFLAGS +=	-I$(SRC)/lib/gss_mechs/mech_krb5/include \
 		-I$(SRC)/uts/common/gssapi/mechs/krb5/include
 
 CERRWARN +=	-Wno-parentheses

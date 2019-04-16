@@ -36,7 +36,6 @@ include		../../Makefile.pam_modules
 
 LDLIBS		+= -lpam -lc
 # Enable large file support for accessing the lastlog file.
-CPPFLAGS	+= -D_FILE_OFFSET_BITS=64
 
 all:	$(LIBS)
 

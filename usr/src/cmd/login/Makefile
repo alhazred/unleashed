@@ -41,7 +41,7 @@ FILEMODE= 4555
 CLOBBERFILES +=	$(LOGINDEVPERM)
 
 CPPFLAGS +=	-DSYSV -DCONSOLE='"/dev/console"' -DSECURITY \
-		-D_FILE_OFFSET_BITS=64 -I$(SRC)/lib/pam_modules/krb5
+	 -I$(SRC)/lib/pam_modules/krb5
 
 LDLIBS += -lpam -ldevinfo
 

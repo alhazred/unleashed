@@ -183,15 +183,9 @@ int utimes(const char *path, const struct timeval timeval_ptr[]);
 #define	VIEW_READWRITE	"SUNWattr_rw"
 #endif
 
-#if _FILE_OFFSET_BITS == 64
 #define	FMT_off_t "lld"
 #define	FMT_off_t_o "llo"
 #define	FMT_blkcnt_t "lld"
-#else
-#define	FMT_off_t "ld"
-#define	FMT_off_t_o "lo"
-#define	FMT_blkcnt_t "ld"
-#endif
 
 /* ACL support */
 

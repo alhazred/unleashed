@@ -47,11 +47,7 @@ extern "C" {
 #define	MAX_OPTVAL_LEN	32			/* Option value max length */
 
 /* Format when printing an off_t */
-#if _FILE_OFFSET_BITS == 64
 #define	OFF_T_FMT	"%lld"
-#else
-#define	OFF_T_FMT	"%ld"
-#endif
 
 typedef union {
 	struct tftphdr	tb_hdr;

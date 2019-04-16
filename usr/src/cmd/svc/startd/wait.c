@@ -37,10 +37,6 @@
  * descriptor is inactive (already closed or not yet opened).
  */
 
-#ifdef _FILE_OFFSET_BITS
-#undef _FILE_OFFSET_BITS
-#endif /* _FILE_OFFSET_BITS */
-
 #include <sys/resource.h>
 #include <sys/stat.h>
 #include <sys/types.h>

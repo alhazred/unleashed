@@ -59,7 +59,6 @@ clobber:=	TARGET= clobber
 acctcom := LDLIBS += lib/a.a
 acctcms acctcon acctcon1 acctmerg acctprc1 acctprc := LDLIBS += lib/a.a
 
-acctdusg:= CPPFLAGS += -D_FILE_OFFSET_BITS=64
 acctdusg:= LDLIBS += -lcmdutils
 
 LIBACCTD=	$(ROOTLIB)/acct

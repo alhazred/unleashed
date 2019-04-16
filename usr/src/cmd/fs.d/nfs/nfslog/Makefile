@@ -40,7 +40,6 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-type-limits
-CPPFLAGS += 	-D_FILE_OFFSET_BITS=64
 
 #
 # Message catalog

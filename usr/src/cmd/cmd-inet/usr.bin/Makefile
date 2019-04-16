@@ -50,9 +50,6 @@ CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized
 CERRWARN +=	-Wno-unused-function
 
-# Enable large file support for reading the lastlog file.
-finger :=	CPPFLAGS += -D_FILE_OFFSET_BITS=64
-
 finger :=		LDLIBS += -lncurses
 
 .KEEP_STATE:

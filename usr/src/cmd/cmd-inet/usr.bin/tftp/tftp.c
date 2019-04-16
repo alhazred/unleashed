@@ -538,10 +538,6 @@ tsize_handler(char *optstr)
 	value = strtoll(optstr, &endp, 10);
 	if (errno != 0 || value < 0 || *endp != '\0')
 		return (EOPTNEG);
-#if _FILE_OFFSET_BITS == 32
-	if (value > MAXOFF_T)
-		return (ENOSPACE);
-#endif
 	/*
 	 * Don't bother checking the tsize value we specified in a write
 	 * request is echoed back in the OACK.

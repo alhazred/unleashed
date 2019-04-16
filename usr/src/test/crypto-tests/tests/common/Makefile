@@ -20,7 +20,7 @@ include $(SRC)/test/Makefile.com
 OBJS = testfuncs.o cryptotest_pkcs.o cryptotest_kcf.o
 SRCS = $(OBJS:%.o=%.c)
 
-CPPFLAGS += -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I$(SRC)/common/crypto/
+CPPFLAGS += -D_LARGEFILE_SOURCE -I$(SRC)/common/crypto/
 
 all install: $(OBJS)
 

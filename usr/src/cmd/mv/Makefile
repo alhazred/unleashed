@@ -39,7 +39,7 @@ CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-uninitialized
 CFLAGS += -DXPG4
 XGETFLAGS += -a -x mv.xcl
-CPPFLAGS += -D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
+CPPFLAGS += -I $(SRC)/common/util
 
 $(PROG) := LDLIBS += -lcmdutils -lavl -lsec -lnvpair
 

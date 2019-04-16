@@ -47,7 +47,7 @@ include $(NDMP_DIR)/Makefile.rpcgen
 
 CPPFLAGS += $(LFLAGS64)
 
-CPPFLAGS += -D_FILE_OFFSET_BITS=64 -DDEBUG
+CPPFLAGS += -DDEBUG
 CPPFLAGS += -I. -Iinclude
 
 CSTD = $(CSTD_GNU99)

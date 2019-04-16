@@ -40,7 +40,6 @@ LDLIBS += 	-lc
 SRCDIR =	../common
 
 CERRWARN +=	-Wno-uninitialized
-CPPFLAGS +=	-D_FILE_OFFSET_BITS=64
 
 debug :=	CPPFLAGS += -DLIBEXACCT_DEBUG
 debug :=	COPTFLAG = -g

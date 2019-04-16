@@ -31,7 +31,6 @@ EXOBJS= chown.o
 include ../Makefile.cmd
 
 CFLAGS += -DXPG4
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 LDLIBS += -lcmdutils -lsec
 
 .KEEP_STATE:

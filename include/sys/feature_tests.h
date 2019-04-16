@@ -139,8 +139,6 @@
 #undef	_LARGEFILE_SOURCE
 #define	_LARGEFILE_SOURCE	1
 
-#define _FILE_OFFSET_BITS 64
-
 /*
  * Use of _XOPEN_SOURCE
  *

@@ -38,7 +38,6 @@ include ../Makefile.com
 LDLIBS += ../lib/mksh/libmksh.a ../lib/vroot/libvroot.a
 LDLIBS += ../lib/bsd/libbsd.a -lc -lumem
 
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 ROOTRULES = $(ROOTSHLIB)/make/make.rules $(ROOTSHLIB)/make/svr4.make.rules
 

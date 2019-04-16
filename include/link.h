@@ -41,12 +41,7 @@ extern "C" {
 #ifndef _ASM
 /*
  * ld support library calls.
- *
- * These cannot be used in a 32bit large file capable environment because
- * libelf is not large-file safe.  Only define these interfaces if we are not
- * 32bit, or not in the large file environment.
  */
-#if !defined(_ILP32) || _FILE_OFFSET_BITS != 64
 #include <libelf.h>
 extern uint_t	ld_version(uint_t);
 extern void	ld_input_done(uint_t *);
@@ -70,8 +65,6 @@ extern void	ld_input_section64(const char *, Elf64_Shdr **, Elf64_Word,
 			Elf_Data *, Elf *, uint_t *);
 extern void	ld_section64(const char *, Elf64_Shdr *, Elf64_Word,
 			Elf_Data *, Elf *);
-
-#endif /* !defined(_ILP32) || _FILE_OFFSET_BITS != 64 */
 
 /*
  * ld_version() version values.

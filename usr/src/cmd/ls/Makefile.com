@@ -37,7 +37,6 @@ LDLIBS += -lsec -lnvpair -lcmdutils -lncurses
 CFLAGS += -DXPG4 -DXPG6
 CFLAGS64 += -DXPG4 -DXPG6
 
-CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 .KEEP_STATE:
 

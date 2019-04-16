@@ -107,7 +107,7 @@ typedef struct ksendfilevec64 {
 
 #ifndef	_KERNEL
 /* large file compilation environment setup */
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
+#if !defined(_LP64)
 #ifdef	__PRAGMA_REDEFINE_EXTNAME
 #pragma	redefine_extname	sendfilev	sendfilev64
 #pragma	redefine_extname	sendfile	sendfile64
@@ -115,7 +115,7 @@ typedef struct ksendfilevec64 {
 #define	sendfilev			sendfilev64
 #define	sendfile			sendfile64
 #endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* !_LP64 && _FILE_OFFSET_BITS == 64 */
+#endif	/* !_LP64 */
 
 /* In the LP64 compilation environment, the APIs are already large file */
 #if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
@@ -131,8 +131,7 @@ typedef struct ksendfilevec64 {
 extern ssize_t sendfilev(int, const struct sendfilevec *, int, size_t *);
 extern ssize_t sendfile(int, int, off_t *, size_t);
 /* Transitional largefile interface */
-#if	defined(_LARGEFILE64_SOURCE) && !((_FILE_OFFSET_BITS == 64) && \
-	    !defined(__PRAGMA_REDEFINE_EXTNAME))
+#if	defined(_LARGEFILE64_SOURCE) && defined(__PRAGMA_REDEFINE_EXTNAME)
 extern ssize_t sendfilev64(int, const struct sendfilevec64 *, int, size_t *);
 extern ssize_t sendfile64(int, int, off64_t *, size_t);
 #endif

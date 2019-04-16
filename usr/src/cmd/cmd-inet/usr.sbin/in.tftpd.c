@@ -640,12 +640,6 @@ tsize_handler(int opcode, char *optval, int *errcode)
 		 * support broken clients we don't check that it is.
 		 */
 	} else {
-#if _FILE_OFFSET_BITS == 32
-		if (value > MAXOFF_T) {
-			*errcode = ENOSPACE;
-			return (NULL);
-		}
-#endif
 		tsize = value;
 		tsize_set = B_TRUE;
 	}

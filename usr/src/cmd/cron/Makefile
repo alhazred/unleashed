@@ -32,7 +32,7 @@ MANIFEST =	cron.xml
 ROOTMANIFESTDIR = $(ROOTSVCSYSTEM)
 ROOTMETHOD =	$(ROOTLIBSVCMETHOD)/svc-cron
 
-CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 -I $(SRC)/common/util
+CPPFLAGS +=	-I $(SRC)/common/util
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-label
 CERRWARN +=	-Wno-uninitialized

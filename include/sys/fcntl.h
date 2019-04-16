@@ -195,7 +195,7 @@ extern "C" {
  * The FLOCK forms are also private and should not be used.
  */
 
-#if defined(_LP64) || _FILE_OFFSET_BITS == 32
+#if defined(_LP64)
 /* "Native" application compilation environment */
 #define	F_SETLK		6	/* Set file lock */
 #define	F_SETLKW	7	/* Set file lock and wait */
@@ -225,7 +225,7 @@ extern "C" {
 #define	F_FLOCK		55	/* private - set flock owned by file */
 #define	F_FLOCKW	56	/* private - set flock owned by file and wait */
 #endif	/* _STRICT_SYMBOLS */
-#endif /* _LP64 || _FILE_OFFSET_BITS == 32 */
+#endif /* _LP64 */
 
 #if 	defined(_LARGEFILE64_SOURCE)
 
