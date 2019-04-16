@@ -65,7 +65,7 @@ main(int argc, char *argv[])
 		exit(127);
 	}
 
-	if ((fd = open64(argv[1], O_RDONLY)) == -1) {
+	if ((fd = open(argv[1], O_RDONLY)) == -1) {
 		(void) fprintf(stderr,
 		    gettext("runat: cannot open %s: %s\n"), argv[1],
 		    strerror(errno));

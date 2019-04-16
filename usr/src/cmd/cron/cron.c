@@ -3400,7 +3400,7 @@ contract_set_template(void)
 {
 	int fd;
 
-	if ((fd = open64(CTFS_ROOT "/process/template", O_RDWR)) < 0)
+	if ((fd = open(CTFS_ROOT "/process/template", O_RDWR)) < 0)
 		crabort("cannot open process contract template",
 		    REMOVE_FIFO | CONSOLE_MSG);
 
@@ -3425,7 +3425,7 @@ contract_clear_template(void)
 {
 	int fd;
 
-	if ((fd = open64(CTFS_ROOT "/process/template", O_RDWR)) < 0)
+	if ((fd = open(CTFS_ROOT "/process/template", O_RDWR)) < 0)
 		crabort("cannot open process contract template",
 		    REMOVE_FIFO | CONSOLE_MSG);
 

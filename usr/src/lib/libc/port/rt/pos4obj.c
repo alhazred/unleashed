@@ -73,7 +73,7 @@ __open_nc(const char *path, int oflag, mode_t mode)
 	}
 
 	(void) pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cancel_state);
-	val = open64(path, oflag, mode);
+	val = open(path, oflag, mode);
 	(void) pthread_setcancelstate(cancel_state, NULL);
 
 	return (val);

@@ -123,13 +123,13 @@ kvm_open(const char *namelist, const char *corefile, const char *swapfile,
 			char *kmem = (corestat.st_rdev == allkmemstat.st_rdev ?
 			    "/dev/allkmem" : "/dev/kmem");
 
-			if ((kd->kvm_kmemfd = open64(kmem, flag)) == -1)
+			if ((kd->kvm_kmemfd = open(kmem, flag)) == -1)
 				return (fail(kd, err, "cannot open %s", kmem));
-			if ((kd->kvm_memfd = open64("/dev/mem", flag)) == -1)
+			if ((kd->kvm_memfd = open("/dev/mem", flag)) == -1)
 				return (fail(kd, err, "cannot open /dev/mem"));
 		}
 	} else {
-		if ((kd->kvm_corefd = open64(corefile, flag)) == -1)
+		if ((kd->kvm_corefd = open(corefile, flag)) == -1)
 			return (fail(kd, err, "cannot open %s", corefile));
 		if (pread64(kd->kvm_corefd, &kd->kvm_dump,
 		    sizeof (kd->kvm_dump), 0) != sizeof (kd->kvm_dump))
@@ -359,7 +359,7 @@ kvm_rw(kvm_t *kd, uint64_t addr, void *buf, size_t size,
 			return (prw(kd->kvm_memfd, buf, size, addr));
 
 		(void) sprintf(procbuf, "/proc/%ld/as", kd->kvm_pid);
-		if ((procfd = open64(procbuf, kd->kvm_openflag)) == -1)
+		if ((procfd = open(procbuf, kd->kvm_openflag)) == -1)
 			return (-1);
 		rval = prw(procfd, buf, size, addr);
 		(void) close(procfd);

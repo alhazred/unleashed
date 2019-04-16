@@ -363,7 +363,7 @@ void
 getsb(struct fs *fs, char *file)
 {
 
-	fi = open64(file, O_RDWR);
+	fi = open(file, O_RDWR);
 	if (fi < 0) {
 		fprintf(stderr, "Cannot open ");
 		perror(file);

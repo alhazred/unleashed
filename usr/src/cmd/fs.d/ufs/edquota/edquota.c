@@ -706,7 +706,7 @@ getdiscq(uid_t uid)
 	for (fsqp = fsqlist; fsqp; fsqp = fsqp->fsq_next) {
 		if (quotactl(Q_GETQUOTA, fsqp->fsq_dev, uid,
 		    (caddr_t)&fsqp->fsq_dqb) != 0) {
-			if ((fd = open64(fsqp->fsq_qfile, O_RDONLY)) < 0) {
+			if ((fd = open(fsqp->fsq_qfile, O_RDONLY)) < 0) {
 				(void) fprintf(stderr, "edquota: ");
 				perror(fsqp->fsq_qfile);
 				continue;
@@ -747,7 +747,7 @@ putdiscq(uid_t uid)
 		    (caddr_t)&fsqp->fsq_dqb) != 0) {
 			int fd;
 
-			if ((fd = open64(fsqp->fsq_qfile, O_RDWR)) < 0) {
+			if ((fd = open(fsqp->fsq_qfile, O_RDWR)) < 0) {
 				(void) fprintf(stderr, "edquota: ");
 				perror(fsqp->fsq_qfile);
 				continue;
@@ -887,7 +887,7 @@ quotactl(int cmd, char *special, uid_t uid, caddr_t addr)
 			open_flags = O_RDWR;
 		}
 
-		if ((fd = open64(qfile, open_flags)) < 0) {
+		if ((fd = open(qfile, open_flags)) < 0) {
 			(void) fprintf(stderr, "quotactl: ");
 			perror("open");
 			exit(31+1);

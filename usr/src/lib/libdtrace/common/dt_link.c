@@ -1015,7 +1015,7 @@ process_obj(dtrace_hdl_t *dtp, const char *obj, int *eprobesp)
 	dt_link_pair_t *pair, *bufs = NULL;
 	dt_strtab_t *strtab;
 
-	if ((fd = open64(obj, O_RDWR)) == -1) {
+	if ((fd = open(obj, O_RDWR)) == -1) {
 		return (dt_link_error(dtp, elf, fd, bufs,
 		    "failed to open %s: %s", obj, strerror(errno)));
 	}
@@ -1528,7 +1528,7 @@ dtrace_program_link(dtrace_hdl_t *dtp, dtrace_prog_t *pgp, uint_t dflags,
 	 * combine it with drti.o later.  We can still refer to it in child
 	 * processes as /dev/fd/<fd>.
 	 */
-	if ((fd = open64(file, O_RDWR | O_CREAT | O_TRUNC, 0666)) == -1) {
+	if ((fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666)) == -1) {
 		return (dt_link_error(dtp, NULL, -1, NULL,
 		    "failed to open %s: %s", file, strerror(errno)));
 	}

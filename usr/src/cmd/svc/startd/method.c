@@ -364,7 +364,7 @@ method_ready_contract(restarter_inst_t *inst, int type,
 	iswait = instance_is_wait_style(inst);
 	istrans = method_is_transient(inst, type);
 
-	tmpl = open64(CTFS_ROOT "/process/template", O_RDWR);
+	tmpl = open(CTFS_ROOT "/process/template", O_RDWR);
 	if (tmpl == -1)
 		uu_die("Could not create contract template");
 

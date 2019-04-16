@@ -690,7 +690,7 @@ ctf_open(const char *filename, int *errp)
 	ctf_file_t *fp;
 	int fd;
 
-	if ((fd = open64(filename, O_RDONLY)) == -1) {
+	if ((fd = open(filename, O_RDONLY)) == -1) {
 		if (errp != NULL)
 			*errp = errno;
 		return (NULL);

@@ -505,11 +505,11 @@ main(int argc, char **argv)
 	 * contract bundle endpoint.  Mark them close-on-exec so we
 	 * don't have to worry about closing them in our child.
 	 */
-	fd = open64(CTFS_ROOT "/process/template", O_RDWR);
+	fd = open(CTFS_ROOT "/process/template", O_RDWR);
 	if (fd == -1)
 		uu_die(gettext("template open failed"));
 
-	efd = open64(CTFS_ROOT "/process/pbundle", O_RDONLY);
+	efd = open(CTFS_ROOT "/process/pbundle", O_RDONLY);
 	if (efd == -1)
 		uu_die(gettext("process bundle open failed"));
 

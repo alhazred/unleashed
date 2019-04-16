@@ -1483,7 +1483,7 @@ logit(void *ap)
 			if (f->f_type != F_FILE)
 				goto out;	/* nothing to do */
 			(void) close(f->f_file);
-			f->f_file = open64(f->f_un.f_fname,
+			f->f_file = open(f->f_un.f_fname,
 			    O_WRONLY|O_APPEND|O_NOCTTY);
 			if (f->f_file < 0) {
 				f->f_type = F_UNUSED;
@@ -3497,7 +3497,7 @@ cfline(char *line, int lineno, struct filed *f)
 		if (S_ISFIFO(sbuf.st_mode))
 			fmode = O_NONBLOCK;
 
-		f->f_file = open64(p, omode|fmode);
+		f->f_file = open(p, omode|fmode);
 		if (f->f_file < 0) {
 			if (fmode && errno == ENXIO) {
 				errno = 0;

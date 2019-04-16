@@ -235,7 +235,7 @@ check(char *file, char *fsdir)
 		sizes[i] = 0;
 	overflow = 0LL;
 	ndu = 0;
-	fd = open64(file, O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd < 0) {
 		(void) fprintf(stderr, "quot: ");
 		perror(file);

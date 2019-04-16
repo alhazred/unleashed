@@ -83,7 +83,7 @@ main(int argc, char *argv[])
 		exit(1);
 	}
 	dev = *argv;
-	fd = open64(dev, pflag ? O_RDONLY : O_RDWR);
+	fd = open(dev, pflag ? O_RDONLY : O_RDWR);
 	if (fd == -1) {
 		(void) fprintf(stderr, "fsirand: Cannot open %s: %s\n", dev,
 		    strerror(errno));

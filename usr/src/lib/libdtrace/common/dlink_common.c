@@ -137,7 +137,7 @@ dtrace_link_dof(dof_hdr_t *dof, Lmid_t lmid, const char *name, uintptr_t addr)
 	if ((p = getenv("DTRACE_DOF_INIT_DEVNAME")) != NULL)
 		devname = p;
 
-	if ((fd = open64(devname, O_RDWR)) < 0) {
+	if ((fd = open(devname, O_RDWR)) < 0) {
 		dprintf(1, "failed to open helper device %s", devname);
 
 		/*
@@ -149,7 +149,7 @@ dtrace_link_dof(dof_hdr_t *dof, Lmid_t lmid, const char *name, uintptr_t addr)
 
 		devname = olddevname;
 
-		if ((fd = open64(devname, O_RDWR)) < 0) {
+		if ((fd = open(devname, O_RDWR)) < 0) {
 			dprintf(1, "failed to open helper device %s", devname);
 			return;
 		}

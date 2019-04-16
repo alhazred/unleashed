@@ -946,7 +946,7 @@ get_psinfo(pid_t pid, psinfo_t *psip)
 
 	(void) snprintf(path, sizeof (path), "/proc/%lu/psinfo", pid);
 
-	fd = open64(path, O_RDONLY);
+	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (-1);
 

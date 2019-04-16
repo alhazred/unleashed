@@ -1402,7 +1402,7 @@ lofi_uncompress(int lfd, const char *filename)
 		die("%s is not compressed\n", filename);
 	}
 
-	if ((compfd = open64(devicename, O_RDONLY | O_NONBLOCK)) == -1) {
+	if ((compfd = open(devicename, O_RDONLY | O_NONBLOCK)) == -1) {
 		delete_mapping(lfd, devicename, filename, B_TRUE);
 		die(gettext("open: %s"), filename);
 	}
@@ -1533,7 +1533,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	if (compressed_seg == NULL || uncompressed_seg == NULL)
 		die(gettext("No memory"));
 
-	if ((uncompfd = open64(filename, O_RDWR, 0)) == -1)
+	if ((uncompfd = open(filename, O_RDWR, 0)) == -1)
 		die(gettext("open: %s"), filename);
 
 	lock.l_type = F_WRLCK;
@@ -1814,7 +1814,7 @@ check_file_validity(const char *filename)
 	int 	error;
 	int	fd;
 
-	fd = open64(filename, O_RDONLY);
+	fd = open(filename, O_RDONLY);
 	if (fd == -1) {
 		die(gettext("open: %s"), filename);
 	}
@@ -1844,7 +1844,7 @@ check_file_is_encrypted(const char *filename)
 	int	got;
 	int	rest = sizeof (lofi_crypto_magic);
 
-	fd = open64(filename, O_RDONLY);
+	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 		die(gettext("failed to open: %s"), filename);
 

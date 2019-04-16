@@ -469,7 +469,7 @@ dfreedev(char *file)
 	fsblkcnt64_t totalblks, availblks, avail, free, used;
 	int fi;
 
-	fi = open64(file, 0);
+	fi = open(file, 0);
 	if (fi < 0) {
 		(void) fprintf(stderr, "df: ");
 		perror(file);

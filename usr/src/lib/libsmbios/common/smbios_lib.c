@@ -216,7 +216,7 @@ smbios_open(const char *file, int version, int flags, int *errp)
 	smbios_hdl_t *shp;
 	int fd;
 
-	if ((fd = open64(file ? file : SMB_SMBIOS_DEVICE, O_RDONLY)) == -1) {
+	if ((fd = open(file ? file : SMB_SMBIOS_DEVICE, O_RDONLY)) == -1) {
 		if ((errno == ENOENT || errno == ENXIO) &&
 		    (file == NULL || strcmp(file, SMB_SMBIOS_DEVICE) == 0))
 			errno = ESMB_NOTFOUND;

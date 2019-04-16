@@ -1061,7 +1061,7 @@ tcreate:
 		int fd;
 
 		(void) mdb_iob_snprintf(rcpath, MAXPATHLEN, "%s/.mdbrc", p);
-		fd = open64(rcpath, O_RDONLY);
+		fd = open(rcpath, O_RDONLY);
 
 		if (fd >= 0 && (rc_io = mdb_fdio_create_named(fd, rcpath))) {
 			mdb_iob_t *iob = mdb_iob_create(rc_io, MDB_IOB_RDONLY);

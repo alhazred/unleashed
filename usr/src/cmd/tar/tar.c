@@ -8383,7 +8383,7 @@ retry_open_attr(int pdirfd, int cwd, char *dirp, char *pattr, char *name,
 static int
 openat64(int fd, const char *name, int oflag, mode_t cmode)
 {
-	return (open64(name, oflag, cmode));
+	return (open(name, oflag, cmode));
 }
 
 static int

@@ -863,7 +863,7 @@ validate_unix(char *arg, int *mplen, int *is_zfs, char *bootfs_arg)
 		goto err_out;
 	}
 
-	if ((elffd = open64(arg, O_RDONLY)) < 0 ||
+	if ((elffd = open(arg, O_RDONLY)) < 0 ||
 	    (pread64(elffd, ident, EI_NIDENT, 0) != EI_NIDENT)) {
 		(void) fprintf(stderr, "%s: %s: %s\n",
 		    cmdname, arg, strerror(errno));

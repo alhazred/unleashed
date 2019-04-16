@@ -257,7 +257,7 @@ Open(const char *name, int oflags, mode_t mode)
 {
 	int fd;
 
-	if ((fd = open64(name, oflags, mode)) == -1)
+	if ((fd = open(name, oflags, mode)) == -1)
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "open(\"%s\"): %s",
 		    name, strerror(errno));
 	return (fd);

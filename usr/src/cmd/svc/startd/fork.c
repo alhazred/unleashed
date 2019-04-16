@@ -148,7 +148,7 @@ fork_common(const char *name, const char *svc_fmri, int retries, ctid_t *ctidp,
 	/*
 	 * Establish process contract terms.
 	 */
-	if ((ctfd = open64(CTFS_ROOT "/process/template", O_RDWR)) == -1) {
+	if ((ctfd = open(CTFS_ROOT "/process/template", O_RDWR)) == -1) {
 		fork_sulogin(B_TRUE, "Could not open process contract template "
 		    "for %s: %s\n", name, strerror(errno));
 		/* NOTREACHED */
@@ -515,7 +515,7 @@ fork_configd_thread(void *vctid)
 		MUTEX_UNLOCK(&st->st_configd_live_lock);
 	}
 
-	fd = open64(CTFS_ROOT "/process/pbundle", O_RDONLY);
+	fd = open(CTFS_ROOT "/process/pbundle", O_RDONLY);
 	if (fd == -1)
 		uu_die("process bundle open failed");
 
@@ -624,7 +624,7 @@ fork_rc_script(char rl, const char *arg, boolean_t wait)
 
 	path[8] = rl;
 
-	tmpl = open64(CTFS_ROOT "/process/template", O_RDWR);
+	tmpl = open(CTFS_ROOT "/process/template", O_RDWR);
 	if (tmpl >= 0) {
 		err = ct_tmpl_set_critical(tmpl, 0);
 		assert(err == 0);

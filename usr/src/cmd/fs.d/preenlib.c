@@ -110,7 +110,7 @@ preen_addev(char *devnm)
 	struct dk_cinfo dki;
 	extern char *strdup();
 
-	if ((fd = open64(devnm, O_RDONLY)) == -1) {
+	if ((fd = open(devnm, O_RDONLY)) == -1) {
 		perror(devnm);
 		return (-1);
 	}

@@ -502,7 +502,7 @@ prepare_contract(const char *script, const char *action)
 	int err = 0;
 
 	do {
-		fd = open64(CTFS_ROOT "/process/template", O_RDWR);
+		fd = open(CTFS_ROOT "/process/template", O_RDWR);
 	} while (fd < 0 && errno == EINTR);
 	if (fd < 0) {
 		uu_warn(gettext("Can not create contract"));

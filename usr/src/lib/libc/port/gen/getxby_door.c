@@ -250,7 +250,7 @@ try_again:
 		int		tbc[3];
 		int		i;
 
-		dp->doorfd = open64(NAME_SERVICE_DOOR, O_RDONLY, 0);
+		dp->doorfd = open(NAME_SERVICE_DOOR, O_RDONLY, 0);
 		if (dp->doorfd == -1) {
 			lmutex_unlock(&dp->door_lock);
 			return (NSS_ERROR);

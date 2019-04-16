@@ -64,7 +64,7 @@ contract_latest(ctid_t *id)
 	ct_stathdl_t st;
 	ctid_t result;
 
-	if ((cfd = open64(CTFS_ROOT "/process/latest", O_RDONLY)) == -1)
+	if ((cfd = open(CTFS_ROOT "/process/latest", O_RDONLY)) == -1)
 		return (errno);
 
 	if ((r = ct_status_read(cfd, CTD_COMMON, &st)) != 0) {
@@ -97,7 +97,7 @@ contract_open(ctid_t ctid, const char *type, const char *file, int oflag)
 		return (-1);
 	}
 
-	fd = open64(path, oflag);
+	fd = open(path, oflag);
 	if (fd != -1) {
 		if (close_on_exec(fd) == -1) {
 			int err = errno;

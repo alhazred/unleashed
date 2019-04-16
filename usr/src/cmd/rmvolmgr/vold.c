@@ -366,7 +366,7 @@ vold_action(struct action_arg *aap)
 		int	tmpl_fd;
 		int	err = 0;
 
-		tmpl_fd = open64(CTFS_ROOT "/process/template",
+		tmpl_fd = open(CTFS_ROOT "/process/template",
 		    O_RDWR);
 		if (tmpl_fd == -1)
 			return (1);

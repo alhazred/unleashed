@@ -89,7 +89,7 @@ init_template(void)
 	int fd;
 	int err = 0;
 
-	fd = open64(CTFS_ROOT "/process/template", O_RDWR);
+	fd = open(CTFS_ROOT "/process/template", O_RDWR);
 	if (fd == -1)
 		return (-1);
 

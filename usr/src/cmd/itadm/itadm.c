@@ -2029,7 +2029,7 @@ itadm_get_password(nvlist_t *nvl, char *key, char *passfile,
 			return (EBADF);
 		}
 
-		fd = open64(passfile, O_RDONLY);
+		fd = open(passfile, O_RDONLY);
 		if (fd == -1) {
 			ret = errno;
 			(void) fprintf(stderr,

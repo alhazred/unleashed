@@ -2422,7 +2422,7 @@ dump_cachefile(const char *cachefile)
 	char *buf;
 	nvlist_t *config;
 
-	if ((fd = open64(cachefile, O_RDONLY)) < 0) {
+	if ((fd = open(cachefile, O_RDONLY)) < 0) {
 		(void) printf("cannot open '%s': %s\n", cachefile,
 		    strerror(errno));
 		exit(1);
@@ -2616,7 +2616,7 @@ dump_label(const char *dev)
 			(void) strlcat(path, "s0", sizeof (path));
 	}
 
-	if ((fd = open64(path, O_RDONLY)) < 0) {
+	if ((fd = open(path, O_RDONLY)) < 0) {
 		(void) fprintf(stderr, "cannot open '%s': %s\n", path,
 		    strerror(errno));
 		exit(1);

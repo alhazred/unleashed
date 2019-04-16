@@ -254,7 +254,7 @@ sysev_replay(fmd_hdl_t *hdl, id_t id, void *arg)
 	 * Open the appropriate device and then determine the offset of the
 	 * start of the ereport dump region located at the end of the device.
 	 */
-	if ((fd = open64(dumpdev, O_RDWR | O_DSYNC)) == -1) {
+	if ((fd = open(dumpdev, O_RDWR | O_DSYNC)) == -1) {
 		fmd_hdl_error(hdl, "failed to open dump transport %s "
 		    "(pending events will not be replayed)", dumpdev);
 		goto done;

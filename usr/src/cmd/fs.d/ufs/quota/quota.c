@@ -635,7 +635,7 @@ getdiskquota(struct mnttab *mntp, uid_t uid, struct dqblk *dqp)
 	if (stat(qfilename, &statb) < 0 || statb.st_dev != fsdev)
 		return (0);
 	(void) __priv_bracket(PRIV_ON);
-	fd = open64(qfilename, O_RDONLY);
+	fd = open(qfilename, O_RDONLY);
 	(void) __priv_bracket(PRIV_OFF);
 	if (fd < 0)
 		return (0);
@@ -695,7 +695,7 @@ quotactl(int cmd, char *mountp, uid_t uid, caddr_t addr)
 				continue;
 			}
 			(void) __priv_bracket(PRIV_ON);
-			fd = open64(qfile, O_RDONLY);
+			fd = open(qfile, O_RDONLY);
 			(void) __priv_bracket(PRIV_OFF);
 			if (fd != -1)
 				break;
@@ -718,7 +718,7 @@ quotactl(int cmd, char *mountp, uid_t uid, caddr_t addr)
 			return (-1);
 		}
 		(void) __priv_bracket(PRIV_ON);
-		fd = open64(qfile, O_RDONLY);
+		fd = open(qfile, O_RDONLY);
 		(void) __priv_bracket(PRIV_OFF);
 		if (fd < 0)
 			return (-1);

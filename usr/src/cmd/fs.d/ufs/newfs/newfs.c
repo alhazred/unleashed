@@ -717,7 +717,7 @@ getdiskbydev(char *disk)
 	diskaddr_t actual_size;
 	int fd;
 
-	if ((fd = open64(disk, 0)) < 0) {
+	if ((fd = open(disk, 0)) < 0) {
 		perror(disk);
 		exit(1);
 	}
@@ -980,7 +980,7 @@ validate_size(char *disk, diskaddr_t size)
 	char 		buf[DEV_BSIZE];
 	int fd, rc;
 
-	if ((fd = open64(disk, O_RDONLY)) < 0) {
+	if ((fd = open(disk, O_RDONLY)) < 0) {
 		perror(disk);
 		exit(1);
 	}
@@ -1022,7 +1022,7 @@ read_sb(char *fsdev)
 	if (stat(fsdev, &statb) < 0)
 		return (0);
 
-	if ((dskfd = open64(fsdev, O_RDONLY)) < 0)
+	if ((dskfd = open(fsdev, O_RDONLY)) < 0)
 		return (0);
 
 	/*
@@ -1086,7 +1086,7 @@ notrand(char *special)
 	int fd;
 
 	fs = (struct fs *)fsbuf;
-	if ((fd = open64(special, 0)) == -1)
+	if ((fd = open(special, 0)) == -1)
 		return (NOT_RANDOMIZED);
 	if (llseek(fd, (offset_t)SBLOCK * DEV_BSIZE, 0) == -1 ||
 	    read(fd, (char *)fs, SBSIZE) != SBSIZE ||

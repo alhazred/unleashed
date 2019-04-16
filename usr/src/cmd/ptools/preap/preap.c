@@ -63,7 +63,7 @@ open_usage(pid_t pid, int *perr)
 	 * Attempt to open the usage file, and return the fd if we can
 	 * confirm this is a regular file provided by /proc.
 	 */
-	if ((fd = open64(path, O_RDONLY)) >= 0) {
+	if ((fd = open(path, O_RDONLY)) >= 0) {
 		if (fstat(fd, &st) != 0 || !S_ISREG(st.st_mode) ||
 		    strcmp(st.st_fstype, "proc") != 0) {
 			(void) close(fd);

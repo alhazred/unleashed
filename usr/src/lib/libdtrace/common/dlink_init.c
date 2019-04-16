@@ -71,7 +71,7 @@ dtrace_drti_fini(void)
 {
 	int fd;
 
-	if ((fd = open64(devname, O_RDWR)) < 0) {
+	if ((fd = open(devname, O_RDWR)) < 0) {
 		dprintf(1, "failed to open helper device %s", devname);
 		return;
 	}

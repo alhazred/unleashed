@@ -115,7 +115,7 @@ fmd_ckpt_create(fmd_ckpt_t *ckp, fmd_module_t *mp)
 
 	(void) unlink(ckp->ckp_src);
 	(void) fmd_conf_getprop(fmd.d_conf, "ckpt.mode", &mode);
-	ckp->ckp_fd = open64(ckp->ckp_src, O_WRONLY | O_CREAT | O_EXCL, mode);
+	ckp->ckp_fd = open(ckp->ckp_src, O_WRONLY | O_CREAT | O_EXCL, mode);
 
 	return (ckp->ckp_fd);
 }

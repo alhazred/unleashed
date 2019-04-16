@@ -474,7 +474,7 @@ ses_contract_thread(void *arg)
 	sigset_t sigset;
 
 	ses_ct_print("start contract event thread");
-	efd = open64(CTFS_ROOT "/device/pbundle", O_RDONLY);
+	efd = open(CTFS_ROOT "/device/pbundle", O_RDONLY);
 	fds.fd = efd;
 	fds.events = POLLIN;
 	fds.revents = 0;
@@ -523,7 +523,7 @@ ses_contract_thread(void *arg)
 		evid = ct_event_get_evid(ev);
 		(void) snprintf(path, PATH_MAX, CTFS_ROOT "/device/%ld/status",
 		    ctid);
-		statfd = open64(path, O_RDONLY);
+		statfd = open(path, O_RDONLY);
 		(void) ct_status_read(statfd, CTD_COMMON, &stathdl);
 		stp = (ses_enum_target_t *)(uintptr_t)
 		    ct_status_get_cookie(stathdl);
@@ -537,7 +537,7 @@ ses_contract_thread(void *arg)
 			ses_ct_print(buf);
 			(void) snprintf(path, PATH_MAX,
 			    CTFS_ROOT "/device/%ld/ctl", ctid);
-			ctlfd = open64(path, O_WRONLY);
+			ctlfd = open(path, O_WRONLY);
 			if (event != CT_EV_NEGEND)
 				(void) ct_ctl_ack(ctlfd, evid);
 			else
@@ -552,7 +552,7 @@ ses_contract_thread(void *arg)
 		(void) pthread_mutex_lock(&stp->set_lock);
 		(void) snprintf(path, PATH_MAX, CTFS_ROOT "/device/%ld/ctl",
 		    ctid);
-		ctlfd = open64(path, O_WRONLY);
+		ctlfd = open(path, O_WRONLY);
 		if (event != CT_EV_NEGEND) {
 			/* if this is an offline event, do the offline */
 			ses_ct_print("got contract offline event");
@@ -702,7 +702,7 @@ ses_create_contract(topo_mod_t *mod, ses_enum_target_t *stp)
 	link_path[len] = '\0';
 
 	/* set up template to create new contract */
-	tfd = open64(CTFS_ROOT "/device/template", O_RDWR);
+	tfd = open(CTFS_ROOT "/device/template", O_RDWR);
 	(void) ct_tmpl_set_critical(tfd, CT_DEV_EV_OFFLINE);
 	(void) ct_tmpl_set_cookie(tfd, (uint64_t)(uintptr_t)stp);
 
@@ -736,7 +736,7 @@ ses_target_free(topo_mod_t *mod, ses_enum_target_t *stp)
 			    stp->set_ctid);
 			(void) snprintf(path, PATH_MAX,
 			    CTFS_ROOT "/device/%ld/ctl", stp->set_ctid);
-			ctlfd = open64(path, O_WRONLY);
+			ctlfd = open(path, O_WRONLY);
 			(void) ct_ctl_abandon(ctlfd);
 			(void) close(ctlfd);
 			stp->set_ctid = 0;

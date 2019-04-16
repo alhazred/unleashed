@@ -377,7 +377,7 @@ fmd_log_xopen(const char *root, const char *name, const char *tag, int oflags)
 		oflags &= ~O_SYNC;
 
 top:
-	if ((lp->log_fd = open64(lp->log_name, oflags, 0644)) == -1 ||
+	if ((lp->log_fd = open(lp->log_name, oflags, 0644)) == -1 ||
 	    fstat(lp->log_fd, &lp->log_stat) == -1) {
 		fmd_error(EFMD_LOG_OPEN, "failed to open log %s", lp->log_name);
 		fmd_log_close(lp);

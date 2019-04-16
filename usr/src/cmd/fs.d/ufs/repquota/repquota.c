@@ -464,7 +464,7 @@ quotactl(int cmd, char *special, uid_t uid, caddr_t addr)
 			}
 
 			/* If we find *ANY* valid "quotas" file, use it */
-			if ((fd = open64(qfile, O_RDONLY)) >= 0)
+			if ((fd = open(qfile, O_RDONLY)) >= 0)
 				break;
 		}
 		(void) fclose(fstab);

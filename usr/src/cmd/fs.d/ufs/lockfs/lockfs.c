@@ -256,7 +256,7 @@ printstatus(char *fn)
 	char		commentbuffer[LOCKFS_MAXCOMMENTLEN+1];
 	struct lockfs	lf;
 
-	fd = open64(fn, O_RDONLY);
+	fd = open(fn, O_RDONLY);
 	if (fd == -1) {
 		if (errno == EIO)
 			printstatusline(fn, "EIO", "May be hard locked");
@@ -347,7 +347,7 @@ flushfs(char *fn)
 {
 	int		fd;
 
-	fd = open64(fn, O_RDONLY);
+	fd = open(fn, O_RDONLY);
 	if (fd == -1) {
 		perror(fn);
 		exitstatus = 2;
@@ -372,7 +372,7 @@ lockfs(char *fn)
 	int		fd;
 	struct lockfs	lf;
 
-	fd = open64(fn, O_RDONLY);
+	fd = open(fn, O_RDONLY);
 	if (fd == -1) {
 		perror(fn);
 		exitstatus = 2;

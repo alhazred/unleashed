@@ -425,7 +425,7 @@ vn_open(char *path, int x1, int flags, int mode, vnode_t **vpp, int x2, int x3)
 	 */
 	if (strncmp(path, "/dev/", 5) == 0) {
 		char *dsk;
-		fd = open64(path, O_RDONLY);
+		fd = open(path, O_RDONLY);
 		if (fd == -1)
 			return (errno);
 		if (fstat(fd, &st) == -1) {
@@ -451,7 +451,7 @@ vn_open(char *path, int x1, int flags, int mode, vnode_t **vpp, int x2, int x3)
 	 * The construct 'flags - FREAD' conveniently maps combinations of
 	 * FREAD and FWRITE to the corresponding O_RDONLY, O_WRONLY, and O_RDWR.
 	 */
-	fd = open64(realpath, flags - FREAD, mode);
+	fd = open(realpath, flags - FREAD, mode);
 
 	if (flags & FCREAT)
 		(void) umask(old_umask);
@@ -460,7 +460,7 @@ vn_open(char *path, int x1, int flags, int mode, vnode_t **vpp, int x2, int x3)
 		char dumppath[MAXPATHLEN];
 		(void) snprintf(dumppath, sizeof (dumppath),
 		    "%s/%s", vn_dumpdir, basename(realpath));
-		dump_fd = open64(dumppath, O_CREAT | O_WRONLY, 0666);
+		dump_fd = open(dumppath, O_CREAT | O_WRONLY, 0666);
 		if (dump_fd == -1)
 			return (errno);
 	} else {

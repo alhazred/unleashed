@@ -4054,7 +4054,7 @@ contract_make_template(uint_t info, uint_t critical, uint_t fatal,
 	    "Couldn't set \"%s\" contract template parameter: %s.\n";
 
 	do
-		fd = open64(CTFS_ROOT "/process/template", O_RDWR);
+		fd = open(CTFS_ROOT "/process/template", O_RDWR);
 	while (fd < 0 && errno == EINTR)
 		;
 	if (fd < 0) {
@@ -4152,7 +4152,7 @@ contracts_init()
 	 * Open an event endpoint.
 	 */
 	do
-		fd = open64(CTFS_ROOT "/process/pbundle", O_RDONLY);
+		fd = open(CTFS_ROOT "/process/pbundle", O_RDONLY);
 	while (fd < 0 && errno == EINTR)
 		;
 	if (fd < 0) {

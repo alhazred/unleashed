@@ -2207,7 +2207,7 @@ restarter_contracts_event_thread(void *unused)
 		uu_die("Unable to bind a new repository handle: %s\n",
 		    scf_strerror(scf_error()));
 
-	fd = open64(CTFS_ROOT "/process/pbundle", O_RDONLY);
+	fd = open(CTFS_ROOT "/process/pbundle", O_RDONLY);
 	if (fd == -1)
 		uu_die("process bundle open failed");
 

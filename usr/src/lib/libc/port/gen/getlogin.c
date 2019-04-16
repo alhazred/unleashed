@@ -63,7 +63,7 @@ getl_r_common(char *answer, size_t namelen, size_t maxlen)
 
 	if ((me = (off64_t)ttyslot()) < 0)
 		return (NULL);
-	if ((uf = open64(UTMPX_FILE, 0)) < 0)
+	if ((uf = open(UTMPX_FILE, 0)) < 0)
 		return (NULL);
 	(void) lseek64(uf, me * sizeof (ubuf), SEEK_SET);
 	if (read(uf, &ubuf, sizeof (ubuf)) != sizeof (ubuf)) {

@@ -290,7 +290,7 @@ dconf_write(dumpconf_t *dcp)
 static int
 open_stat64(const char *path, struct stat *stp)
 {
-	int fd = open64(path, O_RDONLY);
+	int fd = open(path, O_RDONLY);
 
 	if (fd >= 0) {
 		int status = fstat(fd, stp);

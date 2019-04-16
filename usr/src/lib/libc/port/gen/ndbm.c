@@ -181,7 +181,7 @@ dbm_open(const char *file, int flags, mode_t mode)
 		serrno = ENAMETOOLONG;
 		goto bad;
 	}
-	db->dbm_pagf = open64(db->dbm_pagbuf, flags, mode);
+	db->dbm_pagf = open(db->dbm_pagbuf, flags, mode);
 	if (db->dbm_pagf < 0) {
 		serrno = errno;
 		goto bad;
@@ -193,7 +193,7 @@ dbm_open(const char *file, int flags, mode_t mode)
 	 */
 	(void) strlcpy(db->dbm_pagbuf, file, sizeof (db->dbm_pagbuf));
 	(void) strlcat(db->dbm_pagbuf, ".dir", sizeof (db->dbm_pagbuf));
-	db->dbm_dirf = open64(db->dbm_pagbuf, flags, mode);
+	db->dbm_dirf = open(db->dbm_pagbuf, flags, mode);
 	if (db->dbm_dirf < 0) {
 		serrno = errno;
 		goto bad1;

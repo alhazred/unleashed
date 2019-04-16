@@ -43,7 +43,7 @@ initdoor(void *buf, int *doorfd)
 	door_info_t 	doori;
 	char		*me = "initdoor";
 
-	*doorfd = open64(NAME_SERVICE_DOOR, O_RDONLY, 0);
+	*doorfd = open(NAME_SERVICE_DOOR, O_RDONLY, 0);
 
 	_NSCD_LOG(NSCD_LOG_FRONT_END, NSCD_LOG_LEVEL_DEBUG)
 		(me, "door is %s (fd is %d)\n", NAME_SERVICE_DOOR,

@@ -1483,7 +1483,7 @@ is_errorlocked(caddr_t fs)
 		goto out;
 
 	if (mountfd < 0) {
-		if ((mountfd = open64(mountp, O_RDONLY)) == -1)
+		if ((mountfd = open(mountp, O_RDONLY)) == -1)
 			goto out;
 	}
 

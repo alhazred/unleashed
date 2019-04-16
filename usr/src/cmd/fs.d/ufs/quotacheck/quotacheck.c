@@ -442,7 +442,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 
 	if (vflag)
 		printf("*** Checking quotas for %s (%s)\n", rawdisk, fsfile);
-	fi = open64(rawdisk, 0);
+	fi = open(rawdisk, 0);
 	if (fi < 0) {
 		perror(rawdisk);
 		return (1);
@@ -727,7 +727,7 @@ quotactl(int cmd, char *mountp, uid_t uid, caddr_t addr)
 				sizeof (qfile))) {
 				continue;
 			}
-			if ((fd = open64(qfile, O_RDWR)) == -1)
+			if ((fd = open(qfile, O_RDWR)) == -1)
 				break;
 		}
 		fclose(fstab);
@@ -747,7 +747,7 @@ quotactl(int cmd, char *mountp, uid_t uid, caddr_t addr)
 			errno = ENOENT;
 			return (-1);
 		}
-		if ((fd = open64(qfile, O_RDWR)) < 0) {
+		if ((fd = open(qfile, O_RDWR)) < 0) {
 			fprintf(stderr, "quotactl: ");
 			perror("open");
 			exit(31+1);

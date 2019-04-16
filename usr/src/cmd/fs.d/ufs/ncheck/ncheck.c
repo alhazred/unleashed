@@ -237,7 +237,7 @@ check(char *file)
 {
 	int i, j, c;
 
-	fi = open64(file, 0);
+	fi = open(file, 0);
 	if (fi < 0) {
 		(void) fprintf(stderr, "ncheck: cannot open %s\n", file);
 		nerror++;

@@ -9687,7 +9687,7 @@ chop_endslashes(char *path)
 int
 openat64(int fd, char *name, int oflag, mode_t cmode)
 {
-	return (open64(name, oflag, cmode));
+	return (open(name, oflag, cmode));
 }
 
 int

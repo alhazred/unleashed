@@ -135,7 +135,7 @@ mdb_fdio_create_path(const char *path[], const char *fname,
 			    path[i], fname);
 
 			if (access(buf, F_OK) == 0) {
-				fd = open64(buf, flags, mode);
+				fd = open(buf, flags, mode);
 				fname = buf;
 				break;
 			}
@@ -144,7 +144,7 @@ mdb_fdio_create_path(const char *path[], const char *fname,
 		if (fd == -1)
 			(void) set_errno(ENOENT);
 	} else
-		fd = open64(fname, flags, mode);
+		fd = open(fname, flags, mode);
 
 	if (fd >= 0)
 		return (mdb_fdio_create_named(fd, fname));

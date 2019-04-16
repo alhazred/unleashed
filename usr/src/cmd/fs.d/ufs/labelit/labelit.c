@@ -143,9 +143,9 @@ label(char *special, char *fsname, char *volume)
 	struct	fs	*fsp, *altfsp;
 
 	if (fsname == NULL) {
-		f = open64(special, O_RDONLY);
+		f = open(special, O_RDONLY);
 	} else {
-		f = open64(special, O_RDWR);
+		f = open(special, O_RDWR);
 	}
 	if (f < 0) {
 		(void) fprintf(stderr, gettext("labelit: "));

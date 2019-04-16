@@ -438,7 +438,7 @@ quotactl(cmd, mountp, uid, dqp)
 			(void) strlcpy(mountpoint, mntp.mnt_mountp,
 			    sizeof (mountpoint));
 			strcat(mountpoint, "/quotas");
-			if ((fd = open64(mountpoint, O_RDWR)) >= 0)
+			if ((fd = open(mountpoint, O_RDWR)) >= 0)
 				break;
 		}
 		fclose(fstab);
@@ -454,7 +454,7 @@ quotactl(cmd, mountp, uid, dqp)
 		(void) strlcpy(mountpoint, mountp, sizeof (mountpoint));
 		strcat(mountpoint, "/quotas");
 
-		if ((fd = open64(mountpoint, O_RDONLY)) < 0) {
+		if ((fd = open(mountpoint, O_RDONLY)) < 0) {
 			errno = ENOENT;
 			syslog(LOG_ERR, "can not open %s: %m ", mountpoint);
 			return (-1);
@@ -622,7 +622,7 @@ getdiskquota(fsqp, uid, dqp)
 	char qfilename[MAXPATHLEN];
 
 	snprintf(qfilename, sizeof (qfilename), "%s/%s", fsqp->fsq_dir, QFNAME);
-	if ((fd = open64(qfilename, O_RDONLY)) < 0)
+	if ((fd = open(qfilename, O_RDONLY)) < 0)
 		return (0);
 	(void) llseek(fd, (offset_t)dqoff(uid), L_SET);
 	if (read(fd, dqp, sizeof (struct dqblk)) != sizeof (struct dqblk)) {

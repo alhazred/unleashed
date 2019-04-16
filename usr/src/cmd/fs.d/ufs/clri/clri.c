@@ -86,7 +86,7 @@ main(int argc, char *argv[])
 		(void) printf("ufs usage: clri filsys inumber ...\n");
 		return (35);
 	}
-	f = open64(argv[1], 2);
+	f = open(argv[1], 2);
 	if (f < 0) {
 		(void) printf("cannot open %s\n", argv[1]);
 		return (35);

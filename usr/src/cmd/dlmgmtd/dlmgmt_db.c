@@ -213,7 +213,7 @@ dlmgmt_zfop(const char *filename, zoneid_t zoneid, zfcb_t *zfcb,
 		 * zone_enter().
 		 */
 		errno = 0;
-		ctfd = open64("/system/contract/process/template", O_RDWR);
+		ctfd = open("/system/contract/process/template", O_RDWR);
 		if (ctfd == -1)
 			return (errno);
 		if ((err = ct_tmpl_set_critical(ctfd, 0)) != 0 ||

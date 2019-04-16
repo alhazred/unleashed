@@ -811,7 +811,7 @@ main(int argc, char *argv[])
 	argv = &argv[optind];
 
 	fsys = argv[0];
-	fsi = open64(fsys, O_RDONLY);
+	fsi = open(fsys, O_RDONLY);
 	if (fsi < 0) {
 		(void) fprintf(stderr, gettext("%s: cannot open\n"), fsys);
 		lockexit(32);
@@ -1457,7 +1457,7 @@ retry_alternate_logic:
 			lockexit(32);
 		}
 
-		fso = (grow) ? open64(fsys, O_WRONLY) : creat64(fsys, 0666);
+		fso = (grow) ? open(fsys, O_WRONLY) : creat64(fsys, 0666);
 		if (fso < 0) {
 			saverr = errno;
 			(void) fprintf(stderr,
@@ -1475,7 +1475,7 @@ retry_alternate_logic:
 		 * Get a file descriptor that's read-only so that this code
 		 * doesn't accidentally write to the file.
 		 */
-		fso = open64(fsys, O_RDONLY);
+		fso = open(fsys, O_RDONLY);
 		if (fso < 0) {
 			saverr = errno;
 			(void) fprintf(stderr, gettext("%s: cannot open: %s\n"),
@@ -5220,7 +5220,7 @@ wlockfs()
 	/*
 	 * open the mountpoint, and write lock the file system
 	 */
-	if ((lockfd = open64(directory, O_RDONLY)) == -1) {
+	if ((lockfd = open(directory, O_RDONLY)) == -1) {
 		perror(directory);
 		lockexit(32);
 	}

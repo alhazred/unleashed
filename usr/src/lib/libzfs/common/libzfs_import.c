@@ -1158,7 +1158,7 @@ zpool_find_import_impl(libzfs_handle_t *hdl, importargs_t *iarg)
 		else
 			(void) strlcpy(rdsk, path, sizeof (rdsk));
 
-		if ((dfd = open64(rdsk, O_RDONLY)) < 0 ||
+		if ((dfd = open(rdsk, O_RDONLY)) < 0 ||
 		    (dirp = fdopendir(dfd)) == NULL) {
 			if (dfd >= 0)
 				(void) close(dfd);

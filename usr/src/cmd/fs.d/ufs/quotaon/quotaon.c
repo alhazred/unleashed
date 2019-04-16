@@ -309,7 +309,7 @@ quotactl(int cmd, char *mountpt, uid_t uid, caddr_t addr)
 		errno = ENOENT;
 		return (-1);
 	}
-	if ((fd = open64(qfile, O_RDWR)) < 0) {
+	if ((fd = open(qfile, O_RDWR)) < 0) {
 		fprintf(stderr, "quotactl: %s ", qfile);
 		perror("open");
 		exit(31+1);

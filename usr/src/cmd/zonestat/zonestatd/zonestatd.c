@@ -641,7 +641,7 @@ init_template(void)
 	int fd;
 	int err = 0;
 
-	fd = open64(CTFS_ROOT "/process/template", O_RDWR);
+	fd = open(CTFS_ROOT "/process/template", O_RDWR);
 	if (fd == -1)
 		return (-1);
 
@@ -671,7 +671,7 @@ contract_latest(ctid_t *id)
 	ct_stathdl_t st;
 	ctid_t result;
 
-	if ((cfd = open64(CTFS_ROOT "/process/latest", O_RDONLY)) == -1)
+	if ((cfd = open(CTFS_ROOT "/process/latest", O_RDONLY)) == -1)
 		return (errno);
 
 	if ((r = ct_status_read(cfd, CTD_COMMON, &st)) != 0) {
@@ -711,7 +711,7 @@ contract_open(ctid_t ctid, const char *type, const char *file, int oflag)
 		return (-1);
 	}
 
-	fd = open64(path, oflag);
+	fd = open(path, oflag);
 	if (fd != -1) {
 		if (close_on_exec(fd) == -1) {
 			int err = errno;
@@ -2518,7 +2518,7 @@ static int
 zsd_open_exacct(zsd_ctl_t *ctl, boolean_t init)
 {
 	int ret, oret, state, trys = 0, flags;
-	int *fd, *open;
+	int *fd, *opn;
 	ea_file_t *eaf;
 	struct stat *stat;
 	char path[MAXPATHLEN];
@@ -2532,17 +2532,17 @@ zsd_open_exacct(zsd_ctl_t *ctl, boolean_t init)
 		fd = &ctl->zsctl_proc_fd;
 		eaf = &ctl->zsctl_proc_eaf;
 		stat = &ctl->zsctl_proc_stat;
-		open = &ctl->zsctl_proc_open;
+		opn = &ctl->zsctl_proc_open;
 	} else {
 		flags = EO_NO_VALID_HDR | EO_HEAD;
 		fd = &ctl->zsctl_proc_fd_next;
 		eaf = &ctl->zsctl_proc_eaf_next;
 		stat = &ctl->zsctl_proc_stat_next;
-		open = &ctl->zsctl_proc_open_next;
+		opn = &ctl->zsctl_proc_open_next;
 	}
 
 	*fd = -1;
-	*open = 0;
+	*opn = 0;
 retry:
 	/* open accounting files for cpu consumption */
 	ret = acctctl(AC_STATE_GET | AC_PROC, &state, sizeof (state));
@@ -2567,7 +2567,7 @@ retry:
 		goto err;
 	}
 
-	if ((*fd = open64(path, O_RDONLY, 0)) >= 0 &&
+	if ((*fd = open(path, O_RDONLY, 0)) >= 0 &&
 	    (oret = ea_fdopen(eaf, *fd, NULL, flags, O_RDONLY)) == 0)
 		ret = fstat(*fd, stat);
 
@@ -2595,12 +2595,12 @@ retry:
 		(void) nanosleep(&ts, NULL);
 		goto retry;
 	}
-	*open = 1;
+	*opn = 1;
 	return (0);
 err:
 	if (*fd >= 0)
 		(void) close(*fd);
-	*open = 0;
+	*opn = 0;
 	*fd = -1;
 	return (-1);
 }

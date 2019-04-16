@@ -97,7 +97,7 @@ sopen(const char *format, const char *error, const char *permerror, ...)
 		uu_vdie(error, varg);
 	}
 
-	if ((fd = open64(path, O_RDONLY | O_NONBLOCK)) == -1) {
+	if ((fd = open(path, O_RDONLY | O_NONBLOCK)) == -1) {
 		if (permerror && (errno == EPERM || errno == EACCES))
 			uu_vwarn(permerror, varg);
 		else

@@ -668,7 +668,7 @@ main(int argc, char *argv[])
 		}
 	}
 
-	fi = open64(disk, O_RDONLY);
+	fi = open(disk, O_RDONLY);
 
 	if (fi < 0) {
 		saverr = errno;

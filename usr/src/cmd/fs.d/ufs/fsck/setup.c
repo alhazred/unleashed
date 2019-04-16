@@ -482,7 +482,7 @@ open_and_intro(caddr_t devstr, int corefs)
 {
 	int retval = 0;
 
-	if ((fsreadfd = open64(devstr, O_RDONLY)) < 0) {
+	if ((fsreadfd = open(devstr, O_RDONLY)) < 0) {
 		(void) printf("Can't open %s: %s\n", devstr, strerror(errno));
 		exitstat = EXNOSTAT;
 		retval = -1;
@@ -498,7 +498,7 @@ open_and_intro(caddr_t devstr, int corefs)
 		fflag = 1;
 	}
 	pid = getpid();
-	if (nflag || roflag || (fswritefd = open64(devstr, O_WRONLY)) < 0) {
+	if (nflag || roflag || (fswritefd = open(devstr, O_WRONLY)) < 0) {
 		fswritefd = -1;
 		if (preen && !debug)
 			pfatal("(NO WRITE ACCESS)\n");
