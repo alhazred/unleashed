@@ -1418,7 +1418,7 @@ lofi_uncompress(int lfd, const char *filename)
 	free(dir);
 	free(file);
 
-	if ((uncompfd = mkstemp64(tmpfilename)) == -1) {
+	if ((uncompfd = mkstemp(tmpfilename)) == -1) {
 		(void) close(compfd);
 		delete_mapping(lfd, devicename, filename, B_TRUE);
 		die("%s could not be uncompressed\n", filename);
@@ -1580,10 +1580,10 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	free(dir);
 	free(file);
 
-	if ((tfd = mkstemp64(tmpfilename)) == -1)
+	if ((tfd = mkstemp(tmpfilename)) == -1)
 		goto cleanup;
 
-	if ((compfd = mkstemp64(comp_filename)) == -1)
+	if ((compfd = mkstemp(comp_filename)) == -1)
 		goto cleanup;
 
 	/*
