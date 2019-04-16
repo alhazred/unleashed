@@ -1457,7 +1457,7 @@ retry_alternate_logic:
 			lockexit(32);
 		}
 
-		fso = (grow) ? open(fsys, O_WRONLY) : creat64(fsys, 0666);
+		fso = (grow) ? open(fsys, O_WRONLY) : creat(fsys, 0666);
 		if (fso < 0) {
 			saverr = errno;
 			(void) fprintf(stderr,

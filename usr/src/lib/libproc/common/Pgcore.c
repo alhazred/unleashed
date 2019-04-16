@@ -151,7 +151,7 @@ Pgcore(struct ps_prochandle *P, const char *fname, core_content_t content)
 	int err;
 	int saved_errno;
 
-	if ((fd = creat64(fname, 0666)) < 0)
+	if ((fd = creat(fname, 0666)) < 0)
 		return (-1);
 
 	if ((err = Pfgcore(P, fd, content)) != 0) {

@@ -891,7 +891,7 @@ extractfile(char *name)
 		 * fchmod(2) according to the archive later after
 		 * we've written the blocks.
 		 */
-		ofile = creat64(rname, 0600);
+		ofile = creat(rname, 0600);
 
 		if (ofile < 0) {
 			saverr = errno;
