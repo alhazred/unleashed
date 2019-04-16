@@ -255,21 +255,6 @@ static struct sctab {
 	_CS_PATH,		"CS_PATH",		CONFSTR,   NOFLAGS,
 	_CS_PATH,		"_CS_PATH",		CONFSTR,   NOFLAGS,
 
-	/* command names for large file configuration information */
-	/* large file compilation environment configuration */
-
-	_CS_LFS_CFLAGS,		"LFS_CFLAGS",		CONFSTR,   NOFLAGS,
-	_CS_LFS_LDFLAGS,	"LFS_LDFLAGS",		CONFSTR,   NOFLAGS,
-	_CS_LFS_LIBS,		"LFS_LIBS",		CONFSTR,   NOFLAGS,
-	_CS_LFS_LINTFLAGS,	"LFS_LINTFLAGS",	CONFSTR,   NOFLAGS,
-
-	/* transitional large file interface configuration */
-
-	_CS_LFS64_CFLAGS,	"LFS64_CFLAGS",		CONFSTR,   NOFLAGS,
-	_CS_LFS64_LDFLAGS,	"LFS64_LDFLAGS",	CONFSTR,   NOFLAGS,
-	_CS_LFS64_LIBS,		"LFS64_LIBS",		CONFSTR,   NOFLAGS,
-	_CS_LFS64_LINTFLAGS,	"LFS64_LINTFLAGS",	CONFSTR,   NOFLAGS,
-
 	/*
 	 *  UNIX 98:
 	 *  confstr additions, these support

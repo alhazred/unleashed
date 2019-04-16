@@ -69,14 +69,6 @@ static char *pam_inames [PAM_MAX_ITEMS] = {
 /* Undefined Items */
 };
 
-/*
- * This extra definition is needed in order to build this library
- * on pre-64-bit-aware systems.
- */
-#if !defined(_LFS64_LARGEFILE)
-#define	stat64	stat
-#endif	/* !defined(_LFS64_LARGEFILE) */
-
 /* functions to dynamically load modules */
 static int	load_modules(pam_handle_t *, int, char *, pamtab_t *);
 static void 	*open_module(pam_handle_t *, char *);

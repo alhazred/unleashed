@@ -184,16 +184,6 @@ extern "C" {
 #define	STDOUT_FILENO	1
 #define	STDERR_FILENO	2
 
-/*
- * Large File Summit-related announcement macros.  The system supports both
- * the additional and transitional Large File Summit interfaces.  (The final
- * two macros provide a finer granularity breakdown of _LFS64_LARGEFILE.)
- */
-#define	_LFS_LARGEFILE		1
-#define	_LFS64_LARGEFILE	1
-#define	_LFS64_STDIO		1
-#define	_LFS64_ASYNCHRONOUS_IO	1
-
 extern int access(const char *, int);
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern int acct(const char *);

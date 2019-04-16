@@ -49,20 +49,6 @@ extern "C" {
 
 #define	_CS_PATH			65
 
-/*
- * command names for large file configuration information
- */
-/* large file compilation environment configuration */
-#define	_CS_LFS_CFLAGS			68
-#define	_CS_LFS_LDFLAGS			69
-#define	_CS_LFS_LIBS			70
-#define	_CS_LFS_LINTFLAGS		71
-/* transitional large file interface configuration */
-#define	_CS_LFS64_CFLAGS		72
-#define	_CS_LFS64_LDFLAGS		73
-#define	_CS_LFS64_LIBS			74
-#define	_CS_LFS64_LINTFLAGS		75
-
 /* UNIX 98 */
 #define	_CS_XBS5_ILP32_OFF32_CFLAGS	700
 #define	_CS_XBS5_ILP32_OFF32_LDFLAGS	701
