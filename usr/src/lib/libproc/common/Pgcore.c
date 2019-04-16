@@ -920,7 +920,7 @@ dump_map(void *data, const prmap_t *pmp, const char *name)
 			*pgc->pgc_doff += roundup(sizeof (err), 8);
 
 			phdr.p_flags |= PF_SUNW_FAILURE;
-			(void) ftruncate64(pgc->pgc_fd, *pgc->pgc_doff);
+			(void) ftruncate(pgc->pgc_fd, *pgc->pgc_doff);
 			goto exclude;
 		}
 
@@ -1046,7 +1046,7 @@ Pfgcore(struct ps_prochandle *P, int fd, core_content_t content)
 	struct utsname uts;
 	uint_t nphdrs, nshdrs;
 
-	if (ftruncate64(fd, 0) != 0)
+	if (ftruncate(fd, 0) != 0)
 		return (-1);
 
 	if (content == CC_CONTENT_INVALID) {
@@ -1515,7 +1515,7 @@ err:
 	/*
 	 * Wipe out anything we may have written if there was an error.
 	 */
-	(void) ftruncate64(fd, 0);
+	(void) ftruncate(fd, 0);
 	free(pgc.pgc_chunk);
 
 	return (-1);

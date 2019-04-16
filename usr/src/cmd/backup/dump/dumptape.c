@@ -435,7 +435,7 @@ setuparchive(void)
 			dumpabort();
 			/*NOTREACHED*/
 		}
-		if (ftruncate64(archivefd, lf_archoffset) < 0) {
+		if (ftruncate(archivefd, lf_archoffset) < 0) {
 			saverr = errno;
 			msg(gettext(
 				    "Cannot truncate archive file `%s' : %s\n"),

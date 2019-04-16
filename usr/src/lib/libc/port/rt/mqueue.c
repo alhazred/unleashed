@@ -457,7 +457,7 @@ mq_open(const char *path, int oflag, /* mode_t mode, mq_attr *attr */ ...)
 		if (fchmod(fd, mode) < 0)
 			goto out;
 
-		if (ftruncate64(fd, (off64_t)total_size) < 0)
+		if (ftruncate(fd, (off64_t)total_size) < 0)
 			goto out;
 	} else {
 		if ((fd = __pos4obj_open(path, MQ_DATA_TYPE,
@@ -504,7 +504,7 @@ mq_open(const char *path, int oflag, /* mode_t mode, mq_attr *attr */ ...)
 		goto out;
 	cr_flag |= DFILE_OPEN;
 	(void) __pos4obj_unlink(path, MQ_DSCN_TYPE);
-	if (ftruncate64(fd, (off64_t)sizeof (struct mq_dn)) < 0)
+	if (ftruncate(fd, (off64_t)sizeof (struct mq_dn)) < 0)
 		goto out;
 
 	if ((ptr = mmap64(NULL, sizeof (struct mq_dn),

@@ -263,7 +263,7 @@ found:
 	ITITERATE(i, itwalk) {
 		recout(df, itwalk);
 	}
-	if (ftruncate64(fd, ftello(df))) {
+	if (ftruncate(fd, ftello(df))) {
 		saverr = errno;
 		msg(gettext("%s: %s error:\n"),
 		    increm, "ftruncate64", strerror(saverr));

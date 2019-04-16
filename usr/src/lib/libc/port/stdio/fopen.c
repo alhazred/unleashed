@@ -174,7 +174,7 @@ _freopen_null(const char *type, FILE *iop)
 	 * and reopening it.  Ignore truncate failures, eg. with stdout.
 	 */
 	if (mode == 'w')
-		(void) ftruncate64(fd, (off64_t)0);
+		(void) ftruncate(fd, (off64_t)0);
 
 	if (fcntl(fd, F_SETFL, nflag) == -1)
 		goto errret;

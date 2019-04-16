@@ -227,7 +227,7 @@ do_trunc(int fd)
 	off_t   roffset = 0;
 
 	roffset = random() % fsize;
-	if (ftruncate64(fd, (offset + roffset))  < 0) {
+	if (ftruncate(fd, (offset + roffset))  < 0) {
 		perror("truncate");
 		exit(7);
 	}

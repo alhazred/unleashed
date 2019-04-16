@@ -108,7 +108,7 @@ sem_open(const char *path, int oflag, /* mode_t mode, int value */ ...)
 
 	/* if created, acquire total_size in the file */
 	if ((cr_flag & DFILE_CREATE) != 0) {
-		if (ftruncate64(fd, (off64_t)sizeof (sem_t)) < 0)
+		if (ftruncate(fd, (off64_t)sizeof (sem_t)) < 0)
 			goto out;
 	} else {
 		/*

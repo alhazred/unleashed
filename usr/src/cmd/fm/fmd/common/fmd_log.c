@@ -658,7 +658,7 @@ fmd_log_append(fmd_log_t *lp, fmd_event_t *e, fmd_case_t *cp)
 		 * sure the file is always in a sane state w.r.t. libexacct.
 		 */
 		(void) lseek64(lp->log_fd, lp->log_off, SEEK_SET);
-		(void) ftruncate64(lp->log_fd, lp->log_off);
+		(void) ftruncate(lp->log_fd, lp->log_off);
 	}
 
 	(void) pthread_mutex_unlock(&lp->log_lock);
