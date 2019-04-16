@@ -924,7 +924,7 @@ seekRootDirectory(int fd)
 	if (Verbose)
 		(void) fprintf(stderr,
 		    gettext("Seeking root directory @%lld.\n"), seekto);
-	return (lseek64(fd, seekto, SEEK_SET));
+	return (lseek(fd, seekto, SEEK_SET));
 }
 
 void

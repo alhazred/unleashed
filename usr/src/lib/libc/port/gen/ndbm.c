@@ -127,7 +127,7 @@ dbm_flushpag(DBM *db)
 
 	if (dbm_dirty(db)) { /* must page out the page */
 		where = (((off64_t)db->dbm_pagbno) * PBLKSIZ);
-		if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 		    (write(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) != PBLKSIZ)) {
 			db->dbm_flags |= _DBM_IOERR;
 			ok = -1;
@@ -144,7 +144,7 @@ dbm_flushdir(DBM *db)
 	off64_t where;
 	if (dbm_dirdirty(db)) { /* must page out the dir */
 		where = (((off64_t)db->dbm_dirbno) * DBLKSIZ);
-		if ((lseek64(db->dbm_dirf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_dirf, where, L_SET) != where) ||
 		    (write(db->dbm_dirf, db->dbm_dirbuf, DBLKSIZ) != DBLKSIZ)) {
 			ok = -1;
 		}
@@ -290,7 +290,7 @@ dbm_delete(DBM *db, datum key)
 		dbm_setdirty(db);
 	} else {
 		where = (((off64_t)db->dbm_blkno) * PBLKSIZ);
-		if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 		    (write(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) != PBLKSIZ)) {
 			err:
 				db->dbm_flags |= _DBM_IOERR;
@@ -333,7 +333,7 @@ loop:
 		dbm_setdirty(db);
 	} else {
 		where = (((off64_t)db->dbm_blkno) * PBLKSIZ);
-		if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 		    (write(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) != PBLKSIZ)) {
 			db->dbm_flags |= _DBM_IOERR;
 			return (-1);
@@ -376,14 +376,14 @@ split:
 	}
 	db->dbm_pagbno = db->dbm_blkno;
 	where = (((off64_t)db->dbm_blkno) * PBLKSIZ);
-	if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+	if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 	    (write(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) != PBLKSIZ)) {
 		db->dbm_flags |= _DBM_IOERR;
 		return (-1);
 	}
 	dbm_clrdirty(db); /* clear dirty */
 	where = (((off64_t)db->dbm_blkno + db->dbm_hmask + 1) * PBLKSIZ);
-	if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+	if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 	    (write(db->dbm_pagf, ovfbuf, PBLKSIZ) != PBLKSIZ)) {
 		db->dbm_flags |= _DBM_IOERR;
 		return (-1);
@@ -508,7 +508,7 @@ dbm_slow_nextkey(DBM *db)
 
 			db->dbm_pagbno = db->dbm_blkptr;
 			where = (((off64_t)db->dbm_blkptr) * PBLKSIZ);
-			if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+			if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 			    (read(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) !=
 			    PBLKSIZ))
 				(void) memset(db->dbm_pagbuf, 0, PBLKSIZ);
@@ -581,7 +581,7 @@ dbm_do_nextkey(DBM *db, datum inkey)
 			if (dbm_dirty(db)) (void) dbm_flushpag(db);
 			db->dbm_pagbno = db->dbm_blkptr;
 			where = (((off64_t)db->dbm_blkptr) * PBLKSIZ);
-			if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+			if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 			    (read(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) !=
 			    PBLKSIZ))
 				(void) memset(db->dbm_pagbuf, 0, PBLKSIZ);
@@ -739,7 +739,7 @@ dbm_access(DBM *db, unsigned long hash)
 				(void) dbm_flushdir(db); /* must flush */
 			db->dbm_dirbno = b;
 			where = (((off64_t)b) * DBLKSIZ);
-			if ((lseek64(db->dbm_dirf, where, L_SET) != where) ||
+			if ((lseek(db->dbm_dirf, where, L_SET) != where) ||
 			    (read(db->dbm_dirf, db->dbm_dirbuf, DBLKSIZ) !=
 			    DBLKSIZ))
 				(void) memset(db->dbm_dirbuf, 0, DBLKSIZ);
@@ -759,7 +759,7 @@ dbm_access(DBM *db, unsigned long hash)
 	if (my_blkno != db->dbm_pagbno) {
 		if (dbm_dirty(db)) { /* must page out the page */
 			where = (((off64_t)db->dbm_pagbno) * PBLKSIZ);
-			if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+			if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 			    (write(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) !=
 			    PBLKSIZ)) {
 				db->dbm_flags |= _DBM_IOERR;
@@ -769,7 +769,7 @@ dbm_access(DBM *db, unsigned long hash)
 
 		db->dbm_pagbno = my_blkno;
 		where = (((off64_t)my_blkno) * PBLKSIZ);
-		if ((lseek64(db->dbm_pagf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_pagf, where, L_SET) != where) ||
 		    (read(db->dbm_pagf, db->dbm_pagbuf, PBLKSIZ) != PBLKSIZ))
 			(void) memset(db->dbm_pagbuf, 0, PBLKSIZ);
 #ifdef DEBUG
@@ -797,7 +797,7 @@ getbit(DBM *db)
 			(void) dbm_flushdir(db); /* must flush */
 		db->dbm_dirbno = b;
 		where = (((off64_t)b) * DBLKSIZ);
-		if ((lseek64(db->dbm_dirf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_dirf, where, L_SET) != where) ||
 		    (read(db->dbm_dirf, db->dbm_dirbuf, DBLKSIZ) != DBLKSIZ))
 			(void) memset(db->dbm_dirbuf, 0, DBLKSIZ);
 	}
@@ -822,7 +822,7 @@ setbit(DBM *db)
 			(void) dbm_flushdir(db);
 		db->dbm_dirbno = b;
 		where = (((off64_t)b) * DBLKSIZ);
-		if ((lseek64(db->dbm_dirf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_dirf, where, L_SET) != where) ||
 		    (read(db->dbm_dirf, db->dbm_dirbuf, DBLKSIZ) != DBLKSIZ))
 			(void) memset(db->dbm_dirbuf, 0, DBLKSIZ);
 	}
@@ -832,7 +832,7 @@ setbit(DBM *db)
 		dbm_setdirdirty(db);
 	} else {
 		where = (((off64_t)b) * DBLKSIZ);
-		if ((lseek64(db->dbm_dirf, where, L_SET) != where) ||
+		if ((lseek(db->dbm_dirf, where, L_SET) != where) ||
 		    (write(db->dbm_dirf, db->dbm_dirbuf, DBLKSIZ) != DBLKSIZ)) {
 			return (-1);
 		}

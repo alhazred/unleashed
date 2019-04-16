@@ -174,7 +174,7 @@ readBPB(int fd)
 	/*
 	 *  The BPB is the first sector of the file system
 	 */
-	if (lseek64(fd, PartitionOffset, SEEK_SET) < 0) {
+	if (lseek(fd, PartitionOffset, SEEK_SET) < 0) {
 		mountSanityCheckFails();
 		perror(gettext("Cannot seek to start of disk partition"));
 		(void) close(fd);

@@ -81,7 +81,7 @@ fdio_seek(mdb_io_t *io, off64_t offset, int whence)
 	fd_data_t *fdp = io->io_data;
 
 	if (io->io_next == NULL)
-		return (lseek64(fdp->fd_fd, offset, whence));
+		return (lseek(fdp->fd_fd, offset, whence));
 
 	return (IOP_SEEK(io->io_next, offset, whence));
 }
@@ -185,7 +185,7 @@ fdio_bdev_read(mdb_io_t *io, void *buf, size_t nbytes)
 	if (io->io_next != NULL)
 		return (IOP_READ(io->io_next, buf, nbytes));
 
-	if ((off = lseek64(fdp->fd_fd, 0, SEEK_CUR)) == -1)
+	if ((off = lseek(fdp->fd_fd, 0, SEEK_CUR)) == -1)
 		return (-1); /* errno is set for us */
 
 	while (resid != 0) {
@@ -205,7 +205,7 @@ fdio_bdev_read(mdb_io_t *io, void *buf, size_t nbytes)
 	if (resid == nbytes && nbytes != 0)
 		return (set_errno(EMDB_EOF));
 
-	(void) lseek64(fdp->fd_fd, off, SEEK_SET);
+	(void) lseek(fdp->fd_fd, off, SEEK_SET);
 	return (nbytes - resid);
 }
 
@@ -226,7 +226,7 @@ fdio_bdev_write(mdb_io_t *io, const void *buf, size_t nbytes)
 	if (io->io_next != NULL)
 		return (IOP_WRITE(io->io_next, buf, nbytes));
 
-	if ((off = lseek64(fdp->fd_fd, 0, SEEK_CUR)) == -1)
+	if ((off = lseek(fdp->fd_fd, 0, SEEK_CUR)) == -1)
 		return (-1); /* errno is set for us */
 
 	while (resid != 0) {
@@ -250,7 +250,7 @@ fdio_bdev_write(mdb_io_t *io, const void *buf, size_t nbytes)
 	if (resid == nbytes && nbytes != 0)
 		return (set_errno(EMDB_EOF));
 
-	(void) lseek64(fdp->fd_fd, off, SEEK_SET);
+	(void) lseek(fdp->fd_fd, off, SEEK_SET);
 	return (nbytes - resid);
 }
 

@@ -176,7 +176,7 @@ fmd_log_write_hdr(fmd_log_t *lp, const char *tag)
 		(void) ea_pack_object(&hdr, buf, hdr_size);
 		(void) ea_pack_object(&toc, (char *)buf + hdr_size, toc_size);
 
-		if ((lp->log_off = lseek64(lp->log_fd, 0, SEEK_END)) == -1L)
+		if ((lp->log_off = lseek(lp->log_fd, 0, SEEK_END)) == -1L)
 			fmd_panic("failed to seek log %s", lp->log_name);
 
 		if (fmd_log_write(lp, buf, size) != size)
@@ -188,7 +188,7 @@ fmd_log_write_hdr(fmd_log_t *lp, const char *tag)
 		lp->log_beg = lp->log_off + hdr_size + toc_size;
 		lp->log_off = lp->log_off + hdr_size + toc_size;
 
-		if (lp->log_off != lseek64(lp->log_fd, 0, SEEK_END))
+		if (lp->log_off != lseek(lp->log_fd, 0, SEEK_END))
 			fmd_panic("eof off != log_off 0x%llx\n", lp->log_off);
 	} else
 		err = EFMD_LOG_EXACCT;
@@ -229,7 +229,7 @@ fmd_log_check_hdr(fmd_log_t *lp, const char *tag)
 
 	ea_clear(&lp->log_ea); /* resync exacct file */
 
-	if ((hdr_off = lseek64(lp->log_fd, 0, SEEK_CUR)) == -1L)
+	if ((hdr_off = lseek(lp->log_fd, 0, SEEK_CUR)) == -1L)
 		fmd_panic("failed to seek log %s", lp->log_name);
 
 	/*
@@ -316,7 +316,7 @@ fmd_log_check_hdr(fmd_log_t *lp, const char *tag)
 
 	lp->log_toc = hdr_off + hdr_size;
 	lp->log_beg = hdr_off + hdr_size + ea_pack_object(grp, NULL, 0);
-	lp->log_off = lseek64(lp->log_fd, 0, SEEK_END);
+	lp->log_off = lseek(lp->log_fd, 0, SEEK_END);
 	lp->log_skip = grp->eo_group.eg_objs->eo_item.ei_uint64;
 
 	if (lp->log_skip > lp->log_off) {
@@ -657,7 +657,7 @@ fmd_log_append(fmd_log_t *lp, fmd_event_t *e, fmd_case_t *cp)
 		 * the original location and truncate it there in order to make
 		 * sure the file is always in a sane state w.r.t. libexacct.
 		 */
-		(void) lseek64(lp->log_fd, lp->log_off, SEEK_SET);
+		(void) lseek(lp->log_fd, lp->log_off, SEEK_SET);
 		(void) ftruncate(lp->log_fd, lp->log_off);
 	}
 
@@ -889,7 +889,7 @@ fmd_log_replay(fmd_log_t *lp, fmd_log_f *func, void *data)
 		c = CAT_FMA_GROUP;
 	}
 
-	if (lseek64(lp->log_fd, off, SEEK_SET) != off) {
+	if (lseek(lp->log_fd, off, SEEK_SET) != off) {
 		fmd_panic("failed to seek %s to 0x%llx\n",
 		    lp->log_name, (u_longlong_t)off);
 	}
@@ -946,7 +946,7 @@ fmd_log_replay(fmd_log_t *lp, fmd_log_f *func, void *data)
 		skp = off; /* if no replays, move skip to where we ended up */
 
 out:
-	if (lseek64(lp->log_fd, lp->log_off, SEEK_SET) != lp->log_off) {
+	if (lseek(lp->log_fd, lp->log_off, SEEK_SET) != lp->log_off) {
 		fmd_panic("failed to seek %s to 0x%llx\n",
 		    lp->log_name, (u_longlong_t)lp->log_off);
 	}

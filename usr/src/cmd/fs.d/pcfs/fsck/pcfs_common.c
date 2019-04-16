@@ -586,7 +586,7 @@ findPartitionOffset(int fd, char *ldrive)
 			 *  Seek the next extended partition, and find
 			 *  logical drives within it.
 			 */
-			if (lseek64(fd, nextseek * BPSEC, SEEK_SET) < 0 ||
+			if (lseek(fd, nextseek * BPSEC, SEEK_SET) < 0 ||
 			    read(fd, &extmboot, sizeof (extmboot)) !=
 			    sizeof (extmboot)) {
 				perror(gettext("Unable to read extended "

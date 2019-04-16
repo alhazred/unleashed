@@ -180,7 +180,7 @@ _freopen_null(const char *type, FILE *iop)
 		goto errret;
 
 	/* ignore seek failures, eg. with pipes */
-	(void) lseek64(fd, (off64_t)0, SEEK_SET);
+	(void) lseek(fd, (off64_t)0, SEEK_SET);
 
 	return (iop);
 

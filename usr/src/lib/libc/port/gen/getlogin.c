@@ -65,7 +65,7 @@ getl_r_common(char *answer, size_t namelen, size_t maxlen)
 		return (NULL);
 	if ((uf = open(UTMPX_FILE, 0)) < 0)
 		return (NULL);
-	(void) lseek64(uf, me * sizeof (ubuf), SEEK_SET);
+	(void) lseek(uf, me * sizeof (ubuf), SEEK_SET);
 	if (read(uf, &ubuf, sizeof (ubuf)) != sizeof (ubuf)) {
 		(void) close(uf);
 		return (NULL);

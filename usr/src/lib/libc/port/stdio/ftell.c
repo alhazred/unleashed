@@ -74,7 +74,7 @@ ftell(FILE *iop)
 		return (EOF);
 	}
 
-	tres = lseek64(FILENO(iop), 0, SEEK_CUR);
+	tres = lseek(FILENO(iop), 0, SEEK_CUR);
 	if (tres >= 0)
 		tres += adjust;
 

@@ -427,7 +427,7 @@ setuparchive(void)
 
 		archive_opened = 1;
 
-		if (lseek64(archivefd, lf_archoffset, 0) < 0) {
+		if (lseek(archivefd, lf_archoffset, 0) < 0) {
 			saverr = errno;
 			msg(gettext(
 				    "Cannot position archive file `%s' : %s\n"),
@@ -969,7 +969,7 @@ rollforward(int sig)
 	 * Checkpoint archive file
 	 */
 	if (!doingverify && archive) {
-		lf_archoffset = lseek64(archivefd, (off64_t)0, 2);
+		lf_archoffset = lseek(archivefd, (off64_t)0, 2);
 		if (lf_archoffset < 0) {
 			int saverr = errno;
 			msg(gettext("Cannot position archive file `%s': %s\n"),

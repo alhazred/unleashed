@@ -129,7 +129,7 @@ _endopen(const char *name, const char *type, FILE *iop)
 #endif	/*	_LP64	*/
 
 	if (oflag == (O_WRONLY | O_APPEND | O_CREAT)) {	/* type == "a" */
-		if (lseek64(fd, (off64_t)0, SEEK_END) < (off64_t)0) {
+		if (lseek(fd, (off64_t)0, SEEK_END) < (off64_t)0) {
 			(void) close(fd);
 			return (NULL);
 		}

@@ -1127,7 +1127,7 @@ xtrfile(char *buf, size_t size)
 static void
 xtrskip(char *buf, size_t size)
 {
-	if (lseek64(ofile, (offset_t)size, 1) == -1) {
+	if (lseek(ofile, (offset_t)size, 1) == -1) {
 		int saverr = errno;
 		(void) fprintf(stderr,
 		    gettext("seek error extracting inode %d, name %s\n"),
@@ -1544,7 +1544,7 @@ getmore:
 		/* LINTED: unsigned->signed conversion ok */
 		i = (int)(ntrec*tp_bsize);
 		bzero(tbf, (size_t)i);
-		if (lseek64(mt, (offset_t)i, 1) == (off64_t)-1) {
+		if (lseek(mt, (offset_t)i, 1) == (off64_t)-1) {
 			perror(gettext("continuation failed"));
 			done(1);
 		}

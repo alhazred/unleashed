@@ -291,7 +291,7 @@ seekCluster(int fd, int32_t clusterNum)
 
 	seekto = FirstClusterOffset +
 	    ((off64_t)clusterNum - FIRST_CLUSTER) * BytesPerCluster;
-	if (lseek64(fd, seekto, SEEK_SET) != seekto) {
+	if (lseek(fd, seekto, SEEK_SET) != seekto) {
 		saveError = errno;
 		(void) fprintf(stderr,
 		    gettext("Seek to Allocation unit #%d failed: "),

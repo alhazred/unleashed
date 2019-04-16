@@ -723,7 +723,7 @@ seek_partn(int fd, char *pn, bpb_t *wbpb, off64_t *seekto)
 		if (Verbose)
 			(void) printf(gettext("Boot partition's offset: "
 			    "Sector %x.\n"), *seekto/BPSEC);
-		if (lseek64(fd, *seekto, SEEK_SET) < 0) {
+		if (lseek(fd, *seekto, SEEK_SET) < 0) {
 			(void) fprintf(stderr, gettext("Partition %s: "), pn);
 			perror("");
 			return (PART_NOT_FOUND);
@@ -745,7 +745,7 @@ seek_partn(int fd, char *pn, bpb_t *wbpb, off64_t *seekto)
 		if (Verbose)
 			(void) printf(gettext("Partition's offset: "
 			    "Sector %x.\n"), *seekto/BPSEC);
-		if (lseek64(fd, *seekto, SEEK_SET) < 0) {
+		if (lseek(fd, *seekto, SEEK_SET) < 0) {
 			(void) fprintf(stderr, gettext("Partition %s: "), pn);
 			perror("");
 			return (PART_NOT_FOUND);
@@ -781,7 +781,7 @@ seek_partn(int fd, char *pn, bpb_t *wbpb, off64_t *seekto)
 			 *  Seek the next extended partition, and find
 			 *  logical drives within it.
 			 */
-			if (lseek64(fd, nextseek * BPSEC, SEEK_SET) < 0 ||
+			if (lseek(fd, nextseek * BPSEC, SEEK_SET) < 0 ||
 			    read(fd, &extmboot, sizeof (extmboot)) !=
 			    sizeof (extmboot)) {
 				perror(gettext("Unable to read extended "
@@ -864,7 +864,7 @@ seek_partn(int fd, char *pn, bpb_t *wbpb, off64_t *seekto)
 			if (Verbose)
 				(void) printf(gettext("Partition's offset: "
 				    "Sector 0x%x.\n"), *seekto/BPSEC);
-			if (lseek64(fd, *seekto, SEEK_SET) < 0) {
+			if (lseek(fd, *seekto, SEEK_SET) < 0) {
 				(void) fprintf(stderr,
 				    gettext("Partition %s: "), pn);
 				perror("");
@@ -904,7 +904,7 @@ seek_partn(int fd, char *pn, bpb_t *wbpb, off64_t *seekto)
 		if (Verbose)
 			(void) printf(gettext("Partition's offset: "
 			    "Sector %x.\n"), *seekto/BPSEC);
-		if (lseek64(fd, *seekto, SEEK_SET) < 0) {
+		if (lseek(fd, *seekto, SEEK_SET) < 0) {
 			(void) fprintf(stderr,
 			    gettext("Partition %s: "), pn);
 			perror("");
@@ -942,7 +942,7 @@ seek_nofdisk(int fd, bpb_t *wbpb, off64_t *seekto)
 		(void) printf(gettext("Requested offset: Sector %x.\n"),
 		    *seekto/BPSEC);
 
-	if (lseek64(fd, *seekto, SEEK_SET) < 0) {
+	if (lseek(fd, *seekto, SEEK_SET) < 0) {
 		(void) fprintf(stderr,
 		    gettext("User specified start sector %d"), RelOffset);
 		perror("");
@@ -3102,7 +3102,7 @@ write_fat32_bootstuff(int fd, boot_sector_t *bsp,
 			perror(gettext("FS info sector write"));
 			exit(4);
 		}
-		if (lseek64(fd,	seekto + BKUP_BOOTSECT_OFFSET, SEEK_SET) < 0) {
+		if (lseek(fd,	seekto + BKUP_BOOTSECT_OFFSET, SEEK_SET) < 0) {
 			(void) close(fd);
 			perror(gettext("Boot sector backup seek"));
 			exit(4);
@@ -3212,7 +3212,7 @@ write_fat(int fd, off64_t seekto, char *fn, char *lbl, char *ffn, bpb_t *wbpb)
 
 	write_bootsects(fd, &bootsect, wbpb, &fsinfo, seekto);
 
-	if (lseek64(fd,
+	if (lseek(fd,
 	    seekto + (BPSEC * wbpb->bpb.resv_sectors), SEEK_SET) < 0) {
 		(void) close(fd);
 		perror(gettext("Seek to end of reserved sectors"));

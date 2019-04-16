@@ -178,7 +178,7 @@ do_write(int fd)
 	}
 
 	roffset = random() % fsize;
-	if (lseek64(fd, (offset + roffset), SEEK_SET) < 0) {
+	if (lseek(fd, (offset + roffset), SEEK_SET) < 0) {
 		perror("lseek");
 		exit(5);
 	}
@@ -190,7 +190,7 @@ do_write(int fd)
 	}
 
 	if (rflag) {
-		if (lseek64(fd, (offset + roffset), SEEK_SET) < 0) {
+		if (lseek(fd, (offset + roffset), SEEK_SET) < 0) {
 			perror("lseek");
 			exit(7);
 		}

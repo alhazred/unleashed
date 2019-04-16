@@ -58,7 +58,7 @@
 #define	ESHDR_NUM	6
 
 #define	PWRITE_SCN(index, data) \
-	(lseek64(fd, (off64_t)elf_file.shdr[(index)].sh_offset, SEEK_SET) != \
+	(lseek(fd, (off64_t)elf_file.shdr[(index)].sh_offset, SEEK_SET) != \
 	(off64_t)elf_file.shdr[(index)].sh_offset || \
 	dt_write(dtp, fd, (data), elf_file.shdr[(index)].sh_size) != \
 	elf_file.shdr[(index)].sh_size)

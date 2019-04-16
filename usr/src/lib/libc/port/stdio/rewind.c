@@ -55,7 +55,7 @@ void
 _rewind_unlocked(FILE *iop)
 {
 	(void) _fflush_u(iop);
-	(void) lseek64(FILENO(iop), 0, SEEK_SET);
+	(void) lseek(FILENO(iop), 0, SEEK_SET);
 	iop->_cnt = 0;
 	iop->_ptr = iop->_base;
 	iop->_flag &= ~(_IOERR | _IOEOF);

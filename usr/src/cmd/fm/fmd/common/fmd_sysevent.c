@@ -261,7 +261,7 @@ sysev_replay(fmd_hdl_t *hdl, id_t id, void *arg)
 	}
 
 	off = DUMP_OFFSET + DUMP_LOGSIZE + DUMP_ERPTSIZE;
-	off = off0 = lseek64(fd, -off, SEEK_END) & -DUMP_OFFSET;
+	off = off0 = lseek(fd, -off, SEEK_END) & -DUMP_OFFSET;
 
 	if (off == (off64_t)-1LL) {
 		fmd_hdl_error(hdl, "failed to seek dump transport %s "

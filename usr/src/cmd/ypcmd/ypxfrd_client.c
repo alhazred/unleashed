@@ -105,7 +105,7 @@ xdr_pages(xdrs)
 #endif
 			errno = 0;
 			where = (((off64_t)PAG->pag_u.ok.blkno) * PBLKSIZ);
-			(void) lseek64(db->dbm_pagf, where, L_SET);
+			(void) lseek(db->dbm_pagf, where, L_SET);
 			if (errno != 0) {
 				perror("seek");
 				exit(-1);
@@ -150,7 +150,7 @@ xdr_dirs(xdrs)
 		if (DIR->status == OK) {
 			errno = 0;
 			where = (((off64_t)DIR->dir_u.ok.blkno) * DBLKSIZ);
-			(void) lseek64(db->dbm_dirf, where, L_SET);
+			(void) lseek(db->dbm_dirf, where, L_SET);
 			if (errno != 0) {
 				perror("seek");
 				exit(-1);

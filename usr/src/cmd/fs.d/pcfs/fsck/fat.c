@@ -65,7 +65,7 @@ seekFAT(int fd)
 	 */
 	seekto = TheBIOSParameterBlock.bpb.resv_sectors *
 		TheBIOSParameterBlock.bpb.bytes_per_sector + PartitionOffset;
-	return (lseek64(fd, seekto, SEEK_SET));
+	return (lseek(fd, seekto, SEEK_SET));
 }
 
 void

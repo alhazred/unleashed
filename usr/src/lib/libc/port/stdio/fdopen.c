@@ -78,7 +78,7 @@ fdopen(int fd, const char *type) /* associate file desc. with stream */
 		flag = _IOREAD;
 		break;
 	case 'a':
-		(void) lseek64(fd, (off64_t)0, SEEK_END);
+		(void) lseek(fd, (off64_t)0, SEEK_END);
 		/*FALLTHROUGH*/
 	case 'w':
 		flag = _IOWRT;

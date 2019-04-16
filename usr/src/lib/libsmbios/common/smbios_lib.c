@@ -248,7 +248,7 @@ int
 smbios_write(smbios_hdl_t *shp, int fd)
 {
 	smbios_entry_t ep;
-	off64_t off = lseek64(fd, 0, SEEK_CUR) + P2ROUNDUP(sizeof (ep), 16);
+	off64_t off = lseek(fd, 0, SEEK_CUR) + P2ROUNDUP(sizeof (ep), 16);
 
 	if (off > UINT32_MAX)
 		return (smb_set_errno(shp, EOVERFLOW));
@@ -264,7 +264,7 @@ smbios_write(smbios_hdl_t *shp, int fd)
 	smbios_checksum(shp, &ep);
 
 	if (smbios_xwrite(shp, fd, &ep, sizeof (ep)) == -1 ||
-	    lseek64(fd, off, SEEK_SET) != off ||
+	    lseek(fd, off, SEEK_SET) != off ||
 	    smbios_xwrite(shp, fd, shp->sh_buf, shp->sh_buflen) == -1)
 		return (-1);
 

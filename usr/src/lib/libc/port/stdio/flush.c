@@ -662,7 +662,7 @@ _fflush_u(FILE *iop)
 
 	/* this portion is always assumed locked */
 	if (!(iop->_flag & _IOWRT)) {
-		(void) lseek64(GET_FD(iop), -iop->_cnt, SEEK_CUR);
+		(void) lseek(GET_FD(iop), -iop->_cnt, SEEK_CUR);
 		iop->_cnt = 0;
 		/* needed for ungetc & multibyte pushbacks */
 		iop->_ptr = iop->_base;

@@ -2333,7 +2333,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 	/*
 	 * Advance the seek pointer to the start of the PT_NOTE data
 	 */
-	if (lseek64(P->asfd, note_phdr.p_offset, SEEK_SET) == (off_t)-1) {
+	if (lseek(P->asfd, note_phdr.p_offset, SEEK_SET) == (off_t)-1) {
 		dprintf("Pgrab_core: failed to lseek to PT_NOTE data\n");
 		*perr = G_STRANGE;
 		goto err;
@@ -2379,7 +2379,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		 */
 		namesz = P2ROUNDUP((off_t)nhdr.n_namesz, (off_t)4);
 
-		if (lseek64(P->asfd, namesz, SEEK_CUR) == (off_t)-1) {
+		if (lseek(P->asfd, namesz, SEEK_CUR) == (off_t)-1) {
 			dprintf("failed to seek past name and padding\n");
 			*perr = G_STRANGE;
 			goto err;
@@ -2388,7 +2388,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		dprintf("Note hdr n_type=%u n_namesz=%u n_descsz=%u\n",
 		    nhdr.n_type, nhdr.n_namesz, nhdr.n_descsz);
 
-		off = lseek64(P->asfd, (off_t)0L, SEEK_CUR);
+		off = lseek(P->asfd, (off_t)0L, SEEK_CUR);
 
 		/*
 		 * Invoke the note handler function from our table
@@ -2417,7 +2417,7 @@ Pfgrab_core(int core_fd, const char *aout_path, int *perr)
 		 * Seek past the current note data to the next Elf_Nhdr
 		 */
 		descsz = P2ROUNDUP((off_t)nhdr.n_descsz, (off_t)4);
-		if (lseek64(P->asfd, off + descsz, SEEK_SET) == (off_t)-1) {
+		if (lseek(P->asfd, off + descsz, SEEK_SET) == (off_t)-1) {
 			dprintf("Pgrab_core: failed to seek to next nhdr\n");
 			*perr = G_STRANGE;
 			goto err;

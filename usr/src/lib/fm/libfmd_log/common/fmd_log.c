@@ -110,7 +110,7 @@ fmd_log_load_record(fmd_log_t *lp, uint_t iflags, fmd_log_record_t *rp)
 
 	if (iflags & FMD_LOG_XITER_OFFS) {
 		ea_clear(&lp->log_ea);
-		off = lseek64(lp->log_fd, 0, SEEK_CUR);
+		off = lseek(lp->log_fd, 0, SEEK_CUR);
 	}
 
 	if ((grp = ea_get_object_tree(&lp->log_ea, 1)) == NULL)
@@ -262,7 +262,7 @@ fmd_log_load_xref(fmd_log_t *lp, uint_t iflags,
 
 	xlp->log_flags &= ~FMD_LF_START;
 	ea_clear(&xlp->log_ea);
-	(void) lseek64(xlp->log_fd, off, SEEK_SET);
+	(void) lseek(xlp->log_fd, off, SEEK_SET);
 
 	return (fmd_log_load_record(xlp,
 	    iflags, &rp->rec_xrefs[rp->rec_nrefs++]));
@@ -701,7 +701,7 @@ fmd_log_seek(fmd_log_t *lp, off64_t off)
 	lp->log_flags &= ~FMD_LF_START;
 	ea_clear(&lp->log_ea);
 
-	if (lseek64(lp->log_fd, off, SEEK_SET) != off)
+	if (lseek(lp->log_fd, off, SEEK_SET) != off)
 		return (fmd_log_set_errno(lp, errno));
 
 	return (0);
