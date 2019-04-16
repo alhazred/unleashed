@@ -39,7 +39,7 @@ LDLIBS += -lzpool -lzfs -lnvpair
 
 CSTD=	$(CSTD_GNU99)
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
+CPPFLAGS += $(INCS)
 
 CERRWARN += -Wno-uninitialized
 CERRWARN += -Wno-switch

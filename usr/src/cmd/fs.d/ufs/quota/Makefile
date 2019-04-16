@@ -36,7 +36,7 @@ include		../../Makefile.fstype
 OBJS=		quota.o rquota_xdr.o replica.o
 SRCS=		$(OBJS:%.o=%.c)
 XFILE=		$(ROOT)/usr/include/rpcsvc/rquota.x
-CPPFLAGS +=	-I $(ROOT)/usr/include/sys -D_LARGEFILE64_SOURCE
+CPPFLAGS +=	-I $(ROOT)/usr/include/sys
 
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-unused-variable

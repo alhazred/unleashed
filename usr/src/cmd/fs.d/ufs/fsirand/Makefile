@@ -35,7 +35,6 @@ LINKVALUE=	../lib/fs/$(FSTYPE)/$(LIBPROG)
 
 include		../../Makefile.fstype
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
 
 

@@ -64,7 +64,6 @@ typedef struct aio_result32_t {
 #define	AIORESERVED1	23	/* reserved for the aio implementation */
 #define	AIORESERVED2	24
 #define	AIORESERVED3	25
-#ifdef _LARGEFILE64_SOURCE
 #if	defined(_LP64) && !defined(_KERNEL)
 #define	AIOLIO64	AIOLIO
 #define	AIOSUSPEND64	AIOSUSPEND
@@ -84,7 +83,6 @@ typedef struct aio_result32_t {
 #define	AIOCANCEL64	19
 #define	AIOFSYNC64	22
 #endif /* defined(_LP64) && !defined(_KERNEL) */
-#endif /* _LARGEFILE64_SOURCE */
 #endif /* !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__) */
 
 #define	AIO_POLL_BIT	0x20	/* opcode filter for AIO_INPROGRESS */

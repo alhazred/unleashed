@@ -41,7 +41,7 @@ LDLIBS += -lzpool -lumem -lnvpair -lzfs -lavl -lcmdutils
 
 CSTD=	$(CSTD_GNU99)
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS) -DDEBUG
+CPPFLAGS += $(INCS) -DDEBUG
 
 # re-enable warnings that we can tolerate, which are disabled by default
 # in Makefile.master

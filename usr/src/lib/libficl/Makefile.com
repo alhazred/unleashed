@@ -30,7 +30,7 @@ LIBS=	$(DYNLIB)
 FICLDIR=	$(SRC)/common/ficl
 CSTD=	$(CSTD_GNU99)
 PNGLITE=	$(SRC)/common/pnglite
-CPPFLAGS +=	-I.. -I$(FICLDIR) -D_LARGEFILE64_SOURCE=1
+CPPFLAGS +=	-I.. -I$(FICLDIR)
 CPPFLAGS +=	-I$(PNGLITE)
 
 # As variable "count" is marked volatile, gcc 4.4.4 will complain about

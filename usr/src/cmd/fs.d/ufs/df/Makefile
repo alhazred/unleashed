@@ -32,7 +32,6 @@ include		../../Makefile.fstype
 
 OBJS=	df.o
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 LDLIBS += -ladm
 
 CERRWARN +=	-Wno-implicit-function-declaration

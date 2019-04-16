@@ -40,7 +40,6 @@ SRCS=		$(LIBPROG).c $(ROLLSRCS)
 # No msg catalog here.
 POFILE=
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
 $(LIBPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)

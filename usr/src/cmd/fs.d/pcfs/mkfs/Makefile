@@ -40,7 +40,6 @@ POFILE= mkfs.po
 
 catalog:        $(POFILE)
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CERRWARN +=	-Wno-parentheses
 
 $(LIBPROG):	$(OBJS)

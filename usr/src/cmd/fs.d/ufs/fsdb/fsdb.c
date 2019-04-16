@@ -307,14 +307,10 @@ static void		insert(struct lbuf *);
 static void		puta();
 static void		fprnt(char, char);
 static void		index();
-#ifdef _LARGEFILE64_SOURCE
 static void		printll
 	(uoff_t value, int fieldsz, int digits, int lead);
 #define	print(value, fieldsz, digits, lead) \
 	printll((uoff_t)value, fieldsz, digits, lead)
-#else /* !_LARGEFILE64_SOURCE */
-static void		print(long value, int fieldsz, int digits, int lead);
-#endif /* _LARGEFILE64_SOURCE */
 static void		printsb(struct fs *);
 static void		printcg(struct cg *);
 static void		pbits(unsigned char *, int);
@@ -3986,11 +3982,7 @@ OTX:
 				printf("c_flags : ");
 				print(ip->di_cflags, 12, -8, 0);
 				printf("   sz : ");
-#ifdef _LARGEFILE64_SOURCE
 				printll(ip->di_size, 20, -16, 0);
-#else /* !_LARGEFILE64_SOURCE */
-				print(ip->di_size, 12, -8, 0);
-#endif /* _LARGEFILE64_SOURCE */
 				if (ip->di_shadow) {
 					printf("   si: ");
 					print(ip->di_shadow, 12, -8, 0);
@@ -4477,11 +4469,7 @@ index(int b)
  *	leading zeros and right/left justified in the current base.
  */
 static void
-#ifdef _LARGEFILE64_SOURCE
 printll(uoff_t value, int fieldsz, int digits, int lead)
-#else /* !_LARGEFILE64_SOURCE */
-print(long value, int fieldsz, int digits, int lead)
-#endif /* _LARGEFILE64_SOURCE */
 {
 	int	i, left = 0;
 	char	mode = BASE[base - OCTAL];
@@ -4499,28 +4487,20 @@ print(long value, int fieldsz, int digits, int lead)
 	if (lead) {
 		if (left)
 			(void) sprintf(string, "%%%c%d%d.%d"
-#ifdef _LARGEFILE64_SOURCE
 				"ll"
-#endif /* _LARGEFILE64_SOURCE */
 				"%c", '-', 0, digits, lead, mode);
 		else
 			(void) sprintf(string, "%%%d%d.%d"
-#ifdef _LARGEFILE64_SOURCE
 				"ll"
-#endif /* _LARGEFILE64_SOURCE */
 				"%c", 0, digits, lead, mode);
 	} else {
 		if (left)
 			(void) sprintf(string, "%%%c%d"
-#ifdef _LARGEFILE64_SOURCE
 				"ll"
-#endif /* _LARGEFILE64_SOURCE */
 				"%c", '-', digits, mode);
 		else
 			(void) sprintf(string, "%%%d"
-#ifdef _LARGEFILE64_SOURCE
 				"ll"
-#endif /* _LARGEFILE64_SOURCE */
 				"%c", digits, mode);
 	}
 	printf(string, value);

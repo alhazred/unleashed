@@ -38,7 +38,6 @@ TOPSRCS=	$(TOPOBJS:%.o=%.c)
 OBJS=		$(FSSNAPOBJS) $(TOPOBJS)
 SRCS=		$(FSSNAPSRCS) $(TOPSRCS)
 
-CPPFLAGS +=     -D_LARGEFILE64_SOURCE
 CERRWARN +=	-Wno-type-limits
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-unused-variable

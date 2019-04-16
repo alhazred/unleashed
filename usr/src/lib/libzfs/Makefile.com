@@ -71,7 +71,7 @@ INCS += -I../../libc/inc
 CSTD=	$(CSTD_GNU99)
 LDLIBS +=	-lc -lm -ldevid -lgen -lnvpair -luutil -lavl -lefi \
 	-ladm -lidmap -lmd -lumem -lzfs_core -lz -lcmdutils
-CPPFLAGS +=	$(INCS) -D_LARGEFILE64_SOURCE=1
+CPPFLAGS +=	$(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 SRCS=	$(OBJS_COMMON:%.o=$(SRCDIR)/%.c)	\

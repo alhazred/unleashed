@@ -31,7 +31,7 @@ include ../../Makefile.cmd
 CSTD= $(CSTD_GNU99)
 CFLAGS += -g
 CFLAGS64 += -g
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
+CPPFLAGS += $(INCS)
 
 CERRWARN += -Wno-uninitialized
 

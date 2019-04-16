@@ -41,7 +41,6 @@ $(LIBPROG):	$(OBJS)
 		$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 		$(POST_PROCESS)
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
 clean:
 		$(RM) $(LIBPROG).o

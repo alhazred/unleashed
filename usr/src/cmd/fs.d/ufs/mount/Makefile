@@ -37,7 +37,6 @@ $(ROOTLIBFSTYPE)/%:   $(ROOTLIBFSTYPE) %
 include		../../Makefile.fstype
 include		../../Makefile.mount
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CERRWARN +=	-Wno-parentheses
 
 include		../../Makefile.mount.targ

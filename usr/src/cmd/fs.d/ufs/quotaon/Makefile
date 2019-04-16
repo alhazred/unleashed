@@ -39,7 +39,6 @@ include		../../Makefile.fstype
 
 $(ROOTINIT_SCRIPT) :=	FILEMODE = 0744
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CERRWARN +=	-Wno-unused-variable
 CERRWARN +=	-Wno-unused-function
 

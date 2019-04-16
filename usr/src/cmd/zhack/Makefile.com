@@ -44,7 +44,7 @@ LDLIBS += -lzpool -lumem -lnvpair -lzfs
 
 CSTD=	$(CSTD_GNU99)
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 -DDEBUG $(INCS)
+CPPFLAGS += -DDEBUG $(INCS)
 
 .KEEP_STATE:
 

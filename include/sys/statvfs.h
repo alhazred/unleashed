@@ -95,7 +95,6 @@ typedef struct statvfs32 {
 #endif	/* _SYSCALL32 */
 
 /* transitional large file interface version */
-#if defined(_LARGEFILE64_SOURCE)
 typedef struct statvfs64 {
 	unsigned long	f_bsize;	/* preferred file system block size */
 	unsigned long	f_frsize;	/* fundamental file system block size */
@@ -115,7 +114,6 @@ typedef struct statvfs64 {
 	unsigned long	f_filler[16];	/* reserved for future expansion */
 #endif	/* _LP64 */
 } statvfs64_t;
-#endif
 
 #if defined(_SYSCALL32)
 

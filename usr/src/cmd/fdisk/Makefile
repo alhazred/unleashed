@@ -37,7 +37,6 @@ LDLIBS_i386= -lfdisk
 LDLIBS_sparc=
 LDLIBS += -ladm -lefi $(LDLIBS_$(MACH))
 
-i386_CFLAGS += -D_LARGEFILE64_SOURCE
 
 
 all:	$(ROOTFS_PROG)

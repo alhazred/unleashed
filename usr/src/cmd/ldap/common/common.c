@@ -2478,11 +2478,7 @@ ldaptool_boolean_str2value ( const char *ptr, int strict )
 FILE *
 ldaptool_open_file(const char *filename, const char *mode)
 {
-#ifdef _LARGEFILE64_SOURCE
 	return fopen(filename, mode);
-#else
-	return fopen(filename, mode);
-#endif
 }
 
 #ifdef later

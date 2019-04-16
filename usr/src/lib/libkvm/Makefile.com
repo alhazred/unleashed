@@ -39,7 +39,7 @@ DYNFLAGS32 +=	-Wl,-f,/usr/platform/lib/$(DYNLIBPSR)
 DYNFLAGS64 +=	-Wl,-f,/usr/platform/lib/$(MACH64)/$(DYNLIBPSR)
 LDLIBS +=	-lelf -lc
 
-CPPFLAGS = -D_KMEMUSER -D_LARGEFILE64_SOURCE=1 -I.. $(CPPFLAGS.master)
+CPPFLAGS = -D_KMEMUSER -I.. $(CPPFLAGS.master)
 
 CERRWARN +=	-Wno-uninitialized
 

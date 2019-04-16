@@ -58,7 +58,7 @@ $(POFILE):      $(SRCS)
 	sed "/^domain/d" messages.po >  $@
 	$(RM) $(POFILE).i messages.po
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE -I$(FSCOMMONDIR)
+CPPFLAGS += -I$(FSCOMMONDIR)
 LDLIBS +=	-ladm -lefi
 
 $(LIBPROG):	$(OBJS)

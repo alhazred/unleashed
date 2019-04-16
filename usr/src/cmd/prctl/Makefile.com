@@ -37,7 +37,6 @@ CERRWARN += -Wno-uninitialized
 
 LDLIBS	+= -lproc -lproject
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1
 
 .KEEP_STATE:
 

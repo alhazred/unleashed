@@ -43,7 +43,7 @@ LDLIBS += -lzfs -lnvpair -ldevid -lefi -ldiskmgt -luutil -lumem
 
 INCS += -I$(SRCTOP)/kernel/fs/zfs/common -I$(STATCOMMONDIR)
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
+CPPFLAGS += $(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 ROOTUSRSBINLINKS = $(PROG:%=$(ROOTUSRSBIN)/%)

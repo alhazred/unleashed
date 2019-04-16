@@ -32,7 +32,3 @@ LIBPROG=	labelit
 ATTMK=		$(LIBPROG)
 
 include		../../Makefile.fstype
-
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
-
-

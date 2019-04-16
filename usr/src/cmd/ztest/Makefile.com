@@ -40,7 +40,7 @@ LDLIBS += -lumem -lzpool -lcmdutils -lm -lnvpair
 CSTD= $(CSTD_GNU99)
 CFLAGS += -g
 CFLAGS64 += -g
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS) -DDEBUG
+CPPFLAGS += $(INCS) -DDEBUG
 
 CERRWARN += -Wno-switch
 

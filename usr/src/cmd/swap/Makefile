@@ -30,7 +30,6 @@ include ../Makefile.cmd
 
 SUBDIRS += $(MACH64)
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE
 
 all	:=	TARGET = all
 install	:=	TARGET = install

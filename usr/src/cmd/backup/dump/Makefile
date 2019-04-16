@@ -65,8 +65,8 @@ LOCAL=		.
 GENERAL=	../include
 GLOBAL=		../../../../../include
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) -DPARTIAL \
-		-I$(ROLLDIR) $(CPPFLAGS.master) \
-		-D_LARGEFILE64_SOURCE=1
+		-I$(ROLLDIR) $(CPPFLAGS.master)
+
 CERRWARN +=	-Wno-implicit-function-declaration
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-uninitialized

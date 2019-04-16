@@ -32,6 +32,5 @@ LIBPROG=	mount
 include		../../Makefile.fstype
 include		../../Makefile.mount
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE
 
 include		../../Makefile.mount.targ

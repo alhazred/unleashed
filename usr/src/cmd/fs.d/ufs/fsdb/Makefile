@@ -29,7 +29,6 @@ LIBPROG=	fsdb
 
 include		../../Makefile.fstype
 
-CPPFLAGS +=     -D_LARGEFILE64_SOURCE
 
 CERRWARN +=	-Wno-char-subscripts
 CERRWARN +=	-Wno-implicit-function-declaration

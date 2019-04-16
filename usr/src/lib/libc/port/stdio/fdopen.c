@@ -27,15 +27,11 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
 /*
  * Unix routine to do an "fopen" on file descriptor
  * The mode has to be repeated because you can't query its
  * status
  */
-
-#define	_LARGEFILE64_SOURCE 1
 
 #pragma weak _fdopen = fdopen
 

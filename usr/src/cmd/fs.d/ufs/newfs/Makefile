@@ -32,7 +32,7 @@ LINKVALUE=	../lib/fs/$(FSTYPE)/$(LIBPROG)
 
 include		../../Makefile.fstype
 
-CPPFLAGS +=	-I../../ -D_LARGEFILE64_SOURCE
+CPPFLAGS +=	-I../../
 LDLIBS += -ladm -lefi
 
 CERRWARN +=	-Wno-parentheses

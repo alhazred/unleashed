@@ -117,21 +117,6 @@
 #endif
 
 /*
- * Large file interfaces:
- *	_LARGEFILE64_SOURCE
- *		1		transitional large-file-related interfaces
- *				requested (seek64, stat64, etc.)
- *
- * The corresponding announcement macros are respectively:
- *	_LFS_LARGEFILE
- *	_LFS64_LARGEFILE
- * (These are set in <unistd.h>.)
- *
- */
-#undef	_LARGEFILE64_SOURCE
-#define	_LARGEFILE64_SOURCE	1
-
-/*
  * Use of _XOPEN_SOURCE
  *
  * The following X/Open specifications are supported:

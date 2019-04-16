@@ -37,7 +37,6 @@ SRCS=           $(LIBPROG).c $(ROLLSRCS)
 # No msg catalog here.
 POFILE=
 
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
 CERRWARN +=	-Wno-uninitialized
 

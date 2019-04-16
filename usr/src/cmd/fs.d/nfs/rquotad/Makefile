@@ -33,7 +33,6 @@ OBJS=	rpc.rquotad.o rquota_xdr.o
 SRCS=	$(OBJS:%.o=%.c)
 XFILE=	$(ROOT)/usr/include/rpcsvc/rquota.x
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE
 CERRWARN += -Wno-implicit-function-declaration
 CERRWARN += -Wno-unused-variable
 

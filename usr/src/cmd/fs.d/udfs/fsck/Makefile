@@ -43,7 +43,6 @@ CERRWARN +=	-Wno-parentheses
 OBJS=		$(FSCKOBJS) $(UDFSOBJS)
 SRCS=		$(FSCKSRCS) $(UDFSSRCS) ../mkfs/udfslib.c
 
-#CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 CPPFLAGS +=	-I../mkfs
 LDLIBS += -ladm
 $(LIBPROG):	$(OBJS)

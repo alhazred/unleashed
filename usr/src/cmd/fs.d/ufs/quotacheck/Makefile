@@ -32,7 +32,6 @@ OTHERINSTALL=	$(ROOTUSRSBIN)/$(LIBPROG)
 LINKVALUE=	../lib/fs/$(FSTYPE)/$(LIBPROG)
 
 include		../../Makefile.fstype
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 LDLIBS	+=	-ladm
 OBJS=		quotacheck.o
 FSOBJS=		preenlib.o

@@ -61,7 +61,7 @@ INCS += -I$(COMMONBASE)/cmdparse
 INCS += -I$(SRC)/lib/libfcoe/common
 INCS += -I$(SRCTOP)/include
 
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1 $(INCS)
+CPPFLAGS += $(INCS)
 $(NOT_RELEASE_BUILD)CPPFLAGS += -DDEBUG
 
 

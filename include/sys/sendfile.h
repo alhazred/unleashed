@@ -50,7 +50,6 @@ typedef struct sendfilevec {
 
 #define	SFV_NOWAIT	1
 
-#if	defined(_LARGEFILE64_SOURCE)
 /*
  * For 32-bit apps accessing largefile offsets
  * using sendfilev64.
@@ -61,7 +60,6 @@ typedef struct sendfilevec64 {
 	off64_t		sfv_off;
 	size_t		sfv_len;
 } sendfilevec64_t;
-#endif /* _LARGEFILE64_SOURCE */
 
 #if	defined(_SYSCALL32)
 /*
@@ -118,7 +116,7 @@ typedef struct ksendfilevec64 {
 #endif	/* !_LP64 */
 
 /* In the LP64 compilation environment, the APIs are already large file */
-#if defined(_LP64) && defined(_LARGEFILE64_SOURCE)
+#if defined(_LP64)
 #ifdef	__PRAGMA_REDEFINE_EXTNAME
 #pragma redefine_extname	sendfilev64	sendfilev
 #pragma redefine_extname	sendfile64	sendfile
@@ -126,12 +124,12 @@ typedef struct ksendfilevec64 {
 #define	sendfilev64			sendfilev
 #define	sendfile64			sendfile
 #endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* _LP64 && _LARGEFILE64_SOURCE */
+#endif	/* _LP64 */
 
 extern ssize_t sendfilev(int, const struct sendfilevec *, int, size_t *);
 extern ssize_t sendfile(int, int, off_t *, size_t);
 /* Transitional largefile interface */
-#if	defined(_LARGEFILE64_SOURCE) && defined(__PRAGMA_REDEFINE_EXTNAME)
+#if	defined(__PRAGMA_REDEFINE_EXTNAME)
 extern ssize_t sendfilev64(int, const struct sendfilevec64 *, int, size_t *);
 extern ssize_t sendfile64(int, int, off64_t *, size_t);
 #endif

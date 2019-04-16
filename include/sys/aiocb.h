@@ -51,7 +51,6 @@ typedef struct aiocb {
 	int		aio__pad[1];		/* extension padding */
 } aiocb_t;
 
-#ifdef _LARGEFILE64_SOURCE
 #if	!defined(_KERNEL)
 typedef struct aiocb64 {
 	int 		aio_fildes;
@@ -89,7 +88,6 @@ typedef struct aiocb64_32 {
 #endif
 
 #endif /* !defined(_KERNEL) */
-#endif /* _LARGEFILE64_SOURCE */
 
 #ifdef	_SYSCALL32
 typedef struct aiocb32 {

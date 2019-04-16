@@ -53,7 +53,6 @@ catalog:        $(POFILE)
 #COPTFLAG = -g
 #COPTFLAG64 = -g
 #
-CPPFLAGS +=	-D_LARGEFILE64_SOURCE
 
 CERRWARN +=	-Wno-parentheses
 CERRWARN +=	-Wno-unused-variable

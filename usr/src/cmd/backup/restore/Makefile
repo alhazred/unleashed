@@ -41,7 +41,7 @@ LOCAL=		.
 GENERAL=	../include
 GLOBAL=		../../../../../include
 CPPFLAGS=	-I$(LOCAL) -I$(GENERAL) -I$(GLOBAL) \
-			$(CPPFLAGS.master) -D_LARGEFILE64_SOURCE=1
+			$(CPPFLAGS.master)
 LIBDUMP=	../lib/libdump.a
 LDLIBS +=	$(BSTATIC) -L../lib -ldump $(BDYNAMIC) -lsec
 

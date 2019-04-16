@@ -43,7 +43,6 @@ CERRWARN	+= -Wno-switch
 CSTD=	$(CSTD_GNU99)
 
 LDLIBS	+= -lproc -lrtld_db -lc_db -lnvpair
-CPPFLAGS += -D_LARGEFILE64_SOURCE=1
 CPPFLAGS += -I$(SRCTOP)/kernel/fs/zfs
 CPPFLAGS += -I$(SRCTOP)/include
 # SOL_ROUTE

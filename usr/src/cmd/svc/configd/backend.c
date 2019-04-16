@@ -24,8 +24,6 @@
  * Use is subject to license terms.
  */
 
-#define	_LARGEFILE64_SOURCE
-
 #include <assert.h>
 #include <atomic.h>
 #include <door.h>

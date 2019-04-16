@@ -24,10 +24,6 @@
  * All rights reserved.
  */
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
-#define	_LARGEFILE64_SOURCE
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <errno.h>

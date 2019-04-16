@@ -27,11 +27,6 @@
 /*	Copyright (c) 1988 AT&T	*/
 /*	  All Rights Reserved  	*/
 
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
-
-
-#define	_LARGEFILE64_SOURCE	1
-
 #include "lint.h"
 #include "file64.h"
 #include <stdlib.h>

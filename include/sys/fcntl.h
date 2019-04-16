@@ -227,8 +227,6 @@ extern "C" {
 #endif	/* _STRICT_SYMBOLS */
 #endif /* _LP64 */
 
-#if 	defined(_LARGEFILE64_SOURCE)
-
 #if !defined(_LP64) || defined(_KERNEL)
 /*
  * transitional large file interface version
@@ -264,8 +262,6 @@ extern "C" {
 #define	F_FLOCKW64	54	/* private - set flock owned by file and wait */
 #endif /* _STRICT_SYMBOLS */
 #endif /* !_LP64 || _KERNEL */
-
-#endif /* _LARGEFILE64_SOURCE */
 
 #define	F_SHARE		40	/* Set a file share reservation */
 #define	F_UNSHARE	41	/* Remove a file share reservation */
@@ -305,8 +301,6 @@ typedef struct flock32 {
 #endif /* _SYSCALL32 */
 
 /* transitional large file interface version */
-
-#if 	defined(_LARGEFILE64_SOURCE)
 
 typedef struct flock64 {
 	short	l_type;
@@ -353,8 +347,6 @@ typedef struct flock64_64 {
 } flock64_64_t;
 
 #endif	/* _SYSCALL32 */
-
-#endif /* _LARGEFILE64_SOURCE */
 
 #if defined(_KERNEL) || defined(_KMEMUSER)
 /* SVr3 flock type; needed for rfs across the wire compatibility */
