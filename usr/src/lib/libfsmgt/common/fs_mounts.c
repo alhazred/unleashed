@@ -95,13 +95,13 @@ fs_get_availablesize(char *mntpnt, int *errp) {
 		return (0);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		availablesize = stvfs.f_bfree;
 		availablesize = availablesize * stvfs.f_frsize;
 	} else {
 		*errp = errno;
 		return (0);
-	}  /* if (statvfs64(mntpnt, &stvfs) != -1) */
+	}  /* if (statvfs(mntpnt, &stvfs) != -1) */
 
 	return (availablesize);
 } /* fs_get_availablesize */
@@ -120,13 +120,13 @@ fs_get_avail_for_nonsuperuser_size(char *mntpnt, int *errp) {
 		return (0);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		avail_for_nonsu_size = stvfs.f_bavail;
 		avail_for_nonsu_size = avail_for_nonsu_size * stvfs.f_frsize;
 	} else {
 		*errp = errno;
 		return (0);
-	} /* if (statvfs64(mntpnt, &stvfs) != -1) */
+	} /* if (statvfs(mntpnt, &stvfs) != -1) */
 
 	return (avail_for_nonsu_size);
 } /* fs_get_avail_for_nonsuperuser_size(char *mntpnt, int *errp) */
@@ -145,12 +145,12 @@ fs_get_blocksize(char *mntpnt, int *errp) {
 		return (0);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		blocksize = stvfs.f_bsize;
 	} else {
 		*errp = errno;
 		return (0);
-	} /* if (statvfs64(mntpnt, &stvfs) != -1) */
+	} /* if (statvfs(mntpnt, &stvfs) != -1) */
 
 	return (blocksize);
 } /* fs_get_blocksize */
@@ -232,12 +232,12 @@ fs_get_fragsize(char *mntpnt, int *errp) {
 		return (0);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		fragsize = stvfs.f_frsize;
 	} else {
 		*errp = errno;
 		return (0);
-	} /* (statvfs64(mntpnt, &stvfs) != -1) */
+	} /* (statvfs(mntpnt, &stvfs) != -1) */
 
 	return (fragsize);
 } /* fs_get_fragsize(char *mntpnt, int *errp) */
@@ -396,7 +396,7 @@ fs_is_readonly(char *mntpnt, int *errp) {
 		return (B_FALSE);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		readonly = stvfs.f_flag & ST_RDONLY;
 	} else {
 		*errp = errno;
@@ -487,14 +487,14 @@ fs_get_totalsize(char *mntpnt, int *errp) {
 		return (0);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		totalsize = stvfs.f_blocks;
 		totalsize = totalsize * stvfs.f_frsize;
 
 	} else {
 		*errp = errno;
 		return (0);
-	} /* if (statvfs64(mntpnt, &stvfs) != -1) */
+	} /* if (statvfs(mntpnt, &stvfs) != -1) */
 
 	return (totalsize);
 } /* fs_get_totalsize */
@@ -513,13 +513,13 @@ fs_get_usedsize(char *mntpnt, int *errp) {
 		return (0);
 	}
 
-	if (statvfs64(mntpnt, &stvfs) != -1) {
+	if (statvfs(mntpnt, &stvfs) != -1) {
 		usedsize = stvfs.f_blocks - stvfs.f_bfree;
 		usedsize = usedsize * stvfs.f_frsize;
 	} else {
 		*errp = errno;
 		return (0);
-	} /* if (statvfs64(mntpnt, &stvfs) != -1) */
+	} /* if (statvfs(mntpnt, &stvfs) != -1) */
 
 	return (usedsize);
 } /* fs_get_usedsize */

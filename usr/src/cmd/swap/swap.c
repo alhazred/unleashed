@@ -661,7 +661,7 @@ valid(char *pathname, off_t offset, off_t length)
 	struct statvfs64	fs;
 	off_t		need;
 
-	if (stat(pathname, &f) < 0 || statvfs64(pathname,  &fs) < 0) {
+	if (stat(pathname, &f) < 0 || statvfs(pathname,  &fs) < 0) {
 		(void) perror(pathname);
 		return (errno);
 	}

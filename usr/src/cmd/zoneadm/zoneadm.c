@@ -1061,7 +1061,7 @@ validate_zonepath(char *path, int cmd_num)
 		err = B_TRUE;
 	}
 
-	if (statvfs64(rpath, &vfsbuf) != 0) {
+	if (statvfs(rpath, &vfsbuf) != 0) {
 		zperror(rpath, B_FALSE);
 		return (Z_ERR);
 	}

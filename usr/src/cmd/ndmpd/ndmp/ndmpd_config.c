@@ -596,7 +596,7 @@ ndmpd_config_get_fs_info_v3(ndmp_connection_t *connection, void *body)
 		    fs->mnt_mountp);
 		fsip->invalid = 0;
 
-		if (statvfs64(fs->mnt_mountp, &stat_buf) < 0) {
+		if (statvfs(fs->mnt_mountp, &stat_buf) < 0) {
 			NDMP_LOG(LOG_DEBUG,
 			    "statvfs(%s) error.", fs->mnt_mountp);
 			fsip->fs_status =

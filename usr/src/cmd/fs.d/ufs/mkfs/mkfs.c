@@ -1408,7 +1408,7 @@ retry_alternate_logic:
 		/*
 		 * Check if MNTTAB is trustable
 		 */
-		if (statvfs64(MNTTAB, &fs) < 0) {
+		if (statvfs(MNTTAB, &fs) < 0) {
 			(void) fprintf(stderr, gettext("can't statvfs %s\n"),
 			    MNTTAB);
 			exit(32);

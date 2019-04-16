@@ -248,7 +248,7 @@ dir_is_empty(const char *dirname)
 	 * If the statvfs call fails or the filesystem is not a ZFS
 	 * filesystem, fall back to the slow path which uses readdir.
 	 */
-	if ((statvfs64(dirname, &st) != 0) ||
+	if ((statvfs(dirname, &st) != 0) ||
 	    (strcmp(st.f_basetype, "zfs") != 0)) {
 		return (dir_is_empty_readdir(dirname));
 	}

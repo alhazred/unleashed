@@ -558,7 +558,7 @@ dfreemnt(char *file, struct mnttab *mnt)
 {
 	struct statvfs64 fs;
 
-	if (statvfs64(file, &fs) < 0 &&
+	if (statvfs(file, &fs) < 0 &&
 	    chroot_stat(file, statvfs64, (char *)&fs, &file) < 0) {
 		(void) fprintf(stderr, "df: ");
 		perror(file);

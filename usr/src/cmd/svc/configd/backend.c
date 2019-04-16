@@ -476,7 +476,7 @@ backend_is_readonly(struct sqlite *db, const char *path)
 	int r;
 	statvfs64_t stat;
 
-	if (statvfs64(path, &stat) == 0 && (stat.f_flag & ST_RDONLY))
+	if (statvfs(path, &stat) == 0 && (stat.f_flag & ST_RDONLY))
 		return (SQLITE_READONLY);
 
 	r = sqlite_exec(db,

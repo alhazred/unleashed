@@ -187,7 +187,7 @@ struct df_output {
  */
 #define	DFO_NOFLAGS	0x0
 #define	DFO_HEADER	0x1		/* output preceded by header */
-#define	DFO_STATVFS	0x2		/* must do a statvfs64(2) */
+#define	DFO_STATVFS	0x2		/* must do a statvfs(2) */
 
 
 static char	*program_name;
@@ -1797,7 +1797,7 @@ create_request_list(
 		 * It is still possible that the automounter may timeout
 		 * mounts between the time we read the mount table and the
 		 * time we process the request. Even in that case, when
-		 * we issue the statvfs64(2) for the mount point, the file
+		 * we issue the statvfs(2) for the mount point, the file
 		 * system will be mounted again. The only problem will
 		 * occur if the automounter maps change in the meantime
 		 * and the mount point is eliminated.
@@ -2015,7 +2015,7 @@ do_df(int argc, char *argv[])
 					struct statvfs64 stvfs;
 
 					if ((dfop->dfo_flags & DFO_STATVFS) &&
-					    statvfs64(DFR_MOUNT_POINT(dfrp),
+					    statvfs(DFR_MOUNT_POINT(dfrp),
 					    &stvfs) == -1) {
 						errmsg(ERR_PERROR,
 						    "cannot statvfs %s:",

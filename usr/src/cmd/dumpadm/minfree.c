@@ -108,7 +108,7 @@ minfree_compute(const char *dir, char *s, unsigned long long *ullp)
 			return (-1);
 		}
 
-		if (statvfs64(dir, &fsb) == -1) {
+		if (statvfs(dir, &fsb) == -1) {
 			warn(gettext("failed to statvfs %s"), dir);
 			return (-1);
 		}

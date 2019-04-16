@@ -666,7 +666,7 @@ set_mntpt(entity_t *ep)
 	for (mntp = mnt_list; mntp; mntp = mntp->m_next) {
 		if (strncmp(path, mntp->m_mntpt, strlen(mntp->m_mntpt)) == 0) {
 			if (mntp->m_fsid == 0) {
-				if (statvfs64(mntp->m_mntpt, &statvfsbuf)) {
+				if (statvfs(mntp->m_mntpt, &statvfsbuf)) {
 					/* Can't statvfs so no match */
 					continue;
 				} else {
@@ -742,7 +742,7 @@ set_ksnames(entity_t *entities, int nentities, char **fstypes, int nfstypes)
 		}
 
 		/* If we didn't find it, see if it's a path */
-		if (ep->e_name == NULL || statvfs64(ep->e_name, &statvfsbuf)) {
+		if (ep->e_name == NULL || statvfs(ep->e_name, &statvfsbuf)) {
 			/* Error - Make sure the entry is nulled out */
 			ep->e_ksname[0] = 0;
 			continue;
