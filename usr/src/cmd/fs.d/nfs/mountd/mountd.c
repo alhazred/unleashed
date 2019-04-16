@@ -1499,7 +1499,7 @@ static int
 same_file_system(const char *path1, const char *path2)
 {
 	uint64_t fsid1, fsid2;
-	struct stat64 st1, st2;
+	struct stat st1, st2;
 	nvlist_t *nvl1 = NULL;
 	nvlist_t *nvl2 = NULL;
 
@@ -1527,11 +1527,11 @@ same_file_system(const char *path1, const char *path2)
 	 * fall back on st_dev.
 	 */
 
-	if (stat64(path1, &st1) < 0) {
+	if (stat(path1, &st1) < 0) {
 		syslog(LOG_NOTICE, "%s: %m", path1);
 		return (B_FALSE);
 	}
-	if (stat64(path2, &st2) < 0) {
+	if (stat(path2, &st2) < 0) {
 		syslog(LOG_NOTICE, "%s: %m", path2);
 		return (B_FALSE);
 	}

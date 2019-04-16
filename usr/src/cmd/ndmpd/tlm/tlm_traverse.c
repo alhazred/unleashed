@@ -101,7 +101,7 @@ typedef struct traverse_state {
 	char *ts_ent;
 	long ts_dpos; /* position in the directory when reading its entries */
 	fs_fhandle_t ts_fh;
-	struct stat64 ts_st;
+	struct stat ts_st;
 } traverse_state_t;
 
 /*
@@ -129,7 +129,7 @@ traverse_statistics_t traverse_stats;
 #define	MAX_DENT_BUF_SIZE	(8 * 1024)
 
 typedef struct {
-	struct stat64 fd_attr;
+	struct stat fd_attr;
 	fs_fhandle_t fd_fh;
 	short fd_len;
 	char fd_name[1];
@@ -150,7 +150,7 @@ static int traverse_level_nondir(struct fs_traverse *ftp,
  */
 static int
 fs_populate_dents(void *arg, int namelen,
-    char *name, long *countp, struct stat64 *attr,
+    char *name, long *countp, struct stat *attr,
     fs_fhandle_t *fh)
 {
 	dent_arg_t *darg = (dent_arg_t *)arg;
@@ -200,9 +200,9 @@ new_tsp(char *path)
  * Create a file handle and get stats for the given path
  */
 int
-fs_getstat(char *path, fs_fhandle_t *fh, struct stat64 *st)
+fs_getstat(char *path, fs_fhandle_t *fh, struct stat *st)
 {
-	if (lstat64(path, st) == -1)
+	if (lstat(path, st) == -1)
 		return (errno);
 
 	fh->fh_fid = st->st_ino;
@@ -226,7 +226,7 @@ fs_getdents(int fildes, struct dirent *buf, size_t *nbyte,
 	struct dirent *ptr;
 	char file_path[PATH_MAX + 1];
 	fs_fhandle_t fh;
-	struct stat64 st;
+	struct stat st;
 	char *p;
 	int len;
 	int rv;
@@ -254,7 +254,7 @@ fs_getdents(int fildes, struct dirent *buf, size_t *nbyte,
 		(void) strlcat(file_path, ptr->d_name, PATH_MAX + 1);
 		(void) memset(&fh, 0, sizeof (fs_fhandle_t));
 
-		if (lstat64(file_path, &st) != 0) {
+		if (lstat(file_path, &st) != 0) {
 			rv = -1;
 			break;
 		}
@@ -284,7 +284,7 @@ skip_entry:
  */
 int
 fs_readdir(fs_fhandle_t *ts_fh, char *path, long *dpos,
-    char *nm, int *el, fs_fhandle_t *efh, struct stat64 *est)
+    char *nm, int *el, fs_fhandle_t *efh, struct stat *est)
 {
 	struct dirent *dp;
 	char  file_path[PATH_MAX + 1];
@@ -333,7 +333,7 @@ traverse_post(struct fs_traverse *ftp)
 	int pl, el; /* path and directory entry length */
 	cstack_t *sp;
 	fs_fhandle_t pfh, efh;
-	struct stat64 pst, est;
+	struct stat pst, est;
 	traverse_state_t *tsp;
 	struct fst_node pn, en; /* parent and entry nodes */
 
@@ -752,7 +752,7 @@ traverse_level(struct fs_traverse *ftp)
 
 	cstack_t *sp;
 	fs_fhandle_t pfh, efh;
-	struct stat64 pst, est;
+	struct stat pst, est;
 	traverse_state_t *tsp;
 	struct fst_node pn, en;  /* parent and entry nodes */
 	dent_arg_t darg;
@@ -1060,8 +1060,8 @@ filecopy(char *dest, char *src)
 {
 	FILE *src_fh = 0;
 	FILE *dst_fh = 0;
-	struct stat64 src_attr;
-	struct stat64 dst_attr;
+	struct stat src_attr;
+	struct stat dst_attr;
 	char *buf = 0;
 	u_longlong_t bytes_to_copy;
 	size_t nbytes;
@@ -1084,7 +1084,7 @@ filecopy(char *dest, char *src)
 		return (-3);
 	}
 
-	if (stat64(src, &src_attr) < 0) {
+	if (stat(src, &src_attr) < 0) {
 		free(buf);
 		(void) fclose(src_fh);
 		(void) fclose(dst_fh);
@@ -1113,7 +1113,7 @@ filecopy(char *dest, char *src)
 		return (-4);
 	}
 
-	if (stat64(src, &dst_attr) < 0) {
+	if (stat(src, &dst_attr) < 0) {
 		free(buf);
 		return (-2);
 	}

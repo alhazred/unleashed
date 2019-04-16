@@ -190,7 +190,7 @@ work(char *arg, char *rmmount_opt)
 {
 	char 		*name;
 	int		excode = EJECT_OK;
-	struct stat64	sb;
+	struct stat	sb;
 	char		*arg1, *arg2;
 	pid_t		pid;
 	int		status = 1;
@@ -268,7 +268,7 @@ work(char *arg, char *rmmount_opt)
 		}
 
 		if (do_query) {
-			if ((stat64(name, &sb) == 0) && S_ISDIR(sb.st_mode)) {
+			if ((stat(name, &sb) == 0) && S_ISDIR(sb.st_mode)) {
 				(void) fprintf(stderr,
 				    gettext("%s: no media\n"), name);
 				return (EJECT_NO_MEDIA);

@@ -391,7 +391,7 @@ static nvlist_t *
 make_leaf_vdev(const char *arg, uint64_t is_log)
 {
 	char path[MAXPATHLEN];
-	struct stat64 statbuf;
+	struct stat statbuf;
 	nvlist_t *vdev = NULL;
 	char *type = NULL;
 	boolean_t wholedisk = B_FALSE;
@@ -407,7 +407,7 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		 * examining the file descriptor afterwards.
 		 */
 		wholedisk = is_whole_disk(arg);
-		if (!wholedisk && (stat64(arg, &statbuf) != 0)) {
+		if (!wholedisk && (stat(arg, &statbuf) != 0)) {
 			(void) fprintf(stderr,
 			    gettext("cannot open '%s': %s\n"),
 			    arg, strerror(errno));
@@ -425,7 +425,7 @@ make_leaf_vdev(const char *arg, uint64_t is_log)
 		(void) snprintf(path, sizeof (path), "%s/%s", ZFS_DISK_ROOT,
 		    arg);
 		wholedisk = is_whole_disk(path);
-		if (!wholedisk && (stat64(path, &statbuf) != 0)) {
+		if (!wholedisk && (stat(path, &statbuf) != 0)) {
 			/*
 			 * If we got ENOENT, then the user gave us
 			 * gibberish, so try to direct them with a
@@ -617,7 +617,7 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 			for (c = 0; c < children; c++) {
 				nvlist_t *cnv = child[c];
 				char *path;
-				struct stat64 statbuf;
+				struct stat statbuf;
 				uint64_t size = -1ULL;
 				char *childtype;
 				int fd, err;
@@ -688,10 +688,10 @@ get_replication(nvlist_t *nvroot, boolean_t fatal)
 				 * this device altogether.
 				 */
 				if ((fd = open(path, O_RDONLY)) >= 0) {
-					err = fstat64(fd, &statbuf);
+					err = fstat(fd, &statbuf);
 					(void) close(fd);
 				} else {
-					err = stat64(path, &statbuf);
+					err = stat(path, &statbuf);
 				}
 
 				if (err != 0 ||

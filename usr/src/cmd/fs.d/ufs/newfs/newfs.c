@@ -154,7 +154,7 @@ int
 main(int argc, char *argv[])
 {
 	char *special, *name;
-	struct stat64 st;
+	struct stat st;
 	int status;
 	int option;
 	struct fs *sbp;	/* Pointer to superblock (if present) */
@@ -331,7 +331,7 @@ main(int argc, char *argv[])
 
 	if (*special == '\0') {
 		if (strchr(name, '/') != NULL) {
-			if (stat64(name, &st) < 0) {
+			if (stat(name, &st) < 0) {
 				(void) fprintf(stderr,
 				    gettext("newfs: %s: %s\n"),
 				    name, strerror(errno));
@@ -1014,12 +1014,12 @@ struct fs *
 read_sb(char *fsdev)
 {
 	static struct fs	sblock;
-	struct stat64		statb;
+	struct stat		statb;
 	int			dskfd;
 	char			*bufp = NULL;
 	int			bufsz = 0;
 
-	if (stat64(fsdev, &statb) < 0)
+	if (stat(fsdev, &statb) < 0)
 		return (0);
 
 	if ((dskfd = open64(fsdev, O_RDONLY)) < 0)

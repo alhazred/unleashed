@@ -596,7 +596,7 @@ validate_disk(char *arg, char *mountpoint)
 {
 	static char root_dev_path[] = "/dev/dsk";
 	char kernpath[MAXPATHLEN];
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int rc = 0;
 
 	if (strlen(arg) > MAXPATHLEN) {
@@ -616,7 +616,7 @@ validate_disk(char *arg, char *mountpoint)
 	}
 
 	/* Create the directory if it doesn't already exist */
-	if (lstat64(mountpoint, &statbuf) != 0) {
+	if (lstat(mountpoint, &statbuf) != 0) {
 		if (mkdirp(mountpoint, 0755) != 0) {
 			(void) fprintf(stderr,
 			    gettext("Failed to create mountpoint %s\n"),
@@ -639,7 +639,7 @@ validate_disk(char *arg, char *mountpoint)
 	(void) snprintf(kernpath, MAXPATHLEN, "%s/platform/kernel/unix",
 	    mountpoint);
 
-	if (stat64(kernpath, &statbuf) != 0) {
+	if (stat(kernpath, &statbuf) != 0) {
 		(void) fprintf(stderr,
 		    gettext("%s: %s is not a root disk or dataset\n"),
 		    cmdname, arg);

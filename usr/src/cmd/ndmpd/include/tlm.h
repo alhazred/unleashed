@@ -405,7 +405,7 @@ typedef struct	tlm_acls {
 	char acl_root_dir[TLM_VOLNAME_MAX_LENGTH]; /* name of root filesystem */
 	fs_fhandle_t acl_dir_fh;		/* parent dir's info */
 	fs_fhandle_t acl_fil_fh;		/* file's info */
-	struct stat64 acl_attr;			/* file system attributes */
+	struct stat acl_attr;			/* file system attributes */
 	char uname[32];
 	char gname[32];
 } tlm_acls_t;

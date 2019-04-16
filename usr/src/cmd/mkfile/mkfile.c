@@ -164,7 +164,7 @@ main(int argc, char **argv)
 
 		if (!nobytes) {
 			off_t written = 0;
-			struct stat64 st;
+			struct stat st;
 
 			if (lseek(fd, (off_t)0, SEEK_SET) < 0) {
 				saverr = errno;
@@ -177,7 +177,7 @@ main(int argc, char **argv)
 				argc--;
 				continue;
 			}
-			if (fstat64(fd, &st) < 0) {
+			if (fstat(fd, &st) < 0) {
 				saverr = errno;
 				(void) fprintf(stderr, gettext(
 				    "Could not fstat64 %s: %s\n"),

@@ -1191,11 +1191,11 @@ sigAbort(int sig)
 char *
 rawname(char *cp)
 {
-	struct stat64 st;
+	struct stat st;
 	char *dp;
 	extern char *getfullrawname();
 
-	if (stat64(cp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFBLK)
+	if (stat(cp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFBLK)
 		return (cp);
 
 	dp = getfullrawname(cp);
@@ -1206,7 +1206,7 @@ rawname(char *cp)
 		return (0);
 	}
 
-	if (stat64(dp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFCHR) {
+	if (stat(dp, &st) < 0 || (st.st_mode & S_IFMT) != S_IFCHR) {
 		free(dp);
 		return (cp);
 	}
@@ -1339,7 +1339,7 @@ timeclock(time32_t state)
 }
 
 static int
-statcmp(const struct stat64 *left, const struct stat64 *right)
+statcmp(const struct stat *left, const struct stat *right)
 {
 	int result = 1;
 
@@ -1378,8 +1378,8 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 	int working_mode;
 	int saverr;
 	char *errtext;
-	struct stat64 pre_stat, pre_lstat;
-	struct stat64 post_stat, post_lstat;
+	struct stat pre_stat, pre_lstat;
+	struct stat post_stat, post_lstat;
 
 	/*
 	 * Don't want to be spoofed into trashing something we
@@ -1402,11 +1402,11 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 	if ((fd = open(filename, O_WRONLY|O_CREAT|O_TRUNC|O_EXCL,
 	    perms)) < 0) {
 		if (errno == EEXIST) {
-			if (lstat64(filename, &pre_lstat) < 0) {
+			if (lstat(filename, &pre_lstat) < 0) {
 				return (-1);
 			}
 
-			if (stat64(filename, &pre_stat) < 0) {
+			if (stat(filename, &pre_stat) < 0) {
 				return (-1);
 			}
 
@@ -1422,14 +1422,14 @@ safe_open_common(const char *filename, int mode, int perms, int device)
 				return (-1);
 			}
 
-			if (lstat64(filename, &post_lstat) < 0) {
+			if (lstat(filename, &post_lstat) < 0) {
 				saverr = errno;
 				(void) close(fd);
 				errno = saverr;
 				return (-1);
 			}
 
-			if (fstat64(fd, &post_stat) < 0) {
+			if (fstat(fd, &post_stat) < 0) {
 				saverr = errno;
 				(void) close(fd);
 				errno = saverr;

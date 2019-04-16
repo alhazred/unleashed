@@ -548,11 +548,11 @@ again:	if (mount(mnt->mnt_special, mnt->mnt_mountp, flags, fstype,
 	if (checkislog(mnt->mnt_mountp)) {
 		/* update mnttab file if necessary */
 		if (!mflg) {
-			struct stat64 statb;
+			struct stat statb;
 			struct mnttagdesc mtdesc;
 			int fd;
 
-			if (stat64(mnt->mnt_mountp, &statb) != 0)
+			if (stat(mnt->mnt_mountp, &statb) != 0)
 				exit(32);
 			/* do tag ioctl */
 			mtdesc.mtd_major = major(statb.st_dev);

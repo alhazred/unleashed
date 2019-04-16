@@ -157,7 +157,7 @@ ckpath_stx(int pflags)
 int
 ckpath_val(char *path, int pflags)
 {
-	struct stat64 status;
+	struct stat status;
 	int	fd;
 	char	*pt;
 
@@ -169,7 +169,7 @@ ckpath_val(char *path, int pflags)
 		errstr = E_ABSOLUTE;
 		return (1);
 	}
-	if (stat64(path, &status)) {
+	if (stat(path, &status)) {
 		if (pflags & P_EXIST) {
 			errstr = E_EXIST;
 			return (1);

@@ -78,7 +78,7 @@ _dev_mounted(char *path)
 	static FILE 	*fp = NULL;		/* mnttab file pointer */
 	struct mnttab	mnt;			/* set bug not used */
 	char		*cn = NULL;		/* char spcl pathname */
-	struct stat64	sb;
+	struct stat	sb;
 	int		ret_val = 0;
 
 
@@ -96,7 +96,7 @@ _dev_mounted(char *path)
 		goto dun;
 	}
 
-	if (fstat64(fd, &sb) < 0) {
+	if (fstat(fd, &sb) < 0) {
 		goto dun;
 	}
 
@@ -267,7 +267,7 @@ static int
 vol_getmntdev(FILE *fp, struct mnttab *mp, dev_t dev, struct dk_cinfo *ip)
 {
 	int		fd;		/* dev-in-question fd */
-	struct stat64	sb;		/* dev-in-question stat struct */
+	struct stat	sb;		/* dev-in-question stat struct */
 	int		ret_val = 0;	/* default value: no match found */
 	char		*cn;		/* char pathname */
 	struct dk_cinfo	dkinfo;		/* for testing for slices */
@@ -308,7 +308,7 @@ vol_getmntdev(FILE *fp, struct mnttab *mp, dev_t dev, struct dk_cinfo *ip)
 		}
 
 		/* stat the device */
-		if (fstat64(fd, &sb) < 0) {
+		if (fstat(fd, &sb) < 0) {
 			free(cn);
 			(void) close(fd);
 			continue;	/* ain't there: can't be a match */
@@ -413,7 +413,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 	FILE		*fp = NULL;
 	int		fd = -1;
 	char		*cn = NULL;		/* char spcl pathname */
-	struct stat64	sb;
+	struct stat	sb;
 	struct dk_cinfo	info;
 	struct mnttab	mnt;
 	int		ret_val = FALSE;
@@ -435,7 +435,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 		goto dun;
 	}
 
-	if (fstat64(fd, &sb) < 0) {
+	if (fstat(fd, &sb) < 0) {
 		goto dun;
 	}
 
@@ -493,7 +493,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 			char		lpath[2 * (MAXNAMELEN+1)];
 			char		linkbuf[MAXPATHLEN+4];
 			int		lb_len;
-			struct stat64	sb;
+			struct stat	sb;
 
 
 			if (strncmp(dp->d_name, mtype, mtype_len) != 0) {
@@ -502,7 +502,7 @@ get_media_info(char *path, char **mtypep, int *mnump, char **spclp)
 
 			(void) sprintf(lpath, "%s/%s", mnt_dir,
 			    dp->d_name);
-			if (lstat64(lpath, &sb) < 0) {
+			if (lstat(lpath, &sb) < 0) {
 				continue;	/* what? */
 			}
 			if (!S_ISLNK(sb.st_mode)) {

@@ -2012,7 +2012,7 @@ itadm_get_password(nvlist_t *nvl, char *key, char *passfile,
 	char		*pass;
 	char		buf[1024];
 	int		fd;
-	struct stat64	sbuf;
+	struct stat	sbuf;
 	size_t		rd;
 
 	if (!nvl || !key) {
@@ -2020,7 +2020,7 @@ itadm_get_password(nvlist_t *nvl, char *key, char *passfile,
 	}
 
 	if (passfile) {
-		ret = stat64(passfile, &sbuf);
+		ret = stat(passfile, &sbuf);
 		if ((ret != 0) || (!S_ISREG(sbuf.st_mode))) {
 			(void) fprintf(stderr,
 			    gettext("Invalid secret file %s"),

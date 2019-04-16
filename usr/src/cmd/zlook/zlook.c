@@ -138,7 +138,7 @@ print_entries(zut_readdir_t *r)
 }
 
 static void
-print_stats(struct stat64 *sb)
+print_stats(struct stat *sb)
 {
 	char timebuf[512];
 

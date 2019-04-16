@@ -106,7 +106,7 @@ cacl_get(acl_inp inp, int get_flag, int type, acl_t **aclp)
 	acl_t *acl_info;
 	int	save_errno;
 	int	stat_error;
-	struct stat64 statbuf;
+	struct stat statbuf;
 
 	*aclp = NULL;
 	if (type == ACL_PATH) {
@@ -168,11 +168,11 @@ cacl_get(acl_inp inp, int get_flag, int type, acl_t **aclp)
 	}
 
 	if (type == ACL_PATH) {
-		stat_error = stat64(fname, &statbuf);
+		stat_error = stat(fname, &statbuf);
 		error = acl(fname, getcmd, acl_info->acl_cnt,
 		    acl_info->acl_aclp);
 	} else {
-		stat_error = fstat64(fd, &statbuf);
+		stat_error = fstat(fd, &statbuf);
 		error = facl(fd, getcmd, acl_info->acl_cnt,
 		    acl_info->acl_aclp);
 	}
@@ -248,18 +248,18 @@ cacl_set(acl_inp *acl_inp, acl_t *aclp, int type)
 {
 	int error = 0;
 	int acl_flavor_target;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int stat_error;
 	int isdir;
 
 
 	if (type == ACL_PATH) {
-		stat_error = stat64(acl_inp->file, &statbuf);
+		stat_error = stat(acl_inp->file, &statbuf);
 		if (stat_error)
 			return (-1);
 		acl_flavor_target = pathconf(acl_inp->file, _PC_ACL_ENABLED);
 	} else {
-		stat_error = fstat64(acl_inp->fd, &statbuf);
+		stat_error = fstat(acl_inp->fd, &statbuf);
 		if (stat_error)
 			return (-1);
 		acl_flavor_target = fpathconf(acl_inp->fd, _PC_ACL_ENABLED);
@@ -394,11 +394,11 @@ acl_strip(const char *file, uid_t owner, gid_t group, mode_t mode)
 	ace_t	*min_ace_acl;
 	int	acl_flavor;
 	int	aclcnt;
-	struct stat64 statbuf;
+	struct stat statbuf;
 
 	acl_flavor = pathconf(file, _PC_ACL_ENABLED);
 
-	if (stat64(file, &statbuf) != 0) {
+	if (stat(file, &statbuf) != 0) {
 		error = 1;
 		return (error);
 	}

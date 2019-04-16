@@ -95,8 +95,8 @@
 
 static int test_if_blk(char *, dev_t);
 static int test_if_raw(char *, dev_t);
-static char *getblkcomplete(char *, struct stat64 *);
-static char *getrawcomplete(char *, struct stat64 *);
+static char *getblkcomplete(char *, struct stat *);
+static char *getrawcomplete(char *, struct stat *);
 
 /*
  * getfullname() - Builds a fully qualified pathname.
@@ -151,10 +151,10 @@ getfullname(char *path)
 static int
 test_if_blk(char *new_path, dev_t raw_dev)
 {
-	struct stat64	buf;
+	struct stat	buf;
 
 	/* check if we got a char special file */
-	if (stat64(new_path, &buf) != 0)
+	if (stat(new_path, &buf) != 0)
 		return (0);
 
 	if (!S_ISBLK(buf.st_mode))
@@ -172,10 +172,10 @@ test_if_blk(char *new_path, dev_t raw_dev)
 static int
 test_if_raw(char *new_path, dev_t blk_dev)
 {
-	struct stat64	buf;
+	struct stat	buf;
 
 	/* check if we got a char special file */
-	if (stat64(new_path, &buf) != 0)
+	if (stat(new_path, &buf) != 0)
 		return (0);
 
 	if (!S_ISCHR(buf.st_mode))
@@ -192,7 +192,7 @@ test_if_raw(char *new_path, dev_t blk_dev)
  */
 
 static char *
-getblkcomplete(char *cp, struct stat64 *dat)
+getblkcomplete(char *cp, struct stat *dat)
 {
 	char 		*dp;
 	char		*new_path;
@@ -245,7 +245,7 @@ getblkcomplete(char *cp, struct stat64 *dat)
  */
 
 static char *
-getrawcomplete(char *cp, struct stat64 *dat)
+getrawcomplete(char *cp, struct stat *dat)
 {
 	char 		*dp;
 	char		*new_path;
@@ -335,7 +335,7 @@ getvfsspecial(char *path, int raw_special)
 char *
 getfullblkname(char *cp)
 {
-	struct stat64	buf;
+	struct stat	buf;
 	char		*dp;
 	char		*new_path;
 	dev_t		raw_dev;
@@ -352,7 +352,7 @@ getfullblkname(char *cp)
 	if (*cp == '\0')
 		return (cp);
 
-	if (stat64(cp, &buf) != 0) {
+	if (stat(cp, &buf) != 0) {
 		free(cp);
 		return (strdup(""));
 	}
@@ -417,7 +417,7 @@ getfullblkname(char *cp)
 char *
 getfullrawname(char *cp)
 {
-	struct stat64	buf;
+	struct stat	buf;
 	char		*dp;
 	char		*new_path;
 	dev_t		blk_dev;
@@ -434,7 +434,7 @@ getfullrawname(char *cp)
 	if (*cp == '\0')
 		return (cp);
 
-	if (stat64(cp, &buf) != 0) {
+	if (stat(cp, &buf) != 0) {
 		free(cp);
 		return (strdup(""));
 	}

@@ -823,10 +823,10 @@ extractfile(char *name)
 		}
 
 		if (mknod(rname, mode, full_dev) < 0) {
-			struct stat64 s[1];
+			struct stat s[1];
 
 			saverr = errno;
-			if ((stat64(rname, s)) ||
+			if ((stat(rname, s)) ||
 			    ((s->st_mode & S_IFMT) != (mode & S_IFMT)) ||
 			    (s->st_rdev != full_dev)) {
 				if (saverr != EPERM || !complained_mknod) {

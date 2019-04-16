@@ -147,7 +147,7 @@ int
 main(int argc, char *argv[])
 {
 	char *special, *name, *mountpoint = NULL;
-	struct stat64 st;
+	struct stat st;
 	int i, mountfd;
 	int Aflag = 0;
 	char *chg[2];
@@ -163,7 +163,7 @@ main(int argc, char *argv[])
 	 * For performance, don't search mnttab unless necessary
 	 */
 
-	if (stat64(special, &st) >= 0) {
+	if (stat(special, &st) >= 0) {
 		/*
 		 * If mounted directory, search mnttab for special
 		 */
@@ -196,7 +196,7 @@ main(int argc, char *argv[])
 		exit(32);
 	}
 
-	if (stat64(special, &st) < 0) {
+	if (stat(special, &st) < 0) {
 		fprintf(stderr, "tunefs: "); perror(special);
 		exit(31+1);
 	}

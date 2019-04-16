@@ -287,12 +287,12 @@ Fseek(offset_t off, FILE *f)
 		    strerror(errno));
 }
 
-typedef struct stat64 Stat_t;
+typedef struct stat Stat_t;
 
 static void
 Fstat(int fd, Stat_t *sb, const char *fname)
 {
-	if (fstat64(fd, sb) != 0)
+	if (fstat(fd, sb) != 0)
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "fstat(\"%s\"): %s", fname,
 		    strerror(errno));
 }
@@ -300,7 +300,7 @@ Fstat(int fd, Stat_t *sb, const char *fname)
 static void
 Stat(const char *fname, Stat_t *sb)
 {
-	if (stat64(fname, sb) != 0) {
+	if (stat(fname, sb) != 0) {
 		have_dumpfile = B_FALSE;
 		logprint(SC_SL_ERR | SC_EXIT_ERR, "failed to get status "
 		    "of file %s", fname);

@@ -2070,10 +2070,10 @@ get_fmri_state(char *fmri, char *state, size_t state_sz)
 	 * Check for file:// dependencies
 	 */
 	if (scf_parse_file_fmri(lfmri, NULL, &path) == SCF_SUCCESS) {
-		struct stat64 statbuf;
+		struct stat statbuf;
 		const char *msg;
 
-		if (stat64(path, &statbuf) == 0)
+		if (stat(path, &statbuf) == 0)
 			msg = "online";
 		else if (errno == ENOENT)
 			msg = "absent";

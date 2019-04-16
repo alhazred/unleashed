@@ -112,7 +112,7 @@ static	int		dtabrecnum = 0;
  */
 
 static int
-samedev(struct stat64 x, struct stat64 y)
+samedev(struct stat x, struct stat y)
 {
 	int	same;
 
@@ -910,8 +910,8 @@ _getdevrec(char	*device)			/* The device to search for */
 	 *  Automatic data
 	 */
 
-	struct stat64		devstatbuf;	/* Stat struct, <device> */
-	struct stat64		tblstatbuf;	/* Stat struct, tbl entry */
+	struct stat		devstatbuf;	/* Stat struct, <device> */
+	struct stat		tblstatbuf;	/* Stat struct, tbl entry */
 	struct devtabent	*devrec;	/* Pointer to current record */
 	int			found;		/* TRUE if record found */
 	int			olderrno;	/* Old value of errno */
@@ -946,7 +946,7 @@ _getdevrec(char	*device)			/* The device to search for */
 		_setdevtab();
 
 		/*  Status the file <device>.  If fails, invalid device */
-		if (stat64(device, &devstatbuf) != 0) errno = ENODEV;
+		if (stat(device, &devstatbuf) != 0) errno = ENODEV;
 		else {
 
 			/*
@@ -961,7 +961,7 @@ _getdevrec(char	*device)			/* The device to search for */
 			while (!found && (devrec = _getdevtabent())) {
 			    if (!devrec->comment &&
 				(devrec->cdevice != NULL))
-				if (stat64(devrec->cdevice, &tblstatbuf) == 0) {
+				if (stat(devrec->cdevice, &tblstatbuf) == 0) {
 				    if (samedev(tblstatbuf, devstatbuf))
 					found = TRUE;
 				} else {
@@ -984,7 +984,7 @@ _getdevrec(char	*device)			/* The device to search for */
 			while (!found && (devrec = _getdevtabent())) {
 			    if (!devrec->comment &&
 				(devrec->bdevice != NULL))
-				if (stat64(devrec->bdevice, &tblstatbuf) == 0) {
+				if (stat(devrec->bdevice, &tblstatbuf) == 0) {
 				    if (samedev(tblstatbuf, devstatbuf))
 					found = TRUE;
 				} else {
@@ -1007,7 +1007,7 @@ _getdevrec(char	*device)			/* The device to search for */
 			while (!found && (devrec = _getdevtabent())) {
 			    if (!devrec->comment &&
 				(devrec->pathname != NULL))
-				if (stat64(devrec->pathname,
+				if (stat(devrec->pathname,
 				    &tblstatbuf) == 0) {
 				    if (samedev(tblstatbuf, devstatbuf))
 					found = TRUE;

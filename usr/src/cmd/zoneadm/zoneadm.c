@@ -2160,7 +2160,7 @@ verify_pool(zone_dochandle_t handle)
 static int
 verify_fs_special(struct zone_fstab *fstab)
 {
-	struct stat64 st;
+	struct stat st;
 
 	/*
 	 * This validation is really intended for standard zone administration.
@@ -2173,7 +2173,7 @@ verify_fs_special(struct zone_fstab *fstab)
 	if (strcmp(fstab->zone_fs_type, MNTTYPE_ZFS) == 0)
 		return (verify_fs_zfs(fstab));
 
-	if (stat64(fstab->zone_fs_special, &st) != 0) {
+	if (stat(fstab->zone_fs_special, &st) != 0) {
 		(void) fprintf(stderr, gettext("could not verify fs "
 		    "%s: could not access %s: %s\n"), fstab->zone_fs_dir,
 		    fstab->zone_fs_special, strerror(errno));
@@ -2199,9 +2199,9 @@ verify_fs_special(struct zone_fstab *fstab)
 static int
 isregfile(const char *path)
 {
-	struct stat64 st;
+	struct stat st;
 
-	if (stat64(path, &st) == -1)
+	if (stat(path, &st) == -1)
 		return (-1);
 
 	return (S_ISREG(st.st_mode));

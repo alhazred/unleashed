@@ -1026,9 +1026,9 @@ run_stack(pam_handle_t *pamh, int flags, int type, int def_err, int ind,
 		return (PAM_SYSTEM_ERR);
 	if ((err = read_pam_conf(pamh, service_file, service))
 	    != PAM_SUCCESS) {
-		pam_trace(PAM_DEBUG_CONF, "run_stack[%d:%s]: can't read "
+		pam_trace(PAM_DEBUG_CONF, "run_stack[%d]: can't read "
 		    "service-specific conf %s", pamh->include_depth,
-		    pam_trace_cname(pamh), modulep->module_path, service_file);
+		    pam_trace_cname(pamh), service_file);
 	}
 	free(service_file);
 	service_file = NULL;
@@ -1374,7 +1374,7 @@ pam_putenv(pam_handle_t *pamh, const char *name_value)
 	int		error = PAM_SYSTEM_ERR;
 	char		*equal_sign = 0;
 	char		*name = NULL, *value = NULL, *tmp_value = NULL;
-	env_list	*traverse, *trail;
+	env_list	*traverse = NULL, *trail;
 
 	pam_trace(PAM_DEBUG_DEFAULT,
 	    "pam_putenv(%p, %s)", (void *)pamh,
@@ -1817,7 +1817,7 @@ load_modules(pam_handle_t *pamh, int type, char *function_name,
 static void *
 open_module(pam_handle_t *pamh, char *module_so)
 {
-	struct stat64	stb;
+	struct stat	stb;
 	char		*errmsg;
 	void		*lfd;
 	fd_list		*module_fds = 0;
@@ -1825,7 +1825,7 @@ open_module(pam_handle_t *pamh, char *module_so)
 	fd_list		*traverse = 0;
 
 	/* Check the ownership and file modes */
-	if (stat64(module_so, &stb) < 0) {
+	if (stat(module_so, &stb) < 0) {
 		__pam_log(LOG_AUTH | LOG_ERR,
 		    "open_module[%d:%s]: stat(%s) failed: %s",
 		    pamh->include_depth, pam_trace_cname(pamh), module_so,
@@ -1924,7 +1924,7 @@ static int
 open_pam_conf(struct pam_fh **pam_fh, pam_handle_t *pamh, char *config,
     int shardfile)
 {
-	struct stat64	stb;
+	struct stat	stb;
 	int		fd;
 
 	if ((fd = open(config, O_RDONLY)) == -1) {
@@ -1936,7 +1936,7 @@ open_pam_conf(struct pam_fh **pam_fh, pam_handle_t *pamh, char *config,
 		return (0);
 	}
 	/* Check the ownership and file modes */
-	if (fstat64(fd, &stb) < 0) {
+	if (fstat(fd, &stb) < 0) {
 		__pam_log(LOG_AUTH | LOG_ALERT,
 		    "open_pam_conf[%d:%s]: stat(%s) failed: %s",
 		    pamh->include_depth, pam_trace_cname(pamh), config,

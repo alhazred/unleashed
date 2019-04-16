@@ -56,7 +56,7 @@
  * formats we still support encoding the reference as (major, minor, inode).
  * Note that we break out of the file's dev_t into its two 32-bit components to
  * permit development of either 32-bit or 64-bit log readers and writers; the
- * LFS APIs do not yet export a 64-bit dev_t to fstat64(), so there is no way
+ * LFS APIs do not yet export a 64-bit dev_t to fstat(), so there is no way
  * for a 32-bit application to retrieve and store a 64-bit dev_t.
  *
  * In order to replay events in the event of an fmd crash, events are initially
@@ -378,7 +378,7 @@ fmd_log_xopen(const char *root, const char *name, const char *tag, int oflags)
 
 top:
 	if ((lp->log_fd = open64(lp->log_name, oflags, 0644)) == -1 ||
-	    fstat64(lp->log_fd, &lp->log_stat) == -1) {
+	    fstat(lp->log_fd, &lp->log_stat) == -1) {
 		fmd_error(EFMD_LOG_OPEN, "failed to open log %s", lp->log_name);
 		fmd_log_close(lp);
 		return (NULL);

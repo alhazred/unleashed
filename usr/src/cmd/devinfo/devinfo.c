@@ -131,11 +131,11 @@ partinfo(int fd, char *device)
 	int	slice;
 	major_t maj;
 	minor_t min;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	struct extvtoc vtdata;
 	struct dk_gpt *efi;
 
-	i = stat64(device, &statbuf);
+	i = stat(device, &statbuf);
 	if (i < 0)
 		exit(DRERR);
 	maj = major(statbuf.st_rdev);

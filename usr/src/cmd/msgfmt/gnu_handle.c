@@ -121,7 +121,7 @@ static int
 check_utf8(const char *charset)
 {
 	int	fd;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	caddr_t	addr;
 	size_t	buflen, charset_len, utf8_len;
 	char	*c_charset, *c_utf8, *p;
@@ -134,7 +134,7 @@ check_utf8(const char *charset)
 		/* no alias file found */
 		return (0);
 	}
-	if (fstat64(fd, &statbuf) == -1) {
+	if (fstat(fd, &statbuf) == -1) {
 		(void) close(fd);
 		return (0);
 	}

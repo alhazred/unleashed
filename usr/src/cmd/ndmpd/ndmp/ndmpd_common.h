@@ -185,13 +185,13 @@ typedef int ndmpd_remove_file_handler_func_t(void *, int);
 
 typedef int ndmpd_write_func_t(void *, char *, ulong_t);
 
-typedef int ndmpd_file_history_path_func_t(void *, char *, struct stat64 *,
+typedef int ndmpd_file_history_path_func_t(void *, char *, struct stat *,
     u_longlong_t);
 
 typedef int ndmpd_file_history_dir_func_t(void *, char *, ulong_t,
     ulong_t);
 
-typedef int ndmpd_file_history_node_func_t(void *, ulong_t, struct stat64 *,
+typedef int ndmpd_file_history_node_func_t(void *, ulong_t, struct stat *,
     u_longlong_t);
 
 typedef int ndmpd_seek_func_t(void *, u_longlong_t, u_longlong_t);

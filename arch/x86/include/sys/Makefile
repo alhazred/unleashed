@@ -46,7 +46,6 @@ INCS=	archsystm.h \
 	segments.h \
 	spl.h \
 	stack.h \
-	stat_impl.h \
 	synch32.h \
 	sysconfig_impl.h \
 	sysi86.h \

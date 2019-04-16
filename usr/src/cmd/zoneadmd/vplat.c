@@ -801,9 +801,9 @@ forkexec(zlog_t *zlogp, const char *path, char *const argv[])
 static int
 isregfile(const char *path)
 {
-	struct stat64 st;
+	struct stat st;
 
-	if (stat64(path, &st) == -1)
+	if (stat(path, &st) == -1)
 		return (-1);
 
 	return (S_ISREG(st.st_mode));
@@ -1224,9 +1224,9 @@ mount_one(zlog_t *zlogp, struct zone_fstab *fsptr, const char *rootpath,
 	 * time we get here.
 	 */
 	if (zonecfg_in_alt_root()) {
-		struct stat64 st;
+		struct stat st;
 
-		if (stat64(fsptr->zone_fs_special, &st) != -1 &&
+		if (stat(fsptr->zone_fs_special, &st) != -1 &&
 		    S_ISBLK(st.st_mode)) {
 			/*
 			 * If we're going to mount a block device we need
@@ -3720,10 +3720,10 @@ duplicate_zone_root(zlog_t *zlogp, const char *rootpath)
 static boolean_t
 duplicate_reachable_path(zlog_t *zlogp, const char *rootpath)
 {
-	struct stat64 rst, zst;
+	struct stat rst, zst;
 	struct mnttab *mnp;
 
-	if (stat64(rootpath, &rst) == -1) {
+	if (stat(rootpath, &rst) == -1) {
 		zerror(zlogp, B_TRUE, "can't stat %s", rootpath);
 		return (B_TRUE);
 	}
@@ -3735,7 +3735,7 @@ duplicate_reachable_path(zlog_t *zlogp, const char *rootpath)
 			continue;
 		/* We're looking at a loopback mount.  Stat it. */
 		if (mnp->mnt_special != NULL &&
-		    stat64(mnp->mnt_special, &zst) != -1 &&
+		    stat(mnp->mnt_special, &zst) != -1 &&
 		    rst.st_dev == zst.st_dev && rst.st_ino == zst.st_ino) {
 			zerror(zlogp, B_FALSE,
 			    "zone root %s is reachable through %s",

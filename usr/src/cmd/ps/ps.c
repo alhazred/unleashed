@@ -497,7 +497,7 @@ main(int argc, char **argv)
 			p1 = optarg;
 			do {
 				char nambuf[TSZ+6];	/* for "/dev/" + '\0' */
-				struct stat64 s;
+				struct stat s;
 				parg = getarg(&p1);
 				p = Realloc(NULL, TSZ+1);	/* for '\0' */
 				/* zero the buffer before using it */
@@ -517,7 +517,7 @@ main(int argc, char **argv)
 				tty[ntty].tdev = PRNODEV;
 				(void) strcpy(nambuf, "/dev/");
 				(void) strcat(nambuf, p);
-				if (stat64(nambuf, &s) == 0)
+				if (stat(nambuf, &s) == 0)
 					tty[ntty].tdev = s.st_rdev;
 				tty[ntty++].tname = p;
 			} while (*p1);

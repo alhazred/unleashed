@@ -790,36 +790,36 @@ extern void ndmpd_file_history_cleanup(ndmpd_session_t *,
     boolean_t);
 extern int ndmpd_file_history_path(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 extern int ndmpd_file_history_dir(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *);
+    struct stat *);
 extern int ndmpd_file_history_node(lbr_fhlog_call_backs_t *,
     char *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 extern int
 ndmpd_path_restored(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 extern int ndmpd_fhpath_v3_cb(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 extern int ndmpd_fhdir_v3_cb(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *);
+    struct stat *);
 extern int ndmpd_fhnode_v3_cb(lbr_fhlog_call_backs_t *,
     char *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 extern int ndmpd_path_restored_v3(lbr_fhlog_call_backs_t *,
     char *,
-    struct stat64 *,
+    struct stat *,
     u_longlong_t);
 
 extern int ndmp_send_recovery_stat_v3(ndmpd_module_params_t *,
@@ -1034,9 +1034,9 @@ extern void ndmp_stop_remote_reader();
 
 extern boolean_t match(char *, char *);
 extern char *trim_whitespace(char *);
-extern int fs_getstat(char *, struct fs_fhandle *, struct stat64 *);
+extern int fs_getstat(char *, struct fs_fhandle *, struct stat *);
 extern int fs_readdir(struct fs_fhandle *, char *, long *,
-    char *, int *, struct fs_fhandle *, struct stat64 *);
+    char *, int *, struct fs_fhandle *, struct stat *);
 extern int iscreated(ndmp_lbr_params_t *nlp, char *name, tlm_acls_t *tacl,
     time_t t);
 

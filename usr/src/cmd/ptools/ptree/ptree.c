@@ -404,7 +404,7 @@ ctsort(ctid_t ctid, ps_t *p)
 	ps_t *pp;
 	int fd, n;
 	ct_stathdl_t hdl;
-	struct stat64 st;
+	struct stat st;
 
 	for (n = 0; n < nctps; n++)
 		if (ctps[n]->ctid == ctid) {
@@ -414,7 +414,7 @@ ctsort(ctid_t ctid, ps_t *p)
 
 	if ((fd = contract_open(ctid, "process", "status", O_RDONLY)) == -1)
 		return;
-	if (fstat64(fd, &st) == -1 || ct_status_read(fd, CTD_COMMON, &hdl)) {
+	if (fstat(fd, &st) == -1 || ct_status_read(fd, CTD_COMMON, &hdl)) {
 		(void) close(fd);
 		return;
 	}

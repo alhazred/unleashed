@@ -204,7 +204,7 @@ read_psffm(char *file)
 	char	*mbuf, *addr;
 	size_t	fsize, ln_size, ll;
 	wchar_t	*linebufhead = NULL;
-	struct stat64	statbuf;
+	struct stat	statbuf;
 	char	*filename;
 
 	/*
@@ -235,7 +235,7 @@ read_psffm(char *file)
 		error(gettext(ERR_OPEN_FAILED), filename);
 		/* NOTREACHED */
 	}
-	if (fstat64(fd, &statbuf) == -1) {
+	if (fstat(fd, &statbuf) == -1) {
 		error(gettext(ERR_STAT_FAILED), filename);
 		/* NOTREACHED */
 	}

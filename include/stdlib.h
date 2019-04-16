@@ -37,6 +37,7 @@
 #include <iso/stdlib_iso.h>
 #include <iso/stdlib_c99.h>
 #include <iso/stdlib_c11.h>
+#include <inttypes.h>
 
 /*
  * Allow global visibility for symbols defined in
@@ -94,7 +95,7 @@ extern "C" {
 
 #ifndef _UID_T
 #define	_UID_T
-typedef	unsigned int	uid_t;		/* UID type		*/
+typedef	uint32_t	uid_t;		/* UID type		*/
 #endif	/* !_UID_T */
 
 extern int rand_r(unsigned int *);
@@ -232,7 +233,6 @@ extern char *ulltostr(unsigned long long, char *);
 /* OpenBSD compatibility functions */
 #if __UNLEASHED_VISIBLE
 
-#include <inttypes.h>
 extern uint32_t arc4random(void);
 extern void arc4random_buf(void *, size_t);
 extern uint32_t arc4random_uniform(uint32_t);

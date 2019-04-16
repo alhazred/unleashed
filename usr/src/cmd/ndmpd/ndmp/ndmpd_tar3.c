@@ -651,14 +651,14 @@ static boolean_t
 is_valid_backup_dir_v3(ndmpd_module_params_t *params, char *bkpath)
 {
 	char *msg;
-	struct stat64 st;
+	struct stat st;
 
 	if (*bkpath != '/') {
 		MOD_LOGV3(params, NDMP_LOG_ERROR,
 		    "Relative backup path not allowed \"%s\".\n", bkpath);
 		return (FALSE);
 	}
-	if (stat64(bkpath, &st) < 0) {
+	if (stat(bkpath, &st) < 0) {
 		msg = strerror(errno);
 		MOD_LOGV3(params, NDMP_LOG_ERROR, "\"%s\" %s.\n",
 		    bkpath, msg);
@@ -1648,7 +1648,7 @@ backup_dirv3(bk_param_v3_t *bpp, fst_node_t *pnp,
 	longlong_t apos, bpos;
 	acl_t *aclp = NULL;
 	char *acltp;
-	struct stat64 st;
+	struct stat st;
 	char fullpath[TLM_MAX_PATH_NAME];
 	char *p;
 
@@ -1659,7 +1659,7 @@ backup_dirv3(bk_param_v3_t *bpp, fst_node_t *pnp,
 
 	NDMP_LOG(LOG_DEBUG, "d(%s)", bpp->bp_tmp);
 
-	if (lstat64(bpp->bp_tmp, &st) != 0)
+	if (lstat(bpp->bp_tmp, &st) != 0)
 		return (0);
 
 	if (acl_get(bpp->bp_tmp, ACL_NO_TRIVIAL, &aclp) != 0) {
@@ -1722,7 +1722,7 @@ backup_filev3(bk_param_v3_t *bpp, fst_node_t *pnp,
 	longlong_t apos, bpos;
 	acl_t *aclp = NULL;
 	char *acltp;
-	struct stat64 st;
+	struct stat st;
 	char fullpath[TLM_MAX_PATH_NAME];
 	char *p;
 
@@ -1733,7 +1733,7 @@ backup_filev3(bk_param_v3_t *bpp, fst_node_t *pnp,
 
 	NDMP_LOG(LOG_DEBUG, "f(%s)", bpp->bp_tmp);
 
-	if (lstat64(bpp->bp_tmp, &st) != 0)
+	if (lstat(bpp->bp_tmp, &st) != 0)
 		return (0);
 
 	if (!S_ISLNK(bpp->bp_tlmacl->acl_attr.st_mode)) {
@@ -1849,7 +1849,7 @@ shouldskip(bk_param_v3_t *bpp, fst_node_t *pnp,
 {
 	char *ent;
 	boolean_t rv;
-	struct stat64 *estp;
+	struct stat *estp;
 
 	if (!bpp || !pnp || !enp || !errp) {
 		NDMP_LOG(LOG_DEBUG, "Invalid argument");
@@ -1917,7 +1917,7 @@ shouldskip(bk_param_v3_t *bpp, fst_node_t *pnp,
  * bk_selector_t, the the object must be backed up.
  */
 static boolean_t
-ischngd(struct stat64 *stp, time_t t, ndmp_lbr_params_t *nlp)
+ischngd(struct stat *stp, time_t t, ndmp_lbr_params_t *nlp)
 {
 	boolean_t rv;
 
@@ -2033,7 +2033,7 @@ int iscreated(ndmp_lbr_params_t *nlp, char *name, tlm_acls_t *tacl,
 static int
 size_cb(void *arg, fst_node_t *pnp, fst_node_t *enp)
 {
-	struct stat64 *stp;
+	struct stat *stp;
 
 	stp = enp->tn_path ? enp->tn_st : pnp->tn_st;
 	*((u_longlong_t *)arg) += stp->st_size;
@@ -2067,7 +2067,7 @@ timebk_v3(void *arg, fst_node_t *pnp, fst_node_t *enp)
 	int rv;
 	time_t t;
 	bk_param_v3_t *bpp;
-	struct stat64 *stp;
+	struct stat *stp;
 	fs_fhandle_t *fhp;
 
 	bpp = (bk_param_v3_t *)arg;
@@ -2112,7 +2112,7 @@ timebk_v3(void *arg, fst_node_t *pnp, fst_node_t *enp)
 
 		if (ischngd(stp, t, bpp->bp_nlp)) {
 			(void) memcpy(&bpp->bp_tlmacl->acl_attr, stp,
-			    sizeof (struct stat64));
+			    sizeof (struct stat));
 			rv = backup_dirv3(bpp, pnp, enp);
 		}
 	} else {
@@ -2120,7 +2120,7 @@ timebk_v3(void *arg, fst_node_t *pnp, fst_node_t *enp)
 		    iscreated(bpp->bp_nlp, bpp->bp_tmp, bpp->bp_tlmacl, t)) {
 			rv = 0;
 			(void) memcpy(&bpp->bp_tlmacl->acl_attr, stp,
-			    sizeof (struct stat64));
+			    sizeof (struct stat));
 			bpp->bp_tlmacl->acl_fil_fh = *fhp;
 			(void) backup_filev3(bpp, pnp, enp);
 		}
@@ -2154,7 +2154,7 @@ lbrbk_v3(void *arg, fst_node_t *pnp, fst_node_t *enp)
 	char *ent;
 	int rv;
 	bk_param_v3_t *bpp;
-	struct stat64 *stp;
+	struct stat *stp;
 	fs_fhandle_t *fhp;
 
 	bpp = (bk_param_v3_t *)arg;

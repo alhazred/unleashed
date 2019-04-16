@@ -253,7 +253,7 @@ mark_cb(void *arg, fst_node_t *pnp, fst_node_t *enp)
 	u_longlong_t bl;
 	time_t ddate;
 	fs_fhandle_t *pfhp, *efhp;
-	struct stat64 *pstp, *estp;
+	struct stat *pstp, *estp;
 	mark_param_t *mpp;
 	ndmp_lbr_params_t *nlp;
 	tlm_acls_t *tacl;
@@ -737,7 +737,7 @@ marklbrv3_cb(void *arg, fst_node_t *pnp, fst_node_t *enp)
 	int bmd;
 	u_longlong_t bl;
 	fs_fhandle_t *pfhp, *efhp;
-	struct stat64 *pstp, *estp;
+	struct stat *pstp, *estp;
 	mark_param_t *mpp;
 	ndmp_lbr_params_t *nlp;
 

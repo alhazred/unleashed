@@ -243,7 +243,7 @@ static int
 output_xattr_header(char *fname, char *aname, int fd,
     tlm_acls_t *tlm_acls, int section, tlm_cmd_t *local_commands)
 {
-	struct stat64 *attr = &tlm_acls->acl_attr;
+	struct stat *attr = &tlm_acls->acl_attr;
 	struct xattr_hdr *xhdr;
 	struct xattr_buf *xbuf;
 	tlm_tar_hdr_t *tar_hdr;
@@ -256,7 +256,7 @@ output_xattr_header(char *fname, char *aname, int fd,
 	if (section_name == NULL)
 		return (-TLM_NO_SCRATCH_SPACE);
 
-	if (fstat64(fd, attr) == -1) {
+	if (fstat(fd, attr) == -1) {
 		NDMP_LOG(LOG_DEBUG, "output_file_header stat failed.");
 		free(section_name);
 		return (-TLM_OPEN_ERR);
@@ -349,7 +349,7 @@ output_file_header(char *name, char *link,
     tlm_acls_t *tlm_acls, int section, tlm_cmd_t *local_commands)
 {
 	static	longlong_t file_count = 0;
-	struct stat64 *attr = &tlm_acls->acl_attr;
+	struct stat *attr = &tlm_acls->acl_attr;
 	tlm_tar_hdr_t *tar_hdr;
 	long	actual_size;
 	boolean_t long_name = FALSE;

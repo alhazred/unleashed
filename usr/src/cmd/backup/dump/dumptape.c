@@ -497,7 +497,7 @@ setuparchive(void)
 			if (archive && flags & BUF_ARCHIVE && !punt &&
 			    (size = write(archivefd, data, tp_bsize))
 			    != tp_bsize) {
-				struct stat64 stats;
+				struct stat stats;
 
 				if (size != -1) {
 					errmsg = strdup(gettext(
@@ -508,7 +508,7 @@ setuparchive(void)
 					errmsg = strerror(errno);
 				}
 
-				if (fstat64(archivefd, &stats) < 0)
+				if (fstat(archivefd, &stats) < 0)
 				    stats.st_size = -1;
 
 				/* cast to keep lint&printf happy */
@@ -1067,10 +1067,10 @@ nextdevice()
 int
 isrewind(int f)
 {
-	struct stat64 sbuf;
+	struct stat sbuf;
 	int	rewind;
 
-	if (fstat64(f, &sbuf) < 0) {
+	if (fstat(f, &sbuf) < 0) {
 		msg(gettext(
 		    "Cannot obtain status of output device `%s'\n"),
 		    tape);

@@ -363,7 +363,7 @@ make_blkdevname(struct lofi_ioctl *li, char *path, size_t len)
 static void
 wait_until_dev_complete(struct lofi_ioctl *li)
 {
-	struct stat64 buf;
+	struct stat buf;
 	int	cursleep;
 	char	blkpath[MAXPATHLEN];
 	char	charpath[MAXPATHLEN];
@@ -377,7 +377,7 @@ wait_until_dev_complete(struct lofi_ioctl *li)
 	}
 
 	/* Check if links already present */
-	if (stat64(blkpath, &buf) == 0 && stat64(charpath, &buf) == 0)
+	if (stat(blkpath, &buf) == 0 && stat(charpath, &buf) == 0)
 		return;
 
 	/* First use di_devlink_init() */
@@ -392,17 +392,17 @@ wait_until_dev_complete(struct lofi_ioctl *li)
 	 * link creation via sysevents.
 	 */
 	for (cursleep = 0; cursleep < maxsleep; cursleep += sleeptime) {
-		if (stat64(blkpath, &buf) == 0 && stat64(charpath, &buf) == 0)
+		if (stat(blkpath, &buf) == 0 && stat(charpath, &buf) == 0)
 			return;
 		(void) sleep(sleeptime);
 	}
 
 	/* one last try */
 out:
-	if (stat64(blkpath, &buf) == -1) {
+	if (stat(blkpath, &buf) == -1) {
 		die(gettext("%s was not created"), blkpath);
 	}
-	if (stat64(charpath, &buf) == -1) {
+	if (stat(charpath, &buf) == -1) {
 		die(gettext("%s was not created"), charpath);
 	}
 }
@@ -1369,7 +1369,7 @@ lofi_uncompress(int lfd, const char *filename)
 	char *dir = NULL;
 	char *file = NULL;
 	int minor = 0;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int compfd = -1;
 	int uncompfd = -1;
 	ssize_t rbytes;
@@ -1386,7 +1386,7 @@ lofi_uncompress(int lfd, const char *filename)
 		    filename);
 
 	/* Zero length files don't need to be uncompressed */
-	if (stat64(filename, &statbuf) == -1)
+	if (stat(filename, &statbuf) == -1)
 		die(gettext("stat: %s"), filename);
 	if (statbuf.st_size == 0)
 		return;
@@ -1493,7 +1493,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	uint64_t *index = NULL;
 	uint64_t offset;
 	size_t real_segsize;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int compfd = -1, uncompfd = -1;
 	int tfd = -1;
 	ssize_t rbytes, wbytes, lastread;
@@ -1552,7 +1552,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 	if (fcntl(uncompfd, F_SETLKW, &lock) == -1)
 		die(gettext("fcntl: %s"), filename);
 
-	if (fstat64(uncompfd, &statbuf) == -1) {
+	if (fstat(uncompfd, &statbuf) == -1) {
 		(void) close(uncompfd);
 		die(gettext("fstat: %s"), filename);
 	}
@@ -1743,7 +1743,7 @@ lofi_compress(int *lfd, const char *filename, int compress_index,
 			goto cleanup;
 	}
 
-	if (fstat64(compfd, &statbuf) == -1)
+	if (fstat(compfd, &statbuf) == -1)
 		goto cleanup;
 
 	/*
@@ -1810,7 +1810,7 @@ check_algorithm_validity(const char *algname, int *compress_index)
 static void
 check_file_validity(const char *filename)
 {
-	struct stat64 buf;
+	struct stat buf;
 	int 	error;
 	int	fd;
 
@@ -1818,7 +1818,7 @@ check_file_validity(const char *filename)
 	if (fd == -1) {
 		die(gettext("open: %s"), filename);
 	}
-	error = fstat64(fd, &buf);
+	error = fstat(fd, &buf);
 	if (error == -1) {
 		die(gettext("fstat: %s"), filename);
 	} else if (!S_ISLOFIABLE(buf.st_mode)) {

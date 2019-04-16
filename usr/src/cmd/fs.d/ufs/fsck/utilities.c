@@ -1433,7 +1433,7 @@ int
 is_errorlocked(caddr_t fs)
 {
 	int		retval;
-	struct stat64	statb;
+	struct stat	statb;
 	caddr_t		mountp;
 	struct mnttab	*mntent;
 
@@ -1442,7 +1442,7 @@ is_errorlocked(caddr_t fs)
 	if (!fs)
 		return (0);
 
-	if (stat64(fs, &statb) < 0)
+	if (stat(fs, &statb) < 0)
 		return (0);
 
 	if (S_ISDIR(statb.st_mode)) {

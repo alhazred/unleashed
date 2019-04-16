@@ -425,7 +425,7 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 	struct passwd *pw;
 	int cg, i;
 	char *rawdisk;
-	struct stat64 statb;
+	struct stat statb;
 	struct dqblk dqbuf;
 	extern char *getfullrawname();
 
@@ -453,14 +453,14 @@ chkquota(char *fsdev, char *fsfile, char *qffile)
 		close(fi);
 		return (1);
 	}
-	if (fstat64(fileno(qf), &statb) < 0) {
+	if (fstat(fileno(qf), &statb) < 0) {
 		perror(qffile);
 		fclose(qf);
 		close(fi);
 		return (1);
 	}
 	quotadev = statb.st_dev;
-	if (stat64(fsdev, &statb) < 0) {
+	if (stat(fsdev, &statb) < 0) {
 		perror(fsdev);
 		fclose(qf);
 		close(fi);

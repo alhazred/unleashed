@@ -371,7 +371,7 @@ list(int flag)
 	struct swaptable 	*st;
 	struct swapent	*swapent;
 	int	i;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	char		*path;
 	char		fullpath[MAXPATHLEN+1];
 	int		num;
@@ -437,7 +437,7 @@ list(int flag)
 		else
 			(void) snprintf(fullpath, sizeof (fullpath),
 			    "%s", swapent->ste_path);
-		if (stat64(fullpath, &statbuf) < 0)
+		if (stat(fullpath, &statbuf) < 0)
 			if (*swapent->ste_path != '/')
 				(void) printf(gettext("%-20s  -  "),
 				    swapent->ste_path);
@@ -657,11 +657,11 @@ add(char *path, off_t offset, off_t cnt, int flags)
 static int
 valid(char *pathname, off_t offset, off_t length)
 {
-	struct stat64		f;
+	struct stat		f;
 	struct statvfs64	fs;
 	off_t		need;
 
-	if (stat64(pathname, &f) < 0 || statvfs64(pathname,  &fs) < 0) {
+	if (stat(pathname, &f) < 0 || statvfs64(pathname,  &fs) < 0) {
 		(void) perror(pathname);
 		return (errno);
 	}

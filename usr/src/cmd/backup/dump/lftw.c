@@ -103,14 +103,14 @@ static int pwdfd;
 
 static int lf_xftw(
 	const char *,
-	int (*)(const char *, const struct stat64 *, int),
+	int (*)(const char *, const struct stat *, int),
 	int,
-	int (*)(const char *, struct stat64 *));
+	int (*)(const char *, struct stat *));
 
 int
 lf_lftw(
 	const char *path,
-	int (*fn)(const char *, const struct stat64 *, int),
+	int (*fn)(const char *, const struct stat *, int),
 	int depth)
 {
 	int rc;
@@ -118,7 +118,7 @@ lf_lftw(
 	if ((pwdfd = open(".", O_RDONLY)) < 0) {
 		return (-1);
 	} else {
-		rc = (lf_xftw(path, fn, depth, lstat64));
+		rc = (lf_xftw(path, fn, depth, lstat));
 		(void) close(pwdfd);
 		return (rc);
 	}
@@ -128,9 +128,9 @@ static int
 #ifdef __STDC__
 lf_xftw(
 	const char *path,
-	int (*fn)(const char *, const struct stat64 *, int),
+	int (*fn)(const char *, const struct stat *, int),
 	int depth,
-	int (*statfn)(const char *, struct stat64 *))
+	int (*statfn)(const char *, struct stat *))
 #else
 lf_xftw(char *path, int (*fn)(), int depth, int (*statfn)())
 #endif
@@ -139,7 +139,7 @@ lf_xftw(char *path, int (*fn)(), int depth, int (*statfn)())
 	int rc, sublen, saverr, attrfd;
 	DIR *dirp;
 	char *subpath, *component;
-	struct stat64 sb;
+	struct stat sb;
 	struct dirent *dp;
 	extern dev_t partial_dev;
 

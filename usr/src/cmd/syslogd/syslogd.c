@@ -3400,7 +3400,7 @@ cfline(char *line, int lineno, struct filed *f)
 	char buf[MAXLINE];
 	char ebuf[SYS_NMLN+1+40];
 	mode_t fmode, omode = O_WRONLY|O_APPEND|O_NOCTTY;
-	struct stat64 sbuf;
+	struct stat sbuf;
 	pthread_t mythreadno;
 
 	if (Debug) {
@@ -3485,7 +3485,7 @@ cfline(char *line, int lineno, struct filed *f)
 
 	case '/':
 		(void) strlcpy(f->f_un.f_fname, p, MAXPATHLEN);
-		if (stat64(p, &sbuf) < 0) {
+		if (stat(p, &sbuf) < 0) {
 			logerror(p);
 			break;
 		}

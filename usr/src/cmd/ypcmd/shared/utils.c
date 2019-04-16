@@ -191,7 +191,7 @@ check_map_existence(pname)
 	char *pname;
 {
 	char dbfile[MAXNAMLEN + 1];
-	struct stat64 filestat;
+	struct stat filestat;
 	int len;
 
 	if (!pname || ((len = strlen(pname)) == 0) ||
@@ -203,11 +203,11 @@ check_map_existence(pname)
 	(void) strcpy(dbfile, pname);
 	(void) strcat(dbfile, dbm_dir);
 
-	if (stat64(dbfile, &filestat) != -1) {
+	if (stat(dbfile, &filestat) != -1) {
 		(void) strcpy(dbfile, pname);
 		(void) strcat(dbfile, dbm_pag);
 
-		if (stat64(dbfile, &filestat) != -1) {
+		if (stat(dbfile, &filestat) != -1) {
 			return (TRUE);
 		} else {
 

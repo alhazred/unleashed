@@ -39,7 +39,7 @@ extern "C" {
 #endif
 
 struct fmd_log {
-	struct stat64 log_stat;		/* fstat64() information for log file */
+	struct stat log_stat;		/* fstat() information for log file */
 	ea_file_t log_ea;		/* libexacct handle for log file */
 	char *log_path;			/* log file pathname used for open */
 	char *log_version;		/* creator version string */

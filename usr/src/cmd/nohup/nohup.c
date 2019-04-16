@@ -244,7 +244,7 @@ Pfd_iter(struct ps_prochandle *P, proc_fd_iter_f *cb, void *data)
 static int
 fd_cb(void *data, int fd)
 {
-	struct stat64 sbuf;
+	struct stat sbuf;
 	int flags;
 	int *fdp;
 	int oflags;

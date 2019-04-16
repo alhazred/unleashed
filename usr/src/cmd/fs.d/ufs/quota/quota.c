@@ -623,16 +623,16 @@ getdiskquota(struct mnttab *mntp, uid_t uid, struct dqblk *dqp)
 {
 	int fd;
 	dev_t fsdev;
-	struct stat64 statb;
+	struct stat statb;
 	char qfilename[MAXPATHLEN];
 
-	if (stat64(mntp->mnt_special, &statb) < 0 ||
+	if (stat(mntp->mnt_special, &statb) < 0 ||
 	    (statb.st_mode & S_IFMT) != S_IFBLK)
 		return (0);
 	fsdev = statb.st_rdev;
 	(void) snprintf(qfilename, sizeof (qfilename), "%s/%s",
 	    mntp->mnt_mountp, QFNAME);
-	if (stat64(qfilename, &statb) < 0 || statb.st_dev != fsdev)
+	if (stat(qfilename, &statb) < 0 || statb.st_dev != fsdev)
 		return (0);
 	(void) __priv_bracket(PRIV_ON);
 	fd = open64(qfilename, O_RDONLY);

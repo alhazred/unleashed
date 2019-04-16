@@ -87,7 +87,7 @@ compress_slashes(const char *src, char *dest)
  */
 static int
 parse_pathname(const char *inpath, char *dataset, char *relpath,
-    struct stat64 *statbuf)
+    struct stat *statbuf)
 {
 	struct extmnttab mp;
 	FILE *fp;
@@ -109,7 +109,7 @@ parse_pathname(const char *inpath, char *dataset, char *relpath,
 		return (-1);
 	}
 
-	if (stat64(fullpath, statbuf) != 0) {
+	if (stat(fullpath, statbuf) != 0) {
 		(void) fprintf(stderr, "cannot open '%s': %s\n",
 		    fullpath, strerror(errno));
 		return (-1);
@@ -163,7 +163,7 @@ parse_pathname(const char *inpath, char *dataset, char *relpath,
  */
 /* ARGSUSED */
 static int
-object_from_path(const char *dataset, const char *path, struct stat64 *statbuf,
+object_from_path(const char *dataset, const char *path, struct stat *statbuf,
     zinject_record_t *record)
 {
 	objset_t *os;
@@ -334,7 +334,7 @@ translate_record(err_type_t type, const char *object, const char *range,
 {
 	char path[MAXPATHLEN];
 	char *slash;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	int ret = -1;
 
 	kernel_init(FREAD);

@@ -1061,6 +1061,12 @@ SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
 	fdwalk;
 	_fdwalk;
 	fstatat;
+$if _ELF32
+	fstatat_new;
+	fstat_new;
+	lstat_new;
+	stat_new;
+$endif
 	futimesat;
 	_futimesat;
 	getcpuid;

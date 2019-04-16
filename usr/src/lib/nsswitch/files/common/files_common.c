@@ -398,7 +398,7 @@ _nss_files_XY_hash(files_backend_ptr_t be, nss_XbyY_args_t *args,
 	/* LINTED E_FUNC_VAR_UNUSED */
 	nss_XbyY_args_t xargs;
 	/* LINTED E_FUNC_VAR_UNUSED */
-	struct stat64 st;
+	struct stat st;
 
 #ifndef PIC
 	return (_nss_files_XY_all(be, args, netdb, 0, check));
@@ -410,7 +410,7 @@ _nss_files_XY_hash(files_backend_ptr_t be, nss_XbyY_args_t *args,
 	mutex_lock(&fhp->fh_lock);
 retry:
 	retries = 100;
-	while (stat64(be->filename, &st) < 0) {
+	while (stat(be->filename, &st) < 0) {
 		/*
 		 * This can happen only in two cases: Either the file is
 		 * completely missing and we were not able to read it yet
@@ -513,7 +513,7 @@ retry:
 	 * with its server.  The 1-2 second age hack doesn't cover these
 	 * cases -- oh well.
 	 */
-	if (stat64(be->filename, &st) < 0 ||
+	if (stat(be->filename, &st) < 0 ||
 	    st.st_mtim.tv_sec != fhp->fh_mtime.tv_sec ||
 	    st.st_mtim.tv_nsec != fhp->fh_mtime.tv_nsec ||
 	    (uint_t)(time(0) - st.st_mtim.tv_sec + 2) < 4) {

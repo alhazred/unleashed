@@ -275,7 +275,7 @@ typedef struct fs_traverse {
 typedef struct fst_node {
 	char *tn_path;
 	fs_fhandle_t *tn_fh;
-	struct stat64 *tn_st;
+	struct stat *tn_st;
 } fst_node_t;
 
 extern int traverse_post(fs_traverse_t *);

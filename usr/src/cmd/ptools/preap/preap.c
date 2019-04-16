@@ -54,7 +54,7 @@ static int
 open_usage(pid_t pid, int *perr)
 {
 	char path[64];
-	struct stat64 st;
+	struct stat st;
 	int fd;
 
 	(void) snprintf(path, sizeof (path), "/proc/%d/usage", (int)pid);
@@ -64,7 +64,7 @@ open_usage(pid_t pid, int *perr)
 	 * confirm this is a regular file provided by /proc.
 	 */
 	if ((fd = open64(path, O_RDONLY)) >= 0) {
-		if (fstat64(fd, &st) != 0 || !S_ISREG(st.st_mode) ||
+		if (fstat(fd, &st) != 0 || !S_ISREG(st.st_mode) ||
 		    strcmp(st.st_fstype, "proc") != 0) {
 			(void) close(fd);
 			fd = -1;

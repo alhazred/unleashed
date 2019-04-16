@@ -198,7 +198,7 @@ main(int argc, char **argv)
 	const char *bar16 = "----------";
 	const char *bar;
 	struct rlimit rlim;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	char buf[128];
 	int mapfd;
 	int prg_gflags = PGRAB_RDONLY;
@@ -412,7 +412,7 @@ again:
 					continue;
 				}
 
-				if (fstat64(mapfd, &statbuf) != 0) {
+				if (fstat(mapfd, &statbuf) != 0) {
 					Prelease(Pr, prr_flags);
 					(void) close(mapfd);
 					(void) fprintf(stderr, "%s: cannot "
@@ -467,9 +467,9 @@ again:
 			 * Ensure mappings are consistent.
 			 */
 			if (Pstate(Pr) != PS_DEAD) {
-				struct stat64 newbuf;
+				struct stat newbuf;
 
-				if (fstat64(mapfd, &newbuf) != 0 ||
+				if (fstat(mapfd, &newbuf) != 0 ||
 				    memcmp(&newbuf.st_mtim, &statbuf.st_mtim,
 				    sizeof (newbuf.st_mtim)) != 0) {
 					if (stacks != NULL) {

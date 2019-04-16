@@ -172,7 +172,7 @@ lf_ismounted(devname, dirname)
 	char	*devname;	/* name of device (raw or block) */
 	char	*dirname;	/* name of f/s mount point */
 {
-	struct stat64 st;
+	struct stat st;
 	char	*blockname;	/* name of block device */
 	dev_t	dev;
 	int	saverr;
@@ -181,7 +181,7 @@ lf_ismounted(devname, dirname)
 		msg(gettext("Cannot obtain block name from `%s'\n"), devname);
 		return (-1);
 	}
-	if (stat64(blockname, &st) < 0) {
+	if (stat(blockname, &st) < 0) {
 		saverr = errno;
 		msg(gettext("Cannot obtain status of device `%s': %s\n"),
 		    blockname, strerror(saverr));
@@ -190,7 +190,7 @@ lf_ismounted(devname, dirname)
 	}
 	free(blockname);
 	dev = st.st_rdev;
-	if (stat64(dirname, &st) < 0) {
+	if (stat(dirname, &st) < 0) {
 		saverr = errno;
 		msg(gettext("Cannot obtain status of device `%s': %s\n"),
 		    dirname, strerror(saverr));

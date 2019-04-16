@@ -105,7 +105,7 @@ extern int writefile(int, int, char *, char *, char *, char *,
 	struct stat *, struct stat *);
 #else
 extern int writefile(int, int, char *, char *, char *, char *,
-	struct stat64 *, struct stat64 *);
+	struct stat *, struct stat *);
 #endif
 
 /* Gets file descriptors of the source and target attribute files */

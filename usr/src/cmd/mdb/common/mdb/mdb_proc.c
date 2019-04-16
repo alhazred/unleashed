@@ -5155,7 +5155,7 @@ mdb_proc_tgt_create(mdb_tgt_t *t, int argc, const char *argv[])
 
 	const mdb_tgt_regdesc_t *rdp;
 	char execname[MAXPATHLEN];
-	struct stat64 st;
+	struct stat st;
 	int perr;
 	int state;
 	struct rlimit rlim;
@@ -5240,7 +5240,7 @@ mdb_proc_tgt_create(mdb_tgt_t *t, int argc, const char *argv[])
 	 * writing because /proc/object/<file> permission are masked with 0555.
 	 * If Pexecname() fails us, fall back to /proc/<pid>/object/a.out.
 	 */
-	if (t->t_pshandle != NULL && (aout_path == NULL || (stat64(aout_path,
+	if (t->t_pshandle != NULL && (aout_path == NULL || (stat(aout_path,
 	    &st) == 0 && strcmp(st.st_fstype, "proc") == 0))) {
 		GElf_Sym s;
 		aout_path = Pexecname(t->t_pshandle, execname, MAXPATHLEN);

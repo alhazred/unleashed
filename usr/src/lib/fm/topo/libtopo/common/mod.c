@@ -170,10 +170,10 @@ static int
 mod_nvl_data(topo_mod_t *mp, nvlist_t *out, const char *path)
 {
 	struct modinfo mi;
-	struct stat64 s;
+	struct stat s;
 	int id, e;
 
-	if (stat64(path, &s) < 0) {
+	if (stat(path, &s) < 0) {
 		topo_mod_dprintf(mp,
 		    "No system object file for driver %s", path);
 		return (topo_mod_seterrno(mp, EMOD_METHOD_INVAL));

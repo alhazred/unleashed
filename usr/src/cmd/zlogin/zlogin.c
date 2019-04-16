@@ -712,11 +712,11 @@ static int
 process_raw_input(int stdin_fd, int appin_fd)
 {
 	int cc;
-	struct stat64 sb;
+	struct stat sb;
 	char ibuf[ZLOGIN_RDBUFSIZ];
 
 	/* Check how much data is already in the pipe */
-	if (fstat64(appin_fd, &sb) == -1) {
+	if (fstat(appin_fd, &sb) == -1) {
 		perror("stat failed");
 		return (-1);
 	}

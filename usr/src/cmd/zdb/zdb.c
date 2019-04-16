@@ -2418,7 +2418,7 @@ static void
 dump_cachefile(const char *cachefile)
 {
 	int fd;
-	struct stat64 statbuf;
+	struct stat statbuf;
 	char *buf;
 	nvlist_t *config;
 
@@ -2428,7 +2428,7 @@ dump_cachefile(const char *cachefile)
 		exit(1);
 	}
 
-	if (fstat64(fd, &statbuf) != 0) {
+	if (fstat(fd, &statbuf) != 0) {
 		(void) printf("failed to stat '%s': %s\n", cachefile,
 		    strerror(errno));
 		exit(1);
@@ -2594,7 +2594,7 @@ dump_label(const char *dev)
 	char path[MAXPATHLEN];
 	char *buf = label.vl_vdev_phys.vp_nvlist;
 	size_t buflen = sizeof (label.vl_vdev_phys.vp_nvlist);
-	struct stat64 statbuf;
+	struct stat statbuf;
 	uint64_t psize, ashift;
 	boolean_t label_found = B_FALSE;
 
@@ -2605,7 +2605,7 @@ dump_label(const char *dev)
 			(void) snprintf(path, sizeof (path), "%s%s",
 			    ZFS_RDISK_ROOTD, dev + strlen(ZFS_DISK_ROOTD));
 		}
-	} else if (stat64(path, &statbuf) != 0) {
+	} else if (stat(path, &statbuf) != 0) {
 		char *s;
 
 		(void) snprintf(path, sizeof (path), "%s%s", ZFS_RDISK_ROOTD,
@@ -2622,7 +2622,7 @@ dump_label(const char *dev)
 		exit(1);
 	}
 
-	if (fstat64(fd, &statbuf) != 0) {
+	if (fstat(fd, &statbuf) != 0) {
 		(void) fprintf(stderr, "failed to stat '%s': %s\n", path,
 		    strerror(errno));
 		(void) close(fd);

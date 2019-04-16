@@ -232,7 +232,7 @@ repquota(char *fsdev, char *fsfile, char *qffile)
 	FILE *qf;
 	uid_t uid;
 	struct dqblk dqbuf;
-	struct stat64 statb;
+	struct stat statb;
 
 	if (vflag || aflag)
 		(void) printf("%s (%s):\n", fsdev, fsfile);
@@ -241,7 +241,7 @@ repquota(char *fsdev, char *fsfile, char *qffile)
 		perror(qffile);
 		return (1);
 	}
-	if (fstat64(fileno(qf), &statb) < 0) {
+	if (fstat(fileno(qf), &statb) < 0) {
 		perror(qffile);
 		(void) fclose(qf);
 		return (1);
