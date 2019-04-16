@@ -254,10 +254,6 @@ extern int	putw(int, FILE *);
 extern int	fseeko(FILE *, off_t, int);
 extern off_t	ftello(FILE *);
 
-/* FIXME: source compat: these syms are aliases to non-64 vers in libc */
-int fseeko64(FILE *, off_t, int);
-off_t ftello64(FILE *);
-
 #define	getchar_unlocked()	getc_unlocked(stdin)
 #define	putchar_unlocked(x)	putc_unlocked((x), stdout)
 

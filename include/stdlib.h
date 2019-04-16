@@ -240,12 +240,6 @@ long long strtonum(const char *, long long, long long, const char **);
 
 #endif	/* __UNLEASHED_VISIBLE */
 
-/* FIXME: source compat: these are libc aliases to non-64 versions */
-int mkstemp64(char *);
-int mkstemps64(char *, int);
-int mkostemp64(char *, int);
-int mkostemps64(char *, int, int);
-
 #ifdef	__cplusplus
 }
 #endif

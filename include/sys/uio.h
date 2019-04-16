@@ -260,10 +260,6 @@ extern ssize_t writev(int, const struct iovec *, int);
 extern ssize_t preadv(int, const struct iovec *, int, off_t);
 extern ssize_t pwritev(int, const struct iovec *, int, off_t);
 
-/* FIXME: source compat: these libc syms are aliases to non-64 ones */
-ssize_t preadv64(int, const struct iovec *, int, off_t);
-ssize_t pwritev64(int, const struct iovec *, int, off_t);
-
 #endif	/* defined(_KERNEL) */
 
 #ifdef	__cplusplus

@@ -87,11 +87,6 @@ extern int attropen(const char *, const char *, int, ...);
 extern int directio(int, int);
 #endif
 
-/* FIXME source compat; these libc symbols are aliases to the non-64 ones */
-int open64(const char *, int, ...);
-int openat64(int, const char *, int, ...);
-int creat64(const char *, mode_t);
-
 #ifdef	__cplusplus
 }
 #endif

@@ -195,9 +195,6 @@ extern int msync(void *, size_t, int);
 extern int mlock(const void *, size_t);
 extern int munlock(const void *, size_t);
 
-/* FIXME source compat: this libc symbol is an alias to mmap() */
-void *mmap64(void *, size_t, int, int, int, off_t);
-
 extern int mincore(caddr_t, size_t, char *);
 extern int memcntl(caddr_t, size_t, int, caddr_t, int, int);
 extern int madvise(caddr_t, size_t, int);

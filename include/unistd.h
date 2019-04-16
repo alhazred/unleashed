@@ -194,12 +194,6 @@ extern "C" {
 #define	_LFS64_STDIO		1
 #define	_LFS64_ASYNCHRONOUS_IO	1
 
-/* FIXME: source compat: these libc syms are aliases to non-64 ones */
-off_t lseek64(int, off_t, int);
-int ftruncate64(int, off_t);
-ssize_t pread64(int, void *, size_t, off_t);
-ssize_t pwrite64(int, const void *, size_t, off_t);
-
 extern int access(const char *, int);
 #if !defined(__XOPEN_OR_POSIX) || defined(__EXTENSIONS__)
 extern int acct(const char *);
