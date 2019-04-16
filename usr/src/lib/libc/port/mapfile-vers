@@ -1062,10 +1062,10 @@ SYMBOL_VERSION SUNW_1.21 {	# SunOS 5.9 (Solaris 9)
 	_fdwalk;
 	fstatat;
 $if _ELF32
-	fstatat_new;
-	fstat_new;
-	lstat_new;
-	stat_new;
+	fstatat_new		{ FLAGS = NODYNSORT };
+	fstat_new		{ FLAGS = NODYNSORT };
+	lstat_new		{ FLAGS = NODYNSORT };
+	stat_new		{ FLAGS = NODYNSORT };
 $endif
 	futimesat;
 	_futimesat;

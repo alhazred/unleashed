@@ -37,24 +37,6 @@
 
 #define	_ST_FSTYPSZ 16		/* array size for file system type name */
 
-#if !defined(_LP64)
-/*
- * temporary additional symbols to provide ABI compat for 32-bit stat.
- * libc performs translation from the new struct (returned by the kernel) to
- * the old one expected by userland apps.
- *
- * newly compiled 32-bit binaries will use the '_new' symbols through these
- * redefine_extnames - until we can recompile old binaries that depend on the
- * old abi that is.
- */
-#ifndef _LIBC_STAT_C
-#pragma redefine_extname	fstatat	fstatat_new
-#pragma redefine_extname	fstat	fstat_new
-#pragma redefine_extname	lstat	lstat_new
-#pragma redefine_extname	stat	stat_new
-#endif
-#endif
-
 struct stat {
 	dev_t		st_dev;
 	ino_t		st_ino;
