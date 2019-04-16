@@ -8381,7 +8381,7 @@ retry_open_attr(int pdirfd, int cwd, char *dirp, char *pattr, char *name,
 
 #if !defined(O_XATTR)
 static int
-openat64(int fd, const char *name, int oflag, mode_t cmode)
+openat(int fd, const char *name, int oflag, mode_t cmode)
 {
 	return (open(name, oflag, cmode));
 }

@@ -9685,7 +9685,7 @@ chop_endslashes(char *path)
 
 #if !defined(O_XATTR)
 int
-openat64(int fd, char *name, int oflag, mode_t cmode)
+openat(int fd, char *name, int oflag, mode_t cmode)
 {
 	return (open(name, oflag, cmode));
 }

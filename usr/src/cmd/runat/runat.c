@@ -72,7 +72,7 @@ main(int argc, char *argv[])
 		exit(125);
 	}
 
-	if ((dirfd = openat64(fd, ".", O_RDONLY|O_XATTR)) == -1) {
+	if ((dirfd = openat(fd, ".", O_RDONLY|O_XATTR)) == -1) {
 		(void) fprintf(stderr,
 		    gettext("runat: cannot open attribute"
 		    " directory for %s: %s\n"), argv[1], strerror(errno));

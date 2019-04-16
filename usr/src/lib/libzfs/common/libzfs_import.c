@@ -1024,7 +1024,7 @@ zpool_open_func(void *arg)
 
 	if (rn->rn_nozpool)
 		return;
-	if ((fd = openat64(rn->rn_dfd, rn->rn_name, O_RDONLY)) < 0) {
+	if ((fd = openat(rn->rn_dfd, rn->rn_name, O_RDONLY)) < 0) {
 		/* symlink to a device that's no longer there */
 		if (errno == ENOENT)
 			nozpool_all_slices(rn->rn_avl, rn->rn_name);

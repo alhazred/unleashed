@@ -1101,7 +1101,7 @@ resolve(char *path, int *fd, char **rpath)
 	*rpath = path;
 	path = *rpath + strlen(*rpath) +1;
 	while (*path != '\0' &&
-		(*fd = openat64(tfd, *rpath, O_RDONLY)) > 0) {
+		(*fd = openat(tfd, *rpath, O_RDONLY)) > 0) {
 		if (tfd != AT_FDCWD) (void) close(tfd);
 		tfd = *fd;
 		*rpath = path;
@@ -1109,7 +1109,7 @@ resolve(char *path, int *fd, char **rpath)
 	}
 	if (*fd == AT_FDCWD)
 		return;
-	if (*fd < 0 || (*fd = openat64(tfd, ".", O_RDONLY|O_XATTR)) < 0) {
+	if (*fd < 0 || (*fd = openat(tfd, ".", O_RDONLY|O_XATTR)) < 0) {
 		int saverr = errno;
 		(void) fprintf(stderr,
 			gettext("Warning: cannot fully resolve %s: %s"),

@@ -1001,7 +1001,7 @@ movexattrs(orig, targ)
 		/* no attributes to move */
 		return;
 	}
-	if ((fromfd = openat64(tfd, from, O_RDONLY|O_NONBLOCK)) == -1) {
+	if ((fromfd = openat(tfd, from, O_RDONLY|O_NONBLOCK)) == -1) {
 		fprintf(stderr, gettext("%s: cannot move attributes: "), from);
 		perror("");
 		if (tfd != AT_FDCWD) (void) close(tfd);
@@ -1013,7 +1013,7 @@ movexattrs(orig, targ)
 		if (tfd != AT_FDCWD) (void) close(tfd);
 		goto out;
 	}
-	if ((fromdir = openat64(fromfd, ".",
+	if ((fromdir = openat(fromfd, ".",
 				O_RDONLY|O_NONBLOCK|O_XATTR)) == -1) {
 		fprintf(stderr, gettext("%s: cannot access attributes: "),
 			from);
@@ -1024,8 +1024,8 @@ movexattrs(orig, targ)
 	if (tfd != AT_FDCWD) (void) close(tfd);
 
 	resolve(targ, &tfd, &to);
-	if ((tofd = openat64(tfd, to, O_RDONLY|O_NONBLOCK)) == -1 ||
-	    (todir = openat64(tofd, ".", O_RDONLY|O_NONBLOCK|O_XATTR)) == -1) {
+	if ((tofd = openat(tfd, to, O_RDONLY|O_NONBLOCK)) == -1 ||
+	    (todir = openat(tofd, ".", O_RDONLY|O_NONBLOCK|O_XATTR)) == -1) {
 		fprintf(stderr, gettext("%s: cannot create attributes: "), to);
 		perror("");
 		goto out;
