@@ -36,7 +36,6 @@ ROOTCMDDIR =	$(ROOTLIB_HAL)
 
 LDLIBS +=	-lc -ldbus-1 -lhal -lfstyp -lnvpair -ladm -lefi
 
-CPPFLAGS +=	-D_LARGEFILE_SOURCE
 CPPFLAGS +=	$(HAL_DBUS_CPPFLAGS) $(HAL_CONFIG_CPPFLAGS)
 CPPFLAGS +=	-I$(ROOT)/usr/include/hal -I../../utils -I../../hald
 CSTD =	$(CSTD_GNU99)

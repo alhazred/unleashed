@@ -36,7 +36,6 @@ SRCS = $(OBJS:%.o=%.c)
 CMDS = $(PROG:%=$(TESTDIR)/%) $(SCRIPTS:%=$(TESTDIR)/%)
 $(CMDS) := FILEMODE = 0555
 
-CPPFLAGS += -D_LARGEFILE_SOURCE
 
 all: $(PROG)
 

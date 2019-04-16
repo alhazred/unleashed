@@ -22,7 +22,6 @@ SRCS=	 	$(OBJS:%.o=%.c)
 include ../Makefile.cmd
 
 CLOBBERFILES=	$(PROG)
-CPPFLAGS +=        -D_LARGEFILE_SOURCE
 
 CSTD=	$(CSTD_GNU99)
 

@@ -48,7 +48,7 @@ include	../../../Makefile.cmd
 
 CPPFLAGS += -I. -I$(SRC)/common/net/dhcp \
 	    -I$(SRCTOP)/include \
-	-D_LARGEFILE_SOURCE
+
 LDLIBS += -ldhcputil -ldlpi
 LDFLAGS += $(MAPFILE.NGB:%=-Wl,-M%)
 CERRWARN += -Wno-switch

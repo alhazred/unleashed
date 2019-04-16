@@ -36,7 +36,6 @@ include		../../Makefile.fstype
 MAPFILES +=	$(MAPFILE.INT) $(MAPFILE.LEX) $(MAPFILE.NGB)
 MAPOPTS =	$(MAPFILES:%=-Wl,-M%)
 
-CPPFLAGS +=	-D_LARGEFILE_SOURCE
 LDLIBS +=	-lmalloc -ll -ladm
 LDFLAGS +=	$(MAPOPTS)
 YFLAGS =	"-d"

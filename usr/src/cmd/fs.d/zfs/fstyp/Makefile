@@ -43,7 +43,7 @@ LDLIBS += -lnvpair -lzfs -lc
 
 SRCS=	${LIBPROG:%.so.$(FSTYP_VERS)=%.c}
 
-CPPFLAGS += 	-DFSTYP_VERS=${FSTYP_VERS} -D_LARGEFILE_SOURCE
+CPPFLAGS += 	-DFSTYP_VERS=${FSTYP_VERS}
 
 #
 # Override PMAP dependency

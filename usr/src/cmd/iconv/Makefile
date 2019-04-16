@@ -26,7 +26,6 @@ SRCS	= $(OBJS:%.o=%.c)
 CSTD=	$(CSTD_GNU99)
 LDLIBS		+= -lcmdutils -lavl
 YFLAGS		= -d -b parser
-CPPFLAGS	+= -D_LARGEFILE_SOURCE
 $(RELEASE_BUILD) CPPFLAGS += -DNDEBUG
 
 CERRWARN +=	-Wno-unused-label

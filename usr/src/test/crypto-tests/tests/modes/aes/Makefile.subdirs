@@ -37,7 +37,6 @@ CSTD = $(CSTD_GNU99)
 CMDS = $(TESTDIR:%=%/$(PROG))
 $(CMDS) := FILEMODE = 0555
 
-CPPFLAGS += -D_LARGEFILE_SOURCE
 CPPFLAGS += -I$(COMMONDIR) -I$(SRC)/common/crypto/
 
 all: $(PROGS)

@@ -28,7 +28,7 @@ include ../Makefile.cmd
 
 LDLIBS += -lnvpair -lfstyp -ladm
 
-CPPFLAGS += -D_LARGEFILE_SOURCE \
+CPPFLAGS += \
 	    -D_POSIX_PTHREAD_SEMANTICS -I../../lib/libadm/inc
 
 

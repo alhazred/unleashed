@@ -33,7 +33,6 @@ ATTMK=		$(LIBPROG)
 include		../../Makefile.fstype
 
 LDLIBS += -ladm
-CPPFLAGS += -D_LARGEFILE_SOURCE
 
 
 CERRWARN += -Wno-unused-function

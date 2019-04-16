@@ -43,7 +43,6 @@ $(PROGS)	:= OBJS += main.o
 
 CSTD = $(CSTD_GNU99)
 
-CPPFLAGS += -D_LARGEFILE_SOURCE
 CPPFLAGS += -I$(COMMONDIR) -I$(SRC)/common/crypto
 
 LINTFLAGS += -xerroff=E_NAME_USED_NOT_DEF2

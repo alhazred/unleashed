@@ -30,7 +30,6 @@ include ../Makefile.cmd
 
 LDLIBS += -lgen
 XGETFLAGS += -a -x csplit.xcl
-CPPFLAGS += -D_LARGEFILE_SOURCE=1
 
 CERRWARN += -Wno-parentheses
 CERRWARN += -Wno-uninitialized
