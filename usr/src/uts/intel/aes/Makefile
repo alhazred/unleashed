@@ -89,5 +89,5 @@ $(OBJS_DIR)/%.o:  $(COM_DIR)/amd64/%.c
 	$(POST_PROCESS_O)
 
 $(OBJS_DIR)/%.o: $(COM_DIR)/amd64/%.s
-	$(COMPILE.s) -o $@ $(COM_DIR)/amd64/${@F:.o=.s}
+	$(COMPILE64.s) -o $@ $(COM_DIR)/amd64/${@F:.o=.s}
 	$(POST_PROCESS_O)

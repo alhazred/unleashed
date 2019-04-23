@@ -34,7 +34,7 @@ include		$(SRC)/lib/Makefile.lib
 
 MAPFILE-CAP =  ../common/mapfile-cap
 
-ASFLAGS += -P
+ASFLAGS += -P $($(MACH32)_ASFLAGS)
 AS_CPPFLAGS += -D_ASM -D_SSE_INSN -D_SSE2_INSN
 
 .KEEP_STATE:

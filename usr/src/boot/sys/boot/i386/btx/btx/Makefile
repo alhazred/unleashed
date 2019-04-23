@@ -46,7 +46,7 @@ CFLAGS += -Wa,--divide
 
 ORG=	0x9000
 
-LDFLAGS=-e start -Ttext ${ORG} -N -S --oformat binary
+LDFLAGS=-e start -Ttext ${ORG} -N -S --oformat binary -m elf_i386
 
 all install:	$(PROG)
 

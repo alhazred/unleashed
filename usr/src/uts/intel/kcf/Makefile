@@ -88,5 +88,5 @@ install:	$(INSTALL_DEPS)
 include $(UTSBASE)/intel/Makefile.targ
 
 $(OBJS_DIR)/%.o: $(COM_DIR)/modes/amd64/%.s
-	$(COMPILE.s) -o $@ $(COM_DIR)/modes/amd64/${@F:.o=.s}
+	$(COMPILE64.s) -o $@ $(COM_DIR)/modes/amd64/${@F:.o=.s}
 	$(POST_PROCESS_O)

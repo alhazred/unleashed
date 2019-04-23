@@ -23,7 +23,7 @@ CFLAGS +=	-march=i386 -ffreestanding
 CFLAGS +=	-mpreferred-stack-boundary=2
 CFLAGS +=	-mno-mmx -mno-3dnow -mno-sse -mno-sse2 -mno-sse3 -msoft-float
 CFLAGS +=	-std=gnu99 -fno-reorder-functions
-LDFLAGS +=	-nostdlib
+LDFLAGS +=	-nostdlib -m elf_i386
 
 CFLAGS +=	-m32
 ACFLAGS +=	-m32

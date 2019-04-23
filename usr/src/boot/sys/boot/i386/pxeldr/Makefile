@@ -59,7 +59,7 @@ ${BOOT}: ${LDR} ${LOADER}
 	$(DD) if=$@.tmp of=$@ obs=2k conv=sync 2>/dev/null
 	$(RM) $@.tmp
 
-LDFLAGS +=-e start -Ttext ${ORG} -N -S --oformat binary
+LDFLAGS +=-e start -Ttext ${ORG} -N -S --oformat binary -m elf_i386
 
 CLEANFILES += ${LOADER} ${LDR}
 

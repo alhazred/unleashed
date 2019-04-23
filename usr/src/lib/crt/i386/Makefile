@@ -25,5 +25,6 @@
 #
 
 include ../Makefile.com
+ASFLAGS += $($(MACH32)_ASFLAGS)
 
 install:	$(ROOTOBJECTS)

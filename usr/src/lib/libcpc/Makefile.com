@@ -40,7 +40,7 @@ LDLIBS +=	-lpctx -lnvpair -lc
 
 SRCDIR =	../common
 
-ASFLAGS +=	-D_ASM -I../common
+ASFLAGS +=	-D_ASM -I../common $($(TARGETMACH)_AS_XARCH)
 CPPFLAGS +=	-I../common
 
 CERRWARN +=	-Wno-switch

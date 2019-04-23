@@ -86,7 +86,7 @@ install:	$(INSTALL_DEPS)
 include $(UTSBASE)/intel/Makefile.targ
 
 $(OBJS_DIR)/arcfour-x86_64.o: arcfour-x86_64.s
-	$(COMPILE.s) -o $@ ${@F:.o=.s}
+	$(COMPILE64.s) -o $@ ${@F:.o=.s}
 	$(POST_PROCESS_O)
 
 arcfour-x86_64.s: $(COM_DIR)/amd64/arcfour-x86_64.pl

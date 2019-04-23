@@ -183,7 +183,7 @@ $(DBOOT_O):	$(DBOOT_BIN)
 	@echo "	.globl	dboot_image"			>> $(DBOOT_S)
 	@echo "dboot_image:"				>> $(DBOOT_S)
 	$(ELFEXTRACT) $(DBOOT_BIN)			>> $(DBOOT_S)
-	$(COMPILE.s) -o $(DBOOT_O) $(DBOOT_S)
+	$(COMPILE64.s) -o $(DBOOT_O) $(DBOOT_S)
 
 $(DBOOT_OBJS_DIR):
 	-@mkdir -p $@ 2> /dev/null

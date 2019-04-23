@@ -25,6 +25,7 @@
 # Copyright (c) 1994 by Sun Microsystems, Inc.
 #
 
+ASFLAGS=	$(i386_AS_XARCH)
 include		../Makefile.com
 
 .KEEP_STATE:

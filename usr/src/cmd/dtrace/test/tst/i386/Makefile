@@ -76,7 +76,7 @@ EXES =
 
 include ../Makefile.com
 
-ASFLAGS += -D_ASM $(CPPFLAGS)
+ASFLAGS += -D_ASM $(CPPFLAGS) $(i386_AS_XARCH)
 CLOBBER_FILES += helper_helper.o annotated_helper.o
 
 # For the helper test we require an executable data section.

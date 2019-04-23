@@ -40,7 +40,7 @@ LIBS = $(DYNLIB)
 SRCDIR =	../common
 SRCS = $(CMNOBJS:%.o=$(SRCDIR)/%.c)
 
-ASFLAGS +=	-D_ASM -DPIC
+ASFLAGS +=	-D_ASM -DPIC $($(TARGETMACH)_AS_XARCH)
 CPPFLAGS +=	-I../../libc/inc
 LDLIBS +=	-lc
 

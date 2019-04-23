@@ -140,7 +140,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/pcplusmp/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/pcplusmp/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/apix/%.c
 	$(COMPILE.c) -o $@ $<
@@ -151,24 +151,24 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/ppm/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/ppm/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/psm/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/psm/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/io/tzmon/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/ml/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/ml/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/i86pc/os/%.c
 	$(COMPILE.c) -fno-stack-protector -o $@ $<
@@ -230,13 +230,13 @@ DBOOT_MACH_32	= -D_BOOT_TARGET_i386
 DBOOT_MACH_64	= -D_BOOT_TARGET_amd64
 DBOOT_DEFS	= -D_BOOT $(DBOOT_MACH_$(CLASS))
 DBOOT_DEFS	+= -D_MACHDEP -U_KERNEL -D_I32LPx
-DBOOT_FLAGS	= $(CSTD) $(CERRWARN) $(CCNOAUTOINLINE)
+DBOOT_FLAGS	= $(CSTD) $(CERRWARN) $(CCNOAUTOINLINE) $($(MACH)_ASFLAGS)
 
 DBOOT_CC_INCL	= -I$(SRC)/common -I$(SRC)/common/util $(INCLUDE_PATH) \
 		  -I$(SRCTOP)/arch/x86/kernel/dboot
 DBOOT_AS_INCL	= $(AS_INC_PATH)
 
-DBOOT_AS	= $($(MACH)_AS)
+DBOOT_AS	= $($(MACH)_AS) $($(MACH)_ASFLAGS)
 
 $(DBOOT_OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/boot/%.c
 	$(i386_CC) $(DBOOT_FLAGS) -O $(DBOOT_DEFS) $(DBOOT_CC_INCL) -c -o $@ $<
@@ -279,7 +279,7 @@ $(DBOOT_OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/dboot/%.s
 #
 MAPFILE_BIOS	= $(SRCTOP)/arch/x86/kernel/boot/mapfile-bios
 $(OBJS_DIR)/bios_call.o:    $(SRCTOP)/arch/x86/kernel/boot/bios_call_src.s
-	$(COMPILE.s) -o $(OBJS_DIR)/bios_call_src.o \
+	$(COMPILE64.s) -o $(OBJS_DIR)/bios_call_src.o \
 		$(SRCTOP)/arch/x86/kernel/boot/bios_call_src.s
 	$(LD) -dn -M $(MAPFILE_BIOS)  \
 		-o $(OBJS_DIR)/bios_call_src $(OBJS_DIR)/bios_call_src.o
@@ -291,14 +291,14 @@ $(OBJS_DIR)/bios_call.o:    $(SRCTOP)/arch/x86/kernel/boot/bios_call_src.s
 	@echo "  .globl bios_size"		>> $(OBJS_DIR)/bios_call.s
 	@echo "bios_size:"			>> $(OBJS_DIR)/bios_call.s
 	@echo "  .long . - bios_image"		>> $(OBJS_DIR)/bios_call.s
-	$(COMPILE.s) -o $@ $(OBJS_DIR)/bios_call.s
+	$(COMPILE64.s) -o $@ $(OBJS_DIR)/bios_call.s
 
 #
 # Stuff to build fb_swtch.o for the kernel.
 #
 MAPFILE_FBSWTCH	= $(SRCTOP)/arch/x86/kernel/boot/mapfile-fb_swtch
 $(OBJS_DIR)/fb_swtch.o:    $(SRCTOP)/arch/x86/kernel/boot/fb_swtch_src.s
-	$(COMPILE.s) -o $(OBJS_DIR)/fb_swtch_src.o \
+	$(COMPILE64.s) -o $(OBJS_DIR)/fb_swtch_src.o \
 		$(SRCTOP)/arch/x86/kernel/boot/fb_swtch_src.s
 	$(LD) -dn -M $(MAPFILE_FBSWTCH)  \
 		-o $(OBJS_DIR)/fb_swtch_src $(OBJS_DIR)/fb_swtch_src.o
@@ -310,7 +310,7 @@ $(OBJS_DIR)/fb_swtch.o:    $(SRCTOP)/arch/x86/kernel/boot/fb_swtch_src.s
 	@echo "  .globl fb_swtch_size"		>> $(OBJS_DIR)/fb_swtch.s
 	@echo "fb_swtch_size:"			>> $(OBJS_DIR)/fb_swtch.s
 	@echo "  .long . - fb_swtch_image"	>> $(OBJS_DIR)/fb_swtch.s
-	$(COMPILE.s) -o $@ $(OBJS_DIR)/fb_swtch.s
+	$(COMPILE64.s) -o $@ $(OBJS_DIR)/fb_swtch.s
 
 # ridiculous contortions ---
 ATOMIC_SUBDIR_32	= i386
@@ -318,7 +318,7 @@ ATOMIC_SUBDIR_64	= amd64
 ATOMIC_SUBDIR		= $(ATOMIC_SUBDIR_$(CLASS))
 
 $(OBJS_DIR)/%.o:		$(SRC)/common/atomic/$(ATOMIC_SUBDIR)/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 #
 # dtrace stubs

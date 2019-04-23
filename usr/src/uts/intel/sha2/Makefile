@@ -95,7 +95,7 @@ $(ROOTLINK):	$(ROOT_MISC_DIR) $(ROOTMODULE)
 include $(UTSBASE)/intel/Makefile.targ
 
 $(OBJS_DIR)/%.o: %.s
-	$(COMPILE.s) -o $@ ${@F:.o=.s}
+	$(COMPILE64.s) -o $@ ${@F:.o=.s}
 	$(POST_PROCESS_O)
 
 sha512-x86_64.s: $(COMDIR)/sha2/amd64/sha512-x86_64.pl

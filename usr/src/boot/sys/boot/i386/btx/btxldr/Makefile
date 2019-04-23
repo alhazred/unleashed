@@ -30,7 +30,7 @@ CFLAGS += -I./../../common
 CFLAGS += -Wa,--divide
 CFLAGS += -DBTXLDR_VERBOSE
 
-LDFLAGS=-e start -Ttext ${LOADER_ADDRESS} -N -S --oformat binary
+LDFLAGS=-e start -Ttext ${LOADER_ADDRESS} -N -S --oformat binary -m elf_i386
 
 all install:	$(PROG)
 

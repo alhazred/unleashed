@@ -23,7 +23,7 @@ all:		$(EFIPROG)
 include ../Makefile.com
 
 EFI_TARGET=	pei-i386
-LDFLAGS +=	-znocombreloc
+LDFLAGS +=	-znocombreloc -m elf_i386
 
 efi_main.o := CPPFLAGS += -DLOADER_EFI=L\"loader32.efi\"
 CFLAGS +=	-m32

@@ -57,24 +57,24 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/common/io/power/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(SRC)/common/util/i386/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/brand/sn1/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/dtrace/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/dtrace/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/fs/%.c
 	$(COMPILE.c) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/ml/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/ia32/os/%.c
 	$(COMPILE.c) -o $@ $<
@@ -97,7 +97,7 @@ $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/io/acpica/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/io/acpica/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/io/acpica/debugger/%.c
 	$(COMPILE.c) -o $@ $<
@@ -268,7 +268,7 @@ $(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/kdi/%.c
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:		$(SRCTOP)/arch/x86/kernel/kdi/%.s
-	$(COMPILE.s) -o $@ $<
+	$(COMPILE64.s) -o $@ $<
 
 $(OBJS_DIR)/%.o:		$(UTSBASE)/intel/zfs/%.c
 	$(COMPILE.c) -o $@ $<
@@ -299,7 +299,7 @@ $(OBJS_DIR)/%.o:	$(SRCTOP)/arch/x86/kernel/krtld/$(CLASS)/%.c
 $(OBJS_DIR)/kobj.o		:= CPPFLAGS += -D_DBOOT
 
 $(OBJS_DIR)/%.o:	$(SRCTOP)/arch/x86/kernel/krtld/$(CLASS)/%.s
-	$(COMPILE.s) $(KRTLD_INC_PATH) $(KRTLD_CPPFLAGS) -o $@ $<
+	$(COMPILE64.s) $(KRTLD_INC_PATH) $(KRTLD_CPPFLAGS) -o $@ $<
 	$(CTFCONVERT_O)
 
 $(OBJS_DIR)/%.o:	$(SRC)/common/util/$(SUBARCH_DIR)/%.c

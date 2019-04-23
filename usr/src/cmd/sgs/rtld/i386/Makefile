@@ -60,6 +60,7 @@ MAPFILE-ORDER =	../common/mapfile-order-gcc
 
 include		$(SRC)/cmd/sgs/rtld/Makefile.com
 
+ASFLAGS +=	$(i386_ASFLAGS)
 SONAME=		/lib/ld.so.1
 
 SGSMSGTARG +=	$(SGSMSGINTEL) $(SGSMSGINTEL32) $(SGSMSG32)

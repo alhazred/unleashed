@@ -62,7 +62,7 @@ CFLAGS=	-nostdinc -DBOOTPROG=\"gptzfsboot\" \
 CFLAGS +=	--param max-inline-insns-single=100
 CFLAGS +=	-fno-reorder-functions
 
-LD_FLAGS=-static -N --gc-sections
+LD_FLAGS=-static -N --gc-sections -m elf_i386
 CCASFLAGS=-Wa,--divide
 LIBSTAND=	../../libstand/$(MACH)/libstand.a
 LIBZFSBOOT=	../../zfs/$(MACH)/libzfsboot.a

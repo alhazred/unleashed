@@ -35,7 +35,7 @@ OBJS=	$(SRCS:%.S=%.o)
 
 ORG=	0x7c00
 
-LDFLAGS=-e start -Ttext ${ORG} -N -S --oformat binary
+LDFLAGS=-e start -Ttext ${ORG} -N -S --oformat binary -m elf_i386
 
 all:	${PROG}
 

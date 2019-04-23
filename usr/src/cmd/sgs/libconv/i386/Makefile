@@ -34,3 +34,6 @@ include 	../Makefile.com
 install all:	$(LIBRARY) .WAIT
 
 include 	../Makefile.targ
+
+pics/vernote.o: vernote.s
+	$(COMPILE.s) $(i386_AS_XARCH) -o $@ vernote.s

@@ -91,7 +91,7 @@ CLEANFILES=	vers.c ${LOADER} ${LOADER}.sym ${LOADER}.bin loader.help
 CLEANFILES +=	$(FONT).c
 
 CFLAGS +=	-Wall
-LDFLAGS=	-static -Ttext 0x0
+LDFLAGS=	-static -Ttext 0x0 -m elf_i386
 
 # i386 standalone support library
 CPPFLAGS +=	-I.. -I../../../../lib/libstand
