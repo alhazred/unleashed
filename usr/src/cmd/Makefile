@@ -56,7 +56,6 @@ COMMON_SUBDIRS=		\
 	acctadm		\
 	ahciem		\
 	ast		\
-	audio		\
 	auths		\
 	autopush	\
 	backup		\
@@ -404,7 +403,6 @@ i386_SUBDIRS=		\
 MSGSUBDIRS=		\
 	abi		\
 	acctadm		\
-	audio		\
 	auths		\
 	autopush	\
 	backup		\
