@@ -826,6 +826,7 @@ ld_place_section(Ofl_desc *ofl, Is_desc *isp, Place_path_info *path_info,
 	 */
 	sgp = NULL;
 	for (APLIST_TRAVERSE(ofl->ofl_ents, idx1, enp)) {
+		int mask = is_ehframe ? SHF_WRITE : 0;
 
 		/* Disabled segments are not available for assignment */
 		if (enp->ec_segment->sg_flags & FLG_SG_DISABLED)
@@ -856,7 +857,7 @@ ld_place_section(Ofl_desc *ofl, Is_desc *isp, Place_path_info *path_info,
 		if (enp->ec_attrmask &&
 		    /* LINTED */
 		    (enp->ec_attrmask & enp->ec_attrbits) !=
-		    (enp->ec_attrmask & shflags))
+		    (enp->ec_attrmask & (shflags & ~mask)))
 			continue;
 		if (enp->ec_is_name &&
 		    (strcmp(enp->ec_is_name, isp->is_name) != 0))
