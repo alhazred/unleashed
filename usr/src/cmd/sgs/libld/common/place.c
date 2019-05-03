@@ -1067,8 +1067,7 @@ ld_place_section(Ofl_desc *ofl, Is_desc *isp, Place_path_info *path_info,
 	shflagmask =
 	    (ofl->ofl_flags & FLG_OF_RELOBJ) ? ALL_SHF_ORDER : ALL_SHF_IGNORE;
 
-	if (is_ehframe && (ofl->ofl_flags & FLG_OF_RELOBJ) &&
-	    ld_targ.t_m.m_mach == EM_386)
+	if (is_ehframe && ld_targ.t_m.m_mach == EM_386)
 		shflagmask |= SHF_WRITE;
 
 	/*
