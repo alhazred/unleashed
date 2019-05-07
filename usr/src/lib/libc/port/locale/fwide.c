@@ -26,7 +26,6 @@
  */
 
 #include "lint.h"
-#include "mse_int.h"
 #include "file64.h"
 #include "mse.h"
 #include <errno.h>

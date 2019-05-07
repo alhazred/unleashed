@@ -24,7 +24,6 @@
  * SUCH DAMAGE.
  */
 #include "lint.h"
-#include "mse_int.h"
 #include "file64.h"
 #include "mtlib.h"
 #include <errno.h>

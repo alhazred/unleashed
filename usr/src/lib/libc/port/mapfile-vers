@@ -3065,8 +3065,8 @@ $endif
 	_uncached_getpwuid_r;
 	_unordered;
 	utssys;
-	__wcsftime_xpg5;
-	__wcstok_xpg5;
+	__wcsftime_xpg5 { FLAGS = NODYNSORT };
+	__wcstok_xpg5   { FLAGS = NODYNSORT };
 	wdbindf;
 	wdchkind;
 	wddelim;

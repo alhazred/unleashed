@@ -26,7 +26,6 @@
  */
 
 #include "lint.h"
-#include "mse_int.h"
 #include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -34,6 +33,8 @@
 #include <time.h>
 #include <wchar.h>
 #include <alloca.h>
+
+#pragma weak __wcsftime_xpg5 = wcsftime
 
 /*
  * Convert date and time to a wide-character string.
@@ -58,7 +59,7 @@
  */
 
 size_t
-__wcsftime_xpg5(wchar_t *wcs, size_t maxsize, const wchar_t *format,
+wcsftime(wchar_t *wcs, size_t maxsize, const wchar_t *format,
     const struct tm *timeptr)
 {
 	static const mbstate_t initial = { 0 };
@@ -116,24 +117,4 @@ error:
 	free(dst);
 	errno = sverrno;
 	return (0);
-}
-
-size_t
-wcsftime(wchar_t *wcs, size_t maxsize, const char *format,
-    const struct tm *timeptr)
-{
-	int	len;
-	wchar_t	*wfmt;
-	size_t rv;
-
-	/* Convert the format (mb string) to wide char array */
-	len = strlen(format) + 1;
-	wfmt = malloc(sizeof (wchar_t) * len);
-	if (mbstowcs(wfmt, format, len) == (size_t)-1) {
-		free(wfmt);
-		return (0);
-	}
-	rv = __wcsftime_xpg5(wcs, maxsize, wfmt, timeptr);
-	free(wfmt);
-	return (rv);
 }

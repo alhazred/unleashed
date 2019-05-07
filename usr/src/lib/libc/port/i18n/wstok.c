@@ -40,7 +40,6 @@
 
 #include "lint.h"
 #include "mtlib.h"
-#include "mse_int.h"
 #include <stdlib.h>
 #include <wchar.h>
 #include <thread.h>
@@ -51,8 +50,10 @@
 #define	WNULL	(wchar_t *)0
 #endif
 
+#pragma weak __wcstok_xpg5 = wcstok
+
 wchar_t *
-__wcstok_xpg5(wchar_t *string, const wchar_t *sepset, wchar_t **ptr)
+wcstok(wchar_t *string, const wchar_t *sepset, wchar_t **ptr)
 {
 	wchar_t *q, *r;
 
@@ -72,18 +73,18 @@ __wcstok_xpg5(wchar_t *string, const wchar_t *sepset, wchar_t **ptr)
 }
 
 
-wchar_t *
-wcstok(wchar_t *string, const wchar_t *sepset)
+static wchar_t *
+wcstok_xpg4(wchar_t *string, const wchar_t *sepset)
 {
 	wchar_t **lasts = tsdalloc(_T_WCSTOK, sizeof (wchar_t *), NULL);
 
 	if (lasts == NULL)
 		return (NULL);
-	return (__wcstok_xpg5(string, sepset, lasts));
+	return (wcstok(string, sepset, lasts));
 }
 
 wchar_t *
 wstok(wchar_t *string, const wchar_t *sepset)
 {
-	return (wcstok(string, sepset));
+	return (wcstok_xpg4(string, sepset));
 }

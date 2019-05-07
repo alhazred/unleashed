@@ -41,7 +41,6 @@
 
 #include "lint.h"
 #include "file64.h"
-#include "mse_int.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <widec.h>

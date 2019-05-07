@@ -192,28 +192,10 @@ extern wchar_t *wcspbrk(const wchar_t *, const wchar_t *);
 extern wchar_t *wcsrchr(const wchar_t *, wchar_t);
 #endif /* __cplusplus >= 199711L */
 
-#if (!defined(_MSE_INT_H))
-#if defined(_XPG4) && !defined(_XPG5) /* XPG4 or XPG4v2 */
-extern wchar_t *wcstok(wchar_t *, const wchar_t *);
-extern size_t wcsftime(wchar_t *, size_t, const char *, const struct tm *);
-#else	/* XPG4 or XPG4v2 */
-#ifdef __PRAGMA_REDEFINE_EXTNAME
-#pragma redefine_extname wcstok	__wcstok_xpg5
-#pragma redefine_extname wcsftime	__wcsftime_xpg5
 extern wchar_t *wcstok(wchar_t *_RESTRICT_KYWD, const wchar_t *_RESTRICT_KYWD,
 	wchar_t **_RESTRICT_KYWD);
 extern size_t wcsftime(wchar_t *_RESTRICT_KYWD, size_t,
 	const wchar_t *_RESTRICT_KYWD, const struct tm *_RESTRICT_KYWD);
-#else	/* __PRAGMA_REDEFINE_EXTNAME */
-extern wchar_t *__wcstok_xpg5(wchar_t *_RESTRICT_KYWD,
-	const wchar_t *_RESTRICT_KYWD, wchar_t **_RESTRICT_KYWD);
-extern size_t __wcsftime_xpg5(wchar_t *_RESTRICT_KYWD, size_t,
-	const wchar_t *_RESTRICT_KYWD, const struct tm *_RESTRICT_KYWD);
-#define	wcstok	__wcstok_xpg5
-#define	wcsftime	__wcsftime_xpg5
-#endif	/* __PRAGMA_REDEFINE_EXTNAME */
-#endif	/* XPG4 or XPG4v2 */
-#endif	/* !defined(_MSE_INT_H) */
 
 /* not XPG4 and not XPG4v2 */
 #if !defined(_XPG4) || defined(_XPG5)

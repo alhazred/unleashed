@@ -33,7 +33,6 @@
 #include "lint.h"
 #include "file64.h"
 #include "mtlib.h"
-#include "mse_int.h"
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
