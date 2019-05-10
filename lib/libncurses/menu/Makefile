@@ -52,9 +52,7 @@ pc_files:
 	${INSTALL} ${INSTALL_COPY} -o ${SHAREOWN} -g ${SHAREGRP} \
 		-m 0644 ${NCURSES_DIR}/menu/menu.pc ${DESTDIR}/usr/lib/pkgconfig/
 
-SHLIB_LDADD+=   -M${SRCDIR}/mapfile
-realbuild: ${MAPFILE}
-
+VERSION_SCRIPT=   ${.CURDIR}/Symbols.map
 
 .ifdef DESTDIR
 afterinstall: includes pc_files

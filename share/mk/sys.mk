@@ -71,7 +71,7 @@ LEX?=		lex
 LFLAGS?=
 LEX.l?=		${LEX} ${LFLAGS}
 
-LD?=		ld
+LD?=		/usr/gnu/bin/ld
 LDFLAGS?=
 LD_X?=
 LD_x?=

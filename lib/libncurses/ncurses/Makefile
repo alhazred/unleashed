@@ -316,8 +316,7 @@ CLEANFILES=	${GENSRCS} ${GENHDRS} fallback.c lib_gen.c init_keytry.h keys.list m
 		make_keys make_hash.dep make_keys.dep
 		
 
-SHLIB_LDADD+=  -M${NCURSES_SRC}/mapfile
-realbuild: ${MAPFILE}
+VERSION_SCRIPT=  ${.CURDIR}/Symbols.map
 
 afterinstall: incinstall pc_files misc_files
 .if !empty(SYMLINKS)

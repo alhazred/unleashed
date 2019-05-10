@@ -9,17 +9,11 @@ __${.PARSEFILE}__:
 NEED_SOLINKS?= yes
 .endif
 
-MAPFILE_VERS?=	${.CURDIR}/mapfile-vers
-.if exists(${MAPFILE_VERS})
-SHLIB_MAJOR=	1
-SHLIB_LDADD+=	-M${MAPFILE_VERS}
-.else
-
 SHLIB_VERSION_FILE?= ${.CURDIR}/shlib_version
 .if !defined(SHLIB_MAJOR) && exists(${SHLIB_VERSION_FILE})
-SHLIB_MAJOR != . ${SHLIB_VERSION_FILE} ; echo $$major
-SHLIB_MINOR != . ${SHLIB_VERSION_FILE} ; echo $$minor
-SHLIB_TEENY != . ${SHLIB_VERSION_FILE} ; echo $$teeny
+.include "${SHLIB_VERSION_FILE}"
+SHLIB_MAJOR:=${major}
+SHLIB_MINOR:=${minor}
 .endif
 
 .for x in major minor teeny
@@ -30,10 +24,14 @@ print-shlib-$x:
 	@false
 .endif
 .endfor
-.endif
 
-SHLIB_FULLVERSION ?= ${${SHLIB_MAJOR} ${SHLIB_MINOR} ${SHLIB_TEENY}:L:ts.}
-SHLIB_FULLVERSION := ${SHLIB_FULLVERSION}
+.ifndef SHLIB_FULLVERSION
+SHLIB_FULLVERSION= ${SHLIB_MAJOR}
+.if !empty(SHLIB_MINOR)
+SHLIB_FULLVERSION+= ${SHLIB_MINOR}
+.endif
+SHLIB_FULLVERSION := ${SHLIB_FULLVERSION:ts.}
+.endif
 
 # add additional suffixes not exported.
 # .po is used for profiling object files.
@@ -55,7 +53,6 @@ CFLAGS+=	${COPTS}
 # SHLIB_SOVERSION:	version number to be compiled into a shared library
 #			via -soname. Usually ${SHLIB_MAJOR} on ELF.
 #			NetBSD/pmax used to use ${SHLIB_MAJOR}[.${SHLIB_MINOR}
-#			[.${SHLIB_TEENY}]]
 # SHLIB_SHFLAGS:	Flags to tell ${LD} to emit shared library.
 #			with ELF, also set shared-lib version for ld.so.
 # SHLIB_LDSTARTFILE:	support .o file, call C++ file-level constructors
@@ -74,7 +71,7 @@ LD_X?=-X
 LD_x?=-x
 LD_r?=-r
 
-LD_shared=-h lib${LIB}.so.${SHLIB_MAJOR} -G -Bdirect
+LD_shared=-shared --soname lib${LIB}.so.${SHLIB_FULLVERSION}
 
 SHLIB_LD ?= ${LD}
 
@@ -90,7 +87,6 @@ SHLIB_LINKS += lib${LIB}.${LD_solink}.${SHLIB_MAJOR}
 .endif
 
 LIBTOOL?=libtool
-LD_shared ?= -Bshareable -Bforcearchive
 LD_so ?= so.${SHLIB_FULLVERSION}
 LD_solink ?= so
 .if empty(LORDER)
@@ -294,7 +290,11 @@ lib${LIB}_pic.a:: ${SOBJS}
 
 #SHLIB_LDADD?= ${LDADD}
 
-lib${LIB}.${LD_so}: ${SOBJS} ${DPADD}
+.if defined(VERSION_SCRIPT)
+SHLIB_LDADD+=	--version-script=${VERSION_SCRIPT}
+.endif
+
+lib${LIB}.${LD_so}: ${SOBJS} ${DPADD} ${VERSION_SCRIPT}
 	@echo building shared ${LIB} library \(version ${SHLIB_FULLVERSION}\)
 	@rm -f ${.TARGET}
 	${SHLIB_LD} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD} -lc

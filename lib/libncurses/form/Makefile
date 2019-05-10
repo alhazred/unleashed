@@ -68,8 +68,7 @@ pc_files:
 		-m 0644 ${NCURSES_DIR}/form/form.pc ${DESTDIR}/usr/lib/pkgconfig/
 
 
-SHLIB_LDADD+=   -M${SRCDIR}/mapfile
-realbuild: ${MAPFILE}
+VERSION_SCRIPT=   ${.CURDIR}/Symbols.map
 
 .ifdef DESTDIR
 afterinstall: includes pc_files

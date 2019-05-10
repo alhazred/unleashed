@@ -9,7 +9,4 @@ LIBCRTEND=	${DESTDIR}/usr/lib/amd64/crtn.o
 
 .include <unleashed.mk>
 
-MAPFILES=	${SRCTOP}/usr/src/common/mapfiles/common
-_PROGLDOPTS=	-Wl,-Bdirect
-_PROGLDOPTS+=	-Wl,-M${MAPFILES}/map.pagealign
 UNLEASHED_OBJ?=	/usr/obj/${MACHINE}

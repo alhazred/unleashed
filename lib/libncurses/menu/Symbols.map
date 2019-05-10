@@ -1,5 +1,4 @@
-$mapfile_version 2
-SYMBOL_SCOPE {
+{
 global:
 _nc_Calculate_Item_Length_and_Width;
 _nc_Calculate_Text_Width;

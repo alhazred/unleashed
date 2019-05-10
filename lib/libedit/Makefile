@@ -9,12 +9,13 @@ SRCS =	chared.c chartype.c common.c el.c eln.c emacs.c filecomplete.c \
 	parse.c prompt.c read.c readline.c refresh.c search.c sig.c \
 	terminal.c tokenizer.c tokenizern.c tty.c vi.c
 
+VERSION_SCRIPT=	${.CURDIR}/Symbols.map
 MAN=	editline.3 editrc.5 editline.7
 
 LIBEDITDIR?=${.CURDIR}
 
 INCS=	${.CURDIR}/histedit.h
-SHLIB_LDADD+=   -M${.CURDIR}/mapfile -lncurses
+SHLIB_LDADD+=   -lncurses
 
 CLEANFILES+=common.h.tmp emacs.h.tmp fcns.h.tmp func.h.tmp
 CLEANFILES+=help.h.tmp vi.h.tmp tc1.o tc1 .depend
