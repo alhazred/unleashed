@@ -122,7 +122,7 @@ SONAME=		$(DYNLIB)
 # All options are tunable to allow overload/omission from lower makefiles.
 
 
-HSONAME=	-h$(SONAME)
+HSONAME=	-Wl,-h$(SONAME)
 DYNFLAGS=	$(HSONAME) $(ZTEXT) $(ZDEFS) $(BDIRECT) \
 		$(MAPFILES:%=-Wl,-M%) $(MAPFILE.PGA:%=-Wl,-M%)
 
@@ -194,7 +194,7 @@ $(DYNLIB):=	DIR = pics
 $(DYNLIBCCC):=	DIR = pics
 
 SONAMECCC=	$(DYNLIBCCC)
-HSONAMECCC=	-h $(SONAMECCC)
+HSONAMECCC=	-Wl,-h$(SONAMECCC)
 #
 # Keep in sync with the standard DYNFLAGS
 #
