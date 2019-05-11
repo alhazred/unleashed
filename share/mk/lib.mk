@@ -71,9 +71,7 @@ LD_X?=-X
 LD_x?=-x
 LD_r?=-r
 
-LD_shared=-shared --soname lib${LIB}.so.${SHLIB_FULLVERSION}
-
-SHLIB_LD ?= ${LD}
+LD_shared=-shared -Wl,--soname,lib${LIB}.so.${SHLIB_FULLVERSION}
 
 .if !empty(SHLIB_MAJOR)
 .if ${NEED_SOLINKS} && empty(SHLIB_LINKS)
@@ -291,13 +289,13 @@ lib${LIB}_pic.a:: ${SOBJS}
 #SHLIB_LDADD?= ${LDADD}
 
 .if defined(VERSION_SCRIPT)
-SHLIB_LDADD+=	--version-script=${VERSION_SCRIPT}
+SHLIB_LDADD+=	-Wl,--version-script=${VERSION_SCRIPT}
 .endif
 
 lib${LIB}.${LD_so}: ${SOBJS} ${DPADD} ${VERSION_SCRIPT}
 	@echo building shared ${LIB} library \(version ${SHLIB_FULLVERSION}\)
 	@rm -f ${.TARGET}
-	${SHLIB_LD} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD} -lc
+	${CC} ${CFLAGS} -o ${.TARGET} ${LD_shared} ${LD_solib} ${DLLIB} ${SHLIB_LDADD} -lc
 .endif
 .if !empty(SHLIB_LINKS)
 	rm -f ${SHLIB_LINKS}; ${SHLIB_LINKS:O:u:@x@ln -s ${.TARGET} $x;@}
