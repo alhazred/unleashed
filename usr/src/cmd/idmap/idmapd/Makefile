@@ -108,7 +108,7 @@ rpc_svc.o := CFLAGS += $(RPC_MSGOUT_OPT)
 
 $(PROG) := MAPFILES = $(MAPFILE.INT) $(MAPFILE.NGB)
 $(PROG) := LDFLAGS += $(MAPFILES:%=-Wl,-M%) \
-	-R /usr/lib/smbsrv
+	-R/usr/lib/smbsrv
 
 DIRMODE = 0755
 FILEMODE = 0555
