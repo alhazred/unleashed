@@ -90,7 +90,7 @@ YFLAGS		+= -d -v
 # dump_expr() is too hairy
 SMATCH=off
 
-$(ITM) :=	CFLAGS += $(GSHARED) $(C_PICFLAGS) $(ZTEXT) -h $@
+$(ITM) :=	CFLAGS += $(GSHARED) $(C_PICFLAGS) $(ZTEXT) -Wl,-h$@
 $(ITM) :=	sparc_CFLAGS += -mno-app-regs
 $(ITM) :=	sparcv9_CFLAGS += -mno-app-regs
 
