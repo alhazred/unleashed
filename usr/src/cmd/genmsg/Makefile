@@ -61,7 +61,7 @@ all:    $(PROG)
 install: all $(ROOTPROG)
 
 $(PROG): $(OBJS) $(MAPFILES)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
 	$(POST_PROCESS)
 
 $(LEXINTSRCS): $(LEXSRCS)
