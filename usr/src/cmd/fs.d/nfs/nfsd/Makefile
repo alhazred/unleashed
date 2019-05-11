@@ -43,7 +43,7 @@ CERRWARN +=	-Wno-switch
 CERRWARN +=	-Wno-extra
 
 $(TYPEPROG):	$(OBJS)
-		$(CC) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
+		$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
 		$(POST_PROCESS)
 
 nfs_tbind.o:	../lib/nfs_tbind.c
