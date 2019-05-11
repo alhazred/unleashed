@@ -27,7 +27,7 @@
 
 include ../Makefile.com
 
-DYNFLAGS += -R /usr/platform/lib/rsmlib
+DYNFLAGS += -R/usr/platform/lib/rsmlib
 
 .KEEP_STATE:
 
