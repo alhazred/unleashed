@@ -23,7 +23,7 @@ all:		$(EFIPROG)
 include ../Makefile.com
 
 EFI_TARGET=	pei-x86-64
-LDFLAGS +=	-znocombreloc
+LDFLAGS +=	-znocombreloc -m elf_x86_64_sol2
 
 efi_main.o := CPPFLAGS += -DLOADER_EFI=L\"loader64.efi\"
 CFLAGS +=	-m64
