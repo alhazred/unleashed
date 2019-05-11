@@ -69,8 +69,7 @@ BUILD.SO=	$(CC) $(CFLAGS) -o $@ $(GSHARED) $(DYNFLAGS) \
 #
 MAPFILECLASS=	-64
 
-CCNEEDED =	-L$(GCCLIBDIR) -lstdc++
-CCNEEDED +=	-lgcc_s
+CCNEEDED =	-L$(GCCLIBDIR) -lstdc++ -lgcc
 
 BUILDCCC.SO=    $(CCC) $(CCFLAGS) -o $@ $(GSHARED) $(DYNFLAGS) \
 		$(PICS) $(EXTPICS) $(LDLIBS) $(CCNEEDED)

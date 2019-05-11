@@ -546,7 +546,7 @@ COMPILE64.b=	$(ELFWRAP) $(ELFWRAP_FLAGS$(CLASS))
 #
 # Link time macros
 #
-CCNEEDED	= -L$(GCCLIBDIR) -lstdc++ -lgcc_s
+CCNEEDED	= -L$(GCCLIBDIR) -lstdc++ -lgcc
 CCEXTNEEDED	= $(CCNEEDED)
 
 LINK.c=		$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
