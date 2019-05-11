@@ -107,7 +107,7 @@ $(NATIVE_BUILD)CPPFLAGS = \
 	-I$(LIBTECLA)
 $(NATIVE_BUILD)LDFLAGS =
 $(NATIVE_BUILD)LDLIBS = \
-	-L$(LIBSCF)/native -R $(LIBSCF)/native \
+	-L$(LIBSCF)/native -R$(LIBSCF)/native \
 	-L$(ADJUNCT_PROTO)/usr/lib -R$(ADJUNCT_PROTO)/usr/lib \
 	$(SVCCFG_EXTRA_LIBS)
 
