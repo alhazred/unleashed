@@ -169,13 +169,6 @@ typedef	void	(* addfunc_t) __P((int, ioctlfunc_t, void *));
 typedef	int	(* copyfunc_t) __P((void *, void *, size_t));
 
 
-/*
- * SunOS4
- */
-#if defined(sun) && !defined(__SVR4) && !defined(__svr4__)
-extern	int	ioctl __P((int, int, void *));
-#endif
-
 extern	char	thishost[];
 extern	char	flagset[];
 extern	u_char	flags[];
