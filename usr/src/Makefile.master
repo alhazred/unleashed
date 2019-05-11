@@ -573,8 +573,7 @@ BASIC_CC_ARGS=	-fident \
 		-fno-inline-functions \
 		-fno-builtin \
 		-fno-asm \
-		-fdiagnostics-show-option \
-		-nodefaultlibs
+		-fdiagnostics-show-option
 
 # The SPARC ldd and std instructions require 8-byte alignment of their
 # address operand.  gcc correctly uses them only when the ABI requires
@@ -607,13 +606,13 @@ sparcv9_CPP=		$(GNUC_ROOT)/bin/cpp
 sparcv9_AS=		/usr/bin/as -xregsym=no
 sparcv9_LD=		/usr/bin/ld
 
-i386_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+i386_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS) -nodefaultlibs
 i386_CCC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 i386_CPP=		$(GNUC_ROOT)/bin/cpp
 i386_AS=		$(GNUC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
 i386_LD=		/usr/bin/ld
 
-amd64_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS)
+amd64_CC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/gcc $(BASIC_CC_ARGS) -nodefaultlibs
 amd64_CCC=		/usr/libexec/unleashed/gcc-wrap $(GNUC_ROOT)/bin/g++ $(BASIC_CC_ARGS)
 amd64_CPP=		$(GNUC_ROOT)/bin/cpp
 amd64_AS=		$(GNUC_ROOT)/bin/gcc $(BASIC_AS_ARGS)
