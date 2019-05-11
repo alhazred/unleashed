@@ -107,10 +107,10 @@ _SUPCXX=	-lstdc++ -lm
 
 _CCLINK?=	${CC}
 
-.if defined(DESTDIR) && exists(${LIBCRT0}) && ${LIBCRT0} != "/dev/null"
+.if defined(DESTDIR) && exists(${LIBCRT0})
 
 ${PROG}: ${LIBCRT0} ${OBJS} ${LIBC} ${DPADD}
-	${_CCLINK} ${LDFLAGS} ${LDSTATIC} -o ${.TARGET} -nostdlib ${_PROGLDOPTS} -L${DESTDIR}/usr/lib ${LIBCRT0} ${LIBCRTBEGIN} ${OBJS} ${LDADD} -L${DESTDIR}/usr/lib ${_SUPCXX} -lgcc -lc -lgcc ${LIBCRTEND}
+	${_CCLINK} ${LDFLAGS} ${LDSTATIC} -o ${.TARGET} --sysroot=${DESTDIR} ${_PROGLDOPTS} ${OBJS} ${LDADD}
 
 .else
 
