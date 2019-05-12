@@ -141,13 +141,6 @@ sub ProcFile {
 
 	# If there are no versions in the file we're done.
 	if ($Verdef eq 'NOVERDEF') {
-		# Report the lack of versioning, unless the object is
-		# a known plugin, or is explicitly exempt.
-		if ($NotPlugin &&
-		    (!defined($EXRE_noverdef) || ($RelPath !~ $EXRE_noverdef))) {
-			onbld_elfmod::OutMsg($ErrFH, \$Ttl, $RelPath,
-			    "no versions found");
-		}
 		return;
 	}
 
