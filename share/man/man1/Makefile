@@ -105,7 +105,7 @@ MAN = acctcom.1 \
       lari.1 \
       last.1 \
       lastcomm.1 \
-      ld.1 \
+      ld.sun.1 \
       ldap.1 \
       ldapdelete.1 \
       ldaplist.1 \

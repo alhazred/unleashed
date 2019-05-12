@@ -2163,10 +2163,10 @@ cmd/sgs/elfwrap/i386/msg.h
 cmd/sgs/error/i386/error
 cmd/sgs/gprof/i386/gprof
 cmd/sgs/lari/lari
-cmd/sgs/ld/amd64/ld
+cmd/sgs/ld/amd64/ld.sun
 cmd/sgs/ld/amd64/msg.c
 cmd/sgs/ld/amd64/msg.h
-cmd/sgs/ld/i386/ld
+cmd/sgs/ld/i386/ld.sun
 cmd/sgs/ld/i386/msg.c
 cmd/sgs/ld/i386/msg.h
 cmd/sgs/ldd/amd64/ldd

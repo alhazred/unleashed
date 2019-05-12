@@ -24,7 +24,7 @@
 # Copyright 2016 RackTop Systems.
 #
 
-PROG =		ld
+PROG =		ld.sun
 
 include 	$(SRC)/cmd/Makefile.cmd
 include 	$(SRC)/cmd/sgs/Makefile.com

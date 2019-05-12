@@ -686,7 +686,7 @@ const dtrace_pattr_t _dtrace_prvdesc = {
 };
 
 const char *_dtrace_defcpp = "/opt/gcc/4.4.4/bin/cpp"; /* default cpp(1) to invoke */
-const char *_dtrace_defld = "/usr/bin/ld";   /* default ld(1) to invoke */
+const char *_dtrace_defld = "/usr/bin/ld.sun";   /* default ld(1) to invoke */
 
 const char *_dtrace_libdir = "/usr/lib/dtrace"; /* default library directory */
 const char *_dtrace_provdir = "/dev/dtrace/provider"; /* provider directory */
