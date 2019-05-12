@@ -579,14 +579,6 @@ ELF:	foreach my $Line (@Elf) {
 		}
 	}
 
-	# A shared object, that contains non-plt relocations, should have a
-	# combined relocation section indicating it was built with -z combreloc.
-	if ((($Type eq 'DYN') || ($Type eq 'PIE')) &&
-	    $Relsz && ($Relsz != $Pltsz) && ($Sun == 0)) {
-		onbld_elfmod::OutMsg($ErrFH, $ErrTtl, $RelPath,
-		    ".SUNW_reloc section missing\t\t<no -zcombreloc?>");
-	}
-
 	# No objects released to a customer should have any .stabs sections
 	# remaining, they should be stripped.
 	if ($opt{s} && $Stab) {
@@ -594,16 +586,6 @@ ELF:	foreach my $Line (@Elf) {
 
 		onbld_elfmod::OutMsg($ErrFH, $ErrTtl, $RelPath,
 		    "debugging sections should be deleted\t<no strip -x?>");
-	}
-
-	# Identify an object that is not built with either -B direct or
-	# -z direct.
-	goto DONESTAB
-	    if (defined($EXRE_nodirect) && ($RelPath =~ $EXRE_nodirect));
-
-	if ($Relsz && ($HasDirectBinding == 0)) {
-		onbld_elfmod::OutMsg($ErrFH, $ErrTtl, $RelPath,
-		 "object has no direct bindings\t<no -B direct or -z direct?>");
 	}
 
 DONESTAB:
