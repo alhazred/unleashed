@@ -119,7 +119,7 @@ KERNEL_LDFLAGS = \
 # Programs
 #
 CC=/opt/gcc/4.4.4/bin/gcc
-LD=/usr/bin/ld
+LD=/usr/bin/ld.sun
 CTFCONVERT=/usr/bin/ctfconvert
 CTFMERGE=/usr/bin/ctfmerge
 

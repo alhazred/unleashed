@@ -15,7 +15,7 @@ include $(SRC)/Makefile.master
 
 CFLAGS = 	-O1 -m64
 
-LINK.c = env LD_ALTEXEC=$(PROTO)/usr/bin/amd64/ld $(CC) $(CFLAGS) -o $@ $^
+LINK.c = env LD_ALTEXEC=$(PROTO)/usr/bin/amd64/ld.sun $(CC) $(CFLAGS) -o $@ $^
 COMPILE.c = $(CC) $(CFLAGS) -c -o $@ $^
 COMPILE.s = $(CC) $(CFLAGS) -c -o $@ $^
 
